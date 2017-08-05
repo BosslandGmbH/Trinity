@@ -16,6 +16,7 @@ using Trinity.UI;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
+using Zeta.Bot.Navigation;
 
 
 namespace Trinity.Routines.Necromancer
@@ -27,7 +28,7 @@ namespace Trinity.Routines.Necromancer
         public string DisplayName => "Necromancer Rathma Faceroll GC";
         public string Description => "Necromancer Rathma Faceroll Glass Cannon - Stay away I'm very fragile";
         public string Author => "Bantou";
-        public string Version => "1.3.0";
+        public string Version => "1.3.1";
         public string Url => "http://www.diablofans.com/builds/91398-rathma-faceroll-summoner-gr100-new-video-gr100";
         public Build BuildRequirements => new Build
         {
@@ -89,8 +90,36 @@ namespace Trinity.Routines.Necromancer
             TrinityPower power;
             TrinityActor target;
 
-            if (TryMovementPower(out power))
+            TryMovementPower();
+
+            if (TryCursePower(out power))
                 return power;
+
+            if (TryBloodPower(out power))
+                return power;
+
+            if (ShouldApplyCurseWithScythe() && ShouldGrimScythe(out target))
+                return GrimScythe(target);
+
+            if (TryCorpsePower(out power))
+                return power;
+
+            if (TryReanimationPower(out power))
+                return power;
+
+            if (MyTrySecondaryPower(out power))
+                return power;
+
+            if (TryPrimaryPower(out power))
+                return power;
+
+            return null;
+        }
+
+        public TrinityPower MyGetOffensivePower()
+        {
+            TrinityPower power;
+            TrinityActor target;
 
             if (!IsInCombat)
                 return null;
@@ -271,17 +300,17 @@ namespace Trinity.Routines.Necromancer
                         trash = unit;
                 }
             }
-            return goblin ?? boss ?? elite ?? minion ?? trash;
+            return goblin ?? boss ?? elite ?? minion ?? trash ?? CurrentTarget;
         }
 
         private TrinityActor FindClusterTarget(float range = TargetRange)
         {
-            return Core.Targets.Where(u => !u.IsPlayer && u.IsUnit && u.Weight > 0 && u.IsHostile && u.HitPoints > 0 && u.Distance < range).OrderBy(u => u.NearbyUnitsWithinDistance(6f)).FirstOrDefault();
+            return Core.Targets.Where(u => !u.IsPlayer && u.IsUnit && u.Weight > 0 && u.IsHostile && u.HitPoints > 0 && u.Distance < range).OrderBy(u => u.NearbyUnitsWithinDistance(6f)).FirstOrDefault() ?? CurrentTarget;
         }
 
         private TrinityActor FindClosestTarget (float range = TargetRange)
         {
-            return Core.Targets.Where(u => !u.IsPlayer && u.IsUnit && u.Weight > 0 && u.IsHostile && u.HitPoints > 0 && u.Distance < range).OrderBy(u => u.Distance).FirstOrDefault();
+            return Core.Targets.Where(u => !u.IsPlayer && u.IsUnit && u.Weight > 0 && u.IsHostile && u.HitPoints > 0 && u.Distance < range).OrderBy(u => u.Distance).FirstOrDefault() ?? CurrentTarget;
         }
 
         private TrinityActor FindProgressOrPowerGlobe (float range = 80f)
@@ -317,7 +346,9 @@ namespace Trinity.Routines.Necromancer
 
         private bool IsValidTarget(TrinityActor target)
         {
-            return target != null;
+            if (target == null)
+                return false;
+            return target.IsBoss || target.IsElite || target.IsTrashMob || target.IsTreasureGoblin;
         }
 
         private bool MyTrySecondaryPower(out TrinityPower power)
@@ -514,20 +545,17 @@ namespace Trinity.Routines.Necromancer
             return false;
         }
 
-        private bool TryMovementPower(out TrinityPower power)
+        private void TryMovementPower()
         {
             TrinityActor target;
-            power = null;
 
             if (ShouldMove(out target))
-                power = Walk(target);
-
-            return power != null;
+                Navigator.PlayerMover.MoveTowards(target.Position);
         }
 
         public bool TryOffensivePower(out TrinityPower power)
         {
-            power = GetOffensivePower();
+            power = MyGetOffensivePower();
             return power != null;
         }
 
