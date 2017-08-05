@@ -106,24 +106,25 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public static void PulseSetVisited()
         {
-            var nearestNode = Instance.NearestNode as ExplorationNode;
+            var nearestNode = Instance.NearestNode;
 
             if (nearestNode != null && !nearestNode.IsKnown)
             {
-                var currentWorldKnownPositions = KnownPositions.GetOrAdd(AdvDia.CurrentWorldDynamicId, new List<Vector3>());
+                var currentWorldKnownPositions = KnownPositions.GetOrAdd(AdvDia.CurrentWorldDynamicId,
+                    new List<Vector3>());
                 currentWorldKnownPositions.Add(nearestNode.Center.ToVector3());
                 nearestNode.IsKnown = true;
                 nearestNode.IsVisited = true;
 
                 var worldScene = AdvDia.CurrentWorldScene;
-                worldScene.HasBeenVisited = true;               
+                worldScene.HasBeenVisited = true;
 
                 var radius = 40;
                 switch (PluginEvents.CurrentProfileType)
                 {
                     case ProfileType.Rift:
                         radius = 55;
-                        
+
                         if (worldScene != null && worldScene.Name.Contains("Exit"))
                         {
                             radius = 30;
@@ -142,6 +143,36 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 {
                     node.IsVisited = true;
                 }
+
+                //using (new PerformanceTimer("Marking nodes as visited based on Minimap exploration data."))
+                //{
+                //    var innerGrid = Instance.InnerGrid;
+                //    var nodes = new List<ExplorationNode>();
+
+                //    for (int x = 0; x < innerGrid.LengthX; x++)
+                //    {
+                //        for (int y = 0; y < innerGrid.LengthY; y++)
+                //        {
+                //            ExplorationNode node = Instance.InnerGrid[x, y];
+                //            if (node != null && !node.IsVisited)
+                //                nodes.Add(node);
+                //        }
+                //    }
+
+                //    Vector2[] positions = nodes.Select(s => s.Center).ToArray();
+                //    bool[] isExplored;
+                //    //  IsExplored(Vector2[] positions, int worldId, out bool[] result)
+                //    ZetaDia.Minimap.IsExplored(positions, AdvDia.CurrentWorldDynamicId, out isExplored);
+
+                //    for (int i = 0; i < positions.Length; i++)
+                //    {
+                //        if (isExplored[i])
+                //        {
+                //            ExplorationNode exploredNode = Instance.GetNearestNode(positions[i].X, positions[i].Y);
+                //            exploredNode.IsVisited = true;
+                //        }
+                //    }
+                //}
             }
 
             if (!BotMain.IsRunning)
@@ -151,7 +182,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 // because it introduces potential stucks and skipping target actors
                 ExplorationHelpers.UpdateIgnoreRegions();
             }
-
         }
 
 

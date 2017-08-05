@@ -378,6 +378,21 @@ namespace Trinity.Components.Combat
             var isHandledLegendaryType = item.ItemBaseType == ItemBaseType.Armor || item.ItemBaseType == ItemBaseType.Jewelry || item.ItemBaseType == ItemBaseType.Weapon || item.IsPotion;
             if (item.ItemQualityLevel >= ItemQuality.Legendary && isHandledLegendaryType)
             {
+                /* Stash items that hasn't had their legendary power extracted if the CubeExtractOption is set, if we have no currency for extracting it we can assume it would have been salvaged instead.
+                if (Core.Settings.KanaisCube.ExtractLegendaryPowers != CubeExtractOption.None && !Core.Inventory.Currency.HasCurrency(TransmuteRecipe.ExtractLegendaryPower))
+                {
+                    Item legendaryItem = Legendary.GetItem(item);
+
+                    if (legendaryItem != null && legendaryItem.LegendaryAffix != "" &&
+                        Core.Inventory.Stash.ByActorSno(legendaryItem.Id) != null &&
+                        !ZetaDia.Storage.PlayerDataManager.ActivePlayerData.KanaisPowersExtractedActorSnoIds.Contains(
+                            legendaryItem.Id))
+                    {
+                        Core.Logger.Debug($"Stashing due to legendary power hasn't been extracted yet.");
+                        return true;
+                    }
+                }*/
+
                 if (Core.Settings.Items.LegendaryMode == LegendaryMode.Ignore)
                 {
                     Core.Logger.Log($"TRASHING: Ignore Legendary. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
@@ -628,6 +643,8 @@ namespace Trinity.Components.Combat
                     reason = "Transmog Setting";
                     return true;
                 }
+
+ 
 
                 reason = "Default";
                 switch (item.TrinityItemType)
