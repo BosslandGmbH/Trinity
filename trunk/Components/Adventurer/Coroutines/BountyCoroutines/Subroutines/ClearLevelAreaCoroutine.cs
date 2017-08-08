@@ -71,7 +71,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             CoroutineCoodinator.Current = this;
 
             SafeZerg.Instance.DisableZerg();
-            TrinityCombat.SetKillMode(75);
+            TrinityCombat.SetKillMode(1000);
 
             switch (State)
             {
