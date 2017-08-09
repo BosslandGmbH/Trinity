@@ -1036,7 +1036,7 @@
       <MoveToPosition questId="117779" stepId="1" x="2106.1" y="1716.4" z="0.1" sceneX="6.1" sceneY="36.4" sceneZ="0.1" sceneSnoId="74617" sceneName="trOut_Wilderness_MainGraveyard_E01_S02" distance="5"  worldSnoId="71150" levelAreaSnoId="19952" />
       <MoveToPosition questId="117779" stepId="1" x="2088.72" y="1631.17" z="1.22" sceneX="168.72" sceneY="191.17" sceneZ="1.22" sceneSnoId="56593" sceneName="trOut_TristramFields_EntranceA_E01_S01" distance="5"  worldSnoId="71150" levelAreaSnoId="19952" />
       <MoveToPosition questId="117779" stepId="1" x="2089.14" y="1536.18" z="3.58" sceneX="169.14" sceneY="96.18" sceneZ="3.58" sceneSnoId="56593" sceneName="trOut_TristramFields_EntranceA_E01_S01" distance="5"  worldSnoId="71150" levelAreaSnoId="19952" />
-      <MoveToPosition questId="117779" stepId="10" x="2089.02" y="1488.12" z="0.09" sceneX="169.02" sceneY="48.12" sceneZ="0.09" sceneSnoId="56593" sceneName="trOut_TristramFields_EntranceA_E01_S01" distance="5"  worldSnoId="71150" levelAreaSnoId="19952" />
+      <MoveToPosition questId="117779" stepId="1" x="2089.02" y="1488.12" z="0.09" sceneX="169.02" sceneY="48.12" sceneZ="0.09" sceneSnoId="56593" sceneName="trOut_TristramFields_EntranceA_E01_S01" distance="5"  worldSnoId="71150" levelAreaSnoId="19952" />
 
       <WaitTimer questId="117779" stepId="1" waitTime="1000" />
     </If>
