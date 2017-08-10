@@ -4,12 +4,15 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance;
+using Trinity.Framework.Behaviors;
 using Trinity.Framework.Objects;
+using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Reference;
 using Trinity.Modules;
 using Trinity.Settings;
@@ -158,30 +161,30 @@ namespace Trinity.Routines
         /// <summary>
         /// Players build has no free/generator/primary skills equipped
         /// </summary>
-        protected static bool IsNoPrimary
+        public static bool IsNoPrimary
             => SkillUtils.Active.Count(s => s.IsGeneratorOrPrimary) == 0;
 
-        protected static bool ShouldRefreshBastiansGenerator
+        public static bool ShouldRefreshBastiansGenerator
             => Sets.BastionsOfWill.IsFullyEquipped && !Core.Buffs.HasBastiansWillGeneratorBuff
             && SpellHistory.TimeSinceGeneratorCast >= 3750;
 
-        protected static bool ShouldRefreshBastiansSpender
+        public static bool ShouldRefreshBastiansSpender
             => Sets.BastionsOfWill.IsFullyEquipped && !Core.Buffs.HasBastiansWillSpenderBuff
             && SpellHistory.TimeSinceSpenderCast >= 3750;
 
-        protected static int EndlessWalkOffensiveStacks
+        public static int EndlessWalkOffensiveStacks
             => Core.Buffs.GetBuffStacks(447541, 1);
 
-        protected static int EndlessWalkDefensiveStacks
+        public static int EndlessWalkDefensiveStacks
             => Core.Buffs.GetBuffStacks(447541, 2);
 
-        protected static bool HasInfiniteCasting
+        public static bool HasInfiniteCasting
             => Core.Buffs.HasCastingShrine;
 
-        protected static bool HasIngeomBuff
+        public static bool HasIngeomBuff
             => Player.HasBuff(SNOPower.ItemPassive_Unique_Ring_919_x1);
 
-        protected static bool HasInstantCooldowns 
+        public static bool HasInstantCooldowns 
             => HasInfiniteCasting || HasIngeomBuff;
 
 
@@ -335,13 +338,268 @@ namespace Trinity.Routines
 
         #region Hardcore
 
-        // returning true == you've handled it, and default handling is skipped.
-        public virtual async Task<bool> HandleKiting() => false;
-        public virtual async Task<bool> HandleAvoiding(TrinityActor newTarget) => false;
-        public virtual async Task<bool> HandleTargetInRange() => false;
-        public virtual async Task<bool> MoveToTarget() => false;
         public virtual bool SetWeight(TrinityActor cacheObject) => false;
 
+        public virtual async Task<bool> HandleKiting()
+        {
+            if (Core.Avoidance.Avoider.ShouldKite)
+            {
+                Vector3 safespot;
+                if (Core.Avoidance.Avoider.TryGetSafeSpot(out safespot) && safespot.Distance(ZetaDia.Me.Position) > 3f)
+                {
+                    Core.Logger.Log(LogCategory.Avoidance, $"Kiting");
+                    await CastDefensiveSpells();
+                    PlayerMover.MoveTo(safespot);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public virtual async Task<bool> HandleAvoiding()
+        {
+            if (Core.Avoidance.Avoider.ShouldAvoid)
+            {
+                var isCloseToSafeSpot = Core.Player.Position.Distance(Core.Avoidance.Avoider.SafeSpot) < 10f;
+                if (CurrentTarget != null && isCloseToSafeSpot)
+                {
+                    var canReachTarget = CurrentTarget.Distance < CurrentPower?.MinimumRange;
+                    if (canReachTarget && CurrentTarget.IsAvoidanceOnPath && !Core.Player.Actor.IsInAvoidance)
+                    {
+                        Core.Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and target is within range");
+                        return false;
+                    }
+                }
+
+                var safe = (!Core.Player.IsTakingDamage || Core.Player.CurrentHealthPct > 0.5f) && !Core.Player.Actor.IsInCriticalAvoidance;
+
+                //if (newTarget?.Position == LastTarget?.Position && newTarget.IsAvoidanceOnPath && safe)
+                //{
+                //    Core.Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and waiting for avoidance before handling target {newTarget.Name}");
+                //    Core.PlayerMover.MoveTowards(Core.Player.Position);
+                //    return true;
+                //}
+
+                if (!TrinityCombat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
+                {
+                    Core.Logger.Log(LogCategory.Avoidance, $"Waiting for avoidance to clear (out of combat)");
+                    Core.PlayerMover.MoveTowards(Core.Player.Position);
+                    return true;
+                }
+
+                Core.Logger.Log(LogCategory.Avoidance, $"Avoiding");
+                await CastDefensiveSpells();
+                PlayerMover.MoveTo(Core.Avoidance.Avoider.SafeSpot);
+                return true;
+            }
+            return false;
+        }
+
+        public static async Task<bool> CastDefensiveSpells()
+        {
+            var power = TrinityCombat.Routines.Current.GetDefensivePower();
+            if (power != null && power.SNOPower != SpellHistory.LastPowerUsed)
+            {
+                return await TrinityCombat.Spells.CastTrinityPower(power, "Defensive");
+            }
+            return false;
+        }
+
+        public virtual async Task<bool> HandleTarget(TrinityActor target)
+        {
+            if (await WaitForRiftBossSpawn())
+                return true;
+
+            if (WaitForInteractionChannelling())
+                return true;
+
+            if (CurrentPower == null)
+            {
+                if (!Core.Player.IsPowerUseDisabled)
+                {
+                    Core.Logger.Log(LogCategory.Targetting, $"No valid power was selected for target: {CurrentTarget}");
+                }
+                return false;
+            }
+
+            if (CurrentPower.SNOPower != SNOPower.None)
+            {
+                if (!await TrinityCombat.Spells.CastTrinityPower(CurrentPower))
+                {
+                    if (DateTime.UtcNow.Subtract(SpellHistory.LastSpellUseTime).TotalSeconds > 5)
+                    {
+                        Core.Logger.Verbose(LogCategory.Targetting, $"Routine power cast failure timeout. Clearing Target: {target?.Name} and Power: {CurrentPower}");
+                        TrinityCombat.Targeting.Clear();
+                        return false;
+                    }
+
+                    if (CurrentPower.SNOPower != SNOPower.Walk &&
+                        CurrentPower.TargetPosition.Distance(Core.Player.Position) > TrinityCombat.Targeting.MaxTargetDistance)
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
+        public async Task<bool> WaitForRiftBossSpawn()
+        {
+            if (Core.Rift.IsInRift && CurrentTarget.IsBoss)
+            {
+                if (CurrentTarget.IsSpawningBoss)
+                {
+                    Core.Logger.Verbose(LogCategory.Targetting, "Waiting while rift boss spawn");
+
+                    Vector3 safeSpot;
+                    if (Core.Avoidance.Avoider.TryGetSafeSpot(out safeSpot, 30f, 100f, CurrentTarget.Position))
+                    {
+                        PlayerMover.MoveTo(safeSpot);
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool WaitForInteractionChannelling()
+        {
+            if (Core.Player.IsCasting && !Core.Player.IsTakingDamage && CurrentTarget != null && CurrentTarget.IsGizmo)
+            {
+                Core.Logger.Verbose(LogCategory.Targetting, "Waiting while channelling spell");
+                return true;
+            }
+            return false;
+        }
+
+        public virtual async Task<bool> HandleOutsideCombat()
+        {
+            if (!Core.Player.IsCasting && (!TargetUtil.AnyMobsInRange(20f) || !Core.Player.IsTakingDamage))
+            {
+                if (await Behaviors.MoveToMarker.While(m => m.MarkerType == WorldMarkerType.LegendaryItem || m.MarkerType == WorldMarkerType.SetItem))
+                    return true;
+            }
+            return false;
+        }
+
+        public virtual async Task<bool> HandleBeforeCombat()
+        {
+            /* If standing on/nearby a portal, then assume it is intended to get in there. */
+            if (!Core.Player.IsInRift && BountyHelpers.GetPortalNearPosition(ZetaDia.Me.Position) != null)
+            {
+                Core.Logger.Debug("MainCombatTask Waiting for portal interaction");
+                return false;
+            }
+
+            // Wait after elite death until progression globe appears as a valid target or x time has passed.
+            if (Core.Rift.IsInRift && await Behaviors.WaitAfterUnitDeath.While(
+                u => u.IsElite && u.Distance < 150
+                && Core.Targets.Entries.Any(a => a.IsElite && a.EliteType != EliteTypes.Minion && a.RadiusDistance < 60)
+                && !Core.Targets.Any(p => p.Type == TrinityObjectType.ProgressionGlobe && p.Distance < 150),
+                "Wait for Progression Globe", 1000))
+                return true;
+
+            // Priority movement for progression globes. ** Temporary solution!
+            if (TrinityCombat.Targeting.CurrentTarget != null)
+            {
+                if (await Behaviors.MoveToActor.While(
+                    a => a.Type == TrinityObjectType.ProgressionGlobe && !TrinityCombat.Weighting.ShouldIgnore(a) && !a.IsAvoidanceOnPath))
+                    return true;
+            }
+
+            // Priority interaction for doors. increases door opening reliability for some edge cases ** Temporary solution!
+            if (ZetaDia.Storage.RiftStarted && await Behaviors.MoveToInteract.While(
+                a => a.Type == TrinityObjectType.Door && !a.IsUsed && a.Distance < 15f))
+                return true;
+
+            return false;
+        }
+
+        public virtual TrinityPower GetPowerForTarget(TrinityActor target)
+        {
+            var routine = TrinityCombat.Routines.Current;
+            if (target == null)
+                return null;
+
+            switch (target.Type)
+            {
+                case TrinityObjectType.BloodShard:
+                case TrinityObjectType.Gold:
+                case TrinityObjectType.HealthGlobe:
+                case TrinityObjectType.PowerGlobe:
+                case TrinityObjectType.ProgressionGlobe:
+                    return routine.GetMovementPower(target.Position);
+
+                case TrinityObjectType.Door:
+                case TrinityObjectType.HealthWell:
+                case TrinityObjectType.Shrine:
+                case TrinityObjectType.Interactable:
+                case TrinityObjectType.CursedShrine:
+                    return InteractPower(target, 100, 250);
+
+                case TrinityObjectType.CursedChest:
+                case TrinityObjectType.Container:
+                    return InteractPower(target, 100, 1200);
+
+                case TrinityObjectType.Item:
+                    return InteractPower(target, 15, 15, 6f);
+
+                case TrinityObjectType.Destructible:
+                case TrinityObjectType.Barricade:
+                    Core.PlayerMover.MoveTowards(target.Position);
+                    return routine.GetDestructiblePower();
+            }
+
+            if (target.IsQuestGiver)
+            {
+                Core.PlayerMover.MoveTowards(target.Position);
+                return InteractPower(target, 100, 250);
+            }
+
+            if (TrinityCombat.IsInCombat)
+            {
+                var routinePower = routine.GetOffensivePower();
+
+                TrinityPower kamakaziPower;
+                if (TryKamakaziPower(target, routinePower, out kamakaziPower))
+                    return kamakaziPower;
+
+                return routinePower;
+            }
+
+            return null;
+        }
+
+        public TrinityPower InteractPower(TrinityActor actor, int waitBefore, int waitAfter, float addedRange = 0)
+            => new TrinityPower(actor.IsUnit ? SNOPower.Axe_Operate_NPC : SNOPower.Axe_Operate_Gizmo,
+                actor.AxialRadius + addedRange, actor.Position, actor.AcdId, waitBefore, waitAfter);
+
+        public bool TryKamakaziPower(TrinityActor target, TrinityPower routinePower, out TrinityPower power)
+        {
+            // The routine may want us attack something other than current target, like best cluster, whatever.
+            // But for goblin kamakazi we need a special exception to force it to always target the goblin.
+
+            power = null;
+            if (target.IsTreasureGoblin && Core.Settings.Weighting.GoblinPriority == TargetPriority.Kamikaze)
+            {
+                Core.Logger.Log(LogCategory.Targetting, $"Forcing Kamakazi Target on {target}, routineProvided={routinePower}");
+
+                var kamaKaziPower = RoutineBase.DefaultPower;
+                if (routinePower != null)
+                {
+                    routinePower.SetTarget(target);
+                    kamaKaziPower = routinePower;
+                }
+
+                power = kamaKaziPower;
+                return true;
+            }
+            return false;
+        }
+
+        public virtual async Task<bool> HandleStart() => false;
+        public virtual bool ShouldReturnStartResult => false;
+
+        
         #endregion
 
         /// <summary>
@@ -352,7 +610,7 @@ namespace Trinity.Routines
         /// <param name="start"> we can cast for this long before the specified element starts</param>
         /// <param name="finish"> we can cast for this long after the specified element starts</param>
         /// <returns></returns>
-        protected static bool ShouldWaitForConventionofElements(Skill skill, Element element = Element.Unknown, int start = 0, int finish = 4000)
+        public static bool ShouldWaitForConventionofElements(Skill skill, Element element = Element.Unknown, int start = 0, int finish = 4000)
         {
             if (!Legendary.ConventionOfElements.IsEquipped)
                 return false;
@@ -379,7 +637,7 @@ namespace Trinity.Routines
             return true;
         }
 
-        protected static double GetRealCooldown(Skill skill)
+        public static double GetRealCooldown(Skill skill)
         {
             // todo refactor this, there is no need to hardcode these values
 
@@ -415,7 +673,7 @@ namespace Trinity.Routines
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
-        protected static double TimeToElementStart(Element element)
+        public static double TimeToElementStart(Element element)
         {
             var cd = Core.Cooldowns.GetBuffCooldown(SNOPower.P2_ItemPassive_Unique_Ring_038, 8);
             if (cd == null)
@@ -434,7 +692,7 @@ namespace Trinity.Routines
         /// <summary>
         /// Time (ms) since the last start of an element.
         /// </summary>
-        protected static double TimeFromElementStart(Element element)
+        public static double TimeFromElementStart(Element element)
         {
             return GetConventionRotation().Count * 4000 - TimeToElementStart(element);
         }
@@ -442,7 +700,7 @@ namespace Trinity.Routines
         /// <summary>
         /// The current rotation of elements for 'convention of elements' ring, starting from physical.
         /// </summary>
-        protected static List<Element> GetConventionRotation()
+        public static List<Element> GetConventionRotation()
         {
             //Element.Arcane, Element.Cold, Element.Fire, Element.Holy, Element.Lightning, Element.Physical, Element.Poison
 
@@ -483,7 +741,7 @@ namespace Trinity.Routines
         /// <param name="maxDistance">maximum distance spot can be from player's current position</param>
         /// <param name="arriveDistance">how close to get to the middle of the spot before stopping walking</param>
         /// <returns>if a location was found and should be moved to</returns>
-        protected static bool TryMoveToBuffedSpot(out TrinityPower power, float maxDistance, float arriveDistance = 20f)
+        public static bool TryMoveToBuffedSpot(out TrinityPower power, float maxDistance, float arriveDistance = 20f)
         {
             power = null;
 

@@ -83,7 +83,7 @@ namespace Trinity.Routines.Wizard
         public override Func<bool> ShouldIgnoreAvoidance => () => true;
         #endregion
 
-        public override async Task<bool> HandleAvoiding(TrinityActor newTarget)
+        public override async Task<bool> HandleAvoiding()
         {
             if (Core.Avoidance.Avoider.ShouldAvoid)
             {
@@ -99,12 +99,12 @@ namespace Trinity.Routines.Wizard
                 }
 
                 var safe = (!Core.Player.IsTakingDamage || Core.Player.CurrentHealthPct > 0.5f) && !Core.Player.Actor.IsInCriticalAvoidance;
-                if (newTarget?.Position == TrinityCombat.Targeting.LastTarget?.Position && newTarget.IsAvoidanceOnPath && safe)
-                {
-                    Core.Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and waiting for avoidance before handling target {newTarget.Name}");
-                    Core.PlayerMover.MoveTowards(Core.Player.Position);
-                    return true;
-                }
+                //if (newTarget?.Position == TrinityCombat.Targeting.LastTarget?.Position && newTarget.IsAvoidanceOnPath && safe)
+                //{
+                //    Core.Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and waiting for avoidance before handling target {newTarget.Name}");
+                //    Core.PlayerMover.MoveTowards(Core.Player.Position);
+                //    return true;
+                //}
 
                 if (!TrinityCombat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
                 {

@@ -24,11 +24,8 @@ namespace Trinity.Components.Combat
     public interface ITargetingProvider
     {
         Task<bool> HandleTarget(TrinityActor target);
-
         bool IsInRange(TrinityActor target, TrinityPower power);
-
         bool IsInRange(Vector3 position, TrinityPower power);
-
         TrinityActor CurrentTarget { get; }
         TrinityPower CurrentPower { get; }
         TrinityActor LastTarget { get; }
@@ -50,7 +47,7 @@ namespace Trinity.Components.Combat
 
         public float MaxTargetDistance { get; private set; } = 200f;
 
-        private void SetCurrentTarget(TrinityActor target)
+        public void SetCurrentTarget(TrinityActor target)
         {
             if (CurrentTarget != null && CurrentTarget.Targeting.TotalTargetedTime > TimeSpan.FromSeconds(30))
             {
@@ -88,7 +85,7 @@ namespace Trinity.Components.Combat
             CurrentTarget = target;
         }
 
-        private void SetCurrentPower(TrinityPower power)
+        public void SetCurrentPower(TrinityPower power)
         {
             if (CurrentPower != null)
             {
@@ -99,12 +96,14 @@ namespace Trinity.Components.Combat
 
         public async Task<bool> HandleTarget(TrinityActor target)
         {
-            if (await HandleAvoidance(target))
+            if (await TrinityCombat.Routines.Current.HandleAvoiding())
+                return true;
+
+            if (await TrinityCombat.Routines.Current.HandleKiting())
                 return true;
 
             if (target == null || !target.IsValid)
             {
-                //Core.Logger.Verbose(LogCategory.Targetting, $"Null or invalid Target. {target?.Name}");
                 Clear();
                 return false;
             }
@@ -116,43 +115,12 @@ namespace Trinity.Components.Combat
             }
 
             SetCurrentTarget(target);
-            SetCurrentPower(GetPowerForTarget(target));
 
-            if (await WaitForRiftBossSpawn())
-                return true;
+            var power = TrinityCombat.Routines.Current.GetPowerForTarget(target);
 
-            if (WaitForInteractionChannelling())
-                return true;
+            SetCurrentPower(power);
 
-            if (await HandleKiting())
-                return true;
-
-            if (CurrentPower == null)
-            {
-                if (!Core.Player.IsPowerUseDisabled)
-                {
-                    Core.Logger.Log(LogCategory.Targetting, $"No valid power was selected for target: {CurrentTarget}");
-                }
-                return false;
-            }
-
-            if (CurrentPower.SNOPower != SNOPower.None)
-            {
-                if (!await TrinityCombat.Spells.CastTrinityPower(CurrentPower))
-                {
-                    if (DateTime.UtcNow.Subtract(SpellHistory.LastSpellUseTime).TotalSeconds > 5)
-                    {
-                        Core.Logger.Verbose(LogCategory.Targetting, $"Routine power cast failure timeout. Clearing Target: {target?.Name} and Power: {CurrentPower}");
-                        Clear();
-                        return false;
-                    }
-
-                    if (CurrentPower.SNOPower != SNOPower.Walk && CurrentPower.TargetPosition.Distance(Core.Player.Position) > MaxTargetDistance)
-                        return false;
-                }
-            }
-
-            return true;
+            return await TrinityCombat.Routines.Current.HandleTarget(target);
         }
 
         private void Clear()
@@ -161,36 +129,7 @@ namespace Trinity.Components.Combat
             SetCurrentPower(null);
         }
 
-        private async Task<bool> WaitForRiftBossSpawn()
-        {
-            if (Core.Rift.IsInRift && CurrentTarget.IsBoss)
-            {
-                if (CurrentTarget.IsSpawningBoss)
-                {
-                    Core.Logger.Verbose(LogCategory.Targetting, "Waiting while rift boss spawn");
-
-                    Vector3 safeSpot;
-                    if (Core.Avoidance.Avoider.TryGetSafeSpot(out safeSpot, 30f, 100f, CurrentTarget.Position))
-                    {
-                        PlayerMover.MoveTo(safeSpot);
-                    }
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private bool WaitForInteractionChannelling()
-        {
-            if (Core.Player.IsCasting && !Core.Player.IsTakingDamage && CurrentTarget != null && CurrentTarget.IsGizmo)
-            {
-                Core.Logger.Verbose(LogCategory.Targetting, "Waiting while channelling spell");
-                return true;
-            }
-            return false;
-        }
-
-        private bool TryBlacklist(TrinityActor target)
+        public bool TryBlacklist(TrinityActor target)
         {
             if (target == null)
                 return false;
@@ -257,161 +196,6 @@ namespace Trinity.Components.Combat
             return false;
         }
 
-        private TrinityPower GetPowerForTarget(TrinityActor target)
-        {
-            var routine = TrinityCombat.Routines.Current;
-            if (target == null)
-                return null;
-
-            switch (target.Type)
-            {
-                case TrinityObjectType.BloodShard:
-                case TrinityObjectType.Gold:
-                case TrinityObjectType.HealthGlobe:
-                case TrinityObjectType.PowerGlobe:
-                case TrinityObjectType.ProgressionGlobe:
-                    return routine.GetMovementPower(target.Position);
-
-                case TrinityObjectType.Door:
-                case TrinityObjectType.HealthWell:
-                case TrinityObjectType.Shrine:
-                case TrinityObjectType.Interactable:
-                case TrinityObjectType.CursedShrine:
-                    return InteractPower(target, 100, 250);
-
-                case TrinityObjectType.CursedChest:
-                case TrinityObjectType.Container:
-                    return InteractPower(target, 100, 1200);
-
-                case TrinityObjectType.Item:
-                    return InteractPower(target, 15, 15, 6f);
-
-                case TrinityObjectType.Destructible:
-                case TrinityObjectType.Barricade:
-                    Core.PlayerMover.MoveTowards(target.Position);
-                    return routine.GetDestructiblePower();
-            }
-
-            if (target.IsQuestGiver)
-            {
-                Core.PlayerMover.MoveTowards(target.Position);
-                return InteractPower(target, 100, 250);
-            }
-
-            if (TrinityCombat.IsInCombat)
-            {
-                var routinePower = routine.GetOffensivePower();
-
-                TrinityPower kamakaziPower;
-                if (TryKamakaziPower(target, routinePower, out kamakaziPower))
-                    return kamakaziPower;
-
-                return routinePower;
-            }
-
-            return null;
-        }
-
-        private static bool TryKamakaziPower(TrinityActor target, TrinityPower routinePower, out TrinityPower power)
-        {
-            // The routine may want us attack something other than current target, like best cluster, whatever.
-            // But for goblin kamakazi we need a special exception to force it to always target the goblin.
-
-            power = null;
-            if (target.IsTreasureGoblin && Core.Settings.Weighting.GoblinPriority == TargetPriority.Kamikaze)
-            {
-                Core.Logger.Log(LogCategory.Targetting, $"Forcing Kamakazi Target on {target}, routineProvided={routinePower}");
-
-                var kamaKaziPower = RoutineBase.DefaultPower;
-                if (routinePower != null)
-                {
-                    routinePower.SetTarget(target);
-                    kamaKaziPower = routinePower;
-                }
-
-                power = kamaKaziPower;
-                return true;
-            }
-            return false;
-        }
-
-        public TrinityPower InteractPower(TrinityActor actor, int waitBefore, int waitAfter, float addedRange = 0)
-            => new TrinityPower(actor.IsUnit ? SNOPower.Axe_Operate_NPC : SNOPower.Axe_Operate_Gizmo, actor.AxialRadius + addedRange, actor.Position, actor.AcdId, waitBefore, waitAfter);
-
-        public async Task<bool> CastDefensiveSpells()
-        {
-            var power = TrinityCombat.Routines.Current.GetDefensivePower();
-            if (power != null && power.SNOPower != SpellHistory.LastPowerUsed)
-            {
-                return await TrinityCombat.Spells.CastTrinityPower(power, "Defensive");
-            }
-            return false;
-        }
-
-        private async Task<bool> HandleKiting()
-        {
-            if (Core.Avoidance.Avoider.ShouldKite)
-            {
-                if (await TrinityCombat.Routines.Current.HandleKiting())
-                {
-                    return true;
-                }
-
-                Vector3 safespot;
-                if (Core.Avoidance.Avoider.TryGetSafeSpot(out safespot) && safespot.Distance(ZetaDia.Me.Position) > 3f)
-                {
-                    Core.Logger.Log(LogCategory.Avoidance, $"Kiting");
-                    await CastDefensiveSpells();
-                    PlayerMover.MoveTo(safespot);
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private async Task<bool> HandleAvoidance(TrinityActor newTarget)
-        {
-            if (Core.Avoidance.Avoider.ShouldAvoid)
-            {
-                if (await TrinityCombat.Routines.Current.HandleAvoiding(newTarget))
-                {
-                    return true;
-                }
-
-                var isCloseToSafeSpot = Core.Player.Position.Distance(Core.Avoidance.Avoider.SafeSpot) < 10f;
-                if (CurrentTarget != null && isCloseToSafeSpot)
-                {
-                    var canReachTarget = CurrentTarget.Distance < CurrentPower?.MinimumRange;
-                    if (canReachTarget && CurrentTarget.IsAvoidanceOnPath && !Core.Player.Actor.IsInAvoidance)
-                    {
-                        Core.Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and target is within range");
-                        return false;
-                    }
-                }
-
-                var safe = (!Core.Player.IsTakingDamage || Core.Player.CurrentHealthPct > 0.5f) && !Core.Player.Actor.IsInCriticalAvoidance;
-
-                if (newTarget?.Position == LastTarget?.Position && newTarget.IsAvoidanceOnPath && safe)
-                {
-                    Core.Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and waiting for avoidance before handling target {newTarget.Name}");
-                    Core.PlayerMover.MoveTowards(Core.Player.Position);
-                    return true;
-                }
-
-                if (!TrinityCombat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
-                {
-                    Core.Logger.Log(LogCategory.Avoidance, $"Waiting for avoidance to clear (out of combat)");
-                    Core.PlayerMover.MoveTowards(Core.Player.Position);
-                    return true;
-                }
-
-                Core.Logger.Log(LogCategory.Avoidance, $"Avoiding");
-                await CastDefensiveSpells();
-                PlayerMover.MoveTo(Core.Avoidance.Avoider.SafeSpot);
-                return true;
-            }
-            return false;
-        }
 
         public bool IsInRange(TrinityActor target, TrinityPower power)
         {
@@ -468,7 +252,7 @@ namespace Trinity.Components.Combat
             return distance <= rangeRequired && IsInLineOfSight(position);
         }
 
-        private bool IsInLineOfSight(TrinityActor currentTarget)
+        public bool IsInLineOfSight(TrinityActor currentTarget)
         {
             if (GameData.LineOfSightWhitelist.Contains(currentTarget.ActorSnoId))
                 return true;
@@ -483,7 +267,7 @@ namespace Trinity.Components.Combat
             return Core.Grids.Avoidance.CanRayWalk(currentTarget, 5f);
         }
 
-        private bool IsInLineOfSight(Vector3 position)
+        public bool IsInLineOfSight(Vector3 position)
         {
             var longTargetTime = CurrentTarget?.Targeting.TotalTargetedTime < TimeSpan.FromSeconds(10);
 
