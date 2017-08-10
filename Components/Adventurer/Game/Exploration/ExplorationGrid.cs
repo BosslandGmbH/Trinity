@@ -184,23 +184,32 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             }
         }
 
-
+        private HashSet<string> _processedSceneHashes = new HashSet<string>();
 
         protected override void OnUpdated(SceneData newNodes)
         {
-            var nodes = newNodes.ExplorationNodes.Cast<ExplorationNode>().ToList();
+            // Note this excludes scenes already processed so that visiting the previous world with a cached grid maintains its nodes states.
+            // e.g. going to town and coming back to dungeon -> scene updates should remember its visited/explored state.
 
-            UpdateInnerGrid(nodes);
+            var gridName = GetType().Name;
 
-            foreach (var node in nodes)
+            foreach (var scene in newNodes.Scenes.Where(s => !_processedSceneHashes.Contains(s.SceneHash)))
             {
-                if (node == null)
-                    continue;
+                Core.Logger.Verbose($"[{gridName}] Updating grid for scene '{scene.SceneHash}' with {scene.ExplorationNodes.Count} new nodes");
 
-                node.AStarValue = (byte)(node.HasEnoughNavigableCells ? 1 : 2);
+                UpdateInnerGrid(scene.ExplorationNodes);
 
-                if (!node.IsIgnored && node.HasEnoughNavigableCells)
-                    WalkableNodes.Add(node);
+                foreach (var node in scene.ExplorationNodes)
+                {
+                    if (node == null)
+                        continue;
+
+                    node.AStarValue = (byte)(node.HasEnoughNavigableCells ? 1 : 2);
+
+                    if (!node.IsIgnored && node.HasEnoughNavigableCells)
+                        WalkableNodes.Add(node);
+                }
+                _processedSceneHashes.Add(scene.SceneHash);
             }
 
             Core.Logger.Debug("[ExplorationGrid] Updated WalkableNodes={0}", WalkableNodes.Count);
