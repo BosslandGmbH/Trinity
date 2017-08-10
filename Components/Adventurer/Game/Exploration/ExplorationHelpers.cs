@@ -59,9 +59,11 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             return Core.Scenes.CurrentScene.ExitPositions.Values.Any(p => MathUtil.GetRelativeAngularVariance(Core.Player.Position, p, position) <= degreesDifferenceAllowed);
         }
 
-        public static bool IsInUnexploredScene(Vector3 position)
+        public static bool IsInUnexploredScene(Vector3 position) => GetScene(position) != null;
+
+        public static WorldScene GetScene(Vector3 position, Func<WorldScene,bool> func = null)
         {
-            return Core.Scenes.Where(s => s.ExitPositions.Count > 1).Any(s => !s.HasBeenVisited && s.IsInScene(position));
+            return Core.Scenes.Where(s => s.ExitPositions.Count > 1).FirstOrDefault(s => s.IsInScene(position) && (func == null || func(s)));
         }
 
         public static ExplorationNode NearestWeightedUnvisitedNode(HashSet<int> levelAreaIds, List<string> ignoreScenes = null)
@@ -184,26 +186,32 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         {
             var directionMultiplier = IsInPriorityDirection(n.NavigableCenter, 30) ? 2 : 1;
             var sceneConnectionDirectionMultiplier = IsInSceneConnectionDirection(n.NavigableCenter, 30) ? 2 : 1;
-            var unexploredMultiplier = IsInUnexploredScene(n.NavigableCenter) ? 1.5 : 1;
             var nodeInPrioritySceneMultiplier = n.Priority ? 4 : 0;
             var baseDistanceFactor = 1/n.NavigableCenter.Distance(AdvDia.MyPosition);
 
-            return baseDistanceFactor * directionMultiplier * unexploredMultiplier * sceneConnectionDirectionMultiplier * (n.UnvisitedWeight + nodeInPrioritySceneMultiplier);
+            var edgeMultiplier = 1d;
+            var visitedMultiplier = 1d;
+            var exitSceneMultiplier = 1d;
+
+            // for now.. restrict this group of checks from effecting bounties.
+            if (Core.Rift.IsInRift)
+            {
+                var isInExitScene = n.Scene.Name.Contains("Exit");
+                exitSceneMultiplier = isInExitScene ? 10 : 1;
+                visitedMultiplier = n.Scene.HasBeenVisited && !isInExitScene ? 0.2f : 1f;
+
+                // Ignore dead end scenes.
+                if (n.Scene.ExitPositions.Count <= 1 && !isInExitScene)
+                    return 0;
+
+                // Lower weight for scenes near the edge of an open style map.
+                edgeMultiplier = n.Scene.Name.Contains("Border") || n.Scene.Name.Contains("Edge") ? 0.5 : 1;
+            }
+
+            return baseDistanceFactor * exitSceneMultiplier * 
+                directionMultiplier * sceneConnectionDirectionMultiplier 
+                * (n.UnvisitedWeight + nodeInPrioritySceneMultiplier) * visitedMultiplier * edgeMultiplier;
         }
-
-        //public static float FarDistanceDistanceFormula(ExplorationNode n)
-        //{
-        //    var directionMultiplier = IsInPriorityDirection(n.NavigableCenter, 30) ? 2 : 1;
-        //    var sceneConnectionDirectionMultiplier = IsInSceneConnectionDirection(n.NavigableCenter, 30) ? 4 : 0;
-        //    var unexploredMultiplier = IsInUnexploredScene(n.NavigableCenter) ? 2 : 0;
-        //    var nodeInPrioritySceneMultiplier = n.Priority ? 4 : 0;
-        //    var baseDistanceFactor = 1 / n.NavigableCenter.Distance(AdvDia.MyPosition);
-
-        //    return baseDistanceFactor * directionMultiplier * (n.UnvisitedWeight
-        //        + nodeInPrioritySceneMultiplier
-        //        + unexploredMultiplier
-        //        + sceneConnectionDirectionMultiplier);
-        //}
 
         /// <summary>
         /// Defines areas of a scene where exploration nodes should be blacklisted

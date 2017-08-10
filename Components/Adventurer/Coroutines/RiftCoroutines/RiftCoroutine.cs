@@ -45,7 +45,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         private int _level;
         private States _state;
         private bool _townRunInitiated;
-        private int _portalScanRange = 150;
+        private int _portalScanRange = 225;
 
         private int _currentWorldDynamicId;
         private int _previusWorldDynamicId;
