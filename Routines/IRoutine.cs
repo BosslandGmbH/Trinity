@@ -51,25 +51,38 @@ namespace Trinity.Routines
         TrinityPower GetDestructiblePower();
         TrinityPower GetMovementPower(Vector3 destination);
 
-        // Hardcore Overrides        
-        Task<bool> HandleKiting();
-        Task<bool> HandleAvoiding(TrinityActor newTarget);
-        Task<bool> HandleTargetInRange();
-        Task<bool> MoveToTarget();
+        /// <summary>
+        /// Called for every actor in order to get a weight - highest will become 'CurrentTarget'
+        /// Determines which actor (if any) should be the objective. Switch/Door/Globe/Monster etc
+        /// If true: it has been handled for that actor only, false: default weighting is used.
+        /// </summary>
         bool SetWeight(TrinityActor cacheObject);
 
-        // Temporary Overrides        
+        /// <summary>
+        /// Must return a power for use on current target, doors/switches == something to interact, monsters == somethnign to attack
+        /// The power is then passed along to the SpellProvider which reads the instructions from TrinityPower and performs the required 
+        /// checks, movement and casting and logging.
+        /// </summary>
+        TrinityPower GetPowerForTarget(TrinityActor target);
+
+        // Listed in order of execution.
+        Task<bool> HandleBeforeCombat();
+        Task<bool> HandleAvoiding();
+        Task<bool> HandleKiting();
+        Task<bool> HandleTarget(TrinityActor target);
+        Task<bool> HandleOutsideCombat();
+
+        // Temporary Overrides     
         Func<bool> ShouldIgnoreNonUnits { get; }
         Func<bool> ShouldIgnorePackSize { get; }
         Func<bool> ShouldIgnoreAvoidance { get; }
         Func<bool> ShouldIgnoreKiting { get; }
         Func<bool> ShouldIgnoreFollowing { get; }
 
+        // Yeah...
+        Task<bool> HandleStart();
+        bool ShouldReturnStartResult { get; }
+
     }
-
 }
-
-
-
-
 

@@ -68,48 +68,23 @@ namespace Trinity.Components.Combat
                 return false;
 
             if (!Core.Scenes.CurrentWorldScenes.Any())
-            {
-                Core.Logger.Debug("MainCombatTask Waiting for scene data to load");
                 return false;
-            }
+
+            // Allow a 'false' return in routine (to continue with profile) and skip default behavior.
+            var startHookResult = await Routines.Current.HandleStart();
+            if (Routines.Current.ShouldReturnStartResult)
+                return startHookResult;
 
             await UsePotion.Execute();
             await OpenTreasureBags.Execute();
             await VacuumItems.Execute();
-
-            /* If standing on/nearby a portal, then it is intended to get in there. 
-             * This could get better by comparing NearMarker's position with ObjectiveMarker position, 
-             * if equal; then there is definite intention to enter. So stop MainCombatTask -Seq */
-            if (!Core.Player.IsInRift && BountyHelpers.GetPortalNearPosition(ZetaDia.Me.Position) != null)
-            {
-                Core.Logger.Debug("MainCombatTask Waiting for portal interaction");
-                return false;
-            }
 
             var target = Weighting.WeightActors(Core.Targets);
 
             if (await CastBuffs())
                 return true;
 
-            // Wait after elite death until progression globe appears as a valid target or x time has passed.
-            if (Core.Rift.IsInRift && await Behaviors.WaitAfterUnitDeath.While(
-                u => u.IsElite && u.Distance < 150 
-                && Core.Targets.Entries.Any(a => a.IsElite && a.EliteType != EliteTypes.Minion && a.RadiusDistance < 60) 
-                && !Core.Targets.Any(p => p.Type == TrinityObjectType.ProgressionGlobe && p.Distance < 150), 
-                "Wait for Progression Globe", 1000))
-                return true;
-
-            // Priority movement for progression globes. ** Temporary solution!
-            if (target != null)
-            {
-                if (await Behaviors.MoveToActor.While(
-                    a => a.Type == TrinityObjectType.ProgressionGlobe && !Weighting.ShouldIgnore(a) && !a.IsAvoidanceOnPath))
-                    return true;
-            }
-
-            // Priority interaction for doors. increases door opening reliability for some edge cases ** Temporary solution!
-            if (ZetaDia.Storage.RiftStarted && await Behaviors.MoveToInteract.While(
-                a => a.Type == TrinityObjectType.Door && !a.IsUsed && a.Distance < 15f))
+            if (await Routines.Current.HandleBeforeCombat())
                 return true;
 
             // When combat is disabled, we're still allowing trinity to handle non-unit targets.
@@ -121,19 +96,15 @@ namespace Trinity.Components.Combat
 
             // We're not in combat at this point.
 
-            /* We make sure player's 20f radius is clear & not taking damage.
-            Only because mobs around break combat for a moment does not guarantee safe teleportation.
-            Bot in such cases chain dies. -Seq*/
+            if (await Routines.Current.HandleOutsideCombat())
+                return true;
 
             if (!Core.Player.IsCasting && (!TargetUtil.AnyMobsInRange(20f) || !Core.Player.IsTakingDamage))
             {
-                if (await Behaviors.MoveToMarker.While(m => m.MarkerType == WorldMarkerType.LegendaryItem || m.MarkerType == WorldMarkerType.SetItem))
-                    //Core.Logger.Debug("No mobs around 20 yards & I'm not taking damage");
-                    return true;
-
                 await EmergencyRepair.Execute();
                 await AutoEquipSkills.Instance.Execute();
                 await AutoEquipItems.Instance.Execute();
+                return false;
             }
 
             // Allow Profile to Run.
