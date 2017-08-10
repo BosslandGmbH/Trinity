@@ -163,13 +163,19 @@ namespace Trinity.Modules
 
         public SceneData CreateSceneData(IEnumerable<WorldScene> addedScenes, int worldId)
         {
-            var nodes = addedScenes.SelectMany(s => s.Nodes).ToList();
+            var scenes = addedScenes.Select(scene => new SceneDataEntry
+            {
+                SceneHash = scene.HashName,
+                ExplorationNodes = scene.Nodes,
+
+            }).Cast<ISceneDataEntry>().ToList();
 
             var sceneData = new SceneData
             {
                 WorldDynamicId = worldId,
-                ExplorationNodes = nodes.Cast<IGroupNode>().ToList(),
+                Scenes = scenes
             };
+
             return sceneData;
         }
 

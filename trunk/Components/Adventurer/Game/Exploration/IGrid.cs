@@ -41,6 +41,14 @@ namespace Trinity.Components.Adventurer.Game.Exploration
     public interface ISceneData
     {
         int WorldDynamicId { get; }
-        List<IGroupNode> ExplorationNodes { get; }
+        List<ISceneDataEntry> Scenes { get; }
     }
+
+    public interface ISceneDataEntry
+    {
+        string SceneHash { get; }
+
+        List<ExplorationNode> ExplorationNodes { get; }
+    }
+
 }

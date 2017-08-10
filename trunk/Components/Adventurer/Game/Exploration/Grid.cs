@@ -57,20 +57,18 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             GridStore.Grids.Add(new WeakReference<IGrid>(this));           
         }
 
-        public void Update(ISceneData newNodes)
+        public void Update(ISceneData newSceneData)
         {
             Core.Logger.Debug($"Update called for {this.GetType().Name}");
 
-            var sceneData = newNodes as SceneData;
-            if (sceneData != null)
+            var data = newSceneData as SceneData;
+            if (data?.WorldDynamicId == AdvDia.CurrentWorldDynamicId)
             {
-                if (sceneData.WorldDynamicId == AdvDia.CurrentWorldDynamicId)
-                {
-                    LastUpdated = DateTime.UtcNow;
-                    OnUpdated(sceneData);
-                }
+                LastUpdated = DateTime.UtcNow;
+                OnUpdated(data);
             }
         }
+
 
         protected virtual void OnUpdated(SceneData newNodes)
         {
@@ -78,20 +76,18 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         protected void UpdateInnerGrid(IEnumerable<INode> nodes)
         {
-            Core.Logger.Verbose("[{0}] Updating grid with {1} new nodes", GetType().Name, nodes.Count());
-
             //nodes = nodes.OrderBy(n => n.Center.X).ThenBy(n => n.Center.Y).ToList();
 
             var worldId = AdvDia.CurrentWorldDynamicId;
 
             foreach (var node in nodes)
-            {
+            {                
                 if (node.DynamicWorldId != worldId)
                 {
                     Core.Logger.Debug("[{0}] A node has different worldId than current world, skipping", GetType().Name);
                     return;
                 }
-
+       
                 var nodeX = ToGridDistance(node.Center.X);  //(int)Math.Round((node.Center.X - MinX - boxSize / 2) / boxSize);
                 var nodeY = ToGridDistance(node.Center.Y);  //(int)Math.Round((node.Center.Y - MinY - boxSize / 2) / boxSize);
                 InnerGrid[nodeX, nodeY] = (T)node;
