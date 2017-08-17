@@ -134,22 +134,23 @@ namespace Trinity.Components.Coroutines.Town
 
         public static Dictionary<GambleSlotTypes, int> MysterySlotTypeAndId = new Dictionary<GambleSlotTypes, int>
         {
-            {GambleSlotTypes.OneHanded,377355},
-            {GambleSlotTypes.TwoHanded,377356},
-            {GambleSlotTypes.Quiver,377360},
-            {GambleSlotTypes.Orb,377358},
-            {GambleSlotTypes.Mojo,377359},
-            {GambleSlotTypes.Helm,377344},
-            {GambleSlotTypes.Gloves,377346},
-            {GambleSlotTypes.Boots,377347},
-            {GambleSlotTypes.Chest,377345},
-            {GambleSlotTypes.Belt,377349},
-            {GambleSlotTypes.Pants,377350},
-            {GambleSlotTypes.Bracers,377351},
-            {GambleSlotTypes.Shield,377357},
-            {GambleSlotTypes.Ring,377352},
-            {GambleSlotTypes.Amulet,377353},
-            {GambleSlotTypes.Shoulder,377348}
+            {GambleSlotTypes.OneHanded, (int)SNOActor.PH_1HWeapon},
+            {GambleSlotTypes.TwoHanded, (int)SNOActor.PH_2HWeapon},
+            {GambleSlotTypes.Quiver, (int)SNOActor.PH_Quiver},
+            {GambleSlotTypes.Orb, (int)SNOActor.PH_Orb},
+            {GambleSlotTypes.Mojo, (int)SNOActor.PH_Mojo},
+            {GambleSlotTypes.Helm, (int)SNOActor.PH_Helm},
+            {GambleSlotTypes.Gloves, (int)SNOActor.PH_Gloves},
+            {GambleSlotTypes.Boots, (int)SNOActor.PH_Boots},
+            {GambleSlotTypes.Chest, (int)SNOActor.PH_ChestArmor},
+            {GambleSlotTypes.Belt, (int)SNOActor.PH_Belt},
+            {GambleSlotTypes.Pants, (int)SNOActor.PH_Pants},
+            {GambleSlotTypes.Bracers, (int)SNOActor.PH_Bracers},
+            {GambleSlotTypes.Shield, (int)SNOActor.PH_Shield},
+            {GambleSlotTypes.Ring, (int)SNOActor.PH_Ring},
+            {GambleSlotTypes.Amulet,(int)SNOActor.PH_Amulet},
+            {GambleSlotTypes.Shoulder, (int)SNOActor.PH_Shoulders},
+            {GambleSlotTypes.Phylactery, (int)SNOActor.PH_Phylactery}
         };
 
         public static Dictionary<GambleSlotTypes, int> MysterySlotTypeAndPrice = new Dictionary<GambleSlotTypes, int>
@@ -169,7 +170,8 @@ namespace Trinity.Components.Coroutines.Town
             {GambleSlotTypes.Shield,25},
             {GambleSlotTypes.Ring,50},
             {GambleSlotTypes.Amulet,100},
-            {GambleSlotTypes.Shoulder,25}
+            {GambleSlotTypes.Shoulder,25},
+            {GambleSlotTypes.Phylactery,25}
         };
     }
 }
