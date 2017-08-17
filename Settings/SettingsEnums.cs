@@ -24,6 +24,7 @@ namespace Trinity.Settings
         Pants = 1 << 13,
         Shield = 1 << 14,
         Shoulder = 1 << 15,
+        Phylactery = 1 << 16,
     }
 
     [Flags]

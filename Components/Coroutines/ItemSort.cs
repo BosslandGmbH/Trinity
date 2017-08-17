@@ -3,6 +3,7 @@ using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Components.Coroutines.Town;
@@ -1162,6 +1163,11 @@ namespace Trinity.Components.Coroutines
 
         public static bool operator ==(ItemWrapper a, ItemWrapper b)
         {
+            if (ReferenceEquals(a, null))
+                return false;
+            if (ReferenceEquals(b, null))
+                return false;
+
             return a.Equals(b);
         }
 
