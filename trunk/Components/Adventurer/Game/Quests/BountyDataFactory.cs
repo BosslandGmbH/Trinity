@@ -990,7 +990,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 WaypointLevelAreaId = 19954,
                 Coroutines = new List<ISubroutine>
                 {
-                    new GuardedGizmoCoroutine(430723, Int32.MaxValue)
+                    new GuardedGizmoCoroutine(430723, (int)SNOActor.px_Wilderness_Camp_TemplarPrisoners)
                 }
             });
 
@@ -8998,12 +8998,14 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 471712,
                 Act = Act.A2,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 460372, // Enter the final worldId here
                 QuestType = BountyQuestType.KillMonster,
-                WaypointLevelAreaId = 109538,
+                WaypointLevelAreaId = 460671,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                     // Name: p6_TempleCultist_Caster_Unique_A-747 ActorSnoId: 471616
+                   new KillUniqueMonsterCoroutine(471712, 460372, (int)SNOActor.P6_Werewolf_White_Unique_B, -840003353),
+                   new ClearLevelAreaCoroutine(471712)
                 }
             });
 
@@ -9461,6 +9463,21 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveToMapMarkerCoroutine(359939, 271233, 2912417),
                     new ClearAreaForNSecondsCoroutine(359939, 90, 0, 0, 45)
 
+                }
+            });
+
+            // A5 - Bounty: Ancient Prison (363392)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 363392,
+
+                Act = Act.A5,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 459863,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
                 }
             });
         }
