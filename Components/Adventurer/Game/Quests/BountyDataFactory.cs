@@ -8875,8 +8875,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                     new MoveToMapMarkerCoroutine(469699, 460372, 2912417),
                     new WaitCoroutine(469699, 460372, 5000),
-                    // : P6_Friendly_Adventurer-465 ActorSnoId: 462095
-                    new ClearAreaForNSecondsCoroutine(469699, 60, (int)SNOActor.P6_Friendly_Adventurer, 0, 50)
+                    new MoveToScenePositionCoroutine(469699, 460372, "p6_Moor_NSEW_01", new Vector3(-70.10144f, 62.39459f, 0.1f)),
+                    new ClearAreaForNSecondsCoroutine(469699, 60, 0, 0, 50)
                 }
             });
 
