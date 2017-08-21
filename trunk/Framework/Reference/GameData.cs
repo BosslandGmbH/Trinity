@@ -2744,9 +2744,11 @@ namespace Trinity.Framework.Reference
 
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
-            (int)SNOActor.x1_SurvivorCaptain_Rescue_Guards,         // For the Bounty: The Last Stand
+            (int)SNOActor.A1_UniqueVendor_Armorer,                          // Bounty: Scavenged Scabbard 
+            (int)SNOActor.Angel_Trooper_A,                                  // Bounty: Lost Host
+            (int)SNOActor.x1_SurvivorCaptain_Rescue_Guards,                 // Bounty: The Last Stand
             (int)SNOActor.bastionsKeepGuard_Melee_A_02_NPC_RescueEscort,
-            (int)SNOActor.P4_Forest_DyingGuy, // Guy in Greyhollow Island the bot tries to attack.
+            (int)SNOActor.P4_Forest_DyingGuy,                               // Guy in Greyhollow Island the bot tries to attack.
 
             // Obstacle you can't destroy.
             467026, // LS_a3dun_Keep_Exploding_Arch_A-6641 
