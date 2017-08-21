@@ -85,7 +85,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 ClearAreaHelper.CheckClearArea(_startPosition, _radius);
             }
 
-            if (IsQuestStepComplete())
+            if (IsQuestStepComplete() && State != States.Completed)
             {
                 Core.Logger.Log("Ending ClearAreaForNSecondsCoroutine because quest step appears to be completed!");
                 State = States.Completed;
