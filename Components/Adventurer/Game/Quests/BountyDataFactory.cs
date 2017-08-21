@@ -4607,17 +4607,17 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
 
 
-            // A5 - 현상금 사냥: 헤드 몬 톤 처치 (428251)
+            // A5 - Bounty: Kill Hed Monh Ton (428251)
             Bounties.Add(new BountyData
             {
                 QuestId = 428251,
                 Act = Act.A5,
                 WorldId = 408254,
                 QuestType = BountyQuestType.KillMonster,
-                WaypointNumber = 59,
+                WaypointLevelAreaId = 427763,
                 Coroutines = new List<ISubroutine>
                 {
-                    new KillUniqueMonsterCoroutine (428251,408254, 435470, 0),
+                    new KillUniqueMonsterCoroutine (428251, 408254, 435470, 0),
                     new ClearLevelAreaCoroutine(428251),
                 }
             });
