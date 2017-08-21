@@ -1195,8 +1195,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.SpecialEvent,
                 Coroutines = new List<ISubroutine>
                     {
-                        new MoveToMapMarkerCoroutine(344488, 71150, 497382903),
-
                         new EnterLevelAreaCoroutine (344488, 71150, 82076, 497382903, 175482),
  
                         //Navigation appears to be busted on this level
@@ -1489,7 +1487,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Act = Act.A5,
                 WorldId = 271235,
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointNumber = 60,
+                WaypointLevelAreaId = 459863,
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(363402, 271235, 2912417),
@@ -1500,8 +1498,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveToScenePositionCoroutine(363402, 271235, "x1_fortress_SW_01_B", new Vector3(92.48651f, 131.3251f, -9.900016f)),
                     new MoveToScenePositionCoroutine(363402, 271235, "x1_fortress_SW_01_B", new Vector3(95.55377f, 115.0262f, -9.900017f)),
                     new MoveToScenePositionCoroutine(363402, 271235, "x1_fortress_SW_01_B", new Vector3(105.3384f, 146.7679f, -9.900017f)),
-					
-//                    new ClearAreaForNSecondsCoroutine(363402, 60, 2912417, 0, 30, false),
+                    new InteractWithUnitCoroutine(363402, 271235, (int)SNOActor.Angel_Trooper_A, 0, 5),
                 }
             });
 
