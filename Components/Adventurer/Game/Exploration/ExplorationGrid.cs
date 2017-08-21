@@ -43,7 +43,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         }
 
         public static void Clear()
-        {
+        {            
             KnownPositions.Clear();
             _currentGrid = null;
             _lastGrid = null;
@@ -76,7 +76,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public override void Reset()
         {
-            //WorldGrids.Clear();
+            _processedSceneHashes.Clear();
         }
 
         public ExplorationNode GetNearestWalkableNodeToPosition(Vector3 position)
