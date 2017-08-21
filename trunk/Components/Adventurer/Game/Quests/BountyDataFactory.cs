@@ -4967,6 +4967,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine(346088, 70885, 1028158260),
+                        new MoveToSceneCoroutine(346088, 70885, "caOut_Boneyard_Sub80_WormCaveEntrance_01"),
                         new ClearAreaForNSecondsCoroutine(346088, 20, 0, 1028158260, 20),
                         new EnterLevelAreaCoroutine(346088, 70885, 0, 1028158260, 175501),
                         new EnterLevelAreaCoroutine(346088, 111666, 0, 1028158261, 176001),
@@ -8640,7 +8641,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Act = Act.A5,
                 WorldId = 338944,
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointNumber = 52,
+                WaypointLevelAreaId = 338946,
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(359101, 338944, 2912417),
