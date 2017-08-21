@@ -2744,6 +2744,7 @@ namespace Trinity.Framework.Reference
 
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            (int)SNOActor.trDun_Cath_Bannister_x6,                          // Unbreakable obstacle.
             (int)SNOActor.x1_Graveyard_GraveRobert,                         // NPC for the bounty: Grave Robert.
             (int)SNOActor.A2C2DyingGhostGuy,                                // NPC for bounty: The Guardian Spirits.
             (int)SNOActor.x1_bogBlight_Maggot_A,                            // Maggots you can't kill.
