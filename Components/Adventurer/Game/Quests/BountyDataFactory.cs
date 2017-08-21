@@ -8257,10 +8257,10 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Act = Act.A1,
                 WorldId = 71150,
                 QuestType = BountyQuestType.KillMonster,
-                //WaypointNumber = 6,
+                WaypointLevelAreaId = 19954,
                 Coroutines = new List<ISubroutine>
                 {
-                    new MoveToMapMarkerCoroutine(449864, 71150, 883191128),
+                    new KillUniqueMonsterCoroutine(449864, 71150, (int)SNOActor.ZombieFemale_B_Unique001, 883191128),
                     new ClearLevelAreaCoroutine(449864),
                 }
             });
