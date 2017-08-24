@@ -250,6 +250,10 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             if (PluginTime.ReadyToUse(_lastScanTime, 1000))
             {
                 _lastScanTime = PluginTime.CurrentMillisecond;
+
+                if (_objectiveLocation != Vector3.Zero)
+                    return;
+
                 if (_sceneSnoId > 0)
                 {
                     var scene = Core.Scenes.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.SnoId == _sceneSnoId || s.HasChild && s.SubScene.SnoId == _sceneSnoId);

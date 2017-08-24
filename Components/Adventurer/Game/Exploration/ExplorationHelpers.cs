@@ -35,6 +35,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public static void SetExplorationPriority(Vector3 position)
         {
+            if (position == PriorityPosition)
+                return;
+
             PriorityPosition = position;
 
             VisualizerViewModel.DebugPosition = position;
