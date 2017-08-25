@@ -2747,7 +2747,6 @@ namespace Trinity.Framework.Reference
             (int)SNOActor.trDun_Cath_Bannister_x6,                          // Unbreakable obstacle.
             (int)SNOActor.x1_Graveyard_GraveRobert,                         // NPC for the bounty: Grave Robert.
             (int)SNOActor.A2C2DyingGhostGuy,                                // NPC for bounty: The Guardian Spirits.
-            (int)SNOActor.x1_bogBlight_Maggot_A,                            // Maggots you can't kill.
             (int)SNOActor.A1_UniqueVendor_Armorer,                          // NPC at the end of bounty: Scavenged Scabbard 
             (int)SNOActor.Angel_Trooper_A,                                  // NPC for bounty: Lost Host
             (int)SNOActor.x1_SurvivorCaptain_Rescue_Guards,                 // NPC for bounty: The Last Stand

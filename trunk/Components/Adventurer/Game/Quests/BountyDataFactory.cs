@@ -1537,26 +1537,23 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
-            // A1 - 현상금 사냥: 죽음을 부르는 자 카둘 처치 (344490)
+            // A1 - Bounty: Kill Cadhul the Deathcaller (344490)
             Bounties.Add(new BountyData
             {
                 QuestId = 344490,
                 Act = Act.A1,
                 WorldId = 71150, // Enter the final worldId here
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointNumber = 13,
+                WaypointLevelAreaId = 19940,
                 Coroutines = new List<ISubroutine>
                 {
-//					new MoveToMapMarkerCoroutine(344490, 71150, 1928482775),
-					
+                    //new MoveToMapMarkerCoroutine(344490, 71150, 1928482775),
 					new MoveToScenePositionCoroutine(344490, 71150, "trOut_Highlands_Sub240_LeoricBattlements_A", new Vector3(133.3196f, 129.1948f, 9.915271f)),
                     new MoveToScenePositionCoroutine(344490, 71150, "trOut_Highlands_Sub240_LeoricBattlements_A", new Vector3(130.6052f, 98.22607f, 9.915272f)),
                     new MoveToScenePositionCoroutine(344490, 71150, "trOut_Highlands_Sub240_LeoricBattlements_A", new Vector3(155.8533f, 125.9028f, 9.915272f)),
                     new MoveToScenePositionCoroutine(344490, 71150, "trOut_Highlands_Sub240_LeoricBattlements_A", new Vector3(133.0754f, 148.5098f, 9.915272f)),
                     new MoveToScenePositionCoroutine(344490, 71150, "trOut_Highlands_Sub240_LeoricBattlements_A", new Vector3(119.749f, 125.9014f, 9.915271f)),
-
-                    new ClearAreaForNSecondsCoroutine(344490, 60, 0, 0, 45),
-                    new ClearLevelAreaCoroutine (344490)
+                    new ClearLevelAreaCoroutine(344490)
                 }
             });
 
@@ -4533,14 +4530,14 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         private static void AddBounties()
         {
-            // A5 - 현상금 사냥: 톨리퍼 최후의 저항 (359426)
+            // A5 - Bounty: Tollifer's Last Stand (359426)
             Bounties.Add(new BountyData
             {
                 QuestId = 359426,
                 Act = Act.A5,
                 WorldId = 261712,
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointNumber = 51,
+                WaypointLevelAreaId = 261758,
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(359426, 261712, 2912417),
@@ -4562,18 +4559,17 @@ namespace Trinity.Components.Adventurer.Game.Quests
 				}
             });
 
-            // A5 - 현상금 사냥: 쥐잡기 (368613)
+            // A5 - Bounty: Pest Problems (368613)
             Bounties.Add(new BountyData
             {
                 QuestId = 368613,
                 Act = Act.A5,
-                WorldId = 263494, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointNumber = 53,
+                WorldId = 263494,
+                QuestType = BountyQuestType.ClearZone,
+                WaypointLevelAreaId = 263493,
                 Coroutines = new List<ISubroutine>
                 {
-//					new MoveToMapMarkerCoroutine(368613, 263494, -1883144025),
-					new EnterLevelAreaCoroutine(368613, 263494, 0, -1883144025, 333736),
+					new EnterLevelAreaCoroutine(368613, 263494, 263494, -1883144025, 333736),
                     new ClearLevelAreaCoroutine(368613),
                 }
             });
@@ -7861,7 +7857,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Act = Act.A1,
                 WorldId = 71150,
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointNumber = 18,
+                WaypointLevelAreaId = 19943,
                 Coroutines = new List<ISubroutine>
                 {
                    new EnterLevelAreaCoroutine(449835, 71150, 0, -1019926638, 176001),
@@ -8644,7 +8640,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Act = Act.A5,
                 WorldId = 338944,
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointNumber = 52,
+                WaypointLevelAreaId = 338946,
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(359079, 338944, 2912417),
@@ -8846,8 +8842,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(469699, 460372, 2912417),
-                    new WaitCoroutine(469699, 460372, 5000),
                     new MoveToSceneCoroutine(469699, 460372, "p6_Moor_NSEW_01"),
+                    new WaitCoroutine(469699, 460372, 5000),
                     new ClearAreaForNSecondsCoroutine(469699, 60, 0, 0, 50)
                 }
             });

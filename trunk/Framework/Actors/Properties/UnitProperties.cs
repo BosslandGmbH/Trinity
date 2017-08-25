@@ -7,6 +7,7 @@ using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Zeta.Common;
+using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 
@@ -124,13 +125,32 @@ namespace Trinity.Framework.Actors.Properties
             actor.HasBuffVisualEffect = attributes.HasBuffVisualEffect;
         }
 
+        private static int GetTeamId(ACD acd)
+        {
+            var overrideId = acd.GetAttribute<int>(ActorAttributeType.TeamOverride);
+            return overrideId == -1 ? acd.GetAttribute<int>(ActorAttributeType.TeamId) : overrideId;
+        }
+
+        private static bool IsHostile(int a1, int a2)
+        {
+            return a1 != a2 && a1 != 1 && a2 != 1
+                && (a1 != 14 || (uint)(a2 - 10) > 3)
+                && (a2 != 14 || (uint)(a1 - 10) > 3)
+                && ((uint)(a1 - 15) > 7 || (uint)(a2 - 2) > 7)
+                && ((uint)(a1 - 2) > 7 || (uint)(a2 - 15) > 7);
+        }
+
+        private static bool IsHostile(ACD acd, ACD againstActor)
+        {
+            return IsHostile(GetTeamId(acd), GetTeamId(againstActor));
+        }
+
         private static void UpdateTeam(TrinityActor actor, AttributesWrapper attributes)
         {
-            var teamOverride = attributes.TeamOverride;
-            actor.TeamId = teamOverride > 0 ? teamOverride : attributes.TeamId;
+            actor.TeamId = GetTeamId(actor.CommonData);
             actor.Team = (TeamType)actor.TeamId;
-            actor.IsFriendly = actor.TeamId == 1 || actor.TeamId == 2 || actor.TeamId == 17;
-            actor.IsHostile = actor.TeamId == 10 || actor.Attributes.LastDamageAnnId == Core.Player.MyDynamicID;
+            actor.IsFriendly = !IsHostile(actor.CommonData, ZetaDia.Me.CommonData);
+            actor.IsHostile = IsHostile(actor.CommonData, ZetaDia.Me.CommonData) || actor.Attributes.LastDamageAnnId == Core.Player.MyDynamicID;
             actor.IsSameTeam = actor.IsFriendly || actor.TeamId == Core.Player.TeamId || GameData.AllyMonsterTypes.Contains(actor.MonsterType);
             actor.IsHidden = attributes.IsHidden || attributes.IsBurrowed;
             actor.IsSpawningBoss = actor.IsBoss && actor.IsUntargetable;
