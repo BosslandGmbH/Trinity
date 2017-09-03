@@ -10957,17 +10957,17 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheBarber = new Item
         {
-            Id = 0,
+            Id = 195400,
             Name = "The Barber",
             Quality = ItemQuality.Legendary,
             Slug = "the-barber-49S3Pa",
-            ItemType = ItemType.Dagger,
-            TrinityItemType = TrinityItemType.Dagger,
+            ItemType = ItemType.CeremonialDagger,
+            TrinityItemType = TrinityItemType.CeremonialKnife,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Weapon,
             InternalName = "",
             DataUrl = "https://us.battle.net/api/d3/data/item/the-barber-49S3Pa",
-            Url = "https://us.battle.net/d3/en/item/the-barber-49S3Pa",
+            Url = "https://us.battle.net/d3/en/item/the-barber-ReRBQ",
             IconUrl = "https://blzmedia-a.akamaihd.net/d3/icons/items/large/p43_unique_dagger_003_x1_demonhunter_male.png",
             RelativeUrl = "/d3/en/item/the-barber-49S3Pa",
             IsCrafted = false,

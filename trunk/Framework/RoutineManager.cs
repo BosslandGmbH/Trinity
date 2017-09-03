@@ -95,8 +95,23 @@ namespace Trinity.Framework
                 {
                     if (routine != CurrentRoutine)
                     {
-                        Core.Logger.Log($"Loading Force-Selected Routine: {manualSelectionName}");
+                        Core.Logger.Log($"Loading Force-Selected Routine:");
                         CurrentRoutine = routine;
+                        Core.Logger.Warn($"Author: {CurrentRoutine.Author}");
+                        Core.Logger.Warn($"Class: {CurrentRoutine.Class}");
+                        Core.Logger.Warn($"DisplayName: {CurrentRoutine.DisplayName}");
+                        //Range
+                        Core.Logger.Warn($"ClusterRadius: {CurrentRoutine.ClusterRadius}");
+                        Core.Logger.Warn($"ClusterSize: {CurrentRoutine.ClusterSize}");
+                        Core.Logger.Warn($"EliteRange: {CurrentRoutine.EliteRange}");
+                        Core.Logger.Warn($"TrashRange: {CurrentRoutine.TrashRange}");
+                        Core.Logger.Warn($"ShrineRange: {CurrentRoutine.ShrineRange}");
+                        //Health
+                        Core.Logger.Warn($"PotionHealthPct: {CurrentRoutine.PotionHealthPct}");
+                        Core.Logger.Warn($"EmergencyHealthPct: {CurrentRoutine.EmergencyHealthPct}");
+                        Core.Logger.Warn($"HealthGlobeRange: {CurrentRoutine.HealthGlobeRange}");
+
+                        Core.Logger.Warn($"PrimaryEnergyReserve: {CurrentRoutine.PrimaryEnergyReserve}");
                     }
                     
                     return;

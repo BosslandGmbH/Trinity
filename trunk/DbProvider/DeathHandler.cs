@@ -176,9 +176,10 @@ namespace Trinity.DbProvider
 
         public async static Task<bool> MoveWhileGhosted()
         {
-            var safespot = Core.Avoidance.GridEnricher.SafeNodeLayer.Positions.OrderBy(d =>
-                d.Distance(Core.Avoidance.GridEnricher.MonsterCentroid) +
-                d.Distance(Core.Avoidance.GridEnricher.AvoidanceCentroid)).FirstOrDefault();
+            var playerNear = ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).FirstOrDefault(x => x.ACDId != Core.Player.AcdId);
+            var safespot = playerNear?.Position ?? Core.Avoidance.GridEnricher.SafeNodeLayer.Positions.OrderBy(d =>
+                               d.Distance(Core.Avoidance.GridEnricher.MonsterCentroid) +
+                               d.Distance(Core.Avoidance.GridEnricher.AvoidanceCentroid)).FirstOrDefault();
 
             if (safespot == Vector3.Zero)
             {
@@ -186,12 +187,12 @@ namespace Trinity.DbProvider
                 return false;
             }
 
-            Core.Logger.Log("[Death] Moving away from revive position");
-
             var timeout = DateTime.UtcNow.AddSeconds(5);
             while (DateTime.UtcNow < timeout && ZetaDia.Me.IsGhosted && !ZetaDia.Me.IsDead)
             {
-                Core.Logger.Log($"[Death] Moving away... Distance={_deathLocation.Distance(ZetaDia.Me.Position)}");
+                Core.Logger.Log(playerNear != null
+                    ? $"[Death] Moving to closest Player: {playerNear.ActorClass} at Distance: {playerNear.Distance}"
+                    : $"[Death] Moving away from Revive Location at Distance: {_deathLocation.Distance(ZetaDia.Me.Position)}");
                 await Navigator.MoveTo(safespot);
                 await Coroutine.Yield();
             }

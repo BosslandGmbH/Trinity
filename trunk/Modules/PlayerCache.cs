@@ -91,6 +91,10 @@ namespace Trinity.Modules
         public float ShieldHitpoints { get; private set; }
         public DateTime LastInCombatTime { get; private set; }
 
+        public bool IsMelee
+            =>
+                Core.Player.ActorClass == ActorClass.Barbarian || Core.Player.ActorClass == ActorClass.Monk ||
+                Core.Player.ActorClass == ActorClass.Crusader;
 
         public bool IsInventoryLockedForGreaterRift { get; set; }
 
