@@ -11,9 +11,10 @@ using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Navigation;
-using static Core;
 using Trinity.Framework.Avoidance.Structures;
 using System.Threading.Tasks;
+using static Trinity.Framework.Core;
+
 namespace Trinity.Components.Coroutines
 {
     /// <summary>
