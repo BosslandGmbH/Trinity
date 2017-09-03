@@ -340,7 +340,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
             if (Destination != Vector3.Zero)
             {
-                if (_distance != 0 && distanceToDestination <= _distance && zDiff < 4)
+                if (_distance != 0 && distanceToDestination <= _distance && zDiff < 4 || Core.Player.IsDead && !Core.Player.IsGhosted)
                 {
                     Navigator.PlayerMover.MoveStop();
                     LastMoveResult = MoveResult.ReachedDestination;

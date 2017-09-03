@@ -61,7 +61,7 @@ namespace Trinity.Framework.Behaviors
         protected override async Task<bool> OnStopped()
         {
             Core.Logger.Warn($"Arrived at Marker: {Marker}");
-            VacuumItems.Execute();
+            await VacuumItems.Execute();
             VisitedMarkerPositions.Add(Marker.Position);
             Marker = null;
             return true;

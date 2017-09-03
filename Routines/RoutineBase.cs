@@ -60,7 +60,7 @@ namespace Trinity.Routines
         protected static TrinityPower Walk(TrinityActor target)
             => new TrinityPower(SNOPower.Walk, Math.Max(7f, target.AxialRadius), target.Position);
 
-        protected static TrinityPower Walk(Vector3 destination, float range = 7f)
+        protected static TrinityPower Walk(Vector3 destination, float range = 0f)
             => new TrinityPower(SNOPower.Walk, range, destination);
 
         public bool IsEliteNearby 
@@ -253,7 +253,7 @@ namespace Trinity.Routines
             if (settings.Reasons.HasFlag(UseReasons.Elites) && TargetUtil.AnyElitesInRange(40f))
                 return true;
 
-            if (settings.Reasons.HasFlag(UseReasons.Trash) && TargetUtil.ClusterExists(routine.ClusterRadius, routine.TrashRange, routine.ClusterSize))
+            if (settings.Reasons.HasFlag(UseReasons.Trash) && TargetUtil.ClusterExists(routine.TrashRange, routine.TrashRange, routine.ClusterSize))
                 return true;
 
             if (settings.Reasons.HasFlag(UseReasons.Surrounded) && TargetUtil.NumMobsInRange(25f) >= Math.Max(ClusterSize, 5))
@@ -360,8 +360,8 @@ namespace Trinity.Routines
         {
             if (Core.Avoidance.Avoider.ShouldAvoid)
             {
-                var isCloseToSafeSpot = Core.Player.Position.Distance(Core.Avoidance.Avoider.SafeSpot) < 10f;
-                if (CurrentTarget != null && isCloseToSafeSpot)
+                var isCloseToSafeSpot = Core.Player.Position.Distance(Core.Avoidance.Avoider.SafeSpot) < 3f;
+                if (CurrentTarget != null && (!CurrentTarget.IsInAvoidance || isCloseToSafeSpot))
                 {
                     var canReachTarget = CurrentTarget.Distance < CurrentPower?.MinimumRange;
                     if (canReachTarget && CurrentTarget.IsAvoidanceOnPath && !Core.Player.Actor.IsInAvoidance)
@@ -383,16 +383,34 @@ namespace Trinity.Routines
                 if (!TrinityCombat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
                 {
                     Core.Logger.Log(LogCategory.Avoidance, $"Waiting for avoidance to clear (out of combat)");
-                    Core.PlayerMover.MoveTowards(Core.Player.Position);
+
+                    await CastMovementSpells(Core.Avoidance.Avoider.SafeSpot);
                     return true;
                 }
 
-                Core.Logger.Log(LogCategory.Avoidance, $"Avoiding");
-                await CastDefensiveSpells();
-                PlayerMover.MoveTo(Core.Avoidance.Avoider.SafeSpot);
-                return true;
+                if (Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) > 5f)
+                {
+                    Core.Logger.Log(LogCategory.Avoidance, $"Moving away from Critial Avoidance.");
+
+                    if (await CastMovementSpells(Core.Avoidance.Avoider.SafeSpot))
+                        return true;
+
+                    await CastDefensiveSpells();
+                    return true;
+                }
             }
             return false;
+        }
+
+        public static async Task<bool> CastMovementSpells(Vector3 destination)
+        {
+            var power = TrinityCombat.Routines.Current.GetMovementPower(destination);
+            if (power != null && power.SNOPower != SpellHistory.LastPowerUsed)
+            {
+                return await TrinityCombat.Spells.CastTrinityPower(power, "Movement");
+            }
+            PlayerMover.MoveTo(Core.Avoidance.Avoider.SafeSpot);
+            return true;
         }
 
         public static async Task<bool> CastDefensiveSpells()
@@ -434,8 +452,13 @@ namespace Trinity.Routines
                     }
 
                     if (CurrentPower.SNOPower != SNOPower.Walk &&
-                        CurrentPower.TargetPosition.Distance(Core.Player.Position) > TrinityCombat.Targeting.MaxTargetDistance)
+                        CurrentPower.TargetPosition.Distance(Core.Player.Position) >
+                        TrinityCombat.Targeting.MaxTargetDistance)
+                    {
+                        Core.Logger.Verbose(LogCategory.Targetting,
+                            $"Player is too far away from Target: {target?.Distance} and Power: {CurrentPower}");
                         return false;
+                    }
                 }
             }
 

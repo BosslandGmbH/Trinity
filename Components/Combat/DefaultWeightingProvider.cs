@@ -43,7 +43,7 @@ namespace Trinity.Components.Combat
 
                     if (actor.IsElite && !actor.IsBoss)
                         return ShouldIgnoreElite(actor);
-                    else if (actor.IsTrashMob && !actor.IsQuestMonster)
+                    if (actor.IsTrashMob && !actor.IsQuestMonster)
                         return WeightingUtils.ShouldIgnoreTrash(actor);
 
                     break;
@@ -241,8 +241,8 @@ namespace Trinity.Components.Combat
                     #region Foreach Loop
 
                     var playerInCriticalAvoidance = Core.Avoidance.InCriticalAvoidance(ZetaDia.Me.Position);
-                    var leaderTarget = TrinityCombat.Party.Leader != null ? PartyHelper.FindLocalActor(TrinityCombat.Party.Leader.Target) : null;
-                    var isLeader = TrinityCombat.Party.Leader?.IsMe ?? false;
+                    //var leaderTarget = TrinityCombat.Party.Leader != null ? PartyHelper.FindLocalActor(TrinityCombat.Party.Leader.Target) : null;
+                    //var isLeader = TrinityCombat.Party.Leader?.IsMe ?? false;
 
 
                     foreach (var cacheObject in objects.Where(x => !x.IsPlayer))
@@ -287,8 +287,8 @@ namespace Trinity.Components.Combat
                             cacheObject.WeightInfo += "ProfileSceneSetting-AlwaysRayWalk";
                             continue;
                         }
-
-                        if (PlayerMover.IsCompletelyBlocked)
+                        var spellRange = Core.Player.IsMelee ? 12f : 65f;
+                        if (PlayerMover.IsCompletelyBlocked && TrinityCombat.Targeting.CurrentTarget?.Distance > spellRange)
                         {
                             cacheObject.WeightInfo += "PlayerBlocked";
 
@@ -332,7 +332,7 @@ namespace Trinity.Components.Combat
                             continue;
                         }
 
-                        if (cacheObject.IsUnit && cacheObject.Distance < 35f)
+                        if (cacheObject.IsUnit && cacheObject.Distance < 55f)
                         {
                             if (!cacheObject.HasBeenInLoS && !cacheObject.IsHidden && !GameData.HidingUnits.Contains(cacheObject.ActorSnoId))
                             {
@@ -416,16 +416,17 @@ namespace Trinity.Components.Combat
 
                                     //bool isInHotSpot = GroupHotSpots.CacheObjectIsInHotSpot(cacheObject) || cacheObject.IsNavBlocking();
 
+                                    var defaultKillRange = cacheObject.IsUnit && cacheObject.IsTrashMob
+                                        ? TrinityCombat.Routines.Current.TrashRange
+                                        : TrinityCombat.Routines.Current.EliteRange;
+
                                     bool elitesInRangeOfUnit = objects.Any(
                                         u =>
                                             u.AcdId != cacheObject.AcdId &&
                                             u.IsElite &&
-                                            u.Position.Distance2D(cacheObject.Position) <= 15f);
+                                            u.Position.Distance2D(cacheObject.Position) <= TrinityCombat.Routines.Current.EliteRange);
 
-                                    int nearbyTrashCount =
-                                        objects.Count(u => u.IsUnit && u.HitPoints > 0 && u.IsTrashMob &&
-                                                           cacheObject.Position.Distance(u.Position) <=
-                                                           20f);
+                                    int nearbyTrashCount = objects.Count(u => u.IsUnit && u.HitPoints > 0 && u.IsTrashMob && (u.IsInLineOfSight || u.HasBeenInLoS) && cacheObject.Position.Distance(ZetaDia.Me.Position) <= TrinityCombat.Routines.Current.TrashRange);
 
                                     //bool ignoreSummoner = cacheObject.IsSummoner && !Core.Settings.Combat.Misc.ForceKillSummoners;
                                     //bool ignoreSummoner = cacheObject.IsSummoner && !Core.Settings.Combat.Misc.ForceKillSummoners;
@@ -466,10 +467,6 @@ namespace Trinity.Components.Combat
                                             cacheObject.IsBountyObjective);
 
                                     #region Basic Checks
-
-                                    var defaultKillRange = cacheObject.IsUnit && cacheObject.IsTrashMob
-                                        ? TrinityCombat.Routines.Current.TrashRange
-                                        : TrinityCombat.Routines.Current.EliteRange;
 
                                     if (TrinityCombat.CombatMode == CombatMode.KillAll && cacheObject.Distance <= Math.Max(20, TrinityCombat.KillAllRadius) || questBasedKillAll || isInSpecialKillAllScene)
                                     {
@@ -747,10 +744,10 @@ namespace Trinity.Components.Combat
                                         //{
                                         //    cacheObject.WeightInfo += $"Questing Mode - Ignoring Trash Pack Size Setting.";
                                         //}
-                                        else if (leaderTarget != null && !isLeader && leaderTarget.Distance < 60f && TrinityCombat.Party.Leader.IsInCombat)
-                                        {
-                                            cacheObject.WeightInfo += $"Ignoring Trash Pack Size for Leader's Target";
-                                        }
+                                        //else if (leaderTarget != null && leaderTarget.AcdId != cacheObject.AcdId && !isLeader && leaderTarget.Distance < 60f && TrinityCombat.Party.Leader.IsInCombat)
+                                        //{
+                                        //    cacheObject.WeightInfo += $"Ignoring Trash Pack Size for Leader's Target";
+                                        //}
                                         else if (shouldIgnorePackSize)
                                         {
                                             cacheObject.WeightInfo += $"Routine Ignoring Trash Pack Size.";
@@ -781,9 +778,15 @@ namespace Trinity.Components.Combat
                                         //    break;
                                         //}
 
+                                        if (cacheObject.Distance > TrinityCombat.Routines.Current.EliteRange)
+                                        {
+                                            cacheObject.WeightInfo += string.Format("Ignoring {0} Elite is too far away.", cacheObject.InternalName);
+                                            cacheObject.Weight += 0;
+                                            break;
+                                        }
                                         if (cacheObject.IsSpawningBoss)
                                         {
-                                            cacheObject.WeightInfo += string.Format("Boss is spawning", cacheObject.InternalName);
+                                            cacheObject.WeightInfo += string.Format("Ignoring {0} Boss is spawning", cacheObject.InternalName);
                                             cacheObject.Weight += 0;
                                             break;
                                         }
@@ -791,7 +794,7 @@ namespace Trinity.Components.Combat
                                         if (cacheObject.IsBoss && Core.Player.IsInBossEncounterArea && cacheObject.Distance > 60f && !cacheObject.IsUsingBossbar)
                                         {
                                             // Need to trigger boss encounter to start (diablo, belial etc), ignore until profile to moves in range.
-                                            cacheObject.WeightInfo += string.Format("Boss event needs triggering", cacheObject.InternalName);
+                                            cacheObject.WeightInfo += string.Format("Ignoring {0} Boss event needs triggering", cacheObject.InternalName);
                                             cacheObject.Weight += 0;
                                             break;
                                         }
@@ -867,14 +870,14 @@ namespace Trinity.Components.Combat
                                     var elite = EliteMonsterNearFormula(cacheObject, elites);
                                     var aoe = AoENearFormula(cacheObject) + AoEInPathFormula(cacheObject);
 
-                                    var leaderTargetBoost = 1;
-                                    if (leaderTarget != null && !isLeader && cacheObject.AcdId == leaderTarget.AcdId)
-                                    {
-                                        cacheObject.WeightInfo += $"Doubled weight for Leaders Target";
-                                        leaderTargetBoost = 2;
-                                    }
+                                    //var leaderTargetBoost = 1;
+                                    //if (leaderTarget != null && !isLeader && cacheObject.AcdId == leaderTarget.AcdId)
+                                    //{
+                                    //    cacheObject.WeightInfo += $"Doubled weight for Leaders Target";
+                                    //    leaderTargetBoost = 2;
+                                    //}
 
-                                    cacheObject.Weight += (dist + last + pack + health + path + reflect + elite + aoe) * leaderTargetBoost;
+                                    cacheObject.Weight += (dist + last + pack + health + path + reflect + elite + aoe);// * leaderTargetBoost;
 
                                     cacheObject.WeightInfo +=
                                         $" dist={dist:0.0} last={last:0.0} pack={pack:0.0} health={health:0.0} path={path:0.0} reflect={reflect:0.0} elite={elite:0.0} aoe={aoe:0.0}";

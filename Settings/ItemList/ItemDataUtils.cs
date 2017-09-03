@@ -679,6 +679,7 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Quiver, ItemProperty.PrimaryStat), new ItemStatRange {AncientMax = 1000, AncientMin = 825, Max = 750, Min = 650 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Orb, ItemProperty.PrimaryStat), new ItemStatRange {AncientMax = 1000, AncientMin = 825, Max = 750, Min = 650 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Mojo, ItemProperty.PrimaryStat), new ItemStatRange {AncientMax = 1000, AncientMin = 825, Max = 750, Min = 650 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Phylactery, ItemProperty.PrimaryStat), new ItemStatRange {AncientMax = 1000, AncientMin = 825, Max = 750, Min = 650 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Shoulder, ItemProperty.PrimaryStat), new ItemStatRange {AncientMax = 650, AncientMin = 550, Max = 500, Min = 416 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Chest, ItemProperty.PrimaryStat), new ItemStatRange {AncientMax = 650, AncientMin = 550, Max = 500, Min = 416 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Cloak, ItemProperty.PrimaryStat), new ItemStatRange {AncientMax = 650, AncientMin = 550, Max = 500, Min = 416 }},
@@ -727,6 +728,7 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Quiver, ItemProperty.Vitality), new ItemStatRange {AncientMax = 1000, AncientMin = 825, Max = 750, Min = 650 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Orb, ItemProperty.Vitality), new ItemStatRange {AncientMax = 1000, AncientMin = 825, Max = 750, Min = 650 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Mojo, ItemProperty.Vitality), new ItemStatRange {AncientMax = 1000, AncientMin = 825, Max = 750, Min = 650 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Phylactery, ItemProperty.Vitality), new ItemStatRange {AncientMax = 1000, AncientMin = 825, Max = 750, Min = 650 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Shoulder, ItemProperty.Vitality), new ItemStatRange {AncientMax = 650, AncientMin = 550, Max = 500, Min = 416 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Chest, ItemProperty.Vitality), new ItemStatRange {AncientMax = 650, AncientMin = 550, Max = 500, Min = 416 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Cloak, ItemProperty.Vitality), new ItemStatRange {AncientMax = 650, AncientMin = 550, Max = 500, Min = 416 }},
@@ -807,6 +809,7 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Quiver, ItemProperty.CriticalHitChance), new ItemStatRange { Max = 10, Min = 8 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Orb, ItemProperty.CriticalHitChance), new ItemStatRange { Max = 10, Min = 8 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Mojo, ItemProperty.CriticalHitChance), new ItemStatRange { Max = 10, Min = 8 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Phylactery, ItemProperty.CriticalHitChance), new ItemStatRange { Max = 10, Min = 8 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Bracer, ItemProperty.CriticalHitChance), new ItemStatRange { Max = 6, Min = 4.5 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Shield, ItemProperty.CriticalHitChance), new ItemStatRange { Max = 10, Min = 8 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.CrusaderShield, ItemProperty.CriticalHitChance), new ItemStatRange { Max = 10, Min = 8 }},
@@ -848,6 +851,7 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Quiver, ItemProperty.SkillDamage), new ItemStatRange { Max = 15, Min = 10 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Orb, ItemProperty.SkillDamage), new ItemStatRange { Max = 15, Min = 10 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Mojo, ItemProperty.SkillDamage), new ItemStatRange { Max = 15, Min = 10 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Phylactery, ItemProperty.SkillDamage), new ItemStatRange { Max = 15, Min = 10 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Shoulder, ItemProperty.SkillDamage), new ItemStatRange { Max = 15, Min = 10 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Chest, ItemProperty.SkillDamage), new ItemStatRange { Max = 15, Min = 10 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Cloak, ItemProperty.SkillDamage), new ItemStatRange { Max = 15, Min = 10 }},
@@ -869,6 +873,7 @@ namespace Trinity.Settings.ItemList
 
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Orb, ItemProperty.BaseMaxDamage), new ItemStatRange { AncientMax = 600, AncientMin = 400, Max = 500, Min = 340 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Mojo, ItemProperty.BaseMaxDamage), new ItemStatRange { AncientMax = 600, AncientMin = 400, Max = 500, Min = 340 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Phylactery, ItemProperty.BaseMaxDamage), new ItemStatRange { AncientMax = 600, AncientMin = 400, Max = 500, Min = 340 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.MightyWeapon, ItemProperty.BaseMaxDamage), new ItemStatRange { AncientMax = 1940, AncientMin = 1318, Max = 1490, Min = 981 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Wand, ItemProperty.BaseMaxDamage), new ItemStatRange { AncientMax = 1940, AncientMin = 1318, Max = 1490, Min = 981 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Flail, ItemProperty.BaseMaxDamage), new ItemStatRange { AncientMax = 1940, AncientMin = 1318, Max = 1490, Min = 981 }},
@@ -926,6 +931,7 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Quiver, ItemProperty.Sockets), new ItemStatRange { Max = 1, Min = 0 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Orb, ItemProperty.Sockets), new ItemStatRange { Max = 1, Min = 0 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Mojo, ItemProperty.Sockets), new ItemStatRange { Max = 1, Min = 0 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Phylactery, ItemProperty.Sockets), new ItemStatRange { Max = 1, Min = 0 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Chest, ItemProperty.Sockets), new ItemStatRange { Max = 3, Min = 0 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Cloak, ItemProperty.Sockets), new ItemStatRange { Max = 3, Min = 0 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Legs, ItemProperty.Sockets), new ItemStatRange { Max = 2, Min = 0 }},
@@ -961,6 +967,7 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Quiver, ItemProperty.ResourceCost), new ItemStatRange { Max = 8, Min = 5 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Orb, ItemProperty.ResourceCost), new ItemStatRange { Max = 8, Min = 5 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Mojo, ItemProperty.ResourceCost), new ItemStatRange {Max = 8, Min = 5 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Phylactery, ItemProperty.ResourceCost), new ItemStatRange {Max = 8, Min = 5 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Shoulder, ItemProperty.ResourceCost), new ItemStatRange { Max = 8, Min = 5 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.MightyWeapon, ItemProperty.ResourceCost), new ItemStatRange { Max = 10, Min = 8 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Wand, ItemProperty.ResourceCost), new ItemStatRange { Max = 10, Min = 8 }},
@@ -992,6 +999,7 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Quiver, ItemProperty.Cooldown), new ItemStatRange { Max = 8, Min = 5 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Orb, ItemProperty.Cooldown), new ItemStatRange { Max = 8, Min = 5 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Mojo, ItemProperty.Cooldown), new ItemStatRange {Max = 8, Min = 5 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Phylactery, ItemProperty.Cooldown), new ItemStatRange {Max = 8, Min = 5 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Shoulder, ItemProperty.Cooldown), new ItemStatRange { Max = 8, Min = 5 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.MightyWeapon, ItemProperty.Cooldown), new ItemStatRange { Max = 10, Min = 6 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Wand, ItemProperty.Cooldown), new ItemStatRange { Max = 10, Min = 6 }},
@@ -1024,6 +1032,7 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Quiver, ItemProperty.AreaDamage), new ItemStatRange {Min = 10, Max = 20 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Orb, ItemProperty.AreaDamage), new ItemStatRange {Min = 10, Max = 20 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Mojo, ItemProperty.AreaDamage), new ItemStatRange {Min = 10, Max = 20 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Phylactery, ItemProperty.AreaDamage), new ItemStatRange {Min = 10, Max = 20 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Shoulder, ItemProperty.AreaDamage), new ItemStatRange {Min = 10, Max = 20 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.MightyWeapon, ItemProperty.AreaDamage), new ItemStatRange {Min = 16, Max = 24 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Wand, ItemProperty.AreaDamage), new ItemStatRange {Min = 16, Max = 24 }},
@@ -1059,6 +1068,7 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Quiver, ItemProperty.Thorns), new ItemStatRange {AncientMax = 3500, AncientMin = 2881, Max = 2880, Min = 2401 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Orb, ItemProperty.Thorns), new ItemStatRange {AncientMax = 3500, AncientMin = 2881, Max = 2880, Min = 2401 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Mojo, ItemProperty.Thorns), new ItemStatRange {AncientMax = 3500, AncientMin = 2881, Max = 2880, Min = 2401 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Phylactery, ItemProperty.Thorns), new ItemStatRange {AncientMax = 3500, AncientMin = 2881, Max = 2880, Min = 2401 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Shoulder, ItemProperty.Thorns), new ItemStatRange {AncientMax = 9500, AncientMin = 7697, Max = 7696, Min = 5334 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Chest, ItemProperty.Thorns), new ItemStatRange {AncientMax = 9500, AncientMin = 7697, Max = 7696, Min = 5334 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Cloak, ItemProperty.Thorns), new ItemStatRange {AncientMax = 9500, AncientMin = 7697, Max = 7696, Min = 5334 }},
@@ -1098,6 +1108,7 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Quiver, ItemProperty.DamageAgainstElites), new ItemStatRange { Max = 10, Min = 8 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Orb, ItemProperty.DamageAgainstElites), new ItemStatRange { Max = 10, Min = 8 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Mojo, ItemProperty.DamageAgainstElites), new ItemStatRange { Max = 10, Min = 8 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Phylactery, ItemProperty.DamageAgainstElites), new ItemStatRange { Max = 10, Min = 8 }},
 
             // ElementalDamage
 
@@ -1162,6 +1173,7 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Orb, ItemProperty.LifePercent), new ItemStatRange {  Max = 15, Min = 10 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Quiver, ItemProperty.LifePercent), new ItemStatRange {  Max = 15, Min = 10 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Mojo, ItemProperty.LifePercent), new ItemStatRange {  Max = 15, Min = 10 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Phylactery, ItemProperty.LifePercent), new ItemStatRange {  Max = 15, Min = 10 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Chest, ItemProperty.LifePercent), new ItemStatRange {  Max = 15, Min = 10 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Shoulder, ItemProperty.LifePercent), new ItemStatRange {  Max = 15, Min = 10 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Helm, ItemProperty.LifePercent), new ItemStatRange {  Max = 15, Min = 10 }},
@@ -1234,6 +1246,7 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Orb, ItemProperty.RegenerateLifePerSecond), new ItemStatRange { AncientMax = 7185, AncientMin = 6080, Max = 5528, Min = 4643}},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Quiver, ItemProperty.RegenerateLifePerSecond), new ItemStatRange { AncientMax = 7185, AncientMin = 6080, Max = 5528, Min = 4643}},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Mojo, ItemProperty.RegenerateLifePerSecond), new ItemStatRange { AncientMax = 7185, AncientMin = 6080, Max = 5528, Min = 4643}},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Phylactery, ItemProperty.RegenerateLifePerSecond), new ItemStatRange { AncientMax = 7185, AncientMin = 6080, Max = 5528, Min = 4643}},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Chest, ItemProperty.RegenerateLifePerSecond), new ItemStatRange { AncientMax = 7185, AncientMin = 6080, Max = 5528, Min = 4643}},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Gloves, ItemProperty.RegenerateLifePerSecond), new ItemStatRange { AncientMax = 10000, AncientMin = 8445, Max = 7678, Min = 6448}},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Shoulder, ItemProperty.RegenerateLifePerSecond), new ItemStatRange { AncientMax = 7185, AncientMin = 6080, Max = 5528, Min = 4643}},
@@ -1516,7 +1529,9 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Crusader), Skills.Crusader.FallingSword},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Crusader), Skills.Crusader.HeavensFury},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Crusader), Skills.Crusader.Condemn},
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Crusader), Skills.Crusader.Bombardment},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Crusader), Skills.Crusader.Bombardment},			
+			
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Necromancer), Skills.Necromancer.CorpseLance},
 
             // Chest
 
@@ -1565,6 +1580,8 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Crusader), Skills.Crusader.HeavensFury},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Crusader), Skills.Crusader.Bombardment},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Crusader), Skills.Crusader.Condemn},
+			
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Necromancer), Skills.Necromancer.CorpseLance},
 
             // Belt
 
@@ -1737,6 +1754,8 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.SweepAttack},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.Punish},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.BlessedHammer},
+			
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Phylactery, ActorClass.Necromancer), Skills.Necromancer.CorpseLance},
 
             // One Hand Weapon
 

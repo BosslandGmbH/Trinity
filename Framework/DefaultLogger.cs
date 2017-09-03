@@ -64,17 +64,20 @@ namespace Trinity.Framework
         public void Error(LogCategory category, string s, params object[] args)
             => LogToCategory(category, TrinityLogLevel.Error, s, args);
 
+        private string LastMessage;
         private void LogToCategory(LogCategory category, TrinityLogLevel level, string s, object[] args)
         {
             if (args.Length > 0)
                 s = string.Format(s, args);
-
             if (Core.Settings?.Advanced?.LogCategories.HasFlag(category) ?? true)
             {
                 var cat = category != LogCategory.None ? $" [{category}] " : string.Empty;
                 var msg = $"[{Prefix}]{cat} {s}";
 
-                switch (level)
+                if (LastMessage == msg)
+                    return;
+                LastMessage = msg;
+                    switch (level)
                 {
                     case TrinityLogLevel.Warn:
                         _Logger.Warn(msg);

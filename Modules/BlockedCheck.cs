@@ -7,6 +7,8 @@ using Trinity.DbProvider;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Grid;
 using Trinity.Framework.Objects;
+using Zeta.Game;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Modules
 {
@@ -22,7 +24,11 @@ namespace Trinity.Modules
             MoveSpeed = Core.PlayerHistory.GetYardsPerSecond();
 
             if (PlayerMover.CanMoveUnhindered)
+                // && !ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Any(x => x.ACDId != Core.Player.AcdId))
+            {
+                IsBlocked = false;
                 return;
+            }
 
             Nodes = Core.Grids.Avoidance.GetNodesInRadius(Core.Player.Position, 10f)
                 .Where(n => n.IsWalkable && Core.Grids.Avoidance.IsInPlayerFacingDirection(n.NavigableCenter,90d)).ToList();
