@@ -55,7 +55,7 @@ namespace Trinity.Components.Coroutines.Town
             var itemsToDrop = Core.Inventory.Backpack.Where(ShouldDrop).ToList();
             if (!itemsToDrop.Any())
             {
-                Core.Logger.Verbose($"[DropItems] Nothign to Drop");
+                Core.Logger.Verbose($"[DropItems] Nothing to Drop");
                 return false;
             }
 

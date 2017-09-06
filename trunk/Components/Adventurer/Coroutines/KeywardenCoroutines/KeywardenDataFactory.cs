@@ -20,7 +20,15 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
 
     public static class KeywardenDataFactory
     {
-        public static HashSet<int> A4CorruptionSNOs = new HashSet<int> { 210268, 210120 };
+        public static HashSet<int> KeyIds = new HashSet<int>
+        {
+            366946,
+            366947,
+            366948,
+            366949
+        };
+
+    public static HashSet<int> A4CorruptionSNOs = new HashSet<int> { 210268, 210120 };
 
         public static HashSet<int> GoblinSNOs = new HashSet<int>
         {

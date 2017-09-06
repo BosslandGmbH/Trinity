@@ -4,7 +4,9 @@ using Trinity.Framework;
 using Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Events;
+using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
+using Trinity.Framework.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
@@ -61,10 +63,11 @@ namespace Trinity.Components.Adventurer.Game.Combat
             }
 
             var corruptGrowthDetectionRadius = ZetaDia.Service.Hero.Class == ActorClass.Barbarian ? 30 : 20;
-            var combatState = false;
-
-            if (!combatState && ZetaDia.Me.HitpointsCurrentPct <= 0.8f)
+            bool combatState = ZetaDia.Me.HitpointsCurrentPct <= 0.8f;
+            bool eliteInRange = TargetUtil.IsEliteTargetInRange(TrinityCombat.Routines.Current.EliteRange) && Legendary.Ingeom.IsEquipped;
+            if (eliteInRange)
             {
+                Core.Logger.Verbose($"Turning off zerg because Elite is in Range and we have InGeom Equipped.");
                 combatState = true;
             }
 
@@ -84,7 +87,7 @@ namespace Trinity.Components.Adventurer.Game.Combat
             }
 
             var keywarden = KeywardenDataFactory.Items.FirstOrDefault(kw => kw.Value.WorldId == AdvDia.CurrentWorldId);
-            if (!combatState && keywarden.Value != null && keywarden.Value.IsAlive)
+            if (keywarden.Value != null && keywarden.Value.IsAlive)
             {
                 var kwActor = ActorFinder.FindUnit(keywarden.Value.KeywardenSNO);
                 if (kwActor != null && kwActor.Distance < 80f)
@@ -103,7 +106,7 @@ namespace Trinity.Components.Adventurer.Game.Combat
 
             var health = ZetaDia.Me.HitpointsCurrentPct;
             var closeUnitsCount = units.Count(u => u.IsFullyValid() && u.IsHostile && u.IsAlive && u.Position.Distance(AdvDia.MyPosition) <= 15f);
-            if (!combatState && (closeUnitsCount >= 8 || closeUnitsCount >= 3 && health <= 0.6))
+            if (closeUnitsCount >= 8 || (closeUnitsCount >= 3 && health <= 0.6))
             {
                 Core.Logger.Verbose($"Turning off zerg because {closeUnitsCount} units nearby and health is {health}. Distance={1}");
                 combatState = true;
