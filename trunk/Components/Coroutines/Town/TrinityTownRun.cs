@@ -23,8 +23,6 @@ using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Components.Coroutines.Town
 {
-    using Settings;
-
     public class TrinityTownRun
     {
         public static bool StartedOutOfTown { get; set; }
@@ -114,10 +112,11 @@ namespace Trinity.Components.Coroutines.Town
                 Core.Logger.Debug("Started Town Run Loop");
 
                 var checkCycles = 2;
+
                 while (!Core.Player.IsInventoryLockedForGreaterRift)
                 {
                     Core.Inventory.Backpack.ForEach(i => Core.Logger.Debug($"Backpack Item: {i.Name} ({i.ActorSnoId} / {i.InternalName}) RawItemType={i.RawItemType} TrinityItemType={i.TrinityItemType}"));
-                 
+
                     await Coroutine.Yield();
                     GameUI.CloseVendorWindow();
                     await IdentifyItems.Execute();
@@ -133,10 +132,10 @@ namespace Trinity.Components.Coroutines.Town
 
                     if (!await ExtractLegendaryPowers.Execute())
                         continue;
-                      
+
                     if (!await Gamble.Execute())
                         continue;
-                  
+
                     if (!await CubeRaresToLegendary.Execute())
                         continue;
 
@@ -146,13 +145,9 @@ namespace Trinity.Components.Coroutines.Town
                     if (await Any(
                         DropItems.Execute,
                         () => StashItems.Execute(true),
-                        () => VacuumItems.Execute(!TrinitySettings.Settings.Items.DontPickupInTown && ZetaDia.IsInTown),
                         SellItems.Execute,
                         SalvageItems.Execute))
                         continue;
-
-                    //if (await VacuumItems.Execute(true))//!TrinitySettings.Settings.Items.DontPickupInTown
-                    //    continue;
 
                     checkCycles--;
                     if (checkCycles == 0)
@@ -164,7 +159,7 @@ namespace Trinity.Components.Coroutines.Town
                 await StashItems.Execute();
                 await RepairItems.Execute();
 
-                Core.Logger.Log("Finished Town Run!");
+                Core.Logger.Log("Finished Town Run woo!");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(15);
 
                 if (StartedOutOfTown)
@@ -395,14 +390,14 @@ namespace Trinity.Components.Coroutines.Town
                 Core.Logger.Log("Failed to move to return portal :(");
                 return false;
             }
-     
+
             Core.PlayerMover.MoveStop();
 
             if (actor.IsFullyValid() && !actor.Interact())
             {
                 Core.Logger.Debug("Failed to interact with return portal.");
             }
-            
+
             await Coroutine.Sleep(1000);
 
             if (ZetaDia.IsInTown && !ZetaDia.Globals.IsLoadingWorld)
