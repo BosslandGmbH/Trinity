@@ -4,11 +4,12 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Buddy.Coroutines;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
-using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Settings;
+using Trinity.Components.Coroutines;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
@@ -35,6 +36,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
             Searching,
             Moving,
             Waiting,
+            Looting,
             Completed,
             Failed
         }
@@ -92,6 +94,9 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
                 case States.Waiting:
                     return await Waiting();
 
+                case States.Looting:
+                    return await Looting();
+
                 case States.Completed:
                     return await Completed();
 
@@ -114,7 +119,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
 
             if (!_keywardenData.IsAlive)
             {
-                State = States.Completed;
+                State = States.Looting;
                 return false;
             }
             TargetingHelper.TurnCombatOn();
@@ -174,7 +179,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
             if (_markerCoroutine == null)
             {
                 Core.Logger.Log("[Keywarden] Following a keywarden marker, lets see where it goes");
-                _markerCoroutine = new MoveToMapMarkerCoroutine(-1, AdvDia.CurrentWorldId, _minimapMarker.NameHash, true);
+                _markerCoroutine = new MoveToMapMarkerCoroutine(-1, AdvDia.CurrentWorldId, _minimapMarker.NameHash);
             }
 
             if (!_markerCoroutine.IsDone)
@@ -258,13 +263,33 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
 
         private async Task<bool> Waiting()
         {
-            DisablePulse();
             if (_waitCoroutine == null)
             {
                 _waitCoroutine = new WaitCoroutine(5000);
             }
-            if (!await _waitCoroutine.GetCoroutine()) return false;
-            _waitCoroutine = null;
+            Core.Logger.Log("[Keywarden] Waiting...!");
+            await Coroutine.Sleep(2500);
+            State = States.Looting;
+            return false;
+        }
+
+        private async Task<bool> Looting()
+        {
+            DisablePulse();
+            var loots = ZetaDia.Actors.GetActorsOfType<DiaObject>(true).OrderBy(x => x.Distance).Where(x => x.IsFullyValid() && KeywardenDataFactory.KeyIds.Contains(x.ActorSnoId)).ToList();
+            if (!loots.Any())
+            {
+                StatusText = "[Keywarden] No Loot!";
+                Core.Logger.Log("[Keywarden] No Loot!");
+                State = States.Completed;
+                return false;
+            }
+            foreach (var loot in loots)
+            {
+                if (await MoveToAndInteract.Execute(loot, 0, 5))
+                    return true;
+                await Coroutine.Sleep(1000);
+            }
             State = States.Completed;
             return false;
         }

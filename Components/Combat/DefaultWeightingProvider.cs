@@ -16,10 +16,12 @@ using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
-
+using Trinity.Components.Adventurer.Game.Events;
 
 namespace Trinity.Components.Combat
 {
+
+
     public interface IWeightingProvider
     {
         TrinityActor WeightActors(IEnumerable<TrinityActor> objects);
@@ -475,7 +477,7 @@ namespace Trinity.Components.Combat
                                         //
                                         //Formula:   MaxWeight-(Distance * Distance * RangeFactor)
                                         //           RangeFactor effects how quickly weights go into negatives on far distances.    
-                                        
+
                                         var effectiveRadiusIgnore = Math.Max(defaultKillRange, TrinityCombat.KillAllRadius);
                                         if (cacheObject.Distance > effectiveRadiusIgnore)
                                         {
@@ -1310,7 +1312,12 @@ namespace Trinity.Components.Combat
                                         cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Used.";
                                         break;
                                     }
-
+                                    if (PluginEvents.CurrentProfileType == ProfileType.Bounty && cacheObject.Type == TrinityObjectType.CursedShrine)
+                                    {
+                                        cacheObject.Weight = MaxWeight;
+                                        cacheObject.WeightInfo += $"Grabbing Shrine for Bounty {cacheObject.InternalName}";
+                                        break;
+                                    }
                                     // Campaign A5 Quest "Lost Treasure of the Nephalem" - have to interact with nephalem switches first... 
                                     // Quest: x1_Adria, Id: 257120, Step: 108 - disable all looting, pickup, and objects
                                     if (Core.Player.WorldType != Act.OpenWorld && Core.Player.CurrentQuestSNO == 257120 && Core.Player.CurrentQuestStep == 108)
