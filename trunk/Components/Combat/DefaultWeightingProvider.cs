@@ -243,9 +243,17 @@ namespace Trinity.Components.Combat
                     #region Foreach Loop
 
                     var playerInCriticalAvoidance = Core.Avoidance.InCriticalAvoidance(ZetaDia.Me.Position);
+
+                    int nearbyTrashCount = objects.Count(u => 
+                        u.IsUnit && 
+                        u.HitPoints > 0 && 
+                        u.IsTrashMob && 
+                        (u.IsInLineOfSight || u.HasBeenInLoS) && 
+                        u.Position.Distance(ZetaDia.Me.Position) <= TrinityCombat.Routines.Current.TrashRange
+                    );
+
                     //var leaderTarget = TrinityCombat.Party.Leader != null ? PartyHelper.FindLocalActor(TrinityCombat.Party.Leader.Target) : null;
                     //var isLeader = TrinityCombat.Party.Leader?.IsMe ?? false;
-
 
                     foreach (var cacheObject in objects.Where(x => !x.IsPlayer))
                     {
@@ -385,8 +393,6 @@ namespace Trinity.Components.Combat
                             }
                         }
 
-
-
                         if (WeightingUtils.ShouldIgnoreSpecialTarget(cacheObject, out reason))
                         {
                             cacheObject.WeightInfo += reason;
@@ -427,9 +433,7 @@ namespace Trinity.Components.Combat
                                             u.AcdId != cacheObject.AcdId &&
                                             u.IsElite &&
                                             u.Position.Distance2D(cacheObject.Position) <= TrinityCombat.Routines.Current.EliteRange);
-
-                                    int nearbyTrashCount = objects.Count(u => u.IsUnit && u.HitPoints > 0 && u.IsTrashMob && (u.IsInLineOfSight || u.HasBeenInLoS) && cacheObject.Position.Distance(ZetaDia.Me.Position) <= TrinityCombat.Routines.Current.TrashRange);
-
+                                    
                                     //bool ignoreSummoner = cacheObject.IsSummoner && !Core.Settings.Combat.Misc.ForceKillSummoners;
                                     //bool ignoreSummoner = cacheObject.IsSummoner && !Core.Settings.Combat.Misc.ForceKillSummoners;
 

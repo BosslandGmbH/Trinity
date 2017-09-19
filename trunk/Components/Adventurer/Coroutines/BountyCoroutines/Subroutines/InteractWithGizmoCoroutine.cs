@@ -6,6 +6,7 @@ using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
+using Trinity.Components.Coroutines;
 using Zeta.Common;
 
 
@@ -139,7 +140,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 // Special case for cursed chest events.
                 if (_objectiveLocation.Distance(AdvDia.MyPosition) < 16f && _actorId == 365097 && ActorFinder.FindGizmo(364559) != null)
                 {
-                    Core.Logger.Debug("Target gizmo has transformed into invulnerable event gizmo. Ending.");
+                    Core.Logger.Log("Target gizmo has transformed into invulnerable event gizmo. Ending.");
                     State = States.Failed;
                     return false;
                 }
@@ -154,7 +155,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private async Task<bool> Moving()
         {
-            if (!await NavigationCoroutine.MoveTo(_objectiveLocation, 10)) return false;
+            if (!await NavigationCoroutine.MoveTo(_objectiveLocation, 7)) return false;
             if (NavigationCoroutine.LastResult == CoroutineResult.Failure)
             {
                 _objectiveLocation = Vector3.Zero;
@@ -169,6 +170,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             var actor = ActorFinder.FindGizmo(_actorId);
             if (actor == null)
             {
+                Core.Logger.Debug("No Gizmo Found.");
                 State = States.Searching;
                 return false;
             }
@@ -177,6 +179,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 new TimeSpan(0, 0, _secondsToSleepAfterInteraction), _interactAttemps);
             if (!actor.IsInteractableQuestObject())
             {
+                Core.Logger.Error($"Unable to Interact with: {actor.Name} | Distance: {actor.Distance}.  Whitelisting.");
                 ActorFinder.InteractWhitelist.Add(actor.ActorSnoId);
             }
             return false;
@@ -203,7 +206,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 ActorFinder.InteractWhitelist.Remove(_actorId);
                 if (_interactionCoroutine.State == InteractionCoroutine.States.TimedOut)
                 {
-                    Core.Logger.Debug("[InteractWithGizmo] Interaction timed out.");
+                    Core.Logger.Error("[InteractWithGizmo] Interaction timed out.");
                     State = States.Failed;
                     return false;
                 }
@@ -220,11 +223,19 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 }
 
                 var actor = ActorFinder.FindGizmo(_actorId);
-                actor?.Interact();
+                if (actor == null)
+                {
+                    Core.Logger.Log($"No Gizmo Found.");
+                    State = States.Failed;
+                    return false;
+                }
 
-                State = States.Completed;
-                _interactionCoroutine = null;
-                return false;
+                if (await (MoveToAndInteract.Execute(actor)))
+                {
+                    State = States.Completed;
+                    _interactionCoroutine = null;
+                    return false;
+                }
             }
             return false;
         }

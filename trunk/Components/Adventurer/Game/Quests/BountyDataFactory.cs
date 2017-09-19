@@ -123,8 +123,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                     new EnterLevelAreaCoroutine(quest.QuestId, quest.Waypoint.WorldSnoId, BountyHelpers.DynamicBountyPortals.Values.ToList()),
                     new ClearLevelAreaCoroutine(quest.QuestId),
-                    new InteractWithGizmoCoroutine(448214, 443678, 445737, -1, 5, 1, 10, true),
-                    new ClearLevelAreaCoroutine(quest.QuestId)
+                    new InteractWithGizmoCoroutine(quest.QuestId, quest.Waypoint.WorldSnoId, (int)SNOActor.P4_BountyGrounds_CursedShrine, -1, 5, 1, 10, true),
+                    new InteractWithGizmoCoroutine(quest.QuestId, quest.Waypoint.WorldSnoId, (int)SNOActor.P4_BountyGrounds_CursedShrine_A5, -1, 5, 1, 10, true),
+                    //new ClearLevelAreaCoroutine(quest.QuestId)
                 }
             };
         }
@@ -8002,7 +8003,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Act = Act.A1,
                 WorldId = 71150,
                 QuestType = BountyQuestType.SpecialEvent,
-                //WaypointNumber = 18,
+                WaypointLevelAreaId = 19943,
                 Coroutines = new List<ISubroutine>
                 {
                     new EnterLevelAreaCoroutine(449837, 71150, 443346, -1019926638, 176001),
@@ -8747,7 +8748,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
-            // A2 - Bounty: Kill Vidian (474066)
+            // A2 - Bounty: Kill Vidian (474066) // Noin
             Bounties.Add(new BountyData
             {
                 QuestId = 474066,
@@ -8757,11 +8758,19 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 WaypointLevelAreaId = 456638,
                 Coroutines = new List<ISubroutine>
                 {
-                     new EnterLevelAreaCoroutine(474066, 456634, 464096, -1355958932, 176001),
-                     new MoveToMapMarkerCoroutine (474066, 464096, 1944200381),
-                     new EnterLevelAreaCoroutine(474066, 464096, 470238, 1944200381, 467345),
-                     // Type: Monster Name: p6_Shepherd_Boss-32030 ActorSnoId: 464225
-                     new KillUniqueMonsterCoroutine (474066, 464096, (int)SNOActor.p6_Shepherd_Boss, 0),
+                    new MoveToMapMarkerCoroutine (474066, 456634, -1355958932, true),
+                    new WaitCoroutine(474066, 456634, 3000),
+
+                    // g_Portal_ArchTall_Orange (176001) Distance: 46.05756
+                    new MoveToActorCoroutine(474066, 456634, 176001),
+                    new ClearAreaForNSecondsCoroutine (474066, 5, 176001, -1355958932, 45),
+
+                    new EnterLevelAreaCoroutine(474066, 456634, 464096, -1355958932, 176001),
+                    new MoveToMapMarkerCoroutine(474066, 464096, 1944200381),
+                    new EnterLevelAreaCoroutine(474066, 464096, 470238, 1944200381, 467345),
+                    // Type: Monster Name: p6_Shepherd_Boss-32030 ActorSnoId: 464225
+                    new KillUniqueMonsterCoroutine (474066, 464096, (int)SNOActor.p6_Shepherd_Boss, 0),
+                    new ClearLevelAreaCoroutine(474066),
                 }
             });
 
@@ -9306,6 +9315,10 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(470717, 457461, 619535446),
+
+                    new MoveToScenePositionCoroutine(470717, 457461, "P6_Lost_Souls_x1_fortress_EW_05_soul_well", new Vector3(180.5673f, 77.19934f, -74.9f)),
+                    new MoveThroughDeathGates(471135, 457461, 1),
+                    
                     new ClearLevelAreaCoroutine(470717),
                 }
             });
