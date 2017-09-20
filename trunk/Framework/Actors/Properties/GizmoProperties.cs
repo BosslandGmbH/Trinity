@@ -20,7 +20,7 @@ namespace Trinity.Framework.Actors.Properties
             var commonData = actor.CommonData;
             var rActor = actor.RActor;
 
-            actor.IsPlayerHeadstone = actor.ActorSnoId == GameData.PLAYER_HEADSTONE_SNO;
+            actor.IsPlayerHeadstone = actor.ActorSnoId == GameData.PlayerHeadstoneSNO;
             actor.IsRareChest = actor.InternalNameLowerCase.Contains("chest_rare") || GameData.ResplendentChestIds.Contains(actor.ActorSnoId);
             actor.IsCorpse = actor.InternalNameLowerCase.Contains("corpse");
             actor.IsWeaponRack = actor.InternalNameLowerCase.Contains("rack");

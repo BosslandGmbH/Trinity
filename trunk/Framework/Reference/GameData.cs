@@ -13,13 +13,13 @@ namespace Trinity.Framework.Reference
     /// <summary>
     /// Contains hard-coded meta-lists of ActorSnoId's, Spells and other non-dynamic info
     /// </summary>
-    internal partial class GameData
+    internal class GameData
     {
-        public const int PLAYER_HEADSTONE_SNO = 4860;
+        public const int PlayerHeadstoneSNO = 4860;
 
         public const int RiftTrialLevelAreaId = 405915;
 
-        public const int WALLER_SNO = 226808;
+        public const int WallerSNO = 226808;
 
 
         public static HashSet<int> NecroCorpseSnoIds = new HashSet<int>
@@ -92,7 +92,7 @@ namespace Trinity.Framework.Reference
             (int)SNOActor.monk_serenity_goldRings_spirit,
         };
 
-        public readonly static Dictionary<Skill, Set> AllRuneSetsBySkill = new Dictionary<Skill, Set>
+        public static readonly Dictionary<Skill, Set> AllRuneSetsBySkill = new Dictionary<Skill, Set>
         {
             { Skills.Barbarian.FuriousCharge, Sets.TheLegacyOfRaekor },
             { Skills.Wizard.Archon, Sets.VyrsAmazingArcana },
@@ -359,7 +359,7 @@ namespace Trinity.Framework.Reference
             SNOAnim.Barbarian_Female_1HS_Furious_Charge_End_Cannibal, //437862,
         };
 
-        public readonly static HashSet<TrinityObjectType> DestroyableTypes = new HashSet<TrinityObjectType>
+        public static readonly HashSet<TrinityObjectType> DestroyableTypes = new HashSet<TrinityObjectType>
         {
             TrinityObjectType.Barricade,
             TrinityObjectType.Destructible,
@@ -420,7 +420,7 @@ namespace Trinity.Framework.Reference
             401751, //p1_tiered_rifts_Orb
         };
 
-        public readonly static HashSet<TrinityObjectType> InteractableTypes = new HashSet<TrinityObjectType>
+        public static readonly HashSet<TrinityObjectType> InteractableTypes = new HashSet<TrinityObjectType>
         {
             TrinityObjectType.Item,
             TrinityObjectType.Door,
@@ -462,13 +462,13 @@ namespace Trinity.Framework.Reference
              SNOAnim.barbarian_male_Leap_Attack_Air_Cannibal //437875,
         };
 
-        public readonly static Dictionary<Item, string> MinionInternalNameTokenByItem = new Dictionary<Item, string>
+        public static readonly Dictionary<Item, string> MinionInternalNameTokenByItem = new Dictionary<Item, string>
         {
             { Legendary.Maximus, "DemonChains_ItemPassive" },
             { Legendary.HauntOfVaxo, "_shadowClone_" }
         };
 
-        public readonly static HashSet<TrinityItemType> NoPickupClickItemTypes = new HashSet<TrinityItemType>
+        public static readonly HashSet<TrinityItemType> NoPickupClickItemTypes = new HashSet<TrinityItemType>
         {
             TrinityItemType.PowerGlobe,
             TrinityItemType.HealthGlobe,
@@ -476,7 +476,7 @@ namespace Trinity.Framework.Reference
             TrinityItemType.HoradricRelic,
         };
 
-        public readonly static HashSet<TrinityObjectType> NoPickupClickTypes = new HashSet<TrinityObjectType>
+        public static readonly HashSet<TrinityObjectType> NoPickupClickTypes = new HashSet<TrinityObjectType>
         {
             TrinityObjectType.HealthGlobe,
             TrinityObjectType.ProgressionGlobe,
@@ -547,7 +547,7 @@ namespace Trinity.Framework.Reference
             325715,
         };
 
-        public readonly static Dictionary<Item, SNOPower> PowerByItem = new Dictionary<Item, SNOPower>
+        public static readonly Dictionary<Item, SNOPower> PowerByItem = new Dictionary<Item, SNOPower>
         {
             { Legendary.HarringtonWaistguard, SNOPower.ItemPassive_Unique_Ring_685_x1 },
             { Legendary.PoxFaulds, SNOPower.itemPassive_Unique_Pants_007_x1 },
@@ -573,7 +573,7 @@ namespace Trinity.Framework.Reference
             434918, //p1_rifts_Orb_flippy
         };
 
-        public readonly static HashSet<SNOActor> Shrines = new HashSet<SNOActor>
+        public static readonly HashSet<SNOActor> Shrines = new HashSet<SNOActor>
         {
             SNOActor.Shrine_Global_Fortune,
             SNOActor.Shrine_Global_Blessed,
@@ -1636,10 +1636,6 @@ namespace Trinity.Framework.Reference
             { 2455, -562468112, 436504208, "P5_Cosmetic_Wings_bfly_03" },
         };
 
-        public Dictionary<SNOActor, string> BossNames = new Dictionary<SNOActor, string>
-        {
-        };
-
         public HashSet<SNOPower> NonCombatPowers = new HashSet<SNOPower>
         {
             SNOPower.None,
@@ -1687,38 +1683,29 @@ namespace Trinity.Framework.Reference
             "minimapicon",
         };
 
-        private static readonly HashSet<int> _noCheckKillRange = new HashSet<int>
-        {
-            210120, // A4 Corrupt Growth
-            210268, // A4 Corrupt Growth
-        };
 
-        private static readonly HashSet<int> _pandemoniumFortressLevelAreaIds = new HashSet<int>
-        {
-            333758, //LevelArea: X1_LR_Tileset_Fortress
-        };
+        private static Dictionary<int, string> _animatioNamesById;
 
-        private static readonly HashSet<int> _pandemoniumFortressWorlds = new HashSet<int>
-        {
-            271233, // Adventure Pand Fortress 1
-            271235, // Adventure Pand Fortress 2
-        };
-
-        private static readonly HashSet<int> alwaysRaycastWorlds = new HashSet<int>()
+        public static HashSet<int> AlwaysRaycastWorlds { get; } = new HashSet<int>()
         {
             271233, // Pandemonium Fortress 1
             271235, // Pandemonium Fortress 2
         };
 
-        private static readonly HashSet<int> ancientIds = new HashSet<int>
+        public static HashSet<int> AncientIds { get; } = new HashSet<int>
         {
             90443, //Name: Barbarian_CallOfTheAncients_1-1028
             90535, //Name: Barbarian_CallOfTheAncients_2-1029
             90536, //Name: Barbarian_CallOfTheAncients_3-1030
         };
 
-    
-        private static readonly HashSet<int> avoidanceProjectiles = new HashSet<int>
+        public static Dictionary<int, string> AnimatioNamesById => _animatioNamesById ?? (_animatioNamesById = SNOAnim.Invalid.ToDictionary(true));
+
+
+        /// <summary>
+        /// A list of SNO's that are projectiles (so constantly look for new locations while avoiding)
+        /// </summary>
+        public static HashSet<int> AvoidanceProjectiles { get; } = new HashSet<int>
         {
             5212,   // Bees-Wasps
             4103,   // Sha-Ball
@@ -1761,7 +1748,10 @@ namespace Trinity.Framework.Reference
             (int)SNOActor.x1_LR_boss_terrorDemon_A_projectile,
         };
 
-        private static readonly HashSet<int> avoidances = new HashSet<int>
+        /// <summary>
+        /// A list of all the SNO's to avoid - you could add
+        /// </summary>
+        public static HashSet<int> Avoidances { get; } = new HashSet<int>
         {
             219702, // Arcane
             221225, // Arcane 2
@@ -1845,7 +1835,10 @@ namespace Trinity.Framework.Reference
             (int)SNOActor.x1_LR_boss_terrorDemon_A_projectile,
         };
 
-        private static readonly Dictionary<int, TimeSpan> avoidanceSpawnerDuration = new Dictionary<int, TimeSpan>
+        /// <summary>
+        /// The duration the AoE from AvoidanceSpawners should be avoided for
+        /// </summary>
+        public static Dictionary<int, TimeSpan> AvoidanceSpawnerDuration { get; } = new Dictionary<int, TimeSpan>
         {
             {221225, TimeSpan.FromSeconds(10)},   // Arcane
             {219702, TimeSpan.FromSeconds(10)},   // Arcane
@@ -1860,7 +1853,10 @@ namespace Trinity.Framework.Reference
             {159369, TimeSpan.FromSeconds(3)}, // Morlu Meteor
         };
 
-        private static readonly HashSet<int> avoidanceSpawners = new HashSet<int>
+        /// <summary>
+        /// A list of SNO's that spawn AoE then disappear from the object manager
+        /// </summary>
+        public static HashSet<int> AvoidanceSpawners { get; } = new HashSet<int>
         {
             221225,
             219702,
@@ -1871,7 +1867,10 @@ namespace Trinity.Framework.Reference
             159369, //MorluSpellcaster_Meteor_Pending-178011 (159369)
         };
 
-        private static readonly HashSet<int> avoidAnimationAtPlayer = new HashSet<int>
+        /// <summary>
+        /// This list is used for animations where the avoidance point should be the player's current location
+        /// </summary>
+        public static HashSet<int> AvoidAnimationAtPlayer { get; } = new HashSet<int>
         {
             (int)SNOAnim.Beast_start_charge_02, // A1 Savage Beast Charge - needs special handling!
             (int)SNOAnim.Beast_charge_02, // A1 Savage Beast Charge - needs special handling!
@@ -1879,871 +1878,16 @@ namespace Trinity.Framework.Reference
             (int)SNOAnim.morluSpellcaster_attack_AOE_01, //morluSpellcaster_D
             (int)SNOAnim.X1_LR_Boss_morluSpellcaster_generic_cast, //morluSpellcaster_D
             (int)SNOAnim.snakeMan_melee_generic_cast_01, //X1_LR_Boss_Snakeman_Melee_Belial (360281)
-       };
-
-        private static readonly HashSet<int> bossIds = new HashSet<int>
-        {
-            // Siegebreaker (96192), Azmodan (89690), Cydea (95250), Heart-thing (193077),
-            96192,                   89690,           95250,         193077,
-            //Kulle (80509), Small Belial (220160), Big Belial (3349), Diablo 1 (114917), terror Diablo (133562)
-            80509,           220160,                3349,              114917,            133562,
-            62975, // Belial TrueForm
-            //Maghda, Kamyr (MiniBoss before Belial)
-            6031, 51298,
-            // Ghom
-            87642,
-            // I dunno?
-            255929, 256711, 256508, 256187, 256189, 256709,
-            // Another Cydaea
-            137139,
-            // Diablo shadow clones (needs all of them, there is a male & female version of each class!)
-            144001, 144003, 143996, 143994,
-            // Jondar, Chancellor, Queen Araneae (act 1 dungeons), Skeleton King, Butcher
-            86624, 156353, 51341, 5350, 3526,
-            361347, //Jondar from the Adventure mode
-            215103, // Istaku
-            4630, // Rakanoth
-            256015, // Xah'Rith Keywarden
-            115403, // A1 Cain Skeleton boss
-            4373, 4376, 177539, // A1 Robbers
-            168240, // A2 Jewler quest
-            84919, // Skeleton King
-            108444, // ZombieFemale_A_TristramQuest (Wretched Mothers)
-            176889, // ZombieFemale_Unique_WretchedQueen
-            129439, //Arsect The Venomous
-            164502, // sandMonster_A_Head_Guardian
-            378665, // Greed
-
-            // A5
-            316839, // x1_deathOrb_bodyPile
-            375106, // A5 x1_Death_Orb_Monster
-            375111, // A5 x1_Death_Orb_Master_Monster
-            279394, // A5 Adria
-
-            300862, // X1_BigRed_Chronodemon_Event_ForgottenWar
-            318425, // X1_CoreEliteDemon_Chronodemon_Event_ForgottenWar
-
-            300866, // X1_Angel_TrooperBoss_Event_ForgottenWar
-
-            346482, // X1_PandExt_TimeTrap
-            367456, // x1_Pand_Ext_Event_Hive_Blocker
-
-            347276, // x1_Fortress_Soul_Grinder_A
-
-            374751, // x1_PortalGuardian_A
-            307339, // X1_Rockworm_Pand_Unique_HexMaze
-            297730, // x1_Malthael_Boss
         };
 
-        private static readonly HashSet<int> bountyTurnInQuests = new HashSet<int>()
+        /// <summary>
+        /// Contains ActorSnoId's of world objects that should be blacklisted
+        /// </summary>
+        public static HashSet<int> BlackListIds { get; } = new HashSet<int>
         {
-            356988, //x1_AdventureMode_BountyTurnin_A1
-            356994, //x1_AdventureMode_BountyTurnin_A2
-            356996, //x1_AdventureMode_BountyTurnin_A3
-            356999, //x1_AdventureMode_BountyTurnin_A4
-            357001, //x1_AdventureMode_BountyTurnin_A5
-        };
-
-        private static readonly HashSet<int> butcherFloorPanels = new HashSet<int>
-        {
-            // Butcher Floor Panels
-            201454, 201464, 201426, 201438, 200969, 201423, 201242,
-        };
-
-        private static readonly HashSet<int> containerWhiteListIds = new HashSet<int>
-        {
-            (int)SNOActor.x1_Catacombs_Weapon_Rack_Raise,
-            62859,  // TrOut_Fields_Chest
-            62865,  // TrOut_Highlands_Chest
-            62872,  // CaOut_Oasis_Chest
-            78790,  // trOut_wilderness_chest
-            79016,  // trOut_Tristram_chest
-            94708,  // a1dun_Leor_Chest
-            96522,  // a1dun_Cath_chest
-            130170, // a3dun_Crater_Chest
-            108122, // caOut_StingingWinds_Chest
-            111870, // A3_Battlefield_Chest_Snowy
-            111947, // A3_Battlefield_Chest_Frosty
-            213447, // Lore_AzmodanChest3
-            213446, // Lore_AzmodanChest2
-            51300,  // a3dun_Keep_Chest_A
-            179865, // a3dun_Crater_ST_Chest
-            109264, // a3dun_Keep_Chest_Rare
-            212491, // a1dun_Random_Cloud
-            210422, // a1dun_random_pot_of_gold_A
-            211861, // Pinata
-			196945, // a2dun_Spider_EggSack__Chest
-            70534,  // a2dun_Spider_Chest
-            //289794, // Weaponracks on battlefields of eternity --> best place to farm white crafting materials
-            103919, // Demonic Vessels
-            78030,  // GizmoType: Chest Name: trOut_Wilderness_Scarecrow_A-3924 ActorSnoId: 78030
-            173325, // Anvil of Fury
-
-            301177, // A5 Timeless Prison Switch
-
-            // Kevin Spacey was here
-            193023, //LootType3_GraveGuard_C_Corpse_03
-			156682, //Adventurer_A_Corpse_01_WarrivEvent
-			5758, //trDun_Cath_FloorSpawner_01
-			5724, //trDun_Cath_BookcaseShelves_A
-			85790, //Cath_Lecturn_ LachdanansScroll
-			227305, //Lore_Inarius_Corrupt
-			137125, //FesteringWoods_WarriorsRest_Lore
-        };
-
-        private static readonly Dictionary<int, float> defaultAvoidanceAnimationCustomRadius = new Dictionary<int, float>()
-        {
-            {(int)SNOAnim.morluSpellcaster_attack_AOE_01, 20f },
-            {(int)SNOAnim.x1_deathMaiden_attack_special_360_01, 15f},
-            {(int)SNOAnim.x1_Squigglet_Generic_Cast, 40f}, // Rift Boss Slime AOE
-        };
-
-        private static readonly Dictionary<int, float> defaultAvoidanceCustomRadius = new Dictionary<int, float>()
-        {
-            {330824, 35f }, // A5 Urzael animations
-            {360598, 10f }, // x1_Urzael_CeilingDebris_DamagingFire_wall
-            {359205, 20f }, // x1_Urzael_ceilingDebris_Impact_Beam
-            {360883, 20f }, // x1_Urzael_ceilingDebris_Impact_Circle
-            {362850, 12f }, // x1_Urzael_Cannonball_burning_invisible
-            {346976, 12f }, // x1_Urzael_Cannonball_burning_impact
-            {346975, 12f }, // x1_Urzael_Cannonball_burning
-
-            {360738, 12f}, // X1_Adria_arcanePool
-            {338889, 5f}, // x1_Adria_bouncingProjectile
-            {358404, 15f}, // X1_Adria_blood_large
-
-            {335505, 5f}, // x1_malthael_drainSoul_ghost
-            {325136, 20f}, // x1_Malthael_DeathFogMonster
-            {340512, 8f}, // x1_Malthael_Mephisto_LightningObject
-            {343767, 35f }, // Mallet Demons
-            {106709, 35f }, // Mallet Demons
-            {219736, 35f }, // Mallet Demons
-            {219751, 35f }, // Mallet Demons
-
-            {159369, 20f }, //MorluMeteor
-            {4103, 25f}, // Meteor
-            {3528, 15f}, // Butcher_hook
-
-            {359703, 13f}, // X1_Unique_Monster_Generic_AOE_DOT_Cold_10foot
-            {363356, 25f}, // X1_Unique_Monster_Generic_AOE_DOT_Cold_20foot
-            {359693, 13f}, // X1_Unique_Monster_Generic_AOE_DOT_Fire_10foot
-            {363357, 25f}, // X1_Unique_Monster_Generic_AOE_DOT_Fire_20foot
-            {364542, 13f}, // X1_Unique_Monster_Generic_AOE_DOT_Lightning_10foot
-            {364543, 25f}, // X1_Unique_Monster_Generic_AOE_DOT_Lightning_20foot
-            {377537, 13f}, // X1_Unique_Monster_Generic_AOE_DOT_Lightning_hardpoints
-            {360046, 13f}, // X1_Unique_Monster_Generic_AOE_DOT_Poison_10foot
-            {363358, 25f}, // X1_Unique_Monster_Generic_AOE_DOT_Poison_20foot
-            {368156, 13f}, // X1_Unique_Monster_Generic_AOE_Lightning_Ring
-            {358917, 13f}, // X1_Unique_Monster_Generic_AOE_Sphere_Distortion
-            {377086, 13f}, // X1_Unique_Monster_Generic_Projectile_Arcane
-            {377087, 13f}, // X1_Unique_Monster_Generic_Projectile_Cold
-            {377088, 13f}, // X1_Unique_Monster_Generic_Projectile_Fire
-            {377089, 13f}, // X1_Unique_Monster_Generic_Projectile_Holy
-            {377090, 13f}, // X1_Unique_Monster_Generic_Projectile_Lightning
-            {377091, 13f}, // X1_Unique_Monster_Generic_Projectile_Physical
-            {377092, 13f}, // X1_Unique_Monster_Generic_Projectile_Poison
-			{123842,60f},
-
-            {(int)SNOActor.x1_LR_boss_terrorDemon_A_projectile, 10f},
-
-            {4803, 25f}, // Molten Core
-            {4804, 25f}, // Molten Core
-            {224225, 25f}, // Molten Core
-            {247987, 25f}, // Molten Core
-            {139741, 15},
-        };
-
-        private static readonly HashSet<int> demonHunterPetIds = new HashSet<int>
-        {
-            178664,
-            173827,
-            133741,
-            159144,
-            181748,
-            159098,
-            159102,
-            159144,
-            334861,
-        };
-
-        private static readonly HashSet<int> demonHunterSentryIds = new HashSet<int>
-        {
-           141402, 150025, 150024, 168815, 150026, 150027,
-        };
-
-        private static readonly HashSet<int> destroyAtLocationIds = new HashSet<int>
-        {
-            170657, 116409, 121586, 155255, 104596, 93306,
-         };
-
-        private static readonly Dictionary<int, float> destructableObjectRadius = new Dictionary<int, float>
-        {
-            {(int)SNOActor.x1_Westm_Barricade_Round, 25},
-            {2972, 10}, {80357, 16}, {116508, 10}, {113932, 8}, {197514, 18}, {108587, 8}, {108618, 8}, {108612, 8}, {116409, 18}, {121586, 22},
-            {195101, 10}, {195108, 25}, {170657, 5}, {181228, 10}, {211959, 25}, {210418, 25}, {174496, 4}, {193963, 5}, {159066, 12}, {160570, 12},
-            {55325, 5}, {5718, 14}, {5909, 10}, {5792, 8}, {108194, 8}, {129031, 30}, {192867, 3.5f}, {155255, 8}, {54530, 6}, {157541, 6},
-            {93306, 10},
-         };
-
-        private static readonly HashSet<int> eventQuests = new HashSet<int>()
-        {
-            365821, // [D7499CC] Quest: x1_Catacombs_NS_06Mutant_Evant, QuestSnoId: 365821, QuestMeter: -1, QuestState: InProgress, QuestStep: 10, KillCount: 0, BonusCount: 0
-            369381, // [2ECD96F4] Quest: x1_Event_Horde_HunterKillers, QuestSnoId: 369381, QuestMeter: 0.004814815, QuestState: InProgress, QuestStep: 14, KillCount: 0, BonusCount: 0
-            369431, // [2ECD9860] Quest: x1_Event_WaveFight_AncientEvils, QuestSnoId: 369431, QuestMeter: -1, QuestState: InProgress, QuestStep: 13, KillCount: 0, BonusCount: 0
-            336293, // [417DD860] Quest: X1_Graveyard_GraveRobber_Event, QuestSnoId: 336293, QuestMeter: -1, QuestState: InProgress, QuestStep: 46, KillCount: 0, BonusCount: 0
-            369414, // [33955B38] Quest: X1_Pand_Ext_ForgottenWar_Adventure, QuestSnoId: 369414, QuestMeter: -1, QuestState: InProgress, QuestStep: 2, KillCount: 1, BonusCount: 0
-
-            368306, // x1_Event_Horde_ArmyOfHell,
-            369332, // x1_Event_Horde_Bonepit,
-            365252, // x1_Event_Horde_DeathCellar,
-            365150, // x1_Event_Horde_Deathfire,
-            365695, // x1_Event_Horde_DesertFortress,
-            367979, // x1_Event_Horde_Dustbowl,
-            364880, // x1_Event_Horde_FleshpitGrove,
-            369525, // x1_Event_Horde_FlyingAssasins,
-            365796, // x1_Event_Horde_FoulHatchery,
-            365305, // x1_Event_Horde_GhoulSwarm,
-            369366, // x1_Event_Horde_GuardSlaughter,
-            369381, // x1_Event_Horde_HunterKillers,
-            368035, // x1_Event_Horde_InfernalSky,
-            // 365269, // x1_Event_Horde_SpiderTrap,
-            366331, // x1_Event_Horde_UdderChaos,
-            239301, // x1_Event_Jar_Of_Souls_NecroVersion,
-            370334, // x1_Event_SpeedKill_Angel_Corrupt_A,
-            370316, // x1_Event_SpeedKill_BileCrawler_A,
-            369841, // x1_Event_SpeedKill_Bloodhawk_A,
-            370556, // x1_Event_SpeedKill_Boss_Adria,
-            370373, // x1_Event_SpeedKill_Boss_Despair,
-            370154, // x1_Event_SpeedKill_Boss_Ghom,
-            369892, // x1_Event_SpeedKill_Boss_Maghda,
-            365630, // x1_Event_SpeedKill_Boss_SkeletonKing,
-            370349, // x1_Event_SpeedKill_Champion_BigRed_A,
-            370082, // x1_Event_SpeedKill_Champion_FallenHound_D,
-            369895, // x1_Event_SpeedKill_Champion_FleshPitFlyer_C,
-            365586, // x1_Event_SpeedKill_Champion_GhostA,
-            365593, // x1_Event_SpeedKill_Champion_GoatmanB,
-            370364, // x1_Event_SpeedKill_Champion_MalletDemon_A,
-            369906, // x1_Event_SpeedKill_Champion_SandShark_A,
-            370135, // x1_Event_SpeedKill_Champion_SoulRipper_A,
-            370837, // x1_Event_SpeedKill_Champion_SquiggletA,
-            365617, // x1_Event_SpeedKill_Champion_SummonableA,
-            370077, // x1_Event_SpeedKill_Champion_azmodanBodyguard_A,
-            370066, // x1_Event_SpeedKill_Champion_creepMob_A,
-            370341, // x1_Event_SpeedKill_Champion_morluSpellcaster_A,
-            370516, // x1_Event_SpeedKill_Champion_x1_FloaterAngel_A,
-            370544, // x1_Event_SpeedKill_Champon_x1_Rockworm_Pand_A,
-            370320, // x1_Event_SpeedKill_CoreEliteDemon_A,
-            370038, // x1_Event_SpeedKill_Fallen_C,
-            365551, // x1_Event_SpeedKill_GhostHumansA,
-            370053, // x1_Event_SpeedKill_Ghoul_E,
-            364644, // x1_Event_SpeedKill_GoatmanA,
-            365509, // x1_Event_SpeedKill_Goatman_Melee_A_Ghost,
-            370044, // x1_Event_SpeedKill_Goatmutant_B,
-            369873, // x1_Event_SpeedKill_Lacuni_B,
-            370049, // x1_Event_SpeedKill_Monstrosity_Scorpion_A,
-            369910, // x1_Event_SpeedKill_Rare_Ghoul_B,
-            365622, // x1_Event_SpeedKill_Rare_Skeleton2HandA,
-            370147, // x1_Event_SpeedKill_Rare_ThousandPounder,
-            370359, // x1_Event_SpeedKill_Rare_demonTrooper_C,
-            370499, // x1_Event_SpeedKill_Rare_x1_westmarchBrute_C,
-            370060, // x1_Event_SpeedKill_Skeleton_E,
-            364635, // x1_Event_SpeedKill_SkeletonsA,
-            369856, // x1_Event_SpeedKill_Snakeman_A,
-            369884, // x1_Event_SpeedKill_Spiderling_B,
-            369863, // x1_Event_SpeedKill_Swarm_A,
-            370666, // x1_Event_SpeedKill_TentacleBears,
-            369832, // x1_Event_SpeedKill_TriuneCultist_C,
-            365526, // x1_Event_SpeedKill_TriuneVesselA,
-            365547, // x1_Event_SpeedKill_ZombieB,
-            370033, // x1_Event_SpeedKill_demonFlyer_B,
-            369817, // x1_Event_SpeedKill_electricEel_A,
-            369837, // x1_Event_SpeedKill_fastMummy_A,
-            370329, // x1_Event_SpeedKill_morluMelee_B,
-            370482, // x1_Event_SpeedKill_x1_BileCrawler_Skeletal_A,
-            370435, // x1_Event_SpeedKill_x1_BogFamily_A,
-            370452, // x1_Event_SpeedKill_x1_Monstrosity_ScorpionBug_A,
-            370427, // x1_Event_SpeedKill_x1_Skeleton_Ghost_A,
-            370561, // x1_Event_SpeedKill_x1_Tentacle_A,
-            370445, // x1_Event_SpeedKill_x1_bogBlight_Maggot_A,
-            370466, // x1_Event_SpeedKill_x1_leaperAngel_A,
-            370489, // x1_Event_SpeedKill_x1_portalGuardianMinion_A,
-            370476, // x1_Event_SpeedKill_x1_westmarchHound_A,
-            369431, // x1_Event_WaveFight_AncientEvils,
-            365751, // x1_Event_WaveFight_ArmyOfTheDead,
-            368092, // x1_Event_WaveFight_BloodClanAssault,
-            365300, // x1_Event_WaveFight_ChamberOfBone,
-            365033, // x1_Event_WaveFight_CultistLegion,
-            368056, // x1_Event_WaveFight_DeathChill,
-            365678, // x1_Event_WaveFight_FallenWarband,
-            368124, // x1_Event_WaveFight_ForsakenSoldiers,
-            369482, // x1_Event_WaveFight_HostileRealm,
-            368334, // x1_Event_WaveFight_Juggernaut,
-            365133, // x1_Event_WaveFight_KhazraWarband,
-            365953, // x1_Event_WaveFight_SunkenGrave,
-        };
-
-        private static readonly HashSet<int> fastMovementMonsterIds = new HashSet<int>
-        {
-            5212
-         };
-
-        private static readonly HashSet<int> fetishArmyIds = new HashSet<int>
-        {
-            87189, //rune0, rune2, rune3 Fetish_Melee_A-78285
-            89934, //rune1 Fetish_Skeleton_A-77992
-
-            // rune4 Tiki Torch 5 + 2 shamans
-            409656, //Name: Fetish_Melee_fire-78523,
-            90072, //Fetish_doubleStack_Shaman_A-78522,
-
-            410238, //rune5 Fetish_Melee_poison-78595,
-
-            //ActorId: 409590, Type: Monster, Name: Fetish_Melee_Sycophants-852,
-        };
-
-        private static readonly HashSet<int> forceToItemOverrideIds = new HashSet<int>
-        {
-            166943, // DemonTrebuchetKey, infernal key
-            255880, // DemonKey_Destruction
-            255881, // DemonKey_Hate
-            255882, // DemonKey_Terror
-        };
-
-        private static readonly HashSet<int> forceTownPortalLevelAreaIds = new HashSet<int>
-        {
-            55313, // Act 2 Caldeum Bazaar
-        };
-
-        private static readonly HashSet<int> forceUseWOTBIds = new HashSet<int>()
-        {
-            256015, 256000, 255996
-        };
-
-        private static readonly HashSet<int> gargantuanIds = new HashSet<int>
-        {
-            179780, 179778, 179772, 179779, 179776, 122305,
-            // Short Mans Finger
-            432690, //ActorId: 432690, Type: Monster, Name: Legendary_WD_Gargantuan-485, Distance2d: 8.563416,
-            432692, //ActorId: 432692, Type: Monster, Name: Legendary_WD_Gargantuan_Cleave-469,
-            432693, //ActorId: 432693, Type: Monster, Name: Legendary_WD_Gargantuan_Cooldown-476,
-            432695, //ActorId: 432695, Type: Monster, Name: Legendary_WD_Gargantuan_Slam-502,
-            432694, //ActorId: 432694, Type: Monster, Name: Legendary_WD_Gargantuan_Poison-508,
-            432691, //ActorId: 432691, Type: Monster, Name: Legendary_WD_Gargantuan_Absorb-522,
-        };
-
-        private static readonly HashSet<int> goblinIds = new HashSet<int>
-        {
-            (int)SNOActor.treasureGoblin_A, //5984
-            (int)SNOActor.treasureGoblin_B, //5985
-            (int)SNOActor.treasureGoblin_backpack, //5986
-            (int)SNOActor.treasureGoblin_C, //5987
-            //(int)SNOActor.treasureGoblin_Portal, //54862
-            //(int)SNOActor.treasureGoblin_Portal_Proxy, //54887
-            //(int)SNOActor.treasureGoblin_portal_emitter, //59948
-            //(int)SNOActor.treasureGoblin_portal_opening, //60549
-            //(int)SNOActor.treasureGoblin_portal_closing, //60558
-            //(int)SNOActor.treasureGoblin_portal_summon_trailActor, //108403
-            //(int)SNOActor.treasureGoblin_stunImmune_trailActor, //129286
-            //(int)SNOActor.Lore_Bestiary_TreasureGoblin, //147316
-            (int)SNOActor.Shrine_TreasureGoblin, //269349
-            //(int)SNOActor.treasureGoblin_A_Slave, //326803
-            (int)SNOActor.X1_Treasure_Goblin_Event_Runner, //330135
-            //(int)SNOActor.treasureGoblin_C_Unique_DevilsHand, //343046
-            //(int)SNOActor.p1_Tgoblin_Chest_Bomb, //382664
-            //(int)SNOActor.p1_Tgoblin_Gold_Pile_Gib, //385658
-            //(int)SNOActor.p1_Tgoblin_Gold_Pile_C, //386274
-            //(int)SNOActor.p1_Tgoblin_Gold_Pile_C_Gib, //386434
-            //(int)SNOActor.p1_Tgoblin_Gold_Pile_C_ribbons, //386558
-            //(int)SNOActor.p1_TGoblin_Gate, //389569
-            //(int)SNOActor.p1_Tgoblin_Gold_Pile_A, //390498
-            //(int)SNOActor.p1_TGoblin_LightBeam_A, //390682
-            //(int)SNOActor.p1_TGoblin_Torch, //391021
-            //(int)SNOActor.p1_TGoblin_Gondola, //391270
-            (int)SNOActor.treasureGoblin_G, //391593
-            //(int)SNOActor.p1_Tgoblin_Vase_A, //391765
-            //(int)SNOActor.p1_Tgoblin_Vault_Door, //392094
-            //(int)SNOActor.p1_TGoblin_Gondola_Vertical, //392098
-            //(int)SNOActor.p1_Tgoblin_Vase_C, //392606
-            //(int)SNOActor.p1_TGoblin_Gondola_Card_Left, //392657
-            //(int)SNOActor.p1_TGoblin_Gondola_Card_Right, //392660
-            (int)SNOActor.p1_treasureGoblin_inBackpack_A, //394196
-            //(int)SNOActor.p1_TGoblin_CenterPiece_Gem, //394555
-            //(int)SNOActor.p1_Tgoblin_Greed_Bait, //403041
-            //(int)SNOActor.p1_Greed_crowds_goblinPortal, //403532
-            //(int)SNOActor.p1_treasureGoblin_jump_trailActor, //403549
-            (int)SNOActor.p1_Tgoblin_basket_goblin, //403843
-            (int)SNOActor.p1_Tgoblin_basket_goblin, //403843
-            //(int)SNOActor.p1_greed_crowds_goblinCoinThrow_2, //404109
-            //(int)SNOActor.p1_Tgoblin_BG_Torch, //404302
-            //(int)SNOActor.p1_TGoblin_Gate_Closed, //404625
-            //(int)SNOActor.p1_TGoblin_CenterPiece_Gem_Fogged, //404731
-            //(int)SNOActor.p1_TGoblin_CenterPiece_Gem_INVIS, //404733
-            //(int)SNOActor.p1_Greed_crowds_goblinPortal_no_dist, //404854
-            (int)SNOActor.p1_treasureGoblin_tentacle_A, //405186
-            (int)SNOActor.p1_treasureGoblin_tentacle_backpack, //405189
-            //(int)SNOActor.p1_Tgoblin_Chest_Bomb_Chunks, //405308
-            //(int)SNOActor.p1_Tgoblin_Greed_Bait_Chunks, //405339
-            (int)SNOActor.p1_Portal_Tentacle_goblin, //405590
-            (int)SNOActor.treasureGoblin_D_Splitter, //408354
-            (int)SNOActor.treasureGoblin_E, //408655
-            (int)SNOActor.MarkerLocation_GoblinPortalIn, //408679
-            (int)SNOActor.treasureGoblin_F, //408989
-            (int)SNOActor.treasureGoblin_Portal_Open, //410460
-            (int)SNOActor.treasureGoblin_D_Splitter_02, //410572
-            (int)SNOActor.treasureGoblin_D_Splitter_03, //410574
-            (int)SNOActor.treasureGoblin_H, //413289
-            //(int)SNOActor.P2_Goblin_Spawner_LR, //425478
-            (int)SNOActor.p1_treasureGoblin_teleport_shell, //428094
-            (int)SNOActor.p1_treasureGoblin_backpack_B, //428205
-            (int)SNOActor.p1_treasureGoblin_backpack_F, //428206
-            (int)SNOActor.p1_treasureGoblin_backpack_C, //428211
-            (int)SNOActor.p1_treasureGoblin_backpack_H, //428213
-            (int)SNOActor.p1_treasureGoblin_backpack_D, //428247
-            (int)SNOActor.treasureGoblin_I, //428663
-            (int)SNOActor.treasureGoblin_J, //429161
-            (int)SNOActor.p1_treasureGoblin_backpack_J, //429526
-            (int)SNOActor.treasureGoblin_B_WhatsNew, //429615
-            (int)SNOActor.treasureGoblin_F_WhatsNew, //429619
-            (int)SNOActor.treasureGoblin_C_WhatsNew, //429620
-            (int)SNOActor.treasureGoblin_B_FX_WhatsNew, //429624
-            //(int)SNOActor.MarkerLocation_SpecialGoblinRiftSpawn, //429649
-            (int)SNOActor.p1_treasureGoblin_backpack_E, //429660
-            //(int)SNOActor.Spawner_MarkerLocation_SpecialGoblinRiftSpawn, //429676
-            //(int)SNOActor.treasureGoblin_A_LegacyPuzzleRing, //429689
-            (int)SNOActor.p1_Portal_Tentacle_goblin_NoAccess, //430916
-            (int)SNOActor.p1_treasureGoblin_backpack_I, //433905
-            (int)SNOActor.a4_Heaven_Shrine_TreasureGoblin, //434409
-            (int)SNOActor.treasureGoblin_J_WhatsNew, //434630
-            (int)SNOActor.treasureGoblin_J_FX_WhatsNew, //434631
-            (int)SNOActor.treasureGoblin_E_WhatsNew, //434632
-            (int)SNOActor.treasureGoblin_D_WhatsNew, //434633
-            (int)SNOActor.treasureGoblin_Anniversary_Event, //434745
-            (int)SNOActor.p1_Portal_Anniversary_goblin_NoAccess, //435639
-            (int)SNOActor.p3_cos_pet_Murkgoblin_A, //441208
-
-		    450993, // Yahoo !treasureGoblin_K-613 ActorSnoId: 450993, Menagerist Goblin
-
-        ////    //5984, 5985, 5987, 5988, 405186, 380657
-
-        //// treasureGoblin_A
-        //5984,
-        //// treasureGoblin_B
-        //5985,
-        //// treasureGoblin_backpack
-        //5986,
-        //// treasureGoblin_C
-        //5987,
-        //// treasureGoblin_Portal
-        ////54862,
-        //// treasureGoblin_Portal_Proxy
-        ////54887,
-        //// treasureGoblin_portal_emitter
-        ////59948,
-        //// treasureGoblin_portal_opening
-        ////60549,
-        //// treasureGoblin_portal_closing
-        ////60558,
-        //// treasureGoblin_portal_summon_trailActor
-        ////108403,
-        //// treasureGoblin_stunImmune_trailActor
-        ////129286,
-        //// Lore_Bestiary_TreasureGoblin
-        ////147316,
-        //// treasureGoblin_A_Slave
-        ////326803,
-        //// treasureGoblin_C_Unique_DevilsHand
-        //343046,
-        //// p1_treasureGobin_A_Unique_GreedMinion
-        //380657,
-        //// treasureGoblin_G
-        //391593,
-        //// p1_treasureGoblin_inBackpack_A
-        //394196,
-        //// p1_treasureGoblin_jump_trailActor
-        ////403549,
-        //// p1_treasureGoblin_tentacle_A
-        //405186,
-        //// p1_treasureGoblin_tentacle_backpack
-        //405189,
-        //// treasureGoblin_D_Splitter
-        //408354,
-        //// treasureGoblin_E
-        //408655,
-        //// treasureGoblin_F
-        //408989,
-        //// treasureGoblin_Portal_Open
-        ////410460,
-        //// treasureGoblin_D_Splitter_02
-        //410572,
-        //// treasureGoblin_D_Splitter_03
-        //410574,
-        //// treasureGoblin_H
-        //413289,
-        //// p1_treasureGoblin_teleport_shell
-        ////428094,
-        //// p1_treasureGoblin_backpack_B
-        //428205,
-        //// p1_treasureGoblin_backpack_F
-        //428206,
-        //// p1_treasureGoblin_backpack_C
-        //428211,
-        //// p1_treasureGoblin_backpack_H
-        //428213,
-        //// p1_treasureGoblin_backpack_D
-        //428247,
-        //// treasureGoblin_I
-        //428663,
-        //// treasureGoblin_J
-        //429161,
-        //// p1_treasureGoblin_backpack_J
-        //429526,
-        //// treasureGoblin_B_WhatsNew
-        //429615,
-        //// treasureGoblin_F_WhatsNew
-        //429619,
-        //// treasureGoblin_C_WhatsNew
-        //429620,
-        //// treasureGoblin_B_FX_WhatsNew
-        //429624,
-        //// p1_treasureGoblin_backpack_E
-        //429660,
-        //// treasureGoblin_A_LegacyPuzzleRing
-        ////429689,
-        //// p1_treasureGoblin_backpack_I
-        //433905,
-        //// treasureGoblin_J_WhatsNew
-        //434630,
-        //// treasureGoblin_J_FX_WhatsNew
-        //434631,
-        //// treasureGoblin_E_WhatsNew
-        //434632,
-        //// treasureGoblin_D_WhatsNew
-        //434633,
-        //// treasureGoblin_Anniversary_Event
-        //434745,
-         };
-
-        private static readonly HashSet<int> highPriorityInteractables = new HashSet<int>
-        {
-            56686, // a3dun_Keep_Bridge_Switch
-            211999, // a3dun_Keep_Bridge_Switch_B
-            451047, // Mystical Chest - Falcon's Wings
-        };
-
-        private static readonly HashSet<int> ignoreUntargettableAttribute = new HashSet<int>()
-        {
-            5432, // A2 Snakem
-        };
-
-        private static readonly Dictionary<int, int> interactEndAnimations = new Dictionary<int, int>()
-        {
-            {348096, 348093}, // x1_Bog_Beacon_B
-        };
-
-        private static readonly HashSet<int> interactWhiteListIds = new HashSet<int>
-        {
-            //454511, //p43_AD_Valor_BloodStone-21326
-            454473, 455059, // Diablo1 Area Lore Book Lecturn Switches
-            //455675, //p43_AD_Valor_Pedestal-21061 (Sno=455675
-            453770, //p43_trdun_lecturn_hallsoftheblind- 453770
-
-            //328830//x1_Fortress_Portal_Switch (328830)
-            309432, // x1_westm_Bridge
-            209133, // TentacleLord (209133)  QuestSnoId: 434753 QuestStep: 1, Description: Slay the Infernal Bovine herd!
-            363725, // Special Event Chest
-            451047, // Mystical Chest - Falcon's Wings
-            56686, // a3dun_Keep_Bridge_Switch
-            211999, // a3dun_Keep_Bridge_Switch_B
-            52685, // a3dun_Keep_Bridge
-            54882, // a3dun_Keep_Door_Wooden_A
-            105478, // a1dun_Leor_Spike_Spawner_Switch
-            102927, // A1 Cursed Hold Prisoners
-            5747, // A1 Cathedral Switch
-            365097, // Cursed Chest - Damp Cellar
-
-            (int)SNOActor.a2dun_Aqd_Chest_Special_GreedyMiner, // Bounty Quest: A Miners' Gold requires it to be opened.
-
-            // A5
-            348096, // Paths of the Drowned - portal switches - x1_Bog_Beacon_B
-            361364, // A5 Siege Rune Path of War
-
-            274457, // A5 Spirit of Malthael - Tower of Korelan
-            368515, // A5 Nephalem Switch - Passage to Corvus
-
-            354407, // X1_Angel_Common_Event_GreatWeapon
-        };
-
-        private static readonly HashSet<int> lineOfSightWhitelist = new HashSet<int>
-        {
-            307, // a2dun_zolt_pedestal
-            410366, // Siege_wallMonster_C = 410366, Bounty to kill wall monsters, failing los checks.
-            309432, // x1_westm_Bridge
-            116807, // Butcher Health Well
-            180575, // Diablo arena Health Well
-            129031, // A3 Skycrown Catapults
-            220160, // Small Belial (220160),
-            3349,   // Big Belial (3349),
-            210268, // Corrupt Growths 2nd Tier
-            193077, // a3dun_Crater_ST_GiantDemonHeart_Mob
-
-            375106, // A5 x1_Death_Orb_Monster
-            375111, // A5 x1_Death_Orb_Master_Monster
-
-            329390, // x1_Pand_BatteringRam_Hook_B_low
-            368515, // A5 Nephalem Switch -  Passage to Corvus
-            347276, // x1_Fortress_Soul_Grinder_A
-            326937, // x1_Pand_BatteringRam_Hook_B
-            291368, // x1_Urzael_Boss
-        };
-
-        private static readonly Dictionary<int, int> monsterCustomWeights = new Dictionary<int, int>
-        {
-            // Wood wraiths all this line (495 & 496 & 6572 & 139454 & 139456 & 170324 & 170325)
-            {495, 901}, {496, 901}, {6572, 901}, {139454, 901}, {139456, 901}, {170324, 901}, {170325, 901},
-            // -- added 4099 (act 2 fallen shaman)
-            // Fallen Shaman prophets goblin Summoners (365 & 4100)
-            {365, 1901}, {4099, 1901}, {4100, 1901},
-            // The annoying grunts summoned by the above
-            {4084, -250},
-            // Wretched mothers that summon zombies in act 1 (6639)
-            {6639, 951},
-            // Fallen lunatic (4095)
-            {4095, 2999},
-            // Pestilence hands (4738)
-            {4738, 1901},
-            // Belial Minions
-            {104014, 1500},
-            // Act 1 doors that skeletons get stuck behind
-            {454, 1500},
-            // Cydaea boss (95250)
-            {95250, 1501},
-
-            //Cydaea Spiderlings (137139)
-            {137139, -301},
-            // GoatMutantshaman Elite (4304)
-            {4304, 999},
-            // GoatMutantshaman (4300)
-            {4300, 901},
-            // Succubus (5508)
-            {5508, 801},
-            // skeleton summoners (5387, 5388, 5389)
-            {5387, 951}, {5388, 951}, {5389, 951},
-            // Weak skeletons summoned by the above
-            {5395, -401},
-            // Wasp/Bees - Act 2 annoying flyers (5212)
-            {5212, 751},
-            // Dark summoner - summons the helion dogs (6035)
-            {6035, 501},
-            // Dark berserkers - has the huge damaging slow hit (6052)
-            {6052, 501},
-            // The giant undead fat grotesques that explode in act 1 (3847)
-            {3847, 401},
-            // Hive pods that summon flyers in act 1 (4152, 4153, 4154)
-            {4152, 901}, {4153, 901}, {4154, 901},
-            // Totems in act 1 that summon the ranged goatmen (166452)
-            {166452, 901},
-            // Totems in act 1 dungeons that summon skeletons (176907)
-            {176907, 901},
-            // Act 2 Sand Monster + Zultun Kulle (kill sand monster first)
-            {226849, 20000}, {80509, 1100},
-            // Maghda and her minions
-            {6031, 801}, {178512, 901},
-            // Uber Bosses - Skeleton King {255929}, Maghda {256189} & Pets {219702} which must be killed first
-            {255929, 2999}, {219702, 1999}, {256189, 999},
-            // Uber Bosses - Zoltun Kulle {256508} & Siegebreaker {256187}
-            // Siegebreaker removed so the focus remains on Zoltun Kulle until he is dead
-            {256508, 2999},
-            //{256508, 2999}, {256187, 1899},
-            // Uber Bosses - Ghom {256709} & Rakanot {256711}
-            {256709, 2999}, {256711, 1899},
-
-            // A5 Forgotton War trash
-            { 300864, -300 },
-         };
-
-        private static readonly HashSet<int> mysticAllyIds = new HashSet<int>
-        {
-            169123, 123885, 169890, 168878, 169891, 169077, 169904, 169907, 169906, 169908, 169905, 169909
-        };
-
-        private static readonly HashSet<int> navigationObstacleIds = new HashSet<int>
-        {
-            104596, //GizmoType: DestroyableObject Name: trOut_FesteringWoods_Neph_Column_B-27477 ActorSnoId: 104596
-
-            174900, 185391, // demonic forge
-            198977,293900, // Azmo room center
-            194682, 81699, 3340, 123325,
-
-            158681, // A1 Blacksmith_Lore
-            104596, // A1 trOut_FesteringWoods_Neph_Column_B
-            104632, // A1 trOut_FesteringWoods_Neph_Column_B_Broken_Base
-            105303, // A1 trOut_FesteringWoods_Neph_Column_C_Broken_Base_Bottom
-            104827, // A1 trOut_FesteringWoods_Neph_Column_C_Broken_Base
-
-            332924, // x1_Bog_bloodSpring_small, Blood Spring - Overgrown Ruins
-            332922, // x1_Bog_bloodSpring_medium
-            332923, // x1_Bog_bloodSpring_large
-            321855, // x1_Pand_Ext_Ordnance_Mine
-            355898, // x1_Bog_Family_Guard_Tower_Stump
-            376917, // [1FA3B814] Type: ServerProp Name: x1_Westm_Hub_Stool_A-381422 ActorSnoId: 376917, Distance: 2.337004
-            (int)SNOActor.px_Bounty_Camp_Hellportals_Frame, // A4 bounties
-            (int)SNOActor.px_Bounty_Camp_Pinger, // A4 bounties
-
-            // DyingHymn A4 Bounties
-            433402,
-            434971,
-
-            // Bulba
-            433383, // A3 - Bounty - Catapult Command - Catapults
-            433384, // A3 - Bounty - Catapult Command - Catapults
-            210433 //A3 -  Catapult_a3dunKeep_WarMachines_Snow_Firing
-        };
-
-        private static readonly HashSet<int> neverRaycastLevelAreaIds = new HashSet<int>()
-        {
-            405915, // p1_TieredRift_Challenge
-        };
-
-        private static readonly HashSet<int> neverTownPortalLevelAreaIds = new HashSet<int>()
-        {
-            202446, // A1 New Tristram "Attack Area"
-            //19947, // A1 New Tristram "Attack Area"
-            175738, // A4 Bounty Quest with moving floor panels.
-            284069, // A5 Westmarch Overlook
-            308323, // A5 Westmarch Wolf Gate
-            315938, // A5 Westmarch Wolf Gate
-            316374, // A5 Westmarch Storehouse
-            311624, // A5 Westmarch Cathedral Courtyard
-            311623, // A5 Streets of Westmarch
-            309413, // A5 Westmarch Cathedral
-        };
-
-        private static readonly Dictionary<int, float> obstacleCustomRadius = new Dictionary<int, float>
-        {
-            {174900, 25}, {194682, 20}, {81699, 20}, {3340, 12}, {123325, 25}, {185391, 25},
-            {104596, 15}, // trOut_FesteringWoods_Neph_Column_B
-            {104632, 15}, // trOut_FesteringWoods_Neph_Column_B_Broken_Base
-            {105303, 15}, // trOut_FesteringWoods_Neph_Column_C_Broken_Base_Bottom
-            {104827, 15}, // trOut_FesteringWoods_Neph_Column_C_Broken_Base
-            {355898, 12}, // x1_Bog_Family_Guard_Tower_Stump
-            {376917, 10},
-            {293900, 20f}, // Azmo Blocking Shit
-
-            // DyingHymn A4 Bounties
-            {433402, 8},
-            {434971, 10},
-         };
-
-        private static readonly HashSet<int> questLevelAreaIds = new HashSet<int>
-        {
-            202446, // A1 New Tristram "Attack Area"
-            19947, // A1 New Tristram
-            109457, // A1 New Tristram Inn
-            109457, // A1 The Slaughtered Calf Inn
-            62968, // A1 The Hidden Cellar
-            60714, // A1 Leoric's Passage
-            83110, // A1 Cellar of the Damned
-            19935, // A1 Wortham
-            100854, // A1 Khazra Den
-            94672, // A1 Cursed Hold
-
-            60757, // A2 Belial's chambers
-            55313, // A2 Caldeum Bazaar
-            102964, // A2 City of Caldeum
-
-            309413, // A5 Westmarch Cathedral
-
-            336846, // x1_westm_KingEvent01 - Westmarch Commons Contested Villa
-            405915, // p1_TieredRift_Challenge
-        };
-
-        private static readonly HashSet<int> rangedMonsterIds = new HashSet<int>
-        {
-            365, 4100, // fallen
-            4304, 4300, // goat shaman
-            4738, // pestilence
-            4299, // goat ranged
-            62736, 130794, // demon flyer
-            5508, // succubus
-            5388, 4286, 256015, 256000, 255996,
-            5984, 5985, 5987, 5988, 405186, //goblins
-       };
-
-        private static readonly HashSet<int> resplendentChestIds = new HashSet<int>
-        {
-            62873, 95011, 81424, 108230, 111808, 111809, 211861, 62866, 109264, 62866, 62860, 96993,
-            // Magi
-			112182,
-            363725, 357331, // chests after Cursed Chest
-
-             301177, // A5 Timeless Prison Switch
-
-            433670, //[1FA93634] GizmoType: Chest Name: x1_Global_Chest_BossBounty-6118 ActorSnoId: 433670 Distance: 14.60398
-        };
-
-        private static readonly List<int> riftPortalHashes = new List<int>()
-        {
-            1938876094,
-            1938876095,
-            1938876096,
-            1938876097,
-            1938876098,
-            1938876099,
-            1938876100,
-            1938876101,
-            1938876102,
-        };
-
-        private static readonly List<int> riftWorldIds = new List<int>()
-        {
-            288454,
-            288685,
-            288687,
-            288798,
-            288800,
-            288802,
-            288804,
-            288806,
-        };
-
-        private static readonly HashSet<int> shortRangeAttackMonsterIds = new HashSet<int>
-        {
-            4084, 4085, 5395, 144315,
-         };
-
-        private static readonly HashSet<int> straightLinePathingLevelAreaIds = new HashSet<int>
-        {
-            60757, // Belial's chambers
-            405915, // p1_TieredRift_Challenge
-        };
-
-        private static readonly HashSet<string> vanityItems = new HashSet<string>()
-        {
-            "x1_AngelWings_Imperius", // Wings of Valor
-            "X1_SpectralHound_Skull_promo", // Liber Canis Mortui
-            "WoDFlag", // Warsong Pennant
-        };
-
-        private static readonly HashSet<int> wizardHydraIds = new HashSet<int>
-        {
-            // Some hydras are 3 monsters, only use one of their heads.
-            82972, //Type: Monster Name: Wizard_HydraHead_Frost_1-1037 ActorSnoId: 82972
-            83959, // Type: Monster Name: Wizard_HydraHead_Big-1168 ActorSnoId: 83959
-            325807, // Type: Monster Name: Wizard_HydraHead_fire2_1-1250 ActorSnoId: 325807
-            82109, // Type: Monster Name: Wizard_HydraHead_Lightning_1-1288 ActorSnoId: 82109,
-            81515, // Type: Monster Name: Wizard_HydraHead_Arcane_1-1338 ActorSnoId: 81515,
-            80745, // Type: Monster Name: Wizard_HydraHead_Default_1-1364 ActorSnoId: 80745,
-        };
-
-        private static readonly HashSet<int> zombieDogIds = new HashSet<int>
-        {
-            110959, 103235, 103215, 105763, 103217, 51353,
-        };
-
-        private static Dictionary<int, string> _animatioNamesById;
-
-        private static HashSet<int> blacklistIds = new HashSet<int>
-        {
+            (int)SNOActor.bastionsKeepGuard_Melee_A_01_snatched,            // NPC you can't attack.
+            (int)SNOActor.bastionsKeepGuard_Melee_A_02_BlazeOfGlory,        // NPC you can't attack.
+            (int)SNOActor.Bucket_Crane_caOut_Mining_Breakable,              // Obstacle in Dahlgur Oasis.
             (int)SNOActor.trDun_Cath_Bannister_x6,                          // Unbreakable obstacle.
             (int)SNOActor.x1_Graveyard_GraveRobert,                         // NPC for the bounty: Grave Robert.
             (int)SNOActor.A2C2DyingGhostGuy,                                // NPC for bounty: The Guardian Spirits.
@@ -2962,8 +2106,8 @@ namespace Trinity.Framework.Reference
             433246, //A5: Death's Embrace
             433316, //A5: Rathma's Gift
 
-			435630, // Pinger 1
-			434971, // Pinger 2
+            435630, // Pinger 1
+            434971, // Pinger 2
 
             175603, //A3 - Oasis - a2dun_Aqd_Act_Waterwheel_Lever_A_01_WaterPuzzle
 
@@ -2972,7 +2116,386 @@ namespace Trinity.Framework.Reference
             446170, // x1_Monstrosity_ScorpionBug_A_CryptCursedShrine
         };
 
-        private static HashSet<int> forceDestructibles = new HashSet<int>()
+        // A list of bosses in the game, just to make CERTAIN they are treated as elites
+        /// <summary>
+        /// Contains ActorSnoId of known Bosses
+        /// </summary>
+        public static HashSet<int> BossIds { get; } = new HashSet<int>
+        {
+            // Siegebreaker (96192), Azmodan (89690), Cydea (95250), Heart-thing (193077),
+            96192,                   89690,           95250,         193077,
+            //Kulle (80509), Small Belial (220160), Big Belial (3349), Diablo 1 (114917), terror Diablo (133562)
+            80509,           220160,                3349,              114917,            133562,
+            62975, // Belial TrueForm
+            //Maghda, Kamyr (MiniBoss before Belial)
+            6031, 51298,
+            // Ghom
+            87642,
+            // I dunno?
+            255929, 256711, 256508, 256187, 256189, 256709,
+            // Another Cydaea
+            137139,
+            // Diablo shadow clones (needs all of them, there is a male & female version of each class!)
+            144001, 144003, 143996, 143994,
+            // Jondar, Chancellor, Queen Araneae (act 1 dungeons), Skeleton King, Butcher
+            86624, 156353, 51341, 5350, 3526,
+            361347, //Jondar from the Adventure mode
+            215103, // Istaku
+            4630, // Rakanoth
+            256015, // Xah'Rith Keywarden
+            115403, // A1 Cain Skeleton boss
+            4373, 4376, 177539, // A1 Robbers
+            168240, // A2 Jewler quest
+            84919, // Skeleton King
+            108444, // ZombieFemale_A_TristramQuest (Wretched Mothers)
+            176889, // ZombieFemale_Unique_WretchedQueen
+            129439, //Arsect The Venomous
+            164502, // sandMonster_A_Head_Guardian
+            378665, // Greed
+
+            // A5
+            316839, // x1_deathOrb_bodyPile
+            375106, // A5 x1_Death_Orb_Monster
+            375111, // A5 x1_Death_Orb_Master_Monster
+            279394, // A5 Adria
+
+            300862, // X1_BigRed_Chronodemon_Event_ForgottenWar
+            318425, // X1_CoreEliteDemon_Chronodemon_Event_ForgottenWar
+
+            300866, // X1_Angel_TrooperBoss_Event_ForgottenWar
+
+            346482, // X1_PandExt_TimeTrap
+            367456, // x1_Pand_Ext_Event_Hive_Blocker
+
+            347276, // x1_Fortress_Soul_Grinder_A
+
+            374751, // x1_PortalGuardian_A
+            307339, // X1_Rockworm_Pand_Unique_HexMaze
+            297730, // x1_Malthael_Boss
+        };
+
+        /// <summary>
+        /// Contains the list of Boss Level Area ID's
+        /// </summary>
+        public static HashSet<int> BossLevelAreaIDs { get; } = new HashSet<int>
+        {
+            109457, 185228, 60194, 130163, 60714, 19789, 62726, 90881, 195268, 58494, 81178, 60757, 111232, 112580,
+            119656, 111516, 143648, 215396, 119882, 109563, 153669, 215235, 55313, 60193, 19789, 330576, 109563
+        };
+
+        public static HashSet<int> BountyTurnInQuests { get; } = new HashSet<int>()
+        {
+            356988, //x1_AdventureMode_BountyTurnin_A1
+            356994, //x1_AdventureMode_BountyTurnin_A2
+            356996, //x1_AdventureMode_BountyTurnin_A3
+            356999, //x1_AdventureMode_BountyTurnin_A4
+            357001, //x1_AdventureMode_BountyTurnin_A5
+        };
+
+        /// <summary>
+        /// This list is used when an actor has an attribute BuffVisualEffect=1, e.g. fire floors in The Butcher arena
+        /// </summary>
+        public static HashSet<int> ButcherFloorPanels { get; } = new HashSet<int>
+        {
+            // Butcher Floor Panels
+            201454, 201464, 201426, 201438, 200969, 201423, 201242,
+        };
+
+        /// <summary>
+        /// Chests/average-level containers that deserve a bit of extra radius (ie - they are more worthwhile to loot than "random" misc/junk containers)
+        /// </summary>
+        public static HashSet<int> ContainerWhiteListIds { get; } = new HashSet<int>
+        {
+            (int)SNOActor.x1_Catacombs_Weapon_Rack_Raise,
+            62859,  // TrOut_Fields_Chest
+            62865,  // TrOut_Highlands_Chest
+            62872,  // CaOut_Oasis_Chest
+            78790,  // trOut_wilderness_chest
+            79016,  // trOut_Tristram_chest
+            94708,  // a1dun_Leor_Chest
+            96522,  // a1dun_Cath_chest
+            130170, // a3dun_Crater_Chest
+            108122, // caOut_StingingWinds_Chest
+            111870, // A3_Battlefield_Chest_Snowy
+            111947, // A3_Battlefield_Chest_Frosty
+            213447, // Lore_AzmodanChest3
+            213446, // Lore_AzmodanChest2
+            51300,  // a3dun_Keep_Chest_A
+            179865, // a3dun_Crater_ST_Chest
+            109264, // a3dun_Keep_Chest_Rare
+            212491, // a1dun_Random_Cloud
+            210422, // a1dun_random_pot_of_gold_A
+            211861, // Pinata
+            196945, // a2dun_Spider_EggSack__Chest
+            70534,  // a2dun_Spider_Chest
+            //289794, // Weaponracks on battlefields of eternity --> best place to farm white crafting materials
+            103919, // Demonic Vessels
+            78030,  // GizmoType: Chest Name: trOut_Wilderness_Scarecrow_A-3924 ActorSnoId: 78030
+            173325, // Anvil of Fury
+
+            301177, // A5 Timeless Prison Switch
+
+            // Kevin Spacey was here
+            193023, //LootType3_GraveGuard_C_Corpse_03
+            156682, //Adventurer_A_Corpse_01_WarrivEvent
+            5758, //trDun_Cath_FloorSpawner_01
+            5724, //trDun_Cath_BookcaseShelves_A
+            85790, //Cath_Lecturn_ LachdanansScroll
+            227305, //Lore_Inarius_Corrupt
+            137125, //FesteringWoods_WarriorsRest_Lore
+        };
+
+        public static Dictionary<int, float> CustomObjectRadius { get; } = new Dictionary<int, float>
+        {
+            {56686, 4},
+            {52685, 4},
+            {54882, 40},
+            {3349, 25}, // Belial
+            {225270, 35},
+            {180575, 10},  // Diablo Arena Health Well
+            {375111, 45f}, // A5 x1_Death_Orb_Master_Monster
+            {301177, 15f}, // x1_PandExt_Time_Activator
+            {368515, 5f}, // A5 Nephalem Switch -  Passage to Corvus
+            {309432, 37f}, // x1_westm_Bridge
+            {54850, 14f}, // a3dun_Keep_SiegeTowerDoor
+            {325136, 15f},
+            {210120, 20f},//a4dun_Garden_Corruption_Monster
+            {210268, 20f},//a4dun_Garden_Corruption_HellRift_Monster
+            {360111, 20f},//a4dun_Garden_Corruption_Monster_Despair
+        };
+
+        public static Dictionary<int, float> DefaultAvoidanceAnimationCustomRadius { get; } = new Dictionary<int, float>()
+        {
+            {(int)SNOAnim.morluSpellcaster_attack_AOE_01, 20f },
+            {(int)SNOAnim.x1_deathMaiden_attack_special_360_01, 15f},
+            {(int)SNOAnim.x1_Squigglet_Generic_Cast, 40f}, // Rift Boss Slime AOE
+        };
+
+        //       Line 15116:     p1_rifts_Orb_flippy = 434918,
+        //Line 15230:     p1_normal_rifts_Orb = 436807,
+        public static Dictionary<int, float> DefaultAvoidanceCustomRadius { get; } = new Dictionary<int, float>()
+        {
+            {330824, 35f }, // A5 Urzael animations
+            {360598, 10f }, // x1_Urzael_CeilingDebris_DamagingFire_wall
+            {359205, 20f }, // x1_Urzael_ceilingDebris_Impact_Beam
+            {360883, 20f }, // x1_Urzael_ceilingDebris_Impact_Circle
+            {362850, 12f }, // x1_Urzael_Cannonball_burning_invisible
+            {346976, 12f }, // x1_Urzael_Cannonball_burning_impact
+            {346975, 12f }, // x1_Urzael_Cannonball_burning
+
+            {360738, 12f}, // X1_Adria_arcanePool
+            {338889, 5f}, // x1_Adria_bouncingProjectile
+            {358404, 15f}, // X1_Adria_blood_large
+
+            {335505, 5f}, // x1_malthael_drainSoul_ghost
+            {325136, 20f}, // x1_Malthael_DeathFogMonster
+            {340512, 8f}, // x1_Malthael_Mephisto_LightningObject
+            {343767, 35f }, // Mallet Demons
+            {106709, 35f }, // Mallet Demons
+            {219736, 35f }, // Mallet Demons
+            {219751, 35f }, // Mallet Demons
+
+            {159369, 20f }, //MorluMeteor
+            {4103, 25f}, // Meteor
+            {3528, 15f}, // Butcher_hook
+
+            {359703, 13f}, // X1_Unique_Monster_Generic_AOE_DOT_Cold_10foot
+            {363356, 25f}, // X1_Unique_Monster_Generic_AOE_DOT_Cold_20foot
+            {359693, 13f}, // X1_Unique_Monster_Generic_AOE_DOT_Fire_10foot
+            {363357, 25f}, // X1_Unique_Monster_Generic_AOE_DOT_Fire_20foot
+            {364542, 13f}, // X1_Unique_Monster_Generic_AOE_DOT_Lightning_10foot
+            {364543, 25f}, // X1_Unique_Monster_Generic_AOE_DOT_Lightning_20foot
+            {377537, 13f}, // X1_Unique_Monster_Generic_AOE_DOT_Lightning_hardpoints
+            {360046, 13f}, // X1_Unique_Monster_Generic_AOE_DOT_Poison_10foot
+            {363358, 25f}, // X1_Unique_Monster_Generic_AOE_DOT_Poison_20foot
+            {368156, 13f}, // X1_Unique_Monster_Generic_AOE_Lightning_Ring
+            {358917, 13f}, // X1_Unique_Monster_Generic_AOE_Sphere_Distortion
+            {377086, 13f}, // X1_Unique_Monster_Generic_Projectile_Arcane
+            {377087, 13f}, // X1_Unique_Monster_Generic_Projectile_Cold
+            {377088, 13f}, // X1_Unique_Monster_Generic_Projectile_Fire
+            {377089, 13f}, // X1_Unique_Monster_Generic_Projectile_Holy
+            {377090, 13f}, // X1_Unique_Monster_Generic_Projectile_Lightning
+            {377091, 13f}, // X1_Unique_Monster_Generic_Projectile_Physical
+            {377092, 13f}, // X1_Unique_Monster_Generic_Projectile_Poison
+            {123842,60f},
+
+            {(int)SNOActor.x1_LR_boss_terrorDemon_A_projectile, 10f},
+
+            {4803, 25f}, // Molten Core
+            {4804, 25f}, // Molten Core
+            {224225, 25f}, // Molten Core
+            {247987, 25f}, // Molten Core
+            {139741, 15},
+        };
+
+        public static HashSet<int> DemonHunterPetIds { get; } = new HashSet<int>
+        {
+            178664,
+            173827,
+            133741,
+            159144,
+            181748,
+            159098,
+            159102,
+            159144,
+            334861,
+        };
+
+        public static HashSet<int> DemonHunterSentryIds { get; } = new HashSet<int>
+        {
+            141402, 150025, 150024, 168815, 150026, 150027,
+        };
+
+        /// <summary>
+        /// Destructible things that need targeting by a location instead of an AcdId (stuff you can't "click on" to destroy in-game)
+        /// </summary>
+        public static HashSet<int> DestroyAtLocationIds { get; } = new HashSet<int>
+        {
+            170657, 116409, 121586, 155255, 104596, 93306,
+        };
+
+        /// <summary>
+        /// This is the RadiusDistance at which destructibles and barricades (logstacks, large crates, carts, etc.) are added to the cache
+        /// </summary>
+        public static Dictionary<int, float> DestructableObjectRadius { get; } = new Dictionary<int, float>
+        {
+            {(int)SNOActor.x1_Westm_Barricade_Round, 25},
+            {2972, 10}, {80357, 16}, {116508, 10}, {113932, 8}, {197514, 18}, {108587, 8}, {108618, 8}, {108612, 8}, {116409, 18}, {121586, 22},
+            {195101, 10}, {195108, 25}, {170657, 5}, {181228, 10}, {211959, 25}, {210418, 25}, {174496, 4}, {193963, 5}, {159066, 12}, {160570, 12},
+            {55325, 5}, {5718, 14}, {5909, 10}, {5792, 8}, {108194, 8}, {129031, 30}, {192867, 3.5f}, {155255, 8}, {54530, 6}, {157541, 6},
+            {93306, 10},
+        };
+
+        // De-weight to zero but they still need to be processed for ClsoedDoor checks. todo proper fix.
+        public static HashSet<int> DoorsToAlwaysIgnore { get; } = new HashSet<int>
+        {
+            115373, //caOut_Oasis_Door_Aqueduct_A_Top-5549
+            454194, //p43_AD_trDun_Cath_WoodDoor_Lazarus-56453 (454194)
+            454187, //p43_AD_a1dun_Leor_Jail_Door_SuperLocked_A-61290 (454187)
+            454173, //43_AD_a1dun_Leor_Gate_A-61285 (454173)
+            465787, //P6_Church_BloodPool-25682
+        };
+
+        public static HashSet<int> EventQuests { get; } = new HashSet<int>()
+        {
+            365821, // [D7499CC] Quest: x1_Catacombs_NS_06Mutant_Evant, QuestSnoId: 365821, QuestMeter: -1, QuestState: InProgress, QuestStep: 10, KillCount: 0, BonusCount: 0
+            369381, // [2ECD96F4] Quest: x1_Event_Horde_HunterKillers, QuestSnoId: 369381, QuestMeter: 0.004814815, QuestState: InProgress, QuestStep: 14, KillCount: 0, BonusCount: 0
+            369431, // [2ECD9860] Quest: x1_Event_WaveFight_AncientEvils, QuestSnoId: 369431, QuestMeter: -1, QuestState: InProgress, QuestStep: 13, KillCount: 0, BonusCount: 0
+            336293, // [417DD860] Quest: X1_Graveyard_GraveRobber_Event, QuestSnoId: 336293, QuestMeter: -1, QuestState: InProgress, QuestStep: 46, KillCount: 0, BonusCount: 0
+            369414, // [33955B38] Quest: X1_Pand_Ext_ForgottenWar_Adventure, QuestSnoId: 369414, QuestMeter: -1, QuestState: InProgress, QuestStep: 2, KillCount: 1, BonusCount: 0
+
+            368306, // x1_Event_Horde_ArmyOfHell,
+            369332, // x1_Event_Horde_Bonepit,
+            365252, // x1_Event_Horde_DeathCellar,
+            365150, // x1_Event_Horde_Deathfire,
+            365695, // x1_Event_Horde_DesertFortress,
+            367979, // x1_Event_Horde_Dustbowl,
+            364880, // x1_Event_Horde_FleshpitGrove,
+            369525, // x1_Event_Horde_FlyingAssasins,
+            365796, // x1_Event_Horde_FoulHatchery,
+            365305, // x1_Event_Horde_GhoulSwarm,
+            369366, // x1_Event_Horde_GuardSlaughter,
+            369381, // x1_Event_Horde_HunterKillers,
+            368035, // x1_Event_Horde_InfernalSky,
+            // 365269, // x1_Event_Horde_SpiderTrap,
+            366331, // x1_Event_Horde_UdderChaos,
+            239301, // x1_Event_Jar_Of_Souls_NecroVersion,
+            370334, // x1_Event_SpeedKill_Angel_Corrupt_A,
+            370316, // x1_Event_SpeedKill_BileCrawler_A,
+            369841, // x1_Event_SpeedKill_Bloodhawk_A,
+            370556, // x1_Event_SpeedKill_Boss_Adria,
+            370373, // x1_Event_SpeedKill_Boss_Despair,
+            370154, // x1_Event_SpeedKill_Boss_Ghom,
+            369892, // x1_Event_SpeedKill_Boss_Maghda,
+            365630, // x1_Event_SpeedKill_Boss_SkeletonKing,
+            370349, // x1_Event_SpeedKill_Champion_BigRed_A,
+            370082, // x1_Event_SpeedKill_Champion_FallenHound_D,
+            369895, // x1_Event_SpeedKill_Champion_FleshPitFlyer_C,
+            365586, // x1_Event_SpeedKill_Champion_GhostA,
+            365593, // x1_Event_SpeedKill_Champion_GoatmanB,
+            370364, // x1_Event_SpeedKill_Champion_MalletDemon_A,
+            369906, // x1_Event_SpeedKill_Champion_SandShark_A,
+            370135, // x1_Event_SpeedKill_Champion_SoulRipper_A,
+            370837, // x1_Event_SpeedKill_Champion_SquiggletA,
+            365617, // x1_Event_SpeedKill_Champion_SummonableA,
+            370077, // x1_Event_SpeedKill_Champion_azmodanBodyguard_A,
+            370066, // x1_Event_SpeedKill_Champion_creepMob_A,
+            370341, // x1_Event_SpeedKill_Champion_morluSpellcaster_A,
+            370516, // x1_Event_SpeedKill_Champion_x1_FloaterAngel_A,
+            370544, // x1_Event_SpeedKill_Champon_x1_Rockworm_Pand_A,
+            370320, // x1_Event_SpeedKill_CoreEliteDemon_A,
+            370038, // x1_Event_SpeedKill_Fallen_C,
+            365551, // x1_Event_SpeedKill_GhostHumansA,
+            370053, // x1_Event_SpeedKill_Ghoul_E,
+            364644, // x1_Event_SpeedKill_GoatmanA,
+            365509, // x1_Event_SpeedKill_Goatman_Melee_A_Ghost,
+            370044, // x1_Event_SpeedKill_Goatmutant_B,
+            369873, // x1_Event_SpeedKill_Lacuni_B,
+            370049, // x1_Event_SpeedKill_Monstrosity_Scorpion_A,
+            369910, // x1_Event_SpeedKill_Rare_Ghoul_B,
+            365622, // x1_Event_SpeedKill_Rare_Skeleton2HandA,
+            370147, // x1_Event_SpeedKill_Rare_ThousandPounder,
+            370359, // x1_Event_SpeedKill_Rare_demonTrooper_C,
+            370499, // x1_Event_SpeedKill_Rare_x1_westmarchBrute_C,
+            370060, // x1_Event_SpeedKill_Skeleton_E,
+            364635, // x1_Event_SpeedKill_SkeletonsA,
+            369856, // x1_Event_SpeedKill_Snakeman_A,
+            369884, // x1_Event_SpeedKill_Spiderling_B,
+            369863, // x1_Event_SpeedKill_Swarm_A,
+            370666, // x1_Event_SpeedKill_TentacleBears,
+            369832, // x1_Event_SpeedKill_TriuneCultist_C,
+            365526, // x1_Event_SpeedKill_TriuneVesselA,
+            365547, // x1_Event_SpeedKill_ZombieB,
+            370033, // x1_Event_SpeedKill_demonFlyer_B,
+            369817, // x1_Event_SpeedKill_electricEel_A,
+            369837, // x1_Event_SpeedKill_fastMummy_A,
+            370329, // x1_Event_SpeedKill_morluMelee_B,
+            370482, // x1_Event_SpeedKill_x1_BileCrawler_Skeletal_A,
+            370435, // x1_Event_SpeedKill_x1_BogFamily_A,
+            370452, // x1_Event_SpeedKill_x1_Monstrosity_ScorpionBug_A,
+            370427, // x1_Event_SpeedKill_x1_Skeleton_Ghost_A,
+            370561, // x1_Event_SpeedKill_x1_Tentacle_A,
+            370445, // x1_Event_SpeedKill_x1_bogBlight_Maggot_A,
+            370466, // x1_Event_SpeedKill_x1_leaperAngel_A,
+            370489, // x1_Event_SpeedKill_x1_portalGuardianMinion_A,
+            370476, // x1_Event_SpeedKill_x1_westmarchHound_A,
+            369431, // x1_Event_WaveFight_AncientEvils,
+            365751, // x1_Event_WaveFight_ArmyOfTheDead,
+            368092, // x1_Event_WaveFight_BloodClanAssault,
+            365300, // x1_Event_WaveFight_ChamberOfBone,
+            365033, // x1_Event_WaveFight_CultistLegion,
+            368056, // x1_Event_WaveFight_DeathChill,
+            365678, // x1_Event_WaveFight_FallenWarband,
+            368124, // x1_Event_WaveFight_ForsakenSoldiers,
+            369482, // x1_Event_WaveFight_HostileRealm,
+            368334, // x1_Event_WaveFight_Juggernaut,
+            365133, // x1_Event_WaveFight_KhazraWarband,
+            365953, // x1_Event_WaveFight_SunkenGrave,
+        };
+
+        /// <summary>
+        /// ActorSnoId's of Very fast moving mobs (eg wasps), for special skill-selection decisions
+        /// </summary>
+        public static HashSet<int> FastMovingMonsterIds { get; } = new HashSet<int>
+        {
+            5212
+        };
+
+        public static HashSet<int> FetishArmyIds { get; } = new HashSet<int>
+        {
+            87189, //rune0, rune2, rune3 Fetish_Melee_A-78285
+            89934, //rune1 Fetish_Skeleton_A-77992
+
+            // rune4 Tiki Torch 5 + 2 shamans
+            409656, //Name: Fetish_Melee_fire-78523,
+            90072, //Fetish_doubleStack_Shaman_A-78522,
+
+            410238, //rune5 Fetish_Melee_poison-78595,
+
+            //ActorId: 409590, Type: Monster, Name: Fetish_Melee_Sycophants-852,
+        };
+
+        public static HashSet<int> ForceDestructibles { get; } = new HashSet<int>()
         {
             273323, // x1_westm_Door_Wide_Clicky
             55325, // a3dun_Keep_Door_Destructable
@@ -2990,14 +2513,636 @@ namespace Trinity.Framework.Reference
             121821, // A2 - Bounty: The Putrid Waters (433017)
         };
 
-        private static Dictionary<SNOPower, DateTime> lastUseAbilityTimeDefaults = new Dictionary<SNOPower, DateTime>
+        /// <summary>
+        /// This is only intended for use with special bounty caves that spawn units
+        /// as part of a quest that cannot be identified as quest monsters by any
+        /// other means - use with caution.
+        /// </summary>
+        public static HashSet<int> ForceKillAllSceneSnoIds { get; } = new HashSet<int>
         {
-                {SNOPower.DrinkHealthPotion, DateTime.MinValue},
-                {SNOPower.Weapon_Melee_Instant, DateTime.MinValue},
-                {SNOPower.Weapon_Ranged_Instant, DateTime.MinValue},
-            };
+            52888, //caOut_Interior_G_x01_y01,
+            199502, //ragnyr idol bounty fight scene.
+            31604, // a miners gold bounty - caOut_Sub240x240_Mine_Destroyed
+            430021, // king of the ziggaurat?
+            79983, // forged in battle bounty a3dun_Keep_SW_03_Forge
+        };
 
-        private static HashSet<string> whiteItemCraftingWhiteList = new HashSet<string>()
+        /// <summary>
+        /// World-object dictionaries eg large object lists, ignore lists etc.
+        /// A list of SNO's to *FORCE* to type: Item. (BE CAREFUL WITH THIS!).
+        /// </summary>
+        public static HashSet<int> ForceToItemOverrideIds { get; } = new HashSet<int>
+        {
+            166943, // DemonTrebuchetKey, infernal key
+            255880, // DemonKey_Destruction
+            255881, // DemonKey_Hate
+            255882, // DemonKey_Terror
+        };
+
+        public static HashSet<int> ForceTownPortalLevelAreaIds { get; } = new HashSet<int>
+        {
+            55313, // Act 2 Caldeum Bazaar
+        };
+
+        public static HashSet<int> ForceUseWOTBIds { get; } = new HashSet<int>()
+        {
+            256015, 256000, 255996
+        };
+
+        public static HashSet<int> GargantuanIds { get; } = new HashSet<int>
+        {
+            179780, 179778, 179772, 179779, 179776, 122305,
+            // Short Mans Finger
+            432690, //ActorId: 432690, Type: Monster, Name: Legendary_WD_Gargantuan-485, Distance2d: 8.563416,
+            432692, //ActorId: 432692, Type: Monster, Name: Legendary_WD_Gargantuan_Cleave-469,
+            432693, //ActorId: 432693, Type: Monster, Name: Legendary_WD_Gargantuan_Cooldown-476,
+            432695, //ActorId: 432695, Type: Monster, Name: Legendary_WD_Gargantuan_Slam-502,
+            432694, //ActorId: 432694, Type: Monster, Name: Legendary_WD_Gargantuan_Poison-508,
+            432691, //ActorId: 432691, Type: Monster, Name: Legendary_WD_Gargantuan_Absorb-522,
+        };
+
+        /// <summary>
+        /// A list of all known SNO's of treasure goblins/bandits etc.
+        /// </summary>
+        public static HashSet<int> GoblinIds { get; } = new HashSet<int>
+        {
+            (int)SNOActor.treasureGoblin_A, //5984
+            (int)SNOActor.treasureGoblin_B, //5985
+            (int)SNOActor.treasureGoblin_backpack, //5986
+            (int)SNOActor.treasureGoblin_C, //5987
+            //(int)SNOActor.treasureGoblin_Portal, //54862
+            //(int)SNOActor.treasureGoblin_Portal_Proxy, //54887
+            //(int)SNOActor.treasureGoblin_portal_emitter, //59948
+            //(int)SNOActor.treasureGoblin_portal_opening, //60549
+            //(int)SNOActor.treasureGoblin_portal_closing, //60558
+            //(int)SNOActor.treasureGoblin_portal_summon_trailActor, //108403
+            //(int)SNOActor.treasureGoblin_stunImmune_trailActor, //129286
+            //(int)SNOActor.Lore_Bestiary_TreasureGoblin, //147316
+            (int)SNOActor.Shrine_TreasureGoblin, //269349
+            //(int)SNOActor.treasureGoblin_A_Slave, //326803
+            (int)SNOActor.X1_Treasure_Goblin_Event_Runner, //330135
+            //(int)SNOActor.treasureGoblin_C_Unique_DevilsHand, //343046
+            //(int)SNOActor.p1_Tgoblin_Chest_Bomb, //382664
+            //(int)SNOActor.p1_Tgoblin_Gold_Pile_Gib, //385658
+            //(int)SNOActor.p1_Tgoblin_Gold_Pile_C, //386274
+            //(int)SNOActor.p1_Tgoblin_Gold_Pile_C_Gib, //386434
+            //(int)SNOActor.p1_Tgoblin_Gold_Pile_C_ribbons, //386558
+            //(int)SNOActor.p1_TGoblin_Gate, //389569
+            //(int)SNOActor.p1_Tgoblin_Gold_Pile_A, //390498
+            //(int)SNOActor.p1_TGoblin_LightBeam_A, //390682
+            //(int)SNOActor.p1_TGoblin_Torch, //391021
+            //(int)SNOActor.p1_TGoblin_Gondola, //391270
+            (int)SNOActor.treasureGoblin_G, //391593
+            //(int)SNOActor.p1_Tgoblin_Vase_A, //391765
+            //(int)SNOActor.p1_Tgoblin_Vault_Door, //392094
+            //(int)SNOActor.p1_TGoblin_Gondola_Vertical, //392098
+            //(int)SNOActor.p1_Tgoblin_Vase_C, //392606
+            //(int)SNOActor.p1_TGoblin_Gondola_Card_Left, //392657
+            //(int)SNOActor.p1_TGoblin_Gondola_Card_Right, //392660
+            (int)SNOActor.p1_treasureGoblin_inBackpack_A, //394196
+            //(int)SNOActor.p1_TGoblin_CenterPiece_Gem, //394555
+            //(int)SNOActor.p1_Tgoblin_Greed_Bait, //403041
+            //(int)SNOActor.p1_Greed_crowds_goblinPortal, //403532
+            //(int)SNOActor.p1_treasureGoblin_jump_trailActor, //403549
+            (int)SNOActor.p1_Tgoblin_basket_goblin, //403843
+            (int)SNOActor.p1_Tgoblin_basket_goblin, //403843
+            //(int)SNOActor.p1_greed_crowds_goblinCoinThrow_2, //404109
+            //(int)SNOActor.p1_Tgoblin_BG_Torch, //404302
+            //(int)SNOActor.p1_TGoblin_Gate_Closed, //404625
+            //(int)SNOActor.p1_TGoblin_CenterPiece_Gem_Fogged, //404731
+            //(int)SNOActor.p1_TGoblin_CenterPiece_Gem_INVIS, //404733
+            //(int)SNOActor.p1_Greed_crowds_goblinPortal_no_dist, //404854
+            (int)SNOActor.p1_treasureGoblin_tentacle_A, //405186
+            (int)SNOActor.p1_treasureGoblin_tentacle_backpack, //405189
+            //(int)SNOActor.p1_Tgoblin_Chest_Bomb_Chunks, //405308
+            //(int)SNOActor.p1_Tgoblin_Greed_Bait_Chunks, //405339
+            (int)SNOActor.p1_Portal_Tentacle_goblin, //405590
+            (int)SNOActor.treasureGoblin_D_Splitter, //408354
+            (int)SNOActor.treasureGoblin_E, //408655
+            (int)SNOActor.MarkerLocation_GoblinPortalIn, //408679
+            (int)SNOActor.treasureGoblin_F, //408989
+            (int)SNOActor.treasureGoblin_Portal_Open, //410460
+            (int)SNOActor.treasureGoblin_D_Splitter_02, //410572
+            (int)SNOActor.treasureGoblin_D_Splitter_03, //410574
+            (int)SNOActor.treasureGoblin_H, //413289
+            //(int)SNOActor.P2_Goblin_Spawner_LR, //425478
+            (int)SNOActor.p1_treasureGoblin_teleport_shell, //428094
+            (int)SNOActor.p1_treasureGoblin_backpack_B, //428205
+            (int)SNOActor.p1_treasureGoblin_backpack_F, //428206
+            (int)SNOActor.p1_treasureGoblin_backpack_C, //428211
+            (int)SNOActor.p1_treasureGoblin_backpack_H, //428213
+            (int)SNOActor.p1_treasureGoblin_backpack_D, //428247
+            (int)SNOActor.treasureGoblin_I, //428663
+            (int)SNOActor.treasureGoblin_J, //429161
+            (int)SNOActor.p1_treasureGoblin_backpack_J, //429526
+            (int)SNOActor.treasureGoblin_B_WhatsNew, //429615
+            (int)SNOActor.treasureGoblin_F_WhatsNew, //429619
+            (int)SNOActor.treasureGoblin_C_WhatsNew, //429620
+            (int)SNOActor.treasureGoblin_B_FX_WhatsNew, //429624
+            //(int)SNOActor.MarkerLocation_SpecialGoblinRiftSpawn, //429649
+            (int)SNOActor.p1_treasureGoblin_backpack_E, //429660
+            //(int)SNOActor.Spawner_MarkerLocation_SpecialGoblinRiftSpawn, //429676
+            //(int)SNOActor.treasureGoblin_A_LegacyPuzzleRing, //429689
+            (int)SNOActor.p1_Portal_Tentacle_goblin_NoAccess, //430916
+            (int)SNOActor.p1_treasureGoblin_backpack_I, //433905
+            (int)SNOActor.a4_Heaven_Shrine_TreasureGoblin, //434409
+            (int)SNOActor.treasureGoblin_J_WhatsNew, //434630
+            (int)SNOActor.treasureGoblin_J_FX_WhatsNew, //434631
+            (int)SNOActor.treasureGoblin_E_WhatsNew, //434632
+            (int)SNOActor.treasureGoblin_D_WhatsNew, //434633
+            (int)SNOActor.treasureGoblin_Anniversary_Event, //434745
+            (int)SNOActor.p1_Portal_Anniversary_goblin_NoAccess, //435639
+            (int)SNOActor.p3_cos_pet_Murkgoblin_A, //441208
+
+            450993, // Yahoo !treasureGoblin_K-613 ActorSnoId: 450993, Menagerist Goblin
+
+            ////    //5984, 5985, 5987, 5988, 405186, 380657
+
+            //// treasureGoblin_A
+            //5984,
+            //// treasureGoblin_B
+            //5985,
+            //// treasureGoblin_backpack
+            //5986,
+            //// treasureGoblin_C
+            //5987,
+            //// treasureGoblin_Portal
+            ////54862,
+            //// treasureGoblin_Portal_Proxy
+            ////54887,
+            //// treasureGoblin_portal_emitter
+            ////59948,
+            //// treasureGoblin_portal_opening
+            ////60549,
+            //// treasureGoblin_portal_closing
+            ////60558,
+            //// treasureGoblin_portal_summon_trailActor
+            ////108403,
+            //// treasureGoblin_stunImmune_trailActor
+            ////129286,
+            //// Lore_Bestiary_TreasureGoblin
+            ////147316,
+            //// treasureGoblin_A_Slave
+            ////326803,
+            //// treasureGoblin_C_Unique_DevilsHand
+            //343046,
+            //// p1_treasureGobin_A_Unique_GreedMinion
+            //380657,
+            //// treasureGoblin_G
+            //391593,
+            //// p1_treasureGoblin_inBackpack_A
+            //394196,
+            //// p1_treasureGoblin_jump_trailActor
+            ////403549,
+            //// p1_treasureGoblin_tentacle_A
+            //405186,
+            //// p1_treasureGoblin_tentacle_backpack
+            //405189,
+            //// treasureGoblin_D_Splitter
+            //408354,
+            //// treasureGoblin_E
+            //408655,
+            //// treasureGoblin_F
+            //408989,
+            //// treasureGoblin_Portal_Open
+            ////410460,
+            //// treasureGoblin_D_Splitter_02
+            //410572,
+            //// treasureGoblin_D_Splitter_03
+            //410574,
+            //// treasureGoblin_H
+            //413289,
+            //// p1_treasureGoblin_teleport_shell
+            ////428094,
+            //// p1_treasureGoblin_backpack_B
+            //428205,
+            //// p1_treasureGoblin_backpack_F
+            //428206,
+            //// p1_treasureGoblin_backpack_C
+            //428211,
+            //// p1_treasureGoblin_backpack_H
+            //428213,
+            //// p1_treasureGoblin_backpack_D
+            //428247,
+            //// treasureGoblin_I
+            //428663,
+            //// treasureGoblin_J
+            //429161,
+            //// p1_treasureGoblin_backpack_J
+            //429526,
+            //// treasureGoblin_B_WhatsNew
+            //429615,
+            //// treasureGoblin_F_WhatsNew
+            //429619,
+            //// treasureGoblin_C_WhatsNew
+            //429620,
+            //// treasureGoblin_B_FX_WhatsNew
+            //429624,
+            //// p1_treasureGoblin_backpack_E
+            //429660,
+            //// treasureGoblin_A_LegacyPuzzleRing
+            ////429689,
+            //// p1_treasureGoblin_backpack_I
+            //433905,
+            //// treasureGoblin_J_WhatsNew
+            //434630,
+            //// treasureGoblin_J_FX_WhatsNew
+            //434631,
+            //// treasureGoblin_E_WhatsNew
+            //434632,
+            //// treasureGoblin_D_WhatsNew
+            //434633,
+            //// treasureGoblin_Anniversary_Event
+            //434745,
+        };
+
+        public static HashSet<int> HidingUnits { get; } = new HashSet<int>()
+        {
+            218947, //Rockworm_Stationary_QueenWorm
+        };
+
+        public static HashSet<int> HighPriorityInteractables { get; } = new HashSet<int>
+        {
+            56686, // a3dun_Keep_Bridge_Switch
+            211999, // a3dun_Keep_Bridge_Switch_B
+            451047, // Mystical Chest - Falcon's Wings
+        };
+
+        public static HashSet<int> IgnoreUntargettableAttribute { get; } = new HashSet<int>()
+        {
+            5432, // A2 Snakem
+        };
+
+        public static Dictionary<int, int> InteractEndAnimations { get; } = new Dictionary<int, int>()
+        {
+            {348096, 348093}, // x1_Bog_Beacon_B
+        };
+
+        /// <summary>
+        /// Interactable whitelist - things that need interacting with like special wheels, levers - they will be blacklisted for 30 seconds after one-use
+        /// </summary>
+        public static HashSet<int> InteractWhiteListIds { get; } = new HashSet<int>
+        {
+            //454511, //p43_AD_Valor_BloodStone-21326
+            454473, 455059, // Diablo1 Area Lore Book Lecturn Switches
+            //455675, //p43_AD_Valor_Pedestal-21061 (Sno=455675
+            453770, //p43_trdun_lecturn_hallsoftheblind- 453770
+
+            //328830//x1_Fortress_Portal_Switch (328830)
+            309432, // x1_westm_Bridge
+            209133, // TentacleLord (209133)  QuestSnoId: 434753 QuestStep: 1, Description: Slay the Infernal Bovine herd!
+            363725, // Special Event Chest
+            451047, // Mystical Chest - Falcon's Wings
+            56686, // a3dun_Keep_Bridge_Switch
+            211999, // a3dun_Keep_Bridge_Switch_B
+            52685, // a3dun_Keep_Bridge
+            54882, // a3dun_Keep_Door_Wooden_A
+            105478, // a1dun_Leor_Spike_Spawner_Switch
+            102927, // A1 Cursed Hold Prisoners
+            5747, // A1 Cathedral Switch
+            365097, // Cursed Chest - Damp Cellar
+
+            (int)SNOActor.a2dun_Aqd_Chest_Special_GreedyMiner, // Bounty Quest: A Miners' Gold requires it to be opened.
+
+            // A5
+            348096, // Paths of the Drowned - portal switches - x1_Bog_Beacon_B
+            361364, // A5 Siege Rune Path of War
+
+            274457, // A5 Spirit of Malthael - Tower of Korelan
+            368515, // A5 Nephalem Switch - Passage to Corvus
+
+            354407, // X1_Angel_Common_Event_GreatWeapon
+        };
+
+        /// <summary>
+        /// Last used-timers for all abilities to prevent spamming D3 memory for cancast checks too often
+        /// These should NEVER need manually editing
+        /// But you do need to make sure every skill used by TrinityPlugin is listed in here once!
+        /// </summary>
+        public static Dictionary<SNOPower, DateTime> LastUseAbilityTimeDefaults { get; internal set; } = new Dictionary<SNOPower, DateTime>
+        {
+            {SNOPower.DrinkHealthPotion, DateTime.MinValue},
+            {SNOPower.Weapon_Melee_Instant, DateTime.MinValue},
+            {SNOPower.Weapon_Ranged_Instant, DateTime.MinValue},
+        };
+
+        /// <summary>
+        /// Objects that should never be ignored due to no Line of Sight (LoS) or ZDiff
+        /// </summary>
+        public static HashSet<int> LineOfSightWhitelist { get; } = new HashSet<int>
+        {
+            307, // a2dun_zolt_pedestal
+            410366, // Siege_wallMonster_C = 410366, Bounty to kill wall monsters, failing los checks.
+            309432, // x1_westm_Bridge
+            116807, // Butcher Health Well
+            180575, // Diablo arena Health Well
+            129031, // A3 Skycrown Catapults
+            220160, // Small Belial (220160),
+            3349,   // Big Belial (3349),
+            210268, // Corrupt Growths 2nd Tier
+            193077, // a3dun_Crater_ST_GiantDemonHeart_Mob
+
+            375106, // A5 x1_Death_Orb_Monster
+            375111, // A5 x1_Death_Orb_Master_Monster
+
+            329390, // x1_Pand_BatteringRam_Hook_B_low
+            368515, // A5 Nephalem Switch -  Passage to Corvus
+            347276, // x1_Fortress_Soul_Grinder_A
+            326937, // x1_Pand_BatteringRam_Hook_B
+            291368, // x1_Urzael_Boss
+        };
+
+        /// <summary>
+        /// Dictionary of Actor SNO's and cooresponding weighting/Priority
+        /// </summary>
+        public static Dictionary<int, int> MonsterCustomWeights { get; } = new Dictionary<int, int>
+        {
+            // Wood wraiths all this line (495 & 496 & 6572 & 139454 & 139456 & 170324 & 170325)
+            {495, 901}, {496, 901}, {6572, 901}, {139454, 901}, {139456, 901}, {170324, 901}, {170325, 901},
+            // -- added 4099 (act 2 fallen shaman)
+            // Fallen Shaman prophets goblin Summoners (365 & 4100)
+            {365, 1901}, {4099, 1901}, {4100, 1901},
+            // The annoying grunts summoned by the above
+            {4084, -250},
+            // Wretched mothers that summon zombies in act 1 (6639)
+            {6639, 951},
+            // Fallen lunatic (4095)
+            {4095, 2999},
+            // Pestilence hands (4738)
+            {4738, 1901},
+            // Belial Minions
+            {104014, 1500},
+            // Act 1 doors that skeletons get stuck behind
+            {454, 1500},
+            // Cydaea boss (95250)
+            {95250, 1501},
+
+            //Cydaea Spiderlings (137139)
+            {137139, -301},
+            // GoatMutantshaman Elite (4304)
+            {4304, 999},
+            // GoatMutantshaman (4300)
+            {4300, 901},
+            // Succubus (5508)
+            {5508, 801},
+            // skeleton summoners (5387, 5388, 5389)
+            {5387, 951}, {5388, 951}, {5389, 951},
+            // Weak skeletons summoned by the above
+            {5395, -401},
+            // Wasp/Bees - Act 2 annoying flyers (5212)
+            {5212, 751},
+            // Dark summoner - summons the helion dogs (6035)
+            {6035, 501},
+            // Dark berserkers - has the huge damaging slow hit (6052)
+            {6052, 501},
+            // The giant undead fat grotesques that explode in act 1 (3847)
+            {3847, 401},
+            // Hive pods that summon flyers in act 1 (4152, 4153, 4154)
+            {4152, 901}, {4153, 901}, {4154, 901},
+            // Totems in act 1 that summon the ranged goatmen (166452)
+            {166452, 901},
+            // Totems in act 1 dungeons that summon skeletons (176907)
+            {176907, 901},
+            // Act 2 Sand Monster + Zultun Kulle (kill sand monster first)
+            {226849, 20000}, {80509, 1100},
+            // Maghda and her minions
+            {6031, 801}, {178512, 901},
+            // Uber Bosses - Skeleton King {255929}, Maghda {256189} & Pets {219702} which must be killed first
+            {255929, 2999}, {219702, 1999}, {256189, 999},
+            // Uber Bosses - Zoltun Kulle {256508} & Siegebreaker {256187}
+            // Siegebreaker removed so the focus remains on Zoltun Kulle until he is dead
+            {256508, 2999},
+            //{256508, 2999}, {256187, 1899},
+            // Uber Bosses - Ghom {256709} & Rakanot {256711}
+            {256709, 2999}, {256711, 1899},
+
+            // A5 Forgotton War trash
+            { 300864, -300 },
+        };
+
+        public static HashSet<int> MysticAllyIds { get; } = new HashSet<int>
+        {
+            169123, 123885, 169890, 168878, 169891, 169077, 169904, 169907, 169906, 169908, 169905, 169909
+        };
+
+        /// <summary>
+        /// Navigation obstacles for standard navigation down dungeons etc. to help DB movement
+        /// MAKE SURE you add the *SAME* SNO to the "size" dictionary below, and include a reasonable size (keep it smaller rather than larger) for the SNO.
+        /// </summary>
+        public static HashSet<int> NavigationObstacleIds { get; } = new HashSet<int>
+        {
+            104596, //GizmoType: DestroyableObject Name: trOut_FesteringWoods_Neph_Column_B-27477 ActorSnoId: 104596
+
+            174900, 185391, // demonic forge
+            198977,293900, // Azmo room center
+            194682, 81699, 3340, 123325,
+
+            158681, // A1 Blacksmith_Lore
+            104596, // A1 trOut_FesteringWoods_Neph_Column_B
+            104632, // A1 trOut_FesteringWoods_Neph_Column_B_Broken_Base
+            105303, // A1 trOut_FesteringWoods_Neph_Column_C_Broken_Base_Bottom
+            104827, // A1 trOut_FesteringWoods_Neph_Column_C_Broken_Base
+
+            332924, // x1_Bog_bloodSpring_small, Blood Spring - Overgrown Ruins
+            332922, // x1_Bog_bloodSpring_medium
+            332923, // x1_Bog_bloodSpring_large
+            321855, // x1_Pand_Ext_Ordnance_Mine
+            355898, // x1_Bog_Family_Guard_Tower_Stump
+            376917, // [1FA3B814] Type: ServerProp Name: x1_Westm_Hub_Stool_A-381422 ActorSnoId: 376917, Distance: 2.337004
+            (int)SNOActor.px_Bounty_Camp_Hellportals_Frame, // A4 bounties
+            (int)SNOActor.px_Bounty_Camp_Pinger, // A4 bounties
+
+            // DyingHymn A4 Bounties
+            433402,
+            434971,
+
+            // Bulba
+            433383, // A3 - Bounty - Catapult Command - Catapults
+            433384, // A3 - Bounty - Catapult Command - Catapults
+            210433 //A3 -  Catapult_a3dunKeep_WarMachines_Snow_Firing
+        };
+
+        /// <summary>
+        /// A list of LevelAreaSnoIdId's that the bot should always ignore Line of Sight
+        /// </summary>
+        public static HashSet<int> NeverRaycastLevelAreaIds { get; } = new HashSet<int>()
+        {
+            405915, // p1_TieredRift_Challenge
+        };
+
+        public static HashSet<int> NeverTownPortalLevelAreaIds { get; } = new HashSet<int>()
+        {
+            202446, // A1 New Tristram "Attack Area"
+            //19947, // A1 New Tristram "Attack Area"
+            175738, // A4 Bounty Quest with moving floor panels.
+            284069, // A5 Westmarch Overlook
+            308323, // A5 Westmarch Wolf Gate
+            315938, // A5 Westmarch Wolf Gate
+            316374, // A5 Westmarch Storehouse
+            311624, // A5 Westmarch Cathedral Courtyard
+            311623, // A5 Streets of Westmarch
+            309413, // A5 Westmarch Cathedral
+        };
+
+        public static HashSet<int> NoCheckKillRange { get; } = new HashSet<int>
+        {
+            210120, // A4 Corrupt Growth
+            210268, // A4 Corrupt Growth
+        };
+
+        /// <summary>
+        /// Size of the navigation obstacles above (actual SNO list must be matching the above list!)
+        /// </summary>
+        public static Dictionary<int, float> ObstacleCustomRadius { get; } = new Dictionary<int, float>
+        {
+            {174900, 25}, {194682, 20}, {81699, 20}, {3340, 12}, {123325, 25}, {185391, 25},
+            {104596, 15}, // trOut_FesteringWoods_Neph_Column_B
+            {104632, 15}, // trOut_FesteringWoods_Neph_Column_B_Broken_Base
+            {105303, 15}, // trOut_FesteringWoods_Neph_Column_C_Broken_Base_Bottom
+            {104827, 15}, // trOut_FesteringWoods_Neph_Column_C_Broken_Base
+            {355898, 12}, // x1_Bog_Family_Guard_Tower_Stump
+            {376917, 10},
+            {293900, 20f}, // Azmo Blocking Shit
+
+            // DyingHymn A4 Bounties
+            {433402, 8},
+            {434971, 10},
+        };
+
+        public static HashSet<int> PandemoniumFortressLevelAreaIds { get; } = new HashSet<int>
+        {
+            333758, //LevelArea: X1_LR_Tileset_Fortress
+        };
+
+        public static HashSet<int> PandemoniumFortressWorlds { get; } = new HashSet<int>
+        {
+            271233, // Adventure Pand Fortress 1
+            271235, // Adventure Pand Fortress 2
+        };
+
+        public static HashSet<int> QuestLevelAreaIds { get; } = new HashSet<int>
+        {
+            202446, // A1 New Tristram "Attack Area"
+            19947, // A1 New Tristram
+            109457, // A1 New Tristram Inn
+            109457, // A1 The Slaughtered Calf Inn
+            62968, // A1 The Hidden Cellar
+            60714, // A1 Leoric's Passage
+            83110, // A1 Cellar of the Damned
+            19935, // A1 Wortham
+            100854, // A1 Khazra Den
+            94672, // A1 Cursed Hold
+
+            60757, // A2 Belial's chambers
+            55313, // A2 Caldeum Bazaar
+            102964, // A2 City of Caldeum
+
+            309413, // A5 Westmarch Cathedral
+
+            336846, // x1_westm_KingEvent01 - Westmarch Commons Contested Villa
+            405915, // p1_TieredRift_Challenge
+        };
+
+        /// <summary>
+        /// Contains ActorSnoId of ranged units that should be attacked even if outside of kill radius
+        /// </summary>
+        public static HashSet<int> RangedMonsterIds { get; } = new HashSet<int>
+        {
+            365, 4100, // fallen
+            4304, 4300, // goat shaman
+            4738, // pestilence
+            4299, // goat ranged
+            62736, 130794, // demon flyer
+            5508, // succubus
+            5388, 4286, 256015, 256000, 255996,
+            5984, 5985, 5987, 5988, 405186, //goblins
+        };
+
+        public static HashSet<int> RayWalkTargetingOnlyActors { get; } = new HashSet<int>
+        {
+            (int) SNOActor.X1_Pand_Ext_Ordnance_Tower_Shock_A,
+        };
+
+        /// <summary>
+        /// Resplendent chest SNO list
+        /// </summary>
+        public static HashSet<int> ResplendentChestIds { get; } = new HashSet<int>
+        {
+            62873, 95011, 81424, 108230, 111808, 111809, 211861, 62866, 109264, 62866, 62860, 96993,
+            // Magi
+            112182,
+            363725, 357331, // chests after Cursed Chest
+
+            301177, // A5 Timeless Prison Switch
+
+            433670, //[1FA93634] GizmoType: Chest Name: x1_Global_Chest_BossBounty-6118 ActorSnoId: 433670 Distance: 14.60398
+        };
+
+        /// <summary>
+        /// Contains all the Exit Name Hashes in Rifts
+        /// </summary>
+        public static List<int> RiftPortalHashes { get; } = new List<int>()
+        {
+            1938876094,
+            1938876095,
+            1938876096,
+            1938876097,
+            1938876098,
+            1938876099,
+            1938876100,
+            1938876101,
+            1938876102,
+        };
+
+        // PlayerHeadstone
+        /// <summary>
+        /// Contains a list of Rift WorldId's
+        /// </summary>
+        public static List<int> RiftWorldIds { get; } = new List<int>()
+        {
+            288454,
+            288685,
+            288687,
+            288798,
+            288800,
+            288802,
+            288804,
+            288806,
+        };
+
+        // De-weight to zero but they still need to be processed for ClsoedDoor checks. todo proper fix.
+        public static Dictionary<int, int> SceneSpecificDoorsIgnore { get; } = new Dictionary<int, int>
+        {
+            { 454485, (int)SNOActor.p43_AD_Catacombs_Door_A },              // p43_AD_Catacombs_Door_A-13146 (454346)  // D1 Valor Scene Event
+            { 158161, (int)SNOActor.a2dun_Aqd_GodHead_Door_LargePuzzle },   // a2dun_Aqd_GodHead_Door_LargePuzzle  // Bounty: Lost Treasure of Khan Dakab
+        };
+
+        /// <summary>
+        /// A list of crappy "summoned mobs" we should always ignore unless they are very close to us, eg "grunts", summoned skeletons etc.
+        /// </summary>
+        public static HashSet<int> ShortRangeAttackMonsterIds { get; } = new HashSet<int>
+        {
+            4084, 4085, 5395, 144315,
+        };
+
+        /// <summary>
+        /// A list of LevelAreaSnoIdId's that the bot should always use Straight line pathing (no navigator)
+        /// </summary>
+        public static HashSet<int> StraightLinePathingLevelAreaIds { get; } = new HashSet<int>
+        {
+            60757, // Belial's chambers
+            405915, // p1_TieredRift_Challenge
+        };
+
+        //monsterAffix_waller_model (226808)
+        public static HashSet<string> VanityItems { get; } = new HashSet<string>()
+        {
+            "x1_AngelWings_Imperius", // Wings of Valor
+            "X1_SpectralHound_Skull_promo", // Liber Canis Mortui
+            "WoDFlag", // Warsong Pennant
+        };
+
+        public static HashSet<string> WhiteItemCraftingWhiteList { get; } = new HashSet<string>()
         {
             "Ascended Pauldrons",
             "Ascended Armor",
@@ -3029,281 +3174,22 @@ namespace Trinity.Framework.Reference
             "Diabolic Wand"
         };
 
-        public static HashSet<int> AlwaysRaycastWorlds { get { return GameData.alwaysRaycastWorlds; } }
-
-        public static HashSet<int> AncientIds { get { return ancientIds; } }
-
-        public static Dictionary<int, string> AnimatioNamesById
+        public static HashSet<int> WizardHydraIds { get; } = new HashSet<int>
         {
-            get { return _animatioNamesById ?? (_animatioNamesById = SNOAnim.Invalid.ToDictionary(true)); }
-        }
-
-
-        /// <summary>
-        /// A list of SNO's that are projectiles (so constantly look for new locations while avoiding)
-        /// </summary>
-        public static HashSet<int> AvoidanceProjectiles { get { return avoidanceProjectiles; } }
-
-        /// <summary>
-        /// A list of all the SNO's to avoid - you could add
-        /// </summary>
-        public static HashSet<int> Avoidances { get { return avoidances; } }
-
-        /// <summary>
-        /// The duration the AoE from AvoidanceSpawners should be avoided for
-        /// </summary>
-        public static Dictionary<int, TimeSpan> AvoidanceSpawnerDuration { get { return avoidanceSpawnerDuration; } }
-
-        /// <summary>
-        /// A list of SNO's that spawn AoE then disappear from the object manager
-        /// </summary>
-        public static HashSet<int> AvoidanceSpawners { get { return avoidanceSpawners; } }
-
-        /// <summary>
-        /// This list is used for animations where the avoidance point should be the player's current location
-        /// </summary>
-        public static HashSet<int> AvoidAnimationAtPlayer { get { return avoidAnimationAtPlayer; } }
-
-        /// <summary>
-        /// Contains ActorSnoId's of world objects that should be blacklisted
-        /// </summary>
-        public static HashSet<int> BlackListIds { get { return blacklistIds; } }
-
-        // A list of bosses in the game, just to make CERTAIN they are treated as elites
-        /// <summary>
-        /// Contains ActorSnoId of known Bosses
-        /// </summary>
-        public static HashSet<int> BossIds { get { return bossIds; } }
-
-        /// <summary>
-        /// Contains the list of Boss Level Area ID's
-        /// </summary>
-        public static HashSet<int> BossLevelAreaIDs { get; } = new HashSet<int>
-        {
-            109457, 185228, 60194, 130163, 60714, 19789, 62726, 90881, 195268, 58494, 81178, 60757, 111232, 112580,
-            119656, 111516, 143648, 215396, 119882, 109563, 153669, 215235, 55313, 60193, 19789, 330576, 109563
+            // Some hydras are 3 monsters, only use one of their heads.
+            82972, //Type: Monster Name: Wizard_HydraHead_Frost_1-1037 ActorSnoId: 82972
+            83959, // Type: Monster Name: Wizard_HydraHead_Big-1168 ActorSnoId: 83959
+            325807, // Type: Monster Name: Wizard_HydraHead_fire2_1-1250 ActorSnoId: 325807
+            82109, // Type: Monster Name: Wizard_HydraHead_Lightning_1-1288 ActorSnoId: 82109,
+            81515, // Type: Monster Name: Wizard_HydraHead_Arcane_1-1338 ActorSnoId: 81515,
+            80745, // Type: Monster Name: Wizard_HydraHead_Default_1-1364 ActorSnoId: 80745,
         };
-
-        public static HashSet<int> BountyTurnInQuests { get { return GameData.bountyTurnInQuests; } }
-
-        /// <summary>
-        /// This list is used when an actor has an attribute BuffVisualEffect=1, e.g. fire floors in The Butcher arena
-        /// </summary>
-        public static HashSet<int> ButcherFloorPanels { get { return butcherFloorPanels; } }
-
-        /// <summary>
-        /// Chests/average-level containers that deserve a bit of extra radius (ie - they are more worthwhile to loot than "random" misc/junk containers)
-        /// </summary>
-        public static HashSet<int> ContainerWhiteListIds { get { return containerWhiteListIds; } }
-
-        public static Dictionary<int, float> CustomObjectRadius { get; } = new Dictionary<int, float>
-        {
-            {56686, 4},
-            {52685, 4},
-            {54882, 40},
-            {3349, 25}, // Belial
-            {225270, 35},
-            {180575, 10},  // Diablo Arena Health Well
-            {375111, 45f}, // A5 x1_Death_Orb_Master_Monster
-            {301177, 15f}, // x1_PandExt_Time_Activator
-            {368515, 5f}, // A5 Nephalem Switch -  Passage to Corvus
-            {309432, 37f}, // x1_westm_Bridge
-            {54850, 14f}, // a3dun_Keep_SiegeTowerDoor
-            {325136, 15f},
-            {210120, 20f},//a4dun_Garden_Corruption_Monster
-            {210268, 20f},//a4dun_Garden_Corruption_HellRift_Monster
-            {360111, 20f},//a4dun_Garden_Corruption_Monster_Despair
-        };
-
-        public static Dictionary<int, float> DefaultAvoidanceAnimationCustomRadius { get { return defaultAvoidanceAnimationCustomRadius; } }
-
-        //       Line 15116:     p1_rifts_Orb_flippy = 434918,
-        //Line 15230:     p1_normal_rifts_Orb = 436807,
-        public static Dictionary<int, float> DefaultAvoidanceCustomRadius { get { return defaultAvoidanceCustomRadius; } }
-
-        public static HashSet<int> DemonHunterPetIds { get { return demonHunterPetIds; } }
-
-        public static HashSet<int> DemonHunterSentryIds { get { return demonHunterSentryIds; } }
-
-        /// <summary>
-        /// Destructible things that need targeting by a location instead of an AcdId (stuff you can't "click on" to destroy in-game)
-        /// </summary>
-        public static HashSet<int> DestroyAtLocationIds { get { return destroyAtLocationIds; } }
-
-        /// <summary>
-        /// This is the RadiusDistance at which destructibles and barricades (logstacks, large crates, carts, etc.) are added to the cache
-        /// </summary>
-        public static Dictionary<int, float> DestructableObjectRadius { get { return destructableObjectRadius; } }
-
-        // De-weight to zero but they still need to be processed for ClsoedDoor checks. todo proper fix.
-        public static HashSet<int> DoorsToAlwaysIgnore { get; } = new HashSet<int>
-        {
-            115373, //caOut_Oasis_Door_Aqueduct_A_Top-5549
-            454194, //p43_AD_trDun_Cath_WoodDoor_Lazarus-56453 (454194)
-            454187, //p43_AD_a1dun_Leor_Jail_Door_SuperLocked_A-61290 (454187)
-            454173, //43_AD_a1dun_Leor_Gate_A-61285 (454173)
-            465787, //P6_Church_BloodPool-25682
-        };
-
-        public static HashSet<int> EventQuests { get { return GameData.eventQuests; } }
-
-        /// <summary>
-        /// ActorSnoId's of Very fast moving mobs (eg wasps), for special skill-selection decisions
-        /// </summary>
-        public static HashSet<int> FastMovingMonsterIds { get { return fastMovementMonsterIds; } }
-
-        public static HashSet<int> FetishArmyIds { get { return fetishArmyIds; } }
-
-        public static HashSet<int> ForceDestructibles { get { return forceDestructibles; } }
-
-        /// <summary>
-        /// This is only intended for use with special bounty caves that spawn units
-        /// as part of a quest that cannot be identified as quest monsters by any
-        /// other means - use with caution.
-        /// </summary>
-        public static HashSet<int> ForceKillAllSceneSnoIds { get; } = new HashSet<int>
-        {
-            52888, //caOut_Interior_G_x01_y01,
-            199502, //ragnyr idol bounty fight scene.
-            31604, // a miners gold bounty - caOut_Sub240x240_Mine_Destroyed
-            430021, // king of the ziggaurat?
-            79983, // forged in battle bounty a3dun_Keep_SW_03_Forge
-        };
-
-        /// <summary>
-        /// World-object dictionaries eg large object lists, ignore lists etc.
-        /// A list of SNO's to *FORCE* to type: Item. (BE CAREFUL WITH THIS!).
-        /// </summary>
-        public static HashSet<int> ForceToItemOverrideIds { get { return forceToItemOverrideIds; } }
-
-        public static HashSet<int> ForceTownPortalLevelAreaIds { get { return GameData.forceTownPortalLevelAreaIds; } }
-
-        public static HashSet<int> ForceUseWOTBIds { get { return GameData.forceUseWOTBIds; } }
-
-        public static HashSet<int> GargantuanIds { get { return gargantuanIds; } }
-
-        /// <summary>
-        /// A list of all known SNO's of treasure goblins/bandits etc.
-        /// </summary>
-        public static HashSet<int> GoblinIds { get { return goblinIds; } }
-
-        public static HashSet<int> HidingUnits { get; } = new HashSet<int>()
-        {
-            218947, //Rockworm_Stationary_QueenWorm
-        };
-
-        public static HashSet<int> HighPriorityInteractables { get { return highPriorityInteractables; } }
-
-        public static HashSet<int> IgnoreUntargettableAttribute { get { return GameData.ignoreUntargettableAttribute; } }
-
-        public static Dictionary<int, int> InteractEndAnimations { get { return interactEndAnimations; } }
-
-        /// <summary>
-        /// Interactable whitelist - things that need interacting with like special wheels, levers - they will be blacklisted for 30 seconds after one-use
-        /// </summary>
-        public static HashSet<int> InteractWhiteListIds { get { return interactWhiteListIds; } }
-
-        /// <summary>
-        /// Last used-timers for all abilities to prevent spamming D3 memory for cancast checks too often
-        /// These should NEVER need manually editing
-        /// But you do need to make sure every skill used by TrinityPlugin is listed in here once!
-        /// </summary>
-        public static Dictionary<SNOPower, DateTime> LastUseAbilityTimeDefaults
-        {
-            get { return lastUseAbilityTimeDefaults; }
-            internal set { lastUseAbilityTimeDefaults = value; }
-        }
-
-        /// <summary>
-        /// Objects that should never be ignored due to no Line of Sight (LoS) or ZDiff
-        /// </summary>
-        public static HashSet<int> LineOfSightWhitelist { get { return lineOfSightWhitelist; } }
-
-        /// <summary>
-        /// Dictionary of Actor SNO's and cooresponding weighting/Priority
-        /// </summary>
-        public static Dictionary<int, int> MonsterCustomWeights { get { return monsterCustomWeights; } }
-
-        public static HashSet<int> MysticAllyIds { get { return mysticAllyIds; } }
-
-        /// <summary>
-        /// Navigation obstacles for standard navigation down dungeons etc. to help DB movement
-        /// MAKE SURE you add the *SAME* SNO to the "size" dictionary below, and include a reasonable size (keep it smaller rather than larger) for the SNO.
-        /// </summary>
-        public static HashSet<int> NavigationObstacleIds { get { return navigationObstacleIds; } }
-
-        /// <summary>
-        /// A list of LevelAreaSnoIdId's that the bot should always ignore Line of Sight
-        /// </summary>
-        public static HashSet<int> NeverRaycastLevelAreaIds { get { return neverRaycastLevelAreaIds; } }
-
-        public static HashSet<int> NeverTownPortalLevelAreaIds { get { return neverTownPortalLevelAreaIds; } }
-
-        public static HashSet<int> NoCheckKillRange { get { return _noCheckKillRange; } }
-
-        /// <summary>
-        /// Size of the navigation obstacles above (actual SNO list must be matching the above list!)
-        /// </summary>
-        public static Dictionary<int, float> ObstacleCustomRadius { get { return obstacleCustomRadius; } }
-
-        public static HashSet<int> PandemoniumFortressLevelAreaIds { get { return _pandemoniumFortressLevelAreaIds; } }
-
-        public static HashSet<int> PandemoniumFortressWorlds { get { return _pandemoniumFortressWorlds; } }
-
-        public static HashSet<int> QuestLevelAreaIds { get { return GameData.questLevelAreaIds; } }
-
-        /// <summary>
-        /// Contains ActorSnoId of ranged units that should be attacked even if outside of kill radius
-        /// </summary>
-        public static HashSet<int> RangedMonsterIds { get { return rangedMonsterIds; } }
-
-        public static HashSet<int> RayWalkTargetingOnlyActors { get; } = new HashSet<int>
-        {
-            (int) SNOActor.X1_Pand_Ext_Ordnance_Tower_Shock_A,
-        };
-
-        /// <summary>
-        /// Resplendent chest SNO list
-        /// </summary>
-        public static HashSet<int> ResplendentChestIds { get { return resplendentChestIds; } }
-
-        /// <summary>
-        /// Contains all the Exit Name Hashes in Rifts
-        /// </summary>
-        public static List<int> RiftPortalHashes { get { return GameData.riftPortalHashes; } }
-
-        // PlayerHeadstone
-        /// <summary>
-        /// Contains a list of Rift WorldId's
-        /// </summary>
-        public static List<int> RiftWorldIds { get { return GameData.riftWorldIds; } }
-
-        // De-weight to zero but they still need to be processed for ClsoedDoor checks. todo proper fix.
-        public static Dictionary<int, int> SceneSpecificDoorsIgnore { get; } = new Dictionary<int, int>
-        {
-            { 454485, (int)SNOActor.p43_AD_Catacombs_Door_A },              // p43_AD_Catacombs_Door_A-13146 (454346)  // D1 Valor Scene Event
-            { 158161, (int)SNOActor.a2dun_Aqd_GodHead_Door_LargePuzzle },   // a2dun_Aqd_GodHead_Door_LargePuzzle  // Bounty: Lost Treasure of Khan Dakab
-        };
-
-        /// <summary>
-        /// A list of crappy "summoned mobs" we should always ignore unless they are very close to us, eg "grunts", summoned skeletons etc.
-        /// </summary>
-        public static HashSet<int> ShortRangeAttackMonsterIds { get { return shortRangeAttackMonsterIds; } }
-
-        /// <summary>
-        /// A list of LevelAreaSnoIdId's that the bot should always use Straight line pathing (no navigator)
-        /// </summary>
-        public static HashSet<int> StraightLinePathingLevelAreaIds { get { return GameData.straightLinePathingLevelAreaIds; } }
-
-        //monsterAffix_waller_model (226808)
-        public static HashSet<string> VanityItems { get { return GameData.vanityItems; } }
-
-        public static HashSet<string> WhiteItemCraftingWhiteList { get { return whiteItemCraftingWhiteList; } }
-
-        public static HashSet<int> WizardHydraIds { get { return wizardHydraIds; } }
 
         // Three special lists used purely for checking for the existance of a player's summoned mystic ally, gargantuan, or zombie dog
-        public static HashSet<int> ZombieDogIds { get { return zombieDogIds; } }
+        public static HashSet<int> ZombieDogIds { get; } = new HashSet<int>
+        {
+            110959, 103235, 103215, 105763, 103217, 51353,
+        };
 
         /// <summary>
         /// Add an ActorSnoId to the blacklist. Returns false if the blacklist already contains the ActorSnoId
@@ -3312,9 +3198,9 @@ namespace Trinity.Framework.Reference
         /// <returns></returns>
         public static bool AddToBlacklist(int actorId)
         {
-            if (!blacklistIds.Contains(actorId))
+            if (!BlackListIds.Contains(actorId))
             {
-                blacklistIds.Add(actorId);
+                BlackListIds.Add(actorId);
                 return true;
             }
             else
