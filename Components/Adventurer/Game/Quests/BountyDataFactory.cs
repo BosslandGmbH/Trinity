@@ -8900,7 +8900,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 WaypointLevelAreaId = 456638,
                 Coroutines = new List<ISubroutine>
                 {
-                    new MoveToMapMarkerCoroutine(471761, 456634, 2912417 ),
+                    new MoveToMapMarkerCoroutine(471761, 456634, 2912417),
                     new ClearAreaForNSecondsCoroutine(471761, 60, 0, 0, 50)
                 }
             });
