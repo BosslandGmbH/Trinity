@@ -110,13 +110,12 @@ namespace Trinity.Framework.Actors.Properties
                     return ShrineTypes.Conduit;
 
                 case (int)SNOActor.x1_LR_Shrine_Invulnerable:
-                    return ShrineTypes.Shield;
-
                 case (int)SNOActor.x1_LR_Shrine_Run_Speed:
                     return ShrineTypes.Shield;
 
                 case (int)SNOActor.x1_LR_Shrine_Damage:
                     return ShrineTypes.Damage;
+
 
                 case (int)SNOActor.Shrine_TreasureGoblin:
                     return ShrineTypes.Goblin;
