@@ -2759,6 +2759,7 @@ namespace Trinity.Framework.Reference
 
         public static HashSet<int> HidingUnits { get; } = new HashSet<int>()
         {
+            (int)SNOActor.p6_Shepherd,
             218947, //Rockworm_Stationary_QueenWorm
         };
 
