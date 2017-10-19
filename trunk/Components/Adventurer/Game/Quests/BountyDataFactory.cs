@@ -1205,13 +1205,13 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new EnterLevelAreaCoroutine (344488, 82076, 82313, 497382904, 176001, true),
 
                     new WaitCoroutine(344488, 82076, 3000),
-                    new InteractWithUnitCoroutine(344488, 82313, 81609, 0, 3),
-                    new MoveToActorCoroutine(344488, 82313, 222404),
+                    new InteractWithUnitCoroutine(344488, (int)SNOActor.A1_UniqueVendor_Armorer, 81609, 0, 3),
+                    new MoveToActorCoroutine(344488, 82313, (int)SNOActor.a1dun_highlands_JeweledScabbard),
 
-                    new InteractWithGizmoCoroutine(344488, 82313, 222404, 0, 5),
-                    new ClearAreaForNSecondsCoroutine(344488, 10, 222404, 0, 20, false),
-                    new MoveToActorCoroutine(344488, 82313, 81609),
-                    new InteractWithUnitCoroutine(344488, 82313, 81609, 0, 5),
+                    //new InteractWithGizmoCoroutine(344488, 82313, (int)SNOActor.a1dun_highlands_JeweledScabbard, 0, 5),
+                    new ClearAreaForNSecondsCoroutine(344488, 10, (int)SNOActor.a1dun_highlands_JeweledScabbard, 0, 20, false),
+                    new MoveToActorCoroutine(344488, 82313, (int)SNOActor.A1_UniqueVendor_Armorer),
+                    new InteractWithUnitCoroutine(344488, 82313, (int)SNOActor.A1_UniqueVendor_Armorer, 0, 5),
                 }
             });
 
@@ -2306,7 +2306,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new WaitCoroutine(368559, 261712, 5000),
                         new MoveToPositionCoroutine(310845, new Vector3(303, 178, 10)),
 
-                        new ClearAreaForNSecondsCoroutine(368559, 30, 0, 0, 150),
+                        //new ClearAreaForNSecondsCoroutine(368559, 30, 0, 0, 150),
 						
                         // X1_Westm_Door_Hidden_Bookshelf (316627) Distance: 6.397694
                         new InteractWithGizmoCoroutine(368559, 310845, 316627, 0, 5),
@@ -8498,10 +8498,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 //WaypointNumber = 57,
                 Coroutines = new List<ISubroutine>
                 {
-					// x1_Fortress_Portal_Switch (328830) Distance: 1.162077
-                    new MoveToActorCoroutine(363394, 271233, 328830),
-					// x1_Fortress_Portal_Switch (328830) Distance: 1.162077
-					new InteractWithGizmoCoroutine(363394, 271233, 328830, -1751517829, 5),
+                    new MoveToScenePositionCoroutine(363394, 271233, "x1_fortress_NE_05_soul_well", new Vector3(91.16248f, 196.3975f, 20.1f)),
+                    new MoveThroughDeathGates(363394, 271233, 1),
 
                     new MoveToMapMarkerCoroutine(363394, 271233, 2912417),
                     // X1_Fortress_NephalemSpirit (354345) Distance: 21.83757
