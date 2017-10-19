@@ -1885,6 +1885,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static HashSet<int> BlackListIds { get; } = new HashSet<int>
         {
+            (int)SNOActor.Gharbad_The_Weak_Ghost,                           // Event NPC
             (int)SNOActor.x1_NPC_Westmarch_Gorrel_NonUnique,                // NPC for bounty: Noble Deaths.
             (int)SNOActor.bastionsKeepGuard_Melee_A_01_snatched,            // NPC you can't attack.
             (int)SNOActor.bastionsKeepGuard_Melee_A_02_BlazeOfGlory,        // NPC you can't attack.

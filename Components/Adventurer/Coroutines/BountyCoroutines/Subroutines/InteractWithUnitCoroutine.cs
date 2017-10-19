@@ -1,13 +1,16 @@
 ﻿using System;
 using Trinity.Framework;
 using System.Threading.Tasks;
+using Buddy.Coroutines;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
+using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Common.Helpers;
+using Zeta.Game;
 
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
@@ -61,7 +64,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             get { return _isDone | AdvDia.CurrentWorldId != _worldId; }
         }
 
-        public InteractWithUnitCoroutine(int questId, int worldId, int actorId, int marker, int interactAttemps = 1, int secondsToSleepAfterInteraction = 1, int secondsToTimeout = 4)
+        public InteractWithUnitCoroutine(int questId, int worldId, int actorId, int marker, int interactAttemps = 3, int secondsToSleepAfterInteraction = 1, int secondsToTimeout = 4)
         {
             _questId = questId;
             _worldId = worldId;
@@ -199,6 +202,12 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             //    }
             //    _interactionCoroutine.DiaObject = portalGizmo;
             //}
+
+            if (ZetaDia.Me.Movement.IsMoving)
+            {
+                Navigator.PlayerMover.MoveStop();
+                await Coroutine.Sleep(500);
+            }
 
             if (await _interactionCoroutine.GetCoroutine())
             {
