@@ -1417,7 +1417,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
                     new MoveToMapMarkerCoroutine(350560, 70885, 2912417),
 
-                    new InteractWithUnitCoroutine(350560, 70885, 51293, 2912417, 5),
+                    new MoveToScenePositionCoroutine(350560, 70885, "caOut_Sub240x240_Tower_Ruin", new Vector3(130.8402f, 137.6413f, 175.9637f)),
+                    new InteractionCoroutine((int)SNOActor.A2C2DyingGhostGuy, TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(1)),
                     new WaitCoroutine(350560, 70885, 5000),
 
                     new MoveToScenePositionCoroutine(350560, 70885, "caOut_Sub240x240_Tower_Ruin", new Vector3(161.0929f, 112.1465f, 175.5483f)),
