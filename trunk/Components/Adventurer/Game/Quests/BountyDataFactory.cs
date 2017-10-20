@@ -6719,9 +6719,10 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 WorldId = 267412,
                 QuestType = BountyQuestType.KillMonster,
                 LevelAreaIds = new HashSet<int> { 245964 },
+                WaypointLevelAreaId = 258142,
                 Coroutines = new List<ISubroutine>
                     {
-                        new KillUniqueMonsterCoroutine (362913,267412, 361771, -667462790),
+                        new KillUniqueMonsterCoroutine(362913,267412, 361771, -667462790),
                         new ClearLevelAreaCoroutine (362913)
                     }
             });
