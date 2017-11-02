@@ -269,7 +269,9 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 }
                 if (_objectiveLocation == Vector3.Zero && _actorId != 0)
                 {
-                    _objectiveLocation = BountyHelpers.ScanForActorLocation(_actorId, _objectiveScanRange);
+                    var actor = ActorFinder.FindGizmo(_actorId);
+                    if (actor != null && !actor.HasBeenOperated)
+                        _objectiveLocation = BountyHelpers.ScanForActorLocation(_actorId, _objectiveScanRange);
                 }
                 if (_objectiveLocation != Vector3.Zero)
                 {
