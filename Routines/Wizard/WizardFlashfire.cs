@@ -23,7 +23,7 @@ namespace Trinity.Routines.Wizard
         public string Description => "Wizard routine intended for non-grift speed farming materials";
         public string Author => "xzjv";
         public string Version => "0.1";
-        public string Url => "http://www.icy-veins.com/d3/flashfire-wizard-wand-of-woh-build-with-the-tal-rasha-set-patch-2-4-2-season-7";
+        public string Url => "https://www.icy-veins.com/d3/wizard-explosive-blast-farming-build-with-tal-rasha-set-patch-2-6-1-season-12";
 
         public override KiteMode KiteMode => KiteMode.Never;       
 
