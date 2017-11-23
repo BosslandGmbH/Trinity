@@ -1501,7 +1501,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item JessethSkullscythe = new Item
         {
-            Id = 454765,
+            Id = 467580, 
             Name = "Jesseth Skullscythe",
             Quality = ItemQuality.Legendary,
             Slug = "jesseth-skullscythe",
