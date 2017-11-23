@@ -40,7 +40,9 @@ namespace Trinity.Components.Coroutines
 
         public static bool DrinkPotion()
         {
-            var legendaryPotions = Core.Inventory.Backpack.Where(i => i.InternalName.ToLower().Contains("healthpotion_legendary_")).ToList();
+            var legendaryPotions = Core.Inventory.Backpack.Where(i =>  
+            new [] { "healthpotion_legendary_", "healthpotionlegendary_" }.Contains(i.InternalName.ToLower())).ToList();
+
             if (legendaryPotions.Any())
             {
                 Core.Logger.Verbose(LogCategory.None, "Using Potion", 0);
