@@ -77,6 +77,7 @@
         Ancient = 72,
         PrimaryStat = 73,
         ElementalDamage = 74,
+        MaximumEssence = 75,
         ElementalResist,
         ChanceToBlockTotal,
         PassivePower,

@@ -566,6 +566,13 @@ namespace Trinity.Settings.ItemList
                     returnValue = itemValue;
                     break;
 
+                case ItemProperty.MaximumEssence:
+                    itemValue = item.Attributes.MaxEssence;
+                    ruleValue = value;
+                    result = itemValue >= ruleValue;
+                    returnValue = itemValue;
+                    break;
+
                 case ItemProperty.Attribute:
 
                     try
