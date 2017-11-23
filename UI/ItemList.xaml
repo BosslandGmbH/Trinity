@@ -489,6 +489,9 @@
                     <DataTrigger Binding="{Binding Path=ItemProperty}" Value="MaximumWrath">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="MaximumEssence">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
                     <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ChanceToBlind">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormDecimalTemplate}" />
                     </DataTrigger>

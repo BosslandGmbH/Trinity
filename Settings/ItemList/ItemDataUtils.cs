@@ -714,7 +714,8 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.FollowerEnchantress, ItemProperty.PrimaryStat), new ItemStatRange {AncientMax = 1000, AncientMin = 750, Max = 750, Min = 626 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.FollowerScoundrel, ItemProperty.PrimaryStat), new ItemStatRange {AncientMax = 1000, AncientMin = 750, Max = 750, Min = 626 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.FollowerTemplar, ItemProperty.PrimaryStat), new ItemStatRange {AncientMax = 1000, AncientMin = 750, Max = 750, Min = 626 }},
-
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Scythe, ItemProperty.PrimaryStat), new ItemStatRange {AncientMax = 1000, AncientMin = 825, Max = 750, Min = 626 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandScythe, ItemProperty.PrimaryStat), new ItemStatRange {AncientMax = 1465, AncientMin = 1237, Max = 1125, Min = 946 }},
 
             //Vitality
 
@@ -763,7 +764,8 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.FollowerEnchantress, ItemProperty.Vitality), new ItemStatRange {AncientMax = 1000, AncientMin = 825, Max = 750, Min = 626 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.FollowerScoundrel, ItemProperty.Vitality), new ItemStatRange {AncientMax = 1000, AncientMin = 825, Max = 750, Min = 626 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.FollowerTemplar, ItemProperty.Vitality), new ItemStatRange {AncientMax = 1000, AncientMin = 825, Max = 750, Min = 626 }},
-
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Scythe, ItemProperty.Vitality), new ItemStatRange {AncientMax = 1000, AncientMin = 825, Max = 750, Min = 626 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandScythe, ItemProperty.Vitality), new ItemStatRange {AncientMax = 1465, AncientMin = 1237, Max = 1125, Min = 946 }},
 
             //ResistAll
 
@@ -841,6 +843,8 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandSword, ItemProperty.AttackSpeed), new ItemStatRange { Max = 7, Min = 5 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Spear, ItemProperty.AttackSpeed), new ItemStatRange { Max = 7, Min = 5 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Dagger, ItemProperty.AttackSpeed), new ItemStatRange { Max = 7, Min = 5 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Scythe, ItemProperty.AttackSpeed), new ItemStatRange { Max = 7, Min = 5 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandScythe, ItemProperty.AttackSpeed), new ItemStatRange { Max = 7, Min = 5 }},
 
             // Skill Damage acdItem.GetSkillDamageIncrease() method is fixed.
 
@@ -895,6 +899,8 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandPolearm, ItemProperty.BaseMaxDamage), new ItemStatRange { AncientMax = 2325, AncientMin = 1582, Max = 1788, Min = 1177 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandStaff, ItemProperty.BaseMaxDamage), new ItemStatRange { AncientMax = 2325, AncientMin = 1582, Max = 1788, Min = 1177 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandSword, ItemProperty.BaseMaxDamage), new ItemStatRange { AncientMax = 2325, AncientMin = 1582, Max = 1788, Min = 1177 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Scythe, ItemProperty.BaseMaxDamage), new ItemStatRange {AncientMax = 1940, AncientMin = 1318, Max = 1490, Min = 981 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandScythe, ItemProperty.BaseMaxDamage), new ItemStatRange {AncientMax = 2325, AncientMin = 1582, Max = 1788, Min = 1177 }},
 
             // Percent Damage
 
@@ -919,6 +925,8 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandPolearm, ItemProperty.PercentDamage), new ItemStatRange {  Max = 10, Min = 6 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandStaff, ItemProperty.PercentDamage), new ItemStatRange {  Max = 10, Min = 6 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandSword, ItemProperty.PercentDamage), new ItemStatRange {  Max = 10, Min = 6 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Scythe, ItemProperty.PercentDamage), new ItemStatRange { Max = 10, Min = 6 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandScythe, ItemProperty.PercentDamage), new ItemStatRange { Max = 10, Min = 6 }},
 
             // Sockets
 
@@ -958,6 +966,8 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Shield, ItemProperty.Sockets), new ItemStatRange { Max = 1, Min = 0 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Dagger, ItemProperty.Sockets), new ItemStatRange { Max = 1, Min = 0 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.CrusaderShield, ItemProperty.Sockets), new ItemStatRange { Max = 1, Min = 0 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Scythe, ItemProperty.Sockets), new ItemStatRange { Max = 1, Min = 0 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandScythe, ItemProperty.Sockets), new ItemStatRange { Max = 1, Min = 0 }},
             
             // Resource Cost Reduction
 
@@ -990,6 +1000,8 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandSword, ItemProperty.ResourceCost), new ItemStatRange { Max = 10, Min = 8 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Spear, ItemProperty.ResourceCost), new ItemStatRange { Max = 10, Min = 8 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Dagger, ItemProperty.ResourceCost), new ItemStatRange { Max = 10, Min = 8 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Scythe, ItemProperty.ResourceCost), new ItemStatRange { Max = 10, Min = 8 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandScythe, ItemProperty.ResourceCost), new ItemStatRange { Max = 10, Min = 8 }},
 
             // Cooldown Reduction
 
@@ -1022,6 +1034,8 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandSword, ItemProperty.Cooldown), new ItemStatRange { Max = 10, Min = 6 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Spear, ItemProperty.Cooldown), new ItemStatRange { Max = 10, Min = 6 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Dagger, ItemProperty.Cooldown), new ItemStatRange { Max = 10, Min = 6 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Scythe, ItemProperty.Cooldown), new ItemStatRange { Max = 10, Min = 6 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandScythe, ItemProperty.Cooldown), new ItemStatRange { Max = 10, Min = 6 }},
 
             // Area Damage
 
@@ -1055,6 +1069,8 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandSword, ItemProperty.AreaDamage), new ItemStatRange {Min = 16, Max = 24 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Spear, ItemProperty.AreaDamage), new ItemStatRange {Min = 16, Max = 24 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Dagger, ItemProperty.AreaDamage), new ItemStatRange {Min = 16, Max = 24 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Scythe, ItemProperty.AreaDamage), new ItemStatRange { Max = 16, Min = 24 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandScythe, ItemProperty.AreaDamage), new ItemStatRange { Max = 16, Min = 24 }},
 
             // Thorns
 
@@ -1109,6 +1125,8 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Orb, ItemProperty.DamageAgainstElites), new ItemStatRange { Max = 10, Min = 8 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Mojo, ItemProperty.DamageAgainstElites), new ItemStatRange { Max = 10, Min = 8 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Phylactery, ItemProperty.DamageAgainstElites), new ItemStatRange { Max = 10, Min = 8 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Scythe, ItemProperty.DamageAgainstElites), new ItemStatRange { Max = 10, Min = 8 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandScythe, ItemProperty.DamageAgainstElites), new ItemStatRange { Max = 10, Min = 8 }},
 
             // ElementalDamage
 
@@ -1240,6 +1258,8 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.FollowerEnchantress, ItemProperty.LifePerHit), new ItemStatRange { AncientMax = 23950, AncientMin = 20271, Max = 18429, Min = 15474 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.FollowerScoundrel, ItemProperty.LifePerHit), new ItemStatRange { AncientMax = 23950, AncientMin = 20271, Max = 18429, Min = 15474 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.FollowerTemplar, ItemProperty.LifePerHit), new ItemStatRange { AncientMax = 23950, AncientMin = 20271, Max = 18429, Min = 15474 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Scythe, ItemProperty.LifePerHit), new ItemStatRange { AncientMax = 23950, AncientMin = 20271, Max = 18429, Min = 15474 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandScythe, ItemProperty.LifePerHit), new ItemStatRange { AncientMax = 23950, AncientMin = 20271, Max = 18429, Min = 15474 }},
 
             // Life Per Second
 
@@ -1333,6 +1353,12 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.CrusaderShield, ItemProperty.MaximumWrath), new ItemStatRange {  Max = 10, Min = 8 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Flail, ItemProperty.MaximumWrath), new ItemStatRange {  Max = 10, Min = 8 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandFlail, ItemProperty.MaximumWrath), new ItemStatRange {  Max = 16, Min = 20 }},
+
+            // Max Essence
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Scythe, ItemProperty.MaximumEssence), new ItemStatRange { Max = 20, Min = 18 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Phylactery, ItemProperty.MaximumEssence), new ItemStatRange { Max = 20, Min = 18 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandScythe, ItemProperty.MaximumEssence), new ItemStatRange { Max = 40, Min = 36 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Shield, ItemProperty.MaximumEssence), new ItemStatRange { Max = 18, Min = 15 }},
 
             // Chance to Blind
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Amulet, ItemProperty.ChanceToBlind), new ItemStatRange {  Max = 5.1, Min = 1 }},
@@ -1490,6 +1516,10 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Helm, ActorClass.Crusader), Skills.Crusader.ShieldBash},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Helm, ActorClass.Crusader), Skills.Crusader.SweepAttack},
 
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Helm, ActorClass.Necromancer), Skills.Necromancer.BoneSpear},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Helm, ActorClass.Necromancer), Skills.Necromancer.SkeletalMage},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Helm, ActorClass.Necromancer), Skills.Necromancer.DeathNova},
+
             // Shoulders
 
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.DemonHunter), Skills.DemonHunter.Companion},
@@ -1532,6 +1562,12 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Crusader), Skills.Crusader.Bombardment},			
 			
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Necromancer), Skills.Necromancer.CorpseLance},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Necromancer), Skills.Necromancer.Revive},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Necromancer), Skills.Necromancer.BoneSpirit},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Necromancer), Skills.Necromancer.BoneArmor},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Necromancer), Skills.Necromancer.CommandGolem},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Necromancer), Skills.Necromancer.CommandSkeletons},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Necromancer), Skills.Necromancer.CorpseExplosion},
 
             // Chest
 
@@ -1582,6 +1618,12 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Crusader), Skills.Crusader.Condemn},
 			
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Necromancer), Skills.Necromancer.CorpseLance},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Necromancer), Skills.Necromancer.Revive},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Necromancer), Skills.Necromancer.BoneSpirit},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Necromancer), Skills.Necromancer.BoneArmor},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Necromancer), Skills.Necromancer.CommandGolem},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Necromancer), Skills.Necromancer.CommandSkeletons},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Necromancer), Skills.Necromancer.CorpseExplosion},
 
             // Belt
 
@@ -1618,6 +1660,10 @@ namespace Trinity.Settings.ItemList
 
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Belt, ActorClass.Crusader), Skills.Crusader.Punish},
 
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Belt, ActorClass.Necromancer), Skills.Necromancer.BoneSpikes},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Belt, ActorClass.Necromancer), Skills.Necromancer.GrimScythe},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Belt, ActorClass.Necromancer), Skills.Necromancer.SiphonBlood},
+
             // Pants
 
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Legs, ActorClass.DemonHunter), Skills.DemonHunter.Grenade},
@@ -1650,6 +1696,10 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Legs, ActorClass.Crusader), Skills.Crusader.Justice},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Legs, ActorClass.Crusader), Skills.Crusader.Slash},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Legs, ActorClass.Crusader), Skills.Crusader.Smite},
+
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Legs, ActorClass.Necromancer), Skills.Necromancer.BoneSpikes},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Legs, ActorClass.Necromancer), Skills.Necromancer.GrimScythe},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Legs, ActorClass.Necromancer), Skills.Necromancer.SiphonBlood},
             
             // Boots
 
@@ -1691,6 +1741,10 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Boots, ActorClass.Crusader), Skills.Crusader.BlessedShield},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Boots, ActorClass.Crusader), Skills.Crusader.ShieldBash},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Boots, ActorClass.Crusader), Skills.Crusader.SweepAttack},
+
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Boots, ActorClass.Necromancer), Skills.Necromancer.BoneSpear},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Boots, ActorClass.Necromancer), Skills.Necromancer.SkeletalMage},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Boots, ActorClass.Necromancer), Skills.Necromancer.DeathNova},
 
             // Offhand
 
@@ -1756,6 +1810,18 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.BlessedHammer},
 			
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Phylactery, ActorClass.Necromancer), Skills.Necromancer.CorpseLance},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Phylactery, ActorClass.Necromancer), Skills.Necromancer.SkeletalMage},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Phylactery, ActorClass.Necromancer), Skills.Necromancer.Revive},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Phylactery, ActorClass.Necromancer), Skills.Necromancer.BoneSpear},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Phylactery, ActorClass.Necromancer), Skills.Necromancer.BoneSpikes},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Phylactery, ActorClass.Necromancer), Skills.Necromancer.BoneArmor},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Phylactery, ActorClass.Necromancer), Skills.Necromancer.BoneSpirit},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Phylactery, ActorClass.Necromancer), Skills.Necromancer.DeathNova},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Phylactery, ActorClass.Necromancer), Skills.Necromancer.GrimScythe},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Phylactery, ActorClass.Necromancer), Skills.Necromancer.CommandGolem},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Phylactery, ActorClass.Necromancer), Skills.Necromancer.CommandSkeletons},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Phylactery, ActorClass.Necromancer), Skills.Necromancer.SiphonBlood},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Phylactery, ActorClass.Necromancer), Skills.Necromancer.CorpseExplosion},
 
             // One Hand Weapon
 
