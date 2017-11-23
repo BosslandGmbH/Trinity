@@ -20,7 +20,7 @@ namespace Trinity.Routines.Barbarian
         public string Description => "Empowered by the Immortal King set, this Barbarian build emphasises melee devastation and pulverises his enemies to the ground with Hammer of the Ancients Hammer of the Ancients, while maintaining a vast array of buffs and warriors at his side. ";
         public string Author => "xzjv";
         public string Version => "0.1";
-        public string Url => "http://www.icy-veins.com/d3/barbarian-hota-fire-build-with-immortal-king-patch-2-4-2-season-7";
+        public string Url => "https://www.icy-veins.com/d3/barbarian-hota-build-with-immortal-king-patch-2-6-1-season-12";
 
         public Build BuildRequirements => new Build
         {
