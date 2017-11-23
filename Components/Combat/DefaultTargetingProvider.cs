@@ -216,6 +216,11 @@ namespace Trinity.Components.Combat
 
             Core.Logger.Verbose(LogCategory.Targetting, $">> CurrentPower={TrinityCombat.Targeting.CurrentPower} CurrentTarget={target} RangeReq:{targetRangeRequired} RadDist:{target.RadiusDistance}");
 
+
+            // Handle Belial differently, he's never in LineOfSight.
+            if (Core.Player.IsInBossEncounter && target.ActorSnoId == (int)SNOActor.Belial)
+                return target.RadiusDistance <= targetRangeRequired;
+
             return target.RadiusDistance <= targetRangeRequired && IsInLineOfSight(target);
         }
 
@@ -239,16 +244,22 @@ namespace Trinity.Components.Combat
             var rangeRequired = Math.Max(1f, power.MinimumRange);
             var distance = position.Distance(Core.Player.Position);
 
-            if (Core.Player.IsInBossEncounter && TrinityCombat.Targeting.CurrentTarget != null)
+            TrinityActor currentTarget = TrinityCombat.Targeting.CurrentTarget;
+            if (Core.Player.IsInBossEncounter && currentTarget != null)
             {
-                var positionIsBoss = TrinityCombat.Targeting.CurrentTarget.IsBoss && TrinityCombat.Targeting.CurrentTarget.Position.Distance(position) < 10f;
+                var positionIsBoss = currentTarget.IsBoss && currentTarget.Position.Distance(position) < 10f;
                 if (positionIsBoss)
                 {
-                    rangeRequired += TrinityCombat.Targeting.CurrentTarget.CollisionRadius;
+                    rangeRequired += currentTarget.CollisionRadius;
                 }
             }
 
             Core.Logger.Verbose(LogCategory.Targetting, $">> CurrentPower={power} CurrentTarget={position} RangeReq:{rangeRequired} Dist:{distance}");
+
+            // Handle Belial differently, he's never in LineOfSight.
+            if (Core.Player.IsInBossEncounter && currentTarget != null && currentTarget.ActorSnoId == (int) SNOActor.Belial)
+                return distance <= rangeRequired;
+
             return distance <= rangeRequired && IsInLineOfSight(position);
         }
 
