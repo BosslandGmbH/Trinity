@@ -449,7 +449,7 @@ namespace Trinity.Routines.Barbarian
         //Secondary
 
         protected static TrinityPower HammerOfTheAncients(TrinityActor target)
-            => new TrinityPower(Skills.Barbarian.HammerOfTheAncients, 16f, target.AcdId);
+            => new TrinityPower(Skills.Barbarian.HammerOfTheAncients, 16f, target.Position);
 
         protected static TrinityPower SeismicSlam(TrinityActor target)
             => new TrinityPower(Skills.Barbarian.SeismicSlam, 20f, target.AcdId);
