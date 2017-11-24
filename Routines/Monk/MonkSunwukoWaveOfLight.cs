@@ -1,4 +1,5 @@
-﻿using Trinity.Framework;
+﻿using System;
+using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,6 +11,7 @@ using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Trinity.UI;
 using Zeta.Common;
+using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
 
@@ -19,12 +21,16 @@ namespace Trinity.Routines.Monk
     {
         #region Definition
 
-        public string DisplayName => "Monk Sunwuko Wave of Light";
-        public string Description => "Speed rifting build that uses Wave of Light to capitalize on the synergy of the Sunwuko set and Kyoshiro items.";
+        public string DisplayName => "Classic One Punch Monk";
+        public string Description => "Speed rifting build that uses Wave of Light to capitalize on the synergy of the Sunwuko set and Kyoshiro items. Search on DiabloFans for the original Build.";
         public string Author => " TwoCigars";
         public string Version => "Beta 1.3";
-        public string Url => "https://www.icy-veins.com/d3/monk-sunwuko-wave-of-light-build-patch-2-6-1-season-12";
+        public string Url => "http://www.d3planner.com/375196023";
         
+        // D3Planner for the build and best stats
+		//In-Geom and Envious Blade are interchangeable with anything. Rabid Strike, Vengeful Wind, et al work well. 
+        //http://www.d3planner.com/375196023
+
         public Build BuildRequirements => new Build
         {
             Sets = new Dictionary<Set, SetBonus>
@@ -35,6 +41,7 @@ namespace Trinity.Routines.Monk
             {
                 Legendary.PintosPride,
 				Legendary.TzoKrinsGaze,
+				Legendary.KyoshirosSoul,
 				Legendary.KyoshirosBlade,
             },
             Skills = new Dictionary<Skill, Rune>
@@ -51,6 +58,9 @@ namespace Trinity.Routines.Monk
             TrinityPower power;
             Vector3 position;
 
+            if (ShouldSweepingWind() && Skills.Monk.SweepingWind.CanCast())
+                return SweepingWind();
+
             if (TrySpecialPower(out power))
                 return power;            
 
@@ -66,7 +76,7 @@ namespace Trinity.Routines.Monk
                     return DashingStrike(CurrentTarget.Position);
 
                 if (Skills.Monk.WaveOfLight.CanCast())
-                    return WaveOfLight(CurrentTarget);
+                    return WaveOfLight(CurrentTarget.Position);
             }
 
             if (TrySecondaryPower(out power))
@@ -169,11 +179,22 @@ namespace Trinity.Routines.Monk
                 return false;
             }
 
-            if (swStacks <= 1)
-                return false;
-
+            if (swStacks <= MinSweepingWindStacks)
+                return false;    
+			
             if (Player.PrimaryResource < PrimaryEnergyReserve)
                 return false;
+
+            //HAHA
+            target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
+            return true;
+
+
+            if (IsBlocked || IsStuck)
+            {
+                target = TargetUtil.GetClosestUnit(Settings.WoLRange) ?? CurrentTarget;
+                return target != null;
+            }
 
             var isBigCluster = TargetUtil.ClusterExists(Settings.WoLRange, Settings.ClusterSize);
             var isEliteInRange = TargetUtil.AnyElitesInRange(Settings.WoLEliteRange);
@@ -181,21 +202,17 @@ namespace Trinity.Routines.Monk
 
             if (isBigCluster || isEliteInRange || isFarTooMuchResource)
             {
-                target = TargetUtil.GetBestClusterUnit();
+                //target = TargetUtil.GetBestClusterUnit();
+                target = TargetUtil.GetClosestUnit(Settings.WoLRange) ?? CurrentTarget;
                 return target != null;
             }
-			
-            if (IsBlocked || IsStuck)
-            {
-                target = TargetUtil.GetClosestUnit(Settings.WoLRange) ?? CurrentTarget;
-            }
-            else
-            {
-                target = TargetUtil.GetBestClusterUnit(Settings.WoLRange) ?? CurrentTarget;
-            }
-            return true;
-        }		
-		
+
+            //target = TargetUtil.GetBestClusterUnit(Settings.WoLRange) ?? CurrentTarget;
+            target = TargetUtil.GetClosestUnit(Settings.WoLRange) ?? CurrentTarget;
+            return target != null;
+        } 
+
+
         protected override bool ShouldSweepingWind()
         {
             if (!Skills.Monk.SweepingWind.CanCast())
