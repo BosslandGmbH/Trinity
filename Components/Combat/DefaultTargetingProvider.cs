@@ -255,25 +255,25 @@ namespace Trinity.Components.Combat
             Core.Logger.Verbose(LogCategory.Targetting, $">> CurrentPower={power} CurrentTarget={position} RangeReq:{rangeRequired} Dist:{distance}");
 
             // Handle Belial differently, he's never in LineOfSight.
-            if (Core.Player.IsInBossEncounter && currentTarget != null && currentTarget.ActorSnoId == (int) SNOActor.Belial)
+            if (Core.Player.IsInBossEncounter && CurrentTarget != null && CurrentTarget.ActorSnoId == (int) SNOActor.Belial)
                 return distance <= rangeRequired;
 
             return distance <= rangeRequired && IsInLineOfSight(position);
         }
 
-        public bool IsInLineOfSight(TrinityActor currentTarget)
+        public bool IsInLineOfSight(TrinityActor CurrentTarget)
         {
-            if (GameData.LineOfSightWhitelist.Contains(currentTarget.ActorSnoId))
+            if (GameData.LineOfSightWhitelist.Contains(CurrentTarget.ActorSnoId))
                 return true;
 
-            if (currentTarget.RadiusDistance <= 2f)
+            if (CurrentTarget.RadiusDistance <= 2f)
                 return true;
 
             var requiresRayWalk = Core.ProfileSettings.Options.CurrentSceneOptions.AlwaysRayWalk;
-            if (!requiresRayWalk && currentTarget.Targeting.TotalTargetedTime < TimeSpan.FromSeconds(5) && currentTarget.IsInLineOfSight)
+            if (!requiresRayWalk && CurrentTarget.Targeting.TotalTargetedTime < TimeSpan.FromSeconds(5) && CurrentTarget.IsInLineOfSight)
                 return true;
 
-            return Core.Grids.Avoidance.CanRayWalk(currentTarget, 5f);
+            return Core.Grids.Avoidance.CanRayWalk(CurrentTarget, 5f);
         }
 
         public bool IsInLineOfSight(Vector3 position)
