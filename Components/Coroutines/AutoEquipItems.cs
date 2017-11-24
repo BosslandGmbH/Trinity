@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using System.Collections.Generic;
@@ -752,6 +752,7 @@ namespace Trinity.Components.Coroutines
                 case ItemType.CrusaderShield:
                 case ItemType.Shield:
                 case ItemType.Orb:
+                case ItemType.Phylactery:
                     return true;
             }
             return false;
@@ -778,6 +779,8 @@ namespace Trinity.Components.Coroutines
                 case ItemType.Crossbow:
                 case ItemType.HandCrossbow:
                 case ItemType.Bow:
+                case ItemType.Scythe:
+                case ItemType.Phylactery:
                     return true;
             }
             return false;
@@ -857,6 +860,12 @@ namespace Trinity.Components.Coroutines
                 case TrinityItemType.HandCrossbow:
                 case TrinityItemType.TwoHandCrossbow:
                     if (actorClass != ActorClass.DemonHunter)
+                        return false;
+                    break;
+
+                case TrinityItemType.Scythe:
+                case TrinityItemType.Phylactery:
+                    if (actorClass != ActorClass.Necromancer)
                         return false;
                     break;
             }
