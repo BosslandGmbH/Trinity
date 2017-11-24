@@ -1,0 +1,34 @@
+<Profile>
+<Name>C.W dale modify.xxjinhyokxx</Name>
+<KillMonsters>True</KillMonsters>
+<PickupLoot>True</PickupLoot>
+<GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="-1" />
+
+    <TargetBlacklists>
+        <TargetBlacklist actorId="114622" name="Tyrael" />
+        <TargetBlacklist actorId="4153" />
+        <TargetBlacklist actorId="365097" />
+        <TargetBlacklist actorId="368169" />
+        <TargetBlacklist actorId="212491" />
+        <TargetBlacklist actorId="210422" />
+    </TargetBlacklists>
+
+    <Order>
+
+    <TrinityMaxDeaths questId="1" max="2" />
+        <If condition="IsInTown">
+            <WaitTimer questId="1" stepId="1" waitTime="7000"/>
+            <LoadProfile file="Cosmicwing.xml" />
+        </If>
+
+        <If condition="CurrentWorldId == 409093" >
+            <LogMessage message="Clearing the dale" />
+            <RandomMove radius="100" />
+            <ExploreLevelArea/>
+            <LogMessage message="All done !!" />
+            <WaitTimer questId="1" waitTime="1000"/>
+            <LogMessage message="as you cannot get 2 rainbow portals in 1 game" />
+            <LeaveGame quest="1" step="1" stayInParty="True" />
+        </If>
+    </Order>
+</Profile>

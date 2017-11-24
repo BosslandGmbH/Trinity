@@ -60,7 +60,7 @@
 
     <If condition="ZetaDia.Globals.WorldSnoId == 380753">
       <LogMessage questId="1" output="Time to plunder!" />
-      <Interact questId="312429" stepId="2" actorId="378665" actorName="p1_Greed" x="78" y="191" z="-82" worldSnoId="380753" levelAreaSnoId="380774" sceneSnoId="380605" sceneName="p1_TGoblin_Realm_Prototype3_W01_S01" sceneX="75" sceneY="183" sceneZ="-83" />      
+      <Interact questId="312429" stepId="2" actorId="403041" actorName="p1_Tgoblin_Greed_Bait" x="69.34" y="190" z="-82.4" worldSnoId="380753" levelAreaSnoId="380774" sceneSnoId="380605" sceneName="p1_TGoblin_Realm_Prototype3_W01_S01" sceneX="75" sceneY="183" sceneZ="-83" />      
       <WaitTimer questId="1" stepId="1" waitTime="10000" />
       <Interact questId="312429" stepId="2" actorId="403683" explore="false" actorName="p1_Greed_deathChest_Multiclick" worldSnoId="380753" levelAreaSnoId="380774" sceneSnoId="380605" sceneName="p1_TGoblin_Realm_Prototype3_W01_S01"  />
       <WaitTimer questId="1" stepId="1" waitTime="4000" />
