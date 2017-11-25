@@ -9,8 +9,6 @@ using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Trinity.UI;
 using Zeta.Common;
-using Zeta.Game.Internals.Actors;
-
 
 namespace Trinity.Routines.Monk
 {
@@ -21,7 +19,7 @@ namespace Trinity.Routines.Monk
         public string DisplayName => "DatModz's WK WoL Monk";
         public string Description => "DatModz - GR 110+ Sunwuko WoL Monk: This is a well rounded Solo Pushing Build that works well at high levle g-rifts";
         public string Author => "jubisman";
-        public string Version => "0.1";
+        public string Version => "0.2";
         public string Url => "http://www.diablofans.com/builds/96442-datmodz-gr-110-sunwuko-wol-monk";
 
         public Build BuildRequirements => new Build
@@ -41,15 +39,15 @@ namespace Trinity.Routines.Monk
 
         public TrinityPower GetOffensivePower()
         {
+            Vector3 position;
             TrinityActor target;
             TrinityPower power = null;
-            Vector3 position;
-
-            if (ShouldWaveOfLight(out target))
-                return WaveOfLight(target);
 
             if (ShouldDashingStrike(out position))
                 return DashingStrike(position);
+
+            if (ShouldWaveOfLight(out target))
+                return WaveOfLight(target);
 
             return GetPrimary();
         }
@@ -83,22 +81,31 @@ namespace Trinity.Routines.Monk
         {
             target = null;
 
-            if (TargetUtil.AnyMobsInRange(40f))
+            if (!Skills.Monk.WaveOfLight.CanCast())
+                return false;
+
+            if (TargetUtil.AnyMobsInRange(50f))
             {
-                target = TargetUtil.GetBestClusterUnit();
+                target = TargetUtil.GetBestClusterUnit(50f);
                 return target != null;
             }
 
-            return base.ShouldWaveOfLight(out target);
+            return false;
         }
 
         protected override bool ShouldSweepingWind()
         {
             if (!Skills.Monk.SweepingWind.CanCast())
+            {
+                //Core.Logger.Log("CanCast is false for Sweeping Wind");
                 return false;
+            }
 
-            var buffCooldownRemanining = Core.Cooldowns.GetBuffCooldownRemaining(SNOPower.Monk_SweepingWind);
+            /*var buffCooldownRemanining = Core.Cooldowns.GetBuffCooldownRemaining(SNOPower.Monk_SweepingWind);
             if (buffCooldownRemanining.TotalMilliseconds > 750)
+                return false;*/
+
+            if (Skills.Monk.SweepingWind.TimeSinceUse < 5250)
                 return false;
 
             if (Player.IsInTown)
@@ -195,6 +202,15 @@ namespace Trinity.Routines.Monk
                 return position != Vector3.Zero;
             }
 
+            if (Player.CurrentHealthPct >= 0.7f)
+            {
+                Vector3 bestBuffedPosition;
+                var bestClusterPoint = TargetUtil.GetBestClusterPoint(20f);
+                var safePosition = TargetUtil.GetSafeSpotPosition(40f);
+                TargetUtil.BestBuffPosition(40f, bestClusterPoint, true, out bestBuffedPosition);
+                var bestDashPosition = bestBuffedPosition != Vector3.Zero ? bestBuffedPosition : safePosition;
+                return bestDashPosition != Vector3.Zero;
+            }
             return false;
         }
 
