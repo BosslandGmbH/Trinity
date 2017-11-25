@@ -256,7 +256,7 @@ namespace Trinity.Components.Combat
             Core.Logger.Verbose(LogCategory.Targetting, $">> CurrentPower={power} CurrentTarget={position} RangeReq:{rangeRequired} Dist:{distance}");
 
             // Handle Belial differently, he's never in LineOfSight.
-            if (Core.Player.IsInBossEncounter && currentTarget != null && currentTarget.ActorSnoId == (int) SNOActor.Belial)
+            if (Core.Player.IsInBossEncounter && CurrentTarget != null && CurrentTarget.ActorSnoId == (int) SNOActor.Belial)
                 return distance <= rangeRequired;
 
             return distance <= rangeRequired && IsInLineOfSight(position);
