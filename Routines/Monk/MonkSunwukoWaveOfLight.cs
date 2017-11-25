@@ -19,12 +19,16 @@ namespace Trinity.Routines.Monk
     {
         #region Definition
 
-        public string DisplayName => "Monk Sunwuko Wave of Light";
-        public string Description => "Speed rifting build that uses Wave of Light to capitalize on the synergy of the Sunwuko set and Kyoshiro items.";
+        public string DisplayName => "Classic One Punch Monk";
+        public string Description => "Speed rifting build that uses Wave of Light to capitalize on the synergy of the Sunwuko set and Kyoshiro items. Search on DiabloFans for the original Build.";
         public string Author => " TwoCigars";
         public string Version => "Beta 1.3";
-        public string Url => "https://www.icy-veins.com/d3/monk-sunwuko-wave-of-light-build-patch-2-6-1-season-12";
+        public string Url => "http://www.d3planner.com/375196023";
         
+        // D3Planner for the build and best stats
+		//In-Geom and Envious Blade are interchangeable with anything. Rabid Strike, Vengeful Wind, et al work well. 
+        //http://www.d3planner.com/375196023
+
         public Build BuildRequirements => new Build
         {
             Sets = new Dictionary<Set, SetBonus>
@@ -35,6 +39,7 @@ namespace Trinity.Routines.Monk
             {
                 Legendary.PintosPride,
 				Legendary.TzoKrinsGaze,
+				Legendary.KyoshirosSoul,
 				Legendary.KyoshirosBlade,
             },
             Skills = new Dictionary<Skill, Rune>
@@ -170,8 +175,8 @@ namespace Trinity.Routines.Monk
             }
 
             if (swStacks <= 1)
-                return false;
-
+                return false;    
+			
             if (Player.PrimaryResource < PrimaryEnergyReserve)
                 return false;
 
