@@ -1,0 +1,270 @@
+<Profile>
+<Name>[C.W Profiles modify.xxjinhyokxx Speed ver.]</Name>
+<KillMonsters>True</KillMonsters>
+<PickupLoot>True</PickupLoot>
+<GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="-1" />
+
+<!-- igrone -->
+<TargetBlacklists>
+<TargetBlacklist actorId="114622"/>
+<TargetBlacklist actorId="365097"/>
+<TargetBlacklist actorId="364601"/>
+<TargetBlacklist actorId="103919"/>
+<TargetBlacklist actorId="159575"/>
+<TargetBlacklist actorId="114622" />
+<TargetBlacklist actorId="196945"/>
+<TargetBlacklist actorId="103316"/>
+<TargetBlacklist actorId="116508"/>
+<TargetBlacklist actorId="86385"/>
+<TargetBlacklist actorId="64271"/>
+<TargetBlacklist actorId="112200"/>
+<TargetBlacklist actorId="80357"/>
+<TargetBlacklist actorId="130186"/>
+<TargetBlacklist actorId="170325"/>
+<TargetBlacklist actorId="170324"/>
+<TargetBlacklist actorId="166452"/>
+<TargetBlacklist actorId="111907"/>
+</TargetBlacklists>
+  
+<Order>
+	<!-- <TrinityMaxDeaths questId="1" max="50" /> -->
+	
+	 <If condition="ZetaDia.Storage.CurrentWorldType != Act.OpenWorld">
+      <LeaveGame questId="1" reason="Profile must be in adventure mode!" stayInParty="False" />
+    </If> 
+
+	<ProfileSetting name="Cosmic" value="True" />
+	
+	<When condition="ActorExistsNearMe(405590,500)" name="Portal" >
+		<LogMessage output="========== Ah found the dale at last! ============" />
+		<If condition="ProfileSetting('Cosmic') == 'True'">
+			<While condition="CurrentWorldId != 409093">
+				<Interact questId="1" stepId="1" actorId="405590" isPortal="True"  interactRange="9" />
+				<WaitTimer questId="1" stepId="1" waitTime="1000"/>
+			</While>
+			<LoadProfile file="DontDeleteFiles.xml" />		  
+		</If>
+		<If condition="ProfileSetting('Cosmic') == 'False'">
+			<LogMessage output="========== COSMIC set to FALSE ============" />
+			<LogMessage output="========== Not entering portal ============" />
+		</If>
+	</When> 	
+
+    <If condition="IsInTown">
+      <TakeWaypoint waypointNumber="14" />
+    </If>
+
+	<!-- n highlands jump to s highlands -->
+	<If condition="CurrentWorldId == 71150 and CurrentLevelAreaId == 19941" >
+		<LogMessage output="==== move #1 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="1510.95" y="3853" z="40.1" pathPrecision="30" statusText="Searching hunting grounds move 1" />
+		<WaitTimer questId="1" stepId="2" waitTime="1000" />
+		<LogMessage output="==== move #2 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="1736.68" y="3851.38" z="40.1"  pathPrecision="30" statusText="Searching hunting grounds move 2"/>
+		<WaitTimer questId="1" stepId="2" waitTime="1000" />
+		<LogMessage output="==== move #3 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="1556.96" y="4156.96" z="40.1"  pathPrecision="30" statusText="Searching hunting grounds move 2"/>
+		<WaitTimer questId="1" stepId="2" waitTime="1000" />
+		<LogMessage output="==== move #4 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="1427.47" y="4023.39" z="38.27"  pathPrecision="30" statusText="Searching hunting grounds move 2"/>
+		<WaitTimer questId="1" stepId="2" waitTime="1000" />
+		<LogMessage output="==== move #5 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="1275.87" y="3904.67" z="78.13"  pathPrecision="30" statusText="Searching hunting grounds move 2"/>
+		<WaitTimer questId="1" stepId="2" waitTime="1000" />
+		
+		<!-- Northern lvlarea 19941 -->
+		<!-- leorics hunting lvlarea 1199 -->
+		<While condition="CurrentLevelAreaId != 1199">
+			<LogMessage output="==== move Leo's hunting ====" />
+			<TrinityMoveTo questId="312429" stepId="2" x="1233.92" y="3954.84" z="80.10001"  pathPrecision="30" statusText="Searching hunting grounds move 4"/>
+			<WaitTimer questId="1" stepId="2" waitTime="1000" />
+		</While>
+		<LogMessage output="==== move #6 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="1027.295" y="4041.93" z="80.10001"  pathPrecision="30" statusText="Searching hunting grounds move 5"/>
+		<LogMessage output="==== move #7 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="942.04" y="3938.45" z="80.1"  pathPrecision="30" statusText="Searching hunting grounds move 6"/>
+		<LogMessage output="==== move #8 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="915.70" y="3824.91" z="90.2"  pathPrecision="30" statusText="Searching hunting grounds move 7"/> 
+		<LogMessage output="==== move #9 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="926.54" y="3713.89" z="80.1"  pathPrecision="30" statusText="Searching hunting grounds move 8"/>
+		<LogMessage output="==== move #10 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="1199.74" y="3723.15" z="80.10"  pathPrecision="30" statusText="Searching hunting grounds move 9"/> 
+		<LogMessage output="==== move #11 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="1205.68" y="3826.95" z="80.1"  pathPrecision="30" statusText="Searching hunting grounds move 10"/>
+		<LogMessage output="==== move #12 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="1037.65" y="3855.34" z="80.1"  pathPrecision="30" statusText="Searching hunting grounds move 11"/>
+		<LogMessage output="==== move #13 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="1129.12" y="3920.35" z="80.1"  pathPrecision="30" statusText="Searching hunting grounds move 12"/>
+		
+		<While condition="CurrentLevelAreaId != 93632">
+			<UseWaypoint waypointNumber="13" questId="1" />
+		</While>
+		
+	</If>
+	<!-- s highlands into cave - note....add a loop to recheck then move on -->	
+	<If condition="CurrentLevelAreaId == 93632" >
+			<LogMessage output="========== Across the bridge 1 ============" />
+			<TrinityMoveTo questId="1" stepId="2" x="2386" y="4821" z="1.1" statusText="Across the bridge"/>        
+			<WaitTimer questId="1" stepId="2" waitTime="1500" />
+			<LogMessage output="========== Across the bridge 2 ============" />
+			<TrinityMoveTo questId="1" stepId="2" x="2392.23" y="4680.71" z="7.53" statusText="Across the bridge"/>        
+			<WaitTimer questId="1" stepId="2" waitTime="1500" />
+		<While condition="CurrentLevelAreaId != 19940">
+			<LogMessage output="========== In South highlands ============" />
+			<TrinityMoveTo questId="1" stepId="2" x="2392.23" y="4680.71" z="7.53" statusText="Across the bridge"/>        
+			<WaitTimer questId="1" stepId="2" waitTime="500" />
+		</While>
+		<If condition="CurrentWorldId == 71150">
+			<LogMessage output="========== Check first cave ============" />
+			<TrinityMoveTo questId="1" stepId="2" x="2318" y="4508" z="0" statusText="Looking for first cave"/>
+			<Interact questId="1" stepId="2" actorId="176008" isPortal="True" destinationWorldId="82502"/>
+			<WaitTimer questId="1" stepId="2" waitTime="2000" />
+		</If>
+		<If condition="CurrentWorldId == 71150">
+			<LogMessage output="========== Check second cave ============" />
+			<TrinityMoveTo questId="1" stepId="2" x="2195" y="4504.99" z="0.1100002" statusText="Looking for second cave"/>
+			<Interact questId="1" stepId="2" actorId="176008" isPortal="True" destinationWorldId="82502"/>
+			<WaitTimer questId="1" stepId="2" waitTime="2000" />
+		</If>
+		<If condition="CurrentWorldId == 71150">
+			<LogMessage output="========== Check third cave ============" />
+			<TrinityMoveTo questId="1" stepId="2" x="2442.76" y="4248.232" z="0.1" statusText="Looking for third cave"/>
+			<Interact questId="1" stepId="2" actorId="176008" isPortal="True" destinationWorldId="82502"/>
+			<WaitTimer questId="1" stepId="2" waitTime="2000" />
+		</If>
+		<If condition="CurrentWorldId == 71150">
+			<LogMessage output="========== Check fourth cave ============" />
+			<TrinityMoveTo questId="1" stepId="2" x="2196.647" y="4022.333" z="0.1396649" statusText="Looking for fourth cave"/>
+			<Interact questId="1" stepId="2" actorId="176008" isPortal="True" destinationWorldId="82502"/>
+			<WaitTimer questId="1" stepId="2" waitTime="2000" /> 
+		</If>
+		<If condition="CurrentWorldId == 71150">
+			<LogMessage output="========== Check fifth cave ============" />
+			<TrinityMoveTo questId="1" stepId="2" x="2295.898" y="4024.81" z="-4.088893" statusText="Looking for fifth cave"/>
+			<Interact questId="1" stepId="2" actorId="176008" isPortal="True" destinationWorldId="82502"/>
+			<WaitTimer questId="1" stepId="2" waitTime="2000" />
+		</If>
+		<If condition="CurrentWorldId == 71150">
+			<LogMessage output="========== Check sixth cave ============" />
+			<TrinityMoveTo questId="1" stepId="2" x="2435.898" y="4146.81" z="0.1" statusText="Looking for sixth cave"/>
+			<Interact questId="1" stepId="2" actorId="176008" isPortal="True" destinationWorldId="82502"/>
+			<WaitTimer questId="1" stepId="2" waitTime="2000" />
+		</If>
+		<If condition="CurrentWorldId == 71150">
+			<LogMessage output="========== NO cave found moving on ============" />
+			<UseWaypoint waypointNumber="2" questId="1" />
+			<WaitTimer questId="1" waitTime="5000" />
+			<While condition="CurrentWorldId != 50579 ">
+				<UseWaypoint waypointNumber="2" questId="1" />
+				<WaitTimer questId="1" waitTime="10000" />
+			</While>
+		</If>
+        </If>
+	<!-- cave lvl 1 to lvl2 -->	
+	<If condition="CurrentWorldId == 82502">
+		<LogMessage output="========== We are in the cave lvl 1 ============" />
+		<RandomMove radius="100" />		
+		<Explore stopCondition="ActorExistsNearMe(176038,50) and not CurrentSceneName('Entrance')" />
+		<Interact questId="312429" stepId="2" actorId="176038" actorName="g_Portal_Oval_Orange" worldSnoId="82502" />
+	</If>
+	<!-- cave 2 jump to Ruins	-->	
+	<If condition="CurrentWorldId == 82511">
+		<LogMessage output="========== We are in the cave lvl 2 ============" />        
+		<RandomMove radius="100" />
+		<Explore />
+		<While condition="CurrentWorldId != 50579">
+			<UseWaypoint waypointNumber="2" questId="1" />
+			<WaitTimer questId="1" waitTime="5000" />
+		</While>
+	</If>
+	
+    <If condition="CurrentWorldId == 50579" >
+		<LogMessage message="Hunt Cathedral lvl 1" />
+		<Explore stopCondition="ActorExistsNearMe(168932,50)" />
+		<Interact questId="312429" stepId="2" actorId="168932" actorName="Boss_Portal_CainIntro" worldSnoId="50579" />
+    </If>
+    <!-- Leoric's Passage -->
+    <If condition="CurrentWorldId == 60713">
+      <LogMessage message="Through of Leoric's Passage" />
+      <MoveToPosition questId="312429" stepId="2" x="239" y="222" z="25" worldSnoId="60713" levelAreaSnoId="60714" sceneSnoId="60885" sceneName="trDun_Cath_Cain_Intro_01" sceneX="239" sceneY="222" sceneZ="25" isGenerated="false" />
+      <MoveToPosition questId="312429" stepId="2" x="104" y="292" z="0" worldSnoId="60713" levelAreaSnoId="60714" sceneSnoId="60885" sceneName="trDun_Cath_Cain_Intro_01" sceneX="104" sceneY="292" sceneZ="0" isGenerated="false" />
+      <MoveToPosition questId="312429" stepId="2" x="101" y="170" z="0" worldSnoId="60713" levelAreaSnoId="60714" sceneSnoId="60885" sceneName="trDun_Cath_Cain_Intro_01" sceneX="101" sceneY="170" sceneZ="0" isGenerated="false" />
+      <MoveToPosition questId="312429" stepId="2" x="19" y="228" z="-25" worldSnoId="60713" levelAreaSnoId="60714" sceneSnoId="60885" sceneName="trDun_Cath_Cain_Intro_01" sceneX="19" sceneY="228" sceneZ="-25" isGenerated="false" />
+      <While condition="CurrentWorldId != 59486">
+        <LogMessage message="Moving to Waterway" />
+        <TakeWaypoint waypointNumber="27" />
+      </While>
+    </If>
+
+    <!-- rheotnfh -->
+	<If condition="CurrentWorldId == 59486">
+		<MoveToPosition questId="312429" stepId="2" x="91" y="3" z="11" worldSnoId="59486" levelAreaSnoId="62752" sceneSnoId="59372" sceneName="a2dun_Aqd_Special_01" sceneX="91" sceneY="3" sceneZ="11" isGenerated="false" />
+		<Interact questId="312429" stepId="2" actorId="175467" actorName="g_Portal_Rectangle_Blue" worldSnoId="59486" levelAreaSnoId="62752" sceneSnoId="59372" sceneName="a2dun_Aqd_Special_01" sceneX="90" sceneY="0" sceneZ="15" />
+	</If>
+    <!-- tjWhrdnsgk 1 -->
+	<If condition="CurrentWorldId == 432993">
+		<Explore stopCondition="ActorExistsNearMe(176007,75) and not CurrentSceneName('Entrance')"/>
+		<Interact questId="312429" stepId="2" actorId="176007" actorName="g_Portal_Square_Blue" worldSnoId="432993" />
+	</If>
+    <!-- tjWhrdnsgk 2 -->
+	<If condition="CurrentWorldId == 432998">
+		<Explore />
+		<While condition="CurrentWorldId != 59486" >
+		<TakeWaypoint waypointNumber="27" />
+		</While>
+	</If>
+    <!-- rheotnfh -->
+	<If condition="CurrentWorldId == 59486">
+		<MoveToPosition questId="312429" stepId="2" x="21" y="34" z="3" worldSnoId="59486" levelAreaSnoId="62752" sceneSnoId="59372" sceneName="a2dun_Aqd_Special_01" sceneX="21" sceneY="34" sceneZ="3" isGenerated="false" />
+		<Interact questId="312429" stepId="2" actorId="176007" actorName="g_Portal_Rectangle_Blue" worldSnoId="59486" levelAreaSnoId="62752" sceneSnoId="59372" sceneName="a2dun_Aqd_Special_01" sceneX="18" sceneY="36" sceneZ="2" />
+	</If>
+    <!-- ehdWhrdnsgk 1 -->
+	<If condition="CurrentWorldId == 432997">
+		<RandomMove radius="100" />
+		<Explore stopCondition="ActorExistsNearMe(176007,50) and not CurrentSceneName('Entrance')" />
+		<Interact questId="312429" stepId="2" actorId="176007" actorName="g_Portal_Square_Blue" worldSnoId="432997" />
+	</If>
+    <!-- ehdWhrdnsgk 2 -->
+	<If condition="CurrentWorldId == 433001">
+		<Explore />
+		<UseWaypoint waypointNumber="5" questId="1" />
+		<WaitTimer questId="1" waitTime="5000" />
+		<While condition="CurrentWorldId != 50585">
+			<UseWaypoint waypointNumber="5" questId="1" />
+			<WaitTimer questId="1" waitTime="5000" />
+		</While>
+	</If>
+
+    <!-- Crypts jump to GOH if wings set -->
+	<!-- Otherwise leave -->
+	<If condition="CurrentWorldId == 50585">
+		<LogMessage output="Searching Royal crypts" />
+		<RandomMove radius="100" />
+		<LogMessage output="==== move #1 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="817.2393" y="480.4948" z="0.1" pathPrecision="30"  statusText="Searching the crypts"/>
+		<LogMessage output="==== move #2 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="822.1462" y="740.8176" z="0.1000001" pathPrecision="30"  statusText="Searching the crypts"/>
+		<LogMessage output="==== move #3 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="727.5612" y="575.7848" z="0.1" pathPrecision="30"  statusText="Searching the crypts"/>
+		<LogMessage output="==== move #4 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="567.2207" y="577.1889" z="0.1000005" pathPrecision="30"  statusText="Searching the crypts"/>
+		<LogMessage output="==== move #5 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="448.2675" y="582.6633" z="0.1000001" pathPrecision="30"   statusText="Searching the crypts"/>
+		<LogMessage output="==== move #6 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="345.3132" y="574.5313" z="0.3879779" pathPrecision="30"  statusText="Searching the crypts"/>
+		<LogMessage output="==== move #7 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="300.6734" y="516.8789" z="0.1000002" pathPrecision="30" statusText="Searching the crypts"/>
+		<LogMessage output="==== move #8 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="303.71" y="638.2716" z="0.1" pathPrecision="30"   statusText="Searching the crypts"/>
+		<LogMessage output="==== move #9 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="348.6195" y="640.9774" z="0.6421594" pathPrecision="30" statusText="Searching the crypts"/>
+		<LogMessage output="==== move #10 ====" />
+		<TrinityMoveTo questId="312429" stepId="2" x="335.5142" y="749.081" z="0.3364577"  pathPrecision="30" statusText="Searching the crypts"/>
+		
+		<!-- test if portal was found in this map and move back if available -->
+		<Interact questId="1" stepId="1" actorId="405590" isPortal="True" />
+		</If>
+
+	<LeaveGame quest="1" step="1" stayInParty="True" />
+</Order>
+</Profile>

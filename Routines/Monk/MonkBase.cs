@@ -181,6 +181,29 @@ namespace Trinity.Routines.Monk
             return false;
         }
 
+        protected virtual bool ShouldWaveOfLight(out Vector3 position)
+        {
+            position = Vector3.Zero;
+
+            if (!Skills.Monk.WaveOfLight.CanCast())
+                return false;
+
+            if (Player.PrimaryResource < PrimaryEnergyReserve)
+                return false;
+
+            var isBigCluster = TargetUtil.ClusterExists(WaveOfLightRange, 3);
+            var isEliteInRange = TargetUtil.AnyElitesInRange(WaveOfLightRange);
+            var isFarTooMuchResource = Player.PrimaryResourcePct > 0.8f;
+
+            if (isBigCluster || isEliteInRange || isFarTooMuchResource)
+            {
+                position = TargetUtil.GetBestClusterUnit().Position;
+                return position != null;
+            }
+
+            return false;
+        }
+
         protected virtual bool ShouldExplodingPalm(out TrinityActor target)
         {
             target = null;
@@ -501,7 +524,10 @@ namespace Trinity.Routines.Monk
             => new TrinityPower(SNOPower.Monk_LashingTailKick, MeleeAttackRange, target.AcdId);
 
         protected virtual TrinityPower WaveOfLight(TrinityActor target)
-            => new TrinityPower(SNOPower.Monk_WaveOfLight, 60f, target.Position);
+            => new TrinityPower(SNOPower.Monk_WaveOfLight, 60f, target);
+
+        protected virtual TrinityPower WaveOfLight(Vector3 position)
+            => new TrinityPower(SNOPower.Monk_WaveOfLight, 60f, position);
 
         protected virtual TrinityPower ExplodingPalm(TrinityActor target)
             => new TrinityPower(SNOPower.Monk_ExplodingPalm, MeleeAttackRange, target.AcdId);
