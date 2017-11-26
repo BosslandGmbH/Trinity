@@ -19,7 +19,7 @@ namespace Trinity.Routines.Monk
         public string DisplayName => "DatModz's WK WoL Monk";
         public string Description => "DatModz - GR 110+ Sunwuko WoL Monk: This is a well rounded Solo Pushing Build that works well at high levle g-rifts";
         public string Author => "jubisman";
-        public string Version => "0.2";
+        public string Version => "0.3";
         public string Url => "http://www.diablofans.com/builds/96442-datmodz-gr-110-sunwuko-wol-monk";
 
         public Build BuildRequirements => new Build
@@ -84,9 +84,9 @@ namespace Trinity.Routines.Monk
             if (!Skills.Monk.WaveOfLight.CanCast())
                 return false;
 
-            if (TargetUtil.AnyMobsInRange(50f))
+            if (TargetUtil.AnyMobsInRange(55f))
             {
-                target = TargetUtil.GetBestClusterUnit(50f);
+                target = TargetUtil.GetBestClusterUnit();
                 return target != null;
             }
 
@@ -205,9 +205,9 @@ namespace Trinity.Routines.Monk
             if (Player.CurrentHealthPct >= 0.7f)
             {
                 Vector3 bestBuffedPosition;
-                var bestClusterPoint = TargetUtil.GetBestClusterPoint(20f);
+                var bestClusterPoint = TargetUtil.GetBestClusterPoint();
                 var safePosition = TargetUtil.GetSafeSpotPosition(40f);
-                TargetUtil.BestBuffPosition(40f, bestClusterPoint, true, out bestBuffedPosition);
+                TargetUtil.BestBuffPosition(40f, bestClusterPoint, false, out bestBuffedPosition);
                 var bestDashPosition = bestBuffedPosition != Vector3.Zero ? bestBuffedPosition : safePosition;
                 return bestDashPosition != Vector3.Zero;
             }

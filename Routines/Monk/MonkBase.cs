@@ -501,7 +501,7 @@ namespace Trinity.Routines.Monk
             => new TrinityPower(SNOPower.Monk_LashingTailKick, MeleeAttackRange, target.AcdId);
 
         protected virtual TrinityPower WaveOfLight(TrinityActor target)
-            => new TrinityPower(SNOPower.Monk_WaveOfLight, 60f, target.Position);
+            => new TrinityPower(SNOPower.Monk_WaveOfLight, 60f, target.AcdId);
 
         protected virtual TrinityPower ExplodingPalm(TrinityActor target)
             => new TrinityPower(SNOPower.Monk_ExplodingPalm, MeleeAttackRange, target.AcdId);
