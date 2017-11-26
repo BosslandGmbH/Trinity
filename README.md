@@ -15,7 +15,7 @@ the `Clone or download` -> `Download ZIP` buttons. Then delete the `Trinity`
 folder inside Demonbuddy\Plugins and extract the `Trinity` folder from the .zip into
 the directory.
 
-## Developing Trinity (Not working yet)
+## Developing Trinity
 
 Since Demonbuddy compiles Trinity by itself there is no need to set up
 a proper build environment. However, this is still beneficial if you are going to
