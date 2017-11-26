@@ -34,32 +34,27 @@
     <RootNamespace>Trinity</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Demonbuddy, Version=1.1.3180.658, Culture=neutral, PublicKeyToken=eff32ccf253d66d4, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DB-Current\Demonbuddy.exe</HintPath>
+    <Reference Include="Demonbuddy">
+      <HintPath>Dependencies\Demonbuddy.exe</HintPath>
     </Reference>
-    <Reference Include="dlhniyzvtx">
-      <HintPath>..\..\..\DB-Current\dlhniyzvtx.exe</HintPath>
+    <Reference Include="GreyMagic">
+      <HintPath>Dependencies\GreyMagic.dll</HintPath>
     </Reference>
-    <Reference Include="GreyMagic, Version=1.1.3154.652, Culture=neutral, PublicKeyToken=260525fa2b0e778a, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DB-Current\GreyMagic.dll</HintPath>
+    <Reference Include="IronPython">
+      <HintPath>Dependencies\IronPython.dll</HintPath>
     </Reference>
-    <Reference Include="IronPython, Version=2.7.0.40, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DB-Current\IronPython.dll</HintPath>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>Dependencies\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Dynamic, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DB-Current\Microsoft.Dynamic.dll</HintPath>
+    <Reference Include="Microsoft.Dynamic">
+      <HintPath>Dependencies\Microsoft.Dynamic.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Scripting, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DB-Current\Microsoft.Scripting.dll</HintPath>
+    <Reference Include="Microsoft.Scripting">
+      <HintPath>Dependencies\Microsoft.Scripting.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Scripting.Metadata">
-      <HintPath>..\..\..\DB-Current\Microsoft.Scripting.Metadata.dll</HintPath>
+      <HintPath>Dependencies\Microsoft.Scripting.Metadata.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -77,6 +72,9 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Udis86Net">
+      <HintPath>Dependencies\Udis86Net.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>

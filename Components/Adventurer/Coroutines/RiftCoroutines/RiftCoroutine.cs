@@ -570,46 +570,13 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
             _entranceSceneNames.Clear();
             long empoweredCost = 0;
-            bool shouldEmpower = _options.IsEmpowered;
             bool haveMoneyForEmpower = RiftData.EmpoweredRiftCost.TryGetValue(_level, out empoweredCost) && ZetaDia.Storage.PlayerDataManager.ActivePlayerData.Coinage >= (empoweredCost + PluginSettings.Current.MinimumGold);
             bool canEmpower = (_RiftType == RiftType.Greater && haveMoneyForEmpower);
+
             var settings = PluginSettings.Current;
+            bool shouldEmpower = _options.IsEmpowered && _level <= settings.EmpoweredRiftLevelLimit;
 
             _riftStartTime = DateTime.UtcNow;
-            const int waittime = 45;
-            const int partysize = 3; // ToDo: Add slider for party size under beta playground checkbox
-
-            //if (TrinityPluginSettings.Settings.Advanced.BetaPlayground)
-            //{
-            //    if (Core.Player.IsInParty &&
-            //        ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Count() < ZetaDia.Service.Party.NumPartyMembers)
-            //    {
-            //        Core.Logger.Log("Waiting until all party is present.");
-            //        await Coroutine.Wait(TimeSpan.FromMinutes(60),
-            //                () =>
-            //                    ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Count() >=
-            //                    ZetaDia.Service.Party.NumPartyMembers);
-            //    }
-
-            //    if (Core.Player.IsInParty && ZetaDia.Service.Party.NumPartyMembers < partysize)
-            //    {
-            //        Core.Logger.Log("Waiting until we have a party of " + partysize + ".");
-            //        await Coroutine.Wait(TimeSpan.FromMinutes(60),
-            //                () => ZetaDia.Service.Party.NumPartyMembers >= partysize || !ZetaDia.IsInGame);
-            //    }
-
-            //if (ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Count(u => u.Distance >= 5f) <=
-            //    ZetaDia.Service.Party.NumPartyMembers)
-            //{
-            //    Core.Logger.Log("Party member(s) father than 5 yards away. Waiting " + waittime +
-            //                " seconds before opening rift. If party stacks, Starting rift.");
-            //    await Coroutine.Wait(TimeSpan.FromSeconds(waittime),
-            //            () =>
-            //                ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Count(u => u.Distance <= 5) >=
-            //                ZetaDia.Service.Party.NumPartyMembers);
-            //}
-            //}
-
             var maximizeXp = _RiftType == RiftType.Greater && _options.NormalRiftForXPShrine && (ZetaDia.Me.RestExperience < 5000000000 && ZetaDia.Me.RestExperience > -1);
             if (maximizeXp)
             {
@@ -643,7 +610,6 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                     {
                         for (_level = minLevel; _level < maxLevel; _level++)
                         {
-                            //Core.Logger.Debug($"Starting Auto-Gem test for level: {_level}");
                             canEmpower = (RiftData.EmpoweredRiftCost.TryGetValue(_level, out empoweredCost) && ZetaDia.Storage.PlayerDataManager.ActivePlayerData.Coinage >= empoweredCost);
                             var upgradeAttempts = (canEmpower && (shouldEmpower || _level <= settings.EmpoweredRiftLevelLimit) ? 4 : 3);
                             var possibleUpgrades = gems.Gems.Sum(g => g.GetUpgrades(_level, upgradeAttempts, 100));
@@ -660,20 +626,15 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                             Core.Logger.Log("Update chance at max level is 60%, checking if we can take a few levels off still!");
                             for (; _level > minLevel; _level--)
                             {
-                                var couldEmpower = (RiftData.EmpoweredRiftCost.TryGetValue(_level - 1, out empoweredCost) && ZetaDia.Storage.PlayerDataManager.ActivePlayerData.Coinage >= (empoweredCost + PluginSettings.Current.MinimumGold));
-                                var upgradeAttempts = (couldEmpower && (shouldEmpower || _level - 1 <= settings.EmpoweredRiftLevelLimit) ? 4 : 3);
+                                canEmpower = (RiftData.EmpoweredRiftCost.TryGetValue(_level - 1, out empoweredCost) && ZetaDia.Storage.PlayerDataManager.ActivePlayerData.Coinage >= (empoweredCost + PluginSettings.Current.MinimumGold));
+                                var upgradeAttempts = (canEmpower && (shouldEmpower || _level - 1 <= settings.EmpoweredRiftLevelLimit) ? 4 : 3);
                                 var possibleUpgrades = gems.Gems.Sum(g => g.GetUpgrades(_level - 1, upgradeAttempts, 60));
 
                                 if (possibleUpgrades < upgradeAttempts)
                                     break;
-                                else
-                                    canEmpower = couldEmpower;
                             }
                         }
                     }
-
-                    if (_level <= settings.EmpoweredRiftLevelLimit)
-                        shouldEmpower = true;
                 }
 
                 if (_RiftType == RiftType.Greater && shouldEmpower && canEmpower && PluginSettings.Current.UseEmpoweredRifts)

@@ -865,6 +865,7 @@ namespace Trinity.Components.Coroutines
 
                 case TrinityItemType.Scythe:
                 case TrinityItemType.Phylactery:
+                case TrinityItemType.TwoHandScythe:
                     if (actorClass != ActorClass.Necromancer)
                         return false;
                     break;
