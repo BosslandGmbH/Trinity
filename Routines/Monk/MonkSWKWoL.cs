@@ -43,6 +43,9 @@ namespace Trinity.Routines.Monk
             TrinityActor target;
             TrinityPower power = null;
 
+            if (ShouldWalkToTarget(out target))
+                return Walk(target);
+
             if (ShouldDashingStrike(out position))
                 return DashingStrike(position);
 
@@ -84,7 +87,7 @@ namespace Trinity.Routines.Monk
             if (!Skills.Monk.WaveOfLight.CanCast())
                 return false;
 
-            if (TargetUtil.AnyMobsInRange(55f))
+            if (TargetUtil.AnyMobsInRange(45f))
             {
                 target = TargetUtil.GetBestClusterUnit();
                 return target != null;
@@ -96,14 +99,7 @@ namespace Trinity.Routines.Monk
         protected override bool ShouldSweepingWind()
         {
             if (!Skills.Monk.SweepingWind.CanCast())
-            {
-                //Core.Logger.Log("CanCast is false for Sweeping Wind");
                 return false;
-            }
-
-            /*var buffCooldownRemanining = Core.Cooldowns.GetBuffCooldownRemaining(SNOPower.Monk_SweepingWind);
-            if (buffCooldownRemanining.TotalMilliseconds > 750)
-                return false;*/
 
             if (Skills.Monk.SweepingWind.TimeSinceUse < 5250)
                 return false;
@@ -204,11 +200,26 @@ namespace Trinity.Routines.Monk
 
             if (Player.CurrentHealthPct >= 0.7f)
             {
+
                 Vector3 bestBuffedPosition;
+
                 var bestClusterPoint = TargetUtil.GetBestClusterPoint();
                 var safePosition = TargetUtil.GetSafeSpotPosition(40f);
+
                 TargetUtil.BestBuffPosition(40f, bestClusterPoint, false, out bestBuffedPosition);
-                var bestDashPosition = bestBuffedPosition != Vector3.Zero ? bestBuffedPosition : safePosition;
+
+                Vector3 bestDashPosition;
+                if (bestBuffedPosition != Vector3.Zero)
+                {
+                    Core.Logger.Log($"Found buff position - distance: {Player.Position.Distance(bestBuffedPosition)} ({bestBuffedPosition})");
+                    bestDashPosition = bestBuffedPosition;
+                }
+                else
+                {
+                    Core.Logger.Log($"Found safe position - distance: {Player.Position.Distance(safePosition)} ({safePosition})");
+                    bestDashPosition = safePosition;
+                }
+
                 return bestDashPosition != Vector3.Zero;
             }
             return false;
@@ -223,6 +234,19 @@ namespace Trinity.Routines.Monk
                 return false;
 
             return base.ShouldEpiphany();
+        }
+
+        private static bool ShouldWalkToTarget(out TrinityActor target)
+        {
+            target = null;
+
+            if (CurrentTarget.Distance > 45f)
+            {
+                target = CurrentTarget;
+                return target != null;
+            }
+
+            return false;
         }
 
         #region Settings
