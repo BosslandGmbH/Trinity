@@ -55,7 +55,7 @@ namespace Trinity.Components.Coroutines.Town
             if (DateTime.UtcNow < _disabledUntil)
                 return false;
 
-            var kule = TownInfo.ZultonKule?.GetActor() as DiaUnit;
+            var kule = TownInfo.ZoltunKulle?.GetActor() as DiaUnit;
             if (kule != null)
             {
                 if (kule.IsQuestGiver)

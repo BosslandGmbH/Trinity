@@ -495,7 +495,6 @@ namespace Trinity.Framework.Avoidance
             Description = "Fat guys that explode into worms",
             Handler = new AnimationCircularAvoidanceHandler(),
             Element = Element.Physical,
-
             Defaults = new AvoidanceSettingsEntry
             {
                 DistanceMultiplier = 1,
@@ -503,7 +502,6 @@ namespace Trinity.Framework.Avoidance
                 Prioritize = true,
                 IsEnabled = true,
             },
-
             Parts = new List<AvoidancePart>
             {
                 new AvoidancePart
@@ -708,15 +706,22 @@ namespace Trinity.Framework.Avoidance
         {
             Id = (int)AvoidanceType.PerendiDefaultAttack,
             Type = AvoidanceType.PerendiDefaultAttack,
-            Name = "Perendi Default Attack",
-            Description = "Rift boss default attack",
+            Name = "Perendi & Mallet Lord Default Attack",
+            Description = "Rift boss Perendi and Mallet Lord default attack",
             Handler = new AnimationBeamAvoidanceHandler(),
             Element = Element.Physical,
+            Defaults = new AvoidanceSettingsEntry
+            {
+                DistanceMultiplier = 1,
+                HealthPct = 100,
+                Prioritize = true,
+                IsEnabled = true,
+            },
             Parts = new List<AvoidancePart>
             {
                 new AvoidancePart
                 {
-                    Name = "Perendi Melee Attack",
+                    Name = "Perendi/Mallet Lord Melee Attack",
                     Animation = SNOAnim.malletDemon_attack_01,
                     Type = PartType.ActorAnimation,
                     Radius = 20f

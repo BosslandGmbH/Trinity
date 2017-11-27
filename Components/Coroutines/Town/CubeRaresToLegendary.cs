@@ -27,7 +27,7 @@ namespace Trinity.Components.Coroutines.Town
             if (!ZetaDia.IsInGame || !ZetaDia.IsInTown)
                 return false;
 
-            var kule = TownInfo.ZultonKule?.GetActor() as DiaUnit;
+            var kule = TownInfo.ZoltunKulle?.GetActor() as DiaUnit;
             if (kule != null)
             {
                 if (kule.IsQuestGiver)
