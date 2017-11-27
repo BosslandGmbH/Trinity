@@ -17,9 +17,9 @@ namespace Trinity.Routines.Monk
         #region Definition
 
         public string DisplayName => "DatModz's WK WoL Monk";
-        public string Description => "DatModz - GR 110+ Sunwuko WoL Monk: This is a well rounded Solo Pushing Build that works well at high levle g-rifts";
+        public string Description => "DatModz - GR 110+ Sunwuko WoL Monk: This is a well rounded Solo Pushing Build that works well at high level g-rifts";
         public string Author => "jubisman";
-        public string Version => "0.4";
+        public string Version => "0.5";
         public string Url => "http://www.diablofans.com/builds/96442-datmodz-gr-110-sunwuko-wol-monk";
 
         public Build BuildRequirements => new Build
@@ -178,10 +178,6 @@ namespace Trinity.Routines.Monk
         {
             position = Vector3.Zero;
 
-            var skill = Skills.Monk.DashingStrike;
-            if (skill.TimeSinceUse < 3000 && skill.Charges < MaxDashingStrikeCharges)
-                return false;
-
             if (!Skills.Monk.DashingStrike.CanCast())
                 return false;
 
@@ -191,37 +187,18 @@ namespace Trinity.Routines.Monk
             if (!AllowedToUse(Settings.DashingStrike, Skills.Monk.DashingStrike))
                 return false;
 
-            if (Player.CurrentHealthPct < 0.7f && Runes.Monk.BlindingSpeed.IsActive ||
-                Core.Buffs.HasCastingShrine)
+            Vector3 bestBuffedPosition;
+            var bestClusterPoint = TargetUtil.GetBestClusterPoint();
+
+            if (TargetUtil.BestBuffPosition(40f, bestClusterPoint, false, out bestBuffedPosition) &&
+                bestBuffedPosition != Vector3.Zero)
             {
-                position = TargetUtil.GetSafeSpotPosition(40f);
+                Core.Logger.Log($"Found buff position - distance: {Player.Position.Distance(bestBuffedPosition)} ({bestBuffedPosition})");
+                position = bestBuffedPosition;
+
                 return position != Vector3.Zero;
             }
 
-            if (Player.CurrentHealthPct >= 0.7f)
-            {
-
-                Vector3 bestBuffedPosition;
-
-                var bestClusterPoint = TargetUtil.GetBestClusterPoint();
-                var safePosition = TargetUtil.GetSafeSpotPosition(40f);
-
-                TargetUtil.BestBuffPosition(40f, bestClusterPoint, false, out bestBuffedPosition);
-
-                Vector3 bestDashPosition;
-                if (bestBuffedPosition != Vector3.Zero)
-                {
-                    Core.Logger.Log($"Found buff position - distance: {Player.Position.Distance(bestBuffedPosition)} ({bestBuffedPosition})");
-                    bestDashPosition = bestBuffedPosition;
-                }
-                else
-                {
-                    Core.Logger.Log($"Found safe position - distance: {Player.Position.Distance(safePosition)} ({safePosition})");
-                    bestDashPosition = safePosition;
-                }
-
-                return bestDashPosition != Vector3.Zero;
-            }
             return false;
         }
 
