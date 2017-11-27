@@ -15,42 +15,34 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
         private States _state;
         private BountyData _bountyData;
 
-        public int QuestId { get; private set; }
+        public int QuestId { get; }
         public int BoxSize { get; set; }
         public float BoxTolerance { get; set; }
         public bool ZergMode = false;
         public int ObjectiveSearchRadius { get; set; }
         public bool AutoSetNearbyNodesExplored { get; set; }
         public int AutoSetNearbyNodesRadius { get; set; }
-        public bool IsDone { get { return _isDone; } }
+        public bool IsDone => _isDone;
         public BountyStatistic Stats { get; private set; }
 
-        public BountyData BountyData
-        {
-            get { return _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(QuestId)); }
-        }
+        public BountyData BountyData => _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(QuestId));
 
-        public QuestData QuestData
-        {
-            get { return BountyData.QuestData; }
-        }
+        public QuestData QuestData => BountyData.QuestData;
 
         public bool IsInZone
         {
             get
             {
-                if (WaypointFactory.NearWaypoint(BountyData.WaypointNumber))
-                {
+                var wp = ZetaDia.Storage.ActManager.GetWaypointByLevelAreaSnoId(BountyData.WaypointLevelAreaId);
+                if (wp != null && WaypointFactory.NearWaypoint(wp.Number))
                     return true;
-                }
+                
                 if ((BountyData.LevelAreaIds != null && BountyData.LevelAreaIds.Contains(AdvDia.CurrentLevelAreaId)))
-                {
                     return true;
-                }
+                
                 if (ZetaDia.Storage.Quests.ActiveBounty != null && (int)ZetaDia.Storage.Quests.ActiveBounty.Quest == QuestId)
-                {
                     return true;
-                }
+                
                 return false;
             }
         }

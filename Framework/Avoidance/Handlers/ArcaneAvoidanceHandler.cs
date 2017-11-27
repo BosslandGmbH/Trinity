@@ -37,20 +37,20 @@ namespace Trinity.Framework.Avoidance.Handlers
                         Task.FromResult(rotator.Rotate());
                     }
 
-                    var centerNodes = grid.GetNodesInRadius(actor.Position, 6f);
+                    var centerNodes = grid.GetNodesInRadius(actor.Position, 8f);
                     var radAngle = MathUtil.ToRadians(rotator.Angle);
-                    var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 26f, radAngle)).SelectMany(n => n.AdjacentNodes).ToList();
+                    var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 28f, radAngle)).SelectMany(n => n.AdjacentNodes).ToList();
 
                     var futureRadAngle = MathUtil.ToRadians((float)rotator.GetFutureAngle(TimeSpan.FromMilliseconds(500)));
-                    nodes.AddRange(grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 26f, futureRadAngle)).SelectMany(n => n.AdjacentNodes));
+                    nodes.AddRange(grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 28f, futureRadAngle)).SelectMany(n => n.AdjacentNodes));
                     nodes.AddRange(centerNodes);
                     nodes = nodes.Distinct().ToList();
-                    grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 30);
+                    grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 32);
                 }
                 else
                 {
-                    var telegraphNodes = grid.GetNodesInRadius(actor.Position, 10f);
-                    grid.FlagAvoidanceNodes(telegraphNodes, AvoidanceFlags.Avoidance, avoidance, 10);
+                    var telegraphNodes = grid.GetNodesInRadius(actor.Position, 12f);
+                    grid.FlagAvoidanceNodes(telegraphNodes, AvoidanceFlags.Avoidance, avoidance, 12);
                 }
             }
         }
