@@ -19,7 +19,7 @@ namespace Trinity.Routines.Monk
         public string DisplayName => "DatModz's WK WoL Monk";
         public string Description => "DatModz - GR 110+ Sunwuko WoL Monk: This is a well rounded Solo Pushing Build that works well at high levle g-rifts";
         public string Author => "jubisman";
-        public string Version => "0.3";
+        public string Version => "0.4";
         public string Url => "http://www.diablofans.com/builds/96442-datmodz-gr-110-sunwuko-wol-monk";
 
         public Build BuildRequirements => new Build
@@ -227,13 +227,19 @@ namespace Trinity.Routines.Monk
 
         protected override bool ShouldEpiphany()
         {
+            if (!Skills.Monk.Epiphany.CanCast())
+                return false;
+
+            if (HasInstantCooldowns && !Skills.Monk.Epiphany.IsLastUsed)
+                return true;
+
             if (!AllowedToUse(Settings.Epiphany, Skills.Monk.Epiphany))
                 return false;
 
             if (Player.IsInTown)
                 return false;
 
-            return base.ShouldEpiphany();
+            return true;
         }
 
         private static bool ShouldWalkToTarget(out TrinityActor target)
