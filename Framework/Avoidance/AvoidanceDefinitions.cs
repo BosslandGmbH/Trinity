@@ -647,12 +647,28 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
             Description = "Fat guys that explode into worms",
             Handler = new AnimationCircularAvoidanceHandler(),
             Element = Element.Physical,
+
+            Defaults = new AvoidanceSettingsEntry
+            {
+                DistanceMultiplier = 1,
+                HealthPct = 100,
+                Prioritize = true,
+                IsEnabled = true,
+            },
+
             Parts = new List<AvoidancePart>
             {
                 new AvoidancePart
                 {
                     Name = "Death Explosion",
                     Animation = SNOAnim.Stitch_Suicide_Bomb,
+                    Animations = new List<SNOAnim>()
+                    {
+                        SNOAnim.Stitch_Suicide_Bomb,
+                        SNOAnim.Stitch_Suicide_Bomb_Frost,
+                        SNOAnim.Stitch_Suicide_Bomb_Imps,
+                        SNOAnim.Stitch_Suicide_Bomb_spiders,
+                    },
                     Type = PartType.ActorAnimation,
                     Radius = 26f
                 }
@@ -939,7 +955,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         //Line 34017: 15:14:52.791 INFO  Logger [Trinity 2.41.51][Animation] malletDemon_attack_01 State=Transform By: x1_LR_Boss_MalletDemon (343767)
         //Line 34149: 15:14:56.371 INFO  Logger [Trinity 2.41.51][Animation] malletDemon_stunned State=TakingDamage By: x1_LR_Boss_MalletDemon (343767)
         //x1_LR_Boss_MalletDemon_FallingRocks 368453,
-        //todo Parendi / malletdemon avoidance - he hits like a truck.
+        //todo Perendi / malletdemon avoidance - he hits like a truck.
 
         // Beast Creatures with a small guy riding on them, stun the player.
         //[Trinity 2.41.50][Weight] Found New Target MastaBlasta_Combined_A dist=6 IsElite=False Radius=11.0 Weight=1099 ActorSnoId=137856 AnimSnoId=MastaBlasta_Combined_taunt TargetedCount=26 Type=Unit
