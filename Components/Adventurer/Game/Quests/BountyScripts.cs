@@ -209,12 +209,10 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 switch (Type)
                 {
                     case BountyScriptItemType.InteractWithGizmo:
-                        DiaGizmo diaGizmo = actor as DiaGizmo;
-                        if (diaGizmo != null)
-                        {
-                            var gizmo = diaGizmo;
+                        DiaGizmo gizmo = actor as DiaGizmo;
+                        if (gizmo != null)
                             return gizmo.IsFullyValid() && ActorFinder.IsGizmoInteractable(gizmo);
-                        }
+                        
                         return false;
 
                     case BountyScriptItemType.InteractWithMonster:
