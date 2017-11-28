@@ -4,7 +4,7 @@ namespace Trinity.Framework.Avoidance
     {
         None = 0,
         DiseaseCloud,
-        ZoltunKulleTornado,
+        ZultunKuleTornado,
         OrlashBoss,
         Thunderstorm,
         HeraldOfPestilence,
@@ -34,8 +34,6 @@ namespace Trinity.Framework.Avoidance
         PerendiDefaultAttack,
         MalthaelDeathFog,
         MalthaelHellGates,
-        Urzael,
-        CriticalProjectile,
-        Projectile
+        Urzael
     }
 }
