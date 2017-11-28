@@ -40,7 +40,6 @@ namespace Trinity.Routines.Barbarian
 
         public TrinityPower GetOffensivePower()
         {
-            TrinityPower power;
             TrinityActor target;
             Vector3 position;
 
