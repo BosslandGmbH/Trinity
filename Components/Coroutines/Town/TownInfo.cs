@@ -51,7 +51,7 @@ namespace Trinity.Components.Coroutines.Town
 
         public static TownActor BookOfCain => CurrentAct.FirstOrDefault(i => i.ServiceType == ServiceType.Identify);
 
-        public static TownActor ZultonKule => CurrentAct.FirstOrDefault(i => i.ServiceType == ServiceType.Zoltun);
+        public static TownActor ZoltunKulle => CurrentAct.FirstOrDefault(i => i.ServiceType == ServiceType.Zoltun);
 
         public static TownActor Jeweler => CurrentAct.FirstOrDefault(i => JewelerServiceTypes.Contains(i.ServiceType));
 

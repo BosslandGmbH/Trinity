@@ -1,0 +1,305 @@
+﻿<UserControl 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
+
+    mc:Ignorable="d" Background="#434343" d:DesignHeight="820" d:DesignWidth="390">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../UI/Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:PercentConverter x:Key="PercentConverter" />
+            <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+            <converters:EnumVisibilityConverter x:Key="HiddenWhenEnumTrueConverter" Reverse="True" />
+            <converters:EnumVisibilityConverter x:Key="VisibleWhenEnumTrueConverter"  />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Border Padding="10">
+        <Grid>
+            <StackPanel>
+                <GroupBox>
+                    <GroupBox.Header>General</GroupBox.Header>
+                    <StackPanel>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Cluster Size In Greater Rift"
+                            ToolTip="Number of monsters that must be grouped up before fighting starts in greater rift"
+                            Interval="100" IsSnapToTickEnabled="True"
+                            Maximum="40" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.ClusterSize}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Cluster Size In Nephalem Rift"
+                            ToolTip="Number of monsters that must be grouped up before fighting starts in Nephalem rift"
+                            Interval="100" IsSnapToTickEnabled="True"
+                            Maximum="40" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.ClusterSizeN}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Cluster Radius"
+                            ToolTip="Cluster Radius"
+                            Interval="100" IsSnapToTickEnabled="True"
+                            Maximum="60" Minimum="15" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.ClusterRadius}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Emergency Health Pct %"
+                            ToolTip="How low your health must drop before the potion is used"
+                            Interval="500" Maximum="99" Minimum="0" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.EmergencyHealthPct, Converter={StaticResource PercentConverter}}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Skeletal Mages</GroupBox.Header>
+                    <StackPanel>
+                        <CheckBox ToolTip="Use Skeletal Mages any time in Greator Rift, including movement actions (not restricted to combat time)" 
+                            IsChecked="{Binding DataContext.CastMageAnytime}" Content="Use Skeletal Mages any time in Greator Rift"/>
+                        <CheckBox ToolTip="Use Skeletal Mages any time in Nephelm Rift, including movement actions (not restricted to combat time)" 
+                            IsChecked="{Binding DataContext.CastMageAnytimeN}" Content="Use Skeletal Mages any time in Nephelm Rift"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Essence Request for Mage %"
+                            ToolTip="Above x% of essence should Mages be summoned"
+                            Interval="500" Maximum="99" Minimum="0" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.CastMagesPct, Converter={StaticResource PercentConverter}}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Mages for Quick Summon"
+                            ToolTip="Mages for Quick Summon, ignore the Essence Request"
+                            Interval="500" Maximum="10" Minimum="0" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.MinMageCnt}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Recovery</GroupBox.Header>
+                    <StackPanel>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Health Pct to Find Health Globe %"
+                            ToolTip="Find health globe when health pct is below x%"
+                            Interval="500" Maximum="99" Minimum="0" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.HealthPctForFindHealthGlobe, Converter={StaticResource PercentConverter}}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Essence Pct to Find Health Globe %"
+                            ToolTip="Find health globe when essence pct is below x%. Only valid when ReapersWraps is equiped or in cude"
+                            Interval="500" Maximum="99" Minimum="0" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.ResourcePctForFindHealthGlobe, Converter={StaticResource PercentConverter}}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Combat Options</GroupBox.Header>
+                    <StackPanel>
+                        <CheckBox ToolTip="Avoid time-cosuming actions" 
+                            IsChecked="{Binding DataContext.RubbishPC}" Content="My PC is laggy"/>
+                        <CheckBox ToolTip="If killed mulitimes in a short time, cast LOTD when revived" 
+                            IsChecked="{Binding DataContext.FightingRevengeMode}" Content="Revenge Mode"/>
+                        <CheckBox ToolTip="Ignore Avoidence In Greater Rift" 
+                            IsChecked="{Binding DataContext.IgnoreAvoidanceInN}" Content="Ignore Avoidence In Greater Rift"/>
+                        <CheckBox ToolTip="Ignore Avoidence In Nephalem Rift" 
+                            IsChecked="{Binding DataContext.ForbidSimulacrumInNR}" Content="Ignore Avoidence In Nephalem Rift"/>
+                        <CheckBox ToolTip="TPS is very hight, not recommended if your pc is not nice" 
+                            IsChecked="{Binding DataContext.ForceUseShrine}" Content="Force Use Shrine In Combat"/>
+                        <CheckBox ToolTip="Attack OrdnanceTower First" 
+                            IsChecked="{Binding DataContext.ForceAttackOrdnanceTower}" Content="Attack OrdnanceTower First"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Interval of Devour [In 10 Milliseconds]"
+                            ToolTip="Interval of Devour In 10 Milliseconds"
+                            Interval="500" Maximum="20" Minimum="0" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.DurationInLOTD}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Combat Range In Greater Rift"
+                            ToolTip="Combat Range In Greater Rift"
+                            Interval="500" Maximum="60" Minimum="15" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.CastDistance}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Combat Range In Nephalem Rift"
+                            ToolTip="Combat Range In Nephalem Rift"
+                            Interval="500" Maximum="60" Minimum="15" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.CastDistanceWhenNephalemRift}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Combat Range In LOTD"
+                            ToolTip="Combat Range when LOTD is active"
+                            Interval="500" Maximum="60" Minimum="15" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.CastDistanceWhenLandOfDeath}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Health Pct when Cast Simulacrum %"
+                            ToolTip="Don't cast Simulacrum when health pct is below x%"
+                            Interval="500" Maximum="80" Minimum="26" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.CastSimulacrumHealthPct, Converter={StaticResource PercentConverter}}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Cast Interval of Curse Skills in Seconds"
+                            ToolTip="Including Decrepify, Frailty and Leech. If the interval is too small, other skills may be delayed"
+                            Interval="500" Maximum="20" Minimum="1" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.CurseSkillInterval}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Simulacrum and LotD casts</GroupBox.Header>
+                    <StackPanel>
+                        <RadioButton Content="Simulacrum always, LotD on elites" IsChecked="{Binding DataContext.TwoBigUsage, ConverterParameter=AlwaysSimu_EliteLOTD, Converter={StaticResource EnumBooleanConverter}}"  />
+                        <RadioButton Content="Simulacrum and LotD always" IsChecked="{Binding DataContext.TwoBigUsage, ConverterParameter=AlwaysSimu_AlwaysLOTD, Converter={StaticResource EnumBooleanConverter}}" />
+                        <RadioButton Content="Simulacrum and LotD on elites" IsChecked="{Binding DataContext.TwoBigUsage, ConverterParameter=EliteSimu_EliteLOTD, Converter={StaticResource EnumBooleanConverter}}" />
+                        <RadioButton Content="Simulacrum on elites, LotD always" IsChecked="{Binding DataContext.TwoBigUsage, ConverterParameter=EliteSimu_AlwaysLOTD, Converter={StaticResource EnumBooleanConverter}}" />
+                        <RadioButton Content="Simulacrum always, loop LotD" IsChecked="{Binding DataContext.TwoBigUsage, ConverterParameter=Always_Simu_LOTD_Loop, Converter={StaticResource EnumBooleanConverter}}" />
+                        <RadioButton Content="Simulacrum on elites loop LotD" IsChecked="{Binding DataContext.TwoBigUsage, ConverterParameter=Elite_Simu_LOTD_Loop, Converter={StaticResource EnumBooleanConverter}}" />
+                        <CheckBox ToolTip="Don't use Simulacrum and LotD on weakened elites" 
+                            IsChecked="{Binding DataContext.DontUseBigToWeakElite}" Content="No Simulacrum LotD on weakened elites"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Elite Health %"
+                            ToolTip="It will not cast Simulacrum LotD on elites below this health"
+                            Interval="500" Maximum="50" Minimum="1" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.ValidElitHealthPct, Converter={StaticResource PercentConverter}}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                        <CheckBox ToolTip="It will not cast Simulacrum LotD on minions" 
+                            IsChecked="{Binding DataContext.DontUseBigToMinion}" Content="No Simulacrum LotD on minions"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Intelligence Avoidance</GroupBox.Header>
+                    <StackPanel>
+                        <CheckBox ToolTip="Use Intelli Avoider. Not recommended in fast-farm level, recommened in high level greator rift" 
+                            IsChecked="{Binding DataContext.UseIntelliAvoider}" Content="Use Intelli Avoider"/>
+                        <CheckBox ToolTip="Use Blood Rush to Avoid Elite" 
+                            IsChecked="{Binding DataContext.BloodRushAvoidElite}" Content="BloodRushAvoidElite"/>
+                        <CheckBox ToolTip="If dangerous monster is deteced, use the most conservative combat strategy" 
+                            IsChecked="{Binding DataContext.CautiousMode}" Content="CautiousMode"/>
+                        <CheckBox ToolTip="If the [Final-Service] is triggered, combat with the most cautious strategy" 
+                            IsChecked="{Binding DataContext.SurviveMode}" Content="SurviveMode"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="BloodRushSafeRange"
+                            ToolTip="Use bloodrush in movement power only when the destination is clear in selected range"
+                            Interval="500" Maximum="40" Minimum="0" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.BloodRushSafeRange}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Oculus Ring</GroupBox.Header>
+                    <StackPanel>
+                        <CheckBox ToolTip="Go into Oculus Ring buff by walking" 
+                            IsChecked="{Binding DataContext.GoOcculusByFoot}" Content="Oculus walking"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Walk distance"
+                            ToolTip="How many yards away from Oculus buff to get into it"
+                            Interval="500" Maximum="40" Minimum="10" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.GoOcculusByFootDistance}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Options for Obsidian Only (Equiped or Equiped in Cube)</GroupBox.Header>
+                    <StackPanel>
+                        <CheckBox ToolTip="Use Command Skeletons Only In Simulacrum" 
+                            IsChecked="{Binding DataContext.UseMageOnlyInSimulacrum}" Content="Use Command Skeletons Only In Simulacrum"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Inerval of Command Skeletons [In 100 Millisecondes]"
+                            ToolTip="Inerval of Command Skeletons In 100 Millisecondes"
+                            Interval="500" Maximum="30" Minimum="2" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.CastCSInterval}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                            
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Cast Interval of SkeletalMage when Mage is full  [In 100 Milliseconds]"
+                            ToolTip="Cast Interval of SkeletalMage when Mage is full  In 100 Milliseconds"
+                            Interval="500" Maximum="40" Minimum="2" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.MageIntervalWhenFull}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Party mode options</GroupBox.Header>
+                    <StackPanel>
+                        <CheckBox ToolTip="Don't use Health Globe to recover health and energe. For Party Only" 
+                            IsChecked="{Binding DataContext.ForbidFindHealthGlobe}" Content="Don't Find Health Globe"/>
+                        <CheckBox ToolTip="Stand still when in combat" 
+                            IsChecked="{Binding DataContext.StillMode}" Content="Still Mode"/>
+                        <CheckBox ToolTip="Avoid to be left behind" 
+                            IsChecked="{Binding DataContext.AvoidLost}" Content="Avoid to be left behind"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Auto Change Skill Between Nephalem Rift and Greater Rift</GroupBox.Header>
+                    <StackPanel>
+                        <CheckBox ToolTip="Use Different Skills in Greator and Nephlem Rift" 
+                            IsChecked="{Binding DataContext.AutoChangeSkill}" Content="Auto Change Skill" />
+                        <CheckBox ToolTip="Change the rune of bloodrush" 
+                            IsChecked="{Binding DataContext.HasBloodRushInBD}" Content="Use BloodRush In Greater Rift" />
+                        <CheckBox ToolTip="BoneSpike-Siphon" 
+                            IsChecked="{Binding DataContext.BoneSpike2SiphonBlood}" Content="BoneSpike-Siphon" />
+                        <CheckBox ToolTip="Simulacrum2BloodRush" 
+                            IsChecked="{Binding DataContext.Simulacrum2BloodRush}" Content="Simulacrum2BloodRush" />
+                        <CheckBox ToolTip="LOTD2BloodRush" 
+                            IsChecked="{Binding DataContext.LOTD2BloodRush}" Content="LOTD2BloodRush" />
+                        <CheckBox ToolTip="Decrepify2BloodRush" 
+                            IsChecked="{Binding DataContext.Decrepify2BloodRush}" Content="Decrepify2BloodRush" />
+                    </StackPanel> 
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>For Debug Only</GroupBox.Header>
+                    <StackPanel>
+                        <UniformGrid Columns="2">
+                            <CheckBox ToolTip="" 
+                                IsChecked="{Binding DataContext.IsDebugMove}" Content="Debug Move"/>
+                            <CheckBox ToolTip="" 
+                                IsChecked="{Binding DataContext.IsDebugSkill}" Content="Debug Skill"/>
+                            <CheckBox ToolTip="" 
+                                IsChecked="{Binding DataContext.IsDebugAvoid}" Content="Debug Avoid"/>
+                            <CheckBox ToolTip="" 
+                                IsChecked="{Binding DataContext.IsDebugTB}" Content="Debug TwoBig"/>
+                            <CheckBox ToolTip="" 
+                                IsChecked="{Binding DataContext.IsDebugParty}" Content="Debug Party"/>
+                        </UniformGrid>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>
+
+    

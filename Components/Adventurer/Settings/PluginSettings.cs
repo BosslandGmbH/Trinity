@@ -74,7 +74,7 @@ namespace Trinity.Components.Adventurer.Settings
                 //    });
                 //}
                 //return level == 0 ? 120 : level;
-                return 110;
+                return 150;
             }
             set { }
         }
