@@ -110,8 +110,16 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 ScriptItems = new List<BountyScriptItem>
                                                 {
-                                                    new BountyScriptItem {ActorId = 219879, Type = BountyScriptItemType.InteractWithGizmo, WorldId = 157882},
-                                                    new BountyScriptItem {ActorId = 190708, Type = BountyScriptItemType.InteractWithGizmo, WorldId = 157882},
+                                                    new BountyScriptItem {ActorId = 385817, Type = BountyScriptItemType.InteractWithGizmo, WorldId = 157882},
+                                                    new BountyScriptItem {ActorId = 153836, Type = BountyScriptItemType.InteractWithGizmo, WorldId = 157882},
+                                                }
+            });
+
+            Items.Add(368601, new BountyScript
+            {
+                ScriptItems = new List<BountyScriptItem>
+                                                {
+                                                    new BountyScriptItem {ActorId = 336711, Type = BountyScriptItemType.InteractWithMonster, WorldId = 336902},
                                                 }
             });
 
@@ -141,16 +149,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                                                     new BountyScriptItem {ActorId = 205468, Type = BountyScriptItemType.InteractWithMonster, WorldId = 95804},
                                                 }
             });
-
-            Items.Add(465117, new BountyScript
-            {
-                ScriptItems = new List<BountyScriptItem>
-                                                {
-                                                    new BountyScriptItem {ActorId = 465103, Type = BountyScriptItemType.InteractWithGizmo, WorldId =  460372},
-                                                }
-            });
-
-
         }
 
         public IEnumerator<KeyValuePair<int, BountyScript>> GetEnumerator()
@@ -163,7 +161,10 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return GetEnumerator();
         }
 
-        public int Count => Items.Count;
+        public int Count
+        {
+            get { return Items.Count; }
+        }
 
         public bool ContainsKey(int key)
         {
@@ -175,11 +176,20 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return Items.TryGetValue(key, out value);
         }
 
-        public BountyScript this[int key] => Items[key];
+        public BountyScript this[int key]
+        {
+            get { return Items[key]; }
+        }
 
-        public IEnumerable<int> Keys => Items.Keys;
+        public IEnumerable<int> Keys
+        {
+            get { return Items.Keys; }
+        }
 
-        public IEnumerable<BountyScript> Values => Items.Values;
+        public IEnumerable<BountyScript> Values
+        {
+            get { return Items.Values; }
+        }
     }
 
     public class BountyScript
@@ -209,10 +219,11 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 switch (Type)
                 {
                     case BountyScriptItemType.InteractWithGizmo:
-                        DiaGizmo gizmo = actor as DiaGizmo;
-                        if (gizmo != null)
+                        if (actor is DiaGizmo)
+                        {
+                            var gizmo = actor as DiaGizmo;
                             return gizmo.IsFullyValid() && ActorFinder.IsGizmoInteractable(gizmo);
-                        
+                        }
                         return false;
 
                     case BountyScriptItemType.InteractWithMonster:
