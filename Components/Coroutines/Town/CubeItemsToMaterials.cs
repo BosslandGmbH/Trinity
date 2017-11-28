@@ -34,7 +34,7 @@ namespace Trinity.Components.Coroutines.Town
             if (!LastCanRunResult && DateTime.UtcNow.Subtract(LastCanRunCheck).TotalSeconds < 5)
                 return LastCanRunResult;
 
-            var kule = TownInfo.ZultonKule?.GetActor() as DiaUnit;
+            var kule = TownInfo.ZoltunKulle?.GetActor() as DiaUnit;
             if (kule != null)
             {
                 if (kule.IsQuestGiver)
