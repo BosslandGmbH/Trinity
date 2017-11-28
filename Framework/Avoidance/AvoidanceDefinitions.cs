@@ -724,7 +724,7 @@ namespace Trinity.Framework.Avoidance
                     Name = "Perendi/Mallet Lord Melee Attack",
                     Animation = SNOAnim.malletDemon_attack_01,
                     Type = PartType.ActorAnimation,
-                    Radius = 20f
+                    Radius = 30f
                 },
             }
         };
