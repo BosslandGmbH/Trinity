@@ -57,19 +57,75 @@ namespace Trinity.Routines.Barbarian
 
         protected override bool ShouldFuriousCharge(out Vector3 position)
         {
+            // Credit: phelon's raekor.
+
             position = Vector3.Zero;
+            TrinityActor target = null;
 
             if (!Skills.Barbarian.FuriousCharge.CanCast())
                 return false;
 
-            if (CurrentTarget != null && CurrentTarget.Distance > 20)
+            var targetGoal = Math.Floor(5 * Core.Player.CooldownReductionPct);
+            TrinityActor bestPierce = TargetUtil.GetBestPierceTarget(45);
+            var bestPierceCount = bestPierce?.NearbyUnitsWithinDistance(7) ?? 0;
+            TrinityActor bestTarget = TargetUtil.BestAoeUnit(45, true);
+            var bestTargetCount = bestTarget?.NearbyUnitsWithinDistance(7) ?? 0;
+            TrinityActor bestCluster = TargetUtil.GetBestClusterUnit(7, 45);
+            var bestClusterCount = bestCluster?.NearbyUnitsWithinDistance(7) ?? 0;
+
+            if (!Core.Buffs.HasCastingShrine)
             {
-                position = CurrentTarget.Position;
-                return true;
+                if (bestTarget != null && TargetUtil.PierceHitsMonster(bestTarget.Position))
+                {
+                    if (bestTargetCount == 1 || bestTargetCount >= targetGoal)
+                    {
+                        position = GetPositionBehind(bestTarget.Position);
+                        return true;
+                    }
+                }
+
+                if (bestPierce != null && bestCluster != null && TargetUtil.PierceHitsMonster(bestPierce.Position) && TargetUtil.PierceHitsMonster(bestCluster.Position))
+                {
+                    if (bestPierceCount == 1 || bestPierceCount >= targetGoal &&
+                        bestClusterCount == 1 || bestClusterCount >= targetGoal)
+                    {
+                        if (bestClusterCount > bestPierceCount)
+                        {
+                            position = GetPositionBehind(bestCluster.Position);
+                            return true;
+                        }
+                        position = GetPositionBehind(bestPierce.Position);
+                        return true;
+                    }
+                    if (bestPierceCount != 1 && bestPierceCount < targetGoal &&
+                        (bestClusterCount == 1 || bestClusterCount >= targetGoal))
+                    {
+                        position = GetPositionBehind(bestCluster.Position);
+                        return true;
+                    }
+                }
+
+                if (bestPierce != null && TargetUtil.PierceHitsMonster(bestPierce.Position))
+                {
+                    if (bestClusterCount != 1 && bestClusterCount < targetGoal &&
+                        (bestPierceCount == 1 || bestPierceCount >= targetGoal))
+                    {
+                        position = GetPositionBehind(bestPierce.Position);
+                        return true;
+                    }
+                }
+
             }
 
-            return false;
+            position = GetPositionBehind(CurrentTarget.Position);
+            return true;
         }
+
+        private static Vector3 GetPositionBehind(Vector3 position)
+        {
+            return MathEx.CalculatePointFrom(position, Player.Position, Player.Position.Distance(position) + 4f);
+        }
+
 
         #endregion
 

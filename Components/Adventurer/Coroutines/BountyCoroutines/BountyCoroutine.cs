@@ -159,8 +159,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         private async Task<bool> TakingWaypoint()
         {
-            var wp = ZetaDia.Storage.ActManager.GetWaypointByLevelAreaSnoId(BountyData.WaypointLevelAreaId);
-            if (!await WaypointCoroutine.UseWaypoint(wp.Number))
+            if (!await WaypointCoroutine.UseWaypoint(BountyData.WaypointNumber))
                 return false;
 
             State = States.InZone;
