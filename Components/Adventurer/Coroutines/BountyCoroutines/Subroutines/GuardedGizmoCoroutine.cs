@@ -74,7 +74,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         {
             _questId = questId;
             GizmoSNO = actorId;
-            ObjectSearchRadius = 5000;
+            ObjectSearchRadius = 1000;
             Id = Guid.NewGuid();
         }
 
@@ -134,20 +134,10 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         {
             if (PluginSettings.Current.BountyZerg) SafeZerg.Instance.EnableZerg();
             State = States.SearchingForGizmo;
-
-            switch ((SNOLevelArea)AdvDia.CurrentLevelAreaId)
+            if (AdvDia.CurrentLevelAreaId == 263493)
             {
-                case SNOLevelArea.X1_WESTM_ZONE_03:
-                    _objectSearchRadius = 200;
-                    break;
-                case SNOLevelArea.A2_caOut_Oasis:
-                case SNOLevelArea.A1_trOUT_Highlands:
-                case SNOLevelArea.A3_Bridge_01:
-                    _objectSearchRadius = 10000;
-                    break;
+                _objectSearchRadius = 150;
             }
-
-            ObjectSearchRadius = _objectSearchRadius;
             return false;
         }
 
@@ -192,7 +182,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             if (NavigationCoroutine.LastResult == CoroutineResult.Failure && AdvDia.MyPosition.Distance(_currentGizmo.Position) > _currentGizmo.InteractDistance + 20)
             {
                 Core.PlayerMover.MoveTowards(_currentGizmo.Position);
-                ObjectSearchRadius = 200;
+                ObjectSearchRadius = 150;
                 _guardedGizmos.Remove(_currentGizmo.Position);
                 Core.Logger.Log("[Bounty] Gizmo is out of reach, lowering the search radius to {0}", ObjectSearchRadius);
                 State = States.SearchingForGizmo;
@@ -215,7 +205,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         {
             SafeZerg.Instance.DisableZerg();
             EnablePulse();
-            if (!await ClearAreaCoroutine.Clear(_currentGizmo.Position, 50)) return false;
+            if (!await ClearAreaCoroutine.Clear(_currentGizmo.Position, 70)) return false;
             _interactionCoroutine = new InteractionCoroutine(GizmoSNO, new TimeSpan(0, 0, 7), new TimeSpan(0, 0, 1), 3);
             State = States.InteractingWithGizmo;
             return false;
@@ -243,7 +233,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
             _interactionCoroutine = null;
             State = States.SearchingForGizmo;
-            ObjectSearchRadius = 400;
+            ObjectSearchRadius = 300;
 
             return false;
         }
@@ -257,7 +247,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 State = States.MovingToGizmo;
                 return false;
             }
-            if (!await ClearAreaCoroutine.Clear(_currentGizmo.Position, 60, true)) return false;
+            if (!await ClearAreaCoroutine.Clear(_currentGizmo.Position, 90, true)) return false;
             State = States.SearchingForGizmo;
             return false;
         }
