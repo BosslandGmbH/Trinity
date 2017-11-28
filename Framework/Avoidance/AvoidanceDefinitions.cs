@@ -647,7 +647,6 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
             Description = "Fat guys that explode into worms",
             Handler = new AnimationCircularAvoidanceHandler(),
             Element = Element.Physical,
-
             Defaults = new AvoidanceSettingsEntry
             {
                 DistanceMultiplier = 1,
@@ -655,7 +654,6 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
                 Prioritize = true,
                 IsEnabled = true,
             },
-
             Parts = new List<AvoidancePart>
             {
                 new AvoidancePart
@@ -925,10 +923,17 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.PerendiDefaultAttack,
             Type = AvoidanceType.PerendiDefaultAttack,
-            Name = "Perendi Melee Attack",
-            Description = "Rift boss default attack",
+            Name = "Mallet Lord Melee Attack",
+            Description = "Perendi & Mallet Lord default attack",
             Handler = new AnimationBeamAvoidanceHandler(),
             Element = Element.Physical,
+            Defaults = new AvoidanceSettingsEntry
+            {
+                DistanceMultiplier = 1,
+                HealthPct = 100,
+                Prioritize = true,
+                IsEnabled = true,
+            },
             Parts = new List<AvoidancePart>
             {
                 new AvoidancePart
@@ -936,7 +941,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
                     Name = "Perendi Melee Attack",
                     Animation = SNOAnim.malletDemon_attack_01,
                     Type = PartType.ActorAnimation,
-                    Radius = 20f
+                    Radius = 30f
                 },
             }
         };
