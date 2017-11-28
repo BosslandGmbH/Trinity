@@ -17,9 +17,9 @@ namespace Trinity.Routines.Monk
         #region Definition
 
         public string DisplayName => "DatModz's WK WoL Monk";
-        public string Description => "DatModz - GR 110+ Sunwuko WoL Monk: This is a well rounded Solo Pushing Build that works well at high levle g-rifts";
+        public string Description => "DatModz - GR 110+ Sunwuko WoL Monk: This is a well rounded Solo Pushing Build that works well at high level g-rifts";
         public string Author => "jubisman";
-        public string Version => "0.3";
+        public string Version => "0.5.1";
         public string Url => "http://www.diablofans.com/builds/96442-datmodz-gr-110-sunwuko-wol-monk";
 
         public Build BuildRequirements => new Build
@@ -42,6 +42,9 @@ namespace Trinity.Routines.Monk
             Vector3 position;
             TrinityActor target;
             TrinityPower power = null;
+
+            if (ShouldWalkToTarget(out target))
+                return Walk(target);
 
             if (ShouldDashingStrike(out position))
                 return DashingStrike(position);
@@ -84,7 +87,7 @@ namespace Trinity.Routines.Monk
             if (!Skills.Monk.WaveOfLight.CanCast())
                 return false;
 
-            if (TargetUtil.AnyMobsInRange(55f))
+            if (TargetUtil.AnyMobsInRange(45f))
             {
                 target = TargetUtil.GetBestClusterUnit();
                 return target != null;
@@ -96,14 +99,7 @@ namespace Trinity.Routines.Monk
         protected override bool ShouldSweepingWind()
         {
             if (!Skills.Monk.SweepingWind.CanCast())
-            {
-                //Core.Logger.Log("CanCast is false for Sweeping Wind");
                 return false;
-            }
-
-            /*var buffCooldownRemanining = Core.Cooldowns.GetBuffCooldownRemaining(SNOPower.Monk_SweepingWind);
-            if (buffCooldownRemanining.TotalMilliseconds > 750)
-                return false;*/
 
             if (Skills.Monk.SweepingWind.TimeSinceUse < 5250)
                 return false;
@@ -182,10 +178,6 @@ namespace Trinity.Routines.Monk
         {
             position = Vector3.Zero;
 
-            var skill = Skills.Monk.DashingStrike;
-            if (skill.TimeSinceUse < 3000 && skill.Charges < MaxDashingStrikeCharges)
-                return false;
-
             if (!Skills.Monk.DashingStrike.CanCast())
                 return false;
 
@@ -195,34 +187,49 @@ namespace Trinity.Routines.Monk
             if (!AllowedToUse(Settings.DashingStrike, Skills.Monk.DashingStrike))
                 return false;
 
-            if (Player.CurrentHealthPct < 0.7f && Runes.Monk.BlindingSpeed.IsActive ||
-                Core.Buffs.HasCastingShrine)
+            Vector3 bestBuffedPosition;
+            var bestClusterPoint = TargetUtil.GetBestClusterPoint();
+
+            if (TargetUtil.BestBuffPosition(40f, bestClusterPoint, false, out bestBuffedPosition) &&
+                bestBuffedPosition != Vector3.Zero)
             {
-                position = TargetUtil.GetSafeSpotPosition(40f);
+                Core.Logger.Log($"Found buff position - distance: {Player.Position.Distance(bestBuffedPosition)} ({bestBuffedPosition})");
+                position = bestBuffedPosition;
+
                 return position != Vector3.Zero;
             }
 
-            if (Player.CurrentHealthPct >= 0.7f)
-            {
-                Vector3 bestBuffedPosition;
-                var bestClusterPoint = TargetUtil.GetBestClusterPoint();
-                var safePosition = TargetUtil.GetSafeSpotPosition(40f);
-                TargetUtil.BestBuffPosition(40f, bestClusterPoint, false, out bestBuffedPosition);
-                var bestDashPosition = bestBuffedPosition != Vector3.Zero ? bestBuffedPosition : safePosition;
-                return bestDashPosition != Vector3.Zero;
-            }
             return false;
         }
 
         protected override bool ShouldEpiphany()
         {
+            if (!Skills.Monk.Epiphany.CanCast())
+                return false;
+
+            if (HasInstantCooldowns && !Skills.Monk.Epiphany.IsLastUsed)
+                return true;
+
             if (!AllowedToUse(Settings.Epiphany, Skills.Monk.Epiphany))
                 return false;
 
-            if (Player.IsInTown)
+            if (!TargetUtil.AnyMobsInRange(60f))
                 return false;
 
-            return base.ShouldEpiphany();
+            return true;
+        }
+
+        private static bool ShouldWalkToTarget(out TrinityActor target)
+        {
+            target = null;
+
+            if (CurrentTarget.Distance > 45f)
+            {
+                target = CurrentTarget;
+                return target != null;
+            }
+
+            return false;
         }
 
         #region Settings
