@@ -1689,6 +1689,16 @@ namespace Trinity.Components.Combat
                                             break;
                                         }
                                     }
+
+                                    // No point in doing Cow Level runs if we're running past the chests
+                                    var isInCowLevel = ZetaDia.Globals.WorldSnoId == 434649;
+
+                                    if (cacheObject.Distance < 80f && isInCowLevel)
+                                    {
+                                        cacheObject.WeightInfo += $"WhiteListed Interactable Container (CowLevel)";
+                                        cacheObject.Weight = MaxWeight;
+                                        break;
+                                    }
                                 }
 
                                 cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
