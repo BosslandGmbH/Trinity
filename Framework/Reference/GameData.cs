@@ -2506,7 +2506,10 @@ namespace Trinity.Framework.Reference
 
             331397, // x1_westm_Graveyard_Floor_Sarcophagus_Undead_Husband_Event
 
+            390498, // Tgoblin_Gold_Pile_A
             386274, // Tgoblin_Gold_Pile_C
+            391765, // Tgoblin_Vase_A
+            392606, // Tgoblin_Vase_C
 
             211861, //Pinata
 
