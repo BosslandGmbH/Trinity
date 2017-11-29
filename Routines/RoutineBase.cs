@@ -531,7 +531,7 @@ namespace Trinity.Routines
 
             // Priority interaction for doors. increases door opening reliability for some edge cases ** Temporary solution!
             if (ZetaDia.Storage.RiftStarted && await Behaviors.MoveToInteract.While(
-                a => a.Type == TrinityObjectType.Door && !a.IsUsed && a.Distance < 15f))
+                a => a.Type == TrinityObjectType.Door && !a.IsUsed && a.Distance < a.CollisionRadius))
                 return true;
 
             return false;
