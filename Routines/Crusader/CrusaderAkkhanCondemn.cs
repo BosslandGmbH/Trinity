@@ -107,8 +107,18 @@ namespace Trinity.Routines.Crusader
                 return false;
             
             // Don't try to move to the buff if the grid is flagged for avoidance where the buff is.
-            if (_lastBuffPosition != Vector3.Zero && Core.Avoidance.Grid.IsLocationInFlags(_lastBuffPosition, AvoidanceFlags.Avoidance))
+            if (_lastBuffPosition != Vector3.Zero &&
+                Core.Avoidance.Grid.IsLocationInFlags(_lastBuffPosition, AvoidanceFlags.Avoidance))
+            {
+                _lastBuffPosition = Vector3.Zero;
                 return false;
+            }
+
+            if (_lastBuffPosition != Vector3.Zero && !Core.Grids.CanRayWalk(Player.Position, _lastBuffPosition))
+            {
+                _lastBuffPosition = Vector3.Zero;
+                return false;
+            }
 
             if (_lastBuffPosition != Vector3.Zero && Player.Position.Distance(_lastBuffPosition) > 2f && !_groundBuffWalkTimer.IsFinished)
             {
