@@ -105,7 +105,7 @@ namespace Trinity.Routines.Crusader
             buffPosition = Vector3.Zero;
             if (!Settings.MoveToGroundBuffs)
                 return false;
-
+            
             // Don't try to move to the buff if the grid is flagged for avoidance where the buff is.
             if (_lastBuffPosition != Vector3.Zero && Core.Avoidance.Grid.IsLocationInFlags(_lastBuffPosition, AvoidanceFlags.Avoidance))
                 return false;

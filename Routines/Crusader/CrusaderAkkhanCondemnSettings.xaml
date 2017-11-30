@@ -33,7 +33,7 @@
         <GroupBox>
           <GroupBox.Header>General</GroupBox.Header>
           <StackPanel>
-            <CheckBox ToolTip="Attempts to move to ground buffs when they appear, this includes Oculus and Sanctuary" IsChecked="{Binding DataContext.MoveToGroundBuffs, ConverterParameter=Boolean}">Move to ground buffs when they appear</CheckBox>
+            <CheckBox ToolTip="Attempts to move to ground buffs when they appear, this includes Oculus and Sanctuary. Experimental behaviour, use with caution." IsChecked="{Binding DataContext.MoveToGroundBuffs, ConverterParameter=Boolean}">Move to ground buffs - Experimental</CheckBox>
             <Slider Template="{DynamicResource LabelledSliderEditable}" 
                             Tag="Cluster Size"
                             ToolTip="Number of monsters that must be grouped up before fighting starts"
