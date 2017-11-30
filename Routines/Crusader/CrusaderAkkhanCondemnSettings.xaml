@@ -25,14 +25,15 @@
           <GroupBox.Header>Spam skills whenever possible</GroupBox.Header>
           <StackPanel>
             <CheckBox ToolTip="Use Condemn whenever possible" IsChecked="{Binding DataContext.SpamCondemn, ConverterParameter=Boolean}">Condemn</CheckBox>
-            <CheckBox ToolTip="Use Laws of Valor whenever possible" IsChecked="{Binding DataContext.SpamCondemn, ConverterParameter=Boolean}">Laws of Valor</CheckBox>
-            <CheckBox ToolTip="Use Provoke whenever possible" IsChecked="{Binding DataContext.SpamCondemn, ConverterParameter=Boolean}">Provoke</CheckBox>
-            <CheckBox ToolTip="Use Iron Skin whenever possible" IsChecked="{Binding DataContext.SpamCondemn, ConverterParameter=Boolean}">Iron Skin</CheckBox>
+            <CheckBox ToolTip="Use Laws of Valor whenever possible" IsChecked="{Binding DataContext.SpamLawsOfValor, ConverterParameter=Boolean}">Laws of Valor</CheckBox>
+            <CheckBox ToolTip="Use Provoke whenever possible" IsChecked="{Binding DataContext.SpamProvoke, ConverterParameter=Boolean}">Provoke</CheckBox>
+            <CheckBox ToolTip="Use Iron Skin whenever possible" IsChecked="{Binding DataContext.SpamIronSkin, ConverterParameter=Boolean}">Iron Skin</CheckBox>
           </StackPanel>
         </GroupBox>
         <GroupBox>
           <GroupBox.Header>General</GroupBox.Header>
           <StackPanel>
+            <CheckBox ToolTip="Attempts to move to ground buffs when they appear, this includes Oculus and Sanctuary" IsChecked="{Binding DataContext.MoveToGroundBuffs, ConverterParameter=Boolean}">Move to ground buffs when they appear</CheckBox>
             <Slider Template="{DynamicResource LabelledSliderEditable}" 
                             Tag="Cluster Size"
                             ToolTip="Number of monsters that must be grouped up before fighting starts"

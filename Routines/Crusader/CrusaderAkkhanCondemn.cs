@@ -6,12 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using Trinity.Components.Combat.Resources;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Trinity.UI;
 using Zeta.Common;
+using Zeta.Common.Helpers;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Routines.Crusader
@@ -45,6 +47,10 @@ namespace Trinity.Routines.Crusader
         public TrinityPower GetOffensivePower()
         {
             TrinityActor target;
+
+            Vector3 buffPosition;
+            if (ShouldWalkToGroundBuff(out buffPosition))
+                return Walk(buffPosition);
 
             if (!Skills.Crusader.Punish.IsBuffActive && ShouldPunish(out target))
                 return Punish(target);
@@ -89,6 +95,41 @@ namespace Trinity.Routines.Crusader
                 return power;
 
             return null;
+        }
+
+        private Vector3 _lastBuffPosition;
+        readonly WaitTimer _groundBuffWalkTimer = WaitTimer.FiveSeconds;
+        private bool ShouldWalkToGroundBuff(out Vector3 buffPosition)
+        {
+            buffPosition = Vector3.Zero;
+            if (!Settings.MoveToGroundBuffs)
+                return false;
+
+            if (_lastBuffPosition != Vector3.Zero && Player.Position.Distance(_lastBuffPosition) > 2f && !_groundBuffWalkTimer.IsFinished)
+            {
+                Core.Logger.Log($"Moving to buff: {_lastBuffPosition} - Distance: {Player.Position.Distance(_lastBuffPosition)}");
+                return true;
+            }
+
+            _lastBuffPosition = Vector3.Zero;
+            
+            Vector3 bestBuffedPosition;
+            var bestClusterPoint = TargetUtil.GetBestClusterPoint();
+
+            if (TargetUtil.BestBuffPosition(40f, bestClusterPoint, false, out bestBuffedPosition) &&
+                bestBuffedPosition != Vector3.Zero)
+            {
+                Core.Logger.Log($"Found buff: {_lastBuffPosition} - Distance: {Player.Position.Distance(_lastBuffPosition)}");
+                buffPosition = bestBuffedPosition;
+                if (bestBuffedPosition != Vector3.Zero)
+                {
+                    _lastBuffPosition = bestBuffedPosition;
+                    _groundBuffWalkTimer.Reset();
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         #region Overrides
@@ -152,7 +193,7 @@ namespace Trinity.Routines.Crusader
             if (Settings.SpamCondemn)
                 return true;
 
-            if (!TargetUtil.AnyMobsInRange(14f))
+            if (!TargetUtil.AnyMobsInRange(30f))
                 return false;
 
             return true;
@@ -204,6 +245,14 @@ namespace Trinity.Routines.Crusader
 
         public sealed class CrusaderAkkhanCondemnSettings : NotifyBase, IDynamicSetting
         {
+            private bool _moveToGroundBuffs;
+            [DefaultValue(false)]
+            public bool MoveToGroundBuffs
+            {
+                get { return _moveToGroundBuffs; }
+                set { SetField(ref _moveToGroundBuffs, value); }
+            }
+
             private bool _spamCondemn;
             [DefaultValue(true)]
             public bool SpamCondemn
