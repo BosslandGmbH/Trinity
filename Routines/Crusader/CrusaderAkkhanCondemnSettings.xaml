@@ -22,18 +22,12 @@
     <Grid>
       <StackPanel>
         <GroupBox>
-          <GroupBox.Header>Condemn</GroupBox.Header>
+          <GroupBox.Header>Spam skills whenever possible</GroupBox.Header>
           <StackPanel>
-            <CheckBox Name="CbSpamCondemn" ToolTip="Use condemn whenever possible" 
-                                      IsChecked="{Binding DataContext.SpamCondemn, ConverterParameter=Boolean}">Spam</CheckBox>
-            <Slider Template="{DynamicResource LabelledSliderEditable}" 
-                            Tag="Num units in range"
-                            ToolTip="Number of monsters that needs to be in range before casting Condemn"
-                            Interval="100" IsSnapToTickEnabled="True"
-                            Maximum="40" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
-                            Value="{Binding Path=DataContext.UnitsInRangeCondemn}"
-                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
-                            MinWidth="175"/>
+            <CheckBox ToolTip="Use Condemn whenever possible" IsChecked="{Binding DataContext.SpamCondemn, ConverterParameter=Boolean}">Condemn</CheckBox>
+            <CheckBox ToolTip="Use Laws of Valor whenever possible" IsChecked="{Binding DataContext.SpamCondemn, ConverterParameter=Boolean}">Laws of Valor</CheckBox>
+            <CheckBox ToolTip="Use Provoke whenever possible" IsChecked="{Binding DataContext.SpamCondemn, ConverterParameter=Boolean}">Provoke</CheckBox>
+            <CheckBox ToolTip="Use Iron Skin whenever possible" IsChecked="{Binding DataContext.SpamCondemn, ConverterParameter=Boolean}">Iron Skin</CheckBox>
           </StackPanel>
         </GroupBox>
         <GroupBox>
@@ -72,6 +66,23 @@
                                       IsChecked="{Binding DataContext.Akarats.Reasons, ConverterParameter=Surrounded, Converter={converters:FlagsToBoolConverter}}">Surrounded</CheckBox>
               <CheckBox ToolTip="Use when you're low on health" 
                                       IsChecked="{Binding DataContext.Akarats.Reasons, ConverterParameter=HealthEmergency, Converter={converters:FlagsToBoolConverter}}">Health emergency</CheckBox>
+            </StackPanel>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox>
+          <GroupBox.Header>Steed Charge</GroupBox.Header>
+          <StackPanel>
+            <WrapPanel Margin="0,5,0,10">
+              <RadioButton ToolTip="Use vault whenever it makes sense"
+                                Content="Anytime" IsChecked="{Binding DataContext.SteedCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Default}"  />
+              <RadioButton ToolTip="Use only while fighting monsters"
+                                Content="In combat" IsChecked="{Binding DataContext.SteedCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=InCombat}" />
+              <RadioButton  ToolTip="Use only while NOT fighting monsters"
+                                Content="Out of combat" IsChecked="{Binding DataContext.SteedCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=OutOfCombat}" />
+            </WrapPanel>
+            <StackPanel Margin="0,5,0,0">
+              <CheckBox ToolTip="Use when movement is blocked" 
+                                      IsChecked="{Binding DataContext.SteedCharge.Reasons, ConverterParameter=Blocked, Converter={converters:FlagsToBoolConverter}}">Use when movement is blocked</CheckBox>
             </StackPanel>
           </StackPanel>
         </GroupBox>

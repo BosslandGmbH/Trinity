@@ -12,6 +12,7 @@ using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Trinity.UI;
 using Zeta.Common;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Routines.Crusader
 {
@@ -43,14 +44,10 @@ namespace Trinity.Routines.Crusader
         /// <summary> Only cast in combat and the target is a unit </summary>
         public TrinityPower GetOffensivePower()
         {
-            TrinityPower power;
-            TrinityActor target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
+            TrinityActor target;
 
             if (!Skills.Crusader.Punish.IsBuffActive && ShouldPunish(out target))
                 return Punish(target);
-
-            if (ShouldCondemn())
-                return Condemn();
 
             if (ShouldSlash(out target))
                 return Slash(target);
@@ -59,35 +56,6 @@ namespace Trinity.Routines.Crusader
                 return Walk(CurrentTarget);
 
             return null;
-        }
-
-        protected override bool ShouldCondemn()
-        {
-            if (!Skills.Crusader.Condemn.CanCast())
-                return false;
-
-            if (!Settings.SpamCondemn)
-                if (!TargetUtil.AnyMobsInRange(14f))
-                    return false;
-
-            if (Legendary.FrydehrsWrath.IsEquipped && Player.PrimaryResource < 40)
-                return false;
-
-            return true;
-        }
-
-        protected override bool ShouldSlash(out TrinityActor target)
-        {
-            target = null;
-
-            if (!Skills.Crusader.Slash.CanCast())
-                return false;
-
-            if (Skills.Crusader.Slash.IsLastUsed && IsMultiPrimary)
-                return false;
-
-            target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
-            return target != null;
         }
 
         /// <summary> Only cast when avoiding. </summary>
@@ -107,6 +75,9 @@ namespace Trinity.Routines.Crusader
             if (AllowedToUse(Settings.Akarats, Skills.Crusader.AkaratsChampion) && ShouldAkaratsChampion())
                 return AkaratsChampion();
 
+            if (ShouldCondemn())
+                return Condemn();
+
             if (ShouldIronSkin())
                 return IronSkin();
 
@@ -119,6 +90,89 @@ namespace Trinity.Routines.Crusader
 
             return null;
         }
+
+        #region Overrides
+
+        protected override bool ShouldIronSkin()
+        {
+            if (!Skills.Crusader.IronSkin.CanCast())
+                return false;
+
+            if (Settings.SpamIronSkin)
+                return true;
+
+            if (Player.HasBuff(SNOPower.X1_Crusader_IronSkin))
+                return false;
+
+            if (!TargetUtil.AnyMobsInRange(20f))
+                return false;
+
+            return true;
+        }
+
+        protected override bool ShouldLawsOfValor()
+        {
+            if (!Skills.Crusader.LawsOfValor.CanCast())
+                return false;
+
+            if (Settings.SpamLawsOfValor)
+                return true;
+
+            if (!TargetUtil.AnyMobsInRange(25f))
+                return false;
+
+            return true;
+        }
+
+        protected override bool ShouldProvoke()
+        {
+            if (!Skills.Crusader.Provoke.CanCast())
+                return false;
+
+            if (Settings.SpamProvoke)
+                return true;
+
+            if (Player.HasBuff(SNOPower.X1_Crusader_Provoke))
+                return false;
+
+            if (!TargetUtil.AnyMobsInRange(15f))
+                return false;
+
+            return true;
+        }
+
+        protected override bool ShouldCondemn()
+        {
+            if (!Skills.Crusader.Condemn.CanCast())
+                return false;
+
+            if (Legendary.FrydehrsWrath.IsEquipped && Player.PrimaryResource < 40)
+                return false;
+
+            if (Settings.SpamCondemn)
+                return true;
+
+            if (!TargetUtil.AnyMobsInRange(14f))
+                return false;
+
+            return true;
+        }
+
+        protected override bool ShouldSlash(out TrinityActor target)
+        {
+            target = null;
+
+            if (!Skills.Crusader.Slash.CanCast())
+                return false;
+
+            if (Skills.Crusader.Slash.IsLastUsed && IsMultiPrimary)
+                return false;
+
+            target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
+            return target != null;
+        }
+
+        #endregion
 
         /// <summary>
         /// Only cast on destructibles/barricades
@@ -133,13 +187,16 @@ namespace Trinity.Routines.Crusader
         /// </summary>
         public TrinityPower GetMovementPower(Vector3 destination)
         {
+            if (AllowedToUse(Settings.SteedCharge, Skills.Crusader.SteedCharge) && ShouldSteedCharge())
+                return SteedCharge();
+
             return Walk(destination);
         }
 
         #region Settings
 
+
         public override int ClusterSize => Settings.ClusterSize;
-        public int UnitsInRangeCondemn => Settings.UnitsInRangeCondemn;
         public override float EmergencyHealthPct => Settings.EmergencyHealthPct;
 
         IDynamicSetting IRoutine.RoutineSettings => Settings;
@@ -155,20 +212,36 @@ namespace Trinity.Routines.Crusader
                 set { SetField(ref _spamCondemn, value); }
             }
 
+            private bool _spamLawsOfValor;
+            [DefaultValue(true)]
+            public bool SpamLawsOfValor
+            {
+                get { return _spamLawsOfValor; }
+                set { SetField(ref _spamLawsOfValor, value); }
+            }
+
+            private bool _spamProvoke;
+            [DefaultValue(true)]
+            public bool SpamProvoke
+            {
+                get { return _spamProvoke; }
+                set { SetField(ref _spamProvoke, value); }
+            }
+
+            private bool _spamIronSkin;
+            [DefaultValue(true)]
+            public bool SpamIronSkin
+            {
+                get { return _spamIronSkin; }
+                set { SetField(ref _spamIronSkin, value); }
+            }
+
             private int _clusterSize;
             [DefaultValue(1)]
             public int ClusterSize
             {
                 get { return _clusterSize; }
                 set { SetField(ref _clusterSize, value); }
-            }
-
-            private int _unitsInRangeCondemn;
-            [DefaultValue(1)]
-            public int UnitsInRangeCondemn
-            {
-                get { return _unitsInRangeCondemn; }
-                set { SetField(ref _unitsInRangeCondemn, value); }
             }
 
             private float _emergencyHealthPct;
@@ -186,12 +259,25 @@ namespace Trinity.Routines.Crusader
                 set { SetField(ref _akarats, value); }
             }
 
+            private SkillSettings _steedCharge;
+            public SkillSettings SteedCharge
+            {
+                get { return _steedCharge; }
+                set { SetField(ref _steedCharge, value); }
+            }
+
             #region Skill Defaults
 
             private static readonly SkillSettings AkaratsDefaults = new SkillSettings
             {
-                UseMode = UseTime.Selective,
+                UseMode = UseTime.Always,
                 Reasons = UseReasons.Elites | UseReasons.HealthEmergency,
+            };
+
+            private static readonly SkillSettings SteedChargeDefaults = new SkillSettings
+            {
+                UseMode = UseTime.Default,
+                Reasons = UseReasons.Blocked
             };
 
             #endregion
@@ -200,6 +286,7 @@ namespace Trinity.Routines.Crusader
             {
                 base.LoadDefaults();
                 Akarats = AkaratsDefaults.Clone();
+                SteedCharge = SteedChargeDefaults.Clone();
             }
 
             #region IDynamicSetting
