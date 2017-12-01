@@ -1,0 +1,95 @@
+﻿<UserControl 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
+
+    mc:Ignorable="d" Background="#434343" d:DesignHeight="820" d:DesignWidth="390">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="../../UI/Template.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+      <converters:PercentConverter x:Key="PercentConverter" />
+      <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+      <converters:EnumVisibilityConverter x:Key="HiddenWhenEnumTrueConverter" Reverse="True" />
+      <converters:EnumVisibilityConverter x:Key="VisibleWhenEnumTrueConverter"  />
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <Border Padding="10">
+    <Grid>
+      <StackPanel>
+        <GroupBox>
+          <GroupBox.Header>Spam skills whenever possible</GroupBox.Header>
+          <StackPanel>
+            <CheckBox ToolTip="Use Condemn whenever possible" IsChecked="{Binding DataContext.SpamCondemn, ConverterParameter=Boolean}">Condemn</CheckBox>
+            <CheckBox ToolTip="Use Laws of Valor whenever possible" IsChecked="{Binding DataContext.SpamLawsOfValor, ConverterParameter=Boolean}">Laws of Valor</CheckBox>
+            <CheckBox ToolTip="Use Provoke whenever possible" IsChecked="{Binding DataContext.SpamProvoke, ConverterParameter=Boolean}">Provoke</CheckBox>
+            <CheckBox ToolTip="Use Iron Skin whenever possible" IsChecked="{Binding DataContext.SpamIronSkin, ConverterParameter=Boolean}">Iron Skin</CheckBox>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox>
+          <GroupBox.Header>General</GroupBox.Header>
+          <StackPanel>
+            <CheckBox ToolTip="Attempts to move to ground buffs when they appear, this includes Oculus and Sanctuary. Experimental behaviour, use with caution." IsChecked="{Binding DataContext.MoveToGroundBuffs, ConverterParameter=Boolean}">Move to ground buffs - Experimental</CheckBox>
+            <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Cluster Size"
+                            ToolTip="Number of monsters that must be grouped up before fighting starts"
+                            Interval="100" IsSnapToTickEnabled="True"
+                            Maximum="40" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.ClusterSize}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+            <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                        Tag="Health Emergency %"
+                        ToolTip="How low your health must drop before the potion is used"
+                                Interval="500" Maximum="99" Minimum="0" 
+                                SmallChange="1" LargeChange="5"
+                                TickPlacement="None" 
+                                Value="{Binding Path=DataContext.EmergencyHealthPct, Converter={StaticResource PercentConverter}}" 
+                                HorizontalAlignment="Stretch" Margin="0"/>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox>
+          <GroupBox.Header>Akarats Champion</GroupBox.Header>
+          <StackPanel>
+
+            <WrapPanel>
+              <RadioButton Content="Always" IsChecked="{Binding DataContext.Akarats.UseMode, ConverterParameter=Always, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}"  />
+              <RadioButton Content="Selectively" IsChecked="{Binding DataContext.Akarats.UseMode, ConverterParameter=Selective, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}" />
+            </WrapPanel>
+            <StackPanel Margin="0,5,0,0" Visibility="{Binding DataContext.Akarats.UseMode, ConverterParameter=Selective, Converter={StaticResource VisibleWhenEnumTrueConverter}}">
+              <CheckBox ToolTip="Use when there are elites close nearby" 
+                                      IsChecked="{Binding DataContext.Akarats.Reasons, ConverterParameter=Elites, Converter={converters:FlagsToBoolConverter}}">Elites nearby</CheckBox>
+              <CheckBox ToolTip="Use when you are surrounded by enemies" 
+                                      IsChecked="{Binding DataContext.Akarats.Reasons, ConverterParameter=Surrounded, Converter={converters:FlagsToBoolConverter}}">Surrounded</CheckBox>
+              <CheckBox ToolTip="Use when you're low on health" 
+                                      IsChecked="{Binding DataContext.Akarats.Reasons, ConverterParameter=HealthEmergency, Converter={converters:FlagsToBoolConverter}}">Health emergency</CheckBox>
+            </StackPanel>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox>
+          <GroupBox.Header>Steed Charge</GroupBox.Header>
+          <StackPanel>
+            <WrapPanel Margin="0,5,0,10">
+              <RadioButton ToolTip="Use vault whenever it makes sense"
+                                Content="Anytime" IsChecked="{Binding DataContext.SteedCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Default}"  />
+              <RadioButton ToolTip="Use only while fighting monsters"
+                                Content="In combat" IsChecked="{Binding DataContext.SteedCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=InCombat}" />
+              <RadioButton  ToolTip="Use only while NOT fighting monsters"
+                                Content="Out of combat" IsChecked="{Binding DataContext.SteedCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=OutOfCombat}" />
+            </WrapPanel>
+            <StackPanel Margin="0,5,0,0">
+              <CheckBox ToolTip="Use when movement is blocked" 
+                                      IsChecked="{Binding DataContext.SteedCharge.Reasons, ConverterParameter=Blocked, Converter={converters:FlagsToBoolConverter}}">Use when movement is blocked</CheckBox>
+            </StackPanel>
+          </StackPanel>
+        </GroupBox>
+      </StackPanel>
+    </Grid>
+  </Border>
+</UserControl>
+
+    

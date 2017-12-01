@@ -739,6 +739,9 @@ namespace Trinity.Routines.Monk
 
                 if (Skills.Monk.SevenSidedStrike.CanCast())
                     return SevenSidedStrike(CurrentTarget);
+
+                if (Skills.Monk.WaveOfLight.CanCast())
+                    return WaveOfLight(CurrentTarget);
             }
 
 

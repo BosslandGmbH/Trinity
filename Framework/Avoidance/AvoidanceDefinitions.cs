@@ -13,7 +13,6 @@ namespace Trinity.Framework.Avoidance
     public class AvoidanceDefinitions : FieldCollection<AvoidanceDefinitions, AvoidanceDefinition>
     {
         /*
-
         Raziel Boss
              1388: IsLootRunBoss (-2708) i:1 f:0 Value=1
              800: UsingBossbar (-3296) i:1 f:0 Value=1
@@ -21,12 +20,10 @@ namespace Trinity.Framework.Avoidance
                 InternalName => g_ChargedBolt_Projectile-314133
                 ActorSnoId => 4394
                  1249: ProjectileDetonateTime (-2847) i:794745 f:0 Value=794745
-
         Bone warlock boss projectile
             InternalName => SkeletonSummoner_projectile-300033
             ActorSnoId => 5392
             1249: ProjectileDetonateTime(-2847) i:759285 f:0 Value=759285
-
         // Blood Pools
         [Trinity 2.50.238] -- Dumping Attribtues for x1_Bog_bloodSpring_large-301223 (Sno=332923 Ann=-1444543456) at <255.3765, 629.3062, -2> ----
         [Trinity 2.50.238] Attributes (9) Id=1088/2054423616
@@ -211,11 +208,9 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
          292: Untargetable (-3804) i:0 f:0 Value=0 IsValid=True
          800: UsingBossbar (-3296) i:1 f:0 Value=1 IsValid=True
          524: SummonerId (-3572) i:-2012478880 f:0 Value=-2012479000 IsValid=True
-
         [Trinity 2.41.122] SelectedItem changed from  to X1_LR_Boss_TerrorDemon_A_BreathMinion, Type=Unit Dist=26.11438 IsBossOrEliteRareUnique=True IsAttackable=True
         [Trinity 2.41.122][Animation] TerrorDemon_attack_FireBreath State=Transform By: X1_LR_Boss_TerrorDemon_A_BreathMinion (429010)
         [Trinity 2.41.122] SelectedItem changed from  to x1_LR_boss_terrorDemon_A_projectile-12931, Type=Unknown Dist=0 IsBossOrEliteRareUnique=False IsAttackable=False
-
          */
 
         public static AvoidanceDefinition OrlashBoss = new AvoidanceDefinition
@@ -1404,7 +1399,6 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         /*
         Malthael
-
         291: Immunity (-3805) [ DamageType: Cold: 3 ] i:1 f:0 Value=1
          291: Immunity (-3805) [ DamageType: Lightning: 2 ] i:1 f:0 Value=1
          291: Immunity (-3805) [ DamageType: Fire: 1 ] i:1 f:0 Value=1
@@ -1412,7 +1406,6 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
          291: Immunity (-3805) [ DamageType: Holy: 6 ] i:1 f:0 Value=1
          291: Immunity (-3805) [ DamageType: Arcane: 5 ] i:1 f:0 Value=1
          291: Immunity (-3805) [ DamageType: Poison: 4 ] i:1 f:0 Value=1
-
          853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: x1_Malthael_DeathFogMonster_Setup: 325140 ] i:1 f:0 Value=1
                 853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: X1_Malthael_DrainSoul: 327766 ] i:1 f:0 Value=1
          859: PowerBuff1VisualEffectNone (-3237) [ PowerSnoId: X1_Malthael_DrainSoul: 327766 ] i:1 f:0 Value=1
@@ -1420,14 +1413,12 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
          853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: x1_Malthael_PhaseOne_AIState: 330358 ] i:1 f:0 Value=1
          853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: x1_Malthael_SwordShieldStart: 325648 ] i:0 f:0 Value=0
           853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: X1_Malthael_SickleThrowTeleport: 327847 ] i:0 f:0 Value=0
-
             Animation => x1_Malthael_sword_sheild // spinning blades aura
             x1_malthael_drainSoul_ghost
             x1_Malthael_drain_soul_outtro
             x1_malthael_gratesOfHell_darkBall_glowOuter // fire gates arrainged in outer ring
             x1_Malthael_DeathFogMonster
             x1_Malthael_Diablo_Fire_Projectile // fireballs before fire gate ring appears
-
             */
 
         public static AvoidanceDefinition MalthaelDeathFog = new AvoidanceDefinition

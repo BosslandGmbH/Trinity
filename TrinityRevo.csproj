@@ -448,6 +448,7 @@
     <Compile Include="ProfileTags\WhenTag.cs" />
     <Compile Include="ProfileTags\KillTag.cs" />
     <Compile Include="ProfileTags\ZergTag.cs" />
+    <Compile Include="Routines\Crusader\CrusaderAkkhanCondemn.cs" />
     <Compile Include="Routines\DemonHunter\DemonHunterShadowImpale.cs" />
     <Compile Include="Routines\DemonHunter\DH_ShadowThreeKnifes.cs" />
     <Compile Include="Routines\Monk\MonkSWKWoL.cs" />
@@ -762,6 +763,10 @@
     <Content Include="ProfileTags\Tests\WaitForCombat.xml" />
     <Content Include="ProfileTags\Tests\When.xml" />
     <Content Include="ProfileTags\Tests\Zerg.xml" />
+    <Page Include="Routines\Crusader\CrusaderAkkhanCondemnSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Routines\Monk\MonkSWKWoLSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
