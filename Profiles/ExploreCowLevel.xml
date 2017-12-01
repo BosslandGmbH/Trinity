@@ -19,6 +19,8 @@
       <WaitTimer questId="1" stepId="1" waitTime="3000" />
     </If>
     
+    <TownRun minFreeBagSlots="50" />
+    
     <If condition="ZetaDia.CurrentLevelAreaSnoId == 332339 and not ActorExistsAt(434659, 403, 575, 24, 50) and ItemCount(272056) > 0">
 
       <LogMessage Output="Getting Bovine Bardiche from Stash" />
