@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <Profile>
-  <Name>Cow Level Explorer 1.1 by xzjv</Name>
+  <Name>Cow Level Explorer 1.2 by xzjv</Name>
   <KillMonsters>True</KillMonsters>
   <PickupLoot>True</PickupLoot>
   <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" />
@@ -27,20 +27,21 @@
 
       <TakeFromStash>
         <Items>
-          <Item id="272056" quantity="5" />
+          <Item id="272056" quantity="1" />
         </Items>
       </TakeFromStash>
 
       <LogMessage questId="1" output="Moving to Cube" />
 
-      <MoveToActor
-        questId="1"
-        x="425" y="588" z="24"
+      <Interact
         actorId="439975"
-        interactRange="8"
-        pathPrecision="5"
-        pathPointLimit="250"
-        statusText="" />
+        actorName="KanaiCube_Stand"
+        x="419" y="584" z="24"
+        worldSnoId="332336"
+        levelAreaSnoId="332339"
+        sceneSnoId="414798"
+        sceneName="px_trOut_Tristram_E10_S15"
+        sceneX="179" sceneY="107" sceneZ="24" />
 
       <LogMessage questId="1" output="Opening Cow Portal" />
 
@@ -54,15 +55,19 @@
 
     <WaitTimer questId="1" stepId="1" waitTime="1000" />
 
-    <If condition="ZetaDia.CurrentLevelAreaSnoId == 332339 and ActorExistsAt(434659, 403, 575, 24, 50)">
+    <If condition="ZetaDia.CurrentLevelAreaSnoId == 332339 and ActorExistsAt(434659, 426, 581, 24, 50)">
 
-      <LogMessage Output="Entering to Cow Level" />
+      <LogMessage Output="Entering Cow Level" />
 
-      <MoveToActor
-        questId="312429" stepId="2" x="401" y="581" z="24"
-        actorId="434659" interactRange="10" name="p2_TotallyNotACowLevel_Portal"
-        isPortal="True" destinationWorldId="-1" pathPrecision="5"
-        pathPointLimit="250" statusText="" />
+      <Interact
+        actorId="434659"
+        actorName="p2_TotallyNotACowLevel_Portal"
+        x="426" y="581" z="24"
+        worldSnoId="332336"
+        levelAreaSnoId="332339"
+        sceneSnoId="414798"
+        sceneName="px_trOut_Tristram_E10_S15"
+        sceneX="161" sceneY="101" sceneZ="24" />
 
     </If>
 
@@ -99,7 +104,7 @@
     <If condition="ItemCount(272056)">
       
       <LogMessage questId="1" output="Finished!" />  
-      <LeaveGame questId="1" reason="End of Profile." stayInParty="False" />
+      <!--<LeaveGame questId="1" reason="End of Profile." stayInParty="False" />-->
     
     </If>
     
