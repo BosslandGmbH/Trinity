@@ -138,7 +138,7 @@ namespace Trinity.Routines.Barbarian
             if (!skill.CanCast() || Player.PrimaryResource < PrimaryEnergyReserve)
                 return false;
 
-            target = TargetUtil.GetBestClusterUnit(40f, inLineOfSight: true) ?? CurrentTarget;
+            target = TargetUtil.ClosestUnit(30f, u => u.IsInLineOfSight) ?? CurrentTarget;
             return target != null;
         }
 
@@ -161,6 +161,9 @@ namespace Trinity.Routines.Barbarian
 
         public TrinityPower GetBuffPower()
         {
+            if (Player.IsInTown)
+                return null;
+
             TrinityPower trinityPower;
             if (TryProcBandOfMight(out trinityPower))
                 return trinityPower;
