@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <Profile>
-  <Name>Cow Level Explorer 1.2 by xzjv</Name>
+  <Name>Cow Level Explorer 1.3 by xzjv</Name>
   <KillMonsters>True</KillMonsters>
   <PickupLoot>True</PickupLoot>
   <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" />
@@ -75,8 +75,7 @@
 
       <LogMessage questId="1" output="Exploring Cow Level!" />
 
-      <!-- // TentacleLord (209133) -->
-      <Explore endCondition="ActorExistsNearMe(209133, 60)" />
+      <Explore endCondition="PercentNodesVisited(95)" />
 
       <!--
       QuestSNO: 434753 QuestStep: 1, Description: Slay the Infernal Bovine herd!, Header: 434753 1 0, State: InProgress, Index: 0

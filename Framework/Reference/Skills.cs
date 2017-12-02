@@ -1438,7 +1438,7 @@ namespace Trinity.Framework.Reference
                 Cost = 1,
                 Cooldown = TimeSpan.Zero,
                 Element = Element.Physical,
-                Resource = Resource.Fury,
+                Resource = Resource.None,
                 IsDamaging = true,
                 AreaEffectRadius = 0f,
                 ResourceEffect = ResourceEffectType.Spender,
