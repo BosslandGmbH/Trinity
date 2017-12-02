@@ -1451,7 +1451,7 @@ namespace Trinity.Components.Combat
                                         break;
                                     }
 
-                                    if (cacheObject.ZDiff >= 5)
+                                    if (cacheObject.ZDiff >= 8)
                                     {
                                         cacheObject.WeightInfo += "Door beneath or above player";
                                         break;
