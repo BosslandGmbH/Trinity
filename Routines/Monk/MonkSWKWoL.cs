@@ -19,7 +19,7 @@ namespace Trinity.Routines.Monk
         public string DisplayName => "DatModz's WK WoL Monk";
         public string Description => "DatModz - GR 110+ Sunwuko WoL Monk: This is a well rounded Solo Pushing Build that works well at high level g-rifts";
         public string Author => "jubisman";
-        public string Version => "0.5.1";
+        public string Version => "0.6";
         public string Url => "http://www.diablofans.com/builds/96442-datmodz-gr-110-sunwuko-wol-monk";
 
         public Build BuildRequirements => new Build
@@ -41,7 +41,7 @@ namespace Trinity.Routines.Monk
         {
             Vector3 position;
             TrinityActor target;
-            TrinityPower power = null;
+            TrinityPower power;
 
             if (ShouldWalkToTarget(out target))
                 return Walk(target);
@@ -52,32 +52,26 @@ namespace Trinity.Routines.Monk
             if (ShouldWaveOfLight(out target))
                 return WaveOfLight(target);
 
-            return GetPrimary();
+            if (TrySecondaryPower(out power))
+                return power;
+
+            if (TryPrimaryPower(out power))
+                return power;
+
+            return Walk(TargetUtil.GetSafeSpotPosition(20f));
         }
 
-
-        private TrinityPower GetPrimary()
+        private static bool ShouldWalkToTarget(out TrinityActor target)
         {
-            TrinityPower power = null;
+            target = null;
 
-            var target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
+            if (CurrentTarget.Distance > 60f)
+            {
+                target = CurrentTarget;
+                return target != null;
+            }
 
-            if (IsNoPrimary)
-                power = Walk(TargetUtil.GetSafeSpotPosition(20f));
-
-            if (Skills.Monk.FistsOfThunder.CanCast())
-                power = FistsOfThunder(target);
-
-            else if (Skills.Monk.DeadlyReach.CanCast())
-                power = DeadlyReach(target);
-
-            else if (Skills.Monk.CripplingWave.CanCast())
-                power = CripplingWave(target);
-
-            else if (Skills.Monk.WayOfTheHundredFists.CanCast())
-                power = WayOfTheHundredFists(target);
-
-            return power;
+            return false;
         }
 
         protected override bool ShouldWaveOfLight(out TrinityActor target)
@@ -87,7 +81,7 @@ namespace Trinity.Routines.Monk
             if (!Skills.Monk.WaveOfLight.CanCast())
                 return false;
 
-            if (TargetUtil.AnyMobsInRange(45f))
+            if (TargetUtil.AnyMobsInRange(60f))
             {
                 target = TargetUtil.GetBestClusterUnit();
                 return target != null;
@@ -217,19 +211,6 @@ namespace Trinity.Routines.Monk
                 return false;
 
             return true;
-        }
-
-        private static bool ShouldWalkToTarget(out TrinityActor target)
-        {
-            target = null;
-
-            if (CurrentTarget.Distance > 45f)
-            {
-                target = CurrentTarget;
-                return target != null;
-            }
-
-            return false;
         }
 
         #region Settings
