@@ -24,7 +24,7 @@ namespace Trinity.Routines.Barbarian
             "Build that uses full IK set for damage bonus and Raekor's for Furious Charge damage";
 
         public string Author => "jubisman";
-        public string Version => "0.1";
+        public string Version => "0.1.1";
         public string Url => "http://www.diablofans.com/builds/88896-ik-raekor-charge-v2-0-gr100";
 
         public Build BuildRequirements => new Build
@@ -239,9 +239,9 @@ namespace Trinity.Routines.Barbarian
         public override float EmergencyHealthPct => Settings.EmergencyHealthPct;
 
         IDynamicSetting IRoutine.RoutineSettings => Settings;
-        public BarbarianIKHotaSettings Settings { get; } = new BarbarianIKHotaSettings();
+        public BarbarianRaekorIKSettings Settings { get; } = new BarbarianRaekorIKSettings();
 
-        public sealed class BarbarianIKHotaSettings : NotifyBase, IDynamicSetting
+        public sealed class BarbarianRaekorIKSettings : NotifyBase, IDynamicSetting
         {
             private int _clusterSize;
             private float _emergencyHealthPct;
