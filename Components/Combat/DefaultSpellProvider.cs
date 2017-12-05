@@ -150,6 +150,9 @@ namespace Trinity.Components.Combat
             if (!HasEnoughCharges(skill))
                 return false;
 
+            if (!HasEnoughResource(skill))
+                return false;
+
             PowerManager.CanCastFlags reason;
             if (!PowerManager.CanCast(skill.SNOPower, out reason))
             {
@@ -159,9 +162,6 @@ namespace Trinity.Components.Combat
                     return false;
                 }
             }
-
-            if (!HasEnoughResource(skill))
-                return false;
 
             return true;
         }
@@ -187,7 +187,7 @@ namespace Trinity.Components.Combat
         public bool HasEnoughResource(Skill skill)
         {
             var resourceCost = skill.Cost * (1 - Core.Player.ResourceCostReductionPct);
-            if (resourceCost > 0 && !skill.IsGeneratorOrPrimary)
+            if (resourceCost > 1 && !skill.IsGeneratorOrPrimary)
             {
                 var actualResource = (skill.Resource == Resource.Discipline) ? Core.Player.SecondaryResource : Core.Player.PrimaryResource;
                 if (actualResource < resourceCost)
