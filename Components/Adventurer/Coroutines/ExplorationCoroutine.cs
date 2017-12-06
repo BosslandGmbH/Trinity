@@ -115,7 +115,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         {
             State = States.Exploring;
 
-            if(_ignoreScenes != null && _ignoreScenes.Any())
+            if (_ignoreScenes != null && _ignoreScenes.Any())
                 ExplorationHelpers.MarkNodesAsVisited(_ignoreScenes);
 
             return false;
@@ -156,7 +156,10 @@ namespace Trinity.Components.Adventurer.Coroutines
                     _currentDestination.IsCurrentDestination = false;
                 }
 
+
                 var destination = ExplorationHelpers.NearestWeightedUnvisitedNode(_levelAreaIds);
+                if (destination != null)
+                {
                 if (destination != null)
                 {
                     WorldScene destScene = destination.Scene;
@@ -288,6 +291,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         public void DisablePulse()
         {
+
            
         }
 
