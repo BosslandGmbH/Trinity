@@ -24,7 +24,7 @@ namespace Trinity.Routines.Barbarian
             "Build that uses full IK set for damage bonus and Raekor's for Furious Charge damage";
 
         public string Author => "jubisman";
-        public string Version => "0.1.1";
+        public string Version => "0.2";
         public string Url => "http://www.diablofans.com/builds/88896-ik-raekor-charge-v2-0-gr100";
 
         public Build BuildRequirements => new Build
@@ -43,6 +43,30 @@ namespace Trinity.Routines.Barbarian
         };
 
         #endregion
+        
+        public TrinityPower GetBuffPower()
+        {
+            if (ShouldIgnorePain())
+                return IgnorePain();
+
+            if (ShouldSprint())
+                return Sprint();
+
+            if (ShouldBattleRage())
+                return BattleRage();
+
+            if (ShouldWarCry())
+                return WarCry();
+
+            if (ShouldCallOfTheAncients())
+                return CallOfTheAncients();
+
+            if (ShouldWrathOfTheBerserker())
+                return WrathOfTheBerserker();
+
+            return null;
+        }
+
 
         public TrinityPower GetOffensivePower()
         {
@@ -101,7 +125,7 @@ namespace Trinity.Routines.Barbarian
             if (Player.CurrentHealthPct < EmergencyHealthPct ||
                 Skills.Barbarian.WrathOfTheBerserker.TimeSinceUse > 5000 && !Skills.Barbarian.WrathOfTheBerserker.CanCast())
             {
-                Core.Logger.Log("Casting AncientSpear to Restore Health/Reduce Cooldowns");
+                //Core.Logger.Log("Casting AncientSpear to Restore Health/Reduce Cooldowns");
                 target = TargetUtil.GetBestClusterUnit();
             }
 
@@ -109,6 +133,24 @@ namespace Trinity.Routines.Barbarian
         }
 
         protected override bool ShouldFuriousCharge(out Vector3 position)
+        {
+            position = Vector3.Zero;
+            TrinityActor target = null;
+
+            if (!Skills.Barbarian.FuriousCharge.CanCast())
+                return false;
+
+            if (!TargetUtil.AnyMobsInRange(60f))
+                return false;
+
+            if (Legendary.AncientParthanDefenders.IsEquipped)
+                position = TargetUtil.FreezePiercePoint(60f);
+            position = TargetUtil.GetBestPiercePoint(60f);
+
+            return position != Vector3.Zero;
+        }
+
+        /*protected override bool ShouldFuriousCharge(out Vector3 position)
         {
             // Credit: phelon's raekor.
 
@@ -177,34 +219,11 @@ namespace Trinity.Routines.Barbarian
         private static Vector3 GetPositionBehind(Vector3 position)
         {
             return MathEx.CalculatePointFrom(position, Player.Position, Player.Position.Distance(position) + 4f);
-        }
+        }*/
 
         public TrinityPower GetDefensivePower() => GetBuffPower();
 
         public TrinityPower GetDestructiblePower() => DefaultDestructiblePower();
-
-        public TrinityPower GetBuffPower()
-        {
-            if (ShouldIgnorePain())
-                return IgnorePain();
-
-            if (ShouldSprint())
-                return Sprint();
-
-            if (ShouldBattleRage())
-                return BattleRage();
-
-            if (ShouldWarCry())
-                return WarCry();
-
-            if (ShouldCallOfTheAncients())
-                return CallOfTheAncients();
-
-            if (ShouldWrathOfTheBerserker())
-                return WrathOfTheBerserker();
-
-            return null;
-        }
 
         protected override bool ShouldWrathOfTheBerserker()
         {
@@ -221,15 +240,22 @@ namespace Trinity.Routines.Barbarian
 
         public TrinityPower GetMovementPower(Vector3 destination)
         {
-            if (CanChargeTo(destination) && AllowedToUse(Settings.FuriousCharge, Skills.Barbarian.FuriousCharge) &&
-                Skills.Barbarian.FuriousCharge.Charges > 1)
+            if (CanChargeTo(destination) && AllowedToUse(Settings.FuriousCharge, Skills.Barbarian.FuriousCharge))
             {
-                if (IsInCombat && TargetUtil.PierceHitsMonster(destination) ||
-                    Player.Position.Distance(destination) > 20f)
-                {
+                if (IsBlocked && Skills.Barbarian.FuriousCharge.Charges > 0)
                     return FuriousCharge(destination);
-                }
-            }
+
+                if (!IsBlocked && Skills.Barbarian.FuriousCharge.Charges > 1)
+                    return FuriousCharge(destination);
+
+                /*if (TargetUtil.UnitOrDestructibleInFrontOfMe(60f).Count > 0 &&
+                    Skills.Barbarian.FuriousCharge.Charges > 0)
+                {
+                    Core.Logger.Log("Charging through enemy/destructible since it refunds a charge.");
+                    return FuriousCharge(destination);
+                }*/
+            } 
+
             return Walk(destination);
         }
 
