@@ -288,32 +288,6 @@ namespace Trinity.Components.Combat.Resources
                  select u).ToList();
         }
 
-        internal static List<TrinityActor> FreezeTargetsInFrontOfMe(float maxRange,
-            bool ignoreUnitsInAoE = false, bool ignoreElites = false)
-        {
-            return (from u in SafeList(ignoreElites)
-                where u.IsUnit &&
-                      u.Distance <= maxRange && u.IsInLineOfSight &&
-                      !(ignoreUnitsInAoE && u.IsInAvoidance &&
-                        !u.IsAvoidanceOnPath && !u.IsCriticalAvoidanceOnPath) &&
-                      !(ignoreElites && u.IsElite) && !u.IsFrozen
-
-                orderby u.CountUnitsInFront() descending
-                select u).ToList();
-        }
-
-        internal static List<TrinityActor> UnitOrDestructibleInFrontOfMe(float maxRange, bool ignoreUnitsInAoE = false,
-            bool ignoreElites = false)
-        {
-            return (from u in SafeList(ignoreElites)
-                where (u.IsUnit || u.IsDestroyable) &&
-                      u.Distance <= maxRange && u.IsInLineOfSight &&
-                      !(ignoreUnitsInAoE && u.IsInAvoidance) &&
-                      !(ignoreElites && u.IsElite)
-                orderby u.CountUnitsInFront() descending
-                select u).ToList();
-        }
-        
         internal static TrinityActor GetBestPierceTarget(float maxRange, bool ignoreUnitsInAoE = false,
             bool ignoreElites = false)
         {
@@ -335,24 +309,17 @@ namespace Trinity.Components.Combat.Resources
             return Core.Grids.Avoidance.IsIntersectedByFlags(Player.Position, position, AvoidanceFlags.Monster);
         }
 
-        internal static Vector3 FreezePiercePoint(float maxRange,
-            bool ignoreUnitsInAoE = false, bool ignoreElites = false)
-        {
-            var unit = FreezeTargetsInFrontOfMe(maxRange, ignoreUnitsInAoE, ignoreElites).FirstOrDefault();
-            return unit?.Position ?? Vector3.Zero;
-        }
-
         /// <summary>
-            ///
-            /// </summary>
-            /// <param name="radius">Cluster Radius</param>
-            /// <param name="maxRange">Unit Max Distance</param>
-            /// <param name="count">Minimum number of mobs</param>
-            /// <param name="useWeights">Include Mobs with Weight or not</param>
-            /// <param name="includeUnitsInAoe">Include mobs in AoE or not</param>
-            /// <param name="ignoreElites">Ingore elites or not/param>
-            /// <returns></returns>
-            internal static TrinityActor GetBestClusterUnit(
+        ///
+        /// </summary>
+        /// <param name="radius">Cluster Radius</param>
+        /// <param name="maxRange">Unit Max Distance</param>
+        /// <param name="count">Minimum number of mobs</param>
+        /// <param name="useWeights">Include Mobs with Weight or not</param>
+        /// <param name="includeUnitsInAoe">Include mobs in AoE or not</param>
+        /// <param name="ignoreElites">Ingore elites or not/param>
+        /// <returns></returns>
+        internal static TrinityActor GetBestClusterUnit(
             float clusterRadius = 15f, float maxSearchRange = 65f, bool useWeights = true, bool includeUnitsInAoe = true,
             bool ignoreElites = false, bool inLineOfSight = false)
         {

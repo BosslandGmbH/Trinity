@@ -1689,12 +1689,6 @@ namespace Trinity.Components.Combat
                                         break;
                                     }
 
-                                    if (Core.Rift.IsGreaterRift)
-                                    {
-                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Chests are always empty in Greater Rifts.";
-                                        break;
-                                    }
-
                                     if (Core.Settings.Weighting.ContainerWeighting == SettingMode.Selective)
                                     {
                                         var type = GetContainerType(cacheObject);
