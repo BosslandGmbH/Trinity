@@ -8,7 +8,6 @@ using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
-using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Coroutines
 {
@@ -107,7 +106,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         {
             State = States.Exploring;
 
-            if (_ignoreScenes != null && _ignoreScenes.Any())
+            if(_ignoreScenes != null && _ignoreScenes.Any())
                 ExplorationHelpers.MarkNodesAsVisited(_ignoreScenes);
 
             return false;
@@ -152,18 +151,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 {
                     _currentDestination.IsCurrentDestination = false;
                 }
-
                 var destination = ExplorationHelpers.NearestWeightedUnvisitedNode(_levelAreaIds);
-                if (destination != null)
-                {
-                    if (!destination.IsEdgeNode && ZetaDia.Minimap.IsExplored(destination.NavigableCenter, AdvDia.CurrentWorldDynamicId))
-                    {
-                        destination.IsVisited = true;
-                        destination.IsKnown = true;
-                        return false;
-                    }
-                }
-
                 if (destination == null)
                 {
                     Core.Logger.Debug($"[Exploration] No more unvisited nodes to explore, so we're done.");
@@ -274,7 +262,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         public void DisablePulse()
         {
-
+           
         }
 
         #endregion

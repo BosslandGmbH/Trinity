@@ -133,7 +133,6 @@ namespace Trinity.Framework.Actors.ActorTypes
         public EliteTypes EliteType { get; set; }
         public ShrineTypes ShrineType { get; set; }
         public ContainerTypes ContainerType { get; set; }
-        public bool IsFrozen { get; set; }
 
         public SpecialTypes SpecialType { get; set; }
 
