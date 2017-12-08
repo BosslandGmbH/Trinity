@@ -1680,6 +1680,12 @@ namespace Trinity.Components.Combat
                                         break;
                                     }
 
+                                    if (Core.Rift.IsGreaterRift)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Chests are always empty in Greater Rifts.";
+                                        break;
+                                    }
+
                                     if (Core.Settings.Weighting.ContainerWeighting == SettingMode.Selective)
                                     {
                                         var type = GetContainerType(cacheObject);
@@ -1693,7 +1699,7 @@ namespace Trinity.Components.Combat
                                     // No point in doing Cow Level runs if we're running past the chests
                                     var isInCowLevel = ZetaDia.Globals.WorldSnoId == 434649;
 
-                                    if (cacheObject.Distance < 80f && isInCowLevel)
+                                    if (cacheObject.Distance < 35f && isInCowLevel)
                                     {
                                         cacheObject.WeightInfo += $"WhiteListed Interactable Container (CowLevel)";
                                         cacheObject.Weight = MaxWeight;
