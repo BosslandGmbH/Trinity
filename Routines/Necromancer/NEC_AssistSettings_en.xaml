@@ -1,0 +1,128 @@
+﻿<UserControl 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
+
+    mc:Ignorable="d" Background="#434343" d:DesignHeight="820" d:DesignWidth="390">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../UI/Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:PercentConverter x:Key="PercentConverter" />
+            <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+            <converters:EnumVisibilityConverter x:Key="HiddenWhenEnumTrueConverter" Reverse="True" />
+            <converters:EnumVisibilityConverter x:Key="VisibleWhenEnumTrueConverter"  />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Border Padding="10">
+        <Grid>
+            <StackPanel>
+                <GroupBox>
+                    <GroupBox.Header>General</GroupBox.Header>
+                    <StackPanel>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="ClusterSize for GR"
+                            ToolTip="ClusterSize_GR"
+                            Interval="100" IsSnapToTickEnabled="True"
+                            Maximum="40" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.ClusterSize}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="ClusterSize for NR"
+                            ToolTip="ClusterSize_NR"
+                            Interval="100" IsSnapToTickEnabled="True"
+                            Maximum="40" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.ClusterSizeN}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Cluster Range"
+                            ToolTip="ClusterRange"
+                            Interval="100" IsSnapToTickEnabled="True"
+                            Maximum="60" Minimum="15" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.ClusterRadius}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Emergency Health Pct %"
+                            ToolTip="How low your health must drop before the potion is used"
+                            Interval="500" Maximum="99" Minimum="0" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.EmergencyHealthPct, Converter={StaticResource PercentConverter}}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Combat Options</GroupBox.Header>
+                    <StackPanel>
+                        <CheckBox ToolTip="Switch Rune of BloodRush between gr and nr" 
+                            IsChecked="{Binding DataContext.AutoChangeSkill}" Content="Switch Rune of BloodRush" />
+                        <CheckBox ToolTip="This option will override the Option in Trinity. If you are in solo mode, don't check." 
+                            IsChecked="{Binding DataContext.IgnoreShrine}" Content="Ignore Shrine [PartyOnly]" />
+                        <CheckBox ToolTip="Reduce movement time when in combat" 
+                            IsChecked="{Binding DataContext.StillMode}" Content="Sill Mode [PartyOnly]" />
+                        <CheckBox ToolTip="Avoid Lost when in party game" 
+                            IsChecked="{Binding DataContext.AvoidLost}" Content="Avoid Lost [PartyOnly]" />
+                        <CheckBox ToolTip="Use Oculus to enhance damage" 
+                            IsChecked="{Binding DataContext.UseOcculus}" Content="Use Oculus" />
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Combat Distance"
+                            ToolTip=""
+                            Interval="500" Maximum="60" Minimum="20" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.FightDistance}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Devour Interval [In 10ms]"
+                            ToolTip="If your pc is good, just set a low value."
+                            Interval="500" Maximum="50" Minimum="25"
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.DurationInLOTD}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Curse Interval[In Seconds]"
+                            ToolTip="Set the castDecrepity interval for Decrepity, Fraity and Leech"
+                            Interval="500" Maximum="6" Minimum="0" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.CurseInterval}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Cast Interval of CommandSkeletons"
+                            ToolTip="CommandSkeletonsInterval[in 10ms]"
+                            Interval="500" Maximum="20" Minimum="5" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" 
+                            Value="{Binding Path=DataContext.CastCSInterval}" 
+                            HorizontalAlignment="Stretch" Margin="0"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Debug Options</GroupBox.Header>
+                    <StackPanel>
+                        <UniformGrid Columns="2">
+                            <CheckBox ToolTip="" 
+                                IsChecked="{Binding DataContext.IsDebugMove}" Content="Debug Move"/>
+                            <CheckBox ToolTip="" 
+                                IsChecked="{Binding DataContext.IsDebugSkill}" Content="Debug Skill"/>
+                            <CheckBox ToolTip="" 
+                                IsChecked="{Binding DataContext.IsDebugAvoid}" Content="Debug Avoid"/>
+                            <CheckBox ToolTip="" 
+                                IsChecked="{Binding DataContext.IsDebugParty}" Content="Debug Party"/>
+                        </UniformGrid>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>
+
+    
