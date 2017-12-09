@@ -4,6 +4,7 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml.Serialization;
 using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Modules;
 using Zeta.Common;
@@ -41,6 +42,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public WorldScene SubScene { get; set; }
         public DateTime GridCreatedTime { get; set; }
+        public bool HasPlayerConnection { get; set; }
 
         public WorldScene(Scene scene, float boxSize, float boxTolerance)
         {
@@ -70,6 +72,14 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 SouthEast = Max;
                 SouthWest = new Vector2(Max.X, Min.Y);
 
+                CornerPositions = new HashSet<Vector2>
+                {
+                    NorthWest,
+                    NorthEast,
+                    SouthEast,
+                    SouthWest
+                };
+
                 if (ExplorationHelpers.BlacklistedPositionsBySceneSnoId.ContainsKey(SnoId))
                     BlacklistedPositions = ExplorationHelpers.BlacklistedPositionsBySceneSnoId[SnoId];
 
@@ -98,6 +108,8 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 }
             }
         }
+
+        public HashSet<Vector2> CornerPositions { get; set; }
 
         private void ScanExitDirection(SceneExitDirections dir)
         {
@@ -236,63 +248,162 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             public Vector2 EdgePointA;
             public Vector2 EdgePointB;
             public Vector3 ExitPosition;
+
+            public override string ToString() => $"{nameof(ConnectedSceneResult)}: {Scene?.Name} {Direction}";
         }
 
-        public IEnumerable<ConnectedSceneResult> ConnectedScenes()
+        public List<ConnectedSceneResult> ConnectedScenes()
         {
-            if (ExitDirections.HasFlag(SceneExitDirections.North))
+            var scenesSharingCorners = Core.Scenes.CurrentWorldScenes.Where(s => s.CornerPositions.Any(pos => CornerPositions.Contains(pos)));
+            var output = new List<ConnectedSceneResult>();
+            bool withinBounds;
+
+            foreach (var other in scenesSharingCorners)
             {
-                yield return new ConnectedSceneResult
+                var onSouthEdge = other.NorthWest.X == SouthWest.X && other.NorthEast.X == SouthEast.X;
+                withinBounds = other.Size.X < Size.X
+                    ? other.NorthWest.Y >= SouthWest.Y && other.NorthEast.Y <= SouthEast.Y
+                    : other.NorthWest.Y <= SouthWest.Y && other.NorthEast.Y >= SouthEast.Y;
+
+                if (onSouthEdge && withinBounds)
                 {
-                    Scene = Core.Scenes.CurrentWorldScenes.FirstOrDefault(
-                        s => s.ExitDirections.HasFlag(SceneExitDirections.South) &&
-                             s.SouthWest == NorthWest && s.SouthEast == NorthEast),
-                    Direction = SceneExitDirections.North,
-                    ExitPosition = ExitPositions[SceneExitDirections.North],
-                    EdgePointA = NorthWest,
-                    EdgePointB = NorthEast,
-                };
-            }
-            if (ExitDirections.HasFlag(SceneExitDirections.East))
-            {
-                yield return new ConnectedSceneResult
+                    if (other.ExitDirections.HasFlag(SceneExitDirections.North) && ExitDirections.HasFlag(SceneExitDirections.South))
+                    {
+                        output.Add(new ConnectedSceneResult
+                        {
+                            Scene = other,
+                            Direction = SceneExitDirections.South,
+                            ExitPosition = ExitPositions[SceneExitDirections.South],
+                            EdgePointA = other.NorthWest,
+                            EdgePointB = other.NorthEast,
+                        });
+                    }
+                    continue;
+                }
+
+                var onNorthEdge = other.SouthWest.X == NorthWest.X && other.SouthEast.X == NorthEast.X;
+                withinBounds = other.Size.X < Size.X
+                    ? other.SouthWest.Y >= NorthWest.Y && other.SouthEast.Y <= NorthEast.Y
+                    : other.SouthWest.Y <= NorthWest.Y && other.SouthEast.Y >= NorthEast.Y;
+
+                if (onNorthEdge && withinBounds)
                 {
-                    Scene = Core.Scenes.CurrentWorldScenes.FirstOrDefault(
-                        s => s.ExitDirections.HasFlag(SceneExitDirections.West) &&
-                             s.NorthWest == NorthEast && s.SouthWest == SouthEast),
-                    Direction = SceneExitDirections.East,
-                    ExitPosition = ExitPositions[SceneExitDirections.East],
-                    EdgePointA = NorthEast,
-                    EdgePointB = SouthEast,
-                };
-            }
-            if (ExitDirections.HasFlag(SceneExitDirections.South))
-            {
-                yield return new ConnectedSceneResult
+                    if (other.ExitDirections.HasFlag(SceneExitDirections.South) && ExitDirections.HasFlag(SceneExitDirections.North))
+                    {
+                        output.Add(new ConnectedSceneResult
+                        {
+                            Scene = other,
+                            Direction = SceneExitDirections.North,
+                            ExitPosition = ExitPositions[SceneExitDirections.North],
+                            EdgePointA = other.SouthEast,
+                            EdgePointB = other.SouthWest,
+                        });
+
+                    }
+                    continue;
+                }
+
+                var onEastEdge = other.NorthWest.Y == NorthEast.Y && other.SouthWest.Y == SouthEast.Y;
+                withinBounds = other.Size.X < Size.X
+                    ? other.NorthWest.X >= NorthEast.X && other.SouthWest.X <= SouthEast.X
+                    : other.NorthWest.X <= NorthEast.X && other.SouthWest.X >= SouthEast.X;
+
+                if (onEastEdge && withinBounds)
                 {
-                    Scene = Core.Scenes.CurrentWorldScenes.FirstOrDefault(
-                        s => s.ExitDirections.HasFlag(SceneExitDirections.North) &&
-                             s.NorthEast == SouthEast && s.NorthWest == SouthWest),
-                    Direction = SceneExitDirections.South,
-                    ExitPosition = ExitPositions[SceneExitDirections.South],
-                    EdgePointA = SouthEast,
-                    EdgePointB = SouthWest,
-                };
-            }
-            if (ExitDirections.HasFlag(SceneExitDirections.West))
-            {
-                yield return new ConnectedSceneResult
+                    if (other.ExitDirections.HasFlag(SceneExitDirections.West) && ExitDirections.HasFlag(SceneExitDirections.East))
+                    {
+                        output.Add(new ConnectedSceneResult
+                        {
+                            Scene = other,
+                            Direction = SceneExitDirections.East,
+                            ExitPosition = ExitPositions[SceneExitDirections.East],
+                            EdgePointA = other.NorthWest,
+                            EdgePointB = other.SouthWest,
+                        });
+
+                    }
+                    continue;
+                }
+
+                var onWestEdge = other.NorthEast.Y == NorthWest.Y && other.SouthEast.Y == SouthWest.Y;
+                withinBounds = other.Size.X < Size.X
+                    ? other.NorthEast.X >= NorthWest.X && other.SouthEast.X <= SouthWest.X
+                    : other.NorthEast.X <= NorthWest.X && other.SouthEast.X >= SouthWest.X;
+
+                if (onWestEdge && withinBounds)
                 {
-                    Scene = Core.Scenes.CurrentWorldScenes.FirstOrDefault(
-                        s => s.ExitDirections.HasFlag(SceneExitDirections.East) &&
-                             s.SouthEast == SouthWest && s.NorthEast == NorthWest),
-                    Direction = SceneExitDirections.West,
-                    ExitPosition = ExitPositions[SceneExitDirections.West],
-                    EdgePointA = SouthWest,
-                    EdgePointB = NorthWest,
-                };
+                    if (other.ExitDirections.HasFlag(SceneExitDirections.East) && ExitDirections.HasFlag(SceneExitDirections.West))
+                    {
+                        output.Add(new ConnectedSceneResult
+                        {
+                            Scene = other,
+                            Direction = SceneExitDirections.West,
+                            ExitPosition = ExitPositions[SceneExitDirections.West],
+                            EdgePointA = other.SouthEast,
+                            EdgePointB = other.NorthEast,
+                        });
+                    }
+                }
             }
+
+            return output;
         }
+
+        //public IEnumerable<ConnectedSceneResult> ConnectedScenes()
+        //{
+        //    if (ExitDirections.HasFlag(SceneExitDirections.North))
+        //    {
+        //        yield return new ConnectedSceneResult
+        //        {
+        //            Scene = Core.Scenes.CurrentWorldScenes.FirstOrDefault(
+        //                s => s.ExitDirections.HasFlag(SceneExitDirections.South) &&
+        //                     s.SouthWest == NorthWest && s.SouthEast == NorthEast),
+        //            Direction = SceneExitDirections.North,
+        //            ExitPosition = ExitPositions[SceneExitDirections.North],
+        //            EdgePointA = NorthWest,
+        //            EdgePointB = NorthEast,
+        //        };
+        //    }
+        //    if (ExitDirections.HasFlag(SceneExitDirections.East))
+        //    {
+        //        yield return new ConnectedSceneResult
+        //        {
+        //            Scene = Core.Scenes.CurrentWorldScenes.FirstOrDefault(
+        //                s => s.ExitDirections.HasFlag(SceneExitDirections.West) &&
+        //                     s.NorthWest == NorthEast && s.SouthWest == SouthEast),
+        //            Direction = SceneExitDirections.East,
+        //            ExitPosition = ExitPositions[SceneExitDirections.East],
+        //            EdgePointA = NorthEast,
+        //            EdgePointB = SouthEast,
+        //        };
+        //    }
+        //    if (ExitDirections.HasFlag(SceneExitDirections.South))
+        //    {
+        //        yield return new ConnectedSceneResult
+        //        {
+        //            Scene = Core.Scenes.CurrentWorldScenes.FirstOrDefault(
+        //                s => s.ExitDirections.HasFlag(SceneExitDirections.North) &&
+        //                     s.NorthEast == SouthEast && s.NorthWest == SouthWest),
+        //            Direction = SceneExitDirections.South,
+        //            ExitPosition = ExitPositions[SceneExitDirections.South],
+        //            EdgePointA = SouthEast,
+        //            EdgePointB = SouthWest,
+        //        };
+        //    }
+        //    if (ExitDirections.HasFlag(SceneExitDirections.West))
+        //    {
+        //        yield return new ConnectedSceneResult
+        //        {
+        //            Scene = Core.Scenes.CurrentWorldScenes.FirstOrDefault(
+        //                s => s.ExitDirections.HasFlag(SceneExitDirections.East) &&
+        //                     s.SouthEast == SouthWest && s.NorthEast == NorthWest),
+        //            Direction = SceneExitDirections.West,
+        //            ExitPosition = ExitPositions[SceneExitDirections.West],
+        //            EdgePointA = SouthWest,
+        //            EdgePointB = NorthWest,
+        //        };
+        //    }
+        //}
 
         public HashSet<Vector3> BlacklistedPositions { get; set; } = new HashSet<Vector3>();
 
@@ -354,7 +465,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             if (!checkedScenes.Contains(from.HashName))
                 checkedScenes.Add(from.HashName);
 
-            foreach (var connection in from.ConnectedScenes().Where(s => s.Scene != parent))
+            foreach (var connection in from.ConnectedScenes().Where(s => s.Scene != parent).OrderBy(s => s.ExitPosition.Distance(to.Center.ToVector3())))
             {
                 if (connection.Scene == to)
                     return new List<ConnectedSceneResult> { connection };

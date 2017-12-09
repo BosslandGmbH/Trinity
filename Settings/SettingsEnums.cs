@@ -79,6 +79,7 @@ namespace Trinity.Settings
         GroundClicky = 1 << 3,
         Other = 1 << 4,
         RareChest = 1 << 5,
+        CowLevel = 1 << 6,
     }
 
     [Flags]
