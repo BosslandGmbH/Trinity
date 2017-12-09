@@ -390,7 +390,7 @@ namespace Trinity.Routines
 
                 if (Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) > 5f)
                 {
-                    Core.Logger.Log(LogCategory.Avoidance, $"Moving away from Critial Avoidance.");
+                    Core.Logger.Log(LogCategory.Avoidance, $"Moving away from Critical Avoidance.");
 
                     if (await CastMovementSpells(Core.Avoidance.Avoider.SafeSpot))
                         return true;

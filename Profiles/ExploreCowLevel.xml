@@ -75,7 +75,7 @@
 
       <LogMessage questId="1" output="Exploring Cow Level!" />
 
-      <Explore stopCondition="PercentNodesVisited(75)" />
+      <Explore stopCondition="PercentNodesVisited(95)" />
 
       <!--
       QuestSNO: 434753 QuestStep: 1, Description: Slay the Infernal Bovine herd!, Header: 434753 1 0, State: InProgress, Index: 0

@@ -1528,6 +1528,15 @@ namespace Trinity.Components.Combat
                                 if (GameData.ResplendentChestIds.Contains(cacheObject.ActorSnoId))
                                     cacheObject.Weight += 500d;
 
+                                // Gold Piles in the Goblin Real get high priority
+                                var isGoblinRealm = ZetaDia.Globals.WorldSnoId == 379962;
+
+                                if (cacheObject.Distance < 35f && isGoblinRealm)
+                                {
+                                    cacheObject.Weight = MaxWeight;
+                                    break;
+                                }
+
                                 cacheObject.Weight += 0.5 * (ObjectDistanceFormula(cacheObject) +
                                                            EliteMonsterNearFormula(cacheObject, elites) -
                                                            PackDensityFormula(cacheObject, objects) +
@@ -1701,7 +1710,6 @@ namespace Trinity.Components.Combat
 
                                     if (cacheObject.Distance < 35f && isInCowLevel)
                                     {
-                                        cacheObject.WeightInfo += $"WhiteListed Interactable Container (CowLevel)";
                                         cacheObject.Weight = MaxWeight;
                                         break;
                                     }
