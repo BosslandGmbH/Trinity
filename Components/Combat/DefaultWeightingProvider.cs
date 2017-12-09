@@ -1451,7 +1451,7 @@ namespace Trinity.Components.Combat
                                         break;
                                     }
 
-                                    if (cacheObject.ZDiff >= 5)
+                                    if (cacheObject.ZDiff >= 8)
                                     {
                                         cacheObject.WeightInfo += "Door beneath or above player";
                                         break;
@@ -1527,6 +1527,15 @@ namespace Trinity.Components.Combat
                                 // Fix for WhimsyShire Pinata
                                 if (GameData.ResplendentChestIds.Contains(cacheObject.ActorSnoId))
                                     cacheObject.Weight += 500d;
+
+                                // Gold Piles in the Goblin Real get high priority
+                                var isInGoblinRealm = Core.Player.WorldSnoId == (int)SNOWorld.p1_TGoblin_Realm;
+
+                                if (cacheObject.Distance < 35f && isInGoblinRealm)
+                                {
+                                    cacheObject.Weight = MaxWeight;
+                                    break;
+                                }
 
                                 cacheObject.Weight += 0.5 * (ObjectDistanceFormula(cacheObject) +
                                                            EliteMonsterNearFormula(cacheObject, elites) -
@@ -1697,11 +1706,10 @@ namespace Trinity.Components.Combat
                                     }
 
                                     // No point in doing Cow Level runs if we're running past the chests
-                                    var isInCowLevel = ZetaDia.Globals.WorldSnoId == 434649;
+                                    var isInCowLevel = ZetaDia.Globals.WorldSnoId == (int)SNOWorld.p2_TotallyNotACowLevel;
 
                                     if (cacheObject.Distance < 35f && isInCowLevel)
                                     {
-                                        cacheObject.WeightInfo += $"WhiteListed Interactable Container (CowLevel)";
                                         cacheObject.Weight = MaxWeight;
                                         break;
                                     }
@@ -2391,6 +2399,9 @@ namespace Trinity.Components.Combat
 
         public ContainerTypes GetContainerType(TrinityActor cacheObject)
         {
+            if (ZetaDia.Globals.WorldSnoId == (int)SNOWorld.p2_TotallyNotACowLevel)
+                return ContainerTypes.CowLevel;
+
             if (cacheObject.IsRareChest)
                 return ContainerTypes.RareChest;
 

@@ -155,7 +155,6 @@
     <Compile Include="Components\Adventurer\Game\Exploration\SceneMapping\RectangularRegion.cs" />
     <Compile Include="Components\Adventurer\Game\Exploration\SceneMapping\RegionGroup.cs" />
     <Compile Include="Components\Adventurer\Game\Exploration\SceneMapping\SceneDepth.cs" />
-    <Compile Include="Components\Adventurer\Game\Exploration\ScenesStorage.cs" />
     <Compile Include="Components\Adventurer\Game\Exploration\SplitArray.cs" />
     <Compile Include="Components\Adventurer\Game\Exploration\WorldScene.cs" />
     <Compile Include="Components\Adventurer\Game\Exploration\WorldSceneCell.cs" />

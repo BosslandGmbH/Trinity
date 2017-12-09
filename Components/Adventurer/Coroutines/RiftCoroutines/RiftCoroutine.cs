@@ -293,6 +293,8 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         private bool NotStarted()
         {
+            BotMain.SetCurrentStatusTextProvider(() => StatusText);
+
             if (!_experienceTracker.IsStarted) _experienceTracker.Start();
             SafeZerg.Instance.DisableZerg();
 
@@ -1231,18 +1233,21 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         private bool Completed()
         {
+            BotMain.SetCurrentStatusTextProvider(null);
             State = States.ReturningToTown;
             return false;
         }
 
         private bool Failed()
         {
+            BotMain.SetCurrentStatusTextProvider(null);
             Core.Logger.Error("[Rift] Failed to complete the rift.");
             return true;
         }
 
         private bool Finished()
         {
+            BotMain.SetCurrentStatusTextProvider(null);
             return true;
         }
 

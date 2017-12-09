@@ -6,8 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Exploration;
-using Zeta.Bot;
 using Zeta.Bot.Navigation;
+using Zeta.Common;
+using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Coroutines
 {
@@ -65,6 +66,14 @@ namespace Trinity.Components.Adventurer.Coroutines
             _allowReExplore = allowReExplore;
             _useIgnoreRegions = useIgnoreRegions;
             Id = Guid.NewGuid();
+            Core.Scenes.ScenesAdded += OnScenesAdded;
+        }
+
+        private void OnScenesAdded(List<WorldScene> provider)
+        {
+            // Clear the current destination when new scenes are added to force it to regenerate the current path.
+            Core.Logger.Debug("[Exploration] New scenes loaded, setting current destination to null");
+            _currentDestination = null;
         }
 
         public Guid Id { get; }
@@ -97,10 +106,10 @@ namespace Trinity.Components.Adventurer.Coroutines
         private ExplorationNode _currentDestination;
         private int _failedNavigationAttempts;
         private readonly Func<bool> _breakCondition;
-        private List<string> _ignoreScenes;
-        private bool _allowReExplore;
+        private readonly List<string> _ignoreScenes;
+        private readonly bool _allowReExplore;
         private DateTime _explorationDataMaxWaitUntil;
-        private bool _useIgnoreRegions;
+        private readonly bool _useIgnoreRegions;
 
         private bool NotStarted()
         {
@@ -112,8 +121,6 @@ namespace Trinity.Components.Adventurer.Coroutines
             return false;
         }
 
-        //private readonly WaitTimer _newNodePickTimer = new WaitTimer(TimeSpan.FromSeconds(60));
-
         private async Task<bool> Exploring()
         {
             if (_useIgnoreRegions)
@@ -121,11 +128,8 @@ namespace Trinity.Components.Adventurer.Coroutines
                 ExplorationHelpers.UpdateIgnoreRegions();
             }
 
-            if (_currentDestination == null || _currentDestination.IsVisited)// || _newNodePickTimer.IsFinished)
+            if (_currentDestination == null || _currentDestination.IsVisited)
             {
-                //_newNodePickTimer.Stop();
-                //_currentDestination = ExplorationHelpers.NearestWeightedUnvisitedNodeLocation(_levelAreaIds);
-
                 if (_explorationDataMaxWaitUntil != DateTime.MinValue && DateTime.UtcNow > _explorationDataMaxWaitUntil)
                 {
                     Core.Logger.Debug($"[Exploration] Timeout waiting for exploration data");
@@ -151,7 +155,29 @@ namespace Trinity.Components.Adventurer.Coroutines
                 {
                     _currentDestination.IsCurrentDestination = false;
                 }
+
                 var destination = ExplorationHelpers.NearestWeightedUnvisitedNode(_levelAreaIds);
+                if (destination != null)
+                {
+                    WorldScene destScene = destination.Scene;
+                    Vector3 destinationPos = destination.NavigableCenter;
+
+                    var exitPositions = destScene.ExitPositions;
+                    var connectedScenes = destScene.ConnectedScenes();
+                    var unconnectedExits = exitPositions.Where(ep => connectedScenes.FirstOrDefault(cs => cs.Direction == ep.Key) == null);
+
+                    if (destinationPos.Distance(ExplorationHelpers.PriorityPosition) >= 15)
+                    {
+                        if (!unconnectedExits.Any(ep => destinationPos.Distance(ep.Value) <= 15) &&
+                            ZetaDia.Minimap.IsExplored(destinationPos, AdvDia.CurrentWorldDynamicId))
+                        {
+                            destination.IsVisited = true;
+                            destination.IsKnown = true;
+                            return false;
+                        }
+                    }
+                }
+
                 if (destination == null)
                 {
                     Core.Logger.Debug($"[Exploration] No more unvisited nodes to explore, so we're done.");
