@@ -1529,9 +1529,9 @@ namespace Trinity.Components.Combat
                                     cacheObject.Weight += 500d;
 
                                 // Gold Piles in the Goblin Real get high priority
-                                var isGoblinRealm = ZetaDia.Globals.WorldSnoId == 379962;
+                                var isInGoblinRealm = Core.Player.WorldSnoId == (int)SNOWorld.p1_TGoblin_Realm;
 
-                                if (cacheObject.Distance < 35f && isGoblinRealm)
+                                if (cacheObject.Distance < 35f && isInGoblinRealm)
                                 {
                                     cacheObject.Weight = MaxWeight;
                                     break;
