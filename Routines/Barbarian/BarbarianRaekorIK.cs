@@ -24,7 +24,7 @@ namespace Trinity.Routines.Barbarian
             "Build that uses full IK set for damage bonus and Raekor's for Furious Charge damage";
 
         public string Author => "jubisman";
-        public string Version => "0.2";
+        public string Version => "0.2.1";
         public string Url => "http://www.diablofans.com/builds/88896-ik-raekor-charge-v2-0-gr100";
 
         public Build BuildRequirements => new Build
@@ -89,7 +89,7 @@ namespace Trinity.Routines.Barbarian
             if (TryPrimaryPower(out power))
                 return power;
 
-            Core.Logger.Log("walking to safespot because all other powers failed");
+            //Core.Logger.Log("walking to safespot because all other powers failed");
             return Walk(TargetUtil.GetSafeSpotPosition(20f));
         }
 
@@ -123,7 +123,8 @@ namespace Trinity.Routines.Barbarian
 
             // Fury dumping is useful as a way of healing (if you have Life Per Fury Spent on your gear), or as a means of keeping WotB up
             if (Player.CurrentHealthPct < EmergencyHealthPct ||
-                Skills.Barbarian.WrathOfTheBerserker.TimeSinceUse > 5000 && !Skills.Barbarian.WrathOfTheBerserker.CanCast())
+                Skills.Barbarian.WrathOfTheBerserker.TimeSinceUse > 5000 &&
+                !Skills.Barbarian.WrathOfTheBerserker.CanCast())
             {
                 //Core.Logger.Log("Casting AncientSpear to Restore Health/Reduce Cooldowns");
                 target = TargetUtil.GetBestClusterUnit();
@@ -150,77 +151,6 @@ namespace Trinity.Routines.Barbarian
             return position != Vector3.Zero;
         }
 
-        /*protected override bool ShouldFuriousCharge(out Vector3 position)
-        {
-            // Credit: phelon's raekor.
-
-            position = Vector3.Zero;
-            TrinityActor target = null;
-
-            if (!Skills.Barbarian.FuriousCharge.CanCast())
-                return false;
-
-            var targetGoal = Math.Floor(5 * Core.Player.CooldownReductionPct);
-            TrinityActor bestPierce = TargetUtil.GetBestPierceTarget(45);
-            var bestPierceCount = bestPierce?.NearbyUnitsWithinDistance(7) ?? 0;
-            TrinityActor bestTarget = TargetUtil.BestAoeUnit(45, true);
-            var bestTargetCount = bestTarget?.NearbyUnitsWithinDistance(7) ?? 0;
-            TrinityActor bestCluster = TargetUtil.GetBestClusterUnit(7, 45);
-            var bestClusterCount = bestCluster?.NearbyUnitsWithinDistance(7) ?? 0;
-
-            if (!Core.Buffs.HasCastingShrine)
-            {
-                if (bestTarget != null && TargetUtil.PierceHitsMonster(bestTarget.Position))
-                {
-                    if (bestTargetCount == 1 || bestTargetCount >= targetGoal)
-                    {
-                        position = GetPositionBehind(bestTarget.Position);
-                        return true;
-                    }
-                }
-
-                if (bestPierce != null && bestCluster != null && TargetUtil.PierceHitsMonster(bestPierce.Position) && TargetUtil.PierceHitsMonster(bestCluster.Position))
-                {
-                    if (bestPierceCount == 1 || bestPierceCount >= targetGoal &&
-                        bestClusterCount == 1 || bestClusterCount >= targetGoal)
-                    {
-                        if (bestClusterCount > bestPierceCount)
-                        {
-                            position = GetPositionBehind(bestCluster.Position);
-                            return true;
-                        }
-                        position = GetPositionBehind(bestPierce.Position);
-                        return true;
-                    }
-                    if (bestPierceCount != 1 && bestPierceCount < targetGoal &&
-                        (bestClusterCount == 1 || bestClusterCount >= targetGoal))
-                    {
-                        position = GetPositionBehind(bestCluster.Position);
-                        return true;
-                    }
-                }
-
-                if (bestPierce != null && TargetUtil.PierceHitsMonster(bestPierce.Position))
-                {
-                    if (bestClusterCount != 1 && bestClusterCount < targetGoal &&
-                        (bestPierceCount == 1 || bestPierceCount >= targetGoal))
-                    {
-                        position = GetPositionBehind(bestPierce.Position);
-                        return true;
-                    }
-                }
-
-            }
-
-            position = GetPositionBehind(CurrentTarget.Position);
-            return true;
-        }
-
-        private static Vector3 GetPositionBehind(Vector3 position)
-        {
-            return MathEx.CalculatePointFrom(position, Player.Position, Player.Position.Distance(position) + 4f);
-        }*/
-
         public TrinityPower GetDefensivePower() => GetBuffPower();
 
         public TrinityPower GetDestructiblePower() => DefaultDestructiblePower();
@@ -245,15 +175,16 @@ namespace Trinity.Routines.Barbarian
                 if (IsBlocked && Skills.Barbarian.FuriousCharge.Charges > 0)
                     return FuriousCharge(destination);
 
-                if (!IsBlocked && Skills.Barbarian.FuriousCharge.Charges > 1)
-                    return FuriousCharge(destination);
-
-                /*if (TargetUtil.UnitOrDestructibleInFrontOfMe(60f).Count > 0 &&
+                var chargeRange = Player.Position.Distance(destination);
+                if (TargetUtil.UnitOrDestructibleInFrontOfMe(chargeRange).Count > 3 &&
                     Skills.Barbarian.FuriousCharge.Charges > 0)
                 {
                     Core.Logger.Log("Charging through enemy/destructible since it refunds a charge.");
                     return FuriousCharge(destination);
-                }*/
+                }
+
+                if (!IsBlocked && Skills.Barbarian.FuriousCharge.Charges > 1)
+                    return FuriousCharge(destination);
             } 
 
             return Walk(destination);
