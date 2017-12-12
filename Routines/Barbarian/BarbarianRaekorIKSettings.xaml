@@ -46,7 +46,7 @@
           <GroupBox.Header>Furious Charge</GroupBox.Header>
           <StackPanel>
             <WrapPanel Margin="0,5,0,10">
-              <RadioButton ToolTip="Use vault whenever it makes sense"
+              <RadioButton ToolTip="Charge whenever it makes sense"
                                 Content="Anytime" IsChecked="{Binding DataContext.FuriousCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Default}"  />
               <RadioButton ToolTip="Use only while fighting monsters"
                                 Content="In combat" IsChecked="{Binding DataContext.FuriousCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=InCombat}" />
@@ -65,6 +65,20 @@
                             />
             </StackPanel>
           </StackPanel>
+        </GroupBox>
+        <GroupBox>
+          <GroupBox.Header>Fury Dumping</GroupBox.Header>
+            <StackPanel>
+              <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                      Tag="Health %"
+                      ToolTip="Cast Boulder Toss to dump Fury whenever below this health percentage"
+                      Interval="100" Maximum="100" Minimum="1" 
+                      SmallChange="1" LargeChange="5" 
+                      TickPlacement="BottomRight" TickFrequency="1"
+                      Value="{Binding DataContext.DumpHealthPct, Converter={StaticResource PercentConverter}}" 
+                      HorizontalAlignment="Stretch" Margin="2"
+              />
+            </StackPanel>
         </GroupBox>
         <GroupBox>
           <GroupBox.Header>Build Settings</GroupBox.Header>
