@@ -79,6 +79,9 @@ namespace Trinity.Routines.Crusader
             if (Player.IsInTown)
                 return null;
 
+            if (IsSteedCharging)
+                return null;
+
             if (AllowedToUse(Settings.Akarats, Skills.Crusader.AkaratsChampion) && ShouldAkaratsChampion())
                 return AkaratsChampion();
 
