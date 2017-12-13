@@ -102,6 +102,18 @@ namespace Trinity.Modules
             ItemEvents.OnItemStashed += item => RecordItemStats(Current.Stashed, item);
             ItemEvents.OnItemSold += item => RecordItemStats(Current.Sold, item);
 
+            // For the stats on the Main UI
+            ItemEvents.OnItemPickedUp += item =>
+            {
+                if (item.IsGold || item.IsGem)
+                    return;
+                GameEvents.FireItemLooted(item.AcdId);
+            };
+
+            ItemEvents.OnItemSalvaged += item => GameEvents.FireItemSalvaged(item.AcdId);
+            ItemEvents.OnItemStashed += item => GameEvents.FireItemStashed(item.AcdId);
+            ItemEvents.OnItemSold += item => GameEvents.FireItemSold(item.AcdId);
+
             IsWired = true;
         }
 

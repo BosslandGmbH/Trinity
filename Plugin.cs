@@ -93,6 +93,7 @@ namespace Trinity
                 return;
 
             Core.Init();
+            BotMain.OnStop += OnStop;
             TrinitySettings.InitializeSettings();
             SkillUtils.UpdateActiveSkills();            
             TabUi.InstallTab();
@@ -121,6 +122,7 @@ namespace Trinity
         public void OnDisabled()
         {
             IsEnabled = false;
+            BotMain.OnStop -= OnStop;
             TabUi.RemoveTab();
             HookManager.ReplaceTreeHooks();
             Navigator.PlayerMover = new DefaultPlayerMover();
@@ -134,9 +136,13 @@ namespace Trinity
             Core.Logger.Log($"is now DISABLED!");
         }
 
+        private static void OnStop(IBot bot)
+        {
+            BotMain.SetCurrentStatusTextProvider(null);
+        }
+
         public void OnShutdown()
         {
-
         }
 
     }
