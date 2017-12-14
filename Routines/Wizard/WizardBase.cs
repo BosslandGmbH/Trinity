@@ -446,7 +446,7 @@ namespace Trinity.Routines.Wizard
                 }
             }
 
-            return false;
+            return true;
         }
 
         // Mastery
