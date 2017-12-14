@@ -60,13 +60,14 @@
                                 TickPlacement="None" 
                                 Value="{Binding Path=DataContext.CastMagesPct, Converter={StaticResource PercentConverter}}" 
                                 HorizontalAlignment="Stretch" Margin="0"/>
-                    </StackPanel>
-                </GroupBox>
-                <GroupBox>
-                    <GroupBox.Header>Quick Cast 10 Mages</GroupBox.Header>
-                    <StackPanel>
-                        <CheckBox ToolTip="Cast the first 10 Mages as quickly as possible, then cast above Resource %" 
-                            IsChecked="{Binding DataContext.QuickCastMages}" Content="10 Mage Quick Casting"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                        Tag="Mages to Quick Cast"
+                        ToolTip="How many Mages should we Quick Cast"
+                                Interval="1000" Maximum="10" Minimum="0" 
+                                SmallChange="1" LargeChange="5"
+                                TickPlacement="None" 
+                                Value="{Binding Path=DataContext.MagesToQuickCast}" 
+                                HorizontalAlignment="Stretch" Margin="0"/>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox>
