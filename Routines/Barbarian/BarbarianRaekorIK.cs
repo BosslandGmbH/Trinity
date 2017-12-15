@@ -24,7 +24,7 @@ namespace Trinity.Routines.Barbarian
             "Build that uses full IK set for damage bonus and Raekor's for Furious Charge damage";
 
         public string Author => "jubisman";
-        public string Version => "0.2.1";
+        public string Version => "0.2.2";
         public string Url => "http://www.diablofans.com/builds/88896-ik-raekor-charge-v2-0-gr100";
 
         public Build BuildRequirements => new Build
@@ -122,7 +122,7 @@ namespace Trinity.Routines.Barbarian
                 return false;
 
             // Fury dumping is useful as a way of healing (if you have Life Per Fury Spent on your gear), or as a means of keeping WotB up
-            if (Player.CurrentHealthPct < EmergencyHealthPct ||
+            if (Player.CurrentHealthPct < Settings.DumpHealthPct ||
                 Skills.Barbarian.WrathOfTheBerserker.TimeSinceUse > 5000 &&
                 !Skills.Barbarian.WrathOfTheBerserker.CanCast())
             {
@@ -202,6 +202,7 @@ namespace Trinity.Routines.Barbarian
         {
             private int _clusterSize;
             private float _emergencyHealthPct;
+            private float  _dumpHealthPct;
 
             [DefaultValue(8)]
             public int ClusterSize
@@ -238,6 +239,17 @@ namespace Trinity.Routines.Barbarian
             {
                 base.LoadDefaults();
                 FuriousCharge = VaultDefaults.Clone();
+            }
+
+            #endregion
+
+            #region AncientSpear
+
+            [DefaultValue(0.8f)]
+            public float DumpHealthPct
+            {
+                get { return _dumpHealthPct; }
+                set { SetField(ref _dumpHealthPct, value); }
             }
 
             #endregion

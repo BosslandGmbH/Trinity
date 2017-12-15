@@ -455,6 +455,7 @@
     <Compile Include="Routines\Necromancer\NecromancerDefault.cs" />
     <Compile Include="Routines\Necromancer\NecromancerBase.cs" />
     <Compile Include="Routines\Necromancer\NecromancerRathmaFacerollGC.cs" />
+    <Compile Include="Routines\Wizard\WizardRashaChannelMeteor.cs" />
     <Compile Include="Routines\Wizard\WizardManaldCoE.cs" />
     <Compile Include="Routines\Wizard\WizardParalysisArchonBlizzard.cs" />
     <Compile Include="Routines\Wizard\WizardParalysisArchonHydra.cs" />
@@ -772,6 +773,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Routines\Barbarian\BarbarianRaekorIKSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Routines\Wizard\WizardRashaChannelMeteorSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

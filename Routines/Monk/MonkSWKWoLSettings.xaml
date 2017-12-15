@@ -65,7 +65,7 @@
           <GroupBox.Header>Dashing Strike</GroupBox.Header>
           <StackPanel>
             <WrapPanel Margin="0,5,0,10">
-              <RadioButton ToolTip="Use vault whenever it makes sense"
+              <RadioButton ToolTip="Dash whenever it makes sense"
                                          Content="Anytime" IsChecked="{Binding DataContext.DashingStrike.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Default}"  />
               <RadioButton ToolTip="Use only while fighting monsters"
                                          Content="In combat" IsChecked="{Binding DataContext.DashingStrike.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=InCombat}" />

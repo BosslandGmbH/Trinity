@@ -14,8 +14,9 @@
       </ResourceDictionary.MergedDictionaries>
       <converters:PercentConverter x:Key="PercentConverter" />
       <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
-      <converters:EnumVisibilityConverter x:Key="HiddenWhenEnumTrueConverter" Reverse="True" />
-      <converters:EnumVisibilityConverter x:Key="VisibleWhenEnumTrueConverter"  />
+      <converters:EnumVisibilityConverter x:Key="HiddenWhenEnumTrueConverter" Reverse="True"/>
+      <converters:EnumVisibilityConverter x:Key="VisibleWhenEnumTrueConverter" />
+      <converters:FlagsToBoolConverter x:Key="FlagsToValueConverter" />
     </ResourceDictionary>
   </UserControl.Resources>
   <Border Padding="10">
@@ -43,52 +44,30 @@
           </StackPanel>
         </GroupBox>
         <GroupBox>
-          <GroupBox.Header>Furious Charge</GroupBox.Header>
+          <GroupBox.Header>Teleport</GroupBox.Header>
           <StackPanel>
             <WrapPanel Margin="0,5,0,10">
-              <RadioButton ToolTip="Charge whenever it makes sense"
-                                Content="Anytime" IsChecked="{Binding DataContext.FuriousCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Default}"  />
+              <RadioButton ToolTip="Teleport whenever it makes sense"
+                                         Content="Anytime" IsChecked="{Binding DataContext.Teleport.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Default}"  />
               <RadioButton ToolTip="Use only while fighting monsters"
-                                Content="In combat" IsChecked="{Binding DataContext.FuriousCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=InCombat}" />
+                                         Content="In combat" IsChecked="{Binding DataContext.Teleport.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=InCombat}" />
               <RadioButton  ToolTip="Use only while NOT fighting monsters"
-                                Content="Out of combat" IsChecked="{Binding DataContext.FuriousCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=OutOfCombat}" />
+                                          Content="Out of combat" IsChecked="{Binding DataContext.Teleport.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=OutOfCombat}" />
             </WrapPanel>
             <StackPanel>
               <Slider Template="{DynamicResource LabelledSliderEditable}" 
-                            Tag="Recast delay"
-                            ToolTip="The time between casts"
-                            Interval="100" Maximum="6000" Minimum="250" 
-                            SmallChange="100" LargeChange="100" 
-                            TickPlacement="BottomRight" TickFrequency="100"
-                            Value="{Binding DataContext.FuriousCharge.RecastDelayMs}" 
-                            HorizontalAlignment="Stretch" Margin="2"
+                                    Tag="Recast delay"
+                                    ToolTip="The time between casts"
+                                    Interval="100" Maximum="4000" Minimum="200" 
+                                    SmallChange="100" LargeChange="100" 
+                                    TickPlacement="BottomRight" TickFrequency="100"
+                                    Value="{Binding DataContext.Teleport.RecastDelayMs}" 
+                                    HorizontalAlignment="Stretch" Margin="2"
                             />
             </StackPanel>
-          </StackPanel>
-        </GroupBox>
-        <GroupBox>
-          <GroupBox.Header>Fury Dumping</GroupBox.Header>
-            <StackPanel>
-              <Slider Template="{DynamicResource LabelledSliderEditable}" 
-                      Tag="Health %"
-                      ToolTip="Cast Boulder Toss to dump Fury whenever below this health percentage"
-                      Interval="100" Maximum="100" Minimum="1" 
-                      SmallChange="1" LargeChange="5" 
-                      TickPlacement="BottomRight" TickFrequency="1"
-                      Value="{Binding DataContext.DumpHealthPct, Converter={StaticResource PercentConverter}}" 
-                      HorizontalAlignment="Stretch" Margin="2"
-              />
-            </StackPanel>
-        </GroupBox>
-        <GroupBox>
-          <GroupBox.Header>Build Settings</GroupBox.Header>
-          <StackPanel>
-            <TextBlock TextWrapping="Wrap" Margin="10,5,0,0">This build is highly specialized and so we're using what we believe to be the optimal settings. If there is something specific you think should be configurable please let us know.</TextBlock>
           </StackPanel>
         </GroupBox>
       </StackPanel>
     </Grid>
   </Border>
 </UserControl>
-
-    
