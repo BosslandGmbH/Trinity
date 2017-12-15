@@ -160,8 +160,6 @@ namespace Trinity.Components.Adventurer.Coroutines
                 var destination = ExplorationHelpers.NearestWeightedUnvisitedNode(_levelAreaIds);
                 if (destination != null)
                 {
-                if (destination != null)
-                {
                     WorldScene destScene = destination.Scene;
                     Vector3 destinationPos = destination.NavigableCenter;
 
