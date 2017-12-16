@@ -168,6 +168,17 @@ namespace Trinity.Routines.Barbarian
             return base.ShouldWrathOfTheBerserker();
         }
 
+        protected override bool ShouldSprint()
+        {
+            if (!Skills.Barbarian.Sprint.CanCast())
+                return false;
+
+            if (Skills.Barbarian.Sprint.TimeSinceUse < 3750)
+                return false;
+
+            return true;
+        }
+
         public TrinityPower GetMovementPower(Vector3 destination)
         {
             if (CanChargeTo(destination) && AllowedToUse(Settings.FuriousCharge, Skills.Barbarian.FuriousCharge))
