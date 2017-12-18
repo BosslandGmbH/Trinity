@@ -59,10 +59,7 @@ namespace Trinity.Routines.Crusader
             if (ShouldSlash(out target))
                 return Slash(target);
 
-            if (IsNoPrimary)
-                return Walk(CurrentTarget);
-
-            return null;
+            return Walk(CurrentTarget);
         }
 
         /// <summary> Only cast when avoiding. </summary>
@@ -76,7 +73,7 @@ namespace Trinity.Routines.Crusader
         /// </summary>
         public TrinityPower GetBuffPower()
         {
-            if (Player.IsInTown)
+            if (!TargetUtil.AnyMobsInRange(180f))
                 return null;
 
             if (AllowedToUse(Settings.Akarats, Skills.Crusader.AkaratsChampion) && ShouldAkaratsChampion())
@@ -106,14 +103,6 @@ namespace Trinity.Routines.Crusader
             if (!Settings.MoveToGroundBuffs)
                 return false;
             
-            // Don't try to move to the buff if the grid is flagged for avoidance where the buff is.
-            if (_lastBuffPosition != Vector3.Zero &&
-                Core.Avoidance.Grid.IsLocationInFlags(_lastBuffPosition, AvoidanceFlags.Avoidance))
-            {
-                _lastBuffPosition = Vector3.Zero;
-                return false;
-            }
-
             if (_lastBuffPosition != Vector3.Zero && !Core.Grids.CanRayWalk(Player.Position, _lastBuffPosition))
             {
                 _lastBuffPosition = Vector3.Zero;
