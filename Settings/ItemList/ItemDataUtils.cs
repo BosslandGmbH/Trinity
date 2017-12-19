@@ -901,6 +901,7 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandSword, ItemProperty.BaseMaxDamage), new ItemStatRange { AncientMax = 2325, AncientMin = 1582, Max = 1788, Min = 1177 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Scythe, ItemProperty.BaseMaxDamage), new ItemStatRange {AncientMax = 1940, AncientMin = 1318, Max = 1490, Min = 981 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandScythe, ItemProperty.BaseMaxDamage), new ItemStatRange {AncientMax = 2325, AncientMin = 1582, Max = 1788, Min = 1177 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Ring, ItemProperty.BaseMaxDamage), new ItemStatRange {AncientMax = 210, AncientMin = 105, Max = 160, Min = 80} },
 
             // Percent Damage
 

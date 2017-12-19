@@ -9,6 +9,8 @@ using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Trinity.UI;
 using Zeta.Common;
+using System.Linq;
+using Trinity.Settings;
 
 namespace Trinity.Routines.Monk
 {
@@ -19,7 +21,7 @@ namespace Trinity.Routines.Monk
         public string DisplayName => "DatModz's WK WoL Monk";
         public string Description => "DatModz - GR 110+ Sunwuko WoL Monk: This is a well rounded Solo Pushing Build that works well at high level g-rifts";
         public string Author => "jubisman";
-        public string Version => "0.6";
+        public string Version => "0.7";
         public string Url => "http://www.diablofans.com/builds/96442-datmodz-gr-110-sunwuko-wol-monk";
 
         public Build BuildRequirements => new Build
@@ -36,6 +38,62 @@ namespace Trinity.Routines.Monk
         };
 
         #endregion
+
+        public TrinityPower GetBuffPower()
+        {
+            var closeUnit = HostileMonsters.FirstOrDefault(u => u.Distance < 40f);
+            if (ShouldRefreshSpiritGuardsBuff && closeUnit != null && !Player.IsInTown)
+            {
+                //Core.Logger.Log(LogCategory.Routine, "Need Spirit Gaurds Buff");
+
+                if (Skills.Monk.FistsOfThunder.IsActive)
+                    return new TrinityPower(Skills.Monk.FistsOfThunder, 3f);
+
+                else if (Skills.Monk.DeadlyReach.IsActive)
+                    return new TrinityPower(Skills.Monk.DeadlyReach, 3f);
+
+                else if (Skills.Monk.CripplingWave.IsActive)
+                    return new TrinityPower(Skills.Monk.CripplingWave, 3f);
+
+                else if (Skills.Monk.WayOfTheHundredFists.IsActive)
+                    return new TrinityPower(Skills.Monk.WayOfTheHundredFists, 3f);
+            }
+
+            if (ShouldSweepingWind())
+                return SweepingWind();
+
+            if (ShouldMantraOfConviction())
+                return MantraOfConviction();
+
+            if (ShouldMantraOfHealing())
+                return MantraOfConviction();
+
+            if (ShouldMantraOfRetribution())
+                return MantraOfRetribution();
+
+            if (ShouldMantraOfSalvation())
+                return MantraOfSalvation();
+
+            if (ShouldEpiphany())
+                return Epiphany();
+
+            if (ShouldMysticAlly())
+                return MysticAlly();
+
+            if (ShouldBreathOfHeaven())
+                return BreathOfHeaven();
+
+            if (ShouldSerenity())
+                return Serenity();
+
+            if (ShouldBlindingFlash())
+                return BlindingFlash();
+
+            if (ShouldInnerSanctuary())
+                return InnerSanctuary();
+
+            return null;
+        }
 
         public TrinityPower GetOffensivePower()
         {
@@ -72,6 +130,34 @@ namespace Trinity.Routines.Monk
             }
 
             return false;
+        }
+
+        protected override bool ShouldDashingStrike(out Vector3 position)
+        {
+            position = Vector3.Zero;
+
+            if (!Skills.Monk.DashingStrike.CanCast())
+                return false;
+
+            if (Skills.Monk.DashingStrike.TimeSinceUse < 750)
+                return false;
+
+            if (!AllowedToUse(Settings.DashingStrike, Skills.Monk.DashingStrike))
+                return false;
+
+            Vector3 bestBuffedPosition;
+            var bestClusterPoint = TargetUtil.GetBestClusterPoint();
+
+            if (TargetUtil.BestBuffPosition(50f, bestClusterPoint, false, out bestBuffedPosition) &&
+                Player.Position.Distance(bestBuffedPosition) > 10f && bestBuffedPosition != Vector3.Zero)
+            {
+                Core.Logger.Log($"Found buff position - distance: {Player.Position.Distance(bestBuffedPosition)} ({bestBuffedPosition})");
+                position = bestBuffedPosition;
+
+                return position != Vector3.Zero;
+            }
+
+            return true;
         }
 
         protected override bool ShouldWaveOfLight(out TrinityActor target)
@@ -120,44 +206,6 @@ namespace Trinity.Routines.Monk
 
         public TrinityPower GetDefensivePower() => GetBuffPower();
 
-        public TrinityPower GetBuffPower()
-        {
-            if (ShouldSweepingWind())
-                return SweepingWind();
-
-            if (ShouldMantraOfConviction())
-                return MantraOfConviction();
-
-            if (ShouldMantraOfHealing())
-                return MantraOfConviction();
-
-            if (ShouldMantraOfRetribution())
-                return MantraOfRetribution();
-
-            if (ShouldMantraOfSalvation())
-                return MantraOfSalvation();
-
-            if (ShouldEpiphany())
-                return Epiphany();
-
-            if (ShouldMysticAlly())
-                return MysticAlly();
-
-            if (ShouldBreathOfHeaven())
-                return BreathOfHeaven();
-
-            if (ShouldSerenity())
-                return Serenity();
-
-            if (ShouldBlindingFlash())
-                return BlindingFlash();
-
-            if (ShouldInnerSanctuary())
-                return InnerSanctuary();
-
-            return null;
-        }
-
         public TrinityPower GetDestructiblePower() => DefaultDestructiblePower();
 
         public TrinityPower GetMovementPower(Vector3 destination)
@@ -166,34 +214,6 @@ namespace Trinity.Routines.Monk
                 return DashingStrike(destination);
 
             return Walk(destination);
-        }
-
-        protected override bool ShouldDashingStrike(out Vector3 position)
-        {
-            position = Vector3.Zero;
-
-            if (!Skills.Monk.DashingStrike.CanCast())
-                return false;
-
-            if (Skills.Monk.DashingStrike.TimeSinceUse < 750)
-                return false;
-
-            if (!AllowedToUse(Settings.DashingStrike, Skills.Monk.DashingStrike))
-                return false;
-
-            Vector3 bestBuffedPosition;
-            var bestClusterPoint = TargetUtil.GetBestClusterPoint();
-
-            if (TargetUtil.BestBuffPosition(40f, bestClusterPoint, false, out bestBuffedPosition) &&
-                bestBuffedPosition != Vector3.Zero)
-            {
-                Core.Logger.Log($"Found buff position - distance: {Player.Position.Distance(bestBuffedPosition)} ({bestBuffedPosition})");
-                position = bestBuffedPosition;
-
-                return position != Vector3.Zero;
-            }
-
-            return false;
         }
 
         protected override bool ShouldEpiphany()

@@ -230,7 +230,10 @@ namespace Trinity.Framework.Avoidance
         private static bool GetShouldKite()
         {
             if (Core.Buffs.HasInvulnerableShrine)
+            {
+                Core.Logger.Debug(LogCategory.Avoidance, "Not Kiting because invincible");
                 return false;
+            }
 
             if (Core.Player.IsInTown)
                 return false;
@@ -291,7 +294,7 @@ namespace Trinity.Framework.Avoidance
             var isAtKiteHealth = playerHealthPct <= TrinityCombat.Routines.Current.KiteHealthPct;
             if (isAtKiteHealth && TargetZDif < 4 && TrinityCombat.Routines.Current.KiteMode != KiteMode.Never)
             {
-                var canSeeTarget = TrinityCombat.Targeting.CurrentTarget == null || Core.Avoidance.Grid.CanRayCast(ZetaDia.Me.Position, TrinityCombat.Targeting.CurrentTarget.Position);
+                var canSeeTarget = TrinityCombat.Targeting.CurrentTarget != null || Core.Avoidance.Grid.CanRayCast(ZetaDia.Me.Position, TrinityCombat.Targeting.CurrentTarget.Position);
                 if (canSeeTarget)
                 {
                     if (Core.Grids.Avoidance.IsStandingInFlags(AvoidanceFlags.KiteFrom))
