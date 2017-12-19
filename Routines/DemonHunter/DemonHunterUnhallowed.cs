@@ -130,7 +130,7 @@ namespace Trinity.Routines.DemonHunter
             if (!Skills.DemonHunter.Multishot.CanCast())
                 return false;
 
-            if (!TargetUtil.AnyMobsInRange(80f))
+            if (!TargetUtil.AnyMobsInRange(120f))
                 return false;
 
             target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
@@ -147,7 +147,7 @@ namespace Trinity.Routines.DemonHunter
             if (!ShouldRefreshBastiansGenerator && Player.PrimaryResource > PrimaryEnergyReserve)
                 return false;
 
-            if (!TargetUtil.AnyMobsInRange(60f))
+            if (!TargetUtil.AnyMobsInRange(120f))
                 return false;
 
             target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
