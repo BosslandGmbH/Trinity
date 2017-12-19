@@ -2,6 +2,7 @@
 using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Trinity.Components.Coroutines.Town;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Actors.Attributes;
@@ -58,8 +59,12 @@ namespace Trinity.Framework.Actors.Properties
             actor.RequiredLevel = Math.Max(actor.Attributes.RequiredLevel, actor.Attributes.ItemLegendaryItemLevelOverride);
             actor.IsCrafted = attributes.IsCrafted;
             actor.IsVendorBought = attributes.IsVendorBought;
-            actor.IsAccountBound = attributes.ItemBoundToAnnId > 0;
-            actor.IsTradeable = attributes.IsTradeable;
+            actor.IsAccountBound = attributes.ItemBoundToACDId > 0;
+            actor.IsTradeable = attributes.ItemTradeEndTime != 0;
+
+            int gameTick = ZetaDia.Globals.GameTick;
+            int tradeEndTime = attributes.ItemTradeEndTime <= gameTick ? 0 : attributes.ItemTradeEndTime - gameTick;
+            actor.ItemTradeEndTime = TimeSpan.FromSeconds(tradeEndTime/60);
 
             var realname = GetName(actor.GameBalanceId);
             actor.Name = string.IsNullOrEmpty(realname) ? actor.InternalName : realname;
@@ -113,7 +118,7 @@ namespace Trinity.Framework.Actors.Properties
                 actor.IsPickupNoClick = GameData.NoPickupClickItemTypes.Contains(actor.TrinityItemType) || GameData.NoPickupClickTypes.Contains(actor.Type);
                 actor.IsMyDroppedItem = DropItems.DroppedItemAnnIds.Contains(actor.AnnId);
                 actor.CanPickupItem = CanPickupItem(actor);
-                actor.IsItemAssigned = actor.Attributes.ItemBoundToAnnId == 0 && actor.Attributes.ItemAssignedHero == ZetaDia.Service.Hero.HeroId;
+                actor.IsItemAssigned = actor.Attributes.ItemBoundToACDId == 0 && actor.Attributes.ItemAssignedHero == ZetaDia.Service.Hero.HeroId;
             }
 
             if (actor.Type == TrinityObjectType.Gold)
@@ -236,29 +241,19 @@ namespace Trinity.Framework.Actors.Properties
             if (actor.InventorySlot != InventorySlot.None)
                 return false;
 
-            if (actor.Attributes != null)
+            if (actor.Attributes?.ItemBoundToACDId > 0)
             {
-                if (actor.Attributes.ItemBoundToAnnId != 0 && actor.Attributes.ItemBoundToAnnId != -1)
-                {
-                    return actor.Attributes.ItemBoundToAnnId == Core.Actors.Me?.AnnId;
-                }
-
-                if (actor.Attributes.ItemAssignedHero == ZetaDia.Service.Hero?.HeroId)
-                {
-                    return true;
-                }
+                return actor.Attributes.ItemBoundToACDId == Core.Actors.Me?.AcdId;
             }
 
             if (actor.ItemQualityLevel >= ItemQuality.Legendary || actor.IsCraftingReagent)
             {
-                return actor.Attributes != null && (!actor.Attributes.IsTradeable || actor.Attributes.ItemTradePlayerLow.Any(a => a == ZetaDia.Storage.PlayerDataManager.ActivePlayerData.TradingPlayerACDId));
+                return actor.Attributes != null && actor.IsTradeable;
             }
 
             if (actor.IsEquipment && actor.ItemQualityLevel <= ItemQuality.Rare6)
-            {
                 return true;
-            }
-
+            
             return false;
         }
     }
