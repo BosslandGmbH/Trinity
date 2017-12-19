@@ -495,6 +495,7 @@ namespace Trinity.Framework.Reference
             // Needed for A5 bounty clicky on death orbs
             //ActorSnoId=334466 AnimSnoId=x1_Death_Orb_Event_Worldstone_idle TargetedCount=2 Type=Unit
             { 334466, TrinityObjectType.Interactable },
+            { 309432, TrinityObjectType.Interactable },
             { 432258, TrinityObjectType.Interactable },
             { 221574, TrinityObjectType.Interactable} //a1dun_Leoric_IronMaiden_Event, Type=Door GizmoType=Door ActorSnoId=221574
             //{ 54882, ObjectType.Door } //a3dun_Keep_Door_Wooden_A, Type=Interactable GizmoType=Door
@@ -1891,9 +1892,7 @@ namespace Trinity.Framework.Reference
             (int)SNOActor.bastionsKeepGuard_Melee_A_02_BlazeOfGlory,        // NPC you can't attack.
             (int)SNOActor.Bucket_Crane_caOut_Mining_Breakable,              // Obstacle in Dahlgur Oasis.
             (int)SNOActor.trDun_Cath_Bannister_x6,                          // Unbreakable obstacle.
-            (int)SNOActor.x1_Graveyard_GraveRobert,                         // NPC for the bounty: Grave Robert.
             (int)SNOActor.A2C2DyingGhostGuy,                                // NPC for bounty: The Guardian Spirits.
-            (int)SNOActor.A1_UniqueVendor_Armorer,                          // NPC at the end of bounty: Scavenged Scabbard 
             (int)SNOActor.Angel_Trooper_A,                                  // NPC for bounty: Lost Host
             (int)SNOActor.x1_SurvivorCaptain_Rescue_Guards,                 // NPC for bounty: The Last Stand
             (int)SNOActor.bastionsKeepGuard_Melee_A_02_NPC_RescueEscort,    
@@ -1952,8 +1951,6 @@ namespace Trinity.Framework.Reference
             (int)SNOActor.x1_PandExt_Breakable_Angel_B, // x1_PandExt_Breakable_Angel_B-159982 (338281)
 
             (int)SNOActor.a4dunSpire_Interactives_Izual_Ice_Barrier_A,
-            //209133, //TentacleLord
-            //(int)SNOActor.trDun_Cath_Gate_D_UdderChaos, // Door that is locked until you talk to cow king
 
             (int)SNOActor.trDun_Cath_Braizer_Trap, // hanging chandelier triggered by trap switch
 
@@ -2095,23 +2092,26 @@ namespace Trinity.Framework.Reference
             // Bulba
             430733, //A1 Templar Inquisition
             432259, //A1 The Triune Reborn
-            434366, //A1 : Wortham Survivors
-            432770, //A1: Queen's Desert
-            433051, //A2: Prisoners of the Cult
-            432331, //A2: Blood and Iron
-            432885, //A2: The Ancient Devices
-            433184, //A3: The Lost Patrol
-            433295, //A3: The Demon Gates
+            //434366, //A1 : Wortham Survivors
+            //432770, //A1: Queen's Desert
+            //433051, //A2: Prisoners of the Cult
+            //432331, //A2: Blood and Iron
+            //432885, //A2: The Ancient Devices
+            //433184, //A3: The Lost Patrol
+            //433295, //A3: The Demon Gates
             //433385, //A3: Catapult Command (It's a switch instead of chest, so might be pre 2.2 bounty) // needed for quest. 'catapault command'
-            433402, //A4: Hell Portals
-            433124, //A4: Tormented Angels
-            433246, //A5: Death's Embrace
-            433316, //A5: Rathma's Gift
+            //433402, //A4: Hell Portals
+            //433124, //A4: Tormented Angels
+            //433246, //A5: Death's Embrace
+            //433316, //A5: Rathma's Gift
+
+			356805,  //A5
+			193154,  //A4
 
             435630, // Pinger 1
             434971, // Pinger 2
 
-            175603, //A3 - Oasis - a2dun_Aqd_Act_Waterwheel_Lever_A_01_WaterPuzzle
+            //175603, //A3 - Oasis - a2dun_Aqd_Act_Waterwheel_Lever_A_01_WaterPuzzle
 
             287208, // X1_Westm_Door_Giant_Closed_A
 
@@ -2249,21 +2249,24 @@ namespace Trinity.Framework.Reference
 
         public static Dictionary<int, float> CustomObjectRadius { get; } = new Dictionary<int, float>
         {
-            {56686, 4},
-            {52685, 4},
-            {54882, 40},
-            {3349, 25}, // Belial
-            {225270, 35},
-            {180575, 10},  // Diablo Arena Health Well
-            {375111, 45f}, // A5 x1_Death_Orb_Master_Monster
-            {301177, 15f}, // x1_PandExt_Time_Activator
-            {368515, 5f}, // A5 Nephalem Switch -  Passage to Corvus
-            {309432, 37f}, // x1_westm_Bridge
-            {54850, 14f}, // a3dun_Keep_SiegeTowerDoor
-            {325136, 15f},
-            {210120, 20f},//a4dun_Garden_Corruption_Monster
-            {210268, 20f},//a4dun_Garden_Corruption_HellRift_Monster
-            {360111, 20f},//a4dun_Garden_Corruption_Monster_Despair
+            {(int) SNOActor.a3dun_Keep_Bridge_Switch, 4},
+            {(int) SNOActor.a3dun_Keep_Bridge, 4},
+            {(int) SNOActor.a3dun_Keep_Door_Wooden_A, 40},
+            {(int) SNOActor.Belial, 25},
+            {(int) SNOActor.SpiderQueen, 10},
+            {(int) SNOActor.a4dun_Garden_Purification_Well_Enlightened, 35},
+            {(int) SNOActor.a4dun_DIablo_Arena_Health_Well, 10},
+            {(int) SNOActor.x1_Death_Orb_Master_Monster, 45f},
+            {(int) SNOActor.x1_PandExt_Time_Activator, 15f},
+            {(int) SNOActor.x1_Catacombs_Nephalem_Event_Switch, 5f},
+            {(int) SNOActor.x1_westm_Bridge, 40f},
+            {(int) SNOActor.a3dun_Keep_SiegeTowerDoor_A, 14f},
+            {(int) SNOActor.x1_Malthael_DeathFogMonster, 15f},
+            {(int) SNOActor.a4dun_Garden_Corruption_Monster, 20f},
+            {(int) SNOActor.a4dun_Garden_Corruption_HellRift_Monster, 20f},
+            {(int) SNOActor.a4dun_Garden_Corruption_Monster_Despair, 20f},
+            {(int) SNOActor.p6_Event_Moor_BloodCollection_Altar, 22f},
+            {(int) SNOActor.Rockworm_Stationary_QueenWorm, 12f}
         };
 
         public static Dictionary<int, float> DefaultAvoidanceAnimationCustomRadius { get; } = new Dictionary<int, float>()

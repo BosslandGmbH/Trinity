@@ -16,7 +16,6 @@ using Trinity.UI;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Zeta.Bot.Navigation;
 
 
 namespace Trinity.Routines.Necromancer
@@ -28,7 +27,7 @@ namespace Trinity.Routines.Necromancer
         public string DisplayName => "Necromancer Rathma Faceroll GC";
         public string Description => "Necromancer Rathma Faceroll Glass Cannon - Stay away I'm very fragile";
         public string Author => "Bantou";
-        public string Version => "1.3.1";
+        public string Version => "1.3.4rs";
         public string Url => "http://www.diablofans.com/builds/91398-rathma-faceroll-summoner-gr100-new-video-gr100";
         public Build BuildRequirements => new Build
         {
@@ -60,8 +59,8 @@ namespace Trinity.Routines.Necromancer
 
         #endregion
 
-        private const float CombatRange = 60f;
-        private const float TargetRange = 65f;
+        private const float CombatRange = 70f;
+        private const float TargetRange = 75f;
         private const float GetGlobesPct = 0.7f;
 
         public override float TrashRange => CombatRange;
@@ -70,10 +69,7 @@ namespace Trinity.Routines.Necromancer
         public override float ShrineRange => 40f;
         public override float ClusterRadius => 15f;
 
-        private DateTime CombatBlockedTime = DateTime.UtcNow;
-        private DateTime CombatProgressBlockedTime = DateTime.UtcNow;
-        private DateTime CombatHealthBlockedTime = DateTime.UtcNow;
-        private DateTime NonCombatBlockedTime = DateTime.UtcNow;
+        private TrinityActor LastDecrepifyTarget = null;
 
         private TrinityPower MySkeletalMage(TrinityActor target)
             => new TrinityPower(Skills.Necromancer.SkeletalMage, 60f, target.AcdId);
@@ -82,7 +78,16 @@ namespace Trinity.Routines.Necromancer
 
         private bool InCombatState()
         {
-            return IsInCombat;
+            TrinityActor target;
+
+            if (!IsInCombat && ClusterSize > 1)
+                return false;
+
+            target = FindClosestTarget();
+            if (IsValidTarget(target) && target.Distance < CombatRange)
+                return true;
+
+            return false;
         }
 
         public TrinityPower GetOffensivePower()
@@ -90,7 +95,8 @@ namespace Trinity.Routines.Necromancer
             TrinityPower power;
             TrinityActor target;
 
-            TryMovementPower();
+            if (TryMovementPower(out power))
+                return power;
 
             if (TryCursePower(out power))
                 return power;
@@ -101,45 +107,13 @@ namespace Trinity.Routines.Necromancer
             if (ShouldApplyCurseWithScythe() && ShouldGrimScythe(out target))
                 return GrimScythe(target);
 
-            if (TryCorpsePower(out power))
-                return power;
-
             if (TryReanimationPower(out power))
                 return power;
 
             if (MyTrySecondaryPower(out power))
                 return power;
 
-            if (TryPrimaryPower(out power))
-                return power;
-
-            return null;
-        }
-
-        public TrinityPower MyGetOffensivePower()
-        {
-            TrinityPower power;
-            TrinityActor target;
-
-            if (!IsInCombat)
-                return null;
-
-            if (TryCursePower(out power))
-                return power;
-
-            if (TryBloodPower(out power))
-                return power;
-
-            if (ShouldApplyCurseWithScythe() && ShouldGrimScythe(out target))
-                return GrimScythe(target);
-
             if (TryCorpsePower(out power))
-                return power;
-
-            if (TryReanimationPower(out power))
-                return power;
-
-            if (MyTrySecondaryPower(out power))
                 return power;
 
             if (TryPrimaryPower(out power))
@@ -217,36 +191,23 @@ namespace Trinity.Routines.Necromancer
 
         public TrinityPower GetMovementPower(Vector3 destination)
         {
-            TrinityPower power;
             TrinityActor target;
+            TrinityPower power;
 
             if (!IsInCombat || CurrentTarget != null && CurrentTarget.IsElite && CurrentTarget.Position.Distance(destination) <= 10f)
             {
                 if (TryBloodrushMovement(destination, out power))
                     return power;
             }
-            target = FindClosestTarget();
-            if (Player.IsGhosted)
+            if (ShouldNoCombatMove(out target))
+                return Walk(target);
+            if (ShouldStopMovement())
             {
-                Core.Avoidance.Avoider.TryGetSafeSpot(out destination);
-                return Walk(destination);
+                if (TryOffensivePower(out power))
+                    return power;
+                return Walk(Player.Position);
             }
-            if ((IsValidTarget(target) && target.Position.Distance(Player.Position) > MinimumRange) || (Core.Rift.IsNephalemRift && Core.Rift.IsGaurdianSpawned && IgnoreRange) || (!IsInCombat && !Core.Rift.IsGaurdianSpawned) || Core.Avoidance.InAvoidance(Player.Position))
-            {
-                target = FindHealthGlobe();
-                if ((((Legendary.ReapersWraps.IsEquipped || Legendary.ReapersWraps.IsEquippedInCube) && Player.PrimaryResourcePct < GetGlobesPct) || (Player.CurrentHealthPct < EmergencyHealthPct && CollectForHealth)) && !IsInCombat && target != null && !Core.Avoidance.InAvoidance(Player.Position) && DateTime.Compare(DateTime.UtcNow, NonCombatBlockedTime) > 0)
-                {
-                    if (IsBlocked)
-                        NonCombatBlockedTime = DateTime.UtcNow.AddMilliseconds(10000);
-                    else
-                        return Walk(target);
-                }
-                return Walk(destination);
-            }
-            if (TryOffensivePower(out power))
-                return power;
-            // Try to walk to myself so as not to return null.
-            return Walk(Player.Position);
+            return Walk(destination);
         }
 
         #region DecisionHelpers
@@ -303,17 +264,17 @@ namespace Trinity.Routines.Necromancer
             return goblin ?? boss ?? elite ?? minion ?? trash ?? CurrentTarget;
         }
 
-        private TrinityActor FindClusterTarget(float range = TargetRange)
+        private TrinityActor FindClusterTarget(float radius = 6, float range = TargetRange)
         {
-            return Core.Targets.Where(u => !u.IsPlayer && u.IsUnit && u.Weight > 0 && u.IsHostile && u.HitPoints > 0 && u.Distance < range).OrderBy(u => u.NearbyUnitsWithinDistance(6f)).FirstOrDefault() ?? CurrentTarget;
+            return Core.Targets.Where(u => !u.IsPlayer && u.IsUnit && u.Weight > 0 && u.IsHostile && u.HitPoints > 0 && u.Distance < range).OrderBy(u => u.NearbyUnitsWithinDistance(radius)).FirstOrDefault() ?? CurrentTarget;
         }
 
-        private TrinityActor FindClosestTarget (float range = TargetRange)
+        private TrinityActor FindClosestTarget(float range = TargetRange)
         {
             return Core.Targets.Where(u => !u.IsPlayer && u.IsUnit && u.Weight > 0 && u.IsHostile && u.HitPoints > 0 && u.Distance < range).OrderBy(u => u.Distance).FirstOrDefault() ?? CurrentTarget;
         }
 
-        private TrinityActor FindProgressOrPowerGlobe (float range = 80f)
+        private TrinityActor FindProgressOrPowerGlobe(float range = 80f)
         {
             var units = Core.Targets.Where(u => (u?.Type == TrinityObjectType.ProgressionGlobe || u?.Type == TrinityObjectType.PowerGlobe) && u.Distance < range && u.IsInLineOfSight).OrderBy(u => u.Distance);
             TrinityActor progressGlobe = null;
@@ -366,6 +327,31 @@ namespace Trinity.Routines.Necromancer
                 power = BoneSpear(target);
 
             return power != null;
+        }
+
+        protected override bool ShouldDecrepify(out TrinityActor target)
+        {
+            target = null;
+            if (!Skills.Necromancer.Decrepify.CanCast())
+                return false;
+
+            if (Player.PrimaryResource < PrimaryEnergyReserve)
+                return false;
+
+            if (Skills.Necromancer.Decrepify.TimeSinceUse < (IsInCombat ? 1800 : 700))
+                return false;
+
+            target = FindClusterTarget(15f);
+
+            if (!IsValidTarget(target))
+                return false;
+
+            if (LastDecrepifyTarget == target)
+                return false;
+
+            LastDecrepifyTarget = target;
+
+            return true;
         }
 
         protected override bool ShouldSimulacrum(out Vector3 position)
@@ -458,7 +444,7 @@ namespace Trinity.Routines.Necromancer
 
             skeletalMageCount = Core.Actors.Actors.Count(a => a.ActorSnoId == 472606);//counting SkelletonMage
 
-            if ((skeletalMageCount >= 10 && Player.PrimaryResourcePct < CastMagesPct) || (Player.PrimaryResourcePct < CastMagesPct && !QuickCastMages))
+            if (skeletalMageCount >= MagesToQuickCast && Player.PrimaryResourcePct < CastMagesPct)
                 return false;
 
             target = FindBestTarget();
@@ -479,7 +465,7 @@ namespace Trinity.Routines.Necromancer
                 return false;
 
             closestTarget = FindClosestTarget();
-            
+
             if (!IsValidTarget(closestTarget))
                 closestTarget = target;
 
@@ -492,15 +478,10 @@ namespace Trinity.Routines.Necromancer
             progressGlobeTarget = FindProgressOrPowerGlobe();
             if (progressGlobeTarget != null)
             {
-                if (progressGlobeTarget.Position.Distance(closestTarget.Position) >= closestTarget.Distance && closestTarget.Distance >= 10f && !progressGlobeTarget.IsAvoidanceOnPath && DateTime.Compare(DateTime.UtcNow, CombatProgressBlockedTime) < 0)
+                if (progressGlobeTarget.Position.Distance(closestTarget.Position) >= closestTarget.Distance && closestTarget.Distance >= 10f && !progressGlobeTarget.IsAvoidanceOnPath && Core.Grids.CanRayWalk(Player.Position, progressGlobeTarget.Position))
                 {
-                    if (IsBlocked)
-                        CombatProgressBlockedTime = DateTime.UtcNow.AddMilliseconds(10000);
-                    else
-                    {
-                        target = progressGlobeTarget;
-                        return true;
-                    }
+                    target = progressGlobeTarget;
+                    return true;
                 }
             }
             healthGlobeTarget = FindHealthGlobe();
@@ -508,21 +489,13 @@ namespace Trinity.Routines.Necromancer
             {
                 if (((Legendary.ReapersWraps.IsEquipped || Legendary.ReapersWraps.IsEquippedInCube) && Player.PrimaryResourcePct < GetGlobesPct) || (Player.CurrentHealthPct <= Settings.EmergencyHealthPct && CollectForHealth))
                 {
-                    if (healthGlobeTarget.Position.Distance(closestTarget.Position) >= closestTarget.Distance && closestTarget.Distance >= 10f && healthGlobeTarget.Position.Distance(target.Position) <= CombatRange && !healthGlobeTarget.IsAvoidanceOnPath && DateTime.Compare(DateTime.UtcNow, CombatHealthBlockedTime) < 0)
+                    if (healthGlobeTarget.Position.Distance(closestTarget.Position) >= closestTarget.Distance && closestTarget.Distance >= 10f && healthGlobeTarget.Position.Distance(target.Position) <= CombatRange && !healthGlobeTarget.IsAvoidanceOnPath && Core.Grids.CanRayWalk(Player.Position, healthGlobeTarget.Position))
                     {
-                        if (IsBlocked)
-                            CombatHealthBlockedTime = DateTime.UtcNow.AddMilliseconds(10000);
-                        else
-                        {
-                            target = healthGlobeTarget;
-                            return true;
-                        }
+                        target = healthGlobeTarget;
+                        return true;
                     }
                 }
             }
-
-            if (DateTime.Compare(DateTime.UtcNow, CombatBlockedTime) < 0)
-                return false;
 
             if (Core.Rift.IsNephalemRift && Core.Rift.IsGaurdianSpawned && IgnoreRange)
                 return false;
@@ -533,29 +506,67 @@ namespace Trinity.Routines.Necromancer
             if (IsValidTarget(closestTarget) && closestTarget.Position.Distance(Player.Position) <= MaximumRange)
                 return false;
 
-            if ((Core.Rift.IsNephalemRift && !Core.Rift.RiftComplete) || !Core.Rift.IsNephalemRift)
-            {
-                if (IsBlocked)
-                {
-                    CombatBlockedTime = DateTime.UtcNow.AddMilliseconds(10000);
-                    return false;
-                }
+            if (((Core.Rift.IsNephalemRift && !Core.Rift.RiftComplete) || !Core.Rift.IsNephalemRift) && !target.IsAvoidanceOnPath && Core.Grids.CanRayWalk(Player.Position, target.Position))
                 return true;
-            }
+
             return false;
         }
 
-        private void TryMovementPower()
+        private bool ShouldNoCombatMove(out TrinityActor target)
+        {
+            target = FindHealthGlobe();
+            if ((((Legendary.ReapersWraps.IsEquipped || Legendary.ReapersWraps.IsEquippedInCube) && Player.PrimaryResourcePct < GetGlobesPct) ||
+                (Player.CurrentHealthPct < EmergencyHealthPct && CollectForHealth)) &&
+                !IsInCombat && target != null && Core.Grids.CanRayWalk(Player.Position, target.Position) && !target.IsAvoidanceOnPath)
+                return true;
+            return false;
+        }
+
+        private bool ShouldStopMovement()
         {
             TrinityActor target;
 
+            if (Core.Rift.IsNephalemRift && Core.Rift.IsGaurdianSpawned && IgnoreRange)
+                return false;
+
+            if (Core.Settings.Weighting.GoblinPriority == TargetPriority.Kamikaze && CurrentTarget != null && CurrentTarget.IsTreasureGoblin)
+                return false;
+            
+            if (CurrentTarget != null && CurrentTarget?.Type == TrinityObjectType.ProgressionGlobe)
+                return false;
+            /*
+            if (CurrentTarget != null && CurrentTarget?.Type == TrinityObjectType.PowerGlobe)
+                return false;
+
+            if (CurrentTarget != null && CurrentTarget?.Type == TrinityObjectType.Shrine)
+                return false;
+            */
+            if (Core.Avoidance.InAvoidance(Player.Position))
+                return false;
+
+            if (!IsInCombat && ClusterSize > 1)
+                return false;
+
+            target = FindClosestTarget();
+            if (IsValidTarget(target) && target.Distance < MinimumRange)
+                return true;
+                
+            return false;
+        }
+
+        private bool TryMovementPower(out TrinityPower power)
+        {
+            TrinityActor target;
+            power = null;
+
             if (ShouldMove(out target))
-                Navigator.PlayerMover.MoveTowards(target.Position);
+                power = Walk(target);
+            return power != null;
         }
 
         public bool TryOffensivePower(out TrinityPower power)
         {
-            power = MyGetOffensivePower();
+            power = GetOffensivePower();
             return power != null;
         }
 
@@ -566,7 +577,7 @@ namespace Trinity.Routines.Necromancer
         public override int ClusterSize => Settings.ClusterSize;
         public override float EmergencyHealthPct => Settings.EmergencyHealthPct;
         public float CastMagesPct => Settings.CastMagesPct;
-        public bool QuickCastMages => Settings.QuickCastMages;
+        public float MagesToQuickCast => (int) Settings.MagesToQuickCast;
         public float MinimumRange => Settings.MinimumRange;
         public float MaximumRange => Settings.MaximumRange;
         public float LotDRange => Settings.LotDRange;
@@ -585,7 +596,7 @@ namespace Trinity.Routines.Necromancer
             private int _clusterSize;
             private float _emergencyHealthPct;
             private float _castMagesPct;
-            private bool _quickCastMages;
+            private float _magesToQuickCast;
             private float _minimumRange;
             private float _maximumRange;
             private float _lotDRange;
@@ -621,11 +632,11 @@ namespace Trinity.Routines.Necromancer
                 set { SetField(ref _castMagesPct, value); }
             }
 
-            [DefaultValue(true)]
-            public bool QuickCastMages
+            [DefaultValue(4)]
+            public float MagesToQuickCast
             {
-                get { return _quickCastMages; }
-                set { SetField(ref _quickCastMages, value); }
+                get { return _magesToQuickCast; }
+                set { SetField(ref _magesToQuickCast, value); }
             }
 
             [DefaultValue(25f)]

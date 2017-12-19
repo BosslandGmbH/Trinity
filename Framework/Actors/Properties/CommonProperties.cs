@@ -33,7 +33,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.IsAllowedClientEffect = GameData.AllowedClientEffects.Contains(actor.ActorSnoId);
             actor.IsObstacle = GameData.NavigationObstacleIds.Contains(actor.ActorSnoId) || GameData.PathFindingObstacles.ContainsKey(actor.ActorSnoId);
 
-            actor.Name = actor.InternalName; // todo get real name for everything (currently only items have this working)
+            actor.Name = actor.InternalName; // todo: get real name for everything (currently only items have this working)
 
             if (actor.IsRActorBased)
             {
@@ -57,7 +57,7 @@ namespace Trinity.Framework.Actors.Properties
                 actor.ActorSnoId,
                 actor.GizmoType,
                 actor.InternalName
-                );
+            );
 
             actor.Type = type;
             actor.ObjectHash = actor.InternalName + actor.AcdId + actor.RActorId;
@@ -111,10 +111,8 @@ namespace Trinity.Framework.Actors.Properties
                 actor.IsQuestMonster = actor.Attributes.IsQuestMonster || actor.Attributes.IsShadowClone;
             }
             else
-            {
                 actor.AnimationNameLowerCase = string.Empty;
-            }
-
+            
             UpdateLineOfSight(actor);
         }
 
@@ -317,104 +315,95 @@ namespace Trinity.Framework.Actors.Properties
                 obj.ActorSnoId,
                 obj.GizmoType,
                 obj.InternalName
-                );
+            );
         }
 
         public static float GetRequiredRange(TrinityActor actor)
         {
-            var result = 2f;
+            float result;
+            if (GameData.CustomObjectRadius.TryGetValue(actor.ActorSnoId, out result))
+                return result;
 
             switch (actor.Type)
             {
                 // * Unit, we need to pick an ability to use and get within range
                 case TrinityObjectType.Unit:
+                {
+                    if (actor.IsHidden || actor.IsQuestMonster)
+                        result = actor.CollisionRadius + 1;
+
+                    else
                     {
-                        if (actor.IsHidden || actor.IsQuestMonster)
-                        {
-                            result = actor.CollisionRadius +1;
-                        }
+                        if (TrinityCombat.Targeting.CurrentPower != null)
+                            result = Math.Max(TrinityCombat.Targeting.CurrentPower.MinimumRange, actor.CollisionRadius + 1);
                         else
-                        {
-                            if (TrinityCombat.Targeting.CurrentPower != null)
-                                result = Math.Max(TrinityCombat.Targeting.CurrentPower.MinimumRange, actor.CollisionRadius + 1);
-                            else
-                                result = actor.CollisionRadius +1;
-                        }
-                        break;
+                            result = actor.CollisionRadius + 1;
                     }
+                    break;
+                }
+
                 // * Item - need to get within 6 feet and then interact with it
                 case TrinityObjectType.Item:
-                    {
-                        result = 5f;
-                        break;
-                    }
+                {
+                    result = 5f;
+                    break;
+                }
+
                 // * Gold - need to get within pickup radius only
                 case TrinityObjectType.Gold:
-                    {
-                        result = 2f;
-                        break;
-                    }
+                {
+                    result = 2f;
+                    break;
+                }
+
                 // * Globes - need to get within pickup radius only
                 case TrinityObjectType.PowerGlobe:
                 case TrinityObjectType.HealthGlobe:
                 case TrinityObjectType.ProgressionGlobe:
-                    {
-                        result = 2f;
-                        break;
-                    }
+                {
+                    result = 2f;
+                    break;
+                }
+
                 // * Shrine & Container - need to get within 8 feet and interact
                 case TrinityObjectType.HealthWell:
-                    {
-                        result = 4f;
+                {
+                    result = 4f;
+                    break;
+                }
 
-                        float range;
-                        if (GameData.CustomObjectRadius.TryGetValue(actor.ActorSnoId, out range))
-                        {
-                            result = range;
-                        }
-                        break;
-                    }
                 case TrinityObjectType.Shrine:
                 case TrinityObjectType.Container:
-                    {
-                        result = 6f;
+                {
+                    result = 6f;
+                    break;
+                }
 
-                        float range;
-                        if (GameData.CustomObjectRadius.TryGetValue(actor.ActorSnoId, out range))
-                        {
-                            result = range;
-                        }
-                        break;
-                    }
                 case TrinityObjectType.Interactable:
-                    {
-                        result = 5f;
-                        float range;
-                        if (GameData.CustomObjectRadius.TryGetValue(actor.ActorSnoId, out range))
-                        {
-                            result = range;
-                        }
-                        if (result <= 0)
-                            result = actor.AxialRadius;
-                        break;
-                    }
+                {
+                    result = 5f;
+                    break;
+                }
+
                 // * Destructible - need to pick an ability and attack it
                 case TrinityObjectType.Destructible:
-                    {
-                        result = actor.CollisionRadius;
-                        break;
-                    }
+                {
+                    result = actor.CollisionRadius;
+                    break;
+                }
+
                 case TrinityObjectType.Barricade:
-                    {
-                        result = actor.AxialRadius * 0.8f;
-                        break;
-                    }
+                {
+                    result = actor.AxialRadius * 0.8f;
+                    break;
+                }
+
                 // * Avoidance - need to pick an avoid location and move there
                 case TrinityObjectType.Avoidance:
-                    {
-                        result = 2f;
-                        break;
-                    }
+                {
+                    result = 2f;
+                    break;
+                }
                 case TrinityObjectType.Door:
                     result = Math.Max(2f, actor.AxialRadius);
                     break;
@@ -422,11 +411,8 @@ namespace Trinity.Framework.Actors.Properties
                     result = actor.Radius;
                     break;
             }
+
             return result;
         }
-
-
     }
-
-
 }

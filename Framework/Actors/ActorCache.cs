@@ -238,7 +238,7 @@ namespace Trinity.Framework.Actors
                     continue;
 
                 var inventorySlot = commonData.GetInventorySlot();
-                if (inventorySlot == InventorySlot.Merchant || inventorySlot == InventorySlot.None)
+                if (inventorySlot == InventorySlot.Merchant)
                     continue;
 
                 var annId = commonData.AnnId;

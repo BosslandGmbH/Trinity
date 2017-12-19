@@ -146,7 +146,7 @@ namespace Trinity.Components.Coroutines.Town
                     if (!UIElements.SalvageWindow.IsVisible)
                         break;
 
-                    await Coroutine.Sleep(Rnd.Next(500, 750));
+                    await Coroutine.Sleep(Rnd.Next(200, 300));
                     Core.Actors.Update();
 
                     var freshItems = Core.Inventory.Backpack.Where(i => ShouldSalvage(i) && !Core.Inventory.InvalidAnnIds.Contains(i.AnnId)).ToList();
