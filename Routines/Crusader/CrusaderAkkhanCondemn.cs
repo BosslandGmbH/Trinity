@@ -100,18 +100,15 @@ namespace Trinity.Routines.Crusader
         private bool ShouldWalkToGroundBuff(out Vector3 buffPosition)
         {
             buffPosition = Vector3.Zero;
-            if (!Settings.MoveToGroundBuffs)
+            if (!Settings.MoveToGroundBuffs || CurrentTarget == null)
                 return false;
-            
-            if (_lastBuffPosition != Vector3.Zero && !Core.Grids.CanRayWalk(Player.Position, _lastBuffPosition))
-            {
-                _lastBuffPosition = Vector3.Zero;
-                return false;
-            }
 
-            if (_lastBuffPosition != Vector3.Zero && Player.Position.Distance(_lastBuffPosition) > 2f && !_groundBuffWalkTimer.IsFinished)
+            if (_lastBuffPosition != Vector3.Zero && _lastBuffPosition.Distance2D(CurrentTarget.Position) > 20)
+                return false;
+
+            if (_lastBuffPosition != Vector3.Zero && Player.Position.Distance2D(_lastBuffPosition) > 9f && !_groundBuffWalkTimer.IsFinished)
             {
-                Core.Logger.Log($"Moving to buff: {_lastBuffPosition} - Distance: {Player.Position.Distance(_lastBuffPosition)}");
+                Core.Logger.Log($"Moving to buff: {_lastBuffPosition} - Distance: {Player.Position.Distance2D(_lastBuffPosition)}");
                 return true;
             }
 
@@ -123,7 +120,7 @@ namespace Trinity.Routines.Crusader
             if (TargetUtil.BestBuffPosition(40f, bestClusterPoint, false, out bestBuffedPosition) &&
                 bestBuffedPosition != Vector3.Zero)
             {
-                Core.Logger.Log($"Found buff: {_lastBuffPosition} - Distance: {Player.Position.Distance(_lastBuffPosition)}");
+                Core.Logger.Log($"Found buff: {bestBuffedPosition} - Distance: {Player.Position.Distance2D(bestBuffedPosition)}");
                 buffPosition = bestBuffedPosition;
                 if (bestBuffedPosition != Vector3.Zero)
                 {
