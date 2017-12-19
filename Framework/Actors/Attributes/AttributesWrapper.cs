@@ -561,7 +561,7 @@ namespace Trinity.Framework.Actors.Attributes
 
         public int ItemLegendaryItemLevelOverride => GetAttribute<int>(ActorAttributeType.ItemLegendaryItemLevelOverride);
         public int ItemBindingLevelOverride => GetAttribute<int>(ActorAttributeType.ItemBindingLevelOverride); // ItemBindingLevelOverride (-3707) = i:2 f:2.802597E-45 v:2 ModifierType=None Modifier=-1
-        public int ItemBoundToAnnId => GetAttribute<int>(ActorAttributeType.ItemBoundToACD); // ItemBoundToACD (-3709) = i:2014707801 f:1.216956E+34 v:2.014708E+09 ModifierType=None Modifier=-1
+        public int ItemBoundToACDId => GetAttribute<int>(ActorAttributeType.ItemBoundToACD); // ItemBoundToACD (-3709) = i:2014707801 f:1.216956E+34 v:2.014708E+09 ModifierType=None Modifier=-1
         public int Sockets => GetAttribute<int>(ActorAttributeType.Sockets); // Sockets (-3712) = i:1 f:1.401298E-45 v:1 ModifierType=None Modifier=-1
         public ItemQuality ItemQualityLevel => GetAttribute<ItemQuality>(ActorAttributeType.ItemQualityLevel); // ItemQualityLevel (-3720) = i:9 f:1.261169E-44 v:9 ModifierType=None Modifier=-1
         public int DurabilityMax => GetAttribute<int>(ActorAttributeType.DurabilityMax); // DurabilityMax (-3722) = i:286 f:4.007714E-43 v:286 ModifierType=None Modifier=-1
@@ -629,7 +629,7 @@ namespace Trinity.Framework.Actors.Attributes
         //public int ItemStackQuantityHi => GetAttribute<int>(ActorAttributeType.ItemStackQuantityHi);
         //public int ItemStackQuantityLo => GetAttribute<int>(ActorAttributeType.ItemStackQuantityLo); // ItemStackQuantityLo (-3702) = i:5000 f:7.006492E-42 v:5000 ModifierType=None Modifier=-1
 
-        public bool IsTradeable => GetAttribute<bool>(ActorAttributeType.ItemTradeEndTime);
+        public int ItemTradeEndTime => GetAttribute<int>(ActorAttributeType.ItemTradeEndTime);
         public int SocketsFilled => GetAttribute<int>(ActorAttributeType.SocketsFilled);
         public int ArcaneDamage => GetAttribute<int>(ActorAttributeType.DamageWeaponMaxArcane);
         public int ColdDamage => GetAttribute<int>(ActorAttributeType.DamageWeaponMaxCold);
