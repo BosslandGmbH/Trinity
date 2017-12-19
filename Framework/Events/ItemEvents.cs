@@ -54,55 +54,55 @@ namespace Trinity.Framework.Events
 
         public static void FireItemStashed(TrinityItem item)
         {
-            Core.Logger.Log(LogCategory.ItemEvents, $"ItemStashed {item.Name}");
+            Core.Logger.Log(LogCategory.ItemEvents, $"储存物品 {item.Name}");
             OnItemStashed?.Invoke(item);
         }
 
         public static void FireItemSalvaged(TrinityItem item)
         {
-            Core.Logger.Log(LogCategory.ItemEvents, $"ItemSalvaged {item.Name}");
+            Core.Logger.Log(LogCategory.ItemEvents, $"分解物品 {item.Name}");
             OnItemSalvaged?.Invoke(item);
         }
 
         public static void FireItemDropped(TrinityItem item)
         {
-            Core.Logger.Log(LogCategory.ItemEvents, $"ItemDropped {item.Name}");
+            Core.Logger.Log(LogCategory.ItemEvents, $"丢弃物品 {item.Name}");
             OnItemDropped?.Invoke(item);
         }
 
         public static void FireItemPickedUp(TrinityItem item)
         {
-            Core.Logger.Log(LogCategory.ItemEvents, $"ItemPickedUp {item.Name}");
+            Core.Logger.Log(LogCategory.ItemEvents, $"拾取物品 {item.Name}");
             OnItemPickedUp?.Invoke(item);
         }
 
         public static void FireItemSold(TrinityItem item)
         {
-            Core.Logger.Log(LogCategory.ItemEvents, $"ItemSold {item.Name}");
+            Core.Logger.Log(LogCategory.ItemEvents, $"出售物品 {item.Name}");
             OnItemSold?.Invoke(item);
         }
 
         public static void FireItemIdentified(TrinityItem item)
         {
-            Core.Logger.Log(LogCategory.ItemEvents, $"ItemIdentified {item.Name}");
+            Core.Logger.Log(LogCategory.ItemEvents, $"鉴定物品 {item.Name}");
             OnItemIdentified?.Invoke(item);
         }
 
         public static void FireItemMoved(TrinityItem item)
         {
-            Core.Logger.Log(LogCategory.ItemEvents, $"ItemMoved {item.Name}");
+            Core.Logger.Log(LogCategory.ItemEvents, $"移动物品 {item.Name}");
             OnItemMoved?.Invoke(item);
         }
 
         public static void FireItemCubed(TrinityItem item)
         {
-            Core.Logger.Log(LogCategory.ItemEvents, $"ItemCubed {item.Name}");
+            Core.Logger.Log(LogCategory.ItemEvents, $"提取物品传奇威能 {item.Name}");
             OnItemCubed?.Invoke(item);
         }
 
         public static void FireItemGambled(TrinityItem item)
         {
-            Core.Logger.Log(LogCategory.ItemEvents, $"ItemGambled {item.Name}");
+            Core.Logger.Log(LogCategory.ItemEvents, $"赌博物品 {item.Name}");
             OnItemGambled?.Invoke(item);
         }
     }

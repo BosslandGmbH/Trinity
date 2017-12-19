@@ -23,7 +23,7 @@ namespace Trinity.Framework.Reference
             var result = _allPassiveBySnoPower.TryGetValue(power, out passive);
             if (!result)
             {
-                Core.Logger.Debug("Unable to find passive for power {0}", power);
+                Core.Logger.Debug("找不到被动技能 {0}", power);
             }
             return result ? passive : new Passive();
         }

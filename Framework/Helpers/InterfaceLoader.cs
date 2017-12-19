@@ -25,16 +25,16 @@ namespace Trinity.Framework.Helpers
                     {
                         var instance = (T)Activator.CreateInstance(item);
                         if (instance == null) continue;
-                        Core.Logger.Verbose("Instantiated {0}", item.Name);
+                        Core.Logger.Verbose("初始化 {0}", item.Name);
                         Items[item.Name] = instance;
                     }
                     catch (Exception ex)
                     {
-                        Core.Logger.Error("Exception creating instance {0}", ex);
+                        Core.Logger.Error("异常创建实例 {0}", ex);
                     }
                 }
                 sw.Stop();
-                Core.Logger.Verbose($"Finished Loading {configType.Name} in {sw.Elapsed:g}");
+                Core.Logger.Verbose($"配置读取完成, {configType.Name} 于 {sw.Elapsed:g}");
             }
         }
     }

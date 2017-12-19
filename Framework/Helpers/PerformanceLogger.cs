@@ -53,12 +53,12 @@ namespace Trinity.Framework.Helpers
                 {
                     if (Core.Settings.Advanced.LogCategories.HasFlag(LogCategory.Performance) || _ForceLog)
                     {
-                        Logging.DebugFormat("[TrinityPlugin][Performance] Execution of {0} took {1:00.00000}ms.", _BlockName,
+                        Logging.DebugFormat("[Trinity插件][性能] 执行 {0} 花了 {1:00.00000}毫秒.", _BlockName,
                                             _Stopwatch.Elapsed.TotalMilliseconds);
                     }
                     else if (_Stopwatch.Elapsed.TotalMilliseconds > 1000)
                     {
-                        Logging.ErrorFormat("[TrinityPlugin][Performance] Execution of {0} took {1:00.00000}ms.", _BlockName,
+                        Logging.ErrorFormat("[Trinity插件][性能] 执行 {0} 花了 {1:00.00000}毫秒.", _BlockName,
                                             _Stopwatch.Elapsed.TotalMilliseconds);
                     }
                 }

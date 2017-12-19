@@ -130,7 +130,7 @@ namespace Trinity.Components.QuestTools
         {
             if (!string.IsNullOrEmpty(StopCondition) && ScriptManager.GetCondition(StopCondition).Invoke())
             {
-                Core.Logger.Log($"[{TagClassName}] Stop condition was met: ({StopCondition})");
+                Core.Logger.Log($"[{TagClassName}] 满足停止条件: ({StopCondition})");
                 return true;
             }
             return false;
@@ -139,8 +139,8 @@ namespace Trinity.Components.QuestTools
         private bool _isDone;
 
         protected sealed override Composite CreateBehavior() => new ActionRunCoroutine(ctx => Run());
-        public sealed override void OnStart() => Core.Logger.Verbose($"Started Tag: {TagClassName}. {ToString()}");
-        public sealed override void OnDone() => Core.Logger.Verbose($"Finished Tag: {TagClassName} in {EndTime.Subtract(StartTime).TotalSeconds:N2} seconds");
+        public sealed override void OnStart() => Core.Logger.Verbose($"开始标签: {TagClassName}. {ToString()}");
+        public sealed override void OnDone() => Core.Logger.Verbose($"完成标签: {TagClassName} 耗时 {EndTime.Subtract(StartTime).TotalSeconds:N2} 秒");
         public sealed override bool IsDone => _isDone;
         public sealed override bool IsDoneCache => _isDone;
         public sealed override void ResetCachedDone() => Reset();

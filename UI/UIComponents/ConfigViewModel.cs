@@ -64,6 +64,7 @@ namespace Trinity.UI.UIComponents
             }
         }
 
+        public SenExtendSettings SenExtend => _model.SenExtend;
         public ItemSettings Items => _model.Items;
         public WeightingSettings Weighting => _model.Weighting;
         public AdvancedSettings Advanced => _model.Advanced;

@@ -65,7 +65,7 @@ namespace Trinity.Components.Coroutines.Town
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Error("Exception in Gamble.Execute, {0}", ex);
+                    Core.Logger.Error("执行赌博 异常, {0}", ex);
 
                     if (ex is CoroutineStoppedException)
                         throw;
@@ -90,7 +90,7 @@ namespace Trinity.Components.Coroutines.Town
                     IsDumpingShards = true;
                     if ((TownInfo.Kadala.Distance > 8f || !UIElements.VendorWindow.IsVisible) && !await MoveToAndInteract.Execute(TownInfo.Kadala))
                     {
-                        Core.Logger.Log("[Gamble] Failed to move to Kadala, quite unfortunate.");
+                        Core.Logger.Log("[赌博] 无法移动到卡达拉, 很不幸.");
                         break;
                     }
 
@@ -114,7 +114,7 @@ namespace Trinity.Components.Coroutines.Town
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception in Gamble.Execute, {0}", ex);
+                Core.Logger.Error("执行赌博 异常, {0}", ex);
 
                 if (ex is CoroutineStoppedException)
                     throw;
@@ -149,7 +149,7 @@ namespace Trinity.Components.Coroutines.Town
 
                 if (item == null)
                 {
-                    Core.Logger.Error("[Gamble] DB Error ACDItem == null Slot={0} Now buying random item to spend shards", slot);
+                    Core.Logger.Error("[赌博]没有选择需要赌博的道具，现在随机购买项目来花费碎片", slot);
                     var randomItem = ZetaDia.Actors.GetActorsOfType<ACDItem>().FirstOrDefault(a => a.InternalName.StartsWith("PH_"));
                     if (randomItem == null)
                         return true;
@@ -159,12 +159,12 @@ namespace Trinity.Components.Coroutines.Town
 
                 _gambleRotation.Remove(slot);
                 InventoryManager.BuyItem(item.AnnId);
-                Core.Logger.Log("[Gamble] Buying: {0}", slot);
+                Core.Logger.Log("[赌博] 购买中: {0}", slot);
                 _lastGambleTime = DateTime.UtcNow;
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception in Gamble.BuyItems, {0}", ex);
+                Core.Logger.Error("赌博购买异常, {0}", ex);
 
                 if (ex is CoroutineStoppedException)
                     throw;
@@ -193,15 +193,15 @@ namespace Trinity.Components.Coroutines.Town
                     return false;
                 }
 
-                if (TrinityCombat.Loot.IsBackpackFull || InventoryManager.NumFreeBackpackSlots < 5)
+                if (!DefaultLootProvider.IsAnyTwoSlotBackpackLocation || InventoryManager.NumFreeBackpackSlots < 5)
                 {
-                    LogVerbose("No Backpack space, can't gamble!");
+                    LogVerbose("空间不足,无法赌博!");
                     return false;
                 }
-
-                if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
+                // 智能包裹整理
+                if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Items.KeepLegendaryUnid && (Core.Player.ParticipatingInTieredLootRun && !DefaultLootProvider.CanVedonInRift))
                 {
-                    LogVerbose("No gambling during greater rift due to backpack items being disabled ");
+                    LogVerbose("处于大秘境中, 背包物品被禁用而无法赌博 ");
                     return false;
                 }
 
@@ -212,7 +212,7 @@ namespace Trinity.Components.Coroutines.Town
                 {
                     if (Core.Settings.Items.GamblingTypes == GambleSlotTypes.None)
                     {
-                        LogVerbose("Select at least one thing to buy in settings");
+                        LogVerbose("在设置中选择至少一件要赌博的物品");
                         return false;
                     }
                 }
@@ -223,7 +223,7 @@ namespace Trinity.Components.Coroutines.Town
                     {
                         IsDumpingShards = false;
                     }
-                    LogVerbose("Not enough shards!");
+                    LogVerbose("没有足够的碎片!");
                     return false;
                 }
 
@@ -233,14 +233,14 @@ namespace Trinity.Components.Coroutines.Town
                     {
                         IsDumpingShards = false;
                     }
-                    LogVerbose("Can't afford desired items!");
+                    LogVerbose("赌不起想要的东西!");
                     return false;
                 }
              
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception in Gamble.BuyItems, {0}", ex);
+                Core.Logger.Error("赌博购买异常, {0}", ex);
 
                 if (ex is CoroutineStoppedException)
                     throw;
@@ -248,14 +248,14 @@ namespace Trinity.Components.Coroutines.Town
                 return false;
             }
 
-            LogVerbose("Should Gamble!");
+            LogVerbose("开始赌博!");
             return true;
         }
 
         private static void LogVerbose(string msg, params object[] args)
         {
-            var debugInfo = $" Shards={ZetaDia.Storage.PlayerDataManager.ActivePlayerData.BloodshardCount} GambleMode={Core.Settings.Items.GamblingMode} ShardMinimum={Core.Settings.Items.GamblingMinShards}";
-            Core.Logger.Verbose("[Gamble]" + msg + debugInfo, args);
+            var debugInfo = $" 碎片={ZetaDia.Storage.PlayerDataManager.ActivePlayerData.BloodshardCount} 赌博模式={Core.Settings.Items.GamblingMode} 最小碎片={Core.Settings.Items.GamblingMinShards}";
+            Core.Logger.Verbose("[赌博]" + msg + debugInfo, args);
         }
 
         public static bool PurchaseDelayPassed

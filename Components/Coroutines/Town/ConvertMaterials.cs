@@ -30,7 +30,7 @@ namespace Trinity.Components.Coroutines.Town
 
             if (!GetSacraficialItems(to, excludeLegendaryUpgradeRares).Any())
             {
-                Core.Logger.Verbose(LogCategory.Behavior, "[ConvertMaterials] You don't have enough valid weapon/armor/jewellery in backpack", from, to);
+                Core.Logger.Verbose(LogCategory.Behavior, "[转换材料] 没有足够的武器/防具/饰品在背包", from, to);
                 return false;
             }
 
@@ -52,7 +52,7 @@ namespace Trinity.Components.Coroutines.Town
         {
             if (!UIElements.TransmuteItemsDialog.IsVisible)
             {
-                Core.Logger.Log("Transmute dialog must be open");
+                Core.Logger.Log("转换对话框必须打开");
                 return false;
             }
 
@@ -73,14 +73,14 @@ namespace Trinity.Components.Coroutines.Town
         /// <param name="to">the type of material you will get more of</param>
         public static async Task<bool> Execute(CurrencyType from, CurrencyType to)
         {
-            Core.Logger.Log("[ConvertMaterials] Wooo! Lets convert some {0} to {1}", from, to);
+            Core.Logger.Log("[转换材料] 喔喔喔 ! 让我们将一些 {0} 转换到 {1}", from, to);
 
             if (!ZetaDia.IsInGame || !ZetaDia.IsInTown)
                 return false;
 
             if (!CurrencyConversionTypes.Contains(to) || !CurrencyConversionTypes.Contains(from))
             {
-                Core.Logger.Log("[Cube] Unable to convert from {0} to {1}", from, to);
+                Core.Logger.Log("[魔盒] 无法转换从 {0} 到 {1}", from, to);
                 return false;
             }
 
@@ -103,7 +103,7 @@ namespace Trinity.Components.Coroutines.Town
                 var newToAmount = GetCurrency(to);
                 if (newToAmount > toAmount)
                 {
-                    Core.Logger.Log("[ConvertMaterials] Converted materials '{0}' ---> '{1}'", from, to);
+                    Core.Logger.Log("[转换材料] 转换材料 '{0}' ---> '{1}'", from, to);
                     toAmount = newToAmount;
                     fromAmount = GetCurrency(from);
                     ConsecutiveFailures = 0;
@@ -116,7 +116,7 @@ namespace Trinity.Components.Coroutines.Town
                     {
                         Core.Inventory.InvalidAnnIds.Add(item.AnnId);
                     }
-                    Core.Logger.Error("[ConvertMaterials] Failed to convert materials");
+                    Core.Logger.Error("[转换材料] 未能转换材料");
                     return false;
                 }
 

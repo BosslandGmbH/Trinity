@@ -8,10 +8,10 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Template.xaml" />
+                <ResourceDictionary Source="..\Template.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <converters:EnumBooleanConverter x:Key="enumBooleanConverter" />
-            <converters:FlagsEnumValueConverter x:Key="flagsEnumValueBooleanConverter" />
+            <converters:EnumBooleanConverter x:Key="enumBooleanConverter"/>
+            <converters:FlagsEnumValueConverter x:Key="flagsEnumValueBooleanConverter"/>
             <converters:BoolToVisibilityConverter x:Key="VisibleWhenTrueConverter" TrueValue="Visible" FalseValue="Collapsed"/>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -19,66 +19,66 @@
         <DockPanel LastChildFill="True" Margin="0,10,5,0">
             <Border Padding="0">
             <StackPanel DockPanel.Dock="Top" Background="Transparent">
-                <GroupBox Header="Extract Legendary Powers">
+                <GroupBox Header="提取传奇威能">
                     <StackPanel Margin="3,0,3,0">
-                        <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">During a town run TrinityPlugin can extract legendary powers. This destroys the items in the process.</TextBlock>
+                        <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">在城镇中，会自动提取传奇威能。</TextBlock>
                         <Grid Margin="0,3,0,10" Background="Transparent">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100" />
-                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
                        
-                            <TextBlock Grid.Column="0" Margin="2" Text="Items to Extract: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="0" Margin="2" Text="提取项目: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             
                             <WrapPanel Grid.Row="0" Grid.Column="1" Margin="0,3,0,0" >
-                                <RadioButton GroupName="PowerExtrctionOptions" Content="None" ToolTip="Dont extract from any items" 
+                                <RadioButton GroupName="PowerExtrctionOptions" Content="无" ToolTip="不提取" 
                              IsChecked="{Binding Path=KanaisCube.ExtractLegendaryPowers, Converter={StaticResource enumBooleanConverter}, ConverterParameter=None}" VerticalAlignment="Center" Margin="1,1,5,1"/>
 
-                                <RadioButton GroupName="PowerExtrctionOptions" Content="Trash" ToolTip="Extract from items that would normally be salvaged/sold (ItemList only)"
+                                <RadioButton GroupName="PowerExtrctionOptions" Content="垃圾" ToolTip="提取捡取列表中的平时作为拆解的传奇"
                              IsChecked="{Binding Path=KanaisCube.ExtractLegendaryPowers, Converter={StaticResource enumBooleanConverter}, ConverterParameter=OnlyTrashed}" VerticalAlignment="Center" Margin="1,1,5,1"/>
 
-                                <RadioButton GroupName="PowerExtrctionOptions" Content="Non-Ancient" ToolTip="Extract from ANY non-ancient"
+                                <RadioButton GroupName="PowerExtrctionOptions" Content="非远古" ToolTip="提取非远古传奇"
                              IsChecked="{Binding Path=KanaisCube.ExtractLegendaryPowers, Converter={StaticResource enumBooleanConverter}, ConverterParameter=OnlyNonAncient}" VerticalAlignment="Center" Margin="1,1,5,1"/>
 
-                                <RadioButton GroupName="PowerExtrctionOptions" Content="All" ToolTip="Extract from everything possible"
+                                <RadioButton GroupName="PowerExtrctionOptions" Content="全部" ToolTip="提取所有未提取的传奇"
                              IsChecked="{Binding Path=KanaisCube.ExtractLegendaryPowers, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}" VerticalAlignment="Center" Margin="1,1,5,1"/>
                             </WrapPanel>
 
                             <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" >
-                                <CheckBox Margin="0,8,0,0" ToolTip="If enabled, bot will take items from the stash." IsChecked="{Binding Path=KanaisCube.CubeExtractFromStash}">Take legendary items from the Stash</CheckBox>
+                                <CheckBox Margin="0,8,0,0" ToolTip="如果启用, 辅助将自行从仓库中拿取物品." IsChecked="{Binding Path=KanaisCube.CubeExtractFromStash}">从仓库提取传奇</CheckBox>
                                 <TextBlock Visibility="{Binding KanaisCube.CubeExtractFromStash, Converter={StaticResource VisibleWhenTrueConverter}}" 
-                                           Margin="3,8,3,10" TextWrapping="Wrap" Foreground="Orange">WARNING: allowing items to be taken from stash may result in them being sold/salvaged.</TextBlock>
+                                           Margin="3,8,3,10" TextWrapping="Wrap" Foreground="Orange">警告：启用该选项可能会导致仓库中需要保留的传奇在符合条件时自动提取。慎选</TextBlock>
                             </StackPanel>
 
                         </Grid>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="Convert Crafting Materials">
+                <GroupBox Header="转换材料">
                     <StackPanel Margin="3,0,3,0">
-                        <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">During a town run TrinityPlugin can convert non-legendary items into crafting materials. When you have less than the amount selected below, the bot will start creating more of it, consuming your highest crafting material in the process.</TextBlock>
+                        <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">在城镇中,Trinity插件会将非远古道具放入魔盒中.当你的其中一种材料[白黄蓝]少于下面的设定值时,会将你现有最多的材料转换成你下面所选择的材料.</TextBlock>
 
-                        <Label FontWeight="Bold">Select the materials you want more of:</Label>
+                        <Label FontWeight="Bold">选择你想要的材料:</Label>
                         <UniformGrid Columns="3">
-                            <CheckBox ToolTip="Will destroy Common/White and Inferior/Grey items in backpack to create Resuable Parts" IsChecked="{Binding Path=KanaisCube.CreateReusableParts}">Reusable Parts</CheckBox>
-                            <CheckBox ToolTip="Will destroy Magic/Blue items in backpack to create Arcane Dust" IsChecked="{Binding Path=KanaisCube.CreateArcaneDust}">Arcane Dust</CheckBox>
-                            <CheckBox ToolTip="Will destroy Rare/Yellow items in backpack to create Veiled Crystals" IsChecked="{Binding Path=KanaisCube.CreateVeiledCrystals}">Veiled Crystals</CheckBox>
+                            <CheckBox ToolTip="会摧毁在背包中的 白色/灰色道具,来转换出万用材料" IsChecked="{Binding Path=KanaisCube.CreateReusableParts}">万用材料</CheckBox>
+                            <CheckBox ToolTip="摧毁在背包中的 魔法/蓝色道具,来转换出奥术之尘" IsChecked="{Binding Path=KanaisCube.CreateArcaneDust}">奥术之尘</CheckBox>
+                            <CheckBox ToolTip="摧毁在背包中的 稀有/黄色道具,来转换出萦雾水晶" IsChecked="{Binding Path=KanaisCube.CreateVeiledCrystals}">萦雾水晶</CheckBox>
                         </UniformGrid>
 
                         <Grid Margin="0,10,0,10" Background="Transparent">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                            
-                                <Label Grid.Row="0" Grid.Column="0"  Background="Transparent">Only create materials when below X total stack quantity:</Label>
+                                <Label Grid.Row="0" Grid.Column="0"  Background="Transparent">当选择的材料低于设定值时才转换:</Label>
                                 <Slider Grid.Row="1" Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                                     Interval="25" 
                                     Maximum="50000" 
@@ -88,226 +88,226 @@
                                     IsSnapToTickEnabled="True"                                
                                     TickPlacement="BottomRight"                                
                                     Value="{Binding KanaisCube.ConversionQuantityThreshold}" 
-                                    HorizontalAlignment="Stretch" Margin="10,0,25,0" />
+                                    HorizontalAlignment="Stretch" Margin="10,0,25,0"/>
                             
                         </Grid>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="Upgrade Rares to Legendary">
+                <GroupBox Header="升级稀有到传奇">
                     <!--<GroupBox.HeaderTemplate>
                         <DataTemplate>
-                            <Label FontWeight="Bold" Foreground="#333333" Background="Transparent">Upgrade Rares to Legendary</Label>
+                            <Label FontWeight="Bold" Foreground="#333333" Background="Transparent">升级稀有到传奇</Label>
                         </DataTemplate>
                     </GroupBox.HeaderTemplate>-->
                     <StackPanel>
-                        <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">During a town run TrinityPlugin can upgrade rare items into legendary items. Select the types to upgrade below. You will also need the appropriate crafting materials available in your stash or backpack.</TextBlock>
-                        <Label FontWeight="Bold">Armor</Label>
+                        <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">使用魔盒功能升级稀有道具到传奇,只需要在背包或仓库准备好相应的材料.</TextBlock>
+                        <Label FontWeight="Bold">护甲</Label>
                         <UniformGrid Columns="3">
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Belt}">
-                                Belt
+                                腰带
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Boots}">
-                                Boots
+                                靴子
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Bracer}">
-                                Bracer
+                                护腕
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Chest}">
-                                Chest
+                                胸甲
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Cloak}">
-                                Cloak
+                                披风
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Gloves}">
-                                Gloves
+                                手套
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Helm}">
-                                Helm
+                                头盔
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Legs}">
-                                Legs
+                                裤子
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=MightyBelt}">
-                                MightyBelt
+                                重型腰带
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Shoulder}">
-                                Shoulder
+                                护肩
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=SpiritStone}">
-                                SpiritStone
+                                灵石
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=VoodooMask}">
-                                VoodooMask
+                                巫毒面具
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=WizardHat}">
-                                WizardHat
+                                魔法师帽
                             </CheckBox>
                         </UniformGrid>
 
-                        <Label FontWeight="Bold">Jewellery</Label>
+                        <Label FontWeight="Bold">饰品</Label>
                         <UniformGrid Columns="3">
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Amulet}">
-                                Amulet
+                                护符
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Ring}">
-                                Ring
+                                戒指
                             </CheckBox>
                         </UniformGrid>
 
-                        <Label FontWeight="Bold">Offhands</Label>
+                        <Label FontWeight="Bold">副手</Label>
                         <UniformGrid Columns="3">
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=CrusaderShield}">
-                                CrusaderShield
+                                圣教军盾牌
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Mojo}">
-                                Mojo
+                                符咒
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Orb}">
-                                Orb
+                                法器
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Quiver}">
-                                Quiver
+                                箭袋
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Shield}">
-                                Shield
+                                盾牌
                             </CheckBox>
-							<CheckBox
+			    <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Phylactery}">
-								Phylactery
-							</CheckBox>
-							</UniformGrid>
+                                魂匣
+                            </CheckBox>
+                        </UniformGrid>
 
-                        <Label FontWeight="Bold">1-Hand Weapons</Label>
+                        <Label FontWeight="Bold">单手武器</Label>
                         <UniformGrid Columns="3">
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Axe}">
-                                Axe
+                                斧头
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=CeremonialKnife}">
-                                CeremonialKnife
+                                祭祀刀
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Dagger}">
-                                Dagger
+                                匕首
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=FistWeapon}">
-                                FistWeapon
+                                拳套
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Flail}">
-                                Flail
+                                连枷
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=HandCrossbow}">
-                                HandCrossbow
+                                手弩
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Mace}">
-                                Mace
+                                钉锤
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=MightyWeapon}">
-                                MightyWeapon
+                                重武器
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Spear}">
-                                Spear
+                                长矛
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Sword}">
-                                Sword
+                                剑
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Wand}">
-                                Wand
+                                魔杖
                             </CheckBox>
 							<CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Scythe}">
-								Scythe
+								镰刀
 							</CheckBox>
 							</UniformGrid>
 
-                        <Label FontWeight="Bold">2-Hand Weapons</Label>
+                        <Label FontWeight="Bold">双手武器</Label>
                         <UniformGrid Columns="2">
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=TwoHandAxe}">
-                                TwoHandAxe
+                                双手斧
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=TwoHandBow}">
-                                TwoHandBow
+                                双手弓
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=TwoHandCrossbow}">
-                                TwoHandCrossbow
+                                双手弩
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=TwoHandDaibo}">
-                                TwoHandDaibo
+                                双手杖
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=TwoHandFlail}">
-                                TwoHandFlail
+                                双手连枷
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=TwoHandMace}">
-                                TwoHandMace
+                                双手锤
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=TwoHandMighty}">
-                                TwoHandMighty
+                                双手重武器
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=TwoHandPolearm}">
-                                TwoHandPolearm
+                                双手长柄武器
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=TwoHandStaff}">
-                                TwoHandStaff
+                                双手法杖
                             </CheckBox>
                             <CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=TwoHandSword}">
-                                TwoHandSword
+                                双手剑
                             </CheckBox>
 							<CheckBox
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=TwoHandScythe}">
-								TwoHandScythe
+								双手镰刀
 							</CheckBox>
 							</UniformGrid>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="Limits" Margin="0,0,0,0" Padding="0,0,0,5">
+                <GroupBox Header="保持材料库存量" Margin="0,0,0,0" Padding="0,0,0,5">
                     <UniformGrid Margin="5,5,5,5" Columns="1" >
                         <StackPanel Margin="5,0,0,0">
-                            <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">These limits allow you to keep a reserve of crafting materials. The bot will stop upgrading rare items when the amount of resources drops below the levels specified.</TextBlock>
+                            <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">升级限制,当材料低于这个设定值时会停止使用升级功能.</TextBlock>
 
                             <WrapPanel Margin="0,0,0,0" Orientation="Horizontal" x:Name="LimitContainer">
                                 
-                                <TextBlock Text="Always Keep at least x Death's Breaths"
+                                <TextBlock Text="始终保持至少x死亡气息"
                                            TextAlignment="Left"
-                                           ToolTip="Bot will not upgrade rares when resource drops below this amount" />
+                                           ToolTip="当死亡气息低于此数值停止升级" />
                                 
                                 <Slider Width="{Binding ActualWidth, ElementName=LimitContainer}" Template="{DynamicResource SliderEditable}" 
                                     Interval="250" 
@@ -318,7 +318,7 @@
                                     IsSnapToTickEnabled="True"                                
                                     TickPlacement="BottomRight"                                
                                     Value="{Binding KanaisCube.DeathsBreathMinimum}" 
-                                    HorizontalAlignment="Stretch" Margin="0,0,0,0" />
+                                    HorizontalAlignment="Stretch" Margin="0,0,0,0"/>
 
                             </WrapPanel>
                         </StackPanel>

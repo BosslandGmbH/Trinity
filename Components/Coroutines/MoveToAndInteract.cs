@@ -44,7 +44,7 @@ namespace Trinity.Components.Coroutines
 
                 if (!await MoveTo.Execute(obj.Position, obj.Name))
                 {
-                    Core.Logger.Log("MoveTo Failed for {0} ({1}) Distance={2}", obj.Name, obj.ActorSnoId, obj.Distance);
+                    Core.Logger.Log("移动到 {0} ({1}) 失败 距离={2}", obj.Name, obj.ActorSnoId, obj.Distance);
                     return false;
                 }
             }
@@ -54,7 +54,7 @@ namespace Trinity.Components.Coroutines
             {
                 for (int i = 1; i <= interactLimit; i++)
                 {
-                    Core.Logger.Verbose("Interacting with {0} ({1}) Attempt={2}", obj.Name, obj.ActorSnoId, i);
+                    Core.Logger.Verbose("与 {0} ({1}) 交互 尝试={2}", obj.Name, obj.ActorSnoId, i);
                     if (obj.Interact() && i > 1)
                         break;
 
@@ -107,7 +107,7 @@ namespace Trinity.Components.Coroutines
             {
                 if (!await MoveTo.Execute(position, position.ToString(), 12f))
                 {
-                    Core.Logger.Log("MoveTo Failed for {0} Distance={1}", position, position.Distance(ZetaDia.Me.Position));
+                    Core.Logger.Log("移动到 {0} 失败 距离={1}", position, position.Distance(ZetaDia.Me.Position));
                     return false;
                 }
             }
@@ -119,7 +119,7 @@ namespace Trinity.Components.Coroutines
             var actor = ZetaDia.Actors.GetActorsOfType<DiaObject>(true).FirstOrDefault(a => a.ActorSnoId == actorId);
             if (actor == null)
             {
-                Core.Logger.Verbose("Interaction Failed: Actor not found with Id={0}", actorId);
+                Core.Logger.Verbose("交互失败: 没有发现NPC Id={0}", actorId);
                 return false;
             }
 
@@ -138,7 +138,7 @@ namespace Trinity.Components.Coroutines
             {
                 if (!await MoveTo.Execute(position, position.ToString(), (float)(distance - distanceToGo)))
                 {
-                    Core.Logger.Log("MoveTo Failed for {0} Distance={1}", position, position.Distance(ZetaDia.Me.Position));
+                    Core.Logger.Log("移动到 {0} 失败 距离={1}", position, position.Distance(ZetaDia.Me.Position));
                     return false;
                 }
             }
@@ -154,7 +154,7 @@ namespace Trinity.Components.Coroutines
                     if (ZetaDia.Globals.WorldSnoId != startingWorldId)
                         return true;
 
-                    Core.Logger.Log("Interacting with {0} ({1}) Attempt={2}", actorName, actorId, i);
+                    Core.Logger.Log("与 {0} ({1}) 交互 尝试={2}", actorName, actorId, i);
                     if (actor.Interact() && i > 1)
                         break;
 

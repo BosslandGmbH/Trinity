@@ -202,26 +202,26 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
         private async Task<bool> Completed()
         {
             BountyStatistics.CompletedBountyActs++;
-            Core.Logger.Log("[ActBounties] Successfully completed {0} bounties.", Act);
+            Core.Logger.Log("[章节悬赏] 成功完成 {0} 悬赏.", Act);
             return true;
         }
 
         private async Task<bool> UnsupportedBountyFound()
         {
-            Core.Logger.Log("[ActBounties] It seems like we have an unsupported bounty in {0}, skipping the act.", Act);
+            Core.Logger.Log("[章节悬赏] 我们遇到不支持的任务在{0}，跳过此章节.", Act);
             BountyStatistics.RestartsFromUnsupported++;
             return true;
         }
 
         private async Task<bool> ActIsDisabled()
         {
-            Core.Logger.Log("[ActBounties] {0} is disabled on settings, skipping the act.", Act);
+            Core.Logger.Log("[章节悬赏] {0} 在设置中被禁用, ，跳过此章节.", Act);
             return true;
         }
 
         private async Task<bool> Failed()
         {
-            Core.Logger.Error("[ActBounties] Act bounties failed for {0}, skipping the act.", Act);
+            Core.Logger.Error("[奖励悬赏] {0}不是奖励章节,跳过这个章节.", Act);
             return true;
         }
     }

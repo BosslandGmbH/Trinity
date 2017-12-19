@@ -1,0 +1,78 @@
+﻿<UserControl 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
+
+    mc:Ignorable="d" Background="#434343" d:DesignHeight="820" d:DesignWidth="390">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../UI/Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:PercentConverter x:Key="PercentConverter" />
+            <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+            <converters:EnumVisibilityConverter x:Key="HiddenWhenEnumTrueConverter" Reverse="True" />
+            <converters:EnumVisibilityConverter x:Key="VisibleWhenEnumTrueConverter"  />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Border Padding="10">
+        <Grid>
+            <StackPanel>
+                <GroupBox>
+                    <GroupBox.Header>一般 </GroupBox.Header>
+                    <StackPanel>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="群怪数量"
+                            ToolTip="战斗开始前必须进行分组的怪物数量 "
+                            Interval="100" IsSnapToTickEnabled="True"
+                            Maximum="40" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.ClusterSize}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                        Tag="最小生命值 %"
+                        ToolTip="在使用药水之前,你的生命值必须低于多少"
+                                Interval="500" Maximum="99" Minimum="0" 
+                                SmallChange="1" LargeChange="5"
+                                TickPlacement="None" 
+                                Value="{Binding Path=DataContext.EmergencyHealthPct, Converter={StaticResource PercentConverter}}" 
+                                HorizontalAlignment="Stretch" Margin="0"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>狂暴冲撞</GroupBox.Header>
+                    <StackPanel>
+                        <WrapPanel Margin="0,5,0,10">
+                            <RadioButton ToolTip="使用狂暴冲撞,只要是有道理的"
+                                Content="任何时候" IsChecked="{Binding DataContext.FuriousCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Default}"  />
+                            <RadioButton ToolTip="只在战斗时使用"
+                                Content="战斗中" IsChecked="{Binding DataContext.FuriousCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=InCombat}" />
+                            <RadioButton  ToolTip="只使用而不打怪"
+                                Content="脱离战斗" IsChecked="{Binding DataContext.FuriousCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=OutOfCombat}" />
+                        </WrapPanel>
+                        <StackPanel Margin="0,0,0,0">
+                            <CheckBox ToolTip="在移动时被阻止使用" 
+                                      IsChecked="{Binding DataContext.FuriousCharge.Reasons, ConverterParameter=Blocked, Converter={converters:FlagsToBoolConverter}}">在移动时被阻止使用</CheckBox>
+                        </StackPanel>
+                        <StackPanel Margin="0,8,0,0">
+                            <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="间隔使用"
+                            ToolTip="重复使用技能的间隔时间"
+                            Interval="100" Maximum="4000" Minimum="200" 
+                            SmallChange="100" LargeChange="100" 
+                            TickPlacement="BottomRight" TickFrequency="100"
+                            Value="{Binding DataContext.FuriousCharge.RecastDelayMs}" 
+                            HorizontalAlignment="Stretch" Margin="2"
+                            />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>
+
+    

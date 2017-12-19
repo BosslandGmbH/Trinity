@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Framework.Helpers;
 using Zeta.Game;
-
+using Trinity.Components.Combat;
 
 namespace Trinity.Components.Coroutines.Town
 {
@@ -15,13 +15,18 @@ namespace Trinity.Components.Coroutines.Town
         {
             if (!ZetaDia.IsInTown)
             {
-                Core.Logger.Verbose("[IdentifyItems] Need to be in town to identify items");
+                Core.Logger.Verbose("[鉴定物品] 需要在城里鉴定物品");
                 return false;
             }
-
+            //智能包裹整理
+            if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Items.KeepLegendaryUnid && (Core.Player.ParticipatingInTieredLootRun && !DefaultLootProvider.CanVedonInRift))
+            {
+                Core.Logger.Verbose($"[鉴定物品] 秘境中仓库锁定, IsInventoryLockedForGreaterRift={Core.Player.IsInventoryLockedForGreaterRift}, KeepLegendaryUnid={Core.Settings.Items.KeepLegendaryUnid}, ParticipatingInTieredLootRun={Core.Player.ParticipatingInTieredLootRun}, CanVedonInRift={DefaultLootProvider.CanVedonInRift}");
+                return false;
+            }
             if (Core.Settings.Items.KeepLegendaryUnid)
             {
-                Core.Logger.Verbose("[IdentifyItems] Town run setting 'Keep Legendary Unidentified' - Skipping ID");
+                Core.Logger.Verbose("[鉴定物品] 回城设置 '保持未鉴定的传奇' - 跳过 ID");
                 return false;
             }
 
@@ -30,7 +35,7 @@ namespace Trinity.Components.Coroutines.Town
             var bookActor = TownInfo.BookOfCain;
             if (bookActor == null)
             {
-                Core.Logger.Log($"[IdentifyItems] TownInfo.BookOfCain not found Act={ZetaDia.CurrentAct} WorldSnoId={ZetaDia.Globals.WorldSnoId}");
+                Core.Logger.Log($"[鉴定物品] 城镇信息.未找到凯恩之书 Act={ZetaDia.CurrentAct} WorldSnoId={ZetaDia.Globals.WorldSnoId}");
                 return false;
             }
 
@@ -38,8 +43,12 @@ namespace Trinity.Components.Coroutines.Town
             {
                 if (DateTime.UtcNow > timeout)
                     break;
-
-                Core.Logger.Log("Identifying Items");
+                if (!ZetaDia.IsInTown)
+                {
+                    Core.Logger.Verbose("[鉴定物品] 不是在城里鉴定物品");
+                    break;
+                }
+                Core.Logger.Log("鉴定物品");
 
                 if (!Core.Grids.CanRayCast(ZetaDia.Me.Position, bookActor.Position))
                 {

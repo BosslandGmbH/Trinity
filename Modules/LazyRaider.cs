@@ -25,7 +25,7 @@ namespace Trinity.Modules
             var result = (Control.MouseButtons & MouseButtons.Left) == MouseButtons.Left;
             if (result)
             {
-                Core.Logger.Log("Mouse Left Down LazyRaider Pause");
+                Core.Logger.Log("按下鼠标左键暂停懒人模式");
             }
             return result;
         }

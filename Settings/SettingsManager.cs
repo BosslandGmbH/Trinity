@@ -66,17 +66,17 @@ namespace Trinity.Settings
                     if (string.IsNullOrEmpty(filePath))
                         return;
 
-                    Core.Logger.Log($"Saving file to {filePath}");
+                    Core.Logger.Log($"保存文件到 {filePath}");
                     var exportSettings = new TrinityStorage();
                     UILoader.DataContext.ViewStorage.CopyTo(exportSettings);
 
-                    UpdateSections("Exporting", exportSettings, selectionViewModel);
+                    UpdateSections("导出", exportSettings, selectionViewModel);
                     exportSettings.SaveToFile(filePath);
                 }                
             }
             catch (Exception ex)
             {
-                Core.Logger.Error($"Exception in LoadSettingsCommand {ex}");
+                Core.Logger.Error($"在加载设置命令中的异常  {ex}");
             }
         });
 
@@ -95,7 +95,7 @@ namespace Trinity.Settings
                 if (!File.Exists(filePath))
                     throw new FileNotFoundException($"{filePath} not found");
 
-                Core.Logger.Log($"Loading file: {filePath}");
+                Core.Logger.Log($"加载文件: {filePath}");
 
                 // Load settings into Settings window view model only
                 // User still has to click save for it to actually be applied.    
@@ -106,13 +106,13 @@ namespace Trinity.Settings
 
                 if (TryGetImportSelections(importedSections, out selectionViewModel))
                 {
-                    UpdateSections("Importing", settings, selectionViewModel);
+                    UpdateSections("导入", settings, selectionViewModel);
                     UILoader.DataContext.LoadSettings(settings);
                 }
             }
             catch (Exception ex)
             {
-                Core.Logger.Error($"Exception in LoadSettingsCommand {ex}");
+                Core.Logger.Error($"在加载设置命令中的异常  {ex}");
             }
         });
 
@@ -173,16 +173,16 @@ namespace Trinity.Settings
         {
             var dataContext = new SettingsSelectionViewModel
             {
-                Title = "Sections to Import",
-                Description = "Only the sections selected below will be imported.",
-                OkButtonText = "Import",
+                Title = "他人设置 代码导入",
+                Description = "只有勾上的选项内容才会被导入.倒序排列依次是探索、策略、装备列表、战斗、卡奈魔盒、巅峰加点、冒险、高级、权重、物品、躲避、冒险、最后是各职业特定策略",
+                OkButtonText = "导入",
             };
 
             EnableSections(importedParts, dataContext);
 
             var window = UILoader.CreateNonModalWindow(
                 "Modals\\SettingsSelection.xaml",
-                "Import Settings",
+                "导入设置",
                 dataContext,
                 350,
                 225
@@ -198,16 +198,16 @@ namespace Trinity.Settings
         {
             var dataContext = new SettingsSelectionViewModel
             {
-                Title = "Sections to Export",
-                Description = "Only the sections selected below will be exported.",
-                OkButtonText = "Export",
+                Title = "当前设置 代码导出",
+                Description = "只有勾上的选项内容才会被导出.倒序排列依次是探索、策略、装备列表、战斗、卡奈魔盒、巅峰加点、冒险、高级、权重、物品、躲避、冒险、最后是各职业特定策略",
+                OkButtonText = "导出",
             };
 
             EnableSections(SettingsSelectionViewModel.GetDefaultSelections(), dataContext);
 
             var window = UILoader.CreateNonModalWindow(
                 "Modals\\SettingsSelection.xaml",
-                "Export Settings",
+                "导出设置",
                 dataContext,
                 350,
                 225
@@ -252,7 +252,7 @@ namespace Trinity.Settings
                 }
             }
                 
-            Core.Logger.Log($"File contains {result.Count} sections: {string.Join(", ", result)}");
+            Core.Logger.Log($"文件包含 {result.Count} 部分: {string.Join(", ", result)}");
             return result;
         }
 
@@ -277,7 +277,7 @@ namespace Trinity.Settings
                 if (sectionEntry.IsSelected)
                 {
                     if(!string.IsNullOrEmpty(actionDescripter))
-                        Core.Logger.Log($"{actionDescripter} Section: {sectionEntry}");
+                        Core.Logger.Log($"{actionDescripter} 部分: {sectionEntry}");
 
                     continue;
                 }

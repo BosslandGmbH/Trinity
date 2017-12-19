@@ -62,7 +62,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Log("[EnterLevelArea] " + value);
+                    Core.Logger.Log("[进入任务区域] " + value);
                     StatusText = "[EnterLevelArea] " + value;
                 }
                 _state = value;
@@ -331,7 +331,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     if (portal != null)
                     {
                         _discoveredPortalActorId = portal.ActorSnoId;
-                        Core.Logger.Log($"[EnterLevelArea] Unable to find the portal we needed, using this one instead {portal.Name} ({portal.ActorSnoId})");
+                        Core.Logger.Log($"[进入任务区域] 无法找到我们需要的门户, 使用此门户而不是 {portal.Name} ({portal.ActorSnoId})");
                     }
                 }
             }
@@ -487,7 +487,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                                 var nearestGate = ActorFinder.FindNearestDeathGate();
                                 if (nearestGate != null)
                                 {
-                                    Core.Logger.Warn("Found death gate location");
+                                    Core.Logger.Warn("发现死神之门的位置");
                                     _objectiveLocation = nearestGate.Position;
                                 }
                             }
@@ -516,7 +516,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 //}
                 if (_objectiveLocation != Vector3.Zero)
                 {
-                    Core.Logger.Log("[EnterLevelArea] Found the objective at distance {0}", AdvDia.MyPosition.Distance(_objectiveLocation));
+                    Core.Logger.Log("[进入任务区域] 在距离{0}处发现任务目标", AdvDia.MyPosition.Distance(_objectiveLocation));
                     ExplorationHelpers.SetExplorationPriority(_objectiveLocation);
                 }
             }

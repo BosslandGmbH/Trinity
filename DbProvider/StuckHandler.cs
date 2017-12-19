@@ -25,6 +25,10 @@ namespace Trinity.DbProvider
 {
     public class StuckHandler : IStuckHandler
     {
+        /// <summary>
+        /// 卡住时间
+        /// </summary>
+        private DateTime _startStuckTime = DateTime.MinValue;
         private DateTime _lastStuckCheck = DateTime.MinValue;
         private Vector3 _lastPosition = Vector3.Zero;
         private bool _isStuck;
@@ -50,7 +54,11 @@ namespace Trinity.DbProvider
                 CheckForStuck();
 
                 if (_isStuck)
+                {
+                    _startStuckTime = _startStuckTime == DateTime.MinValue ? DateTime.UtcNow : _startStuckTime;
                     LastStuckTime = DateTime.UtcNow;
+                }
+                    
 
                 return _isStuck;
             }
@@ -66,10 +74,10 @@ namespace Trinity.DbProvider
             if (IsNotStuck())
             {
                 if (_isSuspectedStuck)
-                    Core.Logger.Log(LogCategory.StuckHandler, "No longer suspected of stuck");
+                    Core.Logger.Log(LogCategory.StuckHandler, "不再被怀疑卡住");
 
                 if (_isStuck)
-                    Core.Logger.Log(LogCategory.StuckHandler, "No longer stuck!");
+                    Core.Logger.Log(LogCategory.StuckHandler, "不再停留!");
 
                 Reset();
                 return _isStuck;
@@ -90,7 +98,7 @@ namespace Trinity.DbProvider
                     return _isStuck;
                 }
 
-                Core.Logger.Log(LogCategory.StuckHandler, "Suspected Stuck for {0}ms", millisecondsSuspected);
+                Core.Logger.Log(LogCategory.StuckHandler, "怀疑卡住 {0}毫秒", millisecondsSuspected);
                 return _isStuck;
             }
 
@@ -103,9 +111,10 @@ namespace Trinity.DbProvider
 
         private void SetStuck()
         {
-            Core.Logger.Log(LogCategory.StuckHandler, "Definately Stuck!");
+            Core.Logger.Log(LogCategory.StuckHandler, "真的卡住了!");
             _isStuck = true;
-            _stuckPosition = ZetaDia.Me.Position;
+			_stuckPosition = ZetaDia.Me.Position;
+            _startStuckTime = DateTime.UtcNow;
             _isSuspectedStuck = false;
             _suspectedStuckStartTime = DateTime.MaxValue;
         }
@@ -121,8 +130,9 @@ namespace Trinity.DbProvider
         public void Reset(string reason = default(string))
         {
             if (!string.IsNullOrEmpty(reason))
-                Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: {reason}");
+                Core.Logger.Log(LogCategory.StuckHandler, $"没有卡住: {reason}");
 
+            _startStuckTime = DateTime.MinValue;
             _isStuck = false;
             _isSuspectedStuck = false;
             _stuckPosition = Vector3.Zero;
@@ -134,13 +144,13 @@ namespace Trinity.DbProvider
         {
             if (Core.Settings.Advanced.DisableAllMovement)
             {
-                Core.Logger.Log(LogCategory.Movement, $"Not Stuck: Movement is disabled in settings");
+                Core.Logger.Log(LogCategory.Movement, $"没有卡住: 在设置中禁止移动");
                 return true;
             }
 
             if (!ZetaDia.IsInGame || ZetaDia.Me == null || !ZetaDia.Me.IsValid)
             {
-                Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Player data invalid");
+                Core.Logger.Log(LogCategory.StuckHandler, $"没有卡住: 玩家的数据无效");
                 return true;
             }
 
@@ -149,51 +159,51 @@ namespace Trinity.DbProvider
 
             if (ZetaDia.Me.IsInConversation || ZetaDia.Globals.IsPlayingCutscene || ZetaDia.Globals.IsLoadingWorld)
             {
-                Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Conversation/CutScene/Loading");
+                Core.Logger.Log(LogCategory.StuckHandler, $"没有卡住: 对话/切换场景/加载");
                 return true;
             }
 
             if (ZetaDia.Me.LoopingAnimationEndTime > 0)
             {
-                Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Casting");
+                Core.Logger.Log(LogCategory.StuckHandler, $"没有卡住: 正在投掷");
                 return true;
             }
 
             if (_stuckPosition != Vector3.Zero && _stuckPosition.Distance(ZetaDia.Me.Position) > 20f)
             {
-                Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Moved {_stuckPosition.Distance(ZetaDia.Me.Position)} from stuck position");
+                Core.Logger.Log(LogCategory.StuckHandler, $"没有卡住: 从卡住位置 {_stuckPosition.Distance(ZetaDia.Me.Position)} 移动");
                 return true;
             }
 
             if (_suspectedStuckPosition != Vector3.Zero && _suspectedStuckPosition.Distance(ZetaDia.Me.Position) > 15f)
             {
-                Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Moved {_suspectedStuckPosition.Distance(ZetaDia.Me.Position)} from suspected stuck position");
+                Core.Logger.Log(LogCategory.StuckHandler, $"没有卡住: 从疑似卡住位置 {_suspectedStuckPosition.Distance(ZetaDia.Me.Position)} 移动");
                 return true;
             }
 
             if (TrinityCombat.IsCurrentlyAvoiding)
             {
-                Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Currently Avoiding");
+                Core.Logger.Log(LogCategory.StuckHandler, $"没有卡住: 目前规避");
                 return false;
             }
 
             if (TrinityCombat.IsCurrentlyKiting)
             {
-                Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Currently Kiting");
+                Core.Logger.Log(LogCategory.StuckHandler, $"没有卡住: 目前放风筝");
                 return false;
             }
 
             var isWaiting = TrinityCombat.Targeting.CurrentTarget != null && TrinityCombat.Targeting.CurrentPower?.SNOPower == SNOPower.Walk && Core.Player.MovementSpeed < 4 && Core.Grids.CanRayWalk(ZetaDia.Me.Position, TrinityCombat.Targeting.CurrentTarget.Position);
             if (isWaiting)
             {
-                Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Waiting (Routine Walk)");
+                Core.Logger.Log(LogCategory.StuckHandler, $"没有卡住: 等待 (常规步行)");
                 return false;
             }
 
             var secondsSincePowerUse = DateTime.UtcNow.Subtract(SpellHistory.LastSpellUseTime).TotalSeconds;
             if (secondsSincePowerUse < 4 && !_invalidBusyPowers.Contains(SpellHistory.LastPowerUsed) && TrinityCombat.IsInCombat)
             {
-                Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Recently cast power in combat ({SpellHistory.LastPowerUsed}, {secondsSincePowerUse}s ago)");
+                Core.Logger.Log(LogCategory.StuckHandler, $"没有卡住: 最近在战斗中施放的力量 ({SpellHistory.LastPowerUsed}, {secondsSincePowerUse}前)");
                 return true;
             }
 
@@ -207,31 +217,31 @@ namespace Trinity.DbProvider
             var anim = ZetaDia.Me.CommonData.AnimationState;
             if (_busyAnimationStates.Contains(anim))
             {
-                Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Busy Animation State ({anim})");
+                Core.Logger.Log(LogCategory.StuckHandler, $"没有卡住: 繁忙的动画状态  ({anim})");
                 return true;
             }
 
             if (Core.Player.MovementSpeed > 3)
             {
-                Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Moving (Speed: {Core.Player.MovementSpeed})");
+                Core.Logger.Log(LogCategory.StuckHandler, $"没有卡住: 移动 (速度: {Core.Player.MovementSpeed})");
                 return true;
             }
 
             if (ZetaDia.Me.IsDead || UIElements.WaypointMap.IsVisible)
             {
-                Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Dead");
+                Core.Logger.Log(LogCategory.StuckHandler, $"没有卡住: 死亡");
                 return true;
             }
 
             if (IsProfileBusy())
             {
-                Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Profile is Busy");
+                Core.Logger.Log(LogCategory.StuckHandler, $"没有卡住: Profile 很忙");
                 return true;
             }
 
             if (IsAdventurerBusy())
             {
-                Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Adventurer is Busy");
+                Core.Logger.Log(LogCategory.StuckHandler, $"没有卡住: Adventurer 很忙");
                 return true;
             }
 
@@ -307,7 +317,7 @@ namespace Trinity.DbProvider
             }
             catch (Exception ex)
             {
-                Core.Logger.Log("Exception while checking for current profile behavior!");
+                Core.Logger.Log("在检查当前配置文件的行为异常!");
                 Core.Logger.Log(LogCategory.GlobalHandler, ex.ToString());
             }
             if (currentProfileBehavior != null)
@@ -329,16 +339,27 @@ namespace Trinity.DbProvider
 
         public async Task<bool> DoUnstick()
         {
-            Core.Logger.Warn("Trying to get Unstuck...");
+            if ((DateTime.UtcNow - _startStuckTime).TotalSeconds <= 5.0)
+            {
+                Core.Logger.Warn($"尝试使用导航解除卡位...");
+                Navigator.Clear();
+                Navigator.NavigationProvider.Clear();
+                await ClearDestructibleNearby();
+                await Navigator.SearchGridProvider.Update();
+
+                return true;
+            }
+
+            Core.Logger.Warn("尝试使用移动解除卡位...");
             Navigator.Clear();
             Navigator.NavigationProvider.Clear();
             await ClearDestructibleNearby();
 
             await Navigator.SearchGridProvider.Update();
             var startPosition = ZetaDia.Me.Position;
-            Core.Logger.Log("Starting Segment 1...");
+            Core.Logger.Log("开始第一次移动...");
             await MoveAwayFrom(startPosition);
-            Core.Logger.Log("Starting Segment 2 ...");
+            Core.Logger.Log("开始第二次移动...");
             await MoveAwayFrom(startPosition);
             return true;
         }
@@ -392,7 +413,7 @@ namespace Trinity.DbProvider
 
                 var distance = targetPosition.Distance(ZetaDia.Me.Position);
 
-                Core.Logger.Log("Moving to {0} Dist={1}", targetPosition, distance);
+                Core.Logger.Log("移动到 {0} 距离={1}", targetPosition, distance);
 
                 if (Core.IsOutOfGame)
                     return false;
@@ -467,7 +488,7 @@ namespace Trinity.DbProvider
                 var newpoint = new Vector3(newX, newY, center.Z);
                 result.Add(newpoint);
 
-                //Core.Logger.Debug(LogCategory.Movement, "Calculated point {0}: {1}", i, newpoint.ToString());
+                //Core.Logger.Debug(LogCategory.Movement, "计算点 {0}: {1}", i, newpoint.ToString());
             }
             return result;
         }

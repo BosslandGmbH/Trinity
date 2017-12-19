@@ -11,7 +11,7 @@ namespace Trinity.Framework.Reference
 
         public static Set ThousandStorms = new Set
         {
-            Name = "Raiment of a Thousand Storms",
+            Name = "千风飓",
             Items = new List<Item>
             {
                 Legendary.MaskOfTheSearingSky,
@@ -28,7 +28,7 @@ namespace Trinity.Framework.Reference
 
         public static Set NorvaldsFavor = new Set
         {
-            Name = "Norvald's Favor",
+            Name = "诺瓦德的热忱",
             Items = new List<Item>
             {
                 Legendary.ShieldOfTheSteed,
@@ -39,7 +39,7 @@ namespace Trinity.Framework.Reference
 
         public static Set ThornsoftheInvoker = new Set
         {
-            Name = "Thorns of the Invoker",
+            Name = "唤魔师的荆棘",
             Items = new List<Item>
             {
                 Legendary.BurdenOfTheInvoker,
@@ -56,7 +56,7 @@ namespace Trinity.Framework.Reference
 
         public static Set Innas = new Set
         {
-            Name = "Inna's Mantra",
+            Name = "尹娜的真言",
             Items = new List<Item>
             {
                 Legendary.InnasVastExpanse,
@@ -74,7 +74,7 @@ namespace Trinity.Framework.Reference
 
         public static Set RaimentOfTheJadeHarvester = new Set
         {
-            Name = "Raiment of the Jade Harvester",
+            Name = "玉魂师的战甲",
             Items = new List<Item>
             {
                 Legendary.JadeHarvestersCourage,
@@ -91,7 +91,7 @@ namespace Trinity.Framework.Reference
 
         public static Set VyrsAmazingArcana = new Set
         {
-            Name = "Vyr's Amazing Arcana",
+            Name = "维尔的神装",
             Items = new List<Item>
             {
                 Legendary.VyrsAstonishingAura,
@@ -108,7 +108,7 @@ namespace Trinity.Framework.Reference
 
         public static Set TheShadowsMantle = new Set
         {
-            Name = "The Shadow's Mantle",
+            Name = "暗影装束",
             Items = new List<Item>
             {
                 Legendary.TheShadowsBane,
@@ -125,7 +125,7 @@ namespace Trinity.Framework.Reference
 
         public static Set MightOfTheEarth = new Set
         {
-            Name = "Might of the Earth",
+            Name = "大地之力",
             Items = new List<Item>
             {
                 Legendary.EyesOfTheEarth,
@@ -142,7 +142,7 @@ namespace Trinity.Framework.Reference
 
         //public static Set AshearasVestments = new Set
         //{
-        //    Name = "Asheara's Vestments",
+        //    Name = "艾席拉的制服",
         //    Items = new List<Item>
         //    {
         //        Legendary.AshearasFinders,
@@ -157,7 +157,7 @@ namespace Trinity.Framework.Reference
 
         //public static Set CainsDestiny = new Set
         //{
-        //    Name = "Cain's Destiny",
+        //    Name = "凯恩的天命",
         //    Items = new List<Item>
         //    {
         //        Legendary.CainsTravelers,
@@ -171,7 +171,7 @@ namespace Trinity.Framework.Reference
 
         //public static Set AughildsAuthority = new Set
         //{
-        //    Name = "Aughild's Authority",
+        //    Name = "奥吉德的权利",
         //    Items = new List<Item>
         //    {
         //        Legendary.AughildsPower,
@@ -185,7 +185,7 @@ namespace Trinity.Framework.Reference
 
         //public static Set SagesJourney = new Set
         //{
-        //    Name = "Sage's Journey",
+        //    Name = "贤者之难",
         //    Items = new List<Item>
         //    {
         //        Legendary.SagesApogee,
@@ -198,7 +198,7 @@ namespace Trinity.Framework.Reference
 
         public static Set ZunimassasHaunt = new Set
         {
-            Name = "Zunimassa's Haunt",
+            Name = "祖尼玛萨之魂",
             Items = new List<Item>
             {
                 Legendary.ZunimassasMarrow,
@@ -216,7 +216,7 @@ namespace Trinity.Framework.Reference
 
         public static Set DelseresMagnumOpus = new Set
         {
-            Name = "Delsere's Magnum Opus",
+            Name = "德尔西尼的杰作",
             Items = new List<Item>
             {
                 Legendary.DashingPauldronsOfDespair,
@@ -233,7 +233,7 @@ namespace Trinity.Framework.Reference
 
         public static Set NatalyasVengeance = new Set
         {
-            Name = "Natalya's Vengeance",
+            Name = "娜塔亚的复仇",
             Items = new List<Item>
             {
                 Legendary.NatalyasBloodyFootprints,
@@ -251,7 +251,7 @@ namespace Trinity.Framework.Reference
 
         public static Set UnhallowedEssence = new Set
         {
-            Name = "Unhallowed Essence",
+            Name = "邪秽之精",
             Items = new List<Item>
             {
                 Legendary.UnsanctifiedShoulders,
@@ -268,7 +268,7 @@ namespace Trinity.Framework.Reference
 
         public static Set BastionsOfWill = new Set
         {
-            Name = "Bastions of Will",
+            Name = "意志壁垒",
             Items = new List<Item>
             {
                 Legendary.Focus,  
@@ -279,7 +279,7 @@ namespace Trinity.Framework.Reference
 
         public static Set LegacyOfNightmares = new Set
         {
-            Name = "Legacy of Nightmares",
+            Name = "梦魇者的遗礼",
             Items = new List<Item>
             {
                 Legendary.LitanyOfTheUndaunted,  
@@ -290,7 +290,7 @@ namespace Trinity.Framework.Reference
 
         public static Set ChantodosResolve = new Set
         {
-            Name = "Chantodo's Resolve",
+            Name = "迦陀朵的决心",
             Items = new List<Item>
             {
                 Legendary.ChantodosWill,
@@ -301,7 +301,7 @@ namespace Trinity.Framework.Reference
 
         public static Set BulKathossOath = new Set
         {
-            Name = "Bul-Kathos's Oath",
+            Name = "布尔凯索之誓",
             Items = new List<Item>
             {
                 Legendary.BulkathossWarriorBlood,
@@ -312,7 +312,7 @@ namespace Trinity.Framework.Reference
 
         public static Set ManajumasWay = new Set
         {
-            Name = "Manajuma's Way",
+            Name = "马纳祖玛之道",
             Items = new List<Item>
             {
                 Legendary.ManajumasCarvingKnife,
@@ -323,7 +323,7 @@ namespace Trinity.Framework.Reference
 
         public static Set IstvansPairedBlades = new Set
         {
-            Name = "Istvan's Paired Blades",
+            Name = "伊斯特凡的对剑",
             Items = new List<Item>
             {
                 Legendary.TheSlanderer,
@@ -334,7 +334,7 @@ namespace Trinity.Framework.Reference
 
         public static Set DanettasHatred = new Set
         {
-            Name = "Danetta's Hatred",
+            Name = "达内塔之憎",
             Items = new List<Item>
             {
                 Legendary.DanettasSpite,
@@ -345,7 +345,7 @@ namespace Trinity.Framework.Reference
 
         //public static Set GuardiansJeopardy = new Set
         //{
-        //    Name = "Guardian's Jeopardy",
+        //    Name = "守护者的险境",
         //    Items = new List<Item>
         //    {           
         //        Legendary.GuardiansCase,
@@ -358,7 +358,7 @@ namespace Trinity.Framework.Reference
 
         //public static Set CaptainCrimsonTrimmings = new Set
         //{
-        //    Name = "Captain Crimson Trimmings",
+        //    Name = "克里森船长的饰衣",
         //    Items = new List<Item>
         //    {
         //        Legendary.CaptainCrimsonsSilkGirdle,
@@ -371,7 +371,7 @@ namespace Trinity.Framework.Reference
 
         //public static Set DemonsHide = new Set
         //{
-        //    Name = "Demon's Hide",
+        //    Name = "恶魔之皮",
         //    Items = new List<Item>
         //    {
         //        Legendary.DemonsAileron,
@@ -387,7 +387,7 @@ namespace Trinity.Framework.Reference
 
         public static Set TheLegacyOfRaekor = new Set
         {
-            Name = "The Legacy of Raekor",
+            Name = "蕾蔻的传世铠",
             Items = new List<Item>
             {
                 Legendary.RaekorsBurden,
@@ -404,7 +404,7 @@ namespace Trinity.Framework.Reference
 
         public static Set EmbodimentOfTheMarauder = new Set
         {
-            Name = "Embodiment of the Marauder",
+            Name = "掠夺者的化身",
             Items = new List<Item>
             {
                 Legendary.MaraudersCarapace,
@@ -421,7 +421,7 @@ namespace Trinity.Framework.Reference
 
         public static Set HelltoothHarness = new Set
         {
-            Name = "Helltooth Harness",
+            Name = "魔牙战装",
             Items = new List<Item>
             {
                 Legendary.HelltoothMantle,
@@ -438,7 +438,7 @@ namespace Trinity.Framework.Reference
 
         public static Set FirebirdsFinery = new Set
         {
-            Name = "Firebird's Finery",
+            Name = "不死鸟的华服",
             Items = new List<Item>
             {
                 Legendary.FirebirdsBreast,
@@ -456,7 +456,7 @@ namespace Trinity.Framework.Reference
 
         public static Set ArmorOfAkkhan = new Set
         {
-            Name = "Armor of Akkhan",
+            Name = "阿克汉的战甲",
             Items = new List<Item>
             {
                 Legendary.BreastplateOfAkkhan,  
@@ -474,7 +474,7 @@ namespace Trinity.Framework.Reference
 
         public static Set BlackthornesBattlegear = new Set
         {
-            Name = "Blackthorne's Battlegear",
+            Name = "黑棘的战铠",
             Items = new List<Item>
             {
                 Legendary.BlackthornesDuncraigCross,
@@ -490,7 +490,7 @@ namespace Trinity.Framework.Reference
 
         public static Set TalRashasElements = new Set
         {
-            Name = "Tal Rasha's Elements",
+            Name = "塔·拉夏的法理",
             Items = new List<Item>
             {
                 Legendary.TalRashasAllegiance,
@@ -508,7 +508,7 @@ namespace Trinity.Framework.Reference
 
         public static Set EndlessWalk = new Set
         {
-            Name = "Endless Walk",
+            Name = "无尽之途",
             Items = new List<Item>
             {
                 Legendary.TheTravelersPledge,
@@ -519,7 +519,7 @@ namespace Trinity.Framework.Reference
 
         public static Set RolandsLegacy = new Set
         {
-            Name = "Roland's Legacy",
+            Name = "罗兰的传世甲",
             Items = new List<Item>
             {
                 Legendary.RolandsBearing,
@@ -536,7 +536,7 @@ namespace Trinity.Framework.Reference
 
         public static Set ImmortalKingsCall = new Set
         {
-            Name = "Immortal King's Call",
+            Name = "不朽之王的呼唤",
             Items = new List<Item>
             {
                 Legendary.ImmortalKingsBoulderBreaker,
@@ -554,7 +554,7 @@ namespace Trinity.Framework.Reference
 
         public static Set WrathOfTheWastes = new Set
         {
-            Name = "Wrath of the Wastes",
+            Name = "废土之怒",
             Items = new List<Item>
             {
                 Legendary.CuirassOfTheWastes,
@@ -571,7 +571,7 @@ namespace Trinity.Framework.Reference
 
         public static Set MonkeyKingsGarb = new Set
         {
-            Name = "Monkey King's Garb",
+            Name = "猴王战甲",
             Items = new List<Item>
             {
                 Legendary.SunwukosBalance,
@@ -588,7 +588,7 @@ namespace Trinity.Framework.Reference
 
         public static Set ShenlongsSpirit = new Set
         {
-            Name = "Shenlong's Spirit",
+            Name = "神龙之魂",
             Items = new List<Item>
             {
                 Legendary.ShenlongsFistOfLegend,  
@@ -599,7 +599,7 @@ namespace Trinity.Framework.Reference
 
         //public static Set HallowedProtectors = new Set
         //{
-        //    Name = "Hallowed Protectors",
+        //    Name = "神圣护卫",
         //    Items = new List<Item>
         //    {
         //        Legendary.HallowedBreach,
@@ -615,7 +615,7 @@ namespace Trinity.Framework.Reference
 
         public static Set UlianasStratagem = new Set
         {
-            Name = "Uliana's Stratagem",
+            Name = "乌莲娜的谋略",
             Items = new List<Item>
             {
                 Legendary.UlianasBurden,
@@ -632,7 +632,7 @@ namespace Trinity.Framework.Reference
 
         public static Set SpiritOfArachnyr = new Set
         {
-            Name = "Spirit of Arachnyr",
+            Name = "亚拉基尔的灵魂",
             Items = new List<Item>
             {
                 Legendary.ArachyrsCarapace,
@@ -649,7 +649,7 @@ namespace Trinity.Framework.Reference
 
         public static Set SeekerOfTheLight = new Set
         {
-            Name = "Seeker of the Light",
+            Name = "圣光追寻者",
             Items = new List<Item>
             {
                 Legendary.CrownOfTheLight,
@@ -666,7 +666,7 @@ namespace Trinity.Framework.Reference
 
         public static Set TragoulsAvatar = new Set
         {
-            Name = "Trag'Oul's Avatar",
+            Name = "塔格奥的化身",
             Items = new List<Item>
             {
                 Legendary.TragoulsClaws,
@@ -684,7 +684,7 @@ namespace Trinity.Framework.Reference
 
         public static Set BonesOfRathma = new Set
         {
-            Name = "Bones of Rathma",
+            Name = "拉斯玛的骨甲",
             Items = new List<Item>
             {
                 Legendary.RathmasMacabreVambraces,
@@ -702,7 +702,7 @@ namespace Trinity.Framework.Reference
 
         public static Set PestilenceMastersShroud = new Set
         {
-            Name = "Pestilence Master's Shroud",
+            Name = "死疫使者的裹布",
             Items = new List<Item>
             {
                 Legendary.PestilenceBattleBoots,
@@ -720,7 +720,7 @@ namespace Trinity.Framework.Reference
 
         public static Set GraceOfInarius = new Set
         {
-            Name = "Grace of Inarius",
+            Name = "伊纳瑞斯的恩泽",
             Items = new List<Item>
             {
                 Legendary.InariussConviction,
@@ -738,7 +738,7 @@ namespace Trinity.Framework.Reference
 
         public static Set JessethArms = new Set
         {
-            Name = "Jesseth Arms",
+            Name = "杰西斯武装",
             Items = new List<Item>
             {
                 Legendary.JessethSkullscythe,
@@ -750,7 +750,7 @@ namespace Trinity.Framework.Reference
 
         //public static Set BornsCommand = new Set
         //{
-        //    Name = "Born's Command",
+        //    Name = "博恩的号令",
         //    Items = new List<Item>
         //    {
         //        Legendary.BornsFrozenSoul,

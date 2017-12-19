@@ -45,20 +45,20 @@ namespace Trinity.Framework.Behaviors
 
         private async Task<bool> Move()
         {
-            Core.Logger.Verbose($"Moving to Interact: {Actor}");
+            Core.Logger.Verbose($"移动到: {Actor}");
             await CommonCoroutines.MoveTo(Actor.Position, Actor.Name);
             return true;
         }
 
         protected override async Task<bool> OnStarted()
         {
-            Core.Logger.Warn($"Started moving to Interact: {Actor}");
+            Core.Logger.Warn($"开始移动到: {Actor}");
             return true;
         }
 
         protected override async Task<bool> OnStopped()
         {
-            Core.Logger.Warn($"Arrived at Interact: {Actor}");
+            Core.Logger.Warn($"到达: {Actor}");
             Actor.Interact();
             VisitedActorPositions.Add(Actor.Position);
             Actor = null;

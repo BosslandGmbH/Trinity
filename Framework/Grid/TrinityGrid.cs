@@ -277,7 +277,7 @@ namespace Trinity.Framework.Grid
             {
                 var nodes = scene.ExplorationNodes.SelectMany(n => n.Nodes, (p, c) => new AvoidanceNode(c)).ToList();
 
-                Core.Logger.Verbose($"[{gridName}] Updating grid for scene '{scene.SceneHash}' with {scene.ExplorationNodes.Count} new nodes");
+                Core.Logger.Verbose($"[{gridName}] 更新场景网格数据 '{scene.SceneHash}' with {scene.ExplorationNodes.Count} new nodes");
 
                 UpdateInnerGrid(nodes);
 
@@ -295,7 +295,7 @@ namespace Trinity.Framework.Grid
             IsPopulated = true;
 
             sw.Stop();
-            Core.Logger.Verbose($"Avoidance Grid updated NewNodes={nodeCount} NearestNodeFound={NearestNode != null} Time={sw.Elapsed.TotalMilliseconds}ms");
+            Core.Logger.Verbose($"更新躲避网格数据 新节点={nodeCount}个 找到附近节点数={NearestNode != null} 耗时={sw.Elapsed.TotalMilliseconds}ms");
         }
 
         public void FlagNodes(IEnumerable<AvoidanceNode> nodes, AvoidanceFlags flags, int weightModification = 0)

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using System.Collections.Generic;
@@ -100,7 +100,7 @@ namespace Trinity.Components.Coroutines
                 }
             }
 
-            Core.Logger.Log("Item Evaluation {0} Equipped, {1} Backpack Candidates, {2} Upgrades found",
+            Core.Logger.Log("评价装备物品 {0} , {1} 背包里的候选者, {2} 升级后发现",
                 _equippedItems.Count(i => i.Value != null),
                 BackpackEquipment.Count(),
                 _upgrades.Count(i => i.Value != null));
@@ -136,7 +136,7 @@ namespace Trinity.Components.Coroutines
             if (location == DefaultLootProvider.NoFreeSlot)
                 return;
 
-            Core.Logger.Log("Unequipping Item {0} ({1}) from slot {2}", item.RealName, item.ActorSnoId, item.InventorySlot);
+            Core.Logger.Log("装备物品 {0} ({1}) 从插槽 {2}", item.RealName, item.ActorSnoId, item.InventorySlot);
             InventoryManager.MoveItem(item.DynamicId, ZetaDia.Me.CommonData.AnnId, InventorySlot.BackpackItems, (int)location.X, (int)location.Y);
         }
 
@@ -150,7 +150,7 @@ namespace Trinity.Components.Coroutines
             var newLegendary = InventoryManager.Backpack.FirstOrDefault(i => i.ItemQualityLevel >= ItemQuality.Legendary && i.Unidentified > 0 && i.IsValid && !i.IsDisposed);
             if (newLegendary != null)
             {
-                Core.Logger.Log("Identifying Legendary");
+                Core.Logger.Log("鉴定传奇");
                 var dynamicId = newLegendary.AnnId;
                 InventoryManager.IdentifyItem(dynamicId);
                 await Coroutine.Sleep(750);
@@ -175,7 +175,7 @@ namespace Trinity.Components.Coroutines
             var socketableWeapon = InventoryManager.Equipped.FirstOrDefault(i => i.InventorySlot == InventorySlot.LeftHand && i.NumSockets > 0 && i.NumSocketsFilled < i.NumSockets);
             if (socketableWeapon != null)
             {
-                Core.Logger.Log("Socketing {0} ({1}) into equipped weapon {2}", gem.InternalName, gem.GemQuality, socketableWeapon.Name);
+                Core.Logger.Log("镶嵌 {0} ({1}) 在装备的武器 {2}", gem.InternalName, gem.GemQuality, socketableWeapon.Name);
                 socketableWeapon.Socket(gem);
                 return true;
             }
@@ -187,7 +187,7 @@ namespace Trinity.Components.Coroutines
 
             if (socketableBackpackWeapon != null)
             {
-                Core.Logger.Log("Socketing {0} ({1}) into backpack weapon {2}", gem.InternalName, gem.GemQuality, socketableBackpackWeapon.RealName);
+                Core.Logger.Log("镶嵌 {0} ({1}) 在背包里的武器 {2}", gem.InternalName, gem.GemQuality, socketableBackpackWeapon.RealName);
                 socketableBackpackWeapon.AcdItem.Socket(gem);
                 return true;
             }
@@ -213,7 +213,7 @@ namespace Trinity.Components.Coroutines
             var socketableArmor = InventoryManager.Equipped.FirstOrDefault(i => (i.ItemBaseType == ItemBaseType.Armor || i.ItemBaseType == ItemBaseType.Jewelry) && i.NumSockets > 0 && i.NumSocketsFilled < i.NumSockets);
             if (socketableArmor != null)
             {
-                Core.Logger.Log("Socketing {0} ({1}) into equipped armor {2}", gem.InternalName, gem.GemQuality, socketableArmor.Name);
+                Core.Logger.Log("镶嵌 {0} ({1}) 在装备的护甲 {2}", gem.InternalName, gem.GemQuality, socketableArmor.Name);
                 socketableArmor.Socket(gem);
                 return true;
             }
@@ -225,7 +225,7 @@ namespace Trinity.Components.Coroutines
 
             if (socketableBackpackArmor != null)
             {
-                Core.Logger.Log("Socketing {0} ({1}) into backpack armor {2}", gem.InternalName, gem.GemQuality, socketableBackpackArmor.RealName);
+                Core.Logger.Log("镶嵌 {0} ({1}) 在背包里的护甲 {2}", gem.InternalName, gem.GemQuality, socketableBackpackArmor.RealName);
                 socketableBackpackArmor.AcdItem.Socket(gem);
                 return true;
             }
@@ -738,7 +738,7 @@ namespace Trinity.Components.Coroutines
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error getting TrinityItem {0}", ex.Message);
+                Core.Logger.Error("获取 Trinity物品 {0}时出错", ex.Message);
                 return default(CachedACDItem);
             }
         }
@@ -752,7 +752,6 @@ namespace Trinity.Components.Coroutines
                 case ItemType.CrusaderShield:
                 case ItemType.Shield:
                 case ItemType.Orb:
-                case ItemType.Phylactery:
                     return true;
             }
             return false;
@@ -779,8 +778,6 @@ namespace Trinity.Components.Coroutines
                 case ItemType.Crossbow:
                 case ItemType.HandCrossbow:
                 case ItemType.Bow:
-                case ItemType.Scythe:
-                case ItemType.Phylactery:
                     return true;
             }
             return false;
@@ -860,13 +857,6 @@ namespace Trinity.Components.Coroutines
                 case TrinityItemType.HandCrossbow:
                 case TrinityItemType.TwoHandCrossbow:
                     if (actorClass != ActorClass.DemonHunter)
-                        return false;
-                    break;
-
-                case TrinityItemType.Scythe:
-                case TrinityItemType.Phylactery:
-                case TrinityItemType.TwoHandScythe:
-                    if (actorClass != ActorClass.Necromancer)
                         return false;
                     break;
             }

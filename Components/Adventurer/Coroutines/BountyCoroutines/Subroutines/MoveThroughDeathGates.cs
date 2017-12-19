@@ -361,8 +361,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             {
                 if (_state == value) return;
                 if (value != States.NotStarted)
-                    Core.Logger.Log("[MoveThroughDeathGates] " + value);
-                    StatusText = "[MoveThroughDeathGates] " + value;
+                    Core.Logger.Log("[穿越死神之门] " + value);
+                    StatusText = "[穿越死神之门] " + value;
                 _state = value;
             }
         }

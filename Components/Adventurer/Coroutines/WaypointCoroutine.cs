@@ -72,8 +72,8 @@ namespace Trinity.Components.Adventurer.Coroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Debug("[Waypoint] " + value);
-                   StatusText = "[Waypoint] " + value;
+                    Core.Logger.Debug("[传送] " + value);
+                   StatusText = "[传送] " + value;
                 }
                 _state = value;
             }
@@ -144,7 +144,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> ClearingArea()
         {
-            StatusText = "[Waypoint] Clearing area";
+            StatusText = "[传送] 清除区域";
             if (await ClearAreaCoroutine.Clear(_startingPosition, 45))
             {
                 State = States.TogglingWaypointMap;
@@ -197,7 +197,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         {
             if (!_usedWaypoint)
             {
-                Core.Logger.Debug($"[Waypoint] Using waypoint {_waypointNumber}");
+                Core.Logger.Debug($"[传送] 使用传送点 {_waypointNumber}");
                 // Checking for near by waypoint gizmos.
                 var gizmoWaypoint =
                     ZetaDia.Actors.GetActorsOfType<GizmoWaypoint>().OrderBy(g => g.Distance).FirstOrDefault();

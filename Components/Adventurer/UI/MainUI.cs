@@ -35,7 +35,7 @@ namespace Trinity.Components.Adventurer.UI
                     }
                     catch (Exception ex)
                     {
-                        Core.Logger.Error("[MainUI][InstallButtons] " + ex.Message);
+                        Core.Logger.Error("[主界面][安装按钮] " + ex.Message);
                     }
                 });
         }
@@ -54,7 +54,7 @@ namespace Trinity.Components.Adventurer.UI
                     }
                     catch (Exception ex)
                     {
-                        Core.Logger.Error("[MainUI][RemoveButtons] " + ex.Message);
+                        Core.Logger.Error("[主界面][移除按钮] " + ex.Message);
                     }
                 });
         }
@@ -88,7 +88,7 @@ namespace Trinity.Components.Adventurer.UI
                     }
                     catch (Exception ex)
                     {
-                        Core.Logger.Error("[MainUI][Configure] " + ex.Message);
+                        Core.Logger.Error("[主界面][配置] " + ex.Message);
                     }
                 });
             }

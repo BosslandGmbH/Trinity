@@ -16,13 +16,13 @@
     </UserControl.Resources>
     <Grid Margin="10,10,10,0">
         <TabControl Padding="10">
-            <TabItem Header="Items" Foreground="{DynamicResource TextBrush}">
+            <TabItem Header="物品" Foreground="{DynamicResource TextBrush}">
                 <Border Tag="Items.xaml"/>
             </TabItem>
-            <TabItem Header="ItemList" Foreground="{DynamicResource TextBrush}"  Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}" >
+            <TabItem Header="装备列表" Foreground="{DynamicResource TextBrush}"  Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}" >
                 <Border Tag="ItemList.xaml"/>
             </TabItem>
-            <TabItem Header="Cube" Foreground="{DynamicResource TextBrush}">
+            <TabItem Header="卡奈魔盒" Foreground="{DynamicResource TextBrush}">
                 <Border Tag="KanaisCube.xaml"/>
             </TabItem>
         </TabControl>

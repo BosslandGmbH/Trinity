@@ -48,7 +48,7 @@ namespace Trinity.Framework.Helpers
 
         public override string ToString()
         {
-            return $"{Name} PerSecondStat: Updates={UpdateCount} Total={TotalTimeMilliseconds:N4}ms Average={AverageUpdateTimeMilliseconds:N4}ms";
+            return $"{Name} 每秒统计: 更新={UpdateCount} 总的={TotalTimeMilliseconds:N4}毫秒 平均={AverageUpdateTimeMilliseconds:N4}毫秒";
         }
 
         private void Reset()

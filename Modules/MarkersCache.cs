@@ -31,7 +31,7 @@ namespace Trinity.Modules
         public int WorldSnoId { get; set; }
         public int Id { get; set; }
 
-        public override string ToString() => $"{Name} at {Position} Distance {Distance} Type={MarkerType} TextureId={TextureId}";
+        public override string ToString() => $"{Name} 在 {Position} 距离 {Distance} 类型={MarkerType} TextureId={TextureId}";
     }
 
 

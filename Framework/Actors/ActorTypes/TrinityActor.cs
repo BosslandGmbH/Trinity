@@ -133,7 +133,6 @@ namespace Trinity.Framework.Actors.ActorTypes
         public EliteTypes EliteType { get; set; }
         public ShrineTypes ShrineType { get; set; }
         public ContainerTypes ContainerType { get; set; }
-        public bool IsFrozen { get; set; }
 
         public SpecialTypes SpecialType { get; set; }
 
@@ -279,7 +278,7 @@ namespace Trinity.Framework.Actors.ActorTypes
 
             if (IsElite)
             {
-                Core.Logger.Log(LogCategory.Targetting, $"Elite Died: {Name} Acd={AcdId} Sno={ActorSnoId} Size={MonsterSize} Race={MonsterRace} Quality={MonsterQuality} Type={MonsterType} Affixes={MonsterAffixes} CollisionRadius={CollisionRadius} AxialRadius={AxialRadius} SphereRadius={Radius} RiftValue={RiftValuePct}");
+                Core.Logger.Log(LogCategory.Targetting, $"精英死了: {Name} Acd={AcdId} Sno={ActorSnoId} 大小={MonsterSize} 种族={MonsterRace} 品质={MonsterQuality} 类型={MonsterType} 词缀={MonsterAffixes} 碰撞半径={CollisionRadius} 轴向半径={AxialRadius} 球形半径={Radius} 秘境价值={RiftValuePct}");
             }
             //else
             //    Core.Logger.Log($"Unit Died: {Name} Acd={AcdId} Sno={ActorSnoId}");

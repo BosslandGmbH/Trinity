@@ -126,7 +126,7 @@ namespace Trinity.Framework.Helpers
                 Angle = GetAngle(_timer.Elapsed.TotalMilliseconds);
 
                 if (DebugLogging)
-                    Core.Logger.Verbose("Id={0} Angle={1} ElapsedMs={2} StartDegrees={3}",
+                    Core.Logger.Verbose("Id={0} 角度={1} 已过Ms={2} 星级={3}",
                         Id, Angle, _timer.Elapsed.TotalMilliseconds, StartAngleDegrees);
 
                 if (_degreesRotatedSinceStart > RotateAmount)
@@ -153,7 +153,7 @@ namespace Trinity.Framework.Helpers
             var boundAngle = (float)Math.Round(MathUtil.FixAngleTo360(totalAngle), Precision, MidpointRounding.AwayFromZero);
 
             if (DebugLogging)
-                Core.Logger.Verbose("TotalAngle={0} BoundAngle={1} DegreesRotated={2}", totalAngle, boundAngle, _degreesRotatedSinceStart);
+                Core.Logger.Verbose("总角度={0} 结合的角度={1} 旋转度={2}", totalAngle, boundAngle, _degreesRotatedSinceStart);
 
             return boundAngle;
         }
@@ -180,7 +180,7 @@ namespace Trinity.Framework.Helpers
             if (IsRunning)
             {
                 if (DebugLogging)
-                    Core.Logger.Verbose("Stopped Rotation {0}", Id);
+                    Core.Logger.Verbose("停止旋转 {0}", Id);
 
                 IsRunning = false;
             }
@@ -209,13 +209,13 @@ namespace Trinity.Framework.Helpers
                 _speedMillisecondsPerDegree = 0f;
 
             if (DebugLogging)
-                Core.Logger.Verbose("Starting Rotation {0} StartAngle={1} Speed={2} Clockwise={3} DurationMs={4} StartDelay={5} RotateAmount={6} Flipped={7}",
+                Core.Logger.Verbose("开始旋转 {0} 开始角度={1} 速度={2} 顺时针={3} 持续时间Ms={4} 启动延迟={5} 旋转量={6} 翻转={7}",
                     Id, StartAngleDegrees, _speedMillisecondsPerDegree, !RotateAntiClockwise, RotateDuration.TotalMilliseconds, StartDelay.TotalMilliseconds, RotateAmount, FlipRotation);
 
             if (StartDelay.TotalMilliseconds > 0)
             {
                 if (DebugLogging)
-                    Core.Logger.Verbose("Waiting {0}ms", StartDelay.TotalMilliseconds);
+                    Core.Logger.Verbose("等待 {0}毫秒", StartDelay.TotalMilliseconds);
 
                 await Task.Delay(StartDelay);
             }

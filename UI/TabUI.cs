@@ -49,7 +49,7 @@ namespace Trinity.UI
             var hasAccessToApp = Application.Current.CheckAccess();
 
             if (!hasAccessToApp)
-                Core.Logger.Log("Current Thread Id={0} Name='{1}' cannot access the current application. CanAccessDispatcher={2}",
+                Core.Logger.Log("当前线程ID ={0} 名称='{1}' 不能访问当前应用程序. 可以访问调度={2}",
                     Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread.Name, Application.Current.Dispatcher.CheckAccess());
 
             //Core.Logger.Log($"ApplicationDispatcherThreadId={Application.Current.Dispatcher.Thread.ManagedThreadId} " +
@@ -58,7 +58,7 @@ namespace Trinity.UI
 
             if (!Application.Current.MainWindow.CheckAccess())
             {
-                Core.Logger.Log("Current Thread {0} '{1}' cannot access MainWindow Dispatcher",
+                Core.Logger.Log("当前线程 {0} '{1}' 无法访问主窗口调度",
                     Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread.Name);
 
                 return;
@@ -79,46 +79,46 @@ namespace Trinity.UI
 
                 CreateStretchyGroup(string.Empty, new List<Control>
                 {
-                    CreateMajorButton("Configure", ShowMainTrinityUIEventHandler),
-                    CreateMajorButton("Open Visualizer", OpenRadarButtonHandler)
+                    CreateMajorButton("Trinity设置", ShowMainTrinityUIEventHandler),
+                    CreateMajorButton("可视化导航图", OpenRadarButtonHandler)
                 });
 
-                CreateGroup("Items", new List<Control>
+                CreateGroup("物品", new List<Control>
                 {
-                    CreateButton("Sort Backpack", SortBackEventHandler),
-                    CreateButton("Sort Stash", SortStashEventHandler),
-                    CreateButton("Stack Materials", StackCraftingMaterialsInStash),
-                    CreateButton("Stash Backpack", DepositBackpackToStash),                    
+                    CreateButton("整理背包", SortBackEventHandler),
+                    CreateButton("整理仓库", SortStashEventHandler),
+                    CreateButton("堆叠材料", StackCraftingMaterialsInStash),
+                    CreateButton("储存背包", DepositBackpackToStash),                    
                 });
 
-                CreateGroup("Cube Backpack", new List<Control>
+                CreateGroup("卡奈魔盒", new List<Control>
                 {
-                    CreateButton("Upgrade Rares", RunUpgradeBackpackRares),
-                    CreateButton("Extract Powers", RunExtractBackpackPowers),
-                    CreateButton("Convert to Magic", btnClick_ConvertToBlue),
-                    CreateButton("Convert to Common", btnClick_ConvertToCommon),
-                    CreateButton("Convert to Rare", btnClick_ConvertToRare),
+                    CreateButton("升级稀有", RunUpgradeBackpackRares),
+                    CreateButton("提取传奇威能", RunExtractBackpackPowers),
+                    CreateButton("转化为蓝色材料", btnClick_ConvertToBlue),
+                    CreateButton("转化为黄色材料", btnClick_ConvertToCommon),
+                    CreateButton("转化为白色材料", btnClick_ConvertToRare),
 
-                    //CreateButton("Find New ActorIds", GetNewActorSNOsEventHandler),
-                    ////CreateButton("Log Invalid Items", LogInvalidHandler),
-                    //CreateButton("> Gizmo Attribtues", StartGizmoTestHandler),
-                    //CreateButton("> Unit Attribtues", StartUnitTestHandler),
-                    //CreateButton("> Player Attribtues", StartPlayerTestHandler),
-                    ////CreateButton("> Log Power Data", LogPowerDataHandler),
-                    ////CreateButton("Dump Item Powers", StartDataTestHandler),
+                    //CreateButton("查找新的ActorIds", GetNewActorSNOsEventHandler),
+                    ////CreateButton("无效物品日志", LogInvalidHandler),
+                    //CreateButton("> 控件属性", StartGizmoTestHandler),
+                    //CreateButton("> 单位属性", StartUnitTestHandler),
+                    //CreateButton("> 玩家属性", StartPlayerTestHandler),
+                    ////CreateButton("> 日志数据", LogPowerDataHandler),
+                    ////CreateButton("转储物品权重", StartDataTestHandler),
                     ////CreateButton("> Buff Test", StartBuffTestHandler),
                     ////CreateButton("> Stop Tests", StopTestHandler),
-                    //CreateButton("> Unit Monitor", StartUnitMonitor),
-                    //CreateButton("> Player Monitor", StartPlayerMonitor),
+                    //CreateButton("> 单位监控", StartUnitMonitor),
+                    //CreateButton("> 玩家监控", StartPlayerMonitor),
                 });
 
-                CreateGroup("Tools", new List<Control>
+                CreateGroup("工具", new List<Control>
                         {
-                            CreateButton("Dump My Build", DumpBuildEventHandler),
-                            CreateButton("Drop Legendaries", DropLegendariesEventHandler),
-                            //CreateButton("Log Run Time", btnClick_LogRunTime),
-                            CreateButton("Open Log File", OpenLogFileHandler),
-                            CreateButton("Open Settings File", OpenSettingsFileHandler),
+                            CreateButton("保存我的Build", DumpBuildEventHandler),
+                            CreateButton("丢弃传奇", DropLegendariesEventHandler),
+                            //CreateButton("记录运行时间", btnClick_LogRunTime),
+                            CreateButton("打开日志文件", OpenLogFileHandler),
+                            CreateButton("打开设置文件", OpenSettingsFileHandler),
 
                             //CreateButton("Log Town Actor", LogTownActor),
                             //CreateButton("Test UIElement", TestUIElement),
@@ -128,24 +128,24 @@ namespace Trinity.UI
                             //CreateButton("Stop Internals", StopInternals),
                             //CreateButton("Clsoe Vendor", CloseVendorWindowTest),
 
-                            //CreateButton("Test", TestUIElement),
+                            //CreateButton("测试", TestUIElement),
 
-                            //CreateButton("Upgrade Rares", RunUpgradeBackpackRares),
-                            //CreateButton("Extract Powers", ExtractBackpackPowers),
-                            CreateButton("ItemList Check", btnClick_TestItemList),
+                            //CreateButton("升级稀有", RunUpgradeBackpackRares),
+                            //CreateButton("提取传奇威能", ExtractBackpackPowers),
+                            CreateButton("检查捡取列表", btnClick_TestItemList),
 
                             //CreateButton("Stash Test", StashItems),
                             //CreateButton("Test Internals", TestInternals),
                         });
 
-                //CreateButton("Scan UIElement", btnClick_ScanUIElement)
-                //CreateButton("Reload Item Rules", ReloadItemRulesEventHandler);
-                //CreateButton("Show Cache", ShowCacheWindowEventHandler);
-                //CreateButton("Open Radar", OpenRadarButtonHandler);
-                //CreateButton("Start Progression", StartProgressionTestHandler);
-                //CreateButton("Stop Progression", StopProgressionTestHandler);
-                //CreateButton("Cache Test", CacheTestCacheEventHandler);
-                //CreateButton("Special Test", btnClick_SpecialTestHandler);
+                //CreateButton("扫描用于界面", btnClick_ScanUIElement)
+                //CreateButton("重载物品规则", ReloadItemRulesEventHandler);
+                //CreateButton("显示缓存", ShowCacheWindowEventHandler);
+                //CreateButton("打开雷达", OpenRadarButtonHandler);
+                //CreateButton("启动进程", StartProgressionTestHandler);
+                //CreateButton("停止进程", StopProgressionTestHandler);
+                //CreateButton("缓存测试", CacheTestCacheEventHandler);
+                //CreateButton("专项测试", btnClick_SpecialTestHandler);
                 //CreateButton("1000 Rare => Magic", btnClick_MassConvertRareToMagic);
                 //CreateButton("Move to Stash", btnClick_MoveToStash);
                 //CreateButton("Move to Cube", btnClick_MoveToCube);
@@ -181,12 +181,12 @@ namespace Trinity.UI
                 }
                 else
                 {
-                    Core.Logger.Error("Unable to open settings file {0} - file does not exist", logFile);
+                    Core.Logger.Error("无法打开设置文件 {0} - 文件不存在", logFile);
                 }
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error opening settings file: {0} {1}", logFile, ex.Message);
+                Core.Logger.Error("打开设置文件时出错: {0} {1}", logFile, ex.Message);
             }
         }
 
@@ -230,7 +230,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                Core.Logger.Error("异常: " + ex);
             }
         }
 
@@ -255,7 +255,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error Opening Radar Window:" + ex);
+                Core.Logger.Error("打开雷达窗口错误:" + ex);
             }
         }
 
@@ -263,11 +263,11 @@ namespace Trinity.UI
         {
             try
             {
-                Core.Logger.Log("Bot {0} has been running for {1} hours {2} minutes and {3} seconds", Core.Player.Name, GameStats.Instance.RunTime.Hours, GameStats.Instance.RunTime.Minutes, GameStats.Instance.RunTime.Seconds);
+                Core.Logger.Log("辅助 {0} 已经运行了 {1} 小时 {2} 分钟 {3} 秒", Core.Player.Name, GameStats.Instance.RunTime.Hours, GameStats.Instance.RunTime.Minutes, GameStats.Instance.RunTime.Seconds);
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception {0}", ex);
+                Core.Logger.Error("异常 {0}", ex);
             }
         }
 
@@ -287,7 +287,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception {0}", ex);
+                Core.Logger.Error("异常 {0}", ex);
             }
         }
 
@@ -303,7 +303,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error running StashItems: " + ex);
+                Core.Logger.Error("储存物品运行错误: " + ex);
             }
         }
 
@@ -315,7 +315,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception {0}", ex);
+                Core.Logger.Error("异常 {0}", ex);
             }
         }
 
@@ -323,11 +323,11 @@ namespace Trinity.UI
         {
             try
             {
-                Core.Logger.Log("Finished Cache Test");
+                Core.Logger.Log("缓存测试已完成");
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception {0}", ex);
+                Core.Logger.Error("异常 {0}", ex);
             }
         }
 
@@ -339,7 +339,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error Starting Rift Progression : " + ex);
+                Core.Logger.Error("开始秘境进展的错误 : " + ex);
             }
         }
 
@@ -373,7 +373,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error Starting LazyCache: " + ex);
+                Core.Logger.Error("启动懒人缓存错误: " + ex);
             }
         }
 
@@ -421,7 +421,7 @@ namespace Trinity.UI
                 //        //    if (_lastAtts == null || ann != _lastAnn)
                 //        //    {
                 //        //        _lastAtts = null;
-                //        //        Core.Logger.Log($"-- Dumping Attribtues for {acd.Name} (Sno={acd.ActorSnoId} Ann={acd.AnnId}) at {acd.Position} ----");
+                //        //        Core.Logger.Log($"-- 倾销属性 {acd.Name} (Sno={acd.ActorSnoId} Ann={acd.AnnId}) 在 {acd.Position} ----");
                 //        //        Core.Logger.Log(atts + "\r\n");
                 //        //    }
 
@@ -435,12 +435,12 @@ namespace Trinity.UI
                 //        //                var lastValue = _lastAtts[att.Key].GetValue();
                 //        //                if (Convert.ToInt32(lastValue) != Convert.ToInt32(curValue))
                 //        //                {
-                //        //                    Core.Logger.Log($"-- Attribute {att} changed from {lastValue}");
+                //        //                    Core.Logger.Log($"-- 属性 {att} 改变 {lastValue}");
                 //        //                }
                 //        //            }
                 //        //            else
                 //        //            {
-                //        //                Core.Logger.Log($"-- Attribute Added {att}");
+                //        //                Core.Logger.Log($"-- 已添加属性 {att}");
                 //        //            }
                 //        //        }
 
@@ -463,7 +463,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error Starting LazyCache: " + ex);
+                Core.Logger.Error("启动懒人缓存错误: " + ex);
             }
         }
 
@@ -525,12 +525,12 @@ namespace Trinity.UI
             //                            var lastValue = _lastAtts[att.Key].GetValue();
             //                            if (Convert.ToInt32(lastValue) != Convert.ToInt32(curValue))
             //                            {
-            //                                Core.Logger.Log($"-- Attribute {att} changed from {lastValue}");
+            //                                Core.Logger.Log($"-- 属性 {att} 改变 {lastValue}");
             //                            }
             //                        }
             //                        else
             //                        {
-            //                            Core.Logger.Log($"-- Attribute Added {att}");
+            //                            Core.Logger.Log($"-- 已添加属性 {att}");
             //                        }
             //                    }
 
@@ -588,7 +588,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error Starting LazyCache: " + ex);
+                Core.Logger.Error("启动懒人缓存错误: " + ex);
             }
         }
 
@@ -743,7 +743,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                Core.Logger.Error("异常: " + ex);
             }
         }
 
@@ -763,12 +763,12 @@ namespace Trinity.UI
                     Process.Start(logFile);
                 else
                 {
-                    Core.Logger.Error("Unable to open log file {0} - file does not exist", logFile);
+                    Core.Logger.Error("无法打开日志文件 {0} - 文件不存在", logFile);
                 }
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error opening log file: {0} {1}", logFile, ex.Message);
+                Core.Logger.Error("打开日志文件时出错: {0} {1}", logFile, ex.Message);
             }
         }
 
@@ -915,7 +915,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error in TestUIElement: {0} {1}", logFile, ex.Message);
+                Core.Logger.Error("测试UI元素中出错: {0} {1}", logFile, ex.Message);
             }
         }
 
@@ -1000,7 +1000,7 @@ namespace Trinity.UI
                     {
                         if (!existingAtts.Contains(att) || att.ToString().ToLower().Contains("time") || att.ToString().ToLower().Contains("tick"))
                         {
-                            Core.Logger.Log("Unit {0} ({4}) has gained {1} (i:{2} f:{3:00.00000})", testunit.Name, att.ToString(), attiResult, attfResult, testunit.ActorSnoId);
+                            Core.Logger.Log("单位 {0} ({4}) 已获得 {1} (i:{2} f:{3:00.00000})", testunit.Name, att.ToString(), attiResult, attfResult, testunit.ActorSnoId);
                             existingAtts.Add(att);
                         }
                     }
@@ -1015,7 +1015,7 @@ namespace Trinity.UI
 
                         if (existingAtts.Contains(att))
                         {
-                            Core.Logger.Log("Unit {0} ({4}) has lost {1} (i:{2} f:{3:00.00000})", testunit.Name, att.ToString(), attiResult, attfResult, testunit.ActorSnoId);
+                            Core.Logger.Log("单位 {0} ({4}) 已经失去了 {1} (i:{2} f:{3:00.00000})", testunit.Name, att.ToString(), attiResult, attfResult, testunit.ActorSnoId);
                             existingAtts.Remove(att);
                         }
                     }
@@ -1044,7 +1044,7 @@ namespace Trinity.UI
                     {
                         if (testunit.CommonData.GetAttribute<int>(((int)power << 12) + ((int)buffattr & 0xFFF)) == 1)
                         {
-                            Core.Logger.Log("Unit {0} has {1} ({2})", testunit.Name, power, buffattr);
+                            Core.Logger.Log("单位 {0} 有 {1} ({2})", testunit.Name, power, buffattr);
                         }
                     }
                     catch (Exception)
@@ -1064,7 +1064,7 @@ namespace Trinity.UI
                         var result = testunit.CommonData.GetAttribute<int>((int)timeAttr & ((1 << 12) - 1) | ((int)power << 12));
                         if (result > 1)
                         {
-                            Core.Logger.Log("Unit {0} has {1} ({2}) Value={3}", testunit.Name, power, timeAttr, result);
+                            Core.Logger.Log("单位 {0} 有 {1} ({2}) 价值={3}", testunit.Name, power, timeAttr, result);
                         }
                     }
                     catch (Exception)
@@ -1104,7 +1104,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error Starting LazyCache: " + ex);
+                Core.Logger.Error("启动懒人缓存错误: " + ex);
             }
         }
 
@@ -1116,7 +1116,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error Starting LazyCache: " + ex);
+                Core.Logger.Error("启动懒人缓存错误: " + ex);
             }
         }
 
@@ -1136,15 +1136,15 @@ namespace Trinity.UI
         {
             try
             {
-                Core.Logger.Log("Starting");
+                Core.Logger.Log("开启中");
 
                 CoroutineHelper.RunCoroutine(() => CubeRaresToLegendary.Execute());
 
-                Core.Logger.Log("Finished");
+                Core.Logger.Log("已完成");
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                Core.Logger.Error("异常: " + ex);
             }
         }
 
@@ -1160,7 +1160,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                Core.Logger.Error("异常: " + ex);
             }
         }
 
@@ -1172,7 +1172,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                Core.Logger.Error("异常: " + ex);
             }
         }
 
@@ -1184,7 +1184,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                Core.Logger.Error("异常: " + ex);
             }
         }
 
@@ -1244,12 +1244,12 @@ namespace Trinity.UI
         {
             try
             {
-                Core.Logger.Log("Starting Conversion of Backpack to Magic Dust.");
+                Core.Logger.Log("开始将背包转换为奥术之尘.");
                 TaskDispatcher.Start(ret => ConvertMaterials.Execute(CurrencyType.ArcaneDust));
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                Core.Logger.Error("异常: " + ex);
             }
         }
 
@@ -1257,12 +1257,12 @@ namespace Trinity.UI
         {
             try
             {
-                Core.Logger.Log("Starting Conversion of Backpack to Reusable Parts.");
+                Core.Logger.Log("开始将背包转换为万用材料.");
                 TaskDispatcher.Start(ret => ConvertMaterials.Execute(CurrencyType.ReusableParts));
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                Core.Logger.Error("异常: " + ex);
             }
         }
 
@@ -1270,12 +1270,12 @@ namespace Trinity.UI
         {
             try
             {
-                Core.Logger.Log("Starting Conversion of Backpack to Veiled Crystals.");
+                Core.Logger.Log("开始将背包转换成萦雾水晶");
                 TaskDispatcher.Start(ret => ConvertMaterials.Execute(CurrencyType.VeiledCrystal));
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                Core.Logger.Error("异常: " + ex);
             }
         }
 
@@ -1320,7 +1320,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error btnClick_ScanUIElement:" + ex);
+                Core.Logger.Error("错误 btnClick_ScanUIElement:" + ex);
             }
         }
 
@@ -1333,7 +1333,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error showing Configuration from TabUI:" + ex);
+                Core.Logger.Error("构建显示TabUI时错误:" + ex);
             }
         }
 
@@ -1345,7 +1345,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("DumpBuildEventHandler: " + ex);
+                Core.Logger.Error("转储生成事件处理程序: " + ex);
             }
         }
 
@@ -1357,7 +1357,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error logging new items:" + ex);
+                Core.Logger.Error("记录新项目错误:" + ex);
             }
         }
 
@@ -1369,7 +1369,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error sorting backpack:" + ex);
+                Core.Logger.Error("整理背包错误:" + ex);
             }
         }
 
@@ -1387,7 +1387,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error dropping legendaries:" + ex);
+                Core.Logger.Error("掉落传奇错误:" + ex);
             }
         }
 
@@ -1395,14 +1395,14 @@ namespace Trinity.UI
         {
             try
             {
-                Core.Logger.Log("This must be started with stash open.");
-                Core.Logger.Warn("Please wait - this may take up to 30 seconds before starting.");
+                Core.Logger.Log("这必须从打开储物箱开始.");
+                Core.Logger.Warn("请稍候 - 这可能需要30秒才开始.");
 
                 ItemSort.SortStash();
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error dropping legendaries:" + ex);
+                Core.Logger.Error("掉落传奇错误:" + ex);
             }
         }
 
@@ -1416,7 +1416,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error dropping legendaries:" + ex);
+                Core.Logger.Error("掉落传奇错误:" + ex);
             }
         }
 
@@ -1430,7 +1430,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error dropping legendaries:" + ex);
+                Core.Logger.Error("掉落传奇错误:" + ex);
             }
         }
 
@@ -1438,7 +1438,7 @@ namespace Trinity.UI
         {
             try
             {
-                Core.Logger.Log("This feature has been disabled");
+                Core.Logger.Log("此功能已禁用");
                 return;
 
                 //var result = MessageBox.Show("Are you sure? This may remove and salvage/sell items from your stash! Permanently!", "Clean Stash Confirmation",
@@ -1451,7 +1451,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error Cleaning Stash:" + ex);
+                Core.Logger.Error("清洁仓库错误:" + ex);
             }
         }
 

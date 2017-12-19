@@ -69,7 +69,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
                         return Failed();
 
                     default:
-                        Core.Logger.Error("[GenericBounty] If you see this, it's not good!");
+                        Core.Logger.Error("[一般悬赏] 如果你看到这条信息,这并不是好消息!");
                         await Coroutine.Sleep(TimeSpan.MaxValue);
                         return true;
                 }

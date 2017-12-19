@@ -47,20 +47,20 @@ namespace Trinity.Framework.Behaviors
 
         private async Task<bool> Move()
         {
-            Core.Logger.Verbose($"Moving to Actor: {Actor} {Actor.Position}");
+            Core.Logger.Verbose($"移动到: {Actor} {Actor.Position}");
             PlayerMover.MoveTo(Actor.Position);
             return true;
         }
 
         protected override async Task<bool> OnStarted()
         {
-            Core.Logger.Warn($"Started moving to Actor: {Actor}");
+            Core.Logger.Warn($"开始移动到: {Actor}");
             return true;
         }
 
         protected override async Task<bool> OnStopped()
         {
-            Core.Logger.Warn($"Arrived at Actor: {Actor}");
+            Core.Logger.Warn($"到达: {Actor}");
             VisitedActorPositions.Add(Actor.Position);
             Actor = null;
             return true;

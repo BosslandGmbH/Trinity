@@ -505,7 +505,7 @@ namespace Trinity.Framework.Actors.Attributes
         public Dictionary<SNOPower, float> PowerDamagePercentBonuses => GetAttributes<SNOPower, float>(ActorAttributeType.PowerDamagePercentBonus); // PowerDamagePercentBonus (1332085920) = i:1038174126 f:0.11 v:0.11 ModifierType=PowerSnoId Modifier=325216
         public Dictionary<int, int> SetItemCounts => GetAttributes<int, int>(ActorAttributeType.SetItemCount); // SetItemCount (-1399073762) = i:1 f:1.401298E-45 v:1 ModifierType=17 Modifier=-341571
         public Dictionary<DamageType, float> DamageDealtPercentBonuses => GetAttributes<DamageType, float>(ActorAttributeType.DamageDealtPercentBonus); // DamageDealtPercentBonus (242) = i:1044549468 f:0.19 v:0.19 ModifierType=DamageType Modifier=0
-        public Dictionary<ResourceType, float> ResourceMaxBonuses => GetAttributes<ResourceType, float>(ActorAttributeType.ResourceMaxBonus); // ResourceMaxBonus (28823) = i:1088421888 f:7 v:7 ModifierType=ResourceType Modifier=8
+        public Dictionary<ResourceType, float> ResourceMaxBonuses => GetAttributes<ResourceType, float>(ActorAttributeType.ResourceMaxBonus); // ResourceMaxBonus (28823) = i:1088421888 f:7 v:7 ModifierType=ResourceType Modifier=7
         public Dictionary<DamageType, float> DamageWeaponDeltas => GetAttributes<DamageType, float>(ActorAttributeType.DamageWeaponDelta); // DamageWeaponDelta (220) = i:1129709568 f:214 v:214 ModifierType=DamageType Modifier=0
         public Dictionary<DamageType, float> DamageWeaponDeltaSubTotals => GetAttributes<DamageType, float>(ActorAttributeType.DamageWeaponDeltaSubTotal); // DamageWeaponDeltaSubTotal (221) = i:1129709568 f:214 v:214 ModifierType=DamageType Modifier=0
         public Dictionary<DamageType, float> DamageWeaponDeltaTotals => GetAttributes<DamageType, float>(ActorAttributeType.DamageWeaponDeltaTotal); // DamageWeaponDeltaTotal (225) = i:1141891400 f:575.52 v:575.52 ModifierType=DamageType Modifier=0
@@ -704,7 +704,6 @@ namespace Trinity.Framework.Actors.Attributes
         public float LifePerWrath => GetAttribute<float>(ActorAttributeType.SpendingResourceHealsPercentFaith);
         public float LifePerFury => GetAttribute<float>(ActorAttributeType.SpendingResourceHealsPercentFury);
         public float ArcaneOnCrit => GetAttribute<float>(ActorAttributeType.ResourceOnCritArcanum);
-        public float MaxEssence => GetAttribute<float>(ActorAttributeType.ResourceMaxBonus, (int)ResourceType.Essence);
 
         public int Gold => GetAttribute<int>(ActorAttributeType.Gold);
 

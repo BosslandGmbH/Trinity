@@ -13,13 +13,14 @@ using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.Game.Internals.Service;
-
+using Trinity.Components.Adventurer.UI;
 
 namespace Trinity.Framework
 {
     public static class Core
     {
         public static void Init() { }
+		public static ExpStatistics ExpStatistics { get; } = new ExpStatistics();
         public static IFrameworkLogger Logger { get; } = new DefaultLogger();
         public static ChangeMonitor ChangeMonitor { get; } = new ChangeMonitor();
         public static IActorCache Actors { get; } = new ActorCache();

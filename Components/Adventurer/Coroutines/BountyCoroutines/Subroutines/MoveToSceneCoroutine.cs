@@ -178,7 +178,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     _returnTimeForPreviousLocation = PluginTime.CurrentMillisecond;
                     _objectiveLocation = Vector3.Zero;
                     _objectiveScanRange = Math.Max(ActorFinder.LowerSearchRadius(_objectiveScanRange),250);
-                    Core.Logger.Log($"Search Radius changed to  {_objectiveScanRange}");
+                    Core.Logger.Log($"搜索半径更改为  {_objectiveScanRange}");
                     State = States.Searching;
                     return false;
                 }
@@ -230,7 +230,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
                     using (new PerformanceLogger("[MoveToScene] Path to Objective Check", true))
                     {
-                        Core.Logger.Log("[MoveToScene] Found the objective at distance {0}",
+                        Core.Logger.Log("[移动到场景] 在距离{0}处发现目标",
                             AdvDia.MyPosition.Distance(_objectiveLocation));
 
                         ExplorationHelpers.SetExplorationPriority(_objectiveLocation);
@@ -261,8 +261,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             {
                 if (_state == value) return;
                 if (value != States.NotStarted)
-                    Core.Logger.Log("[MoveToScene] " + value);
-                    StatusText = "[MoveToScene] " + value;
+                    Core.Logger.Log("[移动到场景] " + value);
+                    StatusText = "[移动到场景] " + value;
                 _state = value;
             }
         }

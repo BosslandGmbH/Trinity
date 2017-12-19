@@ -1,0 +1,133 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
+             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"  Background="#434343" Padding="10,0,0,0"
+             d:DesignHeight="1150" d:DesignWidth="390">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <!-- Don't format this line otherwise Db can't open config window -->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:PropertyValueConverter x:Key="propertyValueConverter"/>
+            <converters:FlagsEnumValueConverter x:Key="flagsEnumValueBooleanConverter"/>
+            <converters:BoolToVisibilityConverter x:Key="VisibleWhenTrueConverter" TrueValue="Visible" FalseValue="Collapsed"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <ScrollViewer>
+        <StackPanel DockPanel.Dock="Top" Margin="0,10,5,0">
+            <GroupBox Header="经验池设置">
+                <StackPanel>
+                    <TextBlock TextWrapping="Wrap" Margin="5">经验池个数设置.你可以设置吃到几个经验池后才开始大米</TextBlock>
+                    <UniformGrid Columns="1" Margin="0 10 0 0">
+                        <CheckBox IsChecked="{Binding SenExtend.EnableNephalemRestExperienceCheck}" Content="启动自定义经验池经验限制(亿)" ToolTip="启用后将会根据指定的数值进行检测，禁用时将会根据大米层数进行换算，单位为亿"/>
+                    </UniformGrid>
+
+                    <Slider Template="{DynamicResource SliderEditable}" IsEnabled="{Binding SenExtend.EnableNephalemRestExperienceCheck}"
+                        Interval="500" Maximum="2000" Minimum="10" SmallChange="10" TickFrequency="10" TickPlacement="BottomRight"
+                        Value="{Binding SenExtend.MiniNormalRiftForXPShrine}" 
+                        HorizontalAlignment="Stretch" Margin="0,10,0,0"
+                        ToolTip="填入经验池大小，单位是亿(建议填总经验的10%)"/>                    
+
+                    <UniformGrid Columns="2"  VerticalAlignment="Center">
+                        <CheckBox Margin="5" IsChecked="{Binding SenExtend.IsFullRestExperience}" VerticalAlignment="Center">吃满经验池才回大米</CheckBox>
+                        <Slider Template="{DynamicResource SliderEditable}" IsEnabled="{Binding SenExtend.IsFullRestExperience}" 
+                            Interval="500" Maximum="30" Minimum="1" SmallChange="1" TickFrequency="3" TickPlacement="BottomRight" 
+                            Value="{Binding SenExtend.RestExperienceNum}" 
+                            HorizontalAlignment="Stretch"  Margin="5" 
+                            ToolTip="是否吃满经验池才回大米"/>
+                    </UniformGrid>            
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="回城智能整理包裹">
+                <StackPanel>
+                    <CheckBox Margin="5" IsChecked="{Binding SenExtend.EnableIntelligentFinishing}" ToolTip="关闭的话就会次次整理包裹。建议开启该功能">开启智能整理包裹</CheckBox>
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="在城外" ToolTip="默认2就可以了, 触发秘境或城外包裹空位回城条件." />
+
+                        <Slider Grid.Row="0" Grid.Column="1" Template="{DynamicResource SliderEditable}" 
+                            Interval="500" Maximum="59" Minimum="2" SmallChange="1" 
+                            TickFrequency="1" TickPlacement="BottomRight" 
+                            Value="{Binding SenExtend.FreeBagSlots}" IsEnabled="{Binding SenExtend.EnableIntelligentFinishing}" />
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="在城內"  ToolTip="设定的格子至少保证一次大米捡完装备,推荐20,触发回城整理包裹格子数." />
+
+                        <Slider Grid.Row="1" Grid.Column="1" Template="{DynamicResource SliderEditable}"
+                            Interval="500" Maximum="59" Minimum="2" SmallChange="1" 
+                            TickFrequency="1" TickPlacement="BottomRight" 
+                            Value="{Binding SenExtend.FreeBagSlotsInTown}" IsEnabled="{Binding SenExtend.EnableIntelligentFinishing}"/>
+                    </Grid>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="小米材料">
+                <UniformGrid Columns="2">
+                    <CheckBox Content="拾取死亡气息" IsChecked="{Binding SenExtend.IsPickDeathsBreath}" />
+                    <!--<Slider Template="{DynamicResource SliderEditable}" IsEnabled="{Binding SenExtend.IsPickDeathsBreath}"
+                        Interval="500" Maximum="300000" Minimum="0" SmallChange="500" LargeChange="1000"
+                        TickFrequency="500" TickPlacement="BottomRight" IsSnapToTickEnabled="True"
+                        Value="{Binding SenExtend.MinGoldStack}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>-->
+
+                    <CheckBox Content="拾取奥术之尘" IsChecked="{Binding SenExtend.IsPickArcaneDust}"/>
+                    <!--<Slider Template="{DynamicResource SliderEditable}" IsEnabled="{Binding SenExtend.IsPickArcaneDust}"
+                        Interval="500" Maximum="300000" Minimum="0" SmallChange="500" LargeChange="1000"
+                        TickFrequency="500" TickPlacement="BottomRight" IsSnapToTickEnabled="True"
+                        Value="{Binding SenExtend.MinGoldStack}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>-->
+
+                    <CheckBox Content="拾取遗忘之魂" IsChecked="{Binding SenExtend.IsPickForgottenSoul}"/>
+                    <!--<Slider Template="{DynamicResource SliderEditable}" IsEnabled="{Binding SenExtend.IsPickForgottenSoul}"
+                        Interval="500" Maximum="300000" Minimum="0" SmallChange="500" LargeChange="1000"
+                        TickFrequency="500" TickPlacement="BottomRight" IsSnapToTickEnabled="True"
+                        Value="{Binding SenExtend.MinGoldStack}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>-->
+
+
+                    <CheckBox Content="拾取万用材料" IsChecked="{Binding SenExtend.IsPickReusableParts}"/>
+                    <!--<Slider Template="{DynamicResource SliderEditable}" IsEnabled="{Binding SenExtend.IsPickReusableParts}"
+                        Interval="500" Maximum="300000" Minimum="0" SmallChange="500" LargeChange="1000"
+                        TickFrequency="500" TickPlacement="BottomRight" IsSnapToTickEnabled="True"
+                        Value="{Binding SenExtend.MinGoldStack}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>-->
+
+
+                    <CheckBox Content="拾取萦雾水晶" IsChecked="{Binding SenExtend.IsPickVeiledCrystal}"/>
+                    <!--<Slider Template="{DynamicResource SliderEditable}" IsEnabled="{Binding SenExtend.IsPickVeiledCrystal}"
+                        Interval="500" Maximum="300000" Minimum="0" SmallChange="500" LargeChange="1000"
+                        TickFrequency="500" TickPlacement="BottomRight" IsSnapToTickEnabled="True"
+                        Value="{Binding SenExtend.MinGoldStack}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>-->
+                </UniformGrid>
+            </GroupBox>
+
+            <GroupBox Header="箱子扩展">
+                <StackPanel>
+                    <TextBlock TextWrapping="Wrap" Margin="5">勾选小米按T插件设置开箱子, 大米忽略所有箱子</TextBlock>
+                    <CheckBox Margin="5" IsChecked="{Binding SenExtend.IgnoreBoxInGreaterRift}" VerticalAlignment="Center">大米忽略箱子</CheckBox>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="小米忽略躲避">
+                <StackPanel>
+                    <TextBlock TextWrapping="Wrap" Margin="5">勾选小米中将忽略所有躲避条件,无论T插件是否有设置</TextBlock>
+                    <CheckBox Margin="5" IsChecked="{Binding SenExtend.IgnoreAvoidanceInNephalemRift}" VerticalAlignment="Center">小米忽略躲避</CheckBox>
+                </StackPanel>
+            </GroupBox>
+            
+            <GroupBox Header="加强">
+                <StackPanel>
+                    <TextBlock TextWrapping="Wrap" Margin="5">测试功能</TextBlock>
+                    <UniformGrid Columns="2">
+                        <CheckBox Margin="5" IsChecked="{Binding SenExtend.PreventSkipShrine}" VerticalAlignment="Center">防漏圣塔</CheckBox>
+                        <CheckBox Margin="5" IsChecked="{Binding SenExtend.PreventExpPool}" VerticalAlignment="Center">防漏经验池</CheckBox>
+                    </UniformGrid>
+                </StackPanel>
+            </GroupBox>            
+            
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

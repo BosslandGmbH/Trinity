@@ -85,7 +85,7 @@ namespace Trinity.Framework.Helpers
         {
             using (new PerformanceLogger("FileManager.Load"))
             {
-                Core.Logger.Log(LogCategory.Configuration, "Loading Dictionary name={0} keys={1} values={2}", name, keyName, valueName);
+                Core.Logger.Log(LogCategory.Configuration, "加载路径 名称={0} keys={1} 价值={2}", name, keyName, valueName);
                 IDictionary<K, T> ret = new Dictionary<K, T>();
                 try
                 {
@@ -105,7 +105,7 @@ namespace Trinity.Framework.Helpers
 
                             foreach (KeyValuePair<K, T> item in lst)
                             {
-                                Core.Logger.Debug(LogCategory.Configuration, "Found dictionary item {0} = {1}", item.Key, item.Value);
+                                Core.Logger.Debug(LogCategory.Configuration, "发现路径 {0} = {1}", item.Key, item.Value);
                                 ret.Add(item);
                             }
                         }
@@ -116,16 +116,16 @@ namespace Trinity.Framework.Helpers
                     }
                     if (ret.Count > 0)
                     {
-                        Core.Logger.Log(LogCategory.Configuration, "Loaded Dictionary key={1} value={2} with {3} values", keyName, valueName, ret.Count);
+                        Core.Logger.Log(LogCategory.Configuration, "加载路径 key={1} value={2} with {3} values", keyName, valueName, ret.Count);
                     }
                     else
                     {
-                        Core.Logger.Log(LogCategory.Configuration, "Attempted to load Dictionary key={1} value={2} but 0 values found!", keyName, valueName, ret.Count);
+                        Core.Logger.Log(LogCategory.Configuration, "试图加载路径 key={1} value={2} 但是发现0价值!", keyName, valueName, ret.Count);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Log("Exception in FileManager Dictionary Load");
+                    Core.Logger.Log("在文件管理器的路径加载异常");
                 }
                 return ret;
             }
@@ -419,7 +419,7 @@ namespace Trinity.Framework.Helpers
             {
                 CreateDirectory(destDirectory);
             }
-            Core.Logger.Debug("Copying file {0} to {1}", sourcePath, destPath);
+            Core.Logger.Debug("复制文件 {0} to {1}", sourcePath, destPath);
             File.Copy(sourcePath, destPath);
         }
 
@@ -439,7 +439,7 @@ namespace Trinity.Framework.Helpers
             {
                 if (Directory.Exists(routinePath))
                 {
-                    Core.Logger.Debug("Deleting old routine: {0}", routinePath);
+                    Core.Logger.Debug("删除旧日志: {0}", routinePath);
                     Directory.Delete(routinePath, true);
                 }
             }
@@ -448,7 +448,7 @@ namespace Trinity.Framework.Helpers
 
             if (File.Exists(oldTrinityRoutine))
             {
-                Core.Logger.Debug("Deleting old routine: {0}", oldTrinityRoutine);
+                Core.Logger.Debug("删除旧日志: {0}", oldTrinityRoutine);
                 File.Delete(oldTrinityRoutine);
             }
         }

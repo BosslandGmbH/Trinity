@@ -100,7 +100,7 @@ namespace Trinity.Settings.Modals
         public ICommand SelectAllCommand => new RelayCommand(param =>
         {
 
-            Core.Logger.Log("SelectAllCommand fired");
+            Core.Logger.Log("选择所有命令");
 
             foreach (var item in Selections)
             {
@@ -111,7 +111,7 @@ namespace Trinity.Settings.Modals
 
         public ICommand SelectNoneCommand => new RelayCommand(param =>
         {
-            Core.Logger.Log("SelectNoneCommand fired");
+            Core.Logger.Log("选择无命令");
 
             foreach (var item in Selections)
             {

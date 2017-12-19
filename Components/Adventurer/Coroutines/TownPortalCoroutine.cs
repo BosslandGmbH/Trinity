@@ -65,8 +65,8 @@ namespace Trinity.Components.Adventurer.Coroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Debug("[TownPortal] " + value);
-                    StatusText = "[TownPortal] " + value;
+                    Core.Logger.Debug("[城镇] " + value);
+                    StatusText = "[城镇] " + value;
                 }
                 _state = value;
             }

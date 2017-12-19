@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using System.Collections.Generic;
@@ -74,23 +74,23 @@ namespace Trinity.Components.Adventurer.UI
                     var mainWindow = Application.Current.MainWindow;
 
                     var dumpers = new StackPanel { Background = Brushes.DimGray, Height = 176, Margin = new Thickness(2, 2, 0, 2) };
-                    dumpers.Children.Add(CreateTitle("Dumpers"));
-                    dumpers.Children.Add(CreateButton("Map Markers", DumpMapMarkers_Click));
-                    dumpers.Children.Add(CreateButton("All Actors", DumpObjects_Click));
-                    //dumpers.Children.Add(CreateButton("Specific Actor", DumpActor_Click));
-                    dumpers.Children.Add(CreateButton("Unsupported Bounties", DumpUnsupportedBounties_Click));
-                    dumpers.Children.Add(CreateButton("Scenes", DumpLevelAreaScenes_Click));
-                    dumpers.Children.Add(CreateButton("SceneData Entry", DumpSceneInfo));
+                    dumpers.Children.Add(CreateTitle("转储"));
+                    dumpers.Children.Add(CreateButton("地图标记", DumpMapMarkers_Click));
+                    dumpers.Children.Add(CreateButton("全部角色", DumpObjects_Click));
+                    //dumpers.Children.Add(CreateButton("特定角色", DumpActor_Click));
+                    dumpers.Children.Add(CreateButton("不支持的悬赏", DumpUnsupportedBounties_Click));
+                    dumpers.Children.Add(CreateButton("场景等级", DumpLevelAreaScenes_Click));
+                    dumpers.Children.Add(CreateButton("场景数据输入", DumpSceneInfo));
                     
 
                     var coroutineHelpers = new StackPanel { Background = Brushes.DimGray, Height = 176, Margin = new Thickness(2, 2, 0, 2) };
-                    coroutineHelpers.Children.Add(CreateTitle("Coroutines"));
-                    coroutineHelpers.Children.Add(CreateButton("Move To Position", MoveToPosition_Click));
-                    coroutineHelpers.Children.Add(CreateButton("Move To Map Marker", MoveToMapMarker_Click));
-                    coroutineHelpers.Children.Add(CreateButton("Move To Actor", MoveToActor_Click));
-                    coroutineHelpers.Children.Add(CreateButton("Enter LevelA rea", EnterLevelArea_Click));
-                    coroutineHelpers.Children.Add(CreateButton("Clear Level Area", ClearLevelArea_Click));
-                    coroutineHelpers.Children.Add(CreateButton("Clear Area For N Seconds", ClearAreaForNSeconds_Click));
+                    coroutineHelpers.Children.Add(CreateTitle("协同程序"));
+                    coroutineHelpers.Children.Add(CreateButton("移动到指定位置", MoveToPosition_Click));
+                    coroutineHelpers.Children.Add(CreateButton("移动到地图标记", MoveToMapMarker_Click));
+                    coroutineHelpers.Children.Add(CreateButton("移动到角色", MoveToActor_Click));
+                    coroutineHelpers.Children.Add(CreateButton("进入区域等级", EnterLevelArea_Click));
+                    coroutineHelpers.Children.Add(CreateButton("清除区域等级", ClearLevelArea_Click));
+                    coroutineHelpers.Children.Add(CreateButton("清除区域时间(秒)", ClearAreaForNSeconds_Click));
 
                     var scrollViewer3 = new ScrollViewer();
                     var coroutineHelpers3 = new StackPanel
@@ -99,31 +99,31 @@ namespace Trinity.Components.Adventurer.UI
                         Margin = new Thickness(0, 2, 2, 2)
                     };
 
-                    coroutineHelpers3.Children.Add(CreateTitle("Profile Tags"));
-                    coroutineHelpers3.Children.Add(CreateButton("Move To Position", GenerateTag_Click<MoveToPositionTag>));
-                    coroutineHelpers3.Children.Add(CreateButton("Interact", GenerateActorTags_Click<InteractTag>));
-                    coroutineHelpers3.Children.Add(CreateButton("Shuffle", GenerateTag_Click<ShuffleTag>));
-                    coroutineHelpers3.Children.Add(CreateButton("ClearLevelArea", GenerateTag_Click<ClearLevelAreaTag>));
-                    coroutineHelpers3.Children.Add(CreateButton("MoveToActor", GenerateActorTags_Click<MoveToActorTag>));
-                    coroutineHelpers3.Children.Add(CreateButton("MoveToMarker", GenerateMarkerTags_Click<MoveToMapMarkerTag>));
-                    coroutineHelpers3.Children.Add(CreateButton("TakeWaypoint", GenerateTag_Click<TakeWaypointTag>));
-                    coroutineHelpers3.Children.Add(CreateButton("MoveToScene", GenerateTag_Click<MoveToSceneTag>));
-                    coroutineHelpers3.Children.Add(CreateButton("WaitTag", GenerateTag_Click<WaitTag>));
-                    coroutineHelpers3.Children.Add(CreateButton("UseDeathGate", GenerateTag_Click<UseDeathGateTag>));
-                    coroutineHelpers3.Children.Add(CreateButton("Explore", GenerateTag_Click<ExploreTag>));
-                    coroutineHelpers3.Children.Add(CreateButton("If Scene", IfScene_Click));
-                    coroutineHelpers3.Children.Add(CreateButton("If World", IfWorld_Click));
-                    coroutineHelpers3.Children.Add(CreateButton("If Quest World", IfQuestWorld_Click));
+                    coroutineHelpers3.Children.Add(CreateTitle("配置文件标签"));
+                    coroutineHelpers3.Children.Add(CreateButton("移动到指定位置", GenerateTag_Click<MoveToPositionTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("互动", GenerateActorTags_Click<InteractTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("拖曳", GenerateTag_Click<ShuffleTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("清除区域等级", GenerateTag_Click<ClearLevelAreaTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("移动到角色", GenerateActorTags_Click<MoveToActorTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("移动到标记", GenerateMarkerTags_Click<MoveToMapMarkerTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("采取导航点", GenerateTag_Click<TakeWaypointTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("移动到场景", GenerateTag_Click<MoveToSceneTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("等待标签", GenerateTag_Click<WaitTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("使用死神之门", GenerateTag_Click<UseDeathGateTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("探索 ", GenerateTag_Click<ExploreTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("如果场景", IfScene_Click));
+                    coroutineHelpers3.Children.Add(CreateButton("如果世界", IfWorld_Click));
+                    coroutineHelpers3.Children.Add(CreateButton("如果任务世界", IfQuestWorld_Click));
 
                     scrollViewer3.Content = coroutineHelpers3;
 
                     var coroutineHelpers2 = new StackPanel { Background = Brushes.DimGray, Height = 176, Margin = new Thickness(0, 2, 2, 2) };
                     coroutineHelpers2.Children.Add(CreateTitle(" "));
-                    coroutineHelpers2.Children.Add(CreateButton("Wait For N Seconds", WaitForNSeconds_Click, new Thickness(0, 2.5, 5, 2.5)));
-                    coroutineHelpers2.Children.Add(CreateButton("Interact With Gizmo", InteractWithGizmo_Click, new Thickness(0, 2.5, 5, 2.5)));
-                    coroutineHelpers2.Children.Add(CreateButton("Interact With Unit", InteractWithUnit_Click, new Thickness(0, 2.5, 5, 2.5)));
-                    coroutineHelpers2.Children.Add(CreateButton("MoveToScene", MoveToScene_Click, new Thickness(0, 2.5, 5, 2.5)));
-                    coroutineHelpers2.Children.Add(CreateButton("Move To Scene Pos", MoveToScenePosition_Click, new Thickness(0, 2.5, 5, 2.5)));
+                    coroutineHelpers2.Children.Add(CreateButton("等待场景(秒)", WaitForNSeconds_Click, new Thickness(0, 2.5, 5, 2.5)));
+                    coroutineHelpers2.Children.Add(CreateButton("与触发装置互动", InteractWithGizmo_Click, new Thickness(0, 2.5, 5, 2.5)));
+                    coroutineHelpers2.Children.Add(CreateButton("与目标互动", InteractWithUnit_Click, new Thickness(0, 2.5, 5, 2.5)));
+                    coroutineHelpers2.Children.Add(CreateButton("移动到场景", MoveToScene_Click, new Thickness(0, 2.5, 5, 2.5)));
+                    coroutineHelpers2.Children.Add(CreateButton("移动到场景定位", MoveToScenePosition_Click, new Thickness(0, 2.5, 5, 2.5)));
 
                     var uniformGrid = new UniformGrid
                     {
@@ -141,7 +141,7 @@ namespace Trinity.Components.Adventurer.UI
                     _tabItem = new TabItem
                     {
                         Header = "Adventurer",
-                        ToolTip = "Developer Tools",
+                        ToolTip = "开发工具",
                         Content = uniformGrid,
                     };
 
@@ -163,7 +163,7 @@ namespace Trinity.Components.Adventurer.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error showing Configuration from TabUI:" + ex);
+                Core.Logger.Error("显示TabUI中的配置时出错:" + ex);
             }
         }
 
@@ -313,13 +313,13 @@ namespace Trinity.Components.Adventurer.UI
         //        }
         //        if (string.IsNullOrWhiteSpace(mbox.Text))
         //        {
-        //            Core.Logger.Log("Enter an actorId");
+        //            Core.Logger.Log("输入人物ID");
         //            return;
         //        }
         //        int actorId;
         //        if (!int.TryParse(mbox.Text, out actorId))
         //        {
-        //            Core.Logger.Log("Invalid actorId");
+        //            Core.Logger.Log("无效的人物ID");
         //            return;
         //        }
         //        if (!ZetaDia.IsInGame)
@@ -341,7 +341,7 @@ namespace Trinity.Components.Adventurer.UI
         //                    .FirstOrDefault();
         //            if (actor == null)
         //            {
-        //                Core.Logger.Log("Actor not found");
+        //                Core.Logger.Log("找不到人物");
         //                return;
         //            }
 

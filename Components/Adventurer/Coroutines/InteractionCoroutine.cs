@@ -42,8 +42,8 @@ namespace Trinity.Components.Adventurer.Coroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Debug("[Interaction] " + value);
-                    StatusText = "[Interaction] " + value;
+                    Core.Logger.Debug("[互动] " + value);
+                    StatusText = "[互动] " + value;
                 }
                 _state = value;
             }
@@ -102,7 +102,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
             if (Core.Player.IsCastingOrLoading)
             {
-                Core.Logger.Log("Waiting for cast to finish.");
+                Core.Logger.Log("等待转换完成.");
                 return false;
             }
 
@@ -142,16 +142,16 @@ namespace Trinity.Components.Adventurer.Coroutines
             var actor = GetActor();
             if (actor == null || !actor.IsFullyValid())
             {
-                Core.Logger.Debug("Nothing to interact, failing. ");
+                Core.Logger.Debug("目标无效, 交互失败. ");
                 State = States.Failed;
                 return false;
             }
 
-            Core.Logger.Debug($"Interact Actor Found: {actor.Name} ({actor.ActorSnoId}) Distance={actor.Distance}");
+            Core.Logger.Debug($"找到互动目标: {actor.Name} ({actor.ActorSnoId}) 距离={actor.Distance}");
 
             if (!_ignoreSanityChecks && !actor.IsInteractableQuestObject())
             {
-                Core.Logger.Debug("The object is not valid or not interactable, failing.");
+                Core.Logger.Debug("对象是无效的或不可交互.");
                 State = States.Failed;
                 return false;
             }
@@ -220,14 +220,14 @@ namespace Trinity.Components.Adventurer.Coroutines
                 if (ZetaDia.Me.CommonData.AnimationState == AnimationState.Casting)
                 {
                     _castWaitStartTime = DateTime.UtcNow;
-                    Core.Logger.Debug("Waiting while AnimationState.Casting");
+                    Core.Logger.Debug("等待动画状态.");
                     await Coroutine.Sleep(500);
                     return false;
                 }
                 if (ZetaDia.Me.CommonData.AnimationState == AnimationState.Channeling)
                 {
                     _castWaitStartTime = DateTime.UtcNow;
-                    Core.Logger.Debug("Waiting while  AnimationState.Channeling");
+                    Core.Logger.Debug("等待动画状态.");
                     await Coroutine.Sleep(500);
                     return false;
                 }
@@ -251,7 +251,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             var actor = GetActor();
             if (actor == null)
             {
-                Core.Logger.Debug("Nothing to interact, failing. ");
+                Core.Logger.Debug("交互目标无效! ");
                 State = States.Failed;
                 return false;
             }
@@ -281,7 +281,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             var unit = actor as DiaUnit;
             if (_isQuestGiver && unit != null && !unit.IsQuestGiver)
             {
-                Core.Logger.Debug($"Unit {actor.Name} is no longer a quest giver, assuming done!");
+                Core.Logger.Debug($"单位 {actor.Name} 不再是给予者, assuming done!");
                 State = States.Completed;
                 return false;
             }
@@ -302,7 +302,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
             if (_currentInteractAttempt > _interactAttempts)
             {
-                Core.Logger.Debug($"Max interact attempts reached ({_interactAttempts})");
+                Core.Logger.Debug($"已到达最大互动尝试 ({_interactAttempts})");
                 State = States.Completed;
                 return true;
             }

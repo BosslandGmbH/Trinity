@@ -42,7 +42,7 @@ namespace Trinity.Components.Coroutines.Town
         {
             if (!ZetaDia.IsInTown)
             {
-                Core.Logger.Verbose("[SellItems] Need to be in town to sell items");
+                Core.Logger.Verbose("[卖物品] 需要在城里卖物品");
                 return false;
             }
 
@@ -51,12 +51,12 @@ namespace Trinity.Components.Coroutines.Town
             {
                 await RepairItems.Execute();
 
-                Core.Logger.Verbose("[SellItems] Nothing to sell");
+                Core.Logger.Verbose("[卖物品] 没有东西可卖");
                 return false;
             }
 
-            Core.Logger.Verbose("[SellItems] Now to sell {0} items", sellItems.Count);
-            sellItems.ForEach(i => Core.Logger.Debug($"[SellItems] Selling: {i.Name} ({i.ActorSnoId}) InternalName={i.InternalName} Ancient={i.IsAncient} Ann={i.AnnId}"));
+            Core.Logger.Verbose("[卖物品] 现在出售物品 {0} ", sellItems.Count);
+            sellItems.ForEach(i => Core.Logger.Debug($"[卖物品] 卖: {i.Name} ({i.ActorSnoId}) 内部名={i.InternalName} 远古={i.IsAncient} Ann={i.AnnId}"));
 
             await Coroutine.Sleep(Randomizer.Fudge(150));
             GameUI.CloseVendorWindow();
@@ -64,15 +64,15 @@ namespace Trinity.Components.Coroutines.Town
             var merchant = TownInfo.NearestMerchant;
             if (merchant == null)
             {
-                Core.Logger.Error("[SellItems] Unable to find merchant info for this area :(");
+                Core.Logger.Error("[卖物品] 无法找到此区域的小贩信息 :(");
                 return false;
             }
 
             if (!UIElements.VendorWindow.IsVisible)
             {
-                if (!await MoveToAndInteract.Execute(merchant))
+                if (!await MoveToAndInteract.Execute(merchant,10f))
                 {
-                    Core.Logger.Error($"[SellItems] Failed to move to merchant ({merchant.Name}) to sell items :(");
+                    Core.Logger.Error($"[卖物品] 未能移动到小贩 ({merchant.Name}) 出售 :(");
                     return false;
                 }
                 await Coroutine.Sleep(Randomizer.Fudge(1000));
@@ -88,12 +88,12 @@ namespace Trinity.Components.Coroutines.Town
                     {
                         if (!item.IsValid || item.IsUnidentified)
                         {
-                            Core.Logger.Verbose($"[SellItems] Invalid Items Detected: IsValid={item.IsValid} IsUnidentified={item.IsUnidentified}");
+                            Core.Logger.Verbose($"[卖物品] 检测到无效的物品: 有效的={item.IsValid} 是未知的={item.IsUnidentified}");
                             continue;
                         }
 
                         await Coroutine.Sleep(Randomizer.Fudge(100));
-                        Core.Logger.Verbose($"[SellItems] Selling: {item.Name} ({item.ActorSnoId}) Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} Name={item.InternalName}");
+                        Core.Logger.Verbose($"[卖物品] 卖: {item.Name} ({item.ActorSnoId}) 品质={item.ItemQualityLevel} 远古={item.IsAncient} 名称={item.InternalName}");
                         InventoryManager.SellItem(item.ToAcdItem());
                         ItemEvents.FireItemSold(item);
                         Core.Inventory.InvalidAnnIds.Add(item.AnnId);
@@ -105,7 +105,7 @@ namespace Trinity.Components.Coroutines.Town
                 return true;
             }
 
-            Core.Logger.Error($"[SellItems] Failed to sell items");
+            Core.Logger.Error($"[卖物品] 未能卖掉物品");
             return false;
         }
     }

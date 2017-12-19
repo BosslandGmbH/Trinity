@@ -89,13 +89,13 @@ namespace Trinity.Framework.Avoidance
 
                 if (PlayerMover.IsBlocked && Core.BlockedCheck.BlockedTime.TotalMilliseconds > 8000)
                 {
-                    Core.Logger.Debug(LogCategory.Avoidance, "Not Avoiding because blocked");
+                    Core.Logger.Debug(LogCategory.Avoidance, "不能规避因为堵塞");
                     return false;
                 }
 
                 if (TrinityCombat.Targeting.CurrentTarget != null && TrinityCombat.Targeting.CurrentTarget.Distance < 10f && GizmoProximityTypes.Contains(TrinityCombat.Targeting.CurrentTarget.Type))
                 {
-                    Core.Logger.Debug(LogCategory.Avoidance, "Not Avoiding because gizmo nearby");
+                    Core.Logger.Debug(LogCategory.Avoidance, "不能规避因为近有装置");
                     return false;
                 }
 
@@ -104,7 +104,7 @@ namespace Trinity.Framework.Avoidance
                     Core.Avoidance.NearbyStats.WeightPctTotal >= Settings.MinimumNearbyWeightPctTotalTrigger &&
                     Core.Avoidance.NearbyStats.WeightPctAvg >= Settings.AvoiderNearbyPctAvgTrigger)
                 {
-                    Core.Logger.Debug(LogCategory.Avoidance, "Avoidance Local PctAvg: {0:0.00} / {1:0.00} PctTotal={2:0.00} / {3:0.00} Highest={4} / {5} ({6} Nodes, AbsHighest={7})",
+                    Core.Logger.Debug(LogCategory.Avoidance, "本地规避平均百分比: {0:0.00} / {1:0.00} 总计百分比={2:0.00} / {3:0.00} 最高={4} / {5} ({6} 节点, ABS最高={7})",
                         Core.Avoidance.NearbyStats.WeightPctAvg,
                         Settings.AvoiderNearbyPctAvgTrigger,
                         Core.Avoidance.NearbyStats.WeightPctTotal,
@@ -132,7 +132,7 @@ namespace Trinity.Framework.Avoidance
                     var standingInCritical = Core.Grids.Avoidance.IsStandingInFlags(AvoidanceFlags.CriticalAvoidance);
                     if (standingInCritical)
                     {
-                        Core.Logger.Debug(LogCategory.Avoidance, "IsStandingInFlags... CriticalAvoidance");
+                        Core.Logger.Debug(LogCategory.Avoidance, "正站在危险区域... 严重危险躲避");
                         LastAvoidTime = DateTime.UtcNow;
                         return true;
                     }
@@ -144,7 +144,7 @@ namespace Trinity.Framework.Avoidance
 
                     if (Core.Grids.Avoidance.IsPathingOverFlags(AvoidanceFlags.CriticalAvoidance))
                     {
-                        Core.Logger.Debug(LogCategory.Avoidance, "IsPathingOverFlags... CriticalAvoidance");
+                        Core.Logger.Debug(LogCategory.Avoidance, "路径上存在危险区域... 严重危险躲避");
                         Navigator.Clear();
                         LastAvoidTime = DateTime.UtcNow;
                         return true;
@@ -217,7 +217,7 @@ namespace Trinity.Framework.Avoidance
 
             if (TrinityCombat.Routines.Current?.ShouldIgnoreAvoidance() ?? false)
             {
-                Core.Logger.Debug(LogCategory.Avoidance, "Not Avoiding because routine has said no");
+                Core.Logger.Debug(LogCategory.Avoidance, "不规避因为策略说没有");
                 return false;
             }
 
@@ -243,19 +243,19 @@ namespace Trinity.Framework.Avoidance
 
             if (TrinityCombat.Routines.Current.ShouldIgnoreKiting())
             {
-                Core.Logger.Debug(LogCategory.Avoidance, "Not Kiting because routine has said no");
+                Core.Logger.Debug(LogCategory.Avoidance, "不放风筝因为策略说没有");
                 return false;
             }
 
             if (TrinityCombat.Targeting.CurrentTarget?.Distance < 10f && GizmoProximityTypes.Contains(TrinityCombat.Targeting.CurrentTarget.Type))
             {
-                Core.Logger.Debug(LogCategory.Avoidance, "Not Kiting because gizmo nearby");
+                Core.Logger.Debug(LogCategory.Avoidance, "不能放风筝，因为附近有装置");
                 return false;
             }
 
             if (DateTime.UtcNow < KiteStutterCooldownEndTime)
             {
-                Core.Logger.Debug(LogCategory.Avoidance, "Kite On Cooldown");
+                Core.Logger.Debug(LogCategory.Avoidance, "风筝在冷却");
                 return false;
             }
 
@@ -264,7 +264,7 @@ namespace Trinity.Framework.Avoidance
 
             if (PlayerMover.IsBlocked && !isCloseLargeMonster && Core.BlockedCheck.BlockedTime.TotalMilliseconds > 8000 && !Core.Avoidance.InCriticalAvoidance(ZetaDia.Me.Position))
             {
-                Core.Logger.Log(LogCategory.Avoidance, "Not kiting because blocked");
+                Core.Logger.Log(LogCategory.Avoidance, "不放风筝，因为堵塞");
                 return false;
             }
 
@@ -298,13 +298,13 @@ namespace Trinity.Framework.Avoidance
                     {
                         if (DateTime.UtcNow.Subtract(LastKiteTime).TotalMilliseconds > TrinityCombat.Routines.Current.KiteStutterDelay)
                         {
-                            Core.Logger.Debug(LogCategory.Avoidance, "Kite Shutter Triggered");
+                            Core.Logger.Debug(LogCategory.Avoidance, "风筝快门触发");
                             LastKiteTime = DateTime.UtcNow;
                             KiteStutterCooldownEndTime = DateTime.UtcNow.AddMilliseconds(TrinityCombat.Routines.Current.KiteStutterDuration);
                             return true;
                         }
 
-                        Core.Logger.Debug(LogCategory.Avoidance, "IsStandingInFlags... KiteFromNode");
+                        Core.Logger.Debug(LogCategory.Avoidance, "这是标志... 风筝从节点");
                         LastAvoidTime = DateTime.UtcNow;
                         return true;
                     }

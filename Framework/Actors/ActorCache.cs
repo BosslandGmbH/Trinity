@@ -51,6 +51,11 @@ namespace Trinity.Framework.Actors
 
         public readonly ConcurrentDictionary<int, TrinityActor> _rActors = new ConcurrentDictionary<int, TrinityActor>();
         private readonly ConcurrentDictionary<int, TrinityItem> _inventory = new ConcurrentDictionary<int, TrinityItem>();
+		// SENY
+        public readonly ConcurrentDictionary<int, TrinityActor> Portals = new ConcurrentDictionary<int, TrinityActor>();
+        public readonly ConcurrentDictionary<int, TrinityActor> Shrines = new ConcurrentDictionary<int, TrinityActor>();
+        public readonly ConcurrentDictionary<int, TrinityActor> Globes = new ConcurrentDictionary<int, TrinityActor>();
+        public readonly ConcurrentDictionary<int, TrinityActor> Elites = new ConcurrentDictionary<int, TrinityActor>();
 
         private readonly Dictionary<int, short> _annToAcdIndex = new Dictionary<int, short>();
         private readonly Dictionary<int, int> _acdToRActorIndex = new Dictionary<int, int>();
@@ -85,7 +90,7 @@ namespace Trinity.Framework.Actors
             var gameId = ZetaDia.Service.CurrentGameId;
             if (_gameId != gameId)
             {
-                Core.Logger.Debug("Game Change Detected");
+                Core.Logger.Debug("游戏变化检测.");
                 ZetaDia.Actors.Update();
                 _gameId = gameId;
                 return;
@@ -178,7 +183,22 @@ namespace Trinity.Framework.Actors
                     (id, actor) => TryUpdateRActor(id, actor, rActor, out result));
 
                 if (result)
+                {
                     untouchedIds.Remove(rActorId);
+					// SENY
+                    TrinityActor actor = _rActors[rActorId];
+                    if (actor.Type == TrinityObjectType.Portal)
+                        Portals.TryAdd(rActorId, actor);
+
+                    if (actor.Type == TrinityObjectType.Shrine || actor.Type == TrinityObjectType.CursedShrine)
+                        Shrines.TryAdd(rActorId, actor);
+
+                    if (actor.Type == TrinityObjectType.ProgressionGlobe || actor.Type == TrinityObjectType.HealthGlobe || actor.Type == TrinityObjectType.PowerGlobe)
+                        Globes.TryAdd(rActorId, actor);
+
+                    if (actor.IsElite)
+                        Elites.TryAdd(rActorId, actor);
+                }
             }
 
             foreach (var key in untouchedIds)
@@ -400,7 +420,7 @@ namespace Trinity.Framework.Actors
 
         public void Clear()
         {
-            Core.Logger.Warn("Resetting ActorCache");
+            Core.Logger.Warn("重置人物缓存.");
             _annToAcdIndex.Clear();
             foreach (var pair in _rActors)
             {
@@ -415,6 +435,11 @@ namespace Trinity.Framework.Actors
             CurrentAcdIds.Clear();
             CurrentRActorIds.Clear();
             _acdToRActorIndex.Clear();
+			// SENY
+            Portals.Clear();
+            Shrines.Clear();
+            Globes.Clear();
+            Elites.Clear();
             ActivePlayerRActorId = 0;
             Me = null;
         }

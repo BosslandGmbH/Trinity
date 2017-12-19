@@ -47,8 +47,8 @@
                             <StackPanel>
 
                                 <Slider Template="{DynamicResource LabelledSliderEditable}"
-                                    Tag="Health Percent"
-                                    ToolTip="The amount of health player must be below, for this to be avoided"
+                                    Tag="生命值%"
+                                    ToolTip="玩家生命低于#%时躲避"
                                     Interval="5" Maximum="100" Minimum="0"
                                     SmallChange="5" LargeChange="5"
                                     TickPlacement="None"
@@ -56,8 +56,8 @@
                                     HorizontalAlignment="Stretch" Margin="2" />
 
                                 <Slider Template="{DynamicResource LabelledSliderEditable}"
-                                    Tag="Distance Multiplier"
-                                    ToolTip="Multiplier applied to the distance, increase above 1 to make the bot stay further away"
+                                    Tag="#倍距离"
+                                    ToolTip="乘数应用于距离增加1以上，使机器人保持更远"
                                     Maximum="2" Minimum="0"
                                     SmallChange="0.01" LargeChange="0.01"
                                     TickPlacement="None"
@@ -108,10 +108,10 @@
                     <Border Background="#474747" Padding="10,10,10,10">
                         <StackPanel>
                             <UniformGrid Rows="1" Margin="0,0,0,10">
-                                <Button Height="23" Command="{Binding SelectAllCommand}" CommandParameter="GroundEffects">Select All</Button>
-                                <Button Height="23" Command="{Binding SelectNoneCommand}" CommandParameter="GroundEffects">Select None</Button>
-                                <Button Height="23" Command="{Binding SelectDefaultsCommand}" CommandParameter="GroundEffects">Defaults</Button>
-                                <Button Height="23" Command="{Binding MaxHealthCommand}" CommandParameter="GroundEffects">Max All Health</Button>
+                                <Button Height="23" Command="{Binding SelectAllCommand}" CommandParameter="GroundEffects">全选</Button>
+                                <Button Height="23" Command="{Binding SelectNoneCommand}" CommandParameter="GroundEffects">全不选</Button>
+                                <Button Height="23" Command="{Binding SelectDefaultsCommand}" CommandParameter="GroundEffects">默认值</Button>
+                                <Button Height="23" Command="{Binding MaxHealthCommand}" CommandParameter="GroundEffects">所有最大生命值</Button>
                             </UniformGrid>
                             <ListView
                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -136,8 +136,8 @@
                         <StackPanel>
                             -->
                 <!--<UniformGrid Rows="1">
-                                <Button Command="{Binding SelectAllCommand}" CommandParameter="MonsterAbilities">Select All</Button>
-                                <Button Command="{Binding SelectNoneCommand}" CommandParameter="MonsterAbilities">Select None</Button>
+                                <Button Command="{Binding SelectAllCommand}" CommandParameter="MonsterAbilities">全选</Button>
+                                <Button Command="{Binding SelectNoneCommand}" CommandParameter="MonsterAbilities">全不选</Button>
                             </UniformGrid>-->
                 <!--<ListView
                                 ItemContainerStyle="{DynamicResource AvoidanceListViewItemStyle}"

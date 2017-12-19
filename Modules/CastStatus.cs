@@ -112,15 +112,15 @@ namespace Trinity.Modules
                     return;
 
                 case CastResult.Success:
-                    Core.Logger.Verbose($"Casting {info.Power} was Successful");
+                    Core.Logger.Verbose($"施放 {info.Power} 是成功的");
                     break;
 
                 case CastResult.Failed:
-                    Core.Logger.Verbose($"Casting {info.Power} Failed! Elapsed={info.DurationMs}ms");
+                    Core.Logger.Verbose($"施放 {info.Power} 失败! 已过={info.DurationMs}ms");
                     break;
 
                 case CastResult.Casting:
-                    Core.Logger.Verbose($"Casting {info.Power}, Elapsed={info.DurationMs}ms");
+                    Core.Logger.Verbose($"施放 {info.Power}, 已过={info.DurationMs}ms");
                     break;
 
             }
@@ -143,7 +143,7 @@ namespace Trinity.Modules
 
             if (isCasting)
             {
-                Core.Logger.Verbose($"Started Casting {info.Power}");
+                Core.Logger.Verbose($"开始施放 {info.Power}");
                 info.StartPosition = ZetaDia.Me.Position;
                 info.StartTime = DateTime.UtcNow;
                 info.WorldId = ZetaDia.Globals.WorldSnoId;
@@ -152,7 +152,7 @@ namespace Trinity.Modules
                 return CastResult.Casting;
             }
 
-            Core.Logger.Verbose($"Stopped Casting {info.Power} after {info.DurationMs}ms");
+            Core.Logger.Verbose($"开始施放 {info.Power} 后 {info.DurationMs}毫秒");
 
             if (info.Success(info))
             {

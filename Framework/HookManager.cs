@@ -83,7 +83,7 @@ namespace Trinity.Framework
             if (!OriginalHooks.ContainsKey(hookName))
                 OriginalHooks.Add(hookName, TreeHooks.Instance.Hooks[hookName][0]);
 
-            Core.Logger.Log("Replacing " + hookName + " Hook");
+            Core.Logger.Log("更换 " + hookName + " Hook");
             TreeHooks.Instance.ReplaceHook(hookName, behavior);
         }
 
@@ -91,7 +91,7 @@ namespace Trinity.Framework
         {
             if (OriginalHooks.ContainsKey(hook) && TreeHooks.Instance.Hooks.ContainsKey(hook))
             {
-                Core.Logger.Log("Replacing " + hook + " Hook with Original");
+                Core.Logger.Log("更换 " + hook + " Hook with Original");
                 TreeHooks.Instance.ReplaceHook(hook, OriginalHooks[hook]);
             }
         }

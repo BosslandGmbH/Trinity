@@ -35,7 +35,7 @@ namespace Trinity.Components.Coroutines
         /// <returns>System.Int32.</returns>
         public static int Compare(this ItemWrapper thisItem, ItemWrapper thatItem)
         {
-            Core.Logger.Verbose("Comparing item {0} ({1}) to {2} ({3})", thisItem.Name, thisItem.InternalName, thatItem.Name, thatItem.InternalName);
+            Core.Logger.Verbose("比较道具 {0} ({1}) 到 {2} ({3})", thisItem.Name, thisItem.InternalName, thatItem.Name, thatItem.InternalName);
             if (thisItem.DynamicId == thatItem.DynamicId)
                 return 0;
 
@@ -261,7 +261,7 @@ namespace Trinity.Components.Coroutines
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error running Sort backpack: " + ex);
+                Core.Logger.Error("运行背包整理错误: " + ex);
                 RemoveBehavior();
             }
 
@@ -287,7 +287,7 @@ namespace Trinity.Components.Coroutines
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error running Sort stash: " + ex);
+                Core.Logger.Error("运行仓库整理错误: " + ex);
                 RemoveBehavior();
             }
 
@@ -309,7 +309,7 @@ namespace Trinity.Components.Coroutines
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Verbose("Sort behavior not inserted? " + ex);
+                    Core.Logger.Verbose("没用空间来整理? " + ex);
                 }
             }
         }
@@ -337,7 +337,7 @@ namespace Trinity.Components.Coroutines
 
             if (ZetaDia.Me.IsParticipatingInTieredLootRun)
             {
-                Core.Logger.Log("Cannot sort while in trial/greater rift");
+                Core.Logger.Log("在大秘境状态下无法整理");
                 RemoveBehavior();
                 return false;
             }
@@ -346,7 +346,7 @@ namespace Trinity.Components.Coroutines
             {
                 return true;
             }
-            Core.Logger.Log("Starting sort task for {0}", inventorySlot);
+            Core.Logger.Log("开始整理 从 {0}", inventorySlot);
 
             List<ItemWrapper> wrappedItems;
 
@@ -360,7 +360,7 @@ namespace Trinity.Components.Coroutines
                 foreach (InventorySquare square in CharacterSettings.Instance.ProtectedBagSlots)
                 {
                     _usedGrid[square.Column, square.Row] = true;
-                    Core.Logger.Verbose("Slot {0},{1} is protected", square.Column, square.Row);
+                    Core.Logger.Verbose("空间 {0},{1} 被保护", square.Column, square.Row);
                 }
             }
             else if (inventorySlot == InventorySlot.SharedStash)
@@ -373,14 +373,14 @@ namespace Trinity.Components.Coroutines
             }
             else
             {
-                Core.Logger.Error("Unsupported Inventory Slot {0}", inventorySlot);
+                Core.Logger.Error("不支持的存储空间 {0}", inventorySlot);
                 return false;
             }
 
 
             var equipment = wrappedItems.Where(i => i.IsEquipment).OrderByDescending(i => i);
             _sortedItemsQueue = new Queue<ItemWrapper>(equipment);
-            Core.Logger.Verbose("Queued {0} items for forward sort", _sortedItemsQueue.Count());
+            Core.Logger.Verbose("队列 {0} 放道具到 前面的 仓库", _sortedItemsQueue.Count());
 
             foreach (var item in equipment)
             {
@@ -389,7 +389,7 @@ namespace Trinity.Components.Coroutines
 
             var misc = wrappedItems.Where(i => !i.IsEquipment).OrderByDescending(i => i);
             _reverseSortedItemsQueue = new Queue<ItemWrapper>(misc);
-            Core.Logger.Verbose("Queued {0} items for reverse sort", _reverseSortedItemsQueue.Count());
+            Core.Logger.Verbose("队列 {0} 放道具到 后面的 仓库", _reverseSortedItemsQueue.Count());
 
             foreach (var item in misc)
             {
@@ -400,14 +400,14 @@ namespace Trinity.Components.Coroutines
             {
                 _reverseSortedItemsQueue = null;
                 _sortedItemsQueue = null;
-                Core.Logger.Log("No items found to sort?");
+                Core.Logger.Log("没有找到道具种类?");
                 RemoveBehavior();
                 return false;
             }
 
             if (!UIElements.InventoryWindow.IsVisible && inventorySlot == InventorySlot.BackpackItems)
             {
-                Core.Logger.Log("Opening inventory window");
+                Core.Logger.Log("打开仓库界面");
                 var inventoryButton = UIElement.FromName("Root.NormalLayer.game_dialog_backgroundScreenPC.button_inventory");
                 if (inventoryButton != null && inventoryButton.IsEnabled && inventoryButton.IsVisible)
                 {
@@ -417,18 +417,18 @@ namespace Trinity.Components.Coroutines
                 }
                 else
                 {
-                    Core.Logger.Error("Derp - couldn't find inventory Button!");
+                    Core.Logger.Error("Derp - 找不到库存按钮!");
                 }
             }
 
-            Core.Logger.Log("Executing sort task");
+            Core.Logger.Log("执行排序任务");
             if (GameUI.IsElementVisible(GameUI.StashDialogMainPage) && inventorySlot == InventorySlot.SharedStash)
             {
                 await SortItems(inventorySlot);
                 await ReverseItems(inventorySlot);
 
-                Core.Logger.Log("Waiting 5 seconds...");
-                BotMain.StatusText = "Waiting 5 seconds...";
+                Core.Logger.Log("等待 5 秒...");
+                BotMain.StatusText = "等待 5 秒...";
                 await Coroutine.Sleep(5000);
 
                 if (ReturnToStash.StartedOutOfTown && ZetaDia.IsInTown)
@@ -449,7 +449,7 @@ namespace Trinity.Components.Coroutines
         {
             try
             {
-                Core.Logger.Verbose("Initiating sort task 1");
+                Core.Logger.Verbose("启动排序任务 1");
 
                 var myDynamicId = ZetaDia.Me.CommonData.AnnId;
                 int currentRow = 0;
@@ -467,7 +467,7 @@ namespace Trinity.Components.Coroutines
                         break;
                 }
 
-                Core.Logger.Log("Using max columns of {0}, max rows of {1}", maxCol, maxRow);
+                Core.Logger.Log("使用的最大列 {0},最大的行 {1}", maxCol, maxRow);
 
                 while (_sortedItemsQueue.Any())
                 {
@@ -475,7 +475,7 @@ namespace Trinity.Components.Coroutines
 
                     if (inventorySlot == InventorySlot.BackpackItems && CharacterSettings.Instance.ProtectedBagSlots.Any(pbs => pbs.IsItemInSquare(i.Item)))
                     {
-                        Core.Logger.Verbose("Item {0} is protected!", i.Name);
+                        Core.Logger.Verbose("道具 {0} 被保护!", i.Name);
                         continue;
                     }
 
@@ -498,7 +498,7 @@ namespace Trinity.Components.Coroutines
 
                     if (i.Item.InventoryColumn == currentCol && i.Item.InventoryRow == currentRow)
                     {
-                        Core.Logger.Verbose("Item {0} is already sorted at {1},{2}", i.Name, i.Item.InventoryColumn, i.Item.InventoryRow);
+                        Core.Logger.Verbose("道具 {0} 已经准备好存分类 {1},{2}", i.Name, i.Item.InventoryColumn, i.Item.InventoryRow);
                         MarkCellAsUsed(currentRow, currentCol, i);
 
                         currentCol++;
@@ -523,7 +523,7 @@ namespace Trinity.Components.Coroutines
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error sorting " + inventorySlot + " " + ex);
+                Core.Logger.Error("分类错误 " + inventorySlot + " " + ex);
                 RemoveBehavior();
             }
             return false;
@@ -533,7 +533,7 @@ namespace Trinity.Components.Coroutines
         {
             try
             {
-                Core.Logger.Verbose("Initiating sort task 2");
+                Core.Logger.Verbose("启动排序任务 2");
 
                 var myDynamicId = ZetaDia.Me.CommonData.AnnId;
                 int currentRow = 5;
@@ -551,14 +551,14 @@ namespace Trinity.Components.Coroutines
                         break;
                 }
 
-                Core.Logger.Log("Using max columns of {0}, max rows of {1}", maxCol, maxRow);
+                Core.Logger.Log("使用的最大列 {0},最大的行 {1}", maxCol, maxRow);
 
                 while (_reverseSortedItemsQueue.Any())
                 {
                     var i = _reverseSortedItemsQueue.Dequeue();
                     if (inventorySlot == InventorySlot.BackpackItems && CharacterSettings.Instance.ProtectedBagSlots.Any(pbs => pbs.IsItemInSquare(i.Item)))
                     {
-                        Core.Logger.Verbose("Item {0} is protected!", i.Name);
+                        Core.Logger.Verbose("道具 {0} 被保护!", i.Name);
                         continue;
                     }
 
@@ -570,7 +570,7 @@ namespace Trinity.Components.Coroutines
 
                     while (_usedGrid[currentCol, currentRow])
                     {
-                        Core.Logger.Verbose("Grid location {0},{1} is used already", currentCol, currentRow);
+                        Core.Logger.Verbose("位置 {0},{1} 已被使用", currentCol, currentRow);
                         currentCol--;
                         if (currentCol < 0)
                         {
@@ -581,7 +581,7 @@ namespace Trinity.Components.Coroutines
 
                     if (i.Item.InventoryColumn == currentCol && i.Item.InventoryRow == currentRow)
                     {
-                        Core.Logger.Verbose("Item {0} is already sorted at {1},{2}", i.Name, i.Item.InventoryColumn, i.Item.InventoryRow);
+                        Core.Logger.Verbose("道具 {0} 已经准备好存分类 {1},{2}", i.Name, i.Item.InventoryColumn, i.Item.InventoryRow);
                         MarkCellAsUsed(currentRow, currentCol, i);
                         currentCol--;
                         continue;
@@ -621,7 +621,7 @@ namespace Trinity.Components.Coroutines
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error sorting " + inventorySlot + " " + ex);
+                Core.Logger.Error("分类错误 " + inventorySlot + " " + ex);
                 RemoveBehavior();
             }
             return false;
@@ -661,7 +661,7 @@ namespace Trinity.Components.Coroutines
             _usedGrid[currentCol, currentRow] = true;
             if (i.IsTwoSquareItem)
             {
-                Core.Logger.Verbose("{0} is two squares, marking {1},{2} as used", i.Name, currentCol, currentRow + 1);
+                Core.Logger.Verbose("{0} 是两个空间, 标记 {1},{2} 所用", i.Name, currentCol, currentRow + 1);
                 _usedGrid[currentCol, currentRow + 1] = true;
             }
         }
@@ -694,12 +694,12 @@ namespace Trinity.Components.Coroutines
                         }
                         else
                         {
-                            Core.Logger.Verbose("Couldn't find a new location for {0} at {1},{2}", item.Name, col, row);
+                            Core.Logger.Verbose("找不到新位置 {0} at {1},{2}", item.Name, col, row);
                         }
                     }
                     else
                     {
-                        Core.Logger.Error("Item in location {0},{1} was not found!", col, row);
+                        Core.Logger.Error("在位置 {0},{1}没有被发现!", col, row);
                     }
                 }
             }
@@ -727,7 +727,7 @@ namespace Trinity.Components.Coroutines
                 case InventorySlot.SharedStash:
                     return FindEmptyStashSquare(targetCol, targetRow, isTwoSquare, isForward);
                 default:
-                    Core.Logger.Error("Invalid location to find empty slot: {0}", inventorySlot);
+                    Core.Logger.Error("无效的位置，找到未知: {0}", inventorySlot);
                     return new Tuple<int, int>(-1, -1);
             }
         }
@@ -750,7 +750,7 @@ namespace Trinity.Components.Coroutines
                 {
                     if (!item.IsValid)
                     {
-                        Core.Logger.Verbose("Found invalid item while trying to find backback slot!");
+                        Core.Logger.Verbose("发现无效项目，同时试图找到背包位置!");
                         continue;
                     }
 
@@ -845,7 +845,7 @@ namespace Trinity.Components.Coroutines
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error finding stash square: " + ex);
+                Core.Logger.Error("在找存储位置错误: " + ex);
                 return new Tuple<int, int>(-1, -1);
             }
 
@@ -871,7 +871,7 @@ namespace Trinity.Components.Coroutines
                 foreach (InventorySquare square in CharacterSettings.Instance.ProtectedBagSlots)
                 {
                     backpackSlotBlocked[square.Column, square.Row] = true;
-                    Core.Logger.Verbose("Slot {0},{1} is protected", square.Column, square.Row);
+                    Core.Logger.Verbose("空间 {0},{1} 被保护", square.Column, square.Row);
                 }
 
                 if (targetRow != -1 && targetCol != -1)
@@ -886,7 +886,7 @@ namespace Trinity.Components.Coroutines
                 {
                     if (!item.IsValid)
                     {
-                        Core.Logger.Verbose("Found invalid item while trying to find backback slot!");
+                        Core.Logger.Verbose("发现无效项目，同时试图找到背包位置!");
                         continue;
                     }
 
@@ -895,14 +895,14 @@ namespace Trinity.Components.Coroutines
 
                     if (row < 0 || row > 5)
                     {
-                        Core.Logger.Error("Item {0} ({1}) is reporting invalid backpack row of {2}!",
+                        Core.Logger.Error("道具 {0} ({1}) 报告是无效的背包行 {2}!",
                             item.Name, item.InternalName, item.InventoryRow);
                         continue;
                     }
 
                     if (col < 0 || col > 9)
                     {
-                        Core.Logger.Error("Item {0} ({1}) is reporting invalid backpack column of {2}!",
+                        Core.Logger.Error("道具 {0} ({1}) 报告是无效的背包栏 {2}!",
                             item.Name, item.InternalName, item.InventoryColumn);
                         continue;
                     }
@@ -994,13 +994,13 @@ namespace Trinity.Components.Coroutines
                 }
 
                 // no free slot
-                Core.Logger.Verbose("No Free slots!");
+                Core.Logger.Verbose("没有剩余空间!");
                 _lastBackPackLocation = new Tuple<int, int>(-1, -1);
                 return _lastBackPackLocation;
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception while finding backpack slot: " + ex);
+                Core.Logger.Error("查找背包空间时发生意外: " + ex);
                 return new Tuple<int, int>(-1, -1);
             }
         }

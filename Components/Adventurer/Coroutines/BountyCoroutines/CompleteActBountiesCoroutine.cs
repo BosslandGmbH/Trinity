@@ -66,7 +66,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Debug("[CompleteActBounties] " + value);
+                    Core.Logger.Debug("[完成悬赏] " + value);
                 }
                 _logStateChange = true;
                 _state = value;
@@ -128,7 +128,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
                 return false;
             }
             State = States.ReturningToTown;
-            Core.Logger.Log("[CompleteActBounties] Time to return to the town and claim our prize, huzzah!");
+            Core.Logger.Log("[完成悬赏] 是时候回城领取我们的奖励了！");
             return false;
         }
 
@@ -185,7 +185,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
                 var tyrael = ActorFinder.FindUnit(TYRAEL);
                 if (tyrael == null)
                 {
-                    Core.Logger.Error("[CompleteActBounties] Couldn't detect Tyrael. Failing");
+                    Core.Logger.Error("[完成悬赏] 无法检测到泰瑞尔, 失败.");
                     State = States.Failed;
                     return false;
                 }
@@ -200,7 +200,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         private async Task<bool> Completed()
         {
-            Core.Logger.Log("[ActBounties] Successfully completed {0} bounties", _act);
+            Core.Logger.Log("[章节悬赏] 成功完成 {0} 悬赏", _act);
             _isDone = true;
             await Coroutine.Sleep(4000);
             return true;
@@ -208,7 +208,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         private async Task<bool> Failed()
         {
-            Core.Logger.Log("[ActBounties] Failed to completed {0} bounties", _act);
+            Core.Logger.Log("[章节悬赏] 未能完成 {0} 悬赏", _act);
             _isDone = true;
             await Coroutine.Sleep(1000);
             return true;

@@ -40,7 +40,7 @@ namespace Trinity.Components.Adventurer
         protected override void OnWorldChanged(ChangeEventArgs<int> args)
         {
             PluginEvents.WorldChangeTime = PluginTime.CurrentMillisecond;
-            Core.Logger.Debug("[BotEvents] World has changed to WorldId: {0} LevelAreaSnoIdId: {1}", ZetaDia.Globals.WorldSnoId, ZetaDia.CurrentLevelAreaSnoId);
+            Core.Logger.Debug("[Bot事件] 世界已变更到 WorldId: {0} LevelAreaSnoIdId: {1}", ZetaDia.Globals.WorldSnoId, ZetaDia.CurrentLevelAreaSnoId);
             EntryPortals.AddEntryPortal();
         }
 

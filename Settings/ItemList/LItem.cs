@@ -236,7 +236,7 @@ namespace Trinity.Settings.ItemList
                         return;
                     }
 
-                    Core.Logger.Log("AddRequiredRuleCommand {0}", parameter.ToString());
+                    Core.Logger.Log("添加必需的规则命令 {0}", parameter.ToString());
 
                     var item = parameter as ComboBoxItem;
                     var selectedPropertyName = item != null ? item.Content.ToString() : parameter.ToString();
@@ -245,7 +245,7 @@ namespace Trinity.Settings.ItemList
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Log("Exception in AddRequiredRuleCommand: {0} {1}", ex.Message, ex.InnerException, ex);
+                    Core.Logger.Log("异常 添加必需的规则命令: {0} {1}", ex.Message, ex.InnerException, ex);
                 }
 
             });
@@ -259,7 +259,7 @@ namespace Trinity.Settings.ItemList
                         return;
                     }
 
-                    Core.Logger.Log("AddOptionalRuleCommand {0}", parameter.ToString());
+                    Core.Logger.Log("添加可选规则命令 {0}", parameter.ToString());
 
                     var item = parameter as ComboBoxItem;
                     var selectedPropertyName = item != null ? item.Content.ToString() : parameter.ToString();
@@ -268,7 +268,7 @@ namespace Trinity.Settings.ItemList
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Log("Exception in AddOptionalRuleCommand: {0} {1}", ex.Message, ex.InnerException);
+                    Core.Logger.Log("异常 添加可选规则命令: {0} {1}", ex.Message, ex.InnerException);
                 }
 
             });
@@ -281,7 +281,7 @@ namespace Trinity.Settings.ItemList
                     if (lRule == null)
                         return;
 
-                    Core.Logger.Log("RemoveRuleCommand: {0}", lRule.Name);
+                    Core.Logger.Log("删除规则命令: {0}", lRule.Name);
 
                     Rules.Remove(lRule);
 
@@ -290,7 +290,7 @@ namespace Trinity.Settings.ItemList
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Log("Exception in AddRequiredRuleCommand: {0} {1}", ex.Message, ex.InnerException);
+                    Core.Logger.Log("异常 添加必需的规则命令: {0} {1}", ex.Message, ex.InnerException);
                 }
             });
         }
@@ -303,15 +303,15 @@ namespace Trinity.Settings.ItemList
         {
             var propertiesWithDuplicatesAllowed = new HashSet<ItemProperty>
             {
-                ItemProperty.ElementalDamage,
-                ItemProperty.SkillDamage
+                ItemProperty.元素伤害,
+                ItemProperty.技能伤害
             };
 
             Func<ItemProperty, bool> allowedToAdd = p => Rules.All(r => r.ItemProperty != p) || propertiesWithDuplicatesAllowed.Contains(p);
 
             ItemProperty property;
 
-            Core.Logger.Log("Attempting to Add {0} Type={1}", propertyName, ruleType);
+            Core.Logger.Log("尝试添加 {0} 类型={1}", propertyName, ruleType);
 
             if (!Enum.TryParse(propertyName, out property))
                 return;
@@ -344,7 +344,7 @@ namespace Trinity.Settings.ItemList
             {
                 if (!allowed)
                 {
-                    Core.Logger.Log("{0} has already been added and duplicates are not allowed", propertyName);
+                    Core.Logger.Log("{0} 已经添加,不允许重复", propertyName);
                 }
             }
 

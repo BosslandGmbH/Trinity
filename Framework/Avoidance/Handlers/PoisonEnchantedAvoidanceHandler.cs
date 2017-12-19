@@ -38,7 +38,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Error("Exception {0}", ex);
+                    Core.Logger.Error("异常 {0}", ex);
                 }
             }
         }

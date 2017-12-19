@@ -28,7 +28,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Debug($"AnimationBeamAvoidanceHandler Exception reading Animation/Rotation for actor: {actor.InternalName}");
+                    Core.Logger.Debug($"AnimationBeamAvoidanceHandler Exception reading Animation/Rotation for actor: {actor.InternalName} actorId: {actor.AcdId} ActorSnoId:{actor.ActorSnoId}");
                 }
             }
         }

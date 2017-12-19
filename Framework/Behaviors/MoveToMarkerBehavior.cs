@@ -47,20 +47,20 @@ namespace Trinity.Framework.Behaviors
 
         private async Task<bool> Move()
         {
-            Core.Logger.Verbose($"Moving to Marker: {Marker}");
+            Core.Logger.Verbose($"移动到标记: {Marker}");
             await CommonCoroutines.MoveTo(Marker.Position, "ItemMarker");
             return true;
         }
 
         protected override async Task<bool> OnStarted()
         {
-            Core.Logger.Warn($"Started moving to Marker: {Marker}");
+            Core.Logger.Warn($"开始移动到标记: {Marker}");
             return true;
         }
 
         protected override async Task<bool> OnStopped()
         {
-            Core.Logger.Warn($"Arrived at Marker: {Marker}");
+            Core.Logger.Warn($"到达标记: {Marker}");
             await VacuumItems.Execute();
             VisitedMarkerPositions.Add(Marker.Position);
             Marker = null;

@@ -75,7 +75,7 @@ namespace Trinity.Modules
                     }
                     catch (Exception ex)
                     {
-                        Core.Logger.Error($"Exception updating object cache {actor.Name} {actor.ActorSnoId} {ex}");
+                        Core.Logger.Error($"更新对象缓存异常 {actor.Name} {actor.ActorSnoId} {ex}");
                         Clear();
                         return;
                     }
@@ -108,7 +108,7 @@ namespace Trinity.Modules
         {
             if (cacheObject == null)
             {
-                Core.Logger.Error("NullObject");
+                Core.Logger.Error("空对象");
                 return false;
             }
 
@@ -174,32 +174,6 @@ namespace Trinity.Modules
             }
         }
 
-        private static bool IsCorpulent(TrinityActor cacheObject)
-        {
-            switch ((SNOActor)cacheObject.ActorSnoId)
-            {
-                case SNOActor.Corpulent_A:
-                case SNOActor.Corpulent_A_Unique_01:
-                case SNOActor.Corpulent_A_Unique_02:
-                case SNOActor.Corpulent_A_Unique_03:
-                case SNOActor.Corpulent_B:
-                case SNOActor.Corpulent_B_Unique_01:
-                case SNOActor.Corpulent_C:
-                case SNOActor.Corpulent_C_OasisAmbush_Unique:
-                case SNOActor.Corpulent_D:
-                case SNOActor.Corpulent_D_CultistSurvivor_Unique:
-                case SNOActor.Corpulent_D_Unique_Spec_01:
-                case SNOActor.Corpulent_Frost_A:
-                case SNOActor.Corpulent_suicide_blood:
-                case SNOActor.Corpulent_suicide_frost:
-                case SNOActor.Corpulent_suicide_imps:
-                case SNOActor.Corpulent_suicide_spiders:
-                    return true;
-            }
-
-            return false;
-        }
-
         private static bool ShouldCacheCommon(TrinityActor cacheObject)
         {
             if (cacheObject.IsExcludedId && !(ClearArea.IsClearing && cacheObject.IsHostile))
@@ -240,10 +214,6 @@ namespace Trinity.Modules
 
             if (cacheObject.IsUntargetable)
             {
-                // Include corpulents even when they are untargetable otherwise it messes up the avoidance.
-                if (IsCorpulent(cacheObject))
-                    return true;
-
                 cacheObject.AddCacheInfo("Untargetable");
                 return false;
             }
@@ -379,10 +349,6 @@ namespace Trinity.Modules
 
             if (cacheObject.IsInvulnerable && !cacheObject.IsQuestGiver && !cacheObject.IsElite)
             {
-                // Include corpulents even when they are invulnerable otherwise it messes up the avoidance.
-                if (IsCorpulent(cacheObject))
-                    return true;
-
                 cacheObject.AddCacheInfo("Invulnerable");
                 return false;
             }

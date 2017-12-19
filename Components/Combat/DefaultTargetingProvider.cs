@@ -51,7 +51,7 @@ namespace Trinity.Components.Combat
         {
             if (CurrentTarget != null && CurrentTarget.Targeting.TotalTargetedTime > TimeSpan.FromSeconds(30))
             {
-                Core.Logger.Log(LogCategory.Targetting, $"Long target time detected: {CurrentTarget} duration: {CurrentTarget.Targeting.TotalTargetedTime.TotalSeconds:N2}s");
+                Core.Logger.Log(LogCategory.Targetting, $"长时间检测的目标: {CurrentTarget} 持续时间: {CurrentTarget.Targeting.TotalTargetedTime.TotalSeconds:N2}秒");
             }
 
             if (target != null && target.IsMe)
@@ -67,7 +67,7 @@ namespace Trinity.Components.Combat
 
             if (target == null && CurrentTarget != null)
             {
-                Core.Logger.Log(LogCategory.Targetting, $"Clearing Target. Was: {CurrentTarget}");
+                Core.Logger.Log(LogCategory.Targetting, $"清除目标. 因为: {CurrentTarget}");
             }
 
             if (CurrentTarget != null)
@@ -79,7 +79,7 @@ namespace Trinity.Components.Combat
             if (target != null)
             {
                 target?.Targeting.UpdateTargetInfo(true);
-                Core.Logger.Log(LogCategory.Targetting, $"New Target: {target.Name} {target.Targeting} WeightInfo={target.WeightInfo} Targeting={target.Targeting}");
+                Core.Logger.Log(LogCategory.Targetting, $"新的目标: {target.Name} {target.Targeting} 权重信息={target.WeightInfo} 定位={target.Targeting}");
             }
 
             CurrentTarget = target;
@@ -115,6 +115,17 @@ namespace Trinity.Components.Combat
             }
 
             SetCurrentTarget(target);
+            // SENY
+            switch (target.Type)
+            {
+                case TrinityObjectType.Door:
+                case TrinityObjectType.HealthWell:
+                case TrinityObjectType.Shrine:
+                case TrinityObjectType.Interactable:
+                case TrinityObjectType.CursedShrine:
+                    CompensateMove(target.Position, 10);
+                    break;
+            }
 
             var power = TrinityCombat.Routines.Current.GetPowerForTarget(target);
 
@@ -122,6 +133,32 @@ namespace Trinity.Components.Combat
 
             return await TrinityCombat.Routines.Current.HandleTarget(target);
         }
+
+        /// <summary>
+        /// 移动补偿
+        /// </summary>
+        /// <param name="destination"></param>
+        /// <param name="minDest"></param>
+        /// <returns></returns>
+        public virtual bool CompensateMove(Vector3 destination, float minDest)
+        {
+            if ((!Core.Player.IsInTown && (!ZetaDia.Storage.RiftGuardianSpawned || TrinityCombat.Targeting.CurrentTarget.IsBoss)) && (destination.Distance(Core.Player.Position) >= minDest))
+            {
+                float diffZ = Math.Abs((float)(destination.Z - Core.Player.Position.Z));
+                float distance = destination.Distance(Core.Player.Position);
+                if ((((ZetaDia.Storage.CurrentRiftType == Zeta.Game.Internals.RiftType.Greater || ZetaDia.Storage.CurrentRiftType == Zeta.Game.Internals.RiftType.Nephalem) && (ZetaDia.Storage.RiftStarted && (distance < 50f))) && (diffZ < 3f)) && Core.Grids.CanRayWalk(Core.Player.Position, destination))
+                {
+                    Navigator.PlayerMover.MoveTowards(destination);
+                }
+                else
+                {
+                    PlayerMover.NavigateTo(destination, "");
+                }
+                return true;
+            }
+            return false;
+        }
+
 
         private void Clear()
         {
@@ -216,11 +253,6 @@ namespace Trinity.Components.Combat
 
             Core.Logger.Verbose(LogCategory.Targetting, $">> CurrentPower={TrinityCombat.Targeting.CurrentPower} CurrentTarget={target} RangeReq:{targetRangeRequired} RadDist:{target.RadiusDistance}");
 
-
-            // Handle Belial differently, he's never in LineOfSight.
-            if (Core.Player.IsInBossEncounter && target.ActorSnoId == (int)SNOActor.Belial)
-                return target.RadiusDistance <= targetRangeRequired;
-
             return target.RadiusDistance <= targetRangeRequired && IsInLineOfSight(target);
         }
 
@@ -244,22 +276,16 @@ namespace Trinity.Components.Combat
             var rangeRequired = Math.Max(1f, power.MinimumRange);
             var distance = position.Distance(Core.Player.Position);
 
-            TrinityActor currentTarget = TrinityCombat.Targeting.CurrentTarget;
-            if (Core.Player.IsInBossEncounter && currentTarget != null)
+            if (Core.Player.IsInBossEncounter && TrinityCombat.Targeting.CurrentTarget != null)
             {
-                var positionIsBoss = currentTarget.IsBoss && currentTarget.Position.Distance(position) < 10f;
+                var positionIsBoss = TrinityCombat.Targeting.CurrentTarget.IsBoss && TrinityCombat.Targeting.CurrentTarget.Position.Distance(position) < 10f;
                 if (positionIsBoss)
                 {
-                    rangeRequired += currentTarget.CollisionRadius;
+                    rangeRequired += TrinityCombat.Targeting.CurrentTarget.CollisionRadius;
                 }
             }
 
             Core.Logger.Verbose(LogCategory.Targetting, $">> CurrentPower={power} CurrentTarget={position} RangeReq:{rangeRequired} Dist:{distance}");
-
-            // Handle Belial differently, he's never in LineOfSight.
-            if (Core.Player.IsInBossEncounter && currentTarget != null && currentTarget.ActorSnoId == (int) SNOActor.Belial)
-                return distance <= rangeRequired;
-
             return distance <= rangeRequired && IsInLineOfSight(position);
         }
 

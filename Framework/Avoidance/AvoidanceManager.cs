@@ -67,6 +67,12 @@ namespace Trinity.Framework.Avoidance
         {
             _currentRActorIds.Clear();
 
+            // SENY
+            if (Core.Settings.SenExtend.IgnoreAvoidanceInNephalemRift && Core.Rift.IsNephalemRift &&  Core.Player.IsInRift)
+            {
+                return;
+            }
+
             if (!Settings.Entries.Any(s => s.IsEnabled))
                 return;
 
@@ -107,7 +113,7 @@ namespace Trinity.Framework.Avoidance
                 Structures.Avoidance avoidance;
                 if (AvoidanceFactory.TryCreateAvoidance(source, actor, out avoidance))
                 {
-                    Core.Logger.Log(LogCategory.Avoidance, $"Created new Avoidance from {actor.InternalName} RActorId={actor.RActorId} ({avoidance.Definition.Name}, Immune: {avoidance.IsImmune})");
+                    Core.Logger.Log(LogCategory.Avoidance, $"创建新的规避 {actor.InternalName} RActorId={actor.RActorId} ({avoidance.Definition.Name}, 免疫: {avoidance.IsImmune})");
                     _cachedActors.Add(rActorId, actor);
                     CurrentAvoidances.Add(avoidance);
                 }

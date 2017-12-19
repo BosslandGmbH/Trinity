@@ -78,7 +78,7 @@ namespace Trinity.Components.QuestTools
             {
                 item.ConditionPassed = true;
 
-                Core.Logger.Log("Triggered {1} with {0} Behaviors to be run at next opportunity",
+                Core.Logger.Log("触发 {1} 与 {0} 行为在下一个机会运行",
                     item.Nodes.Count, (!string.IsNullOrEmpty(item.Name)) ? item.Name : "Unnamed");
             }
 
@@ -207,7 +207,7 @@ namespace Trinity.Components.QuestTools
             var children = _active.ActiveNode.GetChildren();
             if (children.Count > 0)
             {
-                Core.Logger.Log("Processing {0} Children of '{1}' ({2})", children.Count, _active.Name, _active.Id);
+                Core.Logger.Log("处理 {0} 儿童 '{1}' ({2})", children.Count, _active.Name, _active.Id);
 
                 // Copy QueueItem so we can resume it later.
                 var queueItemToShelve = _active;
@@ -389,7 +389,7 @@ namespace Trinity.Components.QuestTools
         {
             if (item != null && item.ActiveNode != null)
             {
-                Core.Logger.Log("{4}Tag {0} IsDone={1} IsDoneCache={2} LastStatus={3}",
+                Core.Logger.Log("{4}标签 {0} 已经完成了={1} 完成缓存={2} 最后状态={3}",
                     item.ActiveNode.GetType(),
                     item.ActiveNode.IsDone,
                     item.ActiveNode.IsDoneCache,

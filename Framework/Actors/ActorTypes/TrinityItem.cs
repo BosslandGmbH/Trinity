@@ -96,18 +96,18 @@ namespace Trinity.Framework.Actors.ActorTypes
         public void OnMoved()
         {
             ItemEvents.FireItemMoved(this);
-            Core.Logger.Log($"{Name} was moved from [{LastInventoryColumn},{LastInventoryRow} {LastInventorySlot}] => [{InventoryColumn},{InventoryRow} {InventorySlot}] (Ann={AnnId} AcdId={AcdId})");
+            Core.Logger.Log($"{Name} 被移离 [{LastInventoryColumn},{LastInventoryRow} {LastInventorySlot}] => [{InventoryColumn},{InventoryRow} {InventorySlot}] (Ann={AnnId} AcdId={AcdId})");
         }
 
         public void OnIdentified()
         {
             ItemEvents.FireItemIdentified(this);
-            Core.Logger.Log($"{Name} was identified. (Ann={AnnId} AcdId={AcdId} GbId={GameBalanceId}) Ancient={IsAncient} RawType={RawItemType}");
+            Core.Logger.Log($"{Name} 被鉴定. (Ann={AnnId} AcdId={AcdId} GbId={GameBalanceId}) 远古={IsAncient} 原始类型={RawItemType}");
         }
 
         public void OnPickedUp()
         {
-            Core.Logger.Log($"{Name} was picked up. (SnoId={ActorSnoId} Ann={AnnId} AcdId={AcdId} GbId={GameBalanceId}) InternalName={InternalName} Quality={ItemQualityLevel} Ancient={IsAncient} RawType={RawItemType}");
+            Core.Logger.Log($"{Name} 被捡起. (SnoId={ActorSnoId} Ann={AnnId} AcdId={AcdId} GbId={GameBalanceId}) 内部名称={InternalName} 品质={ItemQualityLevel} 远古={IsAncient} 原始类型={RawItemType}");
             ItemEvents.FireItemPickedUp(this);
         }
 
@@ -116,9 +116,9 @@ namespace Trinity.Framework.Actors.ActorTypes
             if (IsPickupNoClick) return;
 
             if (IsPrimalAncient)
-                Core.Logger.Warn($"Primal {Name} dropped. (SnoId={ActorSnoId} Ann={AnnId} AcdId={AcdId} GbId={GameBalanceId}) InternalName={InternalName} Quality={ItemQualityLevel} Ancient={IsAncient} Primal={IsPrimalAncient} RawType={RawItemType}");
+                Core.Logger.Warn($"太古 {Name} 掉落. (SnoId={ActorSnoId} Ann={AnnId} AcdId={AcdId} GbId={GameBalanceId}) 内部名称={InternalName} 品质={ItemQualityLevel} 远古={IsAncient} 太古={IsPrimalAncient} 原始类型={RawItemType}");
             else 
-                Core.Logger.Log($"{Name} dropped. (SnoId={ActorSnoId} Ann={AnnId} AcdId={AcdId} GbId={GameBalanceId}) InternalName={InternalName} Quality={ItemQualityLevel} Ancient={IsAncient} Primal={IsPrimalAncient} RawType={RawItemType}");
+                Core.Logger.Log($"{Name} 掉落. (SnoId={ActorSnoId} Ann={AnnId} AcdId={AcdId} GbId={GameBalanceId}) 内部名称={InternalName} 品质={ItemQualityLevel} 远古={IsAncient} 太古={IsPrimalAncient} 原始类型={RawItemType}");
 
             ItemEvents.FireItemDropped(this);
         }

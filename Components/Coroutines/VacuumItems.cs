@@ -47,12 +47,12 @@ namespace Trinity.Components.Coroutines
 
                 if (!ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, item.Position, Core.Player.WorldDynamicId, item.AcdId))
                 {
-                    Core.Logger.Verbose($"Failed to vacuum item {item.Name} AcdId={item.AcdId}");
+                    Core.Logger.Verbose($"无效的战利品 {item.Name} AcdId={item.AcdId}");
                     continue;
                 }
 
                 count++;
-                Core.Logger.Debug($"Vacuumed: {item.Name} ({item.ActorSnoId}) InternalName={item.InternalName} GbId={item.GameBalanceId}");
+                Core.Logger.Debug($"已拾取: {item.Name} ({item.ActorSnoId}) InternalName={item.InternalName} GbId={item.GameBalanceId}");
                 SpellHistory.RecordSpell(SNOPower.Axe_Operate_Gizmo);
                 VacuumedAcdIds.Add(item.AcdId);
                 isVacuuming = true;
@@ -60,7 +60,7 @@ namespace Trinity.Components.Coroutines
 
             if (count > 0)
             {
-                Core.Logger.Verbose($"Vacuumed {count} items");
+                Core.Logger.Verbose($"拾取 {count} 个物品");
             }
 
             if (VacuumedAcdIds.Count > 1000)

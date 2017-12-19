@@ -18,7 +18,7 @@ namespace Trinity.Framework.Reference
             public static Skill Punish = new Skill
             {
                 Index = 0,
-                Name = "Punish",
+                Name = "惩罚",
                 SNOPower = SNOPower.X1_Crusader_Punish,
                 Slug = "punish",
                 IconSlug = "x1_crusader_punish",
@@ -54,7 +54,7 @@ namespace Trinity.Framework.Reference
             public static Skill ShieldBash = new Skill
             {
                 Index = 1,
-                Name = "Shield Bash",
+                Name = "盾牌猛击",
                 SNOPower = SNOPower.X1_Crusader_ShieldBash2,
                 Slug = "shield-bash",
                 IconSlug = "x1_crusader_shieldbash2",
@@ -90,7 +90,7 @@ namespace Trinity.Framework.Reference
             public static Skill Slash = new Skill
             {
                 Index = 2,
-                Name = "Slash",
+                Name = "烈焰斩",
                 SNOPower = SNOPower.X1_Crusader_Slash,
                 Slug = "slash",
                 IconSlug = "x1_crusader_slash",
@@ -126,7 +126,7 @@ namespace Trinity.Framework.Reference
             public static Skill ShieldGlare = new Skill
             {
                 Index = 3,
-                Name = "Shield Glare",
+                Name = "盾闪",
                 SNOPower = SNOPower.X1_Crusader_ShieldGlare,
                 Slug = "shield-glare",
                 IconSlug = "x1_crusader_shieldglare",
@@ -162,7 +162,7 @@ namespace Trinity.Framework.Reference
             public static Skill SweepAttack = new Skill
             {
                 Index = 4,
-                Name = "Sweep Attack",
+                Name = "横扫",
                 SNOPower = SNOPower.X1_Crusader_SweepAttack,
                 Slug = "sweep-attack",
                 IconSlug = "x1_crusader_sweepattack",
@@ -198,7 +198,7 @@ namespace Trinity.Framework.Reference
             public static Skill IronSkin = new Skill
             {
                 Index = 5,
-                Name = "Iron Skin",
+                Name = "钢铁之肤",
                 SNOPower = SNOPower.X1_Crusader_IronSkin,
                 Slug = "iron-skin",
                 IconSlug = "x1_crusader_ironskin",
@@ -234,7 +234,7 @@ namespace Trinity.Framework.Reference
             public static Skill Provoke = new Skill
             {
                 Index = 6,
-                Name = "Provoke",
+                Name = "挑衅",
                 SNOPower = SNOPower.X1_Crusader_Provoke,
                 Slug = "provoke",
                 IconSlug = "x1_crusader_provoke",
@@ -270,7 +270,7 @@ namespace Trinity.Framework.Reference
             public static Skill Smite = new Skill
             {
                 Index = 7,
-                Name = "Smite",
+                Name = "链击",
                 SNOPower = SNOPower.X1_Crusader_Smite,
                 Slug = "smite",
                 IconSlug = "x1_crusader_smite",
@@ -306,7 +306,7 @@ namespace Trinity.Framework.Reference
             public static Skill BlessedHammer = new Skill
             {
                 Index = 8,
-                Name = "Blessed Hammer",
+                Name = "祝福之锤",
                 SNOPower = SNOPower.X1_Crusader_BlessedHammer,
                 Slug = "blessed-hammer",
                 IconSlug = "x1_crusader_blessedhammer",
@@ -342,7 +342,7 @@ namespace Trinity.Framework.Reference
             public static Skill SteedCharge = new Skill
             {
                 Index = 9,
-                Name = "Steed Charge",
+                Name = "战马冲锋",
                 SNOPower = SNOPower.X1_Crusader_SteedCharge,
                 Slug = "steed-charge",
                 IconSlug = "x1_crusader_steedcharge",
@@ -378,7 +378,7 @@ namespace Trinity.Framework.Reference
             public static Skill LawsOfValor = new Skill
             {
                 Index = 10,
-                Name = "Laws of Valor",
+                Name = "勇气律法",
                 SNOPower = SNOPower.X1_Crusader_LawsOfValor2,
                 Slug = "laws-of-valor",
                 IconSlug = "x1_crusader_lawsofvalor2",
@@ -414,7 +414,7 @@ namespace Trinity.Framework.Reference
             public static Skill Justice = new Skill
             {
                 Index = 11,
-                Name = "Justice",
+                Name = "正义",
                 SNOPower = SNOPower.X1_Crusader_Justice,
                 Slug = "justice",
                 IconSlug = "x1_crusader_justice",
@@ -450,7 +450,7 @@ namespace Trinity.Framework.Reference
             public static Skill Consecration = new Skill
             {
                 Index = 12,
-                Name = "Consecration",
+                Name = "奉献",
                 SNOPower = SNOPower.X1_Crusader_Consecration,
                 Slug = "consecration",
                 IconSlug = "x1_crusader_consecration",
@@ -486,7 +486,7 @@ namespace Trinity.Framework.Reference
             public static Skill LawsOfJustice = new Skill
             {
                 Index = 13,
-                Name = "Laws of Justice",
+                Name = "正义律法",
                 SNOPower = SNOPower.X1_Crusader_LawsOfJustice2,
                 Slug = "laws-of-justice",
                 IconSlug = "x1_crusader_lawsofjustice2",
@@ -522,7 +522,7 @@ namespace Trinity.Framework.Reference
             public static Skill FallingSword = new Skill
             {
                 Index = 14,
-                Name = "Falling Sword",
+                Name = "天罚之剑",
                 SNOPower = SNOPower.X1_Crusader_FallingSword,
                 Slug = "falling-sword",
                 IconSlug = "x1_crusader_fallingsword",
@@ -558,7 +558,7 @@ namespace Trinity.Framework.Reference
             public static Skill BlessedShield = new Skill
             {
                 Index = 15,
-                Name = "Blessed Shield",
+                Name = "祝福之盾",
                 SNOPower = SNOPower.X1_Crusader_BlessedShield,
                 Slug = "blessed-shield",
                 IconSlug = "x1_crusader_blessedshield",
@@ -594,7 +594,7 @@ namespace Trinity.Framework.Reference
             public static Skill Condemn = new Skill
             {
                 Index = 16,
-                Name = "Condemn",
+                Name = "天谴",
                 SNOPower = SNOPower.X1_Crusader_Condemn,
                 Slug = "condemn",
                 IconSlug = "x1_crusader_condemn",
@@ -630,7 +630,7 @@ namespace Trinity.Framework.Reference
             public static Skill Judgment = new Skill
             {
                 Index = 17,
-                Name = "Judgment",
+                Name = "审判",
                 SNOPower = SNOPower.X1_Crusader_Judgment,
                 Slug = "judgment",
                 IconSlug = "x1_crusader_judgment",
@@ -666,7 +666,7 @@ namespace Trinity.Framework.Reference
             public static Skill LawsOfHope = new Skill
             {
                 Index = 18,
-                Name = "Laws of Hope",
+                Name = "希望律法",
                 SNOPower = SNOPower.X1_Crusader_LawsOfHope2,
                 Slug = "laws-of-hope",
                 IconSlug = "x1_crusader_lawsofhope2",
@@ -702,7 +702,7 @@ namespace Trinity.Framework.Reference
             public static Skill AkaratsChampion = new Skill
             {
                 Index = 19,
-                Name = "Akarat's Champion",
+                Name = "阿卡拉特勇士",
                 SNOPower = SNOPower.X1_Crusader_AkaratsChampion,
                 Slug = "akarats-champion",
                 IconSlug = "x1_crusader_akaratschampion",
@@ -738,7 +738,7 @@ namespace Trinity.Framework.Reference
             public static Skill FistOfTheHeavens = new Skill
             {
                 Index = 20,
-                Name = "Fist of the Heavens",
+                Name = "天堂之拳",
                 SNOPower = SNOPower.X1_Crusader_FistOfTheHeavens,
                 Slug = "fist-of-the-heavens",
                 IconSlug = "x1_crusader_fistoftheheavens",
@@ -774,7 +774,7 @@ namespace Trinity.Framework.Reference
             public static Skill Phalanx = new Skill
             {
                 Index = 21,
-                Name = "Phalanx",
+                Name = "斗阵",
                 SNOPower = SNOPower.x1_Crusader_Phalanx3,
                 Slug = "phalanx",
                 IconSlug = "x1_crusader_phalanx3",
@@ -810,7 +810,7 @@ namespace Trinity.Framework.Reference
             public static Skill HeavensFury = new Skill
             {
                 Index = 22,
-                Name = "Heaven's Fury",
+                Name = "天堂之怒",
                 SNOPower = SNOPower.X1_Crusader_HeavensFury3,
                 Slug = "heavens-fury",
                 IconSlug = "x1_crusader_heavensfury3",
@@ -846,7 +846,7 @@ namespace Trinity.Framework.Reference
             public static Skill Bombardment = new Skill
             {
                 Index = 23,
-                Name = "Bombardment",
+                Name = "轰击",
                 SNOPower = SNOPower.X1_Crusader_Bombardment,
                 Slug = "bombardment",
                 IconSlug = "x1_crusader_bombardment",
@@ -885,7 +885,7 @@ namespace Trinity.Framework.Reference
             public static Skill Bash = new Skill
             {
                 Index = 0,
-                Name = "Bash",
+                Name = "猛击",
                 SNOPower = SNOPower.Barbarian_Bash,
                 Slug = "bash",
                 IconSlug = "barbarian_bash",
@@ -920,7 +920,7 @@ namespace Trinity.Framework.Reference
             public static Skill HammerOfTheAncients = new Skill
             {
                 Index = 1,
-                Name = "Hammer of the Ancients",
+                Name = "先祖之锤",
                 SNOPower = SNOPower.Barbarian_HammerOfTheAncients,
                 Slug = "hammer-of-the-ancients",
                 IconSlug = "barbarian_hammeroftheancients",
@@ -956,7 +956,7 @@ namespace Trinity.Framework.Reference
             public static Skill Cleave = new Skill
             {
                 Index = 2,
-                Name = "Cleave",
+                Name = "顺劈斩",
                 SNOPower = SNOPower.Barbarian_Cleave,
                 Slug = "cleave",
                 IconSlug = "barbarian_cleave",
@@ -992,7 +992,7 @@ namespace Trinity.Framework.Reference
             public static Skill GroundStomp = new Skill
             {
                 Index = 3,
-                Name = "Ground Stomp",
+                Name = "大地践踏",
                 SNOPower = SNOPower.Barbarian_GroundStomp,
                 Slug = "ground-stomp",
                 IconSlug = "barbarian_groundstomp",
@@ -1028,7 +1028,7 @@ namespace Trinity.Framework.Reference
             public static Skill Rend = new Skill
             {
                 Index = 4,
-                Name = "Rend",
+                Name = "痛割",
                 SNOPower = SNOPower.Barbarian_Rend,
                 Slug = "rend",
                 IconSlug = "barbarian_rend",
@@ -1064,7 +1064,7 @@ namespace Trinity.Framework.Reference
             public static Skill Leap = new Skill
             {
                 Index = 5,
-                Name = "Leap",
+                Name = "跳斩",
                 SNOPower = SNOPower.Barbarian_Leap,
                 Slug = "leap",
                 IconSlug = "barbarian_leap",
@@ -1100,7 +1100,7 @@ namespace Trinity.Framework.Reference
             public static Skill Overpower = new Skill
             {
                 Index = 6,
-                Name = "Overpower",
+                Name = "压制",
                 SNOPower = SNOPower.Barbarian_Overpower,
                 Slug = "overpower",
                 IconSlug = "barbarian_overpower",
@@ -1136,7 +1136,7 @@ namespace Trinity.Framework.Reference
             public static Skill Frenzy = new Skill
             {
                 Index = 7,
-                Name = "Frenzy",
+                Name = "狂乱",
                 SNOPower = SNOPower.Barbarian_Frenzy,
                 Slug = "frenzy",
                 IconSlug = "barbarian_frenzy",
@@ -1172,7 +1172,7 @@ namespace Trinity.Framework.Reference
             public static Skill SeismicSlam = new Skill
             {
                 Index = 8,
-                Name = "Seismic Slam",
+                Name = "裂地斩",
                 SNOPower = SNOPower.Barbarian_SeismicSlam,
                 Slug = "seismic-slam",
                 IconSlug = "barbarian_seismicslam",
@@ -1208,7 +1208,7 @@ namespace Trinity.Framework.Reference
             public static Skill Revenge = new Skill
             {
                 Index = 9,
-                Name = "Revenge",
+                Name = "复仇",
                 SNOPower = SNOPower.Barbarian_Revenge,
                 Slug = "revenge",
                 IconSlug = "barbarian_revenge",
@@ -1244,7 +1244,7 @@ namespace Trinity.Framework.Reference
             public static Skill ThreateningShout = new Skill
             {
                 Index = 10,
-                Name = "Threatening Shout",
+                Name = "威吓呐喊",
                 SNOPower = SNOPower.Barbarian_ThreateningShout,
                 Slug = "threatening-shout",
                 IconSlug = "barbarian_threateningshout",
@@ -1280,7 +1280,7 @@ namespace Trinity.Framework.Reference
             public static Skill Sprint = new Skill
             {
                 Index = 11,
-                Name = "Sprint",
+                Name = "疾奔",
                 SNOPower = SNOPower.Barbarian_Sprint,
                 Slug = "sprint",
                 IconSlug = "barbarian_sprint",
@@ -1315,7 +1315,7 @@ namespace Trinity.Framework.Reference
             public static Skill WeaponThrow = new Skill
             {
                 Index = 12,
-                Name = "Weapon Throw",
+                Name = "武器飞掷",
                 SNOPower = SNOPower.X1_Barbarian_WeaponThrow,
                 Slug = "weapon-throw",
                 IconSlug = "x1_barbarian_weaponthrow",
@@ -1351,7 +1351,7 @@ namespace Trinity.Framework.Reference
             public static Skill Earthquake = new Skill
             {
                 Index = 13,
-                Name = "Earthquake",
+                Name = "地震",
                 SNOPower = SNOPower.Barbarian_Earthquake,
                 Slug = "earthquake",
                 IconSlug = "barbarian_earthquake",
@@ -1387,7 +1387,7 @@ namespace Trinity.Framework.Reference
             public static Skill Whirlwind = new Skill
             {
                 Index = 14,
-                Name = "Whirlwind",
+                Name = "旋风斩",
                 SNOPower = SNOPower.Barbarian_Whirlwind,
                 Slug = "whirlwind",
                 IconSlug = "barbarian_whirlwind",
@@ -1423,7 +1423,7 @@ namespace Trinity.Framework.Reference
             public static Skill FuriousCharge = new Skill
             {
                 Index = 15,
-                Name = "Furious Charge",
+                Name = "狂暴冲撞",
                 SNOPower = SNOPower.Barbarian_FuriousCharge,
                 Slug = "furious-charge",
                 IconSlug = "barbarian_furiouscharge",
@@ -1438,7 +1438,7 @@ namespace Trinity.Framework.Reference
                 Cost = 1,
                 Cooldown = TimeSpan.Zero,
                 Element = Element.Physical,
-                Resource = Resource.None,
+                Resource = Resource.Fury,
                 IsDamaging = true,
                 AreaEffectRadius = 0f,
                 ResourceEffect = ResourceEffectType.Spender,
@@ -1459,7 +1459,7 @@ namespace Trinity.Framework.Reference
             public static Skill IgnorePain = new Skill
             {
                 Index = 16,
-                Name = "Ignore Pain",
+                Name = "无视苦痛",
                 SNOPower = SNOPower.Barbarian_IgnorePain,
                 Slug = "ignore-pain",
                 IconSlug = "barbarian_ignorepain",
@@ -1495,7 +1495,7 @@ namespace Trinity.Framework.Reference
             public static Skill BattleRage = new Skill
             {
                 Index = 17,
-                Name = "Battle Rage",
+                Name = "战斗怒火",
                 SNOPower = SNOPower.Barbarian_BattleRage,
                 Slug = "battle-rage",
                 IconSlug = "barbarian_battlerage",
@@ -1531,7 +1531,7 @@ namespace Trinity.Framework.Reference
             public static Skill CallOfTheAncients = new Skill
             {
                 Index = 18,
-                Name = "Call of the Ancients",
+                Name = "先祖召唤",
                 SNOPower = SNOPower.Barbarian_CallOfTheAncients,
                 Slug = "call-of-the-ancients",
                 IconSlug = "barbarian_calloftheancients",
@@ -1567,7 +1567,7 @@ namespace Trinity.Framework.Reference
             public static Skill AncientSpear = new Skill
             {
                 Index = 19,
-                Name = "Ancient Spear",
+                Name = "上古之矛",
                 SNOPower = SNOPower.X1_Barbarian_AncientSpear,
                 Slug = "ancient-spear",
                 IconSlug = "x1_barbarian_ancientspear",
@@ -1602,7 +1602,7 @@ namespace Trinity.Framework.Reference
             public static Skill WarCry = new Skill
             {
                 Index = 20,
-                Name = "War Cry",
+                Name = "战吼",
                 SNOPower = SNOPower.X1_Barbarian_WarCry_v2,
                 Slug = "war-cry",
                 IconSlug = "x1_barbarian_warcry_v2",
@@ -1638,7 +1638,7 @@ namespace Trinity.Framework.Reference
             public static Skill WrathOfTheBerserker = new Skill
             {
                 Index = 21,
-                Name = "Wrath of the Berserker",
+                Name = "狂暴者之怒",
                 SNOPower = SNOPower.Barbarian_WrathOfTheBerserker,
                 Slug = "wrath-of-the-berserker",
                 IconSlug = "barbarian_wrathoftheberserker",
@@ -1674,7 +1674,7 @@ namespace Trinity.Framework.Reference
             public static Skill Avalanche = new Skill
             {
                 Index = 22,
-                Name = "Avalanche",
+                Name = "山崩地裂",
                 SNOPower = SNOPower.X1_Barbarian_Avalanche_v2,
                 Slug = "avalanche",
                 IconSlug = "x1_barbarian_avalanche_v2",
@@ -1713,7 +1713,7 @@ namespace Trinity.Framework.Reference
             public static Skill FistsOfThunder = new Skill
             {
                 Index = 0,
-                Name = "Fists of Thunder",
+                Name = "雷光拳",
                 SNOPower = SNOPower.Monk_FistsofThunder,
                 Slug = "fists-of-thunder",
                 IconSlug = "monk_fistsofthunder",
@@ -1749,7 +1749,7 @@ namespace Trinity.Framework.Reference
             public static Skill LashingTailKick = new Skill
             {
                 Index = 1,
-                Name = "Lashing Tail Kick",
+                Name = "神龙摆尾",
                 SNOPower = SNOPower.Monk_LashingTailKick,
                 Slug = "lashing-tail-kick",
                 IconSlug = "monk_lashingtailkick",
@@ -1785,7 +1785,7 @@ namespace Trinity.Framework.Reference
             public static Skill DeadlyReach = new Skill
             {
                 Index = 2,
-                Name = "Deadly Reach",
+                Name = "冲心拳",
                 SNOPower = SNOPower.Monk_DeadlyReach,
                 Slug = "deadly-reach",
                 IconSlug = "monk_deadlyreach",
@@ -1821,7 +1821,7 @@ namespace Trinity.Framework.Reference
             public static Skill BlindingFlash = new Skill
             {
                 Index = 3,
-                Name = "Blinding Flash",
+                Name = "眩目闪",
                 SNOPower = SNOPower.Monk_BlindingFlash,
                 Slug = "blinding-flash",
                 IconSlug = "monk_blindingflash",
@@ -1857,7 +1857,7 @@ namespace Trinity.Framework.Reference
             public static Skill TempestRush = new Skill
             {
                 Index = 4,
-                Name = "Tempest Rush",
+                Name = "风雷冲",
                 SNOPower = SNOPower.Monk_TempestRush,
                 Slug = "tempest-rush",
                 IconSlug = "monk_tempestrush",
@@ -1893,7 +1893,7 @@ namespace Trinity.Framework.Reference
             public static Skill BreathOfHeaven = new Skill
             {
                 Index = 5,
-                Name = "Breath of Heaven",
+                Name = "回天息",
                 SNOPower = SNOPower.Monk_BreathOfHeaven,
                 Slug = "breath-of-heaven",
                 IconSlug = "monk_breathofheaven",
@@ -1929,7 +1929,7 @@ namespace Trinity.Framework.Reference
             public static Skill DashingStrike = new Skill
             {
                 Index = 6,
-                Name = "Dashing Strike",
+                Name = "疾风击",
                 SNOPower = SNOPower.X1_Monk_DashingStrike,
                 Slug = "dashing-strike",
                 IconSlug = "x1_monk_dashingstrike",
@@ -1965,7 +1965,7 @@ namespace Trinity.Framework.Reference
             public static Skill CripplingWave = new Skill
             {
                 Index = 7,
-                Name = "Crippling Wave",
+                Name = "断筋诀",
                 SNOPower = SNOPower.Monk_CripplingWave,
                 Slug = "crippling-wave",
                 IconSlug = "monk_cripplingwave",
@@ -2001,7 +2001,7 @@ namespace Trinity.Framework.Reference
             public static Skill WaveOfLight = new Skill
             {
                 Index = 8,
-                Name = "Wave of Light",
+                Name = "金钟破",
                 SNOPower = SNOPower.Monk_WaveOfLight,
                 Slug = "wave-of-light",
                 IconSlug = "monk_waveoflight",
@@ -2037,7 +2037,7 @@ namespace Trinity.Framework.Reference
             public static Skill ExplodingPalm = new Skill
             {
                 Index = 9,
-                Name = "Exploding Palm",
+                Name = "爆裂掌",
                 SNOPower = SNOPower.Monk_ExplodingPalm,
                 Slug = "exploding-palm",
                 IconSlug = "monk_explodingpalm",
@@ -2073,7 +2073,7 @@ namespace Trinity.Framework.Reference
             public static Skill CycloneStrike = new Skill
             {
                 Index = 10,
-                Name = "Cyclone Strike",
+                Name = "飓风破",
                 SNOPower = SNOPower.Monk_CycloneStrike,
                 Slug = "cyclone-strike",
                 IconSlug = "monk_cyclonestrike",
@@ -2109,7 +2109,7 @@ namespace Trinity.Framework.Reference
             public static Skill WayOfTheHundredFists = new Skill
             {
                 Index = 11,
-                Name = "Way of the Hundred Fists",
+                Name = "百裂拳",
                 SNOPower = SNOPower.Monk_WayOfTheHundredFists,
                 Slug = "way-of-the-hundred-fists",
                 IconSlug = "monk_wayofthehundredfists",
@@ -2145,7 +2145,7 @@ namespace Trinity.Framework.Reference
             public static Skill Serenity = new Skill
             {
                 Index = 12,
-                Name = "Serenity",
+                Name = "禅定",
                 SNOPower = SNOPower.Monk_Serenity,
                 Slug = "serenity",
                 IconSlug = "monk_serenity",
@@ -2181,7 +2181,7 @@ namespace Trinity.Framework.Reference
             public static Skill SevenSidedStrike = new Skill
             {
                 Index = 13,
-                Name = "Seven-Sided Strike",
+                Name = "七相拳",
                 SNOPower = SNOPower.Monk_SevenSidedStrike,
                 Slug = "sevensided-strike",
                 IconSlug = "monk_sevensidedstrike",
@@ -2217,7 +2217,7 @@ namespace Trinity.Framework.Reference
             public static Skill MantraOfSalvation = new Skill
             {
                 Index = 14,
-                Name = "Mantra of Salvation",
+                Name = "救赎真言",
                 SNOPower = SNOPower.X1_Monk_MantraOfEvasion_v2,
                 Slug = "mantra-of-salvation",
                 IconSlug = "x1_monk_mantraofevasion_v2",
@@ -2253,7 +2253,7 @@ namespace Trinity.Framework.Reference
             public static Skill SweepingWind = new Skill
             {
                 Index = 15,
-                Name = "Sweeping Wind",
+                Name = "劲风煞",
                 SNOPower = SNOPower.Monk_SweepingWind,
                 Slug = "sweeping-wind",
                 IconSlug = "monk_sweepingwind",
@@ -2289,7 +2289,7 @@ namespace Trinity.Framework.Reference
             public static Skill MantraOfRetribution = new Skill
             {
                 Index = 16,
-                Name = "Mantra of Retribution",
+                Name = "惩戒真言",
                 SNOPower = SNOPower.X1_Monk_MantraOfRetribution_v2,
                 Slug = "mantra-of-retribution",
                 IconSlug = "x1_monk_mantraofretribution_v2",
@@ -2325,7 +2325,7 @@ namespace Trinity.Framework.Reference
             public static Skill InnerSanctuary = new Skill
             {
                 Index = 17,
-                Name = "Inner Sanctuary",
+                Name = "金轮阵",
                 SNOPower = SNOPower.X1_Monk_InnerSanctuary,
                 Slug = "inner-sanctuary",
                 IconSlug = "x1_monk_innersanctuary",
@@ -2361,7 +2361,7 @@ namespace Trinity.Framework.Reference
             public static Skill MysticAlly = new Skill
             {
                 Index = 18,
-                Name = "Mystic Ally",
+                Name = "幻身诀",
                 SNOPower = SNOPower.X1_Monk_MysticAlly_v2,
                 Slug = "mystic-ally",
                 IconSlug = "x1_monk_mystically_v2",
@@ -2397,7 +2397,7 @@ namespace Trinity.Framework.Reference
             public static Skill MantraOfHealing = new Skill
             {
                 Index = 19,
-                Name = "Mantra of Healing",
+                Name = "治愈真言",
                 SNOPower = SNOPower.X1_Monk_MantraOfHealing_v2,
                 Slug = "mantra-of-healing",
                 IconSlug = "x1_monk_mantraofhealing_v2",
@@ -2433,7 +2433,7 @@ namespace Trinity.Framework.Reference
             public static Skill MantraOfConviction = new Skill
             {
                 Index = 20,
-                Name = "Mantra of Conviction",
+                Name = "定罪真言",
                 SNOPower = SNOPower.X1_Monk_MantraOfConviction_v2,
                 Slug = "mantra-of-conviction",
                 IconSlug = "x1_monk_mantraofconviction_v2",
@@ -2469,7 +2469,7 @@ namespace Trinity.Framework.Reference
             public static Skill Epiphany = new Skill
             {
                 Index = 21,
-                Name = "Epiphany",
+                Name = "灵光悟",
                 SNOPower = SNOPower.X1_Monk_Epiphany,
                 Slug = "epiphany",
                 IconSlug = "x1_monk_epiphany",
@@ -2508,7 +2508,7 @@ namespace Trinity.Framework.Reference
             public static Skill PoisonDart = new Skill
             {
                 Index = 0,
-                Name = "Poison Dart",
+                Name = "剧毒飞镖",
                 SNOPower = SNOPower.Witchdoctor_PoisonDart,
                 Slug = "poison-dart",
                 IconSlug = "witchdoctor_poisondart",
@@ -2544,7 +2544,7 @@ namespace Trinity.Framework.Reference
             public static Skill GraspOfTheDead = new Skill
             {
                 Index = 1,
-                Name = "Grasp of the Dead",
+                Name = "亡者之握",
                 SNOPower = SNOPower.Witchdoctor_GraspOfTheDead,
                 Slug = "grasp-of-the-dead",
                 IconSlug = "witchdoctor_graspofthedead",
@@ -2580,7 +2580,7 @@ namespace Trinity.Framework.Reference
             public static Skill CorpseSpiders = new Skill
             {
                 Index = 2,
-                Name = "Corpse Spiders",
+                Name = "尸蛛",
                 SNOPower = SNOPower.Witchdoctor_CorpseSpider,
                 Slug = "corpse-spiders",
                 IconSlug = "witchdoctor_corpsespider",
@@ -2616,7 +2616,7 @@ namespace Trinity.Framework.Reference
             public static Skill SummonZombieDogs = new Skill
             {
                 Index = 3,
-                Name = "Summon Zombie Dogs",
+                Name = "召唤僵尸犬",
                 SNOPower = SNOPower.Witchdoctor_SummonZombieDog,
                 Slug = "summon-zombie-dogs",
                 IconSlug = "witchdoctor_summonzombiedog",
@@ -2652,7 +2652,7 @@ namespace Trinity.Framework.Reference
             public static Skill Firebats = new Skill
             {
                 Index = 4,
-                Name = "Firebats",
+                Name = "火蝠",
                 SNOPower = SNOPower.Witchdoctor_Firebats,
                 Slug = "firebats",
                 IconSlug = "witchdoctor_firebats",
@@ -2688,7 +2688,7 @@ namespace Trinity.Framework.Reference
             public static Skill Horrify = new Skill
             {
                 Index = 5,
-                Name = "Horrify",
+                Name = "惧灵",
                 SNOPower = SNOPower.Witchdoctor_Horrify,
                 Slug = "horrify",
                 IconSlug = "witchdoctor_horrify",
@@ -2724,7 +2724,7 @@ namespace Trinity.Framework.Reference
             public static Skill SoulHarvest = new Skill
             {
                 Index = 6,
-                Name = "Soul Harvest",
+                Name = "灵魂收割",
                 SNOPower = SNOPower.Witchdoctor_SoulHarvest,
                 Slug = "soul-harvest",
                 IconSlug = "witchdoctor_soulharvest",
@@ -2760,7 +2760,7 @@ namespace Trinity.Framework.Reference
             public static Skill PlagueOfToads = new Skill
             {
                 Index = 7,
-                Name = "Plague of Toads",
+                Name = "蟾蜍之疫",
                 SNOPower = SNOPower.Witchdoctor_PlagueOfToads,
                 Slug = "plague-of-toads",
                 IconSlug = "witchdoctor_plagueoftoads",
@@ -2796,7 +2796,7 @@ namespace Trinity.Framework.Reference
             public static Skill Haunt = new Skill
             {
                 Index = 8,
-                Name = "Haunt",
+                Name = "蚀魂",
                 SNOPower = SNOPower.Witchdoctor_Haunt,
                 Slug = "haunt",
                 IconSlug = "witchdoctor_haunt",
@@ -2832,7 +2832,7 @@ namespace Trinity.Framework.Reference
             public static Skill Sacrifice = new Skill
             {
                 Index = 9,
-                Name = "Sacrifice",
+                Name = "牺牲",
                 SNOPower = SNOPower.Witchdoctor_Sacrifice,
                 Slug = "sacrifice",
                 IconSlug = "witchdoctor_sacrifice",
@@ -2868,7 +2868,7 @@ namespace Trinity.Framework.Reference
             public static Skill ZombieCharger = new Skill
             {
                 Index = 10,
-                Name = "Zombie Charger",
+                Name = "僵尸死士",
                 SNOPower = SNOPower.Witchdoctor_ZombieCharger,
                 Slug = "zombie-charger",
                 IconSlug = "witchdoctor_zombiecharger",
@@ -2904,7 +2904,7 @@ namespace Trinity.Framework.Reference
             public static Skill SpiritWalk = new Skill
             {
                 Index = 11,
-                Name = "Spirit Walk",
+                Name = "灵魂行走",
                 SNOPower = SNOPower.Witchdoctor_SpiritWalk,
                 Slug = "spirit-walk",
                 IconSlug = "witchdoctor_spiritwalk",
@@ -2940,7 +2940,7 @@ namespace Trinity.Framework.Reference
             public static Skill SpiritBarrage = new Skill
             {
                 Index = 12,
-                Name = "Spirit Barrage",
+                Name = "灵魂弹幕",
                 SNOPower = SNOPower.Witchdoctor_SpiritBarrage,
                 Slug = "spirit-barrage",
                 IconSlug = "witchdoctor_spiritbarrage",
@@ -2976,7 +2976,7 @@ namespace Trinity.Framework.Reference
             public static Skill Gargantuan = new Skill
             {
                 Index = 13,
-                Name = "Gargantuan",
+                Name = "僵尸巨兽",
                 SNOPower = SNOPower.Witchdoctor_Gargantuan,
                 Slug = "gargantuan",
                 IconSlug = "witchdoctor_gargantuan",
@@ -3012,7 +3012,7 @@ namespace Trinity.Framework.Reference
             public static Skill LocustSwarm = new Skill
             {
                 Index = 14,
-                Name = "Locust Swarm",
+                Name = "瘟疫虫群",
                 SNOPower = SNOPower.Witchdoctor_Locust_Swarm,
                 Slug = "locust-swarm",
                 IconSlug = "witchdoctor_locust_swarm",
@@ -3048,7 +3048,7 @@ namespace Trinity.Framework.Reference
             public static Skill Firebomb = new Skill
             {
                 Index = 15,
-                Name = "Firebomb",
+                Name = "烈焰炸弹",
                 SNOPower = SNOPower.Witchdoctor_Firebomb,
                 Slug = "firebomb",
                 IconSlug = "witchdoctor_firebomb",
@@ -3084,7 +3084,7 @@ namespace Trinity.Framework.Reference
             public static Skill Hex = new Skill
             {
                 Index = 16,
-                Name = "Hex",
+                Name = "妖术",
                 SNOPower = SNOPower.Witchdoctor_Hex,
                 Slug = "hex",
                 IconSlug = "witchdoctor_hex",
@@ -3120,7 +3120,7 @@ namespace Trinity.Framework.Reference
             public static Skill AcidCloud = new Skill
             {
                 Index = 17,
-                Name = "Acid Cloud",
+                Name = "酸蚀之云",
                 SNOPower = SNOPower.Witchdoctor_AcidCloud,
                 Slug = "acid-cloud",
                 IconSlug = "witchdoctor_acidcloud",
@@ -3156,7 +3156,7 @@ namespace Trinity.Framework.Reference
             public static Skill MassConfusion = new Skill
             {
                 Index = 18,
-                Name = "Mass Confusion",
+                Name = "群体混乱",
                 SNOPower = SNOPower.Witchdoctor_MassConfusion,
                 Slug = "mass-confusion",
                 IconSlug = "witchdoctor_massconfusion",
@@ -3192,7 +3192,7 @@ namespace Trinity.Framework.Reference
             public static Skill BigBadVoodoo = new Skill
             {
                 Index = 19,
-                Name = "Big Bad Voodoo",
+                Name = "巫毒狂舞",
                 SNOPower = SNOPower.Witchdoctor_BigBadVoodoo,
                 Slug = "big-bad-voodoo",
                 IconSlug = "witchdoctor_bigbadvoodoo",
@@ -3228,7 +3228,7 @@ namespace Trinity.Framework.Reference
             public static Skill WallOfDeath = new Skill
             {
                 Index = 20,
-                Name = "Wall of Death",
+                Name = "亡者之墙",
                 SNOPower = SNOPower.Witchdoctor_WallOfZombies,
                 Slug = "wall-of-death",
                 IconSlug = "witchdoctor_wallofzombies",
@@ -3264,7 +3264,7 @@ namespace Trinity.Framework.Reference
             public static Skill FetishArmy = new Skill
             {
                 Index = 21,
-                Name = "Fetish Army",
+                Name = "鬼娃大军",
                 SNOPower = SNOPower.Witchdoctor_FetishArmy,
                 Slug = "fetish-army",
                 IconSlug = "witchdoctor_fetisharmy",
@@ -3300,7 +3300,7 @@ namespace Trinity.Framework.Reference
             public static Skill Piranhas = new Skill
             {
                 Index = 22,
-                Name = "Piranhas",
+                Name = "食人鱼",
                 SNOPower = SNOPower.Witchdoctor_Piranhas,
                 Slug = "piranhas",
                 IconSlug = "witchdoctor_piranhas",
@@ -3361,7 +3361,7 @@ namespace Trinity.Framework.Reference
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Error("Exception Cancelling Archon Mode {0}", ex);
+                    Core.Logger.Error("取消御法者模式异常 {0}", ex);
                 }
 
                 return false;
@@ -3370,7 +3370,7 @@ namespace Trinity.Framework.Reference
             public static Skill ArchonDisintegrationWave = new Skill
             {
                 Index = 27,
-                Name = "Archon DisintegrationWave",
+                Name = "溃解光波(御法者)",
                 SNOPowers = new List<SNOPower>
                 {
                     SNOPower.Wizard_Archon_DisintegrationWave,
@@ -3396,7 +3396,7 @@ namespace Trinity.Framework.Reference
             public static Skill ArchonStrike = new Skill
             {
                 Index = 28,
-                Name = "Archon Strike",
+                Name = "闪电打击(御法者)",
                 SNOPowers = new List<SNOPower>
                 {
                     SNOPower.Wizard_Archon_ArcaneStrike,
@@ -3422,7 +3422,7 @@ namespace Trinity.Framework.Reference
             public static Skill ArchonBlast = new Skill
             {
                 Index = 29,
-                Name = "Archon Blast",
+                Name = "闪电冲击(御法者)",
                 SNOPowers = new List<SNOPower>
                 {
                     SNOPower.Wizard_Archon_ArcaneBlast,
@@ -3448,7 +3448,7 @@ namespace Trinity.Framework.Reference
             public static Skill ArchonTeleport = new Skill
             {
                 Index = 30,
-                Name = "Archon Teleport",
+                Name = "传送(御法者)",
                 SNOPower = SNOPower.Wizard_Archon_Teleport,
                 RequiredLevel = 30,
                 Category = SpellCategory.Archon,
@@ -3468,7 +3468,7 @@ namespace Trinity.Framework.Reference
             public static Skill ArchonSlowTime = new Skill
             {
                 Index = 31,
-                Name = "Archon Slow Time",
+                Name = "时间延缓(御法者)",
                 SNOPower = SNOPower.Wizard_Archon_SlowTime,
                 Category = SpellCategory.Archon,
                 IsPrimary = false,
@@ -3502,7 +3502,7 @@ namespace Trinity.Framework.Reference
             public static Skill MagicMissile = new Skill
             {
                 Index = 0,
-                Name = "Magic Missile",
+                Name = "魔法飞弹",
                 SNOPower = SNOPower.Wizard_MagicMissile,
                 Slug = "magic-missile",
                 IconSlug = "wizard_magicmissile",
@@ -3538,7 +3538,7 @@ namespace Trinity.Framework.Reference
             public static Skill RayOfFrost = new Skill
             {
                 Index = 1,
-                Name = "Ray of Frost",
+                Name = "冰霜射线",
                 SNOPower = SNOPower.Wizard_RayOfFrost,
                 Slug = "ray-of-frost",
                 IconSlug = "wizard_rayoffrost",
@@ -3574,7 +3574,7 @@ namespace Trinity.Framework.Reference
             public static Skill ShockPulse = new Skill
             {
                 Index = 2,
-                Name = "Shock Pulse",
+                Name = "冲击震波",
                 SNOPower = SNOPower.Wizard_ShockPulse,
                 Slug = "shock-pulse",
                 IconSlug = "wizard_shockpulse",
@@ -3610,7 +3610,7 @@ namespace Trinity.Framework.Reference
             public static Skill FrostNova = new Skill
             {
                 Index = 3,
-                Name = "Frost Nova",
+                Name = "冰霜新星",
                 SNOPower = SNOPower.Wizard_FrostNova,
                 Slug = "frost-nova",
                 IconSlug = "wizard_frostnova",
@@ -3646,7 +3646,7 @@ namespace Trinity.Framework.Reference
             public static Skill ArcaneOrb = new Skill
             {
                 Index = 4,
-                Name = "Arcane Orb",
+                Name = "奥术之球",
                 SNOPower = SNOPower.Wizard_ArcaneOrb,
                 Slug = "arcane-orb",
                 IconSlug = "wizard_arcaneorb",
@@ -3682,7 +3682,7 @@ namespace Trinity.Framework.Reference
             public static Skill DiamondSkin = new Skill
             {
                 Index = 5,
-                Name = "Diamond Skin",
+                Name = "钻石体肤",
                 SNOPower = SNOPower.Wizard_DiamondSkin,
                 Slug = "diamond-skin",
                 IconSlug = "wizard_diamondskin",
@@ -3718,7 +3718,7 @@ namespace Trinity.Framework.Reference
             public static Skill WaveOfForce = new Skill
             {
                 Index = 6,
-                Name = "Wave of Force",
+                Name = "原力之波",
                 SNOPower = SNOPower.Wizard_WaveOfForce,
                 Slug = "wave-of-force",
                 IconSlug = "wizard_waveofforce",
@@ -3754,7 +3754,7 @@ namespace Trinity.Framework.Reference
             public static Skill SpectralBlade = new Skill
             {
                 Index = 7,
-                Name = "Spectral Blade",
+                Name = "幽魂之刃",
                 SNOPower = SNOPower.Wizard_SpectralBlade,
                 Slug = "spectral-blade",
                 IconSlug = "wizard_spectralblade",
@@ -3790,7 +3790,7 @@ namespace Trinity.Framework.Reference
             public static Skill ArcaneTorrent = new Skill
             {
                 Index = 8,
-                Name = "Arcane Torrent",
+                Name = "奥术洪流",
                 SNOPower = SNOPower.Wizard_ArcaneTorrent,
                 Slug = "arcane-torrent",
                 IconSlug = "wizard_arcanetorrent",
@@ -3826,7 +3826,7 @@ namespace Trinity.Framework.Reference
             public static Skill EnergyTwister = new Skill
             {
                 Index = 9,
-                Name = "Energy Twister",
+                Name = "能量气旋",
                 SNOPower = SNOPower.Wizard_EnergyTwister,
                 Slug = "energy-twister",
                 IconSlug = "wizard_energytwister",
@@ -3862,7 +3862,7 @@ namespace Trinity.Framework.Reference
             public static Skill IceArmor = new Skill
             {
                 Index = 10,
-                Name = "Ice Armor",
+                Name = "寒冰护甲",
                 SNOPower = SNOPower.Wizard_IceArmor,
                 Slug = "ice-armor",
                 IconSlug = "wizard_icearmor",
@@ -3898,7 +3898,7 @@ namespace Trinity.Framework.Reference
             public static Skill Electrocute = new Skill
             {
                 Index = 11,
-                Name = "Electrocute",
+                Name = "电刑",
                 SNOPower = SNOPower.Wizard_Electrocute,
                 Slug = "electrocute",
                 IconSlug = "wizard_electrocute",
@@ -3934,7 +3934,7 @@ namespace Trinity.Framework.Reference
             public static Skill SlowTime = new Skill
             {
                 Index = 12,
-                Name = "Slow Time",
+                Name = "时间延缓",
                 SNOPower = SNOPower.Wizard_SlowTime,
                 Slug = "slow-time",
                 IconSlug = "wizard_slowtime",
@@ -3970,7 +3970,7 @@ namespace Trinity.Framework.Reference
             public static Skill StormArmor = new Skill
             {
                 Index = 13,
-                Name = "Storm Armor",
+                Name = "风暴护甲",
                 SNOPower = SNOPower.Wizard_StormArmor,
                 Slug = "storm-armor",
                 IconSlug = "wizard_stormarmor",
@@ -4006,7 +4006,7 @@ namespace Trinity.Framework.Reference
             public static Skill ExplosiveBlast = new Skill
             {
                 Index = 14,
-                Name = "Explosive Blast",
+                Name = "聚能爆破",
                 SNOPower = SNOPower.Wizard_ExplosiveBlast,
                 Slug = "explosive-blast",
                 IconSlug = "wizard_explosiveblast",
@@ -4042,7 +4042,7 @@ namespace Trinity.Framework.Reference
             public static Skill MagicWeapon = new Skill
             {
                 Index = 15,
-                Name = "Magic Weapon",
+                Name = "魔法武器",
                 SNOPower = SNOPower.Wizard_MagicWeapon,
                 Slug = "magic-weapon",
                 IconSlug = "wizard_magicweapon",
@@ -4078,7 +4078,7 @@ namespace Trinity.Framework.Reference
             public static Skill Hydra = new Skill
             {
                 Index = 16,
-                Name = "Hydra",
+                Name = "多头蛇",
                 SNOPower = SNOPower.Wizard_Hydra,
                 Slug = "hydra",
                 IconSlug = "wizard_hydra",
@@ -4114,7 +4114,7 @@ namespace Trinity.Framework.Reference
             public static Skill Disintegrate = new Skill
             {
                 Index = 17,
-                Name = "Disintegrate",
+                Name = "瓦解射线",
                 SNOPower = SNOPower.Wizard_Disintegrate,
                 Slug = "disintegrate",
                 IconSlug = "wizard_disintegrate",
@@ -4150,7 +4150,7 @@ namespace Trinity.Framework.Reference
             public static Skill Familiar = new Skill
             {
                 Index = 18,
-                Name = "Familiar",
+                Name = "魔星",
                 SNOPower = SNOPower.Wizard_Familiar,
                 Slug = "familiar",
                 IconSlug = "wizard_familiar",
@@ -4186,7 +4186,7 @@ namespace Trinity.Framework.Reference
             public static Skill Teleport = new Skill
             {
                 Index = 19,
-                Name = "Teleport",
+                Name = "传送",
                 SNOPower = SNOPower.Wizard_Teleport,
                 Slug = "teleport",
                 IconSlug = "wizard_teleport",
@@ -4222,7 +4222,7 @@ namespace Trinity.Framework.Reference
             public static Skill MirrorImage = new Skill
             {
                 Index = 20,
-                Name = "Mirror Image",
+                Name = "镜像",
                 SNOPower = SNOPower.Wizard_MirrorImage,
                 Slug = "mirror-image",
                 IconSlug = "wizard_mirrorimage",
@@ -4258,7 +4258,7 @@ namespace Trinity.Framework.Reference
             public static Skill Meteor = new Skill
             {
                 Index = 21,
-                Name = "Meteor",
+                Name = "陨石术",
                 SNOPower = SNOPower.Wizard_Meteor,
                 Slug = "meteor",
                 IconSlug = "wizard_meteor",
@@ -4294,7 +4294,7 @@ namespace Trinity.Framework.Reference
             public static Skill Blizzard = new Skill
             {
                 Index = 22,
-                Name = "Blizzard",
+                Name = "暴风雪",
                 SNOPower = SNOPower.Wizard_Blizzard,
                 Slug = "blizzard",
                 IconSlug = "wizard_blizzard",
@@ -4330,7 +4330,7 @@ namespace Trinity.Framework.Reference
             public static Skill EnergyArmor = new Skill
             {
                 Index = 23,
-                Name = "Energy Armor",
+                Name = "能量护甲",
                 SNOPower = SNOPower.Wizard_EnergyArmor,
                 Slug = "energy-armor",
                 IconSlug = "wizard_energyarmor",
@@ -4366,7 +4366,7 @@ namespace Trinity.Framework.Reference
             public static Skill Archon = new Skill
             {
                 Index = 24,
-                Name = "Archon",
+                Name = "御法者",
                 SNOPower = SNOPower.Wizard_Archon,
                 Slug = "archon",
                 IconSlug = "wizard_archon",
@@ -4402,7 +4402,7 @@ namespace Trinity.Framework.Reference
             public static Skill BlackHole = new Skill
             {
                 Index = 25,
-                Name = "Black Hole",
+                Name = "黑洞",
                 SNOPower = SNOPower.X1_Wizard_Wormhole,
                 Slug = "black-hole",
                 IconSlug = "x1_wizard_wormhole",
@@ -4441,7 +4441,7 @@ namespace Trinity.Framework.Reference
             public static Skill HungeringArrow = new Skill
             {
                 Index = 0,
-                Name = "Hungering Arrow",
+                Name = "追踪箭",
                 SNOPower = SNOPower.DemonHunter_HungeringArrow,
                 Slug = "hungering-arrow",
                 IconSlug = "demonhunter_hungeringarrow",
@@ -4477,7 +4477,7 @@ namespace Trinity.Framework.Reference
             public static Skill Impale = new Skill
             {
                 Index = 1,
-                Name = "Impale",
+                Name = "暗影飞刀",
                 SNOPower = SNOPower.DemonHunter_Impale,
                 Slug = "impale",
                 IconSlug = "demonhunter_impale",
@@ -4512,7 +4512,7 @@ namespace Trinity.Framework.Reference
             public static Skill EntanglingShot = new Skill
             {
                 Index = 2,
-                Name = "Entangling Shot",
+                Name = "缠绕射击",
                 SNOPower = SNOPower.X1_DemonHunter_EntanglingShot,
                 Slug = "entangling-shot",
                 IconSlug = "x1_demonhunter_entanglingshot",
@@ -4548,7 +4548,7 @@ namespace Trinity.Framework.Reference
             public static Skill Caltrops = new Skill
             {
                 Index = 3,
-                Name = "Caltrops",
+                Name = "铁蒺藜",
                 SNOPower = SNOPower.DemonHunter_Caltrops,
                 Slug = "caltrops",
                 IconSlug = "demonhunter_caltrops",
@@ -4584,7 +4584,7 @@ namespace Trinity.Framework.Reference
             public static Skill RapidFire = new Skill
             {
                 Index = 4,
-                Name = "Rapid Fire",
+                Name = "急速射击",
                 SNOPower = SNOPower.DemonHunter_RapidFire,
                 Slug = "rapid-fire",
                 IconSlug = "demonhunter_rapidfire",
@@ -4620,7 +4620,7 @@ namespace Trinity.Framework.Reference
             public static Skill SmokeScreen = new Skill
             {
                 Index = 5,
-                Name = "Smoke Screen",
+                Name = "烟雾弹",
                 SNOPower = SNOPower.DemonHunter_SmokeScreen,
                 Slug = "smoke-screen",
                 IconSlug = "demonhunter_smokescreen",
@@ -4656,7 +4656,7 @@ namespace Trinity.Framework.Reference
             public static Skill Vault = new Skill
             {
                 Index = 6,
-                Name = "Vault",
+                Name = "影轮翻",
                 SNOPower = SNOPower.DemonHunter_Vault,
                 Slug = "vault",
                 IconSlug = "demonhunter_vault",
@@ -4691,7 +4691,7 @@ namespace Trinity.Framework.Reference
             public static Skill Bolas = new Skill
             {
                 Index = 7,
-                Name = "Bolas",
+                Name = "流星索",
                 SNOPower = SNOPower.DemonHunter_Bolas,
                 Slug = "bolas",
                 IconSlug = "demonhunter_bolas",
@@ -4727,7 +4727,7 @@ namespace Trinity.Framework.Reference
             public static Skill Chakram = new Skill
             {
                 Index = 8,
-                Name = "Chakram",
+                Name = "飞轮刃",
                 SNOPower = SNOPower.DemonHunter_Chakram,
                 Slug = "chakram",
                 IconSlug = "demonhunter_chakram",
@@ -4763,7 +4763,7 @@ namespace Trinity.Framework.Reference
             public static Skill Preparation = new Skill
             {
                 Index = 9,
-                Name = "Preparation",
+                Name = "蓄势待发",
                 SNOPower = SNOPower.DemonHunter_Preparation,
                 Slug = "preparation",
                 IconSlug = "demonhunter_preparation",
@@ -4798,7 +4798,7 @@ namespace Trinity.Framework.Reference
             public static Skill FanOfKnives = new Skill
             {
                 Index = 10,
-                Name = "Fan of Knives",
+                Name = "刀扇",
                 SNOPower = SNOPower.DemonHunter_FanOfKnives,
                 Slug = "fan-of-knives",
                 IconSlug = "demonhunter_fanofknives",
@@ -4834,7 +4834,7 @@ namespace Trinity.Framework.Reference
             public static Skill EvasiveFire = new Skill
             {
                 Index = 11,
-                Name = "Evasive Fire",
+                Name = "闪避射击",
                 SNOPower = SNOPower.X1_DemonHunter_EvasiveFire,
                 Slug = "evasive-fire",
                 IconSlug = "x1_demonhunter_evasivefire",
@@ -4870,7 +4870,7 @@ namespace Trinity.Framework.Reference
             public static Skill Grenade = new Skill
             {
                 Index = 12,
-                Name = "Grenade",
+                Name = "手雷",
                 SNOPower = SNOPower.DemonHunter_Grenades,
                 Slug = "grenade",
                 IconSlug = "demonhunter_grenades",
@@ -4906,7 +4906,7 @@ namespace Trinity.Framework.Reference
             public static Skill ShadowPower = new Skill
             {
                 Index = 13,
-                Name = "Shadow Power",
+                Name = "暗影之力",
                 SNOPower = SNOPower.DemonHunter_ShadowPower,
                 Slug = "shadow-power",
                 IconSlug = "demonhunter_shadowpower",
@@ -4942,7 +4942,7 @@ namespace Trinity.Framework.Reference
             public static Skill SpikeTrap = new Skill
             {
                 Index = 14,
-                Name = "Spike Trap",
+                Name = "尖刺陷阱",
                 SNOPower = SNOPower.DemonHunter_SpikeTrap,
                 Slug = "spike-trap",
                 IconSlug = "demonhunter_spiketrap",
@@ -4978,7 +4978,7 @@ namespace Trinity.Framework.Reference
             public static Skill Companion = new Skill
             {
                 Index = 15,
-                Name = "Companion",
+                Name = "战宠",
                 SNOPower = SNOPower.X1_DemonHunter_Companion,
                 Slug = "companion",
                 IconSlug = "x1_demonhunter_companion",
@@ -5014,7 +5014,7 @@ namespace Trinity.Framework.Reference
             public static Skill Strafe = new Skill
             {
                 Index = 16,
-                Name = "Strafe",
+                Name = "扫射",
                 SNOPower = SNOPower.DemonHunter_Strafe,
                 Slug = "strafe",
                 IconSlug = "demonhunter_strafe",
@@ -5050,7 +5050,7 @@ namespace Trinity.Framework.Reference
             public static Skill ElementalArrow = new Skill
             {
                 Index = 17,
-                Name = "Elemental Arrow",
+                Name = "元素箭",
                 SNOPower = SNOPower.DemonHunter_ElementalArrow,
                 Slug = "elemental-arrow",
                 IconSlug = "demonhunter_elementalarrow",
@@ -5086,7 +5086,7 @@ namespace Trinity.Framework.Reference
             public static Skill MarkedForDeath = new Skill
             {
                 Index = 18,
-                Name = "Marked for Death",
+                Name = "死亡印记",
                 SNOPower = SNOPower.DemonHunter_MarkedForDeath,
                 Slug = "marked-for-death",
                 IconSlug = "demonhunter_markedfordeath",
@@ -5122,7 +5122,7 @@ namespace Trinity.Framework.Reference
             public static Skill Multishot = new Skill
             {
                 Index = 19,
-                Name = "Multishot",
+                Name = "多重射击",
                 SNOPower = SNOPower.DemonHunter_Multishot,
                 Slug = "multishot",
                 IconSlug = "demonhunter_multishot",
@@ -5158,7 +5158,7 @@ namespace Trinity.Framework.Reference
             public static Skill Sentry = new Skill
             {
                 Index = 20,
-                Name = "Sentry",
+                Name = "箭塔",
                 SNOPower = SNOPower.DemonHunter_Sentry,
                 Slug = "sentry",
                 IconSlug = "demonhunter_sentry",
@@ -5194,7 +5194,7 @@ namespace Trinity.Framework.Reference
             public static Skill ClusterArrow = new Skill
             {
                 Index = 21,
-                Name = "Cluster Arrow",
+                Name = "集束箭",
                 SNOPower = SNOPower.DemonHunter_ClusterArrow,
                 Slug = "cluster-arrow",
                 IconSlug = "demonhunter_clusterarrow",
@@ -5230,7 +5230,7 @@ namespace Trinity.Framework.Reference
             public static Skill RainOfVengeance = new Skill
             {
                 Index = 22,
-                Name = "Rain of Vengeance",
+                Name = "复仇之雨",
                 SNOPower = SNOPower.DemonHunter_RainOfVengeance,
                 Slug = "rain-of-vengeance",
                 IconSlug = "demonhunter_rainofvengeance",
@@ -5266,7 +5266,7 @@ namespace Trinity.Framework.Reference
             public static Skill Vengeance = new Skill
             {
                 Index = 23,
-                Name = "Vengeance",
+                Name = "复仇",
                 SNOPower = SNOPower.X1_DemonHunter_Vengeance,
                 Slug = "vengeance",
                 IconSlug = "x1_demonhunter_vengeance",

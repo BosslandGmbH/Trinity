@@ -35,7 +35,7 @@ namespace Trinity.Components.Coroutines.Town
             var stash = TownInfo.Stash?.GetActor();
             if (stash == null)
             {
-                Core.Logger.Log("[TakeItemsFromStash] Unable to find Stash");
+                Core.Logger.Log("[从仓库拿取道具] 无法找到仓库");
                 return false;
             }
 
@@ -46,7 +46,7 @@ namespace Trinity.Components.Coroutines.Town
 
             if (!UIElements.StashWindow.IsVisible && TownInfo.Stash.Distance <= 10f)
             {
-                Core.Logger.Log("[TakeItemsFromStash] Stash window not open, interacting");
+                Core.Logger.Log("[从仓库拿取道具] 仓库界面无法打开, 互动");
                 stash.Interact();
             }
 
@@ -92,7 +92,7 @@ namespace Trinity.Components.Coroutines.Town
                             // Tried InventoryManager.SplitStack but it didnt work, reverting to moving onto existing stacks.
 
                             var amountToSplit = stackSize - lastItem.ItemStackQuantity;
-                            Core.Logger.Log($"[TakeItemsFromStash] Merging Stash Stack {item.Name} ({item.ActorSnoId}) onto Backpack Stack. StackSize={amountToSplit} WithdrawnAlready={numTakenAlready} InternalName={item.InternalName} Id={item.ActorSnoId} Quality={item.ItemQualityLevel} AncientRank={item.AncientRank}");
+                            Core.Logger.Log($"[从仓库拿取道具] 合并仓库内 {item.Name} ({item.ActorSnoId}) 到背包. 堆叠道具大小={amountToSplit} 已撤销={numTakenAlready} 内部名称={item.InternalName} Id={item.ActorSnoId} 品质={item.ItemQualityLevel} 远古等级={item.AncientRank}");
 
                             InventoryManager.MoveItem(item.AnnId, ZetaDia.Me.CommonData.AnnId, InventorySlot.BackpackItems, lastItem.InventoryColumn, lastItem.InventoryRow);
 
@@ -103,7 +103,7 @@ namespace Trinity.Components.Coroutines.Town
                         {
                             if (item.IsValid && !item.IsDisposed)
                             {
-                                Core.Logger.Log($"[TakeItemsFromStash] Removing {item.Name} ({item.ActorSnoId}) from stash. StackSize={stackSize} WithdrawnAlready={numTakenAlready} InternalName={item.InternalName} Id={item.ActorSnoId} AnnId={item.AnnId} Quality={item.ItemQualityLevel} AncientRank={item.AncientRank}");
+                                Core.Logger.Log($"[从仓库拿取道具] 丢弃 {item.Name} ({item.ActorSnoId}) 从仓库中. 堆叠道具大小={stackSize} 已撤销={numTakenAlready} 内部名称={item.InternalName} Id={item.ActorSnoId} AnnId={item.AnnId} 品质={item.ItemQualityLevel} 远古等级={item.AncientRank}");
 
                                 // Quick withdraw broken?
                                 //InventoryManager.QuickWithdraw(item);
@@ -143,13 +143,13 @@ namespace Trinity.Components.Coroutines.Town
             var stash = TownInfo.Stash?.GetActor();
             if (stash == null)
             {
-                Core.Logger.Log("[TakeItemsFromStash] Unable to find Stash");
+                Core.Logger.Log("[从仓库拿取道具] 无法找到仓库");
                 return false;
             }
 
             if (!UIElements.StashWindow.IsVisible && TownInfo.Stash.Distance <= 10f)
             {
-                Core.Logger.Log("[TakeItemsFromStash] Stash window not open, interacting");
+                Core.Logger.Log("[从仓库拿取道具] 仓库界面无法打开, 互动");
                 stash.Interact();
             }
 
@@ -159,11 +159,11 @@ namespace Trinity.Components.Coroutines.Town
                 {
                     if (!item.IsValid)
                     {
-                        Core.Logger.Verbose("[TakeItemsFromStash] An ACDItem was invalid, unable to remove it from stash.");
+                        Core.Logger.Verbose("[从仓库拿取道具] An ACDItem 是无效的, 无法将其从仓库取出.");
                         continue;
                     }
 
-                    Core.Logger.Verbose($"[TakeItemsFromStash] QuickWithdrawing: {item.InternalName} Id={item.ActorSnoId} AnnId={item.AnnId} Name={item.Name} Quality={item.ItemQualityLevel} IsAncient={item.IsAncient}");
+                    Core.Logger.Verbose($"[从仓库拿取道具] 快速提取: {item.InternalName} Id={item.ActorSnoId} AnnId={item.AnnId} 名称={item.Name} 品质={item.ItemQualityLevel} 远古={item.IsAncient}");
                     InventoryManager.QuickWithdraw(item.ToAcdItem());
                 }
                 catch (Exception ex)

@@ -40,7 +40,7 @@ namespace Trinity.Components.Coroutines.Town
 
                 if (await ClearArea.Execute())
                 {
-                    Core.Logger.Debug("Clearing");
+                    Core.Logger.Debug("清除");
                     return false;
                 }
 
@@ -70,7 +70,7 @@ namespace Trinity.Components.Coroutines.Town
 
                 IsWantingTownRun = true;
 
-                Core.Logger.Debug("Town run started");
+                Core.Logger.Debug("开始回城");
 
                 if (ZetaDia.Globals.IsLoadingWorld)
                 {
@@ -90,14 +90,14 @@ namespace Trinity.Components.Coroutines.Town
                     {
                         if (Core.CastStatus.StoneOfRecall.LastResult == CastResult.Failed)
                         {
-                            Core.Logger.Debug("Setting Town Run Cooldown because of cast failure");
+                            Core.Logger.Debug("由于设置故障回城运行CD中");
                             DontAttemptTownRunUntil = DateTime.UtcNow.AddSeconds(5);
                         }
                         return true;
                     }
                 }
 
-                Core.Logger.Verbose($"Starting Townrun");
+                Core.Logger.Verbose($"开始回城...");
 
                 IsInTownVendoring = true;
 
@@ -107,9 +107,10 @@ namespace Trinity.Components.Coroutines.Town
                 }
 
                 await Coroutine.Wait(8000, () => Core.Actors.Inventory.Any());
-                await Coroutine.Sleep(1000);
+                int time = ZetaDia.Service.Party.NumPartyMembers > 1 && !ZetaDia.Service.Party.IsPartyLeader ? 5000 : 1000;
+                await Coroutine.Sleep(time);
 
-                Core.Logger.Debug("Started Town Run Loop");
+                Core.Logger.Debug("开始运行循环");
 
                 var checkCycles = 2;
 
@@ -155,11 +156,14 @@ namespace Trinity.Components.Coroutines.Town
                         break;
                     }
                 }
-
-                await StashItems.Execute();
+				// 优先修理装备
                 await RepairItems.Execute();
+                // 存储重要物品
+                if (Core.Inventory.Backpack.Any(i => i.ItemStackQuantity >= 5000))
+                    await StashItems.Execute();
 
-                Core.Logger.Log("Finished Town Run woo!");
+
+                Core.Logger.Log("完成回城!");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(15);
 
                 if (StartedOutOfTown)
@@ -198,7 +202,7 @@ namespace Trinity.Components.Coroutines.Town
 
             if (IsWantingTownRun)
             {
-                Core.Logger.Debug("Is wanting to town run.");
+                Core.Logger.Debug("想要回城.");
                 return true;
             }
 
@@ -215,14 +219,14 @@ namespace Trinity.Components.Coroutines.Town
             var validLocation = DefaultLootProvider.FindBackpackLocation(true, false);
             if (validLocation.X < 0 || validLocation.Y < 0)
             {
-                Core.Logger.Log("No more space to pickup a 2-slot item, now running town-run routine. (TownRun)");
+                Core.Logger.Log("背包空间低于两格或设定值....");
                 return true;
             }
 
             var needRepair = RepairItems.EquipmentNeedsRepair();
             if (needRepair)
             {
-                Core.Logger.Debug("Townrun for repair.");
+                Core.Logger.Debug("回城维修.");
                 return true;
             }
 
@@ -234,7 +238,7 @@ namespace Trinity.Components.Coroutines.Town
             string cantUseTPreason;
             if (!ZetaDia.Me.CanUseTownPortal(out cantUseTPreason) && !ZetaDia.IsInTown)
             {
-                Core.Logger.Verbose("Can't townrun because '{0}'", cantUseTPreason);
+                Core.Logger.Verbose("无法回城, 因为 '{0}'", cantUseTPreason);
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(10);
                 return false;
             }
@@ -246,13 +250,15 @@ namespace Trinity.Components.Coroutines.Town
             {
                 if (Core.Player.IsInventoryLockedForGreaterRift)
                 {
-                    Core.Logger.Verbose("Can't townrun while in greater rift!");
+                    Core.Logger.Verbose("无法在大秘境中回城!");
                     DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(5);
                     return false;
                 }
 
                 // Close Greater rift before doing a town run.
-                if (!Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
+                // 智能包裹整理
+                bool CanNotVedon = !Core.Settings.SenExtend.EnableIntelligentFinishing || !DefaultLootProvider.CanVedonInRift || Core.Player.IsInTown;
+                if (!Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun && CanNotVedon)
                 {
                     return false;
                 }
@@ -260,28 +266,28 @@ namespace Trinity.Components.Coroutines.Town
 
             if (ErrorDialog.IsVisible)
             {
-                Core.Logger.Log("Can't townrun with an error dialog present!");
+                Core.Logger.Log("一个错误对话框出现不能执行回城!");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(10);
                 return false;
             }
 
             if (Core.Player.WorldSnoId == 71150 && ZetaDia.CurrentQuest.QuestSnoId == 87700 && ZetaDia.CurrentQuest.StepId == -1)
             {
-                Core.Logger.Debug("Can't townrun with the current quest (A1 New Game) !");
+                Core.Logger.Debug("当前任务中不能执行回城 (A1 新游戏) !");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(30);
                 return false;
             }
 
             if (GameData.BossLevelAreaIDs.Contains(Core.Player.LevelAreaId))
             {
-                Core.Logger.Debug("Unable to Town Portal - Boss Area!");
+                Core.Logger.Debug("Boss 战斗中 - 无法使用回城 - !");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(10);
                 return false;
             }
 
             if (GameData.NeverTownPortalLevelAreaIds.Contains(Core.Player.LevelAreaId))
             {
-                Core.Logger.Log("Unable to Town Portal in this area!");
+                Core.Logger.Log("在这个区域无法回城!");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(10);
                 return false;
             }
@@ -301,14 +307,14 @@ namespace Trinity.Components.Coroutines.Town
         {
             if (ZetaDia.IsInTown || !ZetaDia.Me.IsFullyValid() || !UIElements.BackgroundScreenPCButtonRecall.IsEnabled)
             {
-                Core.Logger.Log("Not portaling because its no longer needed or invalid.");
+                Core.Logger.Log("不需要或无效, 无法回城.");
                 return false;
             }
 
             Navigator.PlayerMover.MoveStop();
             await Coroutine.Wait(2000, () => !ZetaDia.Me.Movement.IsMoving);
 
-            Core.Logger.Warn("Starting Town Run");
+            Core.Logger.Warn("开始回城");
             StartedOutOfTown = true;
 
             if (!ZetaDia.IsInTown && !ZetaDia.Globals.IsLoadingWorld)
@@ -379,30 +385,30 @@ namespace Trinity.Components.Coroutines.Town
             var actor = portalRef?.GetActor();
             if (actor == null || !actor.IsFullyValid())
             {
-                Core.Logger.Debug("Couldn't find a return portal");
+                Core.Logger.Debug("找不到传送门");
                 return false;
             }
 
-            Core.Logger.Log("Found a hearth portal, lets use it.");
+            Core.Logger.Log("找到了一个传送门的入口，进行传送.");
 
             if (!await MoveToAndInteract.Execute(actor, 2f, 10))
             {
-                Core.Logger.Log("Failed to move to return portal :(");
+                Core.Logger.Log("移动失败返回传送门 :(");
                 return false;
             }
-
+     
             Core.PlayerMover.MoveStop();
 
             if (actor.IsFullyValid() && !actor.Interact())
             {
-                Core.Logger.Debug("Failed to interact with return portal.");
+                Core.Logger.Debug("未能与传送门交互.");
             }
-
+            
             await Coroutine.Sleep(1000);
 
             if (ZetaDia.IsInTown && !ZetaDia.Globals.IsLoadingWorld)
             {
-                Core.Logger.Log("Trying again to use return portal.");
+                Core.Logger.Log("再次尝试使用传送门.");
                 var gizmo = ZetaDia.Actors.GetActorsOfType<DiaGizmo>().FirstOrDefault(g => g.ActorInfo.GizmoType == GizmoType.HearthPortal);
                 if (gizmo != null)
                 {

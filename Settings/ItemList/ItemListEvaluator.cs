@@ -22,7 +22,7 @@ namespace Trinity.Settings.ItemList
             var item = Legendary.GetItem(cItem);
             if (item == null)
             {
-                Core.Logger.Verbose("  >>  Unknown Item {0} {1} - Auto-keeping", cItem.Name, cItem.ActorSnoId);
+                Core.Logger.Verbose("  >>  未知 道具 {0} {1} - 自动保存", cItem.Name, cItem.ActorSnoId);
                 return true;
             }
 
@@ -35,7 +35,7 @@ namespace Trinity.Settings.ItemList
 
             if (typeEntry == null)
             {
-                Core.Logger.Verbose($"  >> {cItem.Name} did not match any item types");
+                Core.Logger.Verbose($"  >> {cItem.Name} 不匹配任何物品类型");
                 return false;
             }
 
@@ -54,7 +54,7 @@ namespace Trinity.Settings.ItemList
 
             if (cItem.IsCrafted)
             {
-                Core.Logger.Debug("  >>  Crafted Item {0} {1} - Auto-keeping", cItem.Name, id);
+                Core.Logger.Debug("  >>  特别 道具 {0} {1} - 自动保存", cItem.Name, id);
                 return true;
             }
 
@@ -62,7 +62,7 @@ namespace Trinity.Settings.ItemList
             {
                 var props = ItemDataUtils.GetPropertiesForItem(referenceItem);
 
-                Core.Logger.Verbose($"------- Starting Test of {props.Count} supported properties for {cItem.Name}");
+                Core.Logger.Verbose($"------- 开始测试的 {props.Count} 支持特性 {cItem.Name}");
 
                 foreach (var prop in props)
                 {
@@ -80,7 +80,7 @@ namespace Trinity.Settings.ItemList
                     EvaluateProperty(testrule, cItem, out newValue);
                 }
 
-                Core.Logger.Verbose("------- Finished Test for {0} against max value", cItem.Name);
+                Core.Logger.Verbose("------- 已完成对 {0} 的最大值测试", cItem.Name);
             }
 
             var itemSetting = Core.Settings.ItemList.SelectedItems.FirstOrDefault(i => referenceItem.Id == i.Id);
@@ -89,7 +89,7 @@ namespace Trinity.Settings.ItemList
                 return EvaluateRules(cItem, itemSetting, test);
             }
 
-            Core.Logger.Log($"  >>  Unselected ListItem {cItem.Name} {cItem.ActorSnoId} GbId={cItem.GameBalanceId} IsValid={cItem.IsValid}");
+            Core.Logger.Log($"  >>  捡取列表未选中的 {cItem.Name} {cItem.ActorSnoId} 游戏的平衡性={cItem.GameBalanceId} 是否有效={cItem.IsValid}");
             return false;
         }
 
@@ -97,22 +97,22 @@ namespace Trinity.Settings.ItemList
         {
             if (itemSetting == null)
             {
-                Core.Logger.Error("Null ItemSetting");
+                Core.Logger.Error("无效的物品设置");
                 return false;
             }
 
             if (cItem == null)
             {
-                Core.Logger.Error("Null TrinityItem");
+                Core.Logger.Error("无效的 Trinity物品");
                 return false;
             }
 
             var typeName = itemSetting.Type == LItem.ILType.Slot ? $"({itemSetting.Name}) " : string.Empty;
-            Core.Logger.Verbose($"  >>  {cItem.Name} ({itemSetting.Id}) is a selected {itemSetting.Type} {typeName}with {itemSetting.Rules.Count} rules.");
+            Core.Logger.Verbose($"  >>  {cItem.Name} ({itemSetting.Id}) 是选定 {itemSetting.Type} {typeName}与 {itemSetting.Rules.Count} 规则.");
 
             if (itemSetting.RequiredRules.Any())
             {
-                Core.Logger.Verbose("  >>  {0} required rules:", itemSetting.RequiredRules.Count);
+                Core.Logger.Verbose("  >>  {0} 所需的规则:", itemSetting.RequiredRules.Count);
             }
 
             var ruleUpgrades = new Dictionary<LRule, float>();
@@ -123,7 +123,7 @@ namespace Trinity.Settings.ItemList
             {
                 if (!EvaluateProperty(itemRule, cItem, out newValue))
                 {
-                    Core.Logger.Verbose($"  >>  Not stashing because of required rule failure: {itemRule.Name}");
+                    Core.Logger.Verbose($"  >>  由于所需的规则失败，不会锁定: {itemRule.Name}");
                     return false;
                 }
 
@@ -139,7 +139,7 @@ namespace Trinity.Settings.ItemList
                 return true;
             }
 
-            Core.Logger.Verbose($"  >>  item must have {itemSetting.Ops} of {itemSetting.OptionalRules.Count} optional rules:");
+            Core.Logger.Verbose($"  >>  物品必须具有 {itemSetting.Ops} 个 {itemSetting.OptionalRules.Count} 可选规则:");
 
             // X optional rules must be true.
             var trueOptionals = 0;
@@ -172,7 +172,7 @@ namespace Trinity.Settings.ItemList
 
             foreach (var pair in ruleUpgrades)
             {
-                Core.Logger.Log($"Upgraded Rule {pair.Key.Name} from {pair.Key.Value} to {pair.Value}");
+                Core.Logger.Log($"升级后的规则 {pair.Key.Name} 从 {pair.Key.Value} 到 {pair.Value}");
                 pair.Key.Value = pair.Value;
             }
         }
@@ -191,42 +191,42 @@ namespace Trinity.Settings.ItemList
 
             switch (prop)
             {
-                case ItemProperty.PassivePower:
+                case ItemProperty.威能:
                     itemValue = ItemDataUtils.GetPassivePowerValue(item);
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.Ancient:
+                case ItemProperty.远古:
                     itemValue = item.IsAncient ? 1 : 0;
                     ruleValue = value;
                     result = item.IsAncient && Math.Abs(value - 1) < double.Epsilon;
                     returnValue = ruleValue;
                     break;
 
-                case ItemProperty.PrimaryStat:
+                case ItemProperty.主要属性:
                     itemValue = item.Attributes.PrimaryStat;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.CriticalHitChance:
+                case ItemProperty.暴击几率:
                     itemValue = item.Attributes.CritPercent;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.CriticalHitDamage:
+                case ItemProperty.暴击伤害:
                     itemValue = item.Attributes.CritDamagePercent;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.AttackSpeed:
+                case ItemProperty.攻击速度:
 
                     itemValue = item.Attributes.AttacksPerSecondPercent;
                     if (itemValue == 0)
@@ -238,126 +238,126 @@ namespace Trinity.Settings.ItemList
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.ResourceCost:
+                case ItemProperty.减少耗能:
                     itemValue = item.Attributes.ResourceCostReductionPercent;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.Cooldown:
+                case ItemProperty.冷却时间缩短:
                     itemValue = item.Attributes.CooldownPercent;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.ResistAll:
+                case ItemProperty.所有抗性:
                     itemValue = item.Attributes.ResistAll;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.Sockets:
+                case ItemProperty.镶孔:
                     itemValue = item.Attributes.Sockets;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = ruleValue;
                     break;
 
-                case ItemProperty.Vitality:
+                case ItemProperty.体能:
                     itemValue = item.Attributes.Vitality;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.AreaDamage:
+                case ItemProperty.范围伤害:
                     itemValue = item.Attributes.AreaDamagePercent;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.Thorns:
+                case ItemProperty.荆棘伤害:
                     itemValue = item.Attributes.Thorns;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.FireSkills:
+                case ItemProperty.火焰技能:
                     itemValue = item.Attributes.FireSkillDamagePercentBonus;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.ColdSkills:
+                case ItemProperty.冰霜技能:
                     itemValue = item.Attributes.ColdSkillDamagePercentBonus;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.LightningSkills:
+                case ItemProperty.闪电技能:
                     itemValue = item.Attributes.LightningSkillDamagePercentBonus;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.ArcaneSkills:
+                case ItemProperty.奥术技能:
                     itemValue = item.Attributes.ArcaneSkillDamagePercentBonus;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.HolySkills:
+                case ItemProperty.神圣技能:
                     itemValue = item.Attributes.HolySkillDamagePercentBonus;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.PoisonSkills:
+                case ItemProperty.毒性技能:
                     itemValue = item.Attributes.PoisonSkillDamagePercentBonus;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.PhysicalSkills:
+                case ItemProperty.物理技能:
                     itemValue = item.Attributes.PhysicalSkillDamagePercentBonus;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.DamageAgainstElites:
+                case ItemProperty.对精英怪伤害提高:
                     itemValue = item.Attributes.DamageAgainstElites;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.DamageFromElites:
+                case ItemProperty.减少精英怪造成的伤害:
                     itemValue = item.Attributes.DamageFromElites;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.BaseMaxDamage:
+                case ItemProperty.基础最大伤害:
                     itemValue = item.Attributes.MaxDamage;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.SkillDamage:
+                case ItemProperty.技能伤害:
                     var skillId = variant;
                     var skill = ItemDataUtils.GetSkillsForItemType(item.TrinityItemType, Core.Player.ActorClass).FirstOrDefault(s => s.Id == skillId);
                     if (skill != null)
@@ -370,7 +370,7 @@ namespace Trinity.Settings.ItemList
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.ElementalDamage:
+                case ItemProperty.元素伤害:
                     var elementId = variant;
                     var element = (Element)elementId;
                     if (element != Element.Unknown)
@@ -384,190 +384,183 @@ namespace Trinity.Settings.ItemList
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.PercentDamage:
+                case ItemProperty.百分比伤害:
                     itemValue = item.Attributes.WeaponDamagePercent;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.CriticalHitsGrantArcane:
+                case ItemProperty.暴击恢复奥能:
                     itemValue = item.Attributes.ArcaneOnCrit;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.Armor:
+                case ItemProperty.护甲:
                     itemValue = item.Attributes.ArmorBonusItem;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.ChanceToBlock:
+                case ItemProperty.格挡几率:
                     itemValue = item.Attributes.BlockChanceBonusPercent;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.ChanceToBlockTotal:
+                case ItemProperty.格挡几率总计:
                     itemValue = item.Attributes.BlockChanceItemTotal;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.HatredRegen:
+                case ItemProperty.憎恨再生:
                     itemValue = item.Attributes.HatredRegen;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.LifePercent:
+                case ItemProperty.百分比生命:
                     itemValue = item.Attributes.LifePercent *100;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.LifePerHit:
+                case ItemProperty.击中回复生命:
                     itemValue = item.Attributes.LifeOnHit;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.RegenerateLifePerSecond:
+                case ItemProperty.每秒恢复生命:
                     itemValue = item.Attributes.HealthPerSecond;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.ManaRegen:
+                case ItemProperty.法力恢复:
                     itemValue = item.Attributes.ManaRegen;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.MovementSpeed:
+                case ItemProperty.移动速度:
                     itemValue = item.Attributes.MovementSpeedPercent;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.SpiritRegen:
+                case ItemProperty.内力再生:
                     itemValue = item.Attributes.SpiritRegen;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.WrathRegen:
+                case ItemProperty.愤怒值再生:
                     itemValue =
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.LifePerFury:
+                case ItemProperty.消耗怒气恢复生命:
                     itemValue = item.Attributes.LifePerFury;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.LifePerSpirit:
+                case ItemProperty.消耗内力恢复生命:
                     itemValue = item.Attributes.LifePerSpirit;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.LifePerWrath:
+                case ItemProperty.消耗愤怒值恢复生命:
                     itemValue = item.Attributes.LifePerWrath;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.MaximumArcane:
+                case ItemProperty.奥能上限:
                     itemValue = item.Attributes.MaxArcanePower;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.MaximumSpirit:
+                case ItemProperty.内力上限:
                     itemValue = item.Attributes.MaxSpirit;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.MaximumDiscipline:
+                case ItemProperty.戒律上限:
                     itemValue = item.Attributes.MaxDiscipline;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.MaximumFury:
+                case ItemProperty.怒气上限:
                     itemValue = item.Attributes.MaxFury;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.MaximumMana:
+                case ItemProperty.法力上限:
                     itemValue = item.Attributes.MaxMana;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.MaximumWrath:
+                case ItemProperty.愤怒上限:
                     itemValue = item.Attributes.MaximumWrath;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.ChanceToBlind:
+                case ItemProperty.击中产生致盲效果几率:
                     itemValue = item.Attributes.ChanceToBlind;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.ChanceToFreeze:
+                case ItemProperty.击中产生冰冻效果几率:
                     itemValue = item.Attributes.ChanceToFreeze;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.ChanceToImmobilize:
+                case ItemProperty.击中产生定身效果几率:
                     itemValue = item.Attributes.ChanceToImmobilize;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
-                case ItemProperty.ChanceToStun:
+                case ItemProperty.击中产生昏迷效果几率:
                     itemValue = item.Attributes.ChanceToStun;
-                    ruleValue = value;
-                    result = itemValue >= ruleValue;
-                    returnValue = itemValue;
-                    break;
-
-                case ItemProperty.MaximumEssence:
-                    itemValue = item.Attributes.MaxEssence;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
@@ -600,7 +593,7 @@ namespace Trinity.Settings.ItemList
 
                         if (!string.IsNullOrEmpty(error))
                         {
-                            Core.Logger.Warn($"Attribute specified in ItemList is invalid. {friendlyVariant} - {error}");
+                            Core.Logger.Warn($"捡取列表中指定的属性无效. {friendlyVariant} - {error}");
                             break;
                         }
 
@@ -612,12 +605,12 @@ namespace Trinity.Settings.ItemList
                     }
                     catch (Exception ex)
                     {
-                        Core.Logger.Error($"Exception evaluating ItemList rule Attribute {ex}");
+                        Core.Logger.Error($"评估捡取列表规则属性异常 {ex}");
                     }
                     break;
             }
 
-            Core.Logger.Verbose($"  >>  Evaluated {item.Name} -- {prop.ToString().AddSpacesToSentence()} {friendlyVariant} (Item: {itemValue} -v- Rule: {ruleValue}) = {result}");
+            Core.Logger.Verbose($"  >>  评估 {item.Name} -- {prop.ToString().AddSpacesToSentence()} {friendlyVariant} (Item: {itemValue} -v- 规则: {ruleValue}) = {result}");
             newValue = returnValue;
             return result;
         }

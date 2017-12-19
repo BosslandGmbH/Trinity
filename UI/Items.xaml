@@ -1,4 +1,4 @@
-﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -41,39 +41,39 @@
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Legendaries" DockPanel.Dock="Top" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
+            <GroupBox Header="传奇" DockPanel.Dock="Top" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
                 <StackPanel>
                     <StackPanel Margin="0,6,10,0">
                         <WrapPanel Margin="0,0,0,0">
-                            <RadioButton Foreground="White" Content="Always Stash" IsChecked="{Binding Items.LegendaryMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AlwaysStash}" />
-                            <RadioButton Foreground="White" Content="Ignore" IsChecked="{Binding Items.LegendaryMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Ignore}" />
-                            <RadioButton Foreground="White" Content="Only Ancients" IsChecked="{Binding Items.LegendaryMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=StashAncients}" />
-                            <RadioButton Foreground="White" Content="Use ItemList" IsChecked="{Binding Items.LegendaryMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=ItemList}" />
+                            <RadioButton Foreground="White" Content="总是存储" IsChecked="{Binding Items.LegendaryMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AlwaysStash}" />
+                            <RadioButton Foreground="White" Content="忽略" IsChecked="{Binding Items.LegendaryMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Ignore}" />
+                            <RadioButton Foreground="White" Content="仅远古" IsChecked="{Binding Items.LegendaryMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=StashAncients}" />
+                            <RadioButton Foreground="White" Content="使用捡取列表" IsChecked="{Binding Items.LegendaryMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=ItemList}" />
                         </WrapPanel>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Gambling">
+            <GroupBox Header="赌博">
                 <StackPanel Margin="0,6,10,0">
                     <WrapPanel Margin="0,0,0,0">
-                        <RadioButton Foreground="White" Content="Enabled" IsChecked="{Binding Items.GamblingMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}" />
-                        <RadioButton Foreground="White" Content="Disabled" IsChecked="{Binding Items.GamblingMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}" />
-                        <RadioButton Foreground="White" Content="Customize" IsChecked="{Binding Items.GamblingMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}" />
+                        <RadioButton Foreground="White" Content="启用" IsChecked="{Binding Items.GamblingMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}" />
+                        <RadioButton Foreground="White" Content="禁用" IsChecked="{Binding Items.GamblingMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}" />
+                        <RadioButton Foreground="White" Content="自定义" IsChecked="{Binding Items.GamblingMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}" />
                     </WrapPanel>
                     <StackPanel Margin="0,5,0,0" Visibility="{Binding Items.GamblingMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Selective}">
                         <ContentPresenter Margin="0,5,0,10" Content="{Binding Items, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=GamblingTypes}" Style="{DynamicResource SimpleItemsControlSelector}" />
                         <Slider Template="{DynamicResource LabelledSliderEditable}" 
-                            Tag="Never Spend Below"
-                            ToolTip="Number of blood shards to always have as a reserve."
+                            Tag="血岩碎片#以下不执行赌博"
+                            ToolTip="血岩碎片低于设定值将不会继续消耗碎片."
                             Interval="100" 
                             Maximum="1000" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="None" 
                             Value="{Binding Items.GamblingMinShards}" 
                             HorizontalAlignment="Stretch" Margin="0,0,0,0"
                             MinWidth="175"/>
                         <Slider Template="{DynamicResource LabelledSliderEditable}" 
-                            Tag="Save Until Above"
-                            ToolTip="Number of blood shards to have before spending."
+                            Tag="保存碎片到#之后才执行赌博"
+                            ToolTip="血岩碎片达到设定值才会赌博."
                             Interval="100" 
                             Maximum="1500" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="None" 
                             Value="{Binding Items.GamblingMinSpendingShards}" 
@@ -83,17 +83,17 @@
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Low Quality Items" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
+            <GroupBox Header="普通装备" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
                 <StackPanel>
                     <UniformGrid>
-                        <CheckBox Content="Pickup Gray Items" ToolTip="Gray Items" IsChecked="{Binding Items.PickupQualities, Converter={converters:FlagsToBoolConverter}, ConverterParameter=Grey}" />
-                        <CheckBox Content="Pickup White Items" ToolTip="White Items" IsChecked="{Binding Items.PickupQualities, Converter={converters:FlagsToBoolConverter}, ConverterParameter=White}" />
-                        <CheckBox Content="Pickup Blue Items" ToolTip="Blue Items" IsChecked="{Binding Items.PickupQualities, Converter={converters:FlagsToBoolConverter}, ConverterParameter=Blue}" />
-                        <CheckBox Content="Pickup Yellow Items" ToolTip="Yellow Items" IsChecked="{Binding Items.PickupQualities, Converter={converters:FlagsToBoolConverter}, ConverterParameter=Yellow}" />
+                        <CheckBox Content="捡取灰色道具" ToolTip="灰色道具" IsChecked="{Binding Items.PickupQualities, Converter={converters:FlagsToBoolConverter}, ConverterParameter=Grey}" />
+                        <CheckBox Content="捡取白色道具" ToolTip="白色道具" IsChecked="{Binding Items.PickupQualities, Converter={converters:FlagsToBoolConverter}, ConverterParameter=White}" />
+                        <CheckBox Content="捡取蓝色道具" ToolTip="蓝色道具" IsChecked="{Binding Items.PickupQualities, Converter={converters:FlagsToBoolConverter}, ConverterParameter=Blue}" />
+                        <CheckBox Content="捡取黄色道具" ToolTip="黄色道具" IsChecked="{Binding Items.PickupQualities, Converter={converters:FlagsToBoolConverter}, ConverterParameter=Yellow}" />
                     </UniformGrid>
                     <Border Margin="0,7,0,0" BorderBrush="#444" BorderThickness="0,1,0,0">
                         <UniformGrid Margin="0,4,0,0">
-                            <CheckBox Content="Only pickup when standing near / passing by" ToolTip="Bot will avoid walking to pick them up, but will pick them up if already standing ontop of them." IsChecked="{Binding Items.DontWalkToLowQuality}" />
+                            <CheckBox Content="只有站在附近或者路过时才捡取" ToolTip="辅助会避免移动捡取, 除非已经站在他物品上，才会捡它们." IsChecked="{Binding Items.DontWalkToLowQuality}" />
                         </UniformGrid>
                     </Border>
                 </StackPanel>
@@ -104,8 +104,8 @@
                     <TextBlock Margin="-3,0,0,8">Control which items are picked up while fighting monsters</TextBlock>
                     <WrapPanel Margin="0,0,0,0">
                         <RadioButton Foreground="White" Content="Pickup" IsChecked="{Binding Items.InCombatLooting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}" />
-                        <RadioButton Foreground="White" Content="Ignore" IsChecked="{Binding Items.InCombatLooting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}" />
-                        <RadioButton Foreground="White" Content="Customize" IsChecked="{Binding Items.InCombatLooting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}" />
+                        <RadioButton Foreground="White" Content="忽略" IsChecked="{Binding Items.InCombatLooting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}" />
+                        <RadioButton Foreground="White" Content="自定义" IsChecked="{Binding Items.InCombatLooting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}" />
                     </WrapPanel>
                     <StackPanel Margin="0,5,0,0" Visibility="{Binding Items.InCombatLooting, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Selective}">
                         <ContentPresenter Margin="0,5,0,0" Content="{Binding Items, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=InCombatLootQualities}" Style="{DynamicResource SimpleItemsControlSelector}" />
@@ -113,52 +113,52 @@
                 </StackPanel>
             </GroupBox>-->
 
-            <GroupBox Header="Special Items" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
+            <GroupBox Header="特殊物品" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
                 <UniformGrid Columns="2">
-                    <CheckBox Content="Pickup Deaths Breath" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=DeathsBreath}" />
-                    <CheckBox Content="Pickup Designs and Plans" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=CraftingPlans}" />
-                    <CheckBox Content="Stash Transmog Whites" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=TransmogWhites}"  ToolTip="If enabled transmog items are picked up and stashed"/>
-                    <CheckBox Content="Pickup Staff of Herding Parts" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=StaffOfHeardingParts}" ToolTip="If enabled staff of herding crafting materials will be picked up and stashed"/>
-                    <CheckBox Content="Pickup Greater Rift Keys" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=TieredLootrunKey}" ToolTip="If enabled, will pick up greater rift keys"/>
-                    <CheckBox Content="Pickup Rotten Mushroom" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=RottenMushroom}" ToolTip="If enabled, will pick up rotten mushrooms"/>
-                    <CheckBox Content="Pickup Lore Items" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=Lore}" ToolTip="If enabled, will pick up lore books"/>
-                    <CheckBox Content="Pickup Cultist Pages" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=CultistPage}" ToolTip="If enabled, will pick up cultist pages pages"/>
+                    <CheckBox Content="捡取死亡之息" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=DeathsBreath}" />
+                    <CheckBox Content="捡取设计图和一般制作图" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=CraftingPlans}" />
+                    <CheckBox Content="储存白色幻化装备" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=TransmogWhites}"  ToolTip="如果启用,白色幻化装备会被拾取并储存"/>
+                    <CheckBox Content="捡取牧牛杖材料" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=StaffOfHeardingParts}" ToolTip="如果启用,牧牛杖制作材料会被拾取并储存"/>
+                    <CheckBox Content="捡取大秘境钥匙" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=TieredLootrunKey}" ToolTip="如果启用, 将拾取大秘境钥匙"/>
+                    <CheckBox Content="捡取腐烂的蘑菇" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=RottenMushroom}" ToolTip="如果启用, 将拾取腐烂的蘑菇"/>
+                    <CheckBox Content="捡取阅读物品" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=Lore}" ToolTip="如果启用, 将拾取阅读物品"/>
+                    <CheckBox Content="捡取邪教徒书页" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=CultistPage}" ToolTip="如果启用, 将拾取邪教徒书页"/>
                 </UniformGrid>
             </GroupBox>
 
-            <GroupBox Header="Gems" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
+            <GroupBox Header="宝石" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
                 <Border Padding="0,0,0,0">
                     <WrapPanel>
                         <Border BorderThickness="1" Margin="0,0,15,0">
                             <ComboBox SelectedValuePath="Tag" SelectedValue="{Binding Items.GemLevel}" Padding="5" >
-                                <ComboBoxItem Content="Chipped+" IsSelected="True" Tag="0" />
-                                <ComboBoxItem Content="Flawless Square+" IsSelected="True" Tag="14" />
-                                <ComboBoxItem Content="Marquise+" IsSelected="True" Tag="15" />
-                                <ComboBoxItem Content="Imperial+" IsSelected="True" Tag="16" />
+                                <ComboBoxItem Content="碎裂+" IsSelected="True" Tag="0" />
+                                <ComboBoxItem Content="无瑕的方形+" IsSelected="True" Tag="14" />
+                                <ComboBoxItem Content="贵族+" IsSelected="True" Tag="15" />
+                                <ComboBoxItem Content="帝国+" IsSelected="True" Tag="16" />
                             </ComboBox>
                         </Border>
-                        <CheckBox Grid.Row="0" Grid.Column="2" Content="Emerald" 
+                        <CheckBox Grid.Row="0" Grid.Column="2" Content="绿宝石" 
                                   IsChecked="{Binding Items.GemTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Emerald}" 
                                   Margin="0" VerticalAlignment="Center"/>
-                        <CheckBox Grid.Row="0" Grid.Column="3" Content="Topaz" 
+                        <CheckBox Grid.Row="0" Grid.Column="3" Content="黄宝石" 
                                   IsChecked="{Binding Items.GemTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Topaz}" 
                                   Margin="0" VerticalAlignment="Center"/>
-                        <CheckBox Grid.Row="0" Grid.Column="4" Content="Amethyst" 
+                        <CheckBox Grid.Row="0" Grid.Column="4" Content="紫宝石" 
                                   IsChecked="{Binding Items.GemTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Amethyst}" 
                                   Margin="0" VerticalAlignment="Center"/>
-                        <CheckBox Grid.Row="0" Grid.Column="5" Content="Ruby" 
+                        <CheckBox Grid.Row="0" Grid.Column="5" Content="红宝石" 
                                   IsChecked="{Binding Items.GemTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Ruby}" 
                                   Margin="0" VerticalAlignment="Center"/>
-                        <CheckBox Grid.Row="0" Grid.Column="6" Content="Diamond" 
+                        <CheckBox Grid.Row="0" Grid.Column="6" Content="钻石" 
                                   IsChecked="{Binding Items.GemTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Diamond}" 
                                   Margin="0,0,10,0" VerticalAlignment="Center"/>
                     </WrapPanel>
                         </Border>
             </GroupBox>
 
-            <GroupBox Header="Gold" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
+            <GroupBox Header="金币" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
                 <DockPanel LastChildFill="True">
-                    <CheckBox DockPanel.Dock="Left" IsChecked="{Binding Items.PickupGold}" Content="Pickup Gold" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,15,5"  />
+                    <CheckBox DockPanel.Dock="Left" IsChecked="{Binding Items.PickupGold}" Content="捡取最少" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,15,5"  />
                     <Slider Template="{DynamicResource SliderEditable}" IsEnabled="{Binding Items.PickupGold}"
                         Interval="500" Maximum="300000" Minimum="0" SmallChange="500" LargeChange="1000"
                         TickFrequency="500" TickPlacement="BottomRight" IsSnapToTickEnabled="True"
@@ -174,7 +174,7 @@
                     <StackPanel Margin="0,6,0,0">
                         <WrapPanel>
                             <RadioButton Foreground="White" Content="Pickup Cosmetics" IsChecked="{Binding Path=Weighting.CosmeticPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Normal}" />
-                            <RadioButton Foreground="White" Content="Ignore" IsChecked="{Binding Path=Weighting.CosmeticPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Ignore}" />
+                            <RadioButton Foreground="White" Content="忽略" IsChecked="{Binding Path=Weighting.CosmeticPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Ignore}" />
                             <RadioButton Foreground="White" Content="Prioritize" IsChecked="{Binding Path=Weighting.CosmeticPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Prioritize}" />
                             <RadioButton Foreground="White" Content="Kamikaze" IsChecked="{Binding Path=Weighting.CosmeticPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Kamikaze}" />
                         </WrapPanel>
@@ -182,19 +182,19 @@
                 </GroupBox>
             </StackPanel>-->
 
-            <GroupBox Header="Item Sharing">
+            <GroupBox Header="物品共享">
                 <WrapPanel HorizontalAlignment="Left" Margin="0,5,0,0">
-                    <TextBlock Margin="2,2,20,2" Text="Drop In Town: " VerticalAlignment="Center"/>
-                    <RadioButton GroupName="DropInTown" Content="None" ToolTip="Drop nothing in town"
+                    <TextBlock Margin="2,2,20,2" Text="丢弃物品在城里: " VerticalAlignment="Center"/>
+                    <RadioButton GroupName="DropInTown" Content="从不丢弃" ToolTip="不会丢弃任何物品"
                              IsChecked="{Binding Items.DropInTownMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=None}" VerticalAlignment="Center" Margin="1,1,5,1"/>
 
-                    <RadioButton GroupName="DropInTown" Content="Stash" ToolTip="Drop items that would normally be kept/stashed"
+                    <RadioButton GroupName="DropInTown" Content="丢弃存储的物品" ToolTip="丢弃通常被保存/存储的物品"
                              IsChecked="{Binding Items.DropInTownMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Keep}" VerticalAlignment="Center" Margin="1,1,5,1"/>
 
-                    <RadioButton GroupName="DropInTown" Content="Trash" ToolTip="Drop items that woudl normally be salvaged/sold"
+                    <RadioButton GroupName="DropInTown" Content="丢弃卖出的物品" ToolTip="丢弃通常将被抢救/卖出的物品"
                              IsChecked="{Binding Items.DropInTownMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Vendor}" VerticalAlignment="Center" Margin="1,1,5,1"/>
 
-                    <RadioButton GroupName="DropInTown" Content="All" ToolTip="Drop it like its hot!"
+                    <RadioButton GroupName="DropInTown" Content="全部丢弃" ToolTip="丢弃它就像它很烫!"
                              IsChecked="{Binding Items.DropInTownMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}" VerticalAlignment="Center" Margin="1,1,5,1"/>
                 </WrapPanel>
             </GroupBox>
@@ -230,23 +230,23 @@
                 </Grid>
             </GroupBox>-->
 
-            <GroupBox Header="Smart Stashing" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
-                <StackPanel><TextBlock TextWrapping="Wrap" Margin="0,0,0,7">Option to stash things on the first page where items of the same type are found:</TextBlock>
+            <GroupBox Header="智能存仓" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
+                <StackPanel><TextBlock TextWrapping="Wrap" Margin="0,0,0,7">分类存储选项，用来控制在仓库中哪些东西应该放在一起，总是将相同类型的物品放在找到该物品的第一页:</TextBlock>
                 
                 <UniformGrid Columns="1">
-                    <CheckBox Content="For Equipment (Weapons/Armor/Jewellery)" IsChecked="{Binding Items.UseTypeStashingEquipment}" />
-                    <CheckBox Content="For Other Stuff (Gems, Crafting Matrials, etc)" IsChecked="{Binding Items.UseTypeStashingOther}" />
+                    <CheckBox Content="装备 (武器/护甲/首饰)" IsChecked="{Binding Items.UseTypeStashingEquipment}" />
+                    <CheckBox Content="其他东西 (宝石, 制作材料,等)" IsChecked="{Binding Items.UseTypeStashingOther}" />
                     </UniformGrid>
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Misc" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
+            <GroupBox Header="杂项" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
                 <UniformGrid Columns="2">
-                    <CheckBox Content="Don't Pickup Items in Town" IsChecked="{Binding Items.DontPickupInTown}" />
-                    <CheckBox ToolTip="Item list needs items to be identified to check their properties." IsChecked="{Binding Items.KeepLegendaryUnid}" HorizontalAlignment="Left" Content="Keep Legendaries Unidentified" />
-                    <CheckBox ToolTip="Keep bounty caches in your stash rather than openining them automatically" IsChecked="{Binding Items.StashTreasureBags}" HorizontalAlignment="Left" Content="Stash Bounty Caches" />
-                    <CheckBox ToolTip="Completely ignore all items while in combat (useful for speed farming)" IsChecked="{Binding Items.DisableLootingInCombat}" HorizontalAlignment="Left" Content="Disable Looting In Combat" />
-                    <CheckBox IsChecked="{Binding Items.BuyStashTabs}" HorizontalAlignment="Left" Content="Buy Stash Tabs" />
+                    <CheckBox Content="在城里不拾取" IsChecked="{Binding Items.DontPickupInTown}" />
+                    <CheckBox ToolTip="捡取列表需要鉴定才能检查其属性." IsChecked="{Binding Items.KeepLegendaryUnid}" HorizontalAlignment="Left" Content="保持未鉴定的传奇" />
+                    <CheckBox ToolTip="将悬赏赫拉迪姆宝匣保存在您的仓库中而不是自动打开它们" IsChecked="{Binding Items.StashTreasureBags}" HorizontalAlignment="Left" Content="存储悬赏赫拉迪姆宝匣" />
+                    <CheckBox ToolTip="在战斗中完全忽略所有物品(适合速刷用)" IsChecked="{Binding Items.DisableLootingInCombat}" HorizontalAlignment="Left" Content="禁止在战斗中拾取" />
+                    <CheckBox IsChecked="{Binding Items.BuyStashTabs}" HorizontalAlignment="Left" Content="购买储物箱选项" />
 
                 </UniformGrid>
             </GroupBox>

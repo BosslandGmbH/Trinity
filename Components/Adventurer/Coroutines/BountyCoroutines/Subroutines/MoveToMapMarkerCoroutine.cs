@@ -46,8 +46,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Log("[MoveToMapMarker] " + value);
-                    StatusText = "[MoveToMapMarker] " + value;
+                    Core.Logger.Log("[移动到地图标记] " + value);
+                    StatusText = "[移动到地图标记] " + value;
                 }
                 _state = value;
             }
@@ -307,7 +307,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (marker != null && marker.Position != Vector3.Zero)
                 {
                     _objectiveLocation = marker.Position;
-                    Core.Logger.Log($"[MoveToMapMarker] Found the objective {marker}");
+                    Core.Logger.Log($"[移动到地图标记] 发现目标 {marker}");
                     ExplorationHelpers.SetExplorationPriority(_objectiveLocation);
                 }
                 _objectiveLocation = marker?.Position ?? Vector3.Zero;

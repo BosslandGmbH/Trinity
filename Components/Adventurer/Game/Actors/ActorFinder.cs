@@ -44,7 +44,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
 
             if (_radiusChangeCount >= 2)
             {
-                Core.Logger.Log("[ActorFinder] It looks like we couldn't path to the destination, lowering the search radius (New Radius = {0})", radius);
+                Core.Logger.Log("[寻找] 看起来我们不能通往目的地,降低搜索半径 (新的半径 = {0})", radius);
                 _radiusChangeCount = 0;
             }
             _radiusChangeCount++;
@@ -176,7 +176,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
             //    return null;
 
             var gizmo = ZetaDia.Actors.GetActorsOfType<DiaObject>(true)
-                    .Where(u => u.IsValid && u.ActorSnoId == 328830 && u.Distance < 200)
+                    .Where(u => u.IsValid && u.ActorSnoId == 328830 && u.Distance < 80)
                     .OrderBy(u => u.Distance)
                     .FirstOrDefault();
 

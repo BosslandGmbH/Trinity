@@ -39,7 +39,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
             var bountyData = BountyDataFactory.GetBountyData((int)bountyInfo.Quest);
             if (bountyData == null)
             {
-                Core.Logger.Log("Unsupported bounty: {0} - {1}", (int)bountyInfo.Quest, bountyInfo.Info.DisplayName);
+                Core.Logger.Log("不支持的悬赏: {0} - {1}", (int)bountyInfo.Quest, bountyInfo.Info.DisplayName);
                 return null;
             }
             //if (bountyData.QuestType != BountyQuestType.SpecialEvent)

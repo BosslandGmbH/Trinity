@@ -359,8 +359,8 @@ namespace Trinity.Framework.Reference
             //if (fireWorldTransfer)
             //    GameEvents.FireWorldTransferStart();
 
-            Core.Logger.Log("Clicking UI element {0} ({1})", name, element.BaseAddress);
-            Core.StuckHandler.Reset("Clicked UI Element");
+            Core.Logger.Log("点击用户界面 {0} ({1})", name, element.BaseAddress);
+            Core.StuckHandler.Reset("点击用户界面");
             element.Click();
             return true;
         }
@@ -372,20 +372,20 @@ namespace Trinity.Framework.Reference
 
             // These buttons should be clicked with no delay
 
-            if (SafeClickElement(CloseCreditsButton, "Close Credits Button"))
+            if (SafeClickElement(CloseCreditsButton, "关闭按钮"))
             {
                 LastClosedCreditsTime = DateTime.UtcNow;
                 return;
             }
-            if (SafeClickElement(PatchOKButton, "Patch Update OK Button"))
+            if (SafeClickElement(PatchOKButton, "补丁更新 确定按钮"))
                 return;
-            if (isInGame && SafeClickElement(ChinaStoreCloseButton, "Closing China Store Window"))
+            if (isInGame && SafeClickElement(ChinaStoreCloseButton, "关闭国服商城的窗口"))
                 return;
-            if (isInGame && SafeClickElement(BountyRewardDialog, "Bounty Reward Dialog"))
+            if (isInGame && SafeClickElement(BountyRewardDialog, "悬赏对话"))
                 return;
-            if (isInGame && SafeClickElement(ConversationSkipButton, "Conversation Button"))
+            if (isInGame && SafeClickElement(ConversationSkipButton, "对话按钮"))
                 return;
-            if (isInGame && SafeClickElement(TalktoInteractButton1, "Conversation Button"))
+            if (isInGame && SafeClickElement(TalktoInteractButton1, "对话按钮"))
                 return;
 
             if (DateTime.UtcNow.Subtract(_lastCheckedUiButtons).TotalMilliseconds <= 500)
@@ -398,13 +398,13 @@ namespace Trinity.Framework.Reference
             //Last clicked: 0x4CC93A73A58BAFFF, Name: Root.TopLayer.BattleNetModalNotifications_main.ModalNotification
             //[1E048BB0] Mouseover: 0xB4433DA3F648A992, Name: Root.TopLayer.BattleNetModalNotifications_main.ModalNotification.Buttons.ButtonList.OkButton
 
-            if (SafeClickElement(UIElement.FromHash(0xB4433DA3F648A992), "Network Disconnect Error Dialog OK Button"))
+            if (SafeClickElement(UIElement.FromHash(0xB4433DA3F648A992), "网络连接已断开 对话框确定按钮"))
                 return;
 
-            if (isInGame && SafeClickElement(JoinRiftButton, "Join Rift Accept Button", true))
+            if (isInGame && SafeClickElement(JoinRiftButton, "加入秘境 接受按钮", true))
                 return;
 
-            if (isInGame && SafeClickElement(PartyLeaderBossAccept, "Party Leader Boss Accept", true))
+            if (isInGame && SafeClickElement(PartyLeaderBossAccept, "接受组队", true))
                 return;
 
 
@@ -415,14 +415,14 @@ namespace Trinity.Framework.Reference
 
                 if (declineInBounty || alwaysDecline)
                 {
-                    if (isInGame && SafeClickElement(PartyFollowerBossDecline, "Party Follower Boss Decline", true))
+                    if (isInGame && SafeClickElement(PartyFollowerBossDecline, "拒绝跟随队长", true))
                         return;
                 }
             }
 
             if (IsElementVisible(PartyFollowerBossAccept))
             {
-                if (isInGame && SafeClickElement(PartyFollowerBossAccept, "Party Follower Boss Accept", true))
+                if (isInGame && SafeClickElement(PartyFollowerBossAccept, "同意跟随队长", true))
                     return;
             }
 
@@ -431,19 +431,19 @@ namespace Trinity.Framework.Reference
             if (Core.Player.IsCasting)
                 return;
 
-            if (isInGame && SafeClickElement(MercenaryOKButton, "Mercenary OK Button"))
+            if (isInGame && SafeClickElement(MercenaryOKButton, "随从确认按钮"))
                 return;
-            if (SafeClickElement(RiftCompleteOkButton, "Rift Complete OK Button"))
+            if (SafeClickElement(RiftCompleteOkButton, "秘境完成 确认按钮"))
                 return;
             if (SafeClickElement(GenericOK, "GenericOK"))
                 return;
-            if (SafeClickElement(UIElements.ConfirmationDialogOkButton, "ConfirmationDialogOKButton", true))
+            if (SafeClickElement(UIElements.ConfirmationDialogOkButton, "确认对话框 确认按钮", true))
                 return;
-            if (isInGame && SafeClickElement(ConfirmTimedDungeonOK, "Confirm Timed Dungeon OK Button", true))
+            if (isInGame && SafeClickElement(ConfirmTimedDungeonOK, "确认定时地下城 确认按钮", true))
                 return;
-            if (isInGame && SafeClickElement(StashBuyNewTabButton, "Buying new Stash Tab"))
+            if (isInGame && SafeClickElement(StashBuyNewTabButton, "购买新的储物箱选项"))
                 return;
-            if (isInGame && SafeClickElement(TieredRiftRewardContinueButton, "Tiered Rift Reward Continue Button"))
+            if (isInGame && SafeClickElement(TieredRiftRewardContinueButton, "分层秘境奖励继续按钮"))
                 return;
 
         }

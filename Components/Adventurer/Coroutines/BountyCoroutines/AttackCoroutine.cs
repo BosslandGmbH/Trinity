@@ -68,8 +68,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Debug("[Attack] " + value);
-                    StatusText = "[Attack] " + value;
+                    Core.Logger.Debug("[攻击] " + value);
+                    StatusText = "[攻击] " + value;
                 }
                 _state = value;
             }
@@ -137,7 +137,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
         {
             if (!await new MoveToPositionCoroutine(AdvDia.CurrentWorldId, _actor.Position, (int)_attackRange).GetCoroutine())
             {
-                Core.Logger.Log("[AttackCoroutine] Moving to actor failed", _actorId);
+                Core.Logger.Log("[攻击过程] 移动角色失败", _actorId);
                 State = States.Failed;
                 return false;
             }
@@ -155,12 +155,12 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
             {
                 attempts++;
 
-                Core.Logger.Log("[AttackCoroutine] Attacking {0} Dist={1} with skill: {2}", _actor.Name, _actor.Distance, _attackSkill);
+                Core.Logger.Log("[攻击过程] 攻击 {0}  距离={1} 技能: {2}", _actor.Name, _actor.Distance, _attackSkill);
 
                 if (ZetaDia.Me.UsePower(_attackSkill, _actor.Position, AdvDia.CurrentWorldDynamicId, _actor.ACDId) ||
                     ZetaDia.Me.UsePower(_attackSkill, _actor.Position, AdvDia.CurrentWorldDynamicId))
                 {
-                    Core.Logger.Log("[AttackCoroutine] Attack Succeeded! woot!", _actor.Name, _actor.Distance, _attackSkill);
+                    Core.Logger.Log("[攻击过程] 攻击成功! 哇!", _actor.Name, _actor.Distance, _attackSkill);
                     break;
                 }
 
@@ -179,7 +179,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         private async Task<bool> Failed()
         {
-            Core.Logger.Log("[AttackCoroutine] Failed", _actor.Name, _actor.Distance, _attackSkill);
+            Core.Logger.Log("[攻击过程] 失败", _actor.Name, _actor.Distance, _attackSkill);
 
             _isDone = true;
             return false;

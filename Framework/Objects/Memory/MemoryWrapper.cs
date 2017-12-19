@@ -61,7 +61,7 @@ namespace Trinity.Framework.Objects.Memory
             }
             catch (Exception ex)
             {
-                Core.Logger.Log($"Memory ReadObject Exception. {ex.ToLogString(Environment.StackTrace)}");
+                Core.Logger.Log($"内存读取对象异常. {ex.ToLogString(Environment.StackTrace)}");
             }
             return default(T);
         }
@@ -89,7 +89,7 @@ namespace Trinity.Framework.Objects.Memory
             }
             catch (Exception ex)
             {
-                Core.Logger.Log($"Memory ReadAbsoluteObject Exception. {ex.ToLogString(Environment.StackTrace)}");
+                Core.Logger.Log($"内存读取绝对目标异常. {ex.ToLogString(Environment.StackTrace)}");
             }
             return default(T);
         }
@@ -106,7 +106,7 @@ namespace Trinity.Framework.Objects.Memory
             }
             catch (Exception ex)
             {
-                Core.Logger.Log($"Memory ReadOffset Exception. {ex.ToLogString(Environment.StackTrace)}");
+                Core.Logger.Log($"内存读取偏移异常. {ex.ToLogString(Environment.StackTrace)}");
             }
             return default(T);
         }
@@ -123,7 +123,7 @@ namespace Trinity.Framework.Objects.Memory
             }
             catch (Exception ex)
             {
-                Core.Logger.Log($"Memory ReadArray Exception. {ex.ToLogString(Environment.StackTrace)}");
+                Core.Logger.Log($"内存读取阵列异常. {ex.ToLogString(Environment.StackTrace)}");
             }
             return new List<T>();
         }
@@ -136,7 +136,7 @@ namespace Trinity.Framework.Objects.Memory
             }
             catch (Exception ex)
             {
-                Core.Logger.Log($"Memory ReadArray Exception. {ex.ToLogString(Environment.StackTrace)}");
+                Core.Logger.Log($"内存读取阵列异常. {ex.ToLogString(Environment.StackTrace)}");
             }
             return default(T[]);
         }
@@ -289,7 +289,7 @@ namespace Trinity.Framework.Objects.Memory
             }
             catch (Exception ex)
             {
-                Core.Logger.Log($"Memory ReadString Exception. {ex.ToLogString(Environment.StackTrace)}");
+                Core.Logger.Log($"内存读取字符串异常. {ex.ToLogString(Environment.StackTrace)}");
             }
             return string.Empty;
         }
@@ -306,7 +306,7 @@ namespace Trinity.Framework.Objects.Memory
             }
             catch (Exception ex)
             {
-                Core.Logger.Log($"Memory ReadString Exception. {ex.ToLogString(Environment.StackTrace)}");
+                Core.Logger.Log($"内存读取字符串异常. {ex.ToLogString(Environment.StackTrace)}");
             }
             return string.Empty;
         }
@@ -323,7 +323,7 @@ namespace Trinity.Framework.Objects.Memory
             }
             catch (Exception ex)
             {
-                Core.Logger.Log($"Memory ReadString Exception. {ex.ToLogString(Environment.StackTrace)}");
+                Core.Logger.Log($"内存读取字符串异常. {ex.ToLogString(Environment.StackTrace)}");
             }
             return string.Empty;
         }
@@ -346,7 +346,7 @@ namespace Trinity.Framework.Objects.Memory
             }
             catch (Exception ex)
             {
-                Core.Logger.Log($"Memory ReadSerializedData Exception. {ex.ToLogString(Environment.StackTrace)}");
+                Core.Logger.Log($"内存读取序列化的数据异常. {ex.ToLogString(Environment.StackTrace)}");
             }
             return default(T[]);
         }
@@ -379,7 +379,7 @@ namespace Trinity.Framework.Objects.Memory
                     var size = TypeUtil<T>.SizeOf;
                     if (size == 0)
                     {
-                        Core.Logger.Error($"ReadSerializedObjects was unable to get a size for {type.Name}");
+                        Core.Logger.Error($"读取序列化对象无法获取 {type.Name} 的大小");
                     }
 
                     if (serializeBase == IntPtr.Zero)
@@ -411,7 +411,7 @@ namespace Trinity.Framework.Objects.Memory
             }
             catch (Exception ex)
             {
-                Core.Logger.Log($"Memory ReadSerializedObjects Exception. {ex.ToLogString(Environment.StackTrace)}");
+                Core.Logger.Log($"内存读取序列化对象的异常. {ex.ToLogString(Environment.StackTrace)}");
             }
             return default(List<T>);
         }
@@ -428,7 +428,7 @@ namespace Trinity.Framework.Objects.Memory
             }
             catch (Exception ex)
             {
-                Core.Logger.Log($"Memory Read Exception. {ex} {ex.ToLogString(Environment.StackTrace)}");
+                Core.Logger.Log($"内存读取异常. {ex} {ex.ToLogString(Environment.StackTrace)}");
             }
             return default(T);
         }

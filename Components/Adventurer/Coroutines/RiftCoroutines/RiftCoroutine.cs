@@ -14,6 +14,7 @@ using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Components.Adventurer.Game.Stats;
 using Trinity.Components.Adventurer.Settings;
+using Trinity.Components.Adventurer.UI;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Settings;
@@ -39,6 +40,9 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             public States EndState = States.Finished;
             public bool NormalRiftForXPShrine;
         }
+
+        // 经验池是否已满
+        private bool IsRestExperienceFull = false;
 
         private RiftType _RiftType;
         private bool _runningNephalemInsteadOfGreaterRift;
@@ -118,8 +122,8 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Debug("[Rift] " + value);
-                    StatusText = "[Rift] " + value;
+                    Core.Logger.Debug("[秘境] " + value);
+                    StatusText = "[秘境] " + value;
                 }
                 _state = value;
             }
@@ -170,7 +174,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
             if (State == _options.EndState)
             {
-                Core.Logger.Debug("[Rift] Someone told us to stop rifting, so we will do what we're told like a good boy and/or girl.");
+                Core.Logger.Debug("[秘境] 接到停止秘境通知，所以去执行能通知的事情.");
                 State = States.Finished;
                 DisablePulse();
             }
@@ -286,15 +290,14 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 ZetaDia.Actors.Update();
                 Core.Update();
                 var keys = AdvDia.StashAndBackpackItems.Where(i => i.RawItemType == RawItemType.TieredRiftKey).Sum(k => k.ItemStackQuantity);
-                Core.Logger.Log("I have {0} rift keys.", keys);
+                Core.Logger.Log("我有 {0} 秘境钥匙.", keys);
                 return keys;
             }
         }
 
         private bool NotStarted()
         {
-            BotMain.SetCurrentStatusTextProvider(() => StatusText);
-
+			ExpStatistics.UpdateStartRiftInfo();
             if (!_experienceTracker.IsStarted) _experienceTracker.Start();
             SafeZerg.Instance.DisableZerg();
 
@@ -320,7 +323,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 }
                 else
                 {
-                    Core.Logger.Error("You have no Greater Rift Keys. Stopping the bot.");
+                    Core.Logger.Error("你没有秘境钥匙,停止辅助.");
                     BotMain.Stop();
                     return true;
                 }
@@ -402,33 +405,33 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             switch (AdvDia.RiftQuest.Step)
             {
                 case RiftStep.Cleared:
-                    Core.Logger.Log("[Rift] I think I should go and brag to Orek about my success.");
+                    Core.Logger.Log("[秘境] 我想我应该给欧雷克 吹吹我的成功事迹.");
                     State = States.MoveToOrek;
                     return false;
 
                 case RiftStep.BossSpawned:
-                    Core.Logger.Log("[Rift] I wonder why am I in town while the boss is spawned in the rift, I'm taking my chances with this portal.");
+                    Core.Logger.Log("[秘境] 我不知道为什么我在城里而秘境中产生了boss.");
                     State = States.MoveToRiftStone;
                     return false;
 
                 case RiftStep.UrshiSpawned:
-                    Core.Logger.Log("[Rift] I wonder why am I in town while Urshi spawned in the rift, I'm taking my chances with this portal.");
+                    Core.Logger.Log("[秘境] 我不知道为什么我在城镇里, 而秘境中乌尔什出现了.");
                     State = States.MoveToRiftStone;
                     return false;
 
                 case RiftStep.KillingMobs:
-                    Core.Logger.Log("[Rift] I wonder why am I in town while there are many mobs to kill in the rift, I'm taking my chances with this portal.");
+                    Core.Logger.Log("[秘境] 我不知道为什么我在城镇的同时有很多小怪在秘境内厮杀.");
                     State = States.MoveToRiftStone;
                     return false;
 
                 case RiftStep.NotStarted:
                     State = States.MoveToRiftStone;
                     _moveToRiftStoneCoroutine.Reset();
-                    Core.Logger.Log("[Rift] Time to kill some scary monsters. Chop chop!");
+                    Core.Logger.Log("[秘境] 需要花点时间来杀死这些吓人的怪物了, 砍~砍!");
                     return false;
 
                 default:
-                    Core.Logger.Log("[Rift] I really don't know what to do now.");
+                    Core.Logger.Log("[秘境] 我真的不知道现在该做什么.");
                     State = States.Failed;
                     return false;
             }
@@ -467,10 +470,10 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 await Coroutine.Wait(TimeSpan.FromSeconds(5), () => !ZetaDia.Me.IsParticipatingInTieredLootRun);
                 if (ZetaDia.Me.IsParticipatingInTieredLootRun)
                 {
-                    Core.Logger.Log("[Rift] Oh well, I seem to think that the rift is still active, that means I'll not be able to clear out my packs properly, sorry in advance.");
+                    Core.Logger.Log("[秘境] 噢,我似乎觉得秘境效果仍然有效,这意味这我无法正常清理我的背包.");
                 }
             }
-
+            ExpStatistics.UpdateEndRiftInfo();
             _experienceTracker.StopAndReport("Rift");
             _experienceTracker.Start();
 
@@ -480,10 +483,10 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         private bool TownRun()
         {
-            Core.Logger.Debug("[TownRun] BrainBehavior.IsVendoring is {0}", BrainBehavior.IsVendoring);
-            Core.Logger.Debug("[TownRun] ZetaDia.Me.IsParticipatingInTieredLootRun is {0}", ZetaDia.Me.IsParticipatingInTieredLootRun);
-            Core.Logger.Debug("[TownRun] AdvDia.RiftQuest.State is {0}", AdvDia.RiftQuest.State);
-            Core.Logger.Debug("[TownRun] AdvDia.RiftQuest.Step is {0}", AdvDia.RiftQuest.Step);
+            Core.Logger.Debug("[城镇] BrainBehavior.IsVendoring is {0}", BrainBehavior.IsVendoring);
+            Core.Logger.Debug("[城镇] ZetaDia.Me.IsParticipatingInTieredLootRun is {0}", ZetaDia.Me.IsParticipatingInTieredLootRun);
+            Core.Logger.Debug("[城镇] AdvDia.RiftQuest.State is {0}", AdvDia.RiftQuest.State);
+            Core.Logger.Debug("[城镇] AdvDia.RiftQuest.Step is {0}", AdvDia.RiftQuest.Step);
             DisablePulse();
             if (BrainBehavior.IsVendoring)
             {
@@ -492,16 +495,24 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             if (!_townRunInitiated)
             {
                 _townRunInitiated = true;
-                BrainBehavior.ForceTownrun(" We need it.", true);
-                return false;
+                if (!Core.Settings.SenExtend.EnableIntelligentFinishing)
+                {
+                    BrainBehavior.ForceTownrun(" We need it.", true);
+                    return false;
+                }
+                else if (Core.Settings.SenExtend.EnableIntelligentFinishing && ZetaDia.Storage?.CurrentRiftType == RiftType.Nephalem)
+                {
+                    BrainBehavior.ForceTownrun(" We need it.", true);
+                    return false;
+                }
             }
 
             _riftCounter++;
-            Core.Logger.Log("Rifts Completed = {0}", _riftCounter);
+            Core.Logger.Log("秘境完成 = {0}", _riftCounter);
 
             if (_options.RiftCount > 0 && _riftCounter >= _options.RiftCount)
             {
-                Core.Logger.Log("[Rift] Rift limit set on profile tag reached. ({0})", _options.RiftCount);
+                Core.Logger.Log("[秘境] 已达到配置文件上设定的密境次数. ({0})", _options.RiftCount);
                 State = States.Completed;
                 return Finished();
             }
@@ -510,7 +521,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             if (AdvDia.RiftQuest.Step == RiftStep.Completed)
             {
                 State = States.WaitForRiftCountdown;
-                Core.Logger.Log("[Rift] Tick tock, tick tock...");
+                Core.Logger.Log("[秘境] 滴答,滴答...");
             }
             else
             {
@@ -561,6 +572,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 State = States.OnNewRiftLevel;
                 return false;
             }
+
             DisablePulse();
             if (!await _interactWithRiftStoneInteractionCoroutine.GetCoroutine()) return false;
             await Coroutine.Wait(2500, () => UIElements.RiftDialog.IsVisible);
@@ -572,17 +584,98 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
             _entranceSceneNames.Clear();
             long empoweredCost = 0;
+            bool shouldEmpower = _options.IsEmpowered;
             bool haveMoneyForEmpower = RiftData.EmpoweredRiftCost.TryGetValue(_level, out empoweredCost) && ZetaDia.Storage.PlayerDataManager.ActivePlayerData.Coinage >= (empoweredCost + PluginSettings.Current.MinimumGold);
             bool canEmpower = (_RiftType == RiftType.Greater && haveMoneyForEmpower);
-
             var settings = PluginSettings.Current;
-            bool shouldEmpower = _options.IsEmpowered && _level <= settings.EmpoweredRiftLevelLimit;
 
             _riftStartTime = DateTime.UtcNow;
-            var maximizeXp = _RiftType == RiftType.Greater && _options.NormalRiftForXPShrine && (ZetaDia.Me.RestExperience < 5000000000 && ZetaDia.Me.RestExperience > -1);
+            const int waittime = 45;
+            const int partysize = 3; // ToDo: Add slider for party size under beta playground checkbox
+
+            //if (TrinityPluginSettings.Settings.Advanced.BetaPlayground)
+            //{
+            //    if (Core.Player.IsInParty &&
+            //        ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Count() < ZetaDia.Service.Party.NumPartyMembers)
+            //    {
+            //        Core.Logger.Log("等待所有人都聚齐.");
+            //        await Coroutine.Wait(TimeSpan.FromMinutes(60),
+            //                () =>
+            //                    ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Count() >=
+            //                    ZetaDia.Service.Party.NumPartyMembers);
+            //    }
+
+            //    if (Core.Player.IsInParty && ZetaDia.Service.Party.NumPartyMembers < partysize)
+            //    {
+            //        Core.Logger.Log("Waiting until we have a party of " + partysize + ".");
+            //        await Coroutine.Wait(TimeSpan.FromMinutes(60),
+            //                () => ZetaDia.Service.Party.NumPartyMembers >= partysize || !ZetaDia.IsInGame);
+            //    }
+
+            //    if (ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Count(u => u.Distance >= 5f) <=
+            //        ZetaDia.Service.Party.NumPartyMembers)
+            //    {
+            //        Core.Logger.Log("Party member(s) father than 5 yards away. Waiting " + waittime +
+            //                    " 开始秘境前几秒. 如果队员聚齐, 开始秘境.");
+            //        await Coroutine.Wait(TimeSpan.FromSeconds(waittime),
+            //                () =>
+            //                    ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Count(u => u.Distance <= 5) >=
+            //                    ZetaDia.Service.Party.NumPartyMembers);
+            //    }
+            //}
+
+            bool _IsFullRestExperience = (bool)Core.Settings.SenExtend.IsFullRestExperience;
+            
+
+            if (_IsFullRestExperience && _options.NormalRiftForXPShrine)
+            {
+                long TotalExperience = ZetaDia.Me.ParagonCurrentExperience + ZetaDia.Me.ParagonExperienceNextLevel;
+                // 池子数量
+                int _restExperienceNum = ZetaDia.Me.RestExperience < 1 ?  0 : (int)Math.Ceiling((float)ZetaDia.Me.RestExperience / (float)TotalExperience * 10);
+                string strRestExperienceNum = string.Format("当前粪池经验 : {0:0,0}", ZetaDia.Me.RestExperience);
+                // 如果没有经验池
+                if (ZetaDia.Me.RestExperience == 0)
+                {
+                    Core.Logger.Warn($"擦~擦~擦~ 没有粪池经验了, {strRestExperienceNum}");
+                    IsRestExperienceFull = false;
+                    
+                } else {                   
+                    // 经验池未满
+                    if (!IsRestExperienceFull) {
+                        // 经验池已满
+                        if (_restExperienceNum >= (int)Core.Settings.SenExtend.RestExperienceNum)
+                        {
+                            Core.Logger.Warn($"嘢~嘢~粪池已满,{strRestExperienceNum}");
+                            IsRestExperienceFull = true;
+                        }
+                        else
+                        {
+                            // 经验池未来满
+                            Core.Logger.Warn($"粪池没吃饱, {strRestExperienceNum}, 已吃了 {_restExperienceNum} 个粪池, 必须吃满 {(int)Core.Settings.SenExtend.RestExperienceNum} 个粪池!");
+                            IsRestExperienceFull = false; 
+                        }
+                    }
+                }
+            }
+
+
+            //var maximizeXp = _RiftType == RiftType.Greater && _options.NormalRiftForXPShrine && (ZetaDia.Me.RestExperience < 5000000000 && ZetaDia.Me.RestExperience > -1);
+            long _miniNormalRiftForXPShrine = Core.Settings.SenExtend.EnableNephalemRestExperienceCheck ? (long)Core.Settings.SenExtend.MiniNormalRiftForXPShrine * 100000000 : 5000000000;
+
+            var maximizeXp = _RiftType == RiftType.Greater && _options.NormalRiftForXPShrine && (ZetaDia.Me.RestExperience < _miniNormalRiftForXPShrine && ZetaDia.Me.RestExperience > -1);
+
+            if (_options.NormalRiftForXPShrine)
+            {
+                if (_IsFullRestExperience)
+                {
+                    // 经验池没满,去小米
+                    maximizeXp = _RiftType == RiftType.Greater && _options.NormalRiftForXPShrine && !IsRestExperienceFull;
+                }
+            }
+
             if (maximizeXp)
             {
-                Core.Logger.Log("Opening Normal Rift for XP Shrine", _RiftType);
+                Core.Logger.Log("开启小秘境寻找经验池", _RiftType);
                 ZetaDia.Me.OpenRift(-1);
             }
             else
@@ -599,25 +692,26 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                     }
                     if (gems.Gems == null)
                     {
-                        Core.Logger.Error("Gems collection in Adventurer settings was not populated properly.");
+                        Core.Logger.Error("Adventurer设置中的宝石收藏未正确填充.");
                         State = States.Failed;
                         return false;
                     }
                     if (gems.Gems != null && gems.Gems.Count < 21)
                     {
-                        Core.Logger.Log("We're getting a new gem on that run, running it at minimum level (GR " + minLevel + ")!");
+                        Core.Logger.Log("我们正在获得一个新的宝石, 在最低级别运行它 (GR " + minLevel + ")!");
                         _level = minLevel;
                     }
                     else
                     {
                         for (_level = minLevel; _level < maxLevel; _level++)
                         {
+                            //Core.Logger.Debug($"Starting Auto-Gem test for level: {_level}");
                             canEmpower = (RiftData.EmpoweredRiftCost.TryGetValue(_level, out empoweredCost) && ZetaDia.Storage.PlayerDataManager.ActivePlayerData.Coinage >= empoweredCost);
                             var upgradeAttempts = (canEmpower && (shouldEmpower || _level <= settings.EmpoweredRiftLevelLimit) ? 4 : 3);
                             var possibleUpgrades = gems.Gems.Sum(g => g.GetUpgrades(_level, upgradeAttempts, 100));
                             if (possibleUpgrades >= upgradeAttempts)
                             {
-                                Core.Logger.Log($"Setting GR level to {_level}, RequiredChance={PluginSettings.Current.GreaterRiftGemUpgradeChance} Upgrades={possibleUpgrades} / {upgradeAttempts}");
+                                Core.Logger.Log($"设置大秘境等级 {_level}, 宝石升级几率={PluginSettings.Current.GreaterRiftGemUpgradeChance} 升级={possibleUpgrades} / {upgradeAttempts}");
                                 break;
                             }
                         }
@@ -625,28 +719,33 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                         // if upgrade chance at max level is 60%, check if we can still downgrade a few levels for the same upgrade chance
                         if (_level == maxLevel && gems.Gems.Max(g => g.GetUpgradeChance(_level)) == 60)
                         {
-                            Core.Logger.Log("Update chance at max level is 60%, checking if we can take a few levels off still!");
+                            Core.Logger.Log("现在最高升级几率是 60%, 如果我们可以采取一些水平仍然!");
                             for (; _level > minLevel; _level--)
                             {
-                                canEmpower = (RiftData.EmpoweredRiftCost.TryGetValue(_level - 1, out empoweredCost) && ZetaDia.Storage.PlayerDataManager.ActivePlayerData.Coinage >= (empoweredCost + PluginSettings.Current.MinimumGold));
-                                var upgradeAttempts = (canEmpower && (shouldEmpower || _level - 1 <= settings.EmpoweredRiftLevelLimit) ? 4 : 3);
+                                var couldEmpower = (RiftData.EmpoweredRiftCost.TryGetValue(_level - 1, out empoweredCost) && ZetaDia.Storage.PlayerDataManager.ActivePlayerData.Coinage >= (empoweredCost + PluginSettings.Current.MinimumGold));
+                                var upgradeAttempts = (couldEmpower && (shouldEmpower || _level - 1 <= settings.EmpoweredRiftLevelLimit) ? 4 : 3);
                                 var possibleUpgrades = gems.Gems.Sum(g => g.GetUpgrades(_level - 1, upgradeAttempts, 60));
 
                                 if (possibleUpgrades < upgradeAttempts)
                                     break;
+                                else
+                                    canEmpower = couldEmpower;
                             }
                         }
                     }
+
+                    if (_level <= settings.EmpoweredRiftLevelLimit)
+                        shouldEmpower = true;
                 }
 
                 if (_RiftType == RiftType.Greater && shouldEmpower && canEmpower && PluginSettings.Current.UseEmpoweredRifts)
                 {
-                    Core.Logger.Log("Opening Empowered Greater Rift (Cost={0})", empoweredCost);
+                    Core.Logger.Log("开启强化秘境 (花费={0})", empoweredCost);
                     ZetaDia.Me.OpenRift(Math.Min(_level, ZetaDia.Me.CommonData.HighestUnlockedRiftLevel), true);
                 }
                 else
                 {
-                    Core.Logger.Log("Opening {0} Rift", _RiftType);
+                    Core.Logger.Log("开启 {0} 秘境", _RiftType);
                     ZetaDia.Me.OpenRift(Math.Min(_level, ZetaDia.Me.CommonData.HighestUnlockedRiftLevel));
                 }
             }
@@ -698,7 +797,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             else
             {
                 var inTown = ZetaDia.IsInTown;
-                Core.Logger.Debug("Expecting to find a portal here but didnt find one. InTown={0}", inTown);
+                Core.Logger.Debug("期待在这里找到一个入口，但没有找到。在城镇中=={0}", inTown);
                 if (inTown)
                     State = States.InTown;
                 else
@@ -721,7 +820,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 }
                 else if (DateTime.UtcNow.Subtract(_lastEnteringGreaterRiftTime.Value).TotalSeconds > 10)
                 {
-                    Core.Logger.Debug("Stuck detected entering portal, maybe interaction coroutine has failed to do its job");
+                    Core.Logger.Debug("在检测到入口，也许未能完成互动过程");
                     _lastEnteringGreaterRiftTime = null;
                     State = States.InTown;
                 }
@@ -760,11 +859,11 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
             if (Randomizer.Random(1, 10) > 5)
             {
-                Core.Logger.Log("[Rift] Let the massacre continue!");
+                Core.Logger.Log("[秘境] 让大屠杀继续!");
             }
             else
             {
-                Core.Logger.Log("[Rift] Crom, Count the Dead!");
+                Core.Logger.Log("[秘境] 死亡统计!");
             }
             return false;
         }
@@ -904,7 +1003,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         private bool TownstoneFound()
         {
-            Core.Logger.Log("[Rift] That's it folks, returning to town.");
+            Core.Logger.Log("[秘境] 就这样，乡亲们，返回到小镇.");
             State = States.ReturningToTown;
             return false;
         }
@@ -930,7 +1029,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                     {
                         _nextLevelPortalZRequirement = _nextLevelPortalZRequirement == 0 ? 15 : Math.Max(5, _nextLevelPortalZRequirement - 5);
                     }
-                    Core.Logger.Debug($"Cannot fully client path to destination, ZDiffReq={_nextLevelPortalZRequirement} CurrentZDiff={zDiff}");
+                    Core.Logger.Debug($"不能完全到达目的地的路径, Z不相同={_nextLevelPortalZRequirement} CurrentZDiff={zDiff}");
                 }
                 _portalScanRange = ActorFinder.LowerSearchRadius(_portalScanRange);
                 if (_portalScanRange <= 100)
@@ -1017,7 +1116,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 return false;
             }
             if (!await ExplorationCoroutine.Explore(new HashSet<int> { AdvDia.CurrentLevelAreaId })) return false;
-            Core.Logger.Log("[Rift] The Boss must be scared, but we will find him!");
+            Core.Logger.Log("[秘境] Boss一定是害怕躲起来了.但是我们会找到它的!");
             Core.Scenes.Reset();
             return false;
         }
@@ -1046,7 +1145,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             _bossLocation = Vector3.Zero;
             if (AdvDia.RiftQuest.Step != RiftStep.Cleared)
             {
-                Core.Logger.Log("[Rift] You will suffer and die, ugly creature!");
+                Core.Logger.Log("[秘境] 你将受苦并死去,丑陋的怪物!");
                 State = States.KillingBoss;
             }
             return false;
@@ -1078,7 +1177,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 return false;
             }
             if (!await ExplorationCoroutine.Explore(new HashSet<int> { AdvDia.CurrentLevelAreaId })) return false;
-            Core.Logger.Log("[Rift] Where are you, my dear Urshi!");
+            Core.Logger.Log("[秘境] 我亲爱的乌尔什你在那里!");
             Core.Scenes.Reset();
             return false;
         }
@@ -1121,7 +1220,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         {
             if (RiftData.VendorDialog.IsVisible && RiftData.ContinueButton.IsVisible && RiftData.ContinueButton.IsEnabled)
             {
-                Core.Logger.Debug("[Rift] Clicking to Continue button.");
+                Core.Logger.Debug("[秘境] 单击继续按钮.");
                 RiftData.ContinueButton.Click();
                 RiftData.VendorCloseButton.Click();
                 await Coroutine.Sleep(250);
@@ -1131,22 +1230,22 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             var gemToUpgrade = PluginSettings.Current.Gems.GetUpgradeTarget();
             if (gemToUpgrade == null)
             {
-                Core.Logger.Log("[Rift] I couldn't find any gems to upgrade, failing.");
+                Core.Logger.Log("[秘境] 我没有发现任务可升级的宝石.失败.");
                 State = States.Failed;
                 return false;
             }
             _enableGemUpgradeLogs = false;
             if (AdvDia.RiftQuest.Step == RiftStep.Cleared)
             {
-                Core.Logger.Debug("[Rift] Rift Quest is completed, returning to town");
+                Core.Logger.Debug("[秘境] 秘境完成，返回城镇");
                 State = States.Completed;
                 return false;
             }
 
-            Core.Logger.Debug("[Rift] Gem upgrades left before the attempt: {0}", ZetaDia.Me.JewelUpgradesLeft);
+            Core.Logger.Debug("[秘境] 尝试升级宝石: {0}", ZetaDia.Me.JewelUpgradesLeft);
             if (!await CommonCoroutines.AttemptUpgradeGem(gemToUpgrade))
             {
-                Core.Logger.Debug("[Rift] Gem upgrades left after the attempt: {0}", ZetaDia.Me.JewelUpgradesLeft);
+                Core.Logger.Debug("[秘境] 尝试升级宝石: {0}", ZetaDia.Me.JewelUpgradesLeft);
                 return false;
             }
             var gemUpgradesLeft = ZetaDia.Me.JewelUpgradesLeft;
@@ -1157,7 +1256,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
             if (AdvDia.RiftQuest.State == QuestState.Completed && AdvDia.RiftQuest.Step != RiftStep.UrshiSpawned)//gemUpgradesLeft == 0)
             {
-                Core.Logger.Debug("[Rift] Finished all upgrades, returning to town.");
+                Core.Logger.Debug("[秘境] 升级完成, 返回城镇.");
                 State = States.Completed;
                 return false;
             }
@@ -1176,17 +1275,17 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         //        gems.Gems.Where(g => g.UpgradeChance >= minChance && !g.IsMaxRank).ToList();
         //    if (upgradeableGems.Count == 0)
         //    {
-        //        if (enableLog) Core.Logger.Log("[Rift] Couldn't find any gems which is over the minimum upgrade change, upgrading the gem with highest upgrade chance");
+        //        if (enableLog) Core.Logger.Log("[秘境] 找不到达到最小成功几率内的宝石,升级具有最高成功率的宝石");
         //        upgradeableGems = gems.Gems.Where(g => !g.IsMaxRank).OrderByDescending(g => g.UpgradeChance).ToList();
         //    }
         //    if (upgradeableGems.Count == 0)
         //    {
-        //        if (enableLog) Core.Logger.Log("[Rift] Looks like you have no legendary gems, failing.");
+        //        if (enableLog) Core.Logger.Log("[秘境] 看起来你有没有传奇宝石,失败.");
         //        State = States.Failed;
         //        return null;
         //    }
         //    var gemToUpgrade = upgradeableGems.First();
-        //    if (enableLog) Core.Logger.Log("[Rift] Attempting to upgrade {0}", gemToUpgrade.DisplayName);
+        //    if (enableLog) Core.Logger.Log("[秘境] 尝试升级 {0}", gemToUpgrade.DisplayName);
         //    var acdGem =
         //        ZetaDia.Actors.GetActorsOfType<ACDItem>()
         //            .FirstOrDefault(
@@ -1201,12 +1300,12 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             EnablePulse();
             if (_holyCowLocation != Vector3.Zero)
             {
-                Core.Logger.Log("[Rift] Mooooo!");
+                Core.Logger.Log("[秘境] 哞~~~~!");
                 State = States.MovingToHolyCow;
                 return false;
             }
             if (!await ExplorationCoroutine.Explore(new HashSet<int> { AdvDia.CurrentLevelAreaId })) return false;
-            Core.Logger.Log("[Rift] I am no butcher, where is this cow?");
+            Core.Logger.Log("[秘境] 我不是屠夫,这是哪里的牛?");
             Core.Scenes.Reset();
             return false;
         }
@@ -1216,7 +1315,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             EnablePulse();
             if (!await NavigationCoroutine.MoveTo(_holyCowLocation, 5)) return false;
             _holyCowLocation = Vector3.Zero;
-            Core.Logger.Log("[Rift] Mooooo?");
+            Core.Logger.Log("[秘境] 哞~~~~?");
             State = States.InteractingWithHolyCow;
             return false;
         }
@@ -1226,28 +1325,25 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             EnablePulse();
             if (!await _talkToHolyCowCoroutine.GetCoroutine()) return false;
             _talkToHolyCowCoroutine.Reset();
-            Core.Logger.Log("[Rift] Mooo moooo....");
+            Core.Logger.Log("[秘境] 哞~哞~~");
             State = States.SearchingForExitPortal;
             return false;
         }
 
         private bool Completed()
         {
-            BotMain.SetCurrentStatusTextProvider(null);
             State = States.ReturningToTown;
             return false;
         }
 
         private bool Failed()
         {
-            BotMain.SetCurrentStatusTextProvider(null);
-            Core.Logger.Error("[Rift] Failed to complete the rift.");
+            Core.Logger.Error("[秘境] 无法完成秘境.");
             return true;
         }
 
         private bool Finished()
         {
-            BotMain.SetCurrentStatusTextProvider(null);
             return true;
         }
 
@@ -1304,7 +1400,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 var entranceScene = FindEntranceScene();
                 if (entranceScene != null && !_entranceSceneNames.Contains(entranceScene.HashName))
                 {
-                    Core.Logger.Warn($"Found the marker entrance scene '{entranceScene.Name}' ({entranceScene.SnoId}) {entranceScene.Center.Distance(Core.Player.Position.ToVector2())} yards away!");
+                    Core.Logger.Warn($"找到入口 '{entranceScene.Name}' ({entranceScene.SnoId}) 距离: {entranceScene.Center.Distance(Core.Player.Position.ToVector2())} 码!");
 
                     _currentEntranceScene = entranceScene;
                     _entranceSceneNames.Add(entranceScene.HashName);
@@ -1326,7 +1422,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                     _currentExitScene = markerExitScene;
                     var exitSceneConnection = markerExitScene.ExitPositions.FirstOrDefault();
                     ExplorationHelpers.SetExplorationPriority(exitSceneConnection.Value);
-                    Core.Logger.Warn($"Found the marker exit '{markerExitScene.Name}' ({markerExitScene.SnoId}) {exitSceneConnection.Value.Distance(Core.Player.Position)} yards away!");
+                    Core.Logger.Warn($"找到出口-1 '{markerExitScene.Name}' ({markerExitScene.SnoId}) 距离: {exitSceneConnection.Value.Distance(Core.Player.Position)} 码!");
                 }
                 return;
             }
@@ -1341,9 +1437,19 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 _currentExitScene = exitScene;                
                 var exitSceneConnection = exitScene.ExitPositions.FirstOrDefault();
                 ExplorationHelpers.SetExplorationPriority(exitSceneConnection.Value);
-                Core.Logger.Warn($"Found the exit '{exitScene.Name}' ({exitScene.SnoId}) {exitSceneConnection.Value.Distance(Core.Player.Position)} yards away!");
+                Core.Logger.Warn($"找到出口-2 '{exitScene.Name}' ({exitScene.SnoId}) 距离: {exitSceneConnection.Value.Distance(Core.Player.Position)} 码! CanRayWalk: {Core.Grids.Avoidance.CanRayWalk(Core.Player.Position, exitSceneConnection.Value, 5f)} CanRayCast: {Core.Grids.Avoidance.CanRayCast(Core.Player.Position, exitSceneConnection.Value)}");
+
+
+                //if (exitSceneConnection.Value.Distance(Core.Player.Position) <= _portalScanRange)
+                //{
+                //    ExplorationHelpers.SetExplorationPriority(exitSceneConnection.Value);
+                //    Core.Logger.Warn($"找到出口-2 '{exitScene.Name}' ({exitScene.SnoId}) 距离: {exitSceneConnection.Value.Distance(Core.Player.Position)} 码!");
+                //}
+
             }
         }
+
+
 
         private void PulseChecks()
         {
@@ -1360,7 +1466,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 if (!EnteringRiftStates.Contains(State))
                 {
                     Core.Logger.Log(
-                        "[Rift] Oh darn, I managed to return to town, I better go back in the rift before anyone notices.");
+                        "[秘境] Oh,该死.我要回城,我最好在别人没有注意到我之前回去.");
                     State = States.MoveToRiftStone;
                     return;
                 }
@@ -1384,7 +1490,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 case RiftStep.BossSpawned:
                     if (!BossSpawnedStates.Contains(State))
                     {
-                        Core.Logger.Log("[Rift] Behold the Rift Boss!");
+                        Core.Logger.Log("[秘境] 看!秘境Boss!");
                         State = States.BossSpawned;
                     }
                     break;
@@ -1396,14 +1502,14 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                         var totalTime = _riftEndTime - _riftStartTime;
                         if (totalTime.TotalSeconds < 3600 && totalTime.TotalSeconds > 0)
                         {
-                            Core.Logger.Log("[Rift] All done. (Total Time: {0} mins {1} seconds)", totalTime.Minutes, totalTime.Seconds);
-                            Core.Logger.Log("[Rift] Level: {0}", ZetaDia.Me.InTieredLootRunLevel + 1);
+                            Core.Logger.Log("[秘境] 全部完成. (总时间: {0} 分 {1} 秒)", totalTime.Minutes, totalTime.Seconds);
+                            Core.Logger.Log("[秘境] 等级: {0}", ZetaDia.Me.InTieredLootRunLevel + 1);
                         }
                         else
                         {
-                            Core.Logger.Log("[Rift] All done. (Partial rift, no stats available)");
+                            Core.Logger.Log("[秘境] 全部完成.(部分秘境没有统计数据)");
                         }
-                        Core.Logger.Log("[Rift] My dear Urshi, I have some gems for you.");
+                        Core.Logger.Log("[秘境] 我亲爱的乌尔什.我有很多宝石给你.");
                         State = States.UrshiSpawned;
                     }
                     break;
@@ -1419,11 +1525,11 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                         var totalTime = _riftEndTime - _riftStartTime;
                         if (totalTime.TotalSeconds < 3600 && totalTime.TotalSeconds > 0)
                         {
-                            Core.Logger.Log("[Rift] All done. (Total Time: {0} mins {1} seconds)", totalTime.Minutes, totalTime.Seconds);
+                            Core.Logger.Log("[秘境] 全部完成. (总时间: {0} 分 {1} 秒)", totalTime.Minutes, totalTime.Seconds);
                         }
                         else
                         {
-                            Core.Logger.Log("[Rift] All done. (Partial rift, no stats available)");
+                            Core.Logger.Log("[秘境] 全部完成.(部分秘境没有统计数据)");
                         }
                         State = States.ReturningToTown;
                     }
@@ -1442,9 +1548,9 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
             if (_urshiLocation != Vector3.Zero)
             {
-                Core.Logger.Log("[Rift] Urshi is near.");
+                Core.Logger.Log("[秘境] 乌尔什在附近.");
                 State = States.MovingToUrshi;
-                Core.Logger.Debug("[Rift] Found Urshi at distance {0}", AdvDia.MyPosition.Distance(_urshiLocation));
+                Core.Logger.Debug("[秘境] 找到乌尔什, 距离: {0}", AdvDia.MyPosition.Distance(_urshiLocation));
             }
         }
 
@@ -1474,9 +1580,9 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
             if (_bossLocation != Vector3.Zero)
             {
-                Core.Logger.Log("[Rift] The Boss is near.");
+                Core.Logger.Log("[秘境] Boss在附近.");
                 State = States.MovingToBoss;
-                Core.Logger.Debug("[Rift] Found the boss at distance {0}", AdvDia.MyPosition.Distance(_bossLocation));
+                Core.Logger.Debug("[秘境] 找到Boss, 距离 : {0}", AdvDia.MyPosition.Distance(_bossLocation));
             }
         }
 
@@ -1527,8 +1633,8 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
             if (_nextLevelPortalLocation != Vector3.Zero && !EntranceScenes.Any(s => s.IsInScene(_nextLevelPortalLocation)))
             {
-                Core.Logger.Log("[Rift] Oh look! There is a portal over there, let's see what's on the other side.");
-                Core.Logger.Debug("[Rift] Found the objective at distance {0}",
+                Core.Logger.Log("[秘境] 哦,看!有一个入口在那边,让我们来看看另一边有什么.");
+                Core.Logger.Debug("[秘境] 在远处找到目标, 距离 : {0}",
                     AdvDia.MyPosition.Distance(_nextLevelPortalLocation));
             }
         }
@@ -1567,7 +1673,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         {
             if (!_isPulsing)
             {
-                Core.Logger.Debug("[Rift] Registered to pulsator.");
+                Core.Logger.Debug("[秘境] 注册Pulsator.");
                 Pulsator.OnPulse += OnPulse;
                 _isPulsing = true;
             }
@@ -1577,7 +1683,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         {
             if (_isPulsing)
             {
-                Core.Logger.Debug("[Rift] Unregistered from pulsator.");
+                Core.Logger.Debug("[秘境] 注销Pulsator.");
                 Pulsator.OnPulse -= OnPulse;
                 _isPulsing = false;
             }

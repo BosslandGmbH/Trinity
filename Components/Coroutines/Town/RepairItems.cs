@@ -9,6 +9,7 @@ using Zeta.Bot.Navigation;
 using Zeta.Bot.Settings;
 using Zeta.Game;
 using Zeta.Game.Internals;
+using Trinity.Components.Combat;
 
 namespace Trinity.Components.Coroutines.Town
 {
@@ -18,7 +19,7 @@ namespace Trinity.Components.Coroutines.Town
         {
             if (!ZetaDia.IsInTown)
             {
-                Core.Logger.Verbose("[RepairItems] Need to be in town to Repair items");
+                Core.Logger.Verbose("[修理装备] 需要在城里修理装备");
                 return false;
             }
 
@@ -31,7 +32,7 @@ namespace Trinity.Components.Coroutines.Town
             {
                 if (coinage < InventoryManager.GetRepairCost(false))
                 {
-                    Core.Logger.Verbose("[RepairItems] Can't afford to repair");
+                    Core.Logger.Verbose("[修理装备] 不能修理");
                     return false;
                 }
             }
@@ -39,7 +40,7 @@ namespace Trinity.Components.Coroutines.Town
             if (UIElements.VendorWindow.IsVisible)
             {
                 await Coroutine.Sleep(1000);
-                Core.Logger.Verbose("[RepairItems] Repairing equipment while at this vendor");
+                Core.Logger.Verbose("[修理装备] 在这个NPC修理装备");
                 Repair(shouldRepairAll);
                 return true;
             }
@@ -50,13 +51,13 @@ namespace Trinity.Components.Coroutines.Town
 
             if (repairActor == null)
             {
-                Core.Logger.Error("[RepairItems] Failed to find somewhere to repair :(");
+                Core.Logger.Error("[修理装备] 找不到地方修理 :(");
                 return false;
             };
 
             if (!await MoveToAndInteract.Execute(repairActor))
             {
-                Core.Logger.Error($"[RepairItems] Failed to move to Vendor {repairActor.Name} for repair :( ");
+                Core.Logger.Error($"[修理装备] 无法移动到NPC{repairActor.Name} 进行修复 :( ");
                 return false;
             };
 
@@ -69,7 +70,7 @@ namespace Trinity.Components.Coroutines.Town
             if (GameUI.IsBlackSmithWindowOpen || UIElements.VendorWindow.IsVisible)
             {
                 await Coroutine.Sleep(1500);
-                Core.Logger.Verbose($"[RepairItems] Repairing Equipment at {repairActor.Name} :)");
+                Core.Logger.Verbose($"[修理装备] 	在 {repairActor.Name} 修理装备:)");
                 Repair(shouldRepairAll);
                 return true;
             }
@@ -80,12 +81,12 @@ namespace Trinity.Components.Coroutines.Town
             if (GameUI.IsBlackSmithWindowOpen || UIElements.VendorWindow.IsVisible)
             {
                 await Coroutine.Sleep(1000);
-                Core.Logger.Verbose($"[RepairItems] Repairing Equipment at {repairActor.Name} :) (Attempt Two)");
+                Core.Logger.Verbose($"[修理装备] 在 {repairActor.Name}修理装备 :) (尝试两个)");
                 Repair(shouldRepairAll);
                 return true;
             }
 
-            Core.Logger.Error($"[RepairItems] Failed to repair at {repairActor.Name} :(");
+            Core.Logger.Error($"[修理装备] 在 {repairActor.Name}无法修复 :(");
             return false;
         }
 
@@ -112,11 +113,27 @@ namespace Trinity.Components.Coroutines.Town
             // Fix for Campaign quest start of ACT1
             if (ZetaDia.CurrentQuest.QuestSnoId == 87700)
                 return false;
-
+			
+			// 最高耐久
             var currentHighestDurItem = equippedItems.Max(i => i.DurabilityPercent);
-            if (ZetaDia.IsInTown && currentHighestDurItem < 95 && !Core.Player.ParticipatingInTieredLootRun)
+			// 最低耐久
+            var currentLowestDurItem = equippedItems.Min(i => i.DurabilityPercent);
+			// 低于一半
+            var LowThanHalf = equippedItems.Where(i => i.DurabilityPercent < 60).ToList().Count >= equippedItems.Count / 2;
+            // 智能包裹整理
+            bool cantoTwnrun = ZetaDia.Service.Party.NumPartyMembers > 1 && !ZetaDia.Service.Party.IsPartyLeader
+                ? !Core.Player.ParticipatingInTieredLootRun
+                : !Core.Player.ParticipatingInTieredLootRun || DefaultLootProvider.CanVedonInRift;
+
+            bool NeedsRepairInTown = !Core.Settings.SenExtend.EnableIntelligentFinishing
+                ? ZetaDia.IsInTown && currentHighestDurItem < 95 && cantoTwnrun
+                : ZetaDia.IsInTown && (LowThanHalf || currentLowestDurItem < 30) && cantoTwnrun;
+            //Core.Logger.Log($"条件1 = 1 = {ZetaDia.IsInTown},2= {currentHighestDurItem < 98},3= {!Core.Player.ParticipatingInTieredLootRun},4 = {ZetaDia.Me.CommonData.ParticipatingInTieredLootRun} 5 ={ZetaDia.Me.IsParticipatingInTieredLootRun}");
+            //Core.Logger.Log($"条件2 = 1 = {ZetaDia.IsInTown},2 = {(LowThanHalf || currentLowestDurItem < 30)},3 = { !Core.Player.ParticipatingInTieredLootRun}");
+            //Core.Logger.Log($"NeedsRepairInTown = {NeedsRepairInTown},currentHighestDurItem = {currentHighestDurItem},currentLowestDurItem={currentLowestDurItem},LowThanHalf={LowThanHalf}");
+            if (NeedsRepairInTown)
             {
-                Core.Logger.Log($"Equipment Needs Repair! CurrentMaxDurabillity={currentHighestDurItem} InTownRepairLimit={95}");
+                Core.Logger.Log($"装备需要紧急维修! 当前耐久度={currentHighestDurItem} 修理限度={95}");
                 return true;
             }
 
@@ -124,7 +141,7 @@ namespace Trinity.Components.Coroutines.Town
 
             if (currentHighestDurItem <= limit)
             {
-                Core.Logger.Log($"Equipment Needs Emergency Repair! CurrentMaxDurabillity={currentHighestDurItem} RepairLimit={limit}");
+                Core.Logger.Log($"装备需要紧急维修! 当前耐久度={currentHighestDurItem} 修理限度={limit}");
                 return true;
             }
 

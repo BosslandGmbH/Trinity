@@ -69,7 +69,7 @@
                         <Path HorizontalAlignment="Left" Style="{DynamicResource GrabHandlePath}" Margin="0,0,3,0" />
                     </Border>
                     <WrapPanel HorizontalAlignment="Left">
-                    <CheckBox IsChecked="{Binding IsEnabled}" HorizontalAlignment="Left" Background="Transparent" Margin="14,0,0,0" Padding="0" ToolTip="Check box to turn on upgrading this type of gem">
+                    <CheckBox IsChecked="{Binding IsEnabled}" HorizontalAlignment="Left" Background="Transparent" Margin="14,0,0,0" Padding="0" ToolTip="启用复选框以启用此类型的宝石升级">
                         <WrapPanel>
                             <Image DockPanel.Dock="Left" VerticalAlignment="Top" Style="{StaticResource SmallIconStyle}" Margin="2,5,0,0" HorizontalAlignment="Left"
                             Source="{Binding Item.IconUrl, Mode=OneWay, Converter={StaticResource UrlToCachedImageConverter}, IsAsync=true}" />
@@ -103,8 +103,8 @@
                                         <TextBlock VerticalAlignment="Center" Margin="0,0,5,0">
                                             <TextBlock.ToolTip>
                                                 <TextBlock>
-                                                    <Run Text="{Binding CurrentRiftLevel, Mode=OneWay, StringFormat='Rift: \{0\} '}" />
-                                                    <Run Text="{Binding UpgradeChance, Mode=OneWay, StringFormat='Upgrade Chance: \{0\}'}" />
+                                                    <Run Text="{Binding CurrentRiftLevel, Mode=OneWay, StringFormat='秘境等级: \{0\} '}" />
+                                                    <Run Text="{Binding UpgradeChance, Mode=OneWay, StringFormat='升级几率: \{0\}'}" />
                                                 </TextBlock>
                                             </TextBlock.ToolTip>
                                             <Run Foreground="Green" Text="{Binding Rank}" />
@@ -118,7 +118,7 @@
 
                     <Slider Background="Transparent" Grid.Column="0" Template="{DynamicResource SliderEditable}"
                             Visibility="{Binding IsLimited, Converter={StaticResource VisibleWhenTrueConverter}}"
-                            Margin="0,0,35,0" ToolTip="The rank to stop upgrading this gem type at" Width="125"
+                            Margin="0,0,35,0" ToolTip="设置停止升级此类型宝石的等级" Width="125"
                             Interval="500" Maximum="{Binding MaxRank}" Minimum="1"
                             SmallChange="1" LargeChange="5"
                             TickPlacement="None" IsMoveToPointEnabled="True"
@@ -127,7 +127,7 @@
 
                         <CheckBox Grid.Column="1" IsChecked="{Binding IsLimited}"  HorizontalAlignment="Right" Margin="0,0,0,0"
                             Visibility="{Binding IsEnabled, Converter={StaticResource VisibleWhenTrueConverter}}"
-                            ToolTip="Check box to set a rank limit on this gem type"
+                            ToolTip="启用复选框来设置该类型宝石的等级限制"
                             VerticalAlignment="Center" VerticalContentAlignment="Center">
                         </CheckBox>
                     </Grid>
@@ -138,7 +138,7 @@
                                 <DataTemplate>
                                     <Border Padding="6" HorizontalAlignment="Left">
                                         <TextBlock>
-                                            <Run Text="Rank" />
+                                            <Run Text="等级" />
                                             <Run Text="{Binding Rank, Mode=OneWay}" />
                                             <Run Text="-" />
                                             <Run Text="{Binding UpgradeChance, Mode=OneWay}" />
@@ -162,7 +162,7 @@
         <StackPanel>
             <StackPanel Grid.Row="0" Grid.Column="0">
 
-            <GroupBox Header="Bounties" Margin="2 10 10 0">
+            <GroupBox Header="悬赏任务" Margin="2 10 10 0">
                 <Grid Background="Transparent" Margin="0 0 0 2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
@@ -170,93 +170,100 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
                         <!--<CheckBox Name="BountyPrioritizeBonusAct" IsChecked="{Binding BountyPrioritizeBonusAct}" Content="Prioritize Bonus Act" Margin="2" ToolTip="Runs the act with bonus reward first if the act is enabled to maximize the profit."></CheckBox>-->
-                        <TextBlock  Margin="2 4 2 2" Text="Act Selection Mode"></TextBlock>
-                        <!--<RadioButton Name="BountyMode0" GroupName="BountyMode" IsChecked="{Binding BountyMode0}" Margin="2" ToolTip="Restarts the game if the bonus act contains any unsupported bounties">Force Bonus Act Mode</RadioButton>
-                        <RadioButton Name="BountyMode1" GroupName="BountyMode" IsChecked="{Binding BountyMode1}" Margin="2" ToolTip="Skips the Bonus Act if it contains any unsupported bounties">Skip Mode</RadioButton>-->
-                        <RadioButton Name="BountyMode2" GroupName="BountyMode" IsChecked="{Binding BountyMode2}" Margin="2" ToolTip="Attempts to balance mats (Ignores the bonus act if necessary)">Balance Mats Mode</RadioButton>
-                        <RadioButton Name="BountyMode3" GroupName="BountyMode" IsChecked="{Binding BountyMode3}" Margin="2" ToolTip="Runs only selected acts and ignores the bonus act if it's not selected">Act Selection Mode</RadioButton>
-                        <CheckBox Name="BountyZerg" IsChecked="{Binding BountyZerg}" Content="Enable Zerg Mode" ToolTip="Tries to avoid killing unnecessary monsters to speed up the cache farm." Margin="2 10 2 2"></CheckBox>
+                        <TextBlock  Margin="2 4 2 2" Text="悬赏任务模式"></TextBlock>
+                        <!--<RadioButton Name="BountyMode0" GroupName="BountyMode" IsChecked="{Binding BountyMode0}" Margin="2" ToolTip="Restarts the game if the bonus act contains any unsupported bounties">强退重开模式(一旦碰到黑名单任务)</RadioButton>
+                        <RadioButton Name="BountyMode1" GroupName="BountyMode" IsChecked="{Binding BountyMode1}" Margin="2" ToolTip="Skips the Bonus Act if it contains any unsupported bounties">自动跳章模式(一旦碰到黑名单任务)</RadioButton>-->
+                        <RadioButton Name="BountyMode2" GroupName="BountyMode" IsChecked="{Binding BountyMode2}" Margin="2" ToolTip="Attempts to balance mats (Ignores the bonus act if necessary)">平衡萃取材料模式</RadioButton>
+                        <RadioButton Name="BountyMode3" GroupName="BountyMode" IsChecked="{Binding BountyMode3}" Margin="2" ToolTip="Runs only selected acts and ignores the bonus act if it's not selected">自选章节模式</RadioButton>
+                        <CheckBox Name="BountyZerg" IsChecked="{Binding BountyZerg}" Content="不清怪模式(会被动战斗)" ToolTip="Tries to avoid killing unnecessary monsters to speed up the cache farm." Margin="2 10 2 2"></CheckBox>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Visibility="{Binding BountyMode3, Converter={StaticResource VisibleWhenTrueConverter}}">
-                        <CheckBox Name="BountyAct1" IsChecked="{Binding BountyAct1}" IsEnabled="{Binding BountyMode3}" Content="Act 1" Margin="2 4 2 2"></CheckBox>
-                        <CheckBox Name="BountyAct2" IsChecked="{Binding BountyAct2}" IsEnabled="{Binding BountyMode3}" Content="Act 2" Margin="2"></CheckBox>
-                        <CheckBox Name="BountyAct3" IsChecked="{Binding BountyAct3}" IsEnabled="{Binding BountyMode3}" Content="Act 3" Margin="2"></CheckBox>
-                        <CheckBox Name="BountyAct4" IsChecked="{Binding BountyAct4}" IsEnabled="{Binding BountyMode3}" Content="Act 4" Margin="2"></CheckBox>
-                        <CheckBox Name="BountyAct5" IsChecked="{Binding BountyAct5}" IsEnabled="{Binding BountyMode3}" Content="Act 5" Margin="2"></CheckBox>
+                        <CheckBox Name="BountyAct1" IsChecked="{Binding BountyAct1}" IsEnabled="{Binding BountyMode3}" Content="第一幕" Margin="2 4 2 2"></CheckBox>
+                        <CheckBox Name="BountyAct2" IsChecked="{Binding BountyAct2}" IsEnabled="{Binding BountyMode3}" Content="第二幕" Margin="2"></CheckBox>
+                        <CheckBox Name="BountyAct3" IsChecked="{Binding BountyAct3}" IsEnabled="{Binding BountyMode3}" Content="第三幕" Margin="2"></CheckBox>
+                        <CheckBox Name="BountyAct4" IsChecked="{Binding BountyAct4}" IsEnabled="{Binding BountyMode3}" Content="第四幕" Margin="2"></CheckBox>
+                        <CheckBox Name="BountyAct5" IsChecked="{Binding BountyAct5}" IsEnabled="{Binding BountyMode3}" Content="第五幕" Margin="2"></CheckBox>
                     </StackPanel>
 
                 </Grid>
             </GroupBox>
 
-            <GroupBox Header="Greater Rift" Margin="2 10 10 0">
+            <GroupBox Header="大秘境设置" Margin="2 10 10 0">
                 <StackPanel>
                         <Grid Margin="2" Background="Transparent">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition></ColumnDefinition>
                                 <ColumnDefinition Width="70"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="Greater Rift Level" Margin="4 4 0 0"></TextBlock>
-                            <ComboBox Grid.Column="1" SelectedValue="{Binding GreaterRiftLevelRaw}" Name="GreaterRiftLevel" ItemsSource="{Binding GreaterRiftLevels}" HorizontalContentAlignment="Right" />
+                            <TextBlock Grid.Column="0" Text="大秘境层数" Margin="4 4 0 0"></TextBlock>
+                            <ComboBox Grid.Column="1" SelectedValue="{Binding GreaterRiftLevelRaw}" Name="GreaterRiftLevel" ItemsSource="{Binding GreaterRiftLevels}" HorizontalContentAlignment="Right"/>
                         </Grid>
-                    <Border Height="1" Background="DarkSlateGray" />
-                    <CheckBox Name="GreaterRiftRunNephalem" IsChecked="{Binding GreaterRiftRunNephalem}" Content="Run Nephalem Rifts If No Keys Found" Margin="2"></CheckBox>
-                    <Border Height="1" Background="DarkSlateGray" />
+                    <Border Height="1" Background="DarkSlateGray"/>
+                    <CheckBox Name="GreaterRiftRunNephalem" IsChecked="{Binding GreaterRiftRunNephalem}" Content="如果没有钥匙,先去小秘境" Margin="2"></CheckBox>
+                    <Border Height="1" Background="DarkSlateGray"/>
 
-                    <!--<Border Height="1" Background="DarkSlateGray" />-->
+                    <!--<Border Height="1" Background="DarkSlateGray"/>-->
                     <UniformGrid Rows="1">
-                            <CheckBox VerticalAlignment="Center" Name="UseEmpoweredRifts" IsChecked="{Binding UseEmpoweredRifts}" Content="Empower Rift" Margin="2" ToolTip="Sinks a lot of money to give you a 4th gem upgrade opportunity"></CheckBox>
+                            <CheckBox VerticalAlignment="Center" Name="UseEmpoweredRifts" IsChecked="{Binding UseEmpoweredRifts}" Content="强化秘境" Margin="2" ToolTip="Sinks a lot of money to give you a 4th gem upgrade opportunity"></CheckBox>
                             <WrapPanel HorizontalAlignment="Right" ToolTip="Max rift level for empowering rifts" Visibility="{Binding UseEmpoweredRifts, Converter={StaticResource VisibleWhenTrueConverter}}">
-                                <Label>Up To Level:</Label>
-                                <TextBox HorizontalAlignment="Right" Name="EmpowerMaxLevel" Width="50" Text="{Binding EmpoweredRiftLevelLimit, Converter={StaticResource IntToStringConverter}}" />
+                                <Label>该大米层数以上不强化:</Label>
+                                <TextBox HorizontalAlignment="Right" Name="EmpowerMaxLevel" Width="50" Text="{Binding EmpoweredRiftLevelLimit, Converter={StaticResource IntToStringConverter}}"/>
                             </WrapPanel>
                         </UniformGrid>
                         <Border Height="1" Background="DarkSlateGray" />
                         <UniformGrid Rows="1">
-                            <CheckBox VerticalAlignment="Center" Name="UseGemAutoLevel" IsChecked="{Binding UseGemAutoLevel}" Content="Automatically Reduce Rift Level" Margin="2" ToolTip="reduce rift level down to the minimum for 100% upgrade chance."></CheckBox>
+                            <CheckBox VerticalAlignment="Center" Name="UseGemAutoLevel" IsChecked="{Binding UseGemAutoLevel}" Content="升级宝石模式 停留看详情" Margin="2" ToolTip="为100%升级宝石，设置大米层数自动降低"></CheckBox>
                             <WrapPanel HorizontalAlignment="Right" ToolTip="Max level reduction allowed (on top of the -10 required for 100% upgrade chance" Visibility="{Binding UseGemAutoLevel, Converter={StaticResource VisibleWhenTrueConverter}}">
-                                <Label>Max Reduction:</Label>
-                                <TextBox HorizontalAlignment="Right" Name="MaxLevelReduction" Width="50" Text="{Binding GemAutoLevelReductionLimit, Converter={StaticResource IntToStringConverter}}" />
+                                <Label>最多减少层数:</Label>
+                                <TextBox HorizontalAlignment="Right" Name="MaxLevelReduction" Width="50" Text="{Binding GemAutoLevelReductionLimit, Converter={StaticResource IntToStringConverter}}"/>
                             </WrapPanel>
                         </UniformGrid>
-                    <Border Height="1" Background="DarkSlateGray" />
-                    <CheckBox Name="GetXPShrine" IsChecked="{Binding NormalRiftForXPShrine}" Content="Run normal rift until XP Shrine found" Margin="2" ToolTip="Whenever bonus XP is not found, bot will run normal rifts to fine an XP shrine"></CheckBox>
+                    <Border Height="1" Background="DarkSlateGray"/>
+                    <Grid Margin="2" Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="50"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Grid.Column="0" Name="GetXPShrine" IsChecked="{Binding NormalRiftForXPShrine}" Content="经验池低于设定自动小米，1500巅峰以下不建议勾选。单位：亿" Margin="2" ToolTip="无经验池或不足，先去小米寻找经验池"></CheckBox>
+                    </Grid>
+                    <Border Height="1" Background="DarkSlateGray"/>
                     <UniformGrid Columns="2">
-                        <Label ToolTip="Ensure that greater rifts are not opened when keys are below this amount">Minimum Keys:</Label>
-                        <TextBox  ToolTip="Ensure that greater rifts are not opened when keys are below this amount" HorizontalAlignment="Right" Width="50" Text="{Binding MinimumKeys}" />
-                        <Label ToolTip="Ensure that empowered rifts are not used when gold is below this amount">Minimum Gold</Label>
-                        <TextBox  ToolTip="Ensure that empowered rifts are not used when gold is below this amount" HorizontalAlignment="Right" Width="50" Text="{Binding MinimumGold}" />
+                        <Label ToolTip="Ensure that greater rifts are not opened when keys are below this amount">钥匙低于这个数值时，先去小秘境:</Label>
+                        <TextBox  ToolTip="Ensure that greater rifts are not opened when keys are below this amount" HorizontalAlignment="Right" Width="50" Text="{Binding MinimumKeys}"/>
+                        <Label ToolTip="Ensure that empowered rifts are not used when gold is below this amount">金币低于这个数值时，不强化秘境</Label>
+                        <TextBox  ToolTip="Ensure that empowered rifts are not used when gold is below this amount" HorizontalAlignment="Right" Width="50" Text="{Binding MinimumGold}"/>
                     </UniformGrid>
                 </StackPanel>
                 </GroupBox>
 
             <GroupBox Margin="2 10 10 0">
-                <GroupBox.Header>Gem Upgrading</GroupBox.Header>
+                <GroupBox.Header>宝石升级</GroupBox.Header>
                 <StackPanel>
 
-                    <!--<Border Height="1" Margin="2,5,2,5" Background="DarkSlateGray" />-->
-                    <CheckBox Name="GreaterRiftPrioritizeEquipedGems" IsChecked="{Binding GreaterRiftPrioritizeEquipedGems}" Content="Prioritize Equipped Gems" ToolTip="Always upgrades the equipped gems first until Quality% or Rank limit reached" Margin="2"></CheckBox>
+                    <!--<Border Height="1" Margin="2,5,2,5" Background="DarkSlateGray"/>-->
+                    <CheckBox Name="GreaterRiftPrioritizeEquipedGems" IsChecked="{Binding GreaterRiftPrioritizeEquipedGems}" Content="优先升级装备上的宝石" ToolTip="Always upgrades the equipped gems first until Quality% or Rank limit reached" Margin="2"></CheckBox>
 
-                    <!--<CheckBox Name="GemUpgradeEvenly" IsChecked="{Binding GemUpgradeFocusMode}" Content="Focus one gem at a time by order (ranking table below)" ToolTip="Upgrades by row order (ranking in table below) until Quality% or Rank limit reached" Margin="2"></CheckBox>-->
+                    <!--<CheckBox Name="GemUpgradeEvenly" IsChecked="{Binding GemUpgradeFocusMode}" Content="根据下表顺序,直到被最低升级几率和限制等级的条件过滤掉,才升级下一个宝石" ToolTip="Upgrades by row order (ranking in table below) until Quality% or Rank limit reached" Margin="2"></CheckBox>-->
 
                   <StackPanel Margin="0,6,10,0">
-                    <TextBlock Text="Primary Order:" />
+                    <TextBlock Text="优先升级顺序:"/>
                     <WrapPanel Margin="0,0,0,0">
-                      <RadioButton Foreground="White" Content="Rank" IsChecked="{Binding GemUpgradePriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Rank}" />
-                      <RadioButton Foreground="White" Content="Manual Order" IsChecked="{Binding GemUpgradePriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Order}" />
-                      <RadioButton Foreground="White" Content="Chance %" IsChecked="{Binding GemUpgradePriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Chance}" />
+                      <RadioButton Foreground="White" Content="根据限制等级" IsChecked="{Binding GemUpgradePriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Rank}"/>
+                      <RadioButton Foreground="White" Content="当前顺序" IsChecked="{Binding GemUpgradePriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Order}"/>
+                      <RadioButton Foreground="White" Content="根据升级几率" IsChecked="{Binding GemUpgradePriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Chance}"/>
                     </WrapPanel>
                   </StackPanel>                  
                   
                     <WrapPanel>
-                        <TextBlock Grid.Column="0" Text="Don't upgrade gem if chance is below: " Margin="4 4 0 0"></TextBlock>
+                        <TextBlock Grid.Column="0" Text="宝石的最低升级几率: " Margin="4 4 0 0"></TextBlock>
                         <ComboBox Grid.Column="1" Margin="5,2,2,2" SelectedValue="{Binding GreaterRiftGemUpgradeChance}" Name="GreaterRiftGemUpgradeChance" ItemsSource="{Binding GemUpgradeChances}"></ComboBox>
                         <TextBlock Grid.Column="0" Text="%" Margin="4 4 0 0"></TextBlock>
                     </WrapPanel>
 
                     <Border Height="1" Margin="2,5,2,5" Background="DarkSlateGray" />
                     <Grid>
-                        <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">Drag the gems below to set upgrade order.</TextBlock>
-                        <TextBlock HorizontalAlignment="Right" Margin="3,8,8,10" TextWrapping="Wrap">Limit:</TextBlock>
+                        <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">鼠标按住目标宝石后拖拽移动决定顺序.</TextBlock>
+                        <TextBlock HorizontalAlignment="Right" Margin="3,8,8,10" TextWrapping="Wrap">限制等级:</TextBlock>
                     </Grid>
                     <!--  -->
                     <ListBox Padding="5"
@@ -283,24 +290,24 @@
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Misc" Margin="2 10 10 0">
+            <GroupBox Header="杂项" Margin="2 10 10 0">
                 <StackPanel>
                         <Grid Margin="2" Background="Transparent">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition></ColumnDefinition>
                                 <ColumnDefinition Width="90"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="Rift Count Before Leaving Game" Margin="4 4 0 0"></TextBlock>
+                            <TextBlock Grid.Column="0" Text="退出游戏条件:秘境运行次数" Margin="4 4 0 0"></TextBlock>
                             <ComboBox Grid.Column="1" SelectedValue="{Binding RiftCountSetting}" Name="RiftCountCombo" ItemsSource="{Binding RiftCounts}"></ComboBox>
                         </Grid>
-                        <CheckBox Name="NephalemRiftFullExplore" IsChecked="{Binding NephalemRiftFullExplore}" Content="Fully Explore Nephalem Rifts" Margin="2 4 2 2" ToolTip = "Continues clearing the rift until the townstone is found."></CheckBox>
-                        <CheckBox Name="KeywardenZergMode" IsChecked="{Binding KeywardenZergMode}" Content="Safe Zerg Mode for Keywarden" Margin="2" ToolTip="Enables the safe zerg mode for keywarden runs. Safe Zerg Mode disables combat unless the bot is getting hit or surrounded by mobs."></CheckBox>
-                        <CheckBox Name="DebugLogging" IsChecked="{Binding DebugLogging}" Content="Enable Debug Logging" Margin="2" ToolTip="Enables additional logging to diagnose issues"></CheckBox>
+                        <CheckBox Name="NephalemRiftFullExplore" IsChecked="{Binding NephalemRiftFullExplore}" Content="小米层数全清模式" Margin="2 4 2 2" ToolTip = "Continues clearing the rift until the townstone is found."></CheckBox>
+                        <CheckBox Name="KeywardenZergMode" IsChecked="{Binding KeywardenZergMode}" Content="刷装置不清怪模式(会被动战斗)" Margin="2" ToolTip="Enables the safe zerg mode for keywarden runs. Safe Zerg Mode disables combat unless the bot is getting hit or surrounded by mobs."></CheckBox>
+                        <CheckBox Name="DebugLogging" IsChecked="{Binding DebugLogging}" Content="开启日志记录" Margin="2" ToolTip="Enables additional logging to diagnose issues"></CheckBox>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
 
-        <!--<GroupBox Grid.Row="0" Grid.Column="1" Header="Gem Upgrade Priority" Margin="0 2 2 0">
+        <!--<GroupBox Grid.Row="0" Grid.Column="1" Header="宝石升级优先顺序(从上往下)" Margin="0 2 2 0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="23"></RowDefinition>
@@ -316,9 +323,9 @@
                             <ColumnDefinition Width="60"></ColumnDefinition>
                             <ColumnDefinition Width="60"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Name" />
-                        <TextBlock Grid.Column="1" Text="Rank" TextAlignment="Right" />
-                        <TextBlock Grid.Column="2" Text="Chance" TextAlignment="Right" />
+                        <TextBlock Grid.Column="0" Text="传奇宝石"/>
+                        <TextBlock Grid.Column="1" Text="等级" TextAlignment="Right"/>
+                        <TextBlock Grid.Column="2" Text="升级几率" TextAlignment="Right"/>
                     </Grid>
 
                     <ListBox Grid.Column="0" Grid.Row="1" Name="GemPriorityList" BorderThickness="0" Margin="-2 1 -2 0" ItemsSource="{Binding Path=GemUpgradePriority}" ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -370,8 +377,8 @@
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Name="SaveButton" Content="Save" Margin="5 5 2.5 5" FontSize="20" Height="30"></Button>
-                <Button Grid.Column="1" Name="CancelButton" Content="Cancel" Margin="2.5 5 5 5" FontSize="20" Height="30"></Button>
+                <Button Grid.Column="0" Name="SaveButton" Content="保存" Margin="5 5 2.5 5" FontSize="20" Height="30"></Button>
+                <Button Grid.Column="1" Name="CancelButton" Content="取消" Margin="2.5 5 5 5" FontSize="20" Height="30"></Button>
             </Grid>-->
         </StackPanel>
 </UserControl>

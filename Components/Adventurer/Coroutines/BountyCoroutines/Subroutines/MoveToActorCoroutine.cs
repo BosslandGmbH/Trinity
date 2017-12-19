@@ -46,8 +46,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Log("[MoveToActor] " + value);
-                    StatusText = "[MoveToActor] " + value;
+                    Core.Logger.Log("[移动到目标] " + value);
+                    StatusText = "[移动到目标] " + value;
                 }
                 _state = value;
             }
@@ -141,7 +141,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
             if (!_isExploreAllowed)
             {
-                Core.Logger.Log("Unable to find actor and exploration is disabled");
+                Core.Logger.Log("找不到目标和探索被禁用");
                 State = States.Failed;
                 return false;
             }
@@ -217,7 +217,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 }
                 if (_objectiveLocation != Vector3.Zero)
                 {
-                    Core.Logger.Log($"[MoveToObject] Found the objective at distance {AdvDia.MyPosition.Distance(_objectiveLocation)}");
+                    Core.Logger.Log($"[移动到目标] 在距离 {AdvDia.MyPosition.Distance(_objectiveLocation)} 处发现目标");
                 }
             }
             return true;

@@ -66,7 +66,7 @@ namespace Trinity.Framework.Helpers
             BotMain.IsPausedForStateExecution = true;
             StartNew(task, stopCondition, () =>
             {
-                Core.Logger.Log("ForceRunCoroutine Finished");
+                Core.Logger.Log("强制运行协程完成");
                 BotMain.IsPausedForStateExecution = false;
 
             }, tickMilliseconds);
@@ -146,7 +146,7 @@ namespace Trinity.Framework.Helpers
         {
             if (!Tasks.Any()) return;
 
-            Core.Logger.Log($"Sending Cancel Request to {Tasks.Count(t => t.Status == TaskStatus.Running)} Running and {Tasks.Count(t => t.Status != TaskStatus.Running)} Finished Tasks...");
+            Core.Logger.Log($"发送取消请求 {Tasks.Count(t => t.Status == TaskStatus.Running)} 运行和 {Tasks.Count(t => t.Status != TaskStatus.Running)} 已完成的任务...");
 
             if (_tokenSource.Token.CanBeCanceled)
                 _tokenSource.Cancel();

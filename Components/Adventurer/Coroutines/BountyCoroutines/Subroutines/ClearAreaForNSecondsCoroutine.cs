@@ -45,8 +45,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Log("[ClearAreaForNSeconds] " + value);
-                    StatusText = "[ClearAreaForNSeconds] " + value;
+                    Core.Logger.Log("[清理场景需要时间] " + value);
+                    StatusText = "[清理场景需要时间] " + value;
                 }
                 _state = value;
             }
@@ -87,7 +87,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
             if (IsQuestStepComplete() && State != States.Completed)
             {
-                Core.Logger.Log("Ending ClearAreaForNSecondsCoroutine because quest step appears to be completed!");
+                Core.Logger.Log("结束清除区域秒数协调程序，因为任务步骤似乎已经完成!");
                 State = States.Completed;
                 return false;
             }
@@ -219,7 +219,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             }
             if (_center != Vector3.Zero)
             {
-                Core.Logger.Log("[ClearAreaForNSeconds] Found the objective at distance {0}", AdvDia.MyPosition.Distance(_center));
+                Core.Logger.Log("[清理场景需要时间] 在距离{0}处发现任务目标", AdvDia.MyPosition.Distance(_center));
             }
         }
     }

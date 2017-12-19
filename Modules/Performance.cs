@@ -21,7 +21,7 @@ namespace Trinity.Modules
                 if (BotMain.TicksPerSecond != Core.Settings.Advanced.TpsLimit)
                 {
                     BotMain.TicksPerSecond = Core.Settings.Advanced.TpsLimit;
-                    Core.Logger.Verbose(LogCategory.None, "Bot TPS set to {0}", Core.Settings.Advanced.TpsLimit);
+                    Core.Logger.Verbose(LogCategory.None, "DB的处理量设置到 {0}", Core.Settings.Advanced.TpsLimit);
                 }
             }
             else
@@ -29,7 +29,7 @@ namespace Trinity.Modules
                 if (BotMain.TicksPerSecond != DefaultTPS)
                 {
                     BotMain.TicksPerSecond = DefaultTPS;
-                    Core.Logger.Verbose(LogCategory.None, "Reset bot TPS to default: {0}", BotMain.TicksPerSecond);
+                    Core.Logger.Verbose(LogCategory.None, "恢复DB的处理量到默认: {0}", BotMain.TicksPerSecond);
                 }
             }
         }

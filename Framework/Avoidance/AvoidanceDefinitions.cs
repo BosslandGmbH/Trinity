@@ -13,6 +13,7 @@ namespace Trinity.Framework.Avoidance
     public class AvoidanceDefinitions : FieldCollection<AvoidanceDefinitions, AvoidanceDefinition>
     {
         /*
+
         Raziel Boss
              1388: IsLootRunBoss (-2708) i:1 f:0 Value=1
              800: UsingBossbar (-3296) i:1 f:0 Value=1
@@ -20,10 +21,12 @@ namespace Trinity.Framework.Avoidance
                 InternalName => g_ChargedBolt_Projectile-314133
                 ActorSnoId => 4394
                  1249: ProjectileDetonateTime (-2847) i:794745 f:0 Value=794745
+
         Bone warlock boss projectile
             InternalName => SkeletonSummoner_projectile-300033
             ActorSnoId => 5392
             1249: ProjectileDetonateTime(-2847) i:759285 f:0 Value=759285
+
         // Blood Pools
         [Trinity 2.50.238] -- Dumping Attribtues for x1_Bog_bloodSpring_large-301223 (Sno=332923 Ann=-1444543456) at <255.3765, 629.3062, -2> ----
         [Trinity 2.50.238] Attributes (9) Id=1088/2054423616
@@ -42,7 +45,7 @@ namespace Trinity.Framework.Avoidance
         {
             Id = (int)AvoidanceType.DiseaseCloud,
             Type = AvoidanceType.DiseaseCloud,
-            Name = "Disease Cloud",
+            Name = "疾病云雾",
             Element = Element.Poison,
             Handler = new CircularAvoidanceHandler(),
             Parts = new List<AvoidancePart>
@@ -98,7 +101,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.Urzael,
             Type = AvoidanceType.Urzael,
-            Name = "Urzael",
+            Name = "厄兹尔",
             Element = Element.Fire,
             Handler = new CircularAvoidanceHandler(),
             Parts = new List<AvoidancePart>
@@ -169,7 +172,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.ZultunKuleTornado,
             Type = AvoidanceType.ZultunKuleTornado,
-            Name = "Zultun Kule Tornado",
+            Name = "佐敦库勒龙卷风",
             Element = Element.Physical,
             Handler = new CircularAvoidanceHandler(),
             Parts = new List<AvoidancePart>
@@ -208,16 +211,18 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
          292: Untargetable (-3804) i:0 f:0 Value=0 IsValid=True
          800: UsingBossbar (-3296) i:1 f:0 Value=1 IsValid=True
          524: SummonerId (-3572) i:-2012478880 f:0 Value=-2012479000 IsValid=True
+
         [Trinity 2.41.122] SelectedItem changed from  to X1_LR_Boss_TerrorDemon_A_BreathMinion, Type=Unit Dist=26.11438 IsBossOrEliteRareUnique=True IsAttackable=True
         [Trinity 2.41.122][Animation] TerrorDemon_attack_FireBreath State=Transform By: X1_LR_Boss_TerrorDemon_A_BreathMinion (429010)
         [Trinity 2.41.122] SelectedItem changed from  to x1_LR_boss_terrorDemon_A_projectile-12931, Type=Unknown Dist=0 IsBossOrEliteRareUnique=False IsAttackable=False
+
          */
 
         public static AvoidanceDefinition OrlashBoss = new AvoidanceDefinition
         {
             Id = (int)AvoidanceType.OrlashBoss,
             Type = AvoidanceType.OrlashBoss,
-            Name = "Orlash (Boss)",
+            Name = "奥拉什的吐息(BOSS)",
             Element = Element.Lightning,
             Handler = new CircularAvoidanceHandler(),
             Parts = new List<AvoidancePart>
@@ -253,7 +258,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.Thunderstorm,
             Type = AvoidanceType.Thunderstorm,
-            Name = "Thunderstorm",
+            Name = "雷霆风暴",
             Element = Element.Lightning,
             Handler = new CircularAvoidanceHandler(),
             Parts = new List<AvoidancePart>
@@ -274,7 +279,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.HeraldOfPestilence,
             Type = AvoidanceType.HeraldOfPestilence,
-            Name = "Herald of Pestilence",
+            Name = "瘟疫之手",
             Element = Element.Poison,
             Handler = new CircularAvoidanceHandler(),
             Parts = new List<AvoidancePart>
@@ -296,7 +301,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.Desecrator,
             Type = AvoidanceType.Desecrator,
-            Name = "Desecrator",
+            Name = "亵渎",
             Element = Element.Fire,
             Handler = new CircularAvoidanceHandler(),
             Parts = new List<AvoidancePart>
@@ -319,7 +324,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.MorluMeteor,
             Type = AvoidanceType.MorluMeteor,
-            Name = "Morlu Meteor",
+            Name = "火陨石",
             Element = Element.Fire,
             Handler = new CircularAvoidanceHandler(),
             Parts = new List<AvoidancePart>
@@ -341,7 +346,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.ExarchLightningStorm,
             Type = AvoidanceType.ExarchLightningStorm,
-            Name = "Exarch Lightning Storm",
+            Name = "督天灵的锥形闪电",
             Element = Element.Lightning,
             Handler = new CircularAvoidanceHandler(),
             Parts = new List<AvoidancePart>
@@ -388,7 +393,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.GhomBoss,
             Type = AvoidanceType.GhomBoss,
-            Name = "Ghom",
+            Name = "冈姆",
             Description = "Gas cloud scattered around by this rift boss",
             Element = Element.Poison,
             Handler = new CircularAvoidanceHandler(),
@@ -423,7 +428,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.MoltenCore,
             Type = AvoidanceType.MoltenCore,
-            Name = "Molten Core",
+            Name = "熔火-爆炸",
             Description = "Explosion on the ground after killing a 'molten' elite",
             Affix = MonsterAffixes.Molten,
             Element = Element.Fire,
@@ -474,7 +479,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.FireChains,
             Type = AvoidanceType.FireChains,
-            Name = "Fire Chains",
+            Name = "火链",
             Affix = MonsterAffixes.FireChains,
             Handler = new FireChainsAvoidanceHandler(),
             InfoUrl = "http://www.diablowiki.net/Fire_Chains",
@@ -501,7 +506,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.TethrysBoss,
             Type = AvoidanceType.TethrysBoss,
-            Name = "Tethrys Boss",
+            Name = "泰瑟芮丝的大小冰环(BOSS)",
             Handler = new CircularAvoidanceHandler(),
             Element = Element.Cold,
             InfoUrl = "http://www.diablowiki.net/Rift_Guardian",
@@ -539,7 +544,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.Frozen,
             Type = AvoidanceType.Frozen,
-            Name = "Frozen",
+            Name = "冰冻",
             Affix = MonsterAffixes.Frozen,
             Handler = new CircularAvoidanceHandler(),
             InfoUrl = "http://www.diablowiki.net/Frozen",
@@ -565,7 +570,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.Furnace,
             Type = AvoidanceType.Furnace,
-            Name = "Furnace",
+            Name = "会喷火的炉子",
             Handler = new FurnaceAvoidanceHandler(),
             Element = Element.Fire,
             Parts = new List<AvoidancePart>
@@ -598,7 +603,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.ButcherBoss,
             Type = AvoidanceType.ButcherBoss,
-            Name = "Butcher Boss",
+            Name = "屠夫 Boss",
             Description = "A Rift and Campaign Boss with a big cleaver. Fresh Meat!",
             Handler = new CircularAvoidanceHandler(),
             Element = Element.Fire,
@@ -638,30 +643,16 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.Grotesque,
             Type = AvoidanceType.Grotesque,
-            Name = "Grotesque",
+            Name = "怪诞魔",
             Description = "Fat guys that explode into worms",
             Handler = new AnimationCircularAvoidanceHandler(),
             Element = Element.Physical,
-            Defaults = new AvoidanceSettingsEntry
-            {
-                DistanceMultiplier = 1,
-                HealthPct = 100,
-                Prioritize = true,
-                IsEnabled = true,
-            },
             Parts = new List<AvoidancePart>
             {
                 new AvoidancePart
                 {
                     Name = "Death Explosion",
                     Animation = SNOAnim.Stitch_Suicide_Bomb,
-                    Animations = new List<SNOAnim>()
-                    {
-                        SNOAnim.Stitch_Suicide_Bomb,
-                        SNOAnim.Stitch_Suicide_Bomb_Frost,
-                        SNOAnim.Stitch_Suicide_Bomb_Imps,
-                        SNOAnim.Stitch_Suicide_Bomb_spiders,
-                    },
                     Type = PartType.ActorAnimation,
                     Radius = 26f
                 }
@@ -737,7 +728,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.ChargeAttacks,
             Type = AvoidanceType.ChargeAttacks,
-            Name = "Charge Attacks",
+            Name = "电荷攻击",
             Description = "All types of charge based attacks by monsters",
             Handler = new AnimationBeamAvoidanceHandler(),
             Element = Element.Physical,
@@ -918,25 +909,18 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.PerendiDefaultAttack,
             Type = AvoidanceType.PerendiDefaultAttack,
-            Name = "Mallet Lord Melee Attack",
-            Description = "Perendi & Mallet Lord default attack",
+            Name = "BOSS普通攻击",
+            Description = "Rift boss default attack",
             Handler = new AnimationBeamAvoidanceHandler(),
             Element = Element.Physical,
-            Defaults = new AvoidanceSettingsEntry
-            {
-                DistanceMultiplier = 1,
-                HealthPct = 100,
-                Prioritize = true,
-                IsEnabled = true,
-            },
             Parts = new List<AvoidancePart>
             {
                 new AvoidancePart
                 {
-                    Name = "Perendi Melee Attack",
+                    Name = "佩伦迪的近战攻击",
                     Animation = SNOAnim.malletDemon_attack_01,
                     Type = PartType.ActorAnimation,
-                    Radius = 30f
+                    Radius = 20f
                 },
             }
         };
@@ -955,7 +939,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         //Line 34017: 15:14:52.791 INFO  Logger [Trinity 2.41.51][Animation] malletDemon_attack_01 State=Transform By: x1_LR_Boss_MalletDemon (343767)
         //Line 34149: 15:14:56.371 INFO  Logger [Trinity 2.41.51][Animation] malletDemon_stunned State=TakingDamage By: x1_LR_Boss_MalletDemon (343767)
         //x1_LR_Boss_MalletDemon_FallingRocks 368453,
-        //todo Perendi / malletdemon avoidance - he hits like a truck.
+        //todo Parendi / malletdemon avoidance - he hits like a truck.
 
         // Beast Creatures with a small guy riding on them, stun the player.
         //[Trinity 2.41.50][Weight] Found New Target MastaBlasta_Combined_A dist=6 IsElite=False Radius=11.0 Weight=1099 ActorSnoId=137856 AnimSnoId=MastaBlasta_Combined_taunt TargetedCount=26 Type=Unit
@@ -984,7 +968,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.RatKing,
             Type = AvoidanceType.RatKing,
-            Name = "Rat King",
+            Name = "哈默林的鼠疫漩涡(BOSS)",
             Description = "Rift Boss who dispatches balls of rats",
             Handler = new CircularAvoidanceHandler(),
             Element = Element.Poison,
@@ -1004,7 +988,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         //AvoidanceData.Add(new AvoidanceData
         //{
-        //    Name = "Thunderstorm",
+        //    Name = "雷霆风暴",
         //    Handler = new CircularAvoidanceHandler(),
         //    Element = Element.Fire,
         //    Parts = new List<AvoidancePart>
@@ -1062,7 +1046,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.Plagued,
             Type = AvoidanceType.Plagued,
-            Name = "Plagued",
+            Name = "毒云",
             Description = "Swirly puddles of poisonous goo",
             Affix = MonsterAffixes.Plagued,
             Handler = new CircularAvoidanceHandler(),
@@ -1095,7 +1079,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.FrozenPulse,
             Type = AvoidanceType.FrozenPulse,
-            Name = "Frozen Pulse",
+            Name = "冰冻脉冲",
             Description = "Spikey ice balls that chase you, then explode",
             InfoUrl = "http://www.diablowiki.net/Frozen_Pulse",
             Affix = MonsterAffixes.FrozenPulse,
@@ -1148,7 +1132,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.MoltenTrail,
             Type = AvoidanceType.MoltenTrail,
-            Name = "Molten Trail",
+            Name = "熔火之径",
             Description = "Fire trails behind molten elites",
             Affix = MonsterAffixes.Molten, //AffixGbId = 95868,
             InfoUrl = "http://www.diablowiki.net/Molten",
@@ -1174,7 +1158,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.ArcaneSentry,
             Type = AvoidanceType.ArcaneSentry,
-            Name = "Arcane Sentry",
+            Name = "强奥",
             Description = "Beams of hurt that spin around",
             Affix = MonsterAffixes.ArcaneEnchanted,
             Element = Element.Arcane,
@@ -1216,7 +1200,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.MaghdaBoss,
             Type = AvoidanceType.MaghdaBoss,
-            Name = "Maghda Boss",
+            Name = "麦格妲的虫群攻击(BOSS)",
             Description = "Handling for the insect projectile she shoots",
             Element = Element.Physical,
             Handler = new CircularAvoidanceHandler(),
@@ -1244,7 +1228,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.Orbiter,
             Type = AvoidanceType.Orbiter,
-            Name = "Orbiter",
+            Name = "电球",
             Description = "Balls of lighting that enlarge when u get close",
             InfoUrl = "http://www.diablowiki.net/Orbiter",
             Element = Element.Lightning,
@@ -1279,7 +1263,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.MageFire,
             Type = AvoidanceType.MageFire,
-            Name = "Mage Fire",
+            Name = "萨满火焰",
             Description = "A single small puddle of fire",
             Handler = new CircularAvoidanceHandler(),
             Element = Element.Fire,
@@ -1342,7 +1326,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.PoisonEnchanted,
             Type = AvoidanceType.PoisonEnchanted,
-            Name = "Poison Enchanted",
+            Name = "十字毒",
             Description = "Poison affix that makes long vertical or horizontal trails from an explosion point.",
             InfoUrl = "http://www.diablowiki.net/Poison_Enchanted",
             Affix = MonsterAffixes.PoisonEnchanted,
@@ -1381,7 +1365,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         {
             Id = (int)AvoidanceType.Mortar,
             Type = AvoidanceType.Mortar,
-            Name = "Mortar",
+            Name = "轰炮",
             Affix = MonsterAffixes.Mortar,
             Handler = new CircularAvoidanceHandler(),
             Element = Element.Fire,
@@ -1399,6 +1383,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         /*
         Malthael
+
         291: Immunity (-3805) [ DamageType: Cold: 3 ] i:1 f:0 Value=1
          291: Immunity (-3805) [ DamageType: Lightning: 2 ] i:1 f:0 Value=1
          291: Immunity (-3805) [ DamageType: Fire: 1 ] i:1 f:0 Value=1
@@ -1406,6 +1391,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
          291: Immunity (-3805) [ DamageType: Holy: 6 ] i:1 f:0 Value=1
          291: Immunity (-3805) [ DamageType: Arcane: 5 ] i:1 f:0 Value=1
          291: Immunity (-3805) [ DamageType: Poison: 4 ] i:1 f:0 Value=1
+
          853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: x1_Malthael_DeathFogMonster_Setup: 325140 ] i:1 f:0 Value=1
                 853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: X1_Malthael_DrainSoul: 327766 ] i:1 f:0 Value=1
          859: PowerBuff1VisualEffectNone (-3237) [ PowerSnoId: X1_Malthael_DrainSoul: 327766 ] i:1 f:0 Value=1
@@ -1413,12 +1399,14 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
          853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: x1_Malthael_PhaseOne_AIState: 330358 ] i:1 f:0 Value=1
          853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: x1_Malthael_SwordShieldStart: 325648 ] i:0 f:0 Value=0
           853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: X1_Malthael_SickleThrowTeleport: 327847 ] i:0 f:0 Value=0
+
             Animation => x1_Malthael_sword_sheild // spinning blades aura
             x1_malthael_drainSoul_ghost
             x1_Malthael_drain_soul_outtro
             x1_malthael_gratesOfHell_darkBall_glowOuter // fire gates arrainged in outer ring
             x1_Malthael_DeathFogMonster
             x1_Malthael_Diablo_Fire_Projectile // fireballs before fire gate ring appears
+
             */
 
         public static AvoidanceDefinition MalthaelDeathFog = new AvoidanceDefinition
@@ -1426,7 +1414,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
             Id = (int)AvoidanceType.MalthaelDeathFog,
             Group = "Malthael",
             Type = AvoidanceType.MalthaelDeathFog,
-            Name = "Malthael Death Fog",
+            Name = "马瑟伊尔死亡迷雾",
             Description = "Fog that hurts",
             Element = Element.Physical,
             Handler = new CircularAvoidanceHandler(),
@@ -1447,7 +1435,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
             Id = (int)AvoidanceType.MalthaelHellGates,
             Group = "Malthael",
             Type = AvoidanceType.MalthaelHellGates,
-            Name = "Malthael Hell Gates",
+            Name = "马萨伊尔的末日烈焰",
             Description = "Fire gates arrainged in outer ring",
             Element = Element.Fire,
             Handler = new CircularAvoidanceHandler(),
@@ -1468,7 +1456,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
             Id = (int)AvoidanceType.MalthaelTeleport,
             Type = AvoidanceType.MalthaelTeleport,
             Group = "Malthael",
-            Name = "Maltheal Teleport Attack",
+            Name = "马萨伊尔的镰刀旋转",       
             Description = "Maltheal teleports to you and owns you with his sickle",
             Element = Element.Physical,
             Handler = new AnimationBeamAvoidanceHandler(),
@@ -1496,6 +1484,6 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
                     Radius = 40f
                 },
             }
-        };
+        };       
     }
 }

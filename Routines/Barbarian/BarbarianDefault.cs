@@ -151,7 +151,7 @@ namespace Trinity.Routines.Barbarian
             private static readonly SkillSettings WrathOfTheBerserkerDefaults = new SkillSettings
             {
                 UseMode = UseTime.Selective,
-                Reasons = UseReasons.Elites | UseReasons.HealthEmergency | UseReasons.Goblins
+                Reasons = UseReasons.Elites | UseReasons.HealthEmergency
             };
 
             private static readonly SkillSettings FuriousChargeDefaults = new SkillSettings

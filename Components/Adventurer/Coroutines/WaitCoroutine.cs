@@ -48,14 +48,14 @@ namespace Trinity.Components.Adventurer.Coroutines
                 _waitTimer = new WaitTimer(_waitTime);
                 _waitTimer.Reset();
 
-                string status = $"[Wait] Waiting for {_waitTime.TotalSeconds} seconds";
+                string status = $"[等待] 等待 {_waitTime.TotalSeconds} 秒";
                 StatusText = status;
                 Core.Logger.Debug(status);
             }
 
             if (ZetaDia.Globals.WorldSnoId != _worldId)
             {
-                StatusText = "[Wait] Stopped waiting because world id is not correct";
+                StatusText = "[等待] 因为 World id 不正确, 停止等待";
                 Core.Logger.Debug(StatusText);
                 _isDone = true;
                 return true;

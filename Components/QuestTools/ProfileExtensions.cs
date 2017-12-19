@@ -138,7 +138,7 @@ namespace Trinity.Components.QuestTools
             if (type == typeof(WaitWhileTag))
                 return (behavior as WaitWhileTag).ToEnhanced().RunEnhanced();
             
-            Core.Logger.Warn("You attempted to run a tag ({0}) that can't be converted to IEnhancedProfileBehavior ", behavior.GetType());
+            Core.Logger.Warn("您试图运行一个标签 ({0}) 不能转换为 IEnhancedProfileBehavior ", behavior.GetType());
 
             return new Action(ret => RunStatus.Failure);           
         }

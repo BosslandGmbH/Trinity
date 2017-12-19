@@ -145,7 +145,7 @@ namespace Trinity.Modules
                             var handler = avoidance.Definition.Handler;
                             if (handler == null)
                             {
-                                Core.Logger.Error(LogCategory.Avoidance, $"Avoidance: {avoidance.Definition.Name} has no handler");
+                                Core.Logger.Error(LogCategory.Avoidance, $"规避: {avoidance.Definition.Name} 有处理程序");
                                 continue;
                             }
 
@@ -227,7 +227,7 @@ namespace Trinity.Modules
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Log("Exception in UpdateGrid {0}", ex);
+                    Core.Logger.Log("更新网格 {0} 中的异常", ex);
 
                     if (ex is CoroutineStoppedException)
                         throw;

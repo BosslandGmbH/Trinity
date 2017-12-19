@@ -35,7 +35,7 @@ namespace Trinity.Components.Combat
         {
             if (power == null || power.SNOPower == SNOPower.None)
             {
-                Core.Logger.Log(LogCategory.Spells, $"Power was null or SNOPower.None");
+                Core.Logger.Log(LogCategory.Spells, $"Power无效或 SNOPower.None");
                 return false;
             }
 
@@ -43,7 +43,7 @@ namespace Trinity.Components.Combat
             {
                 if (!Core.Player.IsPowerUseDisabled)
                 {
-                    Core.Logger.Log(LogCategory.Spells, $"CanCast failed for {power.SNOPower}");
+                    Core.Logger.Log(LogCategory.Spells, $"施放失败 {power.SNOPower}");
                 }
                 return false;
             }
@@ -67,7 +67,7 @@ namespace Trinity.Components.Combat
 
                 if (!TrinityCombat.Targeting.IsInRange(target, power))
                 {
-                    Core.Logger.Log(LogCategory.Movement, $"Moving to {castInfo}");
+                    Core.Logger.Log(LogCategory.Movement, $"移动到 {castInfo}");
                     PlayerMover.MoveTo(target.Position);
                     return true;
                 }
@@ -76,14 +76,14 @@ namespace Trinity.Components.Combat
             {
                 if (distance > TrinityCombat.Targeting.MaxTargetDistance)
                 {
-                    Core.Logger.Log(LogCategory.Spells, $"Target is way too far away ({distance})");
+                    Core.Logger.Log(LogCategory.Spells, $"目标太远 ({distance})");
                     return false;
                 }
 
-                castInfo += $" Dist:{Core.Player.Position.Distance(power.TargetPosition)}";
+                castInfo += $" 距离:{Core.Player.Position.Distance(power.TargetPosition)}";
                 if (!TrinityCombat.Targeting.IsInRange(power.TargetPosition, power))
                 {
-                    Core.Logger.Log(LogCategory.Movement, $"Moving to position for {castInfo}");
+                    Core.Logger.Log(LogCategory.Movement, $"移动到 {castInfo}的位置");
                     PlayerMover.MoveTo(power.TargetPosition);
                     return true;
                 }
@@ -107,7 +107,7 @@ namespace Trinity.Components.Combat
                 return false;
             }
 
-            Core.Logger.Warn(LogCategory.Spells, $"Cast {castInfo}");
+            Core.Logger.Warn(LogCategory.Spells, $"施放 {castInfo}");
 
             if (power.SNOPower == SNOPower.Axe_Operate_Gizmo && Core.StuckHandler.IsStuck)
             {
@@ -124,7 +124,7 @@ namespace Trinity.Components.Combat
 
             if (power.ShouldWaitForAttackToFinish)
             {
-                Core.Logger.Log(LogCategory.Spells, $"Waiting for Attack to Finish");
+                Core.Logger.Log(LogCategory.Spells, $"等待攻击结束 ");
                 await Coroutine.Wait(1000, () => Core.Player.IsCasting);
             }
             return true;
@@ -150,9 +150,6 @@ namespace Trinity.Components.Combat
             if (!HasEnoughCharges(skill))
                 return false;
 
-            if (!HasEnoughResource(skill))
-                return false;
-
             PowerManager.CanCastFlags reason;
             if (!PowerManager.CanCast(skill.SNOPower, out reason))
             {
@@ -162,6 +159,9 @@ namespace Trinity.Components.Combat
                     return false;
                 }
             }
+
+            if (!HasEnoughResource(skill))
+                return false;
 
             return true;
         }
@@ -187,7 +187,7 @@ namespace Trinity.Components.Combat
         public bool HasEnoughResource(Skill skill)
         {
             var resourceCost = skill.Cost * (1 - Core.Player.ResourceCostReductionPct);
-            if (resourceCost > 1 && !skill.IsGeneratorOrPrimary)
+            if (resourceCost > 0 && !skill.IsGeneratorOrPrimary)
             {
                 var actualResource = (skill.Resource == Resource.Discipline) ? Core.Player.SecondaryResource : Core.Player.PrimaryResource;
                 if (actualResource < resourceCost)

@@ -145,7 +145,7 @@ namespace Trinity.Components.QuestTools
         {
             if (!string.IsNullOrEmpty(StopCondition) && ScriptManager.GetCondition(StopCondition).Invoke())
             {
-                Core.Logger.Log($"[{TagClassName}] Stop condition was met: ({StopCondition})");
+                Core.Logger.Log($"[{TagClassName}] 满足停止条件: ({StopCondition})");
                 return true;
             }
             return false;
@@ -155,7 +155,7 @@ namespace Trinity.Components.QuestTools
         public sealed override void OnStart()
         {
             OnStartFired = true;
-            Core.Logger.Verbose($"Started Tag: {TagClassName}. {ToString()}");
+            Core.Logger.Verbose($"开始标签: {TagClassName}. {ToString()}");
         }
 
         public bool OnStartFired { get; set; }

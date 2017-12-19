@@ -128,57 +128,57 @@ namespace Trinity.Components.Adventurer.Settings
 
             UpdateGems(level);
 
-            Core.Logger.Log($"[UpgradeGems] ---- Gem Upgrade Summary ----");
-            Core.Logger.Log($"[UpgradeGems] Current Rift Level: {level}");
-            Core.Logger.Log($"[UpgradeGems] Gem Count: {Gems.Count}");
-            Core.Logger.Log($"[UpgradeGems] Highest Ranked Gem: {Gems.Max(g => g.Rank)}");
-            Core.Logger.Log($"[UpgradeGems] Lowest Ranked Gem: {Gems.Min(g => g.Rank)}");
-            Core.Logger.Log($"[UpgradeGems] Upgrade Chance Setting: {minChance}%");
-            Core.Logger.Log($"[UpgradeGems] Ordering Priority: {priority}");
-            Core.Logger.Log($"[UpgradeGems] Prioritize Equipped: {equipPriority}");
+            Core.Logger.Log($"[升级宝石] ---- 宝石升级汇总 ----");
+            Core.Logger.Log($"[升级宝石] 目前秘境等级: {level}");
+            Core.Logger.Log($"[升级宝石] 宝石数量: {Gems.Count}");
+            Core.Logger.Log($"[升级宝石] 宝石的最高等级: {Gems.Max(g => g.Rank)}");
+            Core.Logger.Log($"[升级宝石] 宝石的最低等级: {Gems.Min(g => g.Rank)}");
+            Core.Logger.Log($"[升级宝石] 升级几率设置: {minChance}%");
+            Core.Logger.Log($"[升级宝石] 排序优先: {priority}");
+            Core.Logger.Log($"[升级宝石] 优先已装备: {equipPriority}");
 
             var gems = Gems.ToList();
 
-            Core.Logger.Log($"[UpgradeGems] ---- Excluded: User Disabled Type ----");
+            Core.Logger.Log($"[升级宝石] ---- 排除: 用户禁用类型 ----");
 
             foreach (var gem in gems.ToList())
             {
                 if (!gem.Settings.IsEnabled)
                 {
-                    Core.Logger.Log($"[UpgradeGems] {gem.Name} ({gem.SNO}) Id={gem.Guid} Rank={gem.Rank}");
+                    Core.Logger.Log($"[升级宝石] {gem.Name} ({gem.SNO}) Id={gem.Guid} 等级={gem.Rank}");
                     gems.Remove(gem);
                 }
             }
 
-            Core.Logger.Log($"[UpgradeGems] ---- Excluded: By Max Rank ----");
+            Core.Logger.Log($"[升级宝石] ---- 排除: 最高等级 ----");
 
             foreach (var gem in gems.ToList())
             {
                 if (gem.Rank >= gem.Settings.MaxRank)
                 {
-                    Core.Logger.Log($"[UpgradeGems] {gem.Name} ({gem.SNO}) Id={gem.Guid} Rank={gem.Rank} MaxRank={gem.Settings.MaxRank}");
+                    Core.Logger.Log($"[升级宝石] {gem.Name} ({gem.SNO}) Id={gem.Guid} 等级={gem.Rank} 最高等级={gem.Settings.MaxRank}");
                     gems.Remove(gem);
                 }
             }
 
-            Core.Logger.Log($"[UpgradeGems] ---- Excluded: User Rank Limit ----");
+            Core.Logger.Log($"[升级宝石] ---- 排除: 用户等级限制 ----");
 
             foreach (var gem in gems.ToList())
             {
                 if (gem.Settings.IsLimited && gem.Rank >= gem.Settings.Limit)
                 {
-                    Core.Logger.Log($"[UpgradeGems] {gem.Name} ({gem.SNO}) Id={gem.Guid} Rank={gem.Rank} Limit={(!gem.Settings.IsLimited ? "None" : gem.Settings.Limit.ToString())}");
+                    Core.Logger.Log($"[升级宝石] {gem.Name} ({gem.SNO}) Id={gem.Guid} 等级={gem.Rank} 限制={(!gem.Settings.IsLimited ? "None" : gem.Settings.Limit.ToString())}");
                     gems.Remove(gem);
                 }
             }
 
-            Core.Logger.Log($"[UpgradeGems] ---- Excluded: Below Chance ({minChance}%) ----");
+            Core.Logger.Log($"[升级宝石] ---- 排除: 小于几率 ({minChance}%) ----");
 
             foreach (var gem in gems.ToList())
             {
                 if (gem.UpgradeChance < chanceReq)
                 {
-                    Core.Logger.Log($"[UpgradeGems] {gem.Name} ({gem.SNO}) Id={gem.Guid} Rank={gem.Rank} Chance={gem.UpgradeChance}");
+                    Core.Logger.Log($"[升级宝石] {gem.Name} ({gem.SNO}) Id={gem.Guid} 等级={gem.Rank} 几率={gem.UpgradeChance}");
                     gems.Remove(gem);
                 }
             }
@@ -187,39 +187,39 @@ namespace Trinity.Components.Adventurer.Settings
             {
                 case GemPriority.None:
                 case GemPriority.Rank:
-                    Core.Logger.Log($"[UpgradeGems] ---- 'Rank' Ordered Candidates ({gems.Count}), by {(equipPriority ? "Equipped, " : "")}Rank ----");
+                    Core.Logger.Log($"[升级宝石] ---- '等级' 有序的候选者 ({gems.Count}), by {(equipPriority ? "Equipped, " : "")}等级 ----");
                     gems = gems.OrderBy(g => equipPriority && g.IsEquiped ? 0 : 1).ThenByDescending(g => g.Rank).ThenBy(g => g.Settings.Order).ToList();
                     break;
                 case GemPriority.Order:
-                    Core.Logger.Log($"[UpgradeGems] ---- 'Order' Ordered Candidates ({gems.Count}), by {(equipPriority ? "Equipped, " : "")}Order ----");
+                    Core.Logger.Log($"[升级宝石] ---- '顺序' 有序的候选者 ({gems.Count}), by {(equipPriority ? "Equipped, " : "")}顺序 ----");
                     gems = gems.OrderBy(g => equipPriority && g.IsEquiped ? 0 : 1).ThenBy(g => g.Settings.Order).ToList();
                     break;
                 case GemPriority.Chance:
-                    Core.Logger.Log($"[UpgradeGems] ---- 'Chance' Ordered Candidates ({gems.Count}), by {(equipPriority ? "Equipped, " : "")}Chance, then Rank ----");
+                    Core.Logger.Log($"[升级宝石] ---- '几率' 有序的候选者 ({gems.Count}), by {(equipPriority ? "Equipped, " : "")}几率, 然后等级 ----");
                     gems = gems.OrderBy(g => equipPriority && g.IsEquiped ? 0 : 1).ThenByDescending(g => g.UpgradeChance).ThenByDescending(g => g.Rank).ToList();
                     break;
             }
 
             //if (focus)
             //{
-            //    Core.Logger.Log($"[UpgradeGems] ---- Ordered Candidates ({gems.Count}), by {(equipPriority ? "Equipped, " : "")}Order, Rank - Focus Mode ----");
+            //    Core.Logger.Log($"[升级宝石] ---- 有序的候选者 ({gems.Count}), by {(equipPriority ? "Equipped, " : "")}顺序, 等级 - 集中模式 ----");
             //    gems = gems.OrderBy(g => equipPriority && g.IsEquiped ? 0 : 1).ThenBy(g => g.Settings.Order).ToList();
             //}
             //else
             //{
-            //    Core.Logger.Log($"[UpgradeGems] ---- Ordered Candidates ({gems.Count}), by {(equipPriority ? "Equipped, " : "")}Chance, Order, Rank ----");
+            //    Core.Logger.Log($"[升级宝石] ---- 有序的候选者 ({gems.Count}), by {(equipPriority ? "Equipped, " : "")}几率, 顺序, 等级 ----");
             //    gems = gems.OrderBy(g => equipPriority && g.IsEquiped ? 0 : 1).ThenByDescending(g => g.UpgradeChance).ThenBy(g => g.Settings.Order).ThenBy(g => g.Rank).ToList();
             //}
 
             for (int i = 0; i < gems.Count; i++)
             {
                 var gem = gems.ElementAtOrDefault(i);
-                Core.Logger.Log($"[UpgradeGems] #{(i + 1)}: {gem.Name} ({gem.SNO}) Id={gem.Guid} Rank={gem.Rank} Chance={gem.UpgradeChance} @{level} Order={gem.Settings.Order} Limit={(gem.Settings.IsLimited ? "None" : gem.Settings.Limit.ToString())} Equipped={gem.IsEquiped}");
+                Core.Logger.Log($"[升级宝石] #{(i + 1)}: {gem.Name} ({gem.SNO}) Id={gem.Guid} 等级={gem.Rank} 几率={gem.UpgradeChance} @{level} 顺序={gem.Settings.Order} 限制={(gem.Settings.IsLimited ? "None" : gem.Settings.Limit.ToString())} 装备={gem.IsEquiped}");
             }
 
             if (gems.Count == 0)
             {
-                Core.Logger.Log("[UpgradeGems] Couldn't find any gems over the minimum upgrade chance, upgrading the gem with highest upgrade chance");
+                Core.Logger.Log("[升级宝石] 找不到任何达到最小成功几率内的宝石,升级具有最高成功率的宝石");
                 gems = Gems.Where(g => !g.IsMaxRank).OrderByDescending(g => g.UpgradeChance).ToList();
             }
 
@@ -228,15 +228,15 @@ namespace Trinity.Components.Adventurer.Settings
             var gemToUpgrade = gems.FirstOrDefault();
             if (gemToUpgrade != null)
             {
-                Core.Logger.Log($"[UpgradeGems] ---- Selection ----");
-                Core.Logger.Log($"[UpgradeGems] Attempting to upgrade {gemToUpgrade.DisplayName} ({gemToUpgrade.SNO}) Rank={gemToUpgrade.Rank} Chance={gemToUpgrade.UpgradeChance}%");
+                Core.Logger.Log($"[升级宝石] ---- 选择 ----");
+                Core.Logger.Log($"[升级宝石] 尝试升级 {gemToUpgrade.DisplayName} ({gemToUpgrade.SNO}) 等级={gemToUpgrade.Rank} 几率={gemToUpgrade.UpgradeChance}%");
                 acdGem = ZetaDia.Actors.GetActorsOfType<ACDItem>().FirstOrDefault(i => gemToUpgrade.Guid == i.AnnId);
             }
 
             if (acdGem == null)
             {
                 acdGem = ZetaDia.Actors.GetActorsOfType<ACDItem>().FirstOrDefault(i => i.ItemType == ItemType.LegendaryGem);
-                Core.Logger.Log($"[UpgradeGems] AcdItem Not Found {gemToUpgrade?.DisplayName} - Using {acdGem?.Name} so the quest can be completed");
+                Core.Logger.Log($"[升级宝石] AcdItem 没有发现 {gemToUpgrade?.DisplayName} - 使用 {acdGem?.Name} 所以任务可以完成");
             }
 
             return acdGem;

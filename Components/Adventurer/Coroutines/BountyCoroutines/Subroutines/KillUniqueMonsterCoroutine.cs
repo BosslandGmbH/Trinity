@@ -51,8 +51,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Log("[KillUniqueMonster] " + value);
-                    StatusText = "[KillUniqueMonster] " + value;
+                    Core.Logger.Log("[杀死特殊怪物] " + value);
+                    StatusText = "[杀死特殊怪物] " + value;
                 }
                 _state = value;
             }
@@ -222,7 +222,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 {
                     using (new PerformanceLogger("[KillUniqueMonster] Path to Objective Check", true))
                     {
-                        Core.Logger.Log("[KillUniqueMonster] Found the objective at distance {0}",
+                        Core.Logger.Log("[杀死特殊怪物] 在距离{0}处发现目标",
                             AdvDia.MyPosition.Distance(_objectiveLocation));
 
                         ExplorationHelpers.SetExplorationPriority(_objectiveLocation);

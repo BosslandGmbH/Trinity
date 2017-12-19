@@ -53,7 +53,7 @@ namespace Trinity.Components.Coroutines.Town
         {
             if (!ZetaDia.IsInTown)
             {
-                Core.Logger.Verbose("[StashItems] Need to be in town to stash items");
+                Core.Logger.Verbose("[储存物品] 需要在城里储存物品");
                 return false;
             }
 
@@ -64,8 +64,8 @@ namespace Trinity.Components.Coroutines.Town
                 return false;
             }
 
-            Core.Logger.Verbose($"[StashItems] Now to stash {stashItems.Count} items");
-            stashItems.ForEach(i => Core.Logger.Debug($"[StashItems] Stashing: {i.Name} ({i.ActorSnoId}) InternalName={i.InternalName} Ancient={i.IsAncient} Ann={i.AnnId}"));
+            Core.Logger.Verbose($"[储存物品] 现在储存物品 {stashItems.Count} ");
+            stashItems.ForEach(i => Core.Logger.Debug($"[储存物品] 储存: {i.Name} ({i.ActorSnoId}) 内部名={i.InternalName} 远古={i.IsAncient} Ann={i.AnnId}"));
 
             GameUI.CloseVendorWindow();
 
@@ -79,13 +79,13 @@ namespace Trinity.Components.Coroutines.Town
 
                 if (!await MoveTo.Execute(stash.Position))
                 {
-                    Core.Logger.Error($"[SalvageItems] Failed to move to stash interact position ({stash.Name}) to stash items :(");
+                    Core.Logger.Error($"[救助物品] 未能移动到与储物箱 ({stash.Name}) 交互位置储存物品 :(");
                     return false;
                 };
                 Navigator.PlayerMover.MoveTowards(stash.Position);
                 if (!await MoveToAndInteract.Execute(stash, 5f))
                 {
-                    Core.Logger.Error($"[SalvageItems] Failed to move to stash ({stash.Name}) to stash items :(");
+                    Core.Logger.Error($"[救助物品] 未能将移动到储物箱 ({stash.Name}) 储存物品 :(");
                     return false;
                 };
                 await Coroutine.Sleep(750);
@@ -96,7 +96,7 @@ namespace Trinity.Components.Coroutines.Town
             {
                 if (Core.Settings.Items.BuyStashTabs && StashPagesAvailableToPurchase)
                 {
-                    Core.Logger.Error("[StashItems] Attempting to buy stash pages");
+                    Core.Logger.Error("[储存物品] 尝试购买储物箱");
                     InventoryManager.BuySharedStashSlots();
                 }
 
@@ -109,7 +109,7 @@ namespace Trinity.Components.Coroutines.Town
                 var freshItems = Core.Inventory.Backpack.Where(ShouldStash).Where(i => AllowedToStash(dontStashCraftingMaterials, i)).ToList();
                 if (!freshItems.Any())
                 {
-                    Core.Logger.Verbose($"[StashItems] No items to stash");
+                    Core.Logger.Verbose($"[储存物品] 没有物品可储存 ");
                 }
                 else
                 {
@@ -125,7 +125,7 @@ namespace Trinity.Components.Coroutines.Town
                             var page = GetBestStashLocation(item, out col, out row);
                             if (page == -1)
                             {
-                                Core.Logger.Verbose($"[StashItems] No place to put item, stash is probably full ({item.Name} [{col},{row}] Page={page})");
+                                Core.Logger.Verbose($"[储存物品] 没有放物品的地方, 储物箱可能是满的 ({item.Name} [{col},{row}] 页面={page})");
                                 HandleFullStash();
                                 isStashFull = true;
                                 continue;
@@ -133,12 +133,12 @@ namespace Trinity.Components.Coroutines.Town
 
                             if (page != InventoryManager.CurrentStashPage)
                             {
-                                Core.Logger.Verbose($"[StashItems] Changing to stash page: {page}");
+                                Core.Logger.Verbose($"[储存物品] 改变储存页面: {page}");
                                 InventoryManager.SwitchStashPage(page);
                                 await Coroutine.Sleep(500);
                             }
 
-                            Core.Logger.Debug($"[StashItems] Stashing: {item.Name} ({item.ActorSnoId}) [{item.InventoryColumn},{item.InventoryRow} {item.InventorySlot}] Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} InternalName={item.InternalName} StashPage={page}");
+                            Core.Logger.Debug($"[储存物品] 正在储存: {item.Name} ({item.ActorSnoId}) [{item.InventoryColumn},{item.InventoryRow} {item.InventorySlot}] 品质={item.ItemQualityLevel} 是否远古={item.IsAncient} InternalName={item.InternalName} 仓库页={page}");
                             InventoryManager.MoveItem(item.AnnId, Core.Player.MyDynamicID, InventorySlot.SharedStash, col, row);                     
                             await Coroutine.Sleep(100);
 
@@ -149,7 +149,7 @@ namespace Trinity.Components.Coroutines.Town
                         }
                         catch (Exception ex)
                         {
-                            Core.Logger.Log($"Exception Stashing Item: {ex}");
+                            Core.Logger.Log($"储存物品异常: {ex}");
                         }
                     }
                 }
@@ -163,7 +163,7 @@ namespace Trinity.Components.Coroutines.Town
                 return true;
             }
 
-            Core.Logger.Error($"[StashItems] Failed to stash items");
+            Core.Logger.Error($"[储存物品] 没有要储存的物品");
             return false;
         }
 
@@ -181,7 +181,7 @@ namespace Trinity.Components.Coroutines.Town
             var stash = TownInfo.Stash;
             if (stash == null)
             {
-                Core.Logger.Error("[StashItems] Unable to find a stash info for this area :(");
+                Core.Logger.Error("[储存物品] 无法找到储物箱这个区域的信息 :(");
                 return false;
             }
 
@@ -189,7 +189,7 @@ namespace Trinity.Components.Coroutines.Town
             {
                 if (!await MoveToAndInteract.Execute(stash))
                 {
-                    Core.Logger.Error($"[StashItems] Failed to move to stash ({stash.Name}) to salvage items :(");
+                    Core.Logger.Error($"[储存物品] 未能移动到储物箱 ({stash.Name}) 救助物品 :(");
                     return false;
                 }
                 await Coroutine.Sleep(1000);
@@ -273,7 +273,7 @@ namespace Trinity.Components.Coroutines.Town
                         if (!targetItem.IsValid)
                             continue;
 
-                        Core.Logger.Log($"[StashItems] Stacking: {item.Name} ({item.ActorSnoId}) [{item.InventoryColumn},{item.InventoryRow}] ({item.ItemStackQuantity}) onto [{col},{row}] ({targetItem.ItemStackQuantity})");
+                        Core.Logger.Log($"[储存物品] 堆叠: {item.Name} ({item.ActorSnoId}) [{item.InventoryColumn},{item.InventoryRow}] ({item.ItemStackQuantity}) onto [{col},{row}] ({targetItem.ItemStackQuantity})");
                         InventoryManager.MoveItem(item.AnnId, Core.Player.MyDynamicID, InventorySlot.SharedStash, col, row);
                         usedIds.Add(item.AnnId);
 
@@ -536,7 +536,7 @@ namespace Trinity.Components.Coroutines.Town
 
             if (item.ActorSnoId == existingItem.ActorSnoId && newStackSize <= item.MaxStackCount && item.AnnId != existingItem.AnnId)
             {
-                Core.Logger.Debug($"Can stash item {item.Name} on page {stashPageNumber} at [col={col},row={row}] (stack on existing {existingStackQuantity} + {itemStackQuantity} ({newStackSize}) / {item.MaxStackCount})");
+                Core.Logger.Debug($"可以储存物品 {item.Name} 在储存页面 {stashPageNumber} at [col={col},row={row}] (stack on existing {existingStackQuantity} + {itemStackQuantity} ({newStackSize}) / {item.MaxStackCount})");
                 placeAtCol = col;
                 placeAtRow = row;
                 return true;
@@ -568,7 +568,7 @@ namespace Trinity.Components.Coroutines.Town
 
             if (isSquareEmpty)
             {
-                Core.Logger.Verbose($"Can stash item {item.Name} on page {stashPageNumber} at [col={col},row={row}]");
+                Core.Logger.Verbose($"可以储存物品 {item.Name} 在储存页面 {stashPageNumber}  [col={col},row={row}]");
                 placeAtCol = col;
                 placeAtRow = row;
                 return true;
@@ -584,11 +584,11 @@ namespace Trinity.Components.Coroutines.Town
 
         private static void HandleFullStash()
         {
-            Core.Logger.Error($"[StashItems] There is no space in the stash. Woops!");
+            Core.Logger.Error($"[储存物品] 在储物箱里没有空间. 糟糕!");
 
             if (GlobalSettings.Instance.FullInventoryHandling == FullInventoryOption.Logout)
             {
-                Core.Logger.Error($"[StashItems] Shutting down DB and D3 and requesting no restarts (DemonbuddyExitCode.DoNotRestart: 12) because of DB Setting 'FullInventoryOption.Logout'!");
+                Core.Logger.Error($"[储存物品] 关闭DB和D3 并要求重新启动无 (DemonbuddyExitCode.DoNotRestart: 12) 因为DB的设定是 'FullInventoryOption.Logout'!");
                 ZetaDia.Service.Party.LeaveGame(false);
                 Thread.Sleep(15000);
                 BotMain.Stop(false, "");

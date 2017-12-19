@@ -22,27 +22,35 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
         public int ObjectiveSearchRadius { get; set; }
         public bool AutoSetNearbyNodesExplored { get; set; }
         public int AutoSetNearbyNodesRadius { get; set; }
-        public bool IsDone => _isDone;
+        public bool IsDone { get { return _isDone; } }
         public BountyStatistic Stats { get; private set; }
 
-        public BountyData BountyData => _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(QuestId));
+        public BountyData BountyData
+        {
+            get { return _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(QuestId)); }
+        }
 
-        public QuestData QuestData => BountyData.QuestData;
+        public QuestData QuestData
+        {
+            get { return BountyData.QuestData; }
+        }
 
         public bool IsInZone
         {
             get
             {
-                var wp = ZetaDia.Storage.ActManager.GetWaypointByLevelAreaSnoId(BountyData.WaypointLevelAreaId);
-                if (wp != null && WaypointFactory.NearWaypoint(wp.Number))
+                if (WaypointFactory.NearWaypoint(BountyData.WaypointNumber))
+                {
                     return true;
-
+                }
                 if ((BountyData.LevelAreaIds != null && BountyData.LevelAreaIds.Contains(AdvDia.CurrentLevelAreaId)))
+                {
                     return true;
-                
+                }
                 if (ZetaDia.Storage.Quests.ActiveBounty != null && (int)ZetaDia.Storage.Quests.ActiveBounty.Quest == QuestId)
+                {
                     return true;
-
+                }
                 return false;
             }
         }
@@ -131,7 +139,11 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
             }
             if (!_returningToTownWaitTimer.IsFinished) return false;
             _returningToTownWaitTimer = null;
-         
+            //if (!IsAvailable)
+            //{
+            //    _isDone = true;
+            //    return true;
+            //}
             Stats = BountyStatistic.GetInstance(QuestId);
 
             LastBountyStats = Stats;
@@ -142,7 +154,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
             if (Stats.EndTime == default(DateTime))
                 Stats.EndTime = DateTime.UtcNow;
 
-            Core.Logger.Log("[Bounty] Starting {0} ({1})", QuestData.Name, QuestId);
+            Core.Logger.Log("[悬赏] 开始 {0} ({1})", QuestData.Name, QuestId);
             if (IsInZone)
             {
                 State = States.InZone;
@@ -159,9 +171,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         private async Task<bool> TakingWaypoint()
         {
-            if (!await WaypointCoroutine.UseWaypoint(BountyData.WaypointNumber))
-                return false;
-
+            if (!await WaypointCoroutine.UseWaypoint(BountyData.WaypointNumber)) return false;
             State = States.InZone;
             return false;
         }
@@ -177,21 +187,21 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
             return false;
         }
 
+        public static int currentRandomizedBounty = -1;
         private WaitTimer _completedWaitTimer;
 
         private async Task<bool> Completed()
         {
             if (_completedWaitTimer == null) _completedWaitTimer = QuestId == 359927 ? new WaitTimer(TimeSpan.FromSeconds(15)) : new WaitTimer(TimeSpan.FromSeconds(3));
-            if (!_completedWaitTimer.IsFinished)
-                return false;
-
+            if (!_completedWaitTimer.IsFinished) return false;
             _completedWaitTimer = null;
             _isDone = true;
             if (Stats != null)
             {
                 Stats.EndTime = DateTime.UtcNow;
                 Stats.IsCompleted = true;
-                Core.Logger.Log("[Bounty] Completed {0} ({1}) Time {2:hh\\:mm\\:ss}", QuestData.Name, QuestId, Stats.EndTime - Stats.StartTime);
+                Core.Logger.Log("[悬赏] 已完成 {0} ({1}) 时间 {2:hh\\:mm\\:ss}", QuestData.Name, QuestId, Stats.EndTime - Stats.StartTime);
+                currentRandomizedBounty = -1;
             }
 
             return true;
@@ -199,7 +209,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         private async Task<bool> Failed()
         {
-            Core.Logger.Error("[Bounty] Failed {0} ({1})", QuestData.Name, QuestId);
+            Core.Logger.Error("[悬赏] 失败 {0} ({1})", QuestData.Name, QuestId);
             _isDone = true;
             Stats.EndTime = DateTime.UtcNow;
             Stats.IsFailed = true;
@@ -216,7 +226,16 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
                 {
                     coroutine.DisablePulse();
                 }
+                return;
             }
+            //if (State != States.NotStarted && State != States.Completed && State != States.Failed)
+            //{
+            //    if (!IsInZone && State != States.TakingWaypoint)
+            //    {
+            //        Core.Logger.Log("[Bounty] Looks like we left the bounty zone, returning");
+            //        State = States.TakingWaypoint;
+            //    }
+            //}
         }
 
         public virtual void Reset()

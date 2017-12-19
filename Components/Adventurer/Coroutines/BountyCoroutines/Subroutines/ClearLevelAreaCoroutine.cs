@@ -58,8 +58,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Log("[ClearLevelArea] " + value);
-                    StatusText = "[ClearLevelArea] " + value;
+                    Core.Logger.Log("[清理任务区域] " + value);
+                    StatusText = "[清理任务区域] " + value;
                 }
                 _state = value;
             }
@@ -182,14 +182,14 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private async Task<bool> Completed()
         {
             TrinityCombat.ResetCombatMode();
-            Core.Logger.Log("[ClearLevelArea] Completed");
+            Core.Logger.Log("[清理任务区域] 已完成");
             return true;
         }
 
         private async Task<bool> Failed()
         {
             TrinityCombat.ResetCombatMode();
-            Core.Logger.Log("[ClearLevelArea] Failed");
+            Core.Logger.Log("[清理任务区域] 失败了");
             return true;
         }
 
@@ -210,7 +210,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             var actor = ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).Where(o => o.IsValid && o.CommonData != null && o.CommonData.IsValid && o.IsAlive && o.CommonData.MinimapVisibilityFlags != 0).OrderBy(o => o.Distance).FirstOrDefault();
 
             if (actor == null) return Vector3.Zero;
-            Core.Logger.Debug("[ClearLevelArea] Found a hostile unit {0} at {1} distance", ((SNOActor)actor.ActorSnoId).ToString(), actor.Distance);
+            Core.Logger.Debug("[清理任务区域] 找到一个敌对的单位 {0} 距离 {1}", ((SNOActor)actor.ActorSnoId).ToString(), actor.Distance);
             return actor.Position;
         }
 
@@ -219,7 +219,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             var actor = ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true).Where(o => o.ActorSnoId == _objectiveId && o.IsValid && o.CommonData != null && o.CommonData.IsValid && o.CommonData.MinimapVisibilityFlags != 0).OrderBy(o => o.Distance).FirstOrDefault();
 
             if (actor == null) return Vector3.Zero;
-            Core.Logger.Debug("[ClearLevelArea] Found a hostile unit {0} at {1} distance", ((SNOActor)actor.ActorSnoId).ToString(), actor.Distance);
+            Core.Logger.Debug("[清理任务区域] 找到一个敌对的单位 {0} 距离 {1}", ((SNOActor)actor.ActorSnoId).ToString(), actor.Distance);
             return actor.Position;
         }
     }

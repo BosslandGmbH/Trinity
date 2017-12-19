@@ -1,12 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Trinity.Components.Adventurer;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Framework;
+using Trinity.Framework.Reference;
+using Zeta.Bot;
 using Zeta.Game;
+using Trinity.Components.Adventurer.Game;
+using Trinity.Components.Adventurer.Game.Exploration;
+using System;
+using Trinity.Framework;
 using Trinity.Framework.Helpers;
+using System.Collections.Generic;
+using System.Linq;
 using Trinity.Framework.Objects;
+using Zeta.Bot;
+using Zeta.Game;
 using Zeta.Common;
+using Zeta.Game.Internals;
+using Trinity.Framework.Reference;
 using Zeta.Game.Internals;
 using System.Collections;
 
@@ -29,12 +44,10 @@ namespace Trinity.Modules
         {
             get
             {
-                Vector3 cachedPos = Core.Player.Position;
-                Vector3 pos = cachedPos == Vector3.Zero ? ZetaDia.Me.Position : cachedPos;
                 var worldId = ZetaDia.Globals.WorldId;
-
-                return CurrentWorldScenes.FirstOrDefault(
-                        s => s.DynamicWorldId == worldId && pos.X >= s.Min.X && pos.Y >= s.Min.Y && pos.X <= s.Max.X && pos.Y <= s.Max.Y);
+                return
+                    CurrentWorldScenes.FirstOrDefault(
+                        s => s.DynamicWorldId == worldId && AdvDia.MyPosition.X >= s.Min.X && AdvDia.MyPosition.Y >= s.Min.Y && AdvDia.MyPosition.X <= s.Max.X && AdvDia.MyPosition.Y <= s.Max.Y);
             }
         }
 
@@ -79,7 +92,7 @@ namespace Trinity.Modules
                 //    return;
                 //}
 
-                Core.Logger.Debug("[SceneStorage] World has changed from {0} to {1}", _currentWorld, currentWorldId);
+                Core.Logger.Debug("[场景存储] World 已变更, 从 {0} 到 {1}", _currentWorld, currentWorldId);
                 _currentWorld = currentWorldId;
                 Reset();
             }
@@ -115,7 +128,7 @@ namespace Trinity.Modules
                     worldId = scene.Mesh.WorldId;
 
                     Scene subScene = scene.Mesh.SubScene;
-                    if (scene.IsAlmostValid() && scene.Mesh.ParentSceneId <= 0 && worldId == currentWorldId)
+                    if (scene.IsAlmostValid() && scene.Mesh.ParentSceneId <= 0 && worldId == currentWorldId )
                     {
                         if (scene.Mesh.Zone.GridSquares.Length <= 1 && (subScene != null && !subScene.HasGridSquares()))
                             continue;
@@ -136,27 +149,15 @@ namespace Trinity.Modules
             }
 
             if (addedScenes.Count > 0)
-            {                
-                Core.Logger.Debug("[ScenesStorage] Found {0} new scenes", addedScenes.Count);
+            {
+                Core.Logger.Debug("[场景存储] 找到 {0} 个新场景", addedScenes.Count);
                 var sceneData = CreateSceneData(addedScenes, worldId);
                 foreach (var grid in GridStore.GetCurrentGrids())
                 {
                     grid.Update(sceneData);
                 }
-
-                if (CurrentScene != null)
-                {
-                    foreach (var scene in CurrentWorldScenes.Where(s => !s.HasPlayerConnection))
-                    {
-                        if (scene == CurrentScene || CurrentScene.IsConnected(scene))
-                        {
-                            scene.HasPlayerConnection = true;
-                        }
-                    }
-                }
-
                 ScenesAdded?.Invoke(addedScenes);
-                Core.Logger.Debug("[ScenesStorage] Updates Finished", addedScenes.Count);
+                Core.Logger.Debug("[场景存储] 更新完毕!", addedScenes.Count);
             }
         }
 
@@ -199,7 +200,7 @@ namespace Trinity.Modules
 
         public void Reset()
         {
-            Core.Logger.Debug("[ScenesStorage] Reseting");
+            Core.Logger.Debug("[场景存储] 复位");
             CurrentWorldSceneIds.Clear();
             CurrentWorldScenes.Clear();
             foreach (var grid in GridStore.GetCurrentGrids())

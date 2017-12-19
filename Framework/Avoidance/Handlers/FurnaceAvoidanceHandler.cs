@@ -19,7 +19,7 @@ namespace Trinity.Framework.Avoidance.Handlers
 
                 if (actor.IsDead || actor.CommonData == null || !actor.CommonData.IsValid || actor.CommonData.IsDisposed)
                 {
-                    Core.Logger.Verbose("Actor {0} CommonData Invalid ({1})", actor.InternalName, part.Name);
+                    Core.Logger.Verbose("参与者 {0} 常用数据无效 ({1})", actor.InternalName, part.Name);
                     continue;
                 }
 

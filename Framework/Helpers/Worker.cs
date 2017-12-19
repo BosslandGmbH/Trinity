@@ -54,7 +54,7 @@ namespace Trinity.Framework.Helpers
                 Priority = ThreadPriority.BelowNormal,
             };
 
-            Core.Logger.Debug("Starting {0} Thread Id={1}", _thread.Name, _thread.ManagedThreadId);
+            Core.Logger.Debug("开始 {0} 线程 Id={1}", _thread.Name, _thread.ManagedThreadId);
 
             _working = true;
             _thread.Start();
@@ -69,7 +69,7 @@ namespace Trinity.Framework.Helpers
                 if (!IsRunning)
                     return;
 
-                Core.Logger.Debug("Shutting down thread");
+                Core.Logger.Debug("关闭线程");
 
                 _thread.Abort(new { RequestingThreadId = Thread.CurrentThread.ManagedThreadId });
             }
@@ -84,7 +84,7 @@ namespace Trinity.Framework.Helpers
             if (_thread == null)
                 return;
 
-            Core.Logger.Debug("Thread {0}: {1} Started", _thread.ManagedThreadId, _thread.Name);
+            Core.Logger.Debug("线程 {0}: {1} 已经启动", _thread.ManagedThreadId, _thread.Name);
 
             while (_working)
             {
@@ -101,16 +101,16 @@ namespace Trinity.Framework.Helpers
                 catch (ThreadAbortException ex)
                 {
                     _working = false;
-                    Core.Logger.Debug("Aborting Thread: {0}, StateInfo={1}", _thread.ManagedThreadId, ex.ExceptionState);
+                    Core.Logger.Debug("中止 线程: {0}, StateInfo={1}", _thread.ManagedThreadId, ex.ExceptionState);
                     Thread.ResetAbort();
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Log("Error in Thread {0}: {1} {2}", _thread.ManagedThreadId, _thread.Name, ex);
+                    Core.Logger.Log("线程中的错误 {0}: {1} {2}", _thread.ManagedThreadId, _thread.Name, ex);
                 }
             }
 
-            Core.Logger.Debug("Thread {0}: {1} Finished", _thread.ManagedThreadId, _thread.Name);
+            Core.Logger.Debug("线程 {0}: {1} 完成", _thread.ManagedThreadId, _thread.Name);
 
             OnStopped.Invoke();
         }

@@ -59,7 +59,7 @@ namespace Trinity.Framework.Behaviors
 
         private async Task<bool> WaitAction()
         {
-            Core.Logger.Verbose(LogCategory.Behavior, $"Waiting after unit death: {LastDiedUnit?.Name}, because {WaitReason}, TimeSinceDeath={TimeSinceDeath:g} RemainingWaitTime={RemainingWaitTime:g}");
+            Core.Logger.Verbose(LogCategory.Behavior, $"单位死亡后等待: {LastDiedUnit?.Name}, 因为 {WaitReason}, 死亡时间={TimeSinceDeath:g} 剩余的等待时间={RemainingWaitTime:g}");
             await Coroutine.Sleep(250);
             return true;
         }
@@ -67,14 +67,14 @@ namespace Trinity.Framework.Behaviors
         protected override async Task<bool> OnStarted()
         {
             LastStartedTime = DateTime.UtcNow;
-            Core.Logger.Warn($"Started waiting after unit death: {LastDiedUnit?.Name}, {LastDiedUnit?.AcdId}");
+            Core.Logger.Warn($"单位: {LastDiedUnit?.Name} 死亡后开始等待, {LastDiedUnit?.AcdId}");
             return true;
         }
 
         protected override async Task<bool> OnStopped()
         {
             LastStoppedTime = DateTime.UtcNow;
-            Core.Logger.Warn($"Finished waiting after unit death: {LastDiedUnit?.Name}, TimeWaited={LastRunTime:g}");
+            Core.Logger.Warn($"完成单位: {LastDiedUnit?.Name}死亡后的等待, 等待时间={LastRunTime:g}");
             return true;
         }
     }

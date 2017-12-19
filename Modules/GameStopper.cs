@@ -52,7 +52,7 @@ namespace Trinity.Modules
 
         private void Stop(string reason)
         {
-            Core.Logger.Warn($"Game Stopped: {reason}");
+            Core.Logger.Warn($"游戏停止: {reason}");
             SystemSounds.Exclamation.Play();
             BotMain.Stop();
         }

@@ -47,8 +47,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Log("[InteractWithGizmo] " + value);
-                    StatusText = "[InteractWithGizmo] " + value;
+                    Core.Logger.Log("[互动] " + value);
+                    StatusText = "[互动] " + value;
                 }
                 _state = value;
             }
@@ -170,7 +170,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             var actor = ActorFinder.FindGizmo(_actorId);
             if (actor == null)
             {
-                Core.Logger.Debug("No Gizmo Found.");
+                Core.Logger.Debug("没有发现互动目标.");
                 State = States.Searching;
                 return false;
             }
@@ -179,7 +179,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 new TimeSpan(0, 0, _secondsToSleepAfterInteraction), _interactAttemps);
             if (!actor.IsInteractableQuestObject())
             {
-                Core.Logger.Error($"Unable to Interact with: {actor.Name} | Distance: {actor.Distance}.  Whitelisting.");
+                Core.Logger.Error($"无法互动: {actor.Name} | 距离: {actor.Distance}.");
                 ActorFinder.InteractWhitelist.Add(actor.ActorSnoId);
             }
             return false;
@@ -206,7 +206,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 ActorFinder.InteractWhitelist.Remove(_actorId);
                 if (_interactionCoroutine.State == InteractionCoroutine.States.TimedOut)
                 {
-                    Core.Logger.Error("[InteractWithGizmo] Interaction timed out.");
+                    Core.Logger.Debug("[互动] 互动超时.");
                     State = States.Failed;
                     return false;
                 }
@@ -216,7 +216,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     var nextGizmo = ActorFinder.FindGizmo(_actorId, gizmo => gizmo.IsInteractableQuestObject());
                     if (nextGizmo != null)
                     {
-                        Core.Logger.Warn("Found another actor that needs some interaction. Dist={0}", nextGizmo.Distance);
+                        Core.Logger.Warn("发现另一个互动目标. 距离={0}", nextGizmo.Distance);
                         State = States.Searching;
                         return false;
                     }
@@ -225,7 +225,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 var actor = ActorFinder.FindGizmo(_actorId);
                 if (actor == null)
                 {
-                    Core.Logger.Log($"No Gizmo Found.");
+                    Core.Logger.Log($"没有发现互动目标.");
                     State = States.Failed;
                     return false;
                 }
@@ -269,9 +269,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 }
                 if (_objectiveLocation == Vector3.Zero && _actorId != 0)
                 {
-                    var actor = ActorFinder.FindGizmo(_actorId);
-                    if (actor != null && !actor.HasBeenOperated)
-                        _objectiveLocation = BountyHelpers.ScanForActorLocation(_actorId, _objectiveScanRange);
+                    _objectiveLocation = BountyHelpers.ScanForActorLocation(_actorId, _objectiveScanRange);
                 }
                 if (_objectiveLocation != Vector3.Zero)
                 {

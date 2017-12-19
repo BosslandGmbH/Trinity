@@ -48,8 +48,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Log("[MoveToScenePosition] " + value);
-                    StatusText = "[MoveToScenePosition] " + value;
+                    Core.Logger.Log("[移动到场景位置] " + value);
+                    StatusText = "[移动到场景位置] " + value;
                 }
                 _state = value;
             }
@@ -262,7 +262,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                         _worldScene = scene;
                         _objectiveLocation = _worldScene.GetWorldPosition(_position);
                         ExplorationHelpers.SetExplorationPriority(_objectiveLocation);
-                        Core.Logger.Debug($"Scan found target scene by SnoId {_worldScene.Name} ({_worldScene.SnoId}). Pos={_objectiveLocation} Dist={_objectiveLocation.Distance(AdvDia.MyPosition)} Relative={_position}");
+                        Core.Logger.Debug($"发现目标场景  SnoId {_worldScene.Name} ({_worldScene.SnoId}). Pos={_objectiveLocation} Dist={_objectiveLocation.Distance(AdvDia.MyPosition)} Relative={_position}");
                     }
                 }
                 else if (!string.IsNullOrEmpty(_sceneName))
@@ -279,13 +279,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                         _worldScene = scene;
                         _objectiveLocation = _worldScene.GetWorldPosition(_position);
                         ExplorationHelpers.SetExplorationPriority(_objectiveLocation);
-                        Core.Logger.Debug($"Scan found target scene {_worldScene.Name} ({_worldScene.SnoId}). Pos={_objectiveLocation} Dist={_objectiveLocation.Distance(AdvDia.MyPosition)} Relative={_position}");
+                        Core.Logger.Debug($"发现目标场景 {_worldScene.Name} ({_worldScene.SnoId}). Pos={_objectiveLocation} Dist={_objectiveLocation.Distance(AdvDia.MyPosition)} Relative={_position}");
                     }
                 }
 
                 if (!Core.Scenes.CurrentScene.IsConnected(_objectiveLocation))
                 {
-                    Core.Logger.Debug($"Unable to reach the scene, we need to uncover more intermediary scenes first");
+                    Core.Logger.Debug($"无法到达现场，需要先到达中间场景。");
                     _objectiveLocation = Vector3.Zero;
                 }
 

@@ -274,9 +274,5 @@ namespace Trinity.Settings
             set { SetField(ref _useTypeStashingOther, value); }
         }
 
-
-
     }
-
-
 }

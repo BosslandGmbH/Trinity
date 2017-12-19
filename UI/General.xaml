@@ -10,74 +10,75 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Template.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
-            <converters:PercentConverter x:Key="PercentConverter" />
-            <converters:SliderValueToVisibilityConverter x:Key="SliderValueToVisibilityConverter" />
+            <converters:EnumBooleanConverter x:Key="EnumBooleanConverter"/>
+            <converters:PercentConverter x:Key="PercentConverter"/>
+            <converters:SliderValueToVisibilityConverter x:Key="SliderValueToVisibilityConverter"/>
             <converters:BoolToVisibilityConverter x:Key="VisibleWhenTrueConverter" TrueValue="Visible" FalseValue="Collapsed"/>
             <converters:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed"/>
-            <converters:PropertyValueConverter x:Key="propertyValueConverter" />
-            <converters:BoolInverterConverter x:Key="BoolInverterConverter" />
-            <converters:EnumVisibilityConverter x:Key="EnumVisibilityConverter" />
+            <converters:PropertyValueConverter x:Key="propertyValueConverter"/>
+            <converters:BoolInverterConverter x:Key="BoolInverterConverter"/>
+            <converters:EnumVisibilityConverter x:Key="EnumVisibilityConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer>
         <StackPanel Margin="0,10,5,0">
 
-            <GroupBox Header="Shrines and Pylons">
+            <GroupBox Header="圣坛和秘坛">
                 <StackPanel Margin="0,6,10,0">
                     <WrapPanel Margin="0,0,0,0">
-                        <RadioButton Foreground="White" Content="Use Shrines" IsChecked="{Binding Weighting.ShrineWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}" />
-                        <RadioButton Foreground="White" Content="Ignore" IsChecked="{Binding Weighting.ShrineWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}" />
-                        <RadioButton Foreground="White" Content="Customize" IsChecked="{Binding Weighting.ShrineWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}" />
+                        <RadioButton Foreground="White" Content="使用" IsChecked="{Binding Weighting.ShrineWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}"/>
+                        <RadioButton Foreground="White" Content="忽视" IsChecked="{Binding Weighting.ShrineWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}"/>
+                        <RadioButton Foreground="White" Content="勾选特定塔" IsChecked="{Binding Weighting.ShrineWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}"/>
                     </WrapPanel>
                     <StackPanel Margin="0,5,0,0" Visibility="{Binding Weighting.ShrineWeighting, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Selective}">
-                        <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=ShrineTypes}" Style="{DynamicResource SimpleItemsControlSelector}" />
+                       <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=ShrineTypes}" Style="{DynamicResource SimpleItemsControlSelector}"/>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Containers">
+            <GroupBox Header="箱子">
                 <StackPanel Margin="0,6,10,0">
                     <WrapPanel Margin="0,0,0,0">
-                        <RadioButton Foreground="White" Content="Open Containers" IsChecked="{Binding Weighting.ContainerWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}" />
-                        <RadioButton Foreground="White" Content="Ignore" IsChecked="{Binding Weighting.ContainerWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}" />
-                        <RadioButton Foreground="White" Content="Customize" IsChecked="{Binding Weighting.ContainerWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}" />
+                        <RadioButton Foreground="White" Content="打开" IsChecked="{Binding Weighting.ContainerWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}"/>
+                        <RadioButton Foreground="White" Content="忽视" IsChecked="{Binding Weighting.ContainerWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}"/>
+                        <RadioButton Foreground="White" Content="勾选特定物体：1尸体  普通宝箱  武器架  2环境物体  其他  精美箱子" IsChecked="{Binding Weighting.ContainerWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}"/>
                     </WrapPanel>
                     <StackPanel Margin="0,5,0,0" Visibility="{Binding Weighting.ContainerWeighting, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Selective}">
-                        <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=ContainerTypes}" Style="{DynamicResource SimpleItemsControlSelector}" />
+                        <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=ContainerTypes}" Style="{DynamicResource SimpleItemsControlSelector}"/>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Globes">
+            <GroupBox Header="球体">
                 <StackPanel Margin="0,6,10,0">
                     <WrapPanel Margin="0,0,0,0">
-                        <RadioButton Foreground="White" Content="Collect Globes" IsChecked="{Binding Weighting.GlobeWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}" />
-                        <RadioButton Foreground="White" Content="Ignore" IsChecked="{Binding Weighting.GlobeWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}" />
-                        <RadioButton Foreground="White" Content="Customize" IsChecked="{Binding Weighting.GlobeWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}" />
+                        <RadioButton Foreground="White" Content="捡球" IsChecked="{Binding Weighting.GlobeWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}"/>
+                        <RadioButton Foreground="White" Content="忽视" IsChecked="{Binding Weighting.GlobeWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}"/>
+                        <RadioButton Foreground="White" Content="勾选特定" IsChecked="{Binding Weighting.GlobeWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}"/>
                     </WrapPanel>
                     <StackPanel Margin="0,5,0,0" Visibility="{Binding Weighting.GlobeWeighting, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Selective}">
-                        <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=GlobeTypes}" Style="{DynamicResource SimpleItemsControlSelector}" />
+                    <Label Margin="0,8,0,-2" FontWeight="Bold">  血球     能量球     小秘境进度球    大秘境进度球</Label>
+                        <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=GlobeTypes}" Style="{DynamicResource SimpleItemsControlSelector}"/>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
 
             <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
                 <GroupBox.Header>
-                    Paragon
+                    巅峰点数
                 </GroupBox.Header>
                 <StackPanel>
-                    <CheckBox Margin="3,10,3,10" IsChecked="{Binding Paragon.IsEnabled}">Spend paragon points</CheckBox>
+                    <CheckBox Margin="3,10,3,10" IsChecked="{Binding Paragon.IsEnabled}">自动加点</CheckBox>
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Auto-Equip">
+            <GroupBox Header="自动替换">
                 <StackPanel>
                     <UniformGrid Columns="2">
-                        <CheckBox Content="Items" IsChecked="{Binding Items.AutoEquipItems}" Margin="5"/>
-                        <CheckBox Content="Skills" IsChecked="{Binding Items.AutoEquipSkills}" Margin="5"/>
-                        <CheckBox Content="Don't Equip Weapons" IsChecked="{Binding Items.AutoEquipIgnoreWeapons}" Margin="5"/>
-                        <CheckBox Content="Disable at level 70" IsChecked="{Binding Items.AutoEquipAutoDisable}" Margin="5"/>
+                        <CheckBox Content="装备" IsChecked="{Binding Items.AutoEquipItems}" Margin="5"/>
+                        <CheckBox Content="技能" IsChecked="{Binding Items.AutoEquipSkills}" Margin="5"/>
+                        <CheckBox Content="不换武器" IsChecked="{Binding Items.AutoEquipIgnoreWeapons}" Margin="5"/>
+                        <CheckBox Content="满级时禁用" IsChecked="{Binding Items.AutoEquipAutoDisable}" Margin="5"/>
                     </UniformGrid>
                 </StackPanel>
             </GroupBox>            
@@ -85,13 +86,13 @@
             <StackPanel Grid.Row="6" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0">
                 <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
                     <GroupBox.Header>
-                        Boss Fights
+                        处理BOSS战前的对话框（组队）
                     </GroupBox.Header>
                     <StackPanel>
                         <WrapPanel Margin="0,5,0,0">
-                            <RadioButton Foreground="White" Margin="0,0,10,0" Content="Accept" IsChecked="{Binding Combat.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AlwaysAccept}" />
-                            <RadioButton Foreground="White" Margin="0,0,10,0" Content="Decline" IsChecked="{Binding Combat.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AlwaysDecline}" />
-                            <RadioButton Foreground="White" Margin="0,0,10,0" Content="Decline while on Bounty" IsChecked="{Binding Combat.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=DeclineInBounty}" />
+                            <RadioButton Foreground="White" Margin="0,0,10,0" Content="接受" IsChecked="{Binding Combat.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AlwaysAccept}"/>
+                            <RadioButton Foreground="White" Margin="0,0,10,0" Content="拒绝" IsChecked="{Binding Combat.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AlwaysDecline}"/>
+                            <RadioButton Foreground="White" Margin="0,0,10,0" Content="仅在冒险模式中拒绝" IsChecked="{Binding Combat.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=DeclineInBounty}"/>
                         </WrapPanel>
                     </StackPanel>
                 </GroupBox>
@@ -100,62 +101,66 @@
             <StackPanel Grid.Row="6" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0">
                 <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
                     <GroupBox.Header>
-                        Goblins
+                        追杀哥布林
                     </GroupBox.Header>
                     <StackPanel Margin="0,6,0,0">
                         <WrapPanel>
-                            <RadioButton Foreground="White" Content="Attack Goblins" IsChecked="{Binding Path=Weighting.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Normal}" />
-                            <RadioButton Foreground="White" Content="Ignore" IsChecked="{Binding Path=Weighting.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Ignore}" />
-                            <RadioButton Foreground="White" Content="Prioritize" IsChecked="{Binding Path=Weighting.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Prioritize}" />
-                            <RadioButton Foreground="White" Content="Kamikaze" IsChecked="{Binding Path=Weighting.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Kamikaze}" />
+                            <RadioButton Foreground="White" Content="攻击" IsChecked="{Binding Path=Weighting.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Normal}"/>
+                            <RadioButton Foreground="White" Content="忽视" IsChecked="{Binding Path=Weighting.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Ignore}"/>
+                            <RadioButton Foreground="White" Content="优先" IsChecked="{Binding Path=Weighting.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Prioritize}"/>
+                            <RadioButton Foreground="White" Content="拼命" IsChecked="{Binding Path=Weighting.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Kamikaze}"/>
                         </WrapPanel>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
 
-            <GroupBox Header="Elite Monsters">
+            <GroupBox Header="精英怪">
                 <StackPanel Margin="0,6,10,0">
                     <WrapPanel Margin="0,0,0,0">
-                        <RadioButton Foreground="White" Content="Attack Elites" IsChecked="{Binding Weighting.EliteWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}" />
-                        <RadioButton Foreground="White" Content="Ignore" IsChecked="{Binding Weighting.EliteWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}" />
-                        <RadioButton Foreground="White" Content="Customize" IsChecked="{Binding Weighting.EliteWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}" />
+                        <RadioButton Foreground="White" Content="攻击" IsChecked="{Binding Weighting.EliteWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}"/>
+                        <RadioButton Foreground="White" Content="忽视" IsChecked="{Binding Weighting.EliteWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}"/>
+                        <RadioButton Foreground="White" Content="勾选特定" IsChecked="{Binding Weighting.EliteWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}"/>
                     </WrapPanel>
                     <StackPanel Margin="0,5,0,0" Visibility="{Binding Weighting.EliteWeighting, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Selective}">
+                            <Label Margin="0,8,0,-2" FontWeight="Bold">——金怪——————————爪牙——————————紫怪——</Label>
                         <!--<UniformGrid Columns="2" Margin="0,8,0,0" >
-                            <CheckBox IsChecked="{Binding Path=Misc.IgnoreElites}" ToolTip="Attack trash mobs only">Ignore Elite/Rare/Unique</CheckBox>
-                            <CheckBox IsChecked="{Binding Misc.IgnoreRares}" Content="Ignore Yellow/Rare Packs"/>
-                            <CheckBox IsChecked="{Binding Misc.IgnoreMinions}" Content="Ignore Minions"/>
-                            <CheckBox IsChecked="{Binding Misc.IgnoreChampions}" Content="Ignore Blue/Champ Packs"/>
+                            <CheckBox IsChecked="{Binding Path=Misc.IgnoreElites}" ToolTip="Attack trash mobs only">只攻击普通怪</CheckBox>
+                            <CheckBox IsChecked="{Binding Misc.IgnoreRares}" Content="忽视稀有怪"/>
+                            <CheckBox IsChecked="{Binding Misc.IgnoreMinions}" Content="忽视稀有怪的爪牙"/>
+                            <CheckBox IsChecked="{Binding Misc.IgnoreChampions}" Content="忽视精英怪"/>
                         </UniformGrid>-->
-                        <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=EliteTypes}" Style="{DynamicResource SimpleItemsControlSelector}" />
-                        <Label Margin="0,8,0,-2" FontWeight="Bold">Ignore By Affix:</Label>
-                        <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=IgnoreAffixes}" Style="{DynamicResource SimpleItemsControlSelector}" />
+                        <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=EliteTypes}" Style="{DynamicResource SimpleItemsControlSelector}"/>
+                        <Label Margin="0,8,0,-2" FontWeight="Bold">根据词缀忽视精英怪（数字代表行数）</Label>
+	                <Label Margin="0,8,0,-2" FontWeight="Bold">1强奥 复仇 亵渎 2电化 强命 迅捷 3火链 冰冻 冰脉 4联结 结群 幻术</Label>
+                        <Label Margin="0,8,0,-2" FontWeight="Bold">5监禁 击退 飞弹抑制 6熔火 轰炮 梦魇 7电球 瘟疫 强毒 8反伤 护盾 瞬移</Label>
+	                <Label Margin="0,8,0,-2" FontWeight="Bold">9雷暴 吸血 漩涡 10筑墙 虫洞 霸王</Label>
+                        <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=IgnoreAffixes}" Style="{DynamicResource SimpleItemsControlSelector}"/>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Trash Monsters">
+            <GroupBox Header="普通怪">
                 <StackPanel Margin="0,6,10,0">
                     <WrapPanel Margin="0,0,0,0">
-                        <RadioButton Foreground="White" Content="Attack Trash" ToolTip="Trash will be attacked according to the routine's 'Cluster Size' setting" IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}" />
-                        <RadioButton Foreground="White" Content="Ignore" ToolTip="Ignore except for a few situations like when stuck/blocked, quest objective monsters or trying to town portal." IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}" />
-                        <!--<RadioButton Foreground="White" Content="Ignore except when path blocked" ToolTip="Trash will be ignored except when monsters block your path" IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Auto}" />-->
+                        <RadioButton Foreground="White" Content="攻击" ToolTip="Trash will be attacked according to the routine's 'Cluster Size' setting" IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}"/>
+                        <RadioButton Foreground="White" Content="忽视" ToolTip="Ignore except for a few situations like when stuck/blocked, quest objective monsters or trying to town portal." IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}"/>
+                        <!--<RadioButton Foreground="White" Content="被围住时攻击" ToolTip="Trash will be ignored except when monsters block your path" IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Auto}"/>-->
                     </WrapPanel>
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Special Targets">
+            <GroupBox Header="特殊目标（组队）">
                 <StackPanel Margin="0,5,0,0">
-                    <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=SpecialTypes}" Style="{DynamicResource SimpleItemsControlSelector}" />
+                    <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=SpecialTypes}" Style="{DynamicResource SimpleItemsControlSelector}"/>
                 </StackPanel>
             </GroupBox>            
             
             <!--<GroupBox Header="Trash Monsters">
                 <StackPanel Margin="0,6,10,0">
                     <WrapPanel Margin="0,0,0,0">
-                        <RadioButton Foreground="White" Content="Attack Trash" IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}" />
-                        <RadioButton Foreground="White" Content="Attack When Stuck" ToolTip="Trash Ignored usually but attacked when bot is stuck." IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}" />
-                        <RadioButton Foreground="White" Content="Always Ignore" ToolTip="Trash Ignored, except special situations - like clearing area for town run." IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}" />
+                        <RadioButton Foreground="White" Content="Attack Trash" IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}"/>
+                        <RadioButton Foreground="White" Content="Attack When Stuck" ToolTip="Trash Ignored usually but attacked when bot is stuck." IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}"/>
+                        <RadioButton Foreground="White" Content="Always Ignore" ToolTip="Trash Ignored, except special situations - like clearing area for town run." IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}"/>
                     </WrapPanel>
                 </StackPanel>
             </GroupBox>-->

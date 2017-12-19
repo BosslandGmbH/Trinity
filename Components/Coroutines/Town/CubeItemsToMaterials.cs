@@ -34,12 +34,12 @@ namespace Trinity.Components.Coroutines.Town
             if (!LastCanRunResult && DateTime.UtcNow.Subtract(LastCanRunCheck).TotalSeconds < 5)
                 return LastCanRunResult;
 
-            var kule = TownInfo.ZoltunKulle?.GetActor() as DiaUnit;
+            var kule = TownInfo.ZultonKule?.GetActor() as DiaUnit;
             if (kule != null)
             {
                 if (kule.IsQuestGiver)
                 {
-                    Core.Logger.Verbose("[CubeRaresToLegendary] Cube is not unlocked yet");
+                    Core.Logger.Verbose("[魔盒道具材料] 魔盒尚未解锁");
                     return false;
                 }
             }
@@ -47,7 +47,7 @@ namespace Trinity.Components.Coroutines.Town
             var settingsTypes = Core.Settings.KanaisCube.GetCraftingMaterialTypes();
             if (!settingsTypes.Any())
             {
-                Core.Logger.Verbose("[CubeItemsToMaterials] No materials have been selected in settings");
+                Core.Logger.Verbose("[魔盒道具材料] 在设置中没有选择任何材料");
                 return false;
             }
 
@@ -77,11 +77,11 @@ namespace Trinity.Components.Coroutines.Town
             if (!CanRun())
                 return true;
 
-            Core.Logger.Verbose("[CubeItemsToMaterials] Time to Convert some junk into delicious crafting materials.");
+            Core.Logger.Verbose("[魔盒道具材料] 是时间转换一些垃圾 把它变成材料.");
 
             if (!await MoveToAndInteract.Execute(TownInfo.KanaisCube))
             {
-                Core.Logger.Log("[CubeItemsToMaterials] Failed to move to the cube, quite unfortunate.");
+                Core.Logger.Log("[魔盒道具材料] 无法移动到立魔盒, 很不幸.");
                 return true;
             }
 
@@ -100,14 +100,14 @@ namespace Trinity.Components.Coroutines.Town
             {
                 if (!await ConvertMaterials.Execute(highestCount, toType))
                 {
-                    Core.Logger.Log("[Cube] Failed! Finished!");
+                    Core.Logger.Log("[魔盒] 失败! 完成!");
                     return true;
                 }
                 await Coroutine.Sleep(100);
                 await Coroutine.Yield();
             }
 
-            Core.Logger.Verbose("[Cube] CubeItemsToMaterials Finished!");
+            Core.Logger.Verbose("[魔盒] 魔盒转换材料完成!");
             return true;
         }
 

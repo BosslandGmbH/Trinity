@@ -43,7 +43,7 @@ namespace Trinity.Modules
                 int pointsAvailable = ZetaDia.Me.GetParagonPointsAvailable((ParagonCategory) i);
                 if (pointsAvailable != 0)
                 {
-                    Core.Logger.Log("You have {0} points in the category: {1} available", pointsAvailable, category);
+                    Core.Logger.Log("你有 {0} 点巅峰: {1} 可用", pointsAvailable, category);
 
                     switch (category)
                     {
@@ -82,7 +82,7 @@ namespace Trinity.Modules
             {
                 if (pointsSpent >= pointsAvailable)
                 {
-                    Core.Logger.Verbose("Spent all available points for the category '{0}'", item.Category);
+                    Core.Logger.Verbose("花费了所有类别的所有可用点 '{0}'", item.Category);
                     return;
                 }
 
@@ -92,7 +92,7 @@ namespace Trinity.Modules
 
                 if (currentlySpent >= item.MaxLimit)
                 {
-                    Core.Logger.Verbose("Skipping {1} ({2}) max limit has been reached (Spent={3} IsLimited={4} Limit={5} LimitMax={6}",
+                    Core.Logger.Verbose("跳过 {1} ({2}) 的最大限制已经达到 (花费={3} 有限={4} 限制={5} 限制最大值={6}",
                         amount, item.DisplayName, item.DynamicType, currentlySpent, item.IsLimited, item.Limit, item.MaxLimit);
 
                     continue;
@@ -102,7 +102,7 @@ namespace Trinity.Modules
                 {
                     if (currentlySpent >= item.Limit)
                     {
-                        Core.Logger.Verbose("Skipping {1} ({2}) limit has been reached (Spent={3} IsLimited={4} Limit={5} LimitMax={6}",
+                        Core.Logger.Verbose("跳过 {1} ({2}) 限制已达到 (花费={3} 有限={4} 限制={5} 限制最大值={6}",
                             amount, item.DisplayName, item.DynamicType, currentlySpent, item.IsLimited, item.Limit, item.MaxLimit);
 
                         continue;
@@ -120,19 +120,19 @@ namespace Trinity.Modules
                         var pointsNegatedByItems = pctBonus * 2;
                         var effectiveMaxPoints = item.MaxLimit - pointsNegatedByItems; 
                         amount = Math.Min(effectiveMaxPoints, amount);
-                        Core.Logger.Verbose("Adjusting MovementSpeed based on {0}% contributed by items.", pctBonus);
+                        Core.Logger.Verbose("基于项目贡献的 {0}% 调整移动速度.", pctBonus);
                     }
                 }
 
                 if (amount <= 0)
                 {
-                    Core.Logger.Verbose("Skipping {1} ({2}) spend amount = {0} (Spent={3} IsLimited={4} Limit={5} LimitMax={6}",
+                    Core.Logger.Verbose("跳过 {1} ({2}) 花费数量 = {0} (花费={3} 有限={4} 限制={5} 限制最大值={6}",
                         amount, item.DisplayName, item.DynamicType, currentlySpent, item.IsLimited, item.Limit, item.MaxLimit);
 
                     continue;
                 }
 
-                Core.Logger.Verbose("Assigning {0} points to {1} ({2}) (Spent={3} IsLimited={4} Limit={5} LimitMax={6}", 
+                Core.Logger.Verbose("将 {0} 点分配给 {1} ({2}) (花费={3} 有限={4} 限制={5} 限制最大值={6}", 
                     amount, item.DisplayName, item.DynamicType, currentlySpent, item.IsLimited, item.Limit, item.MaxLimit);
 
                 ZetaDia.Me.SpendParagonPoints(item.DynamicType, amount);

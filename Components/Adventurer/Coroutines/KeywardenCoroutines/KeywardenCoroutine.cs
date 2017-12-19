@@ -56,7 +56,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
                         break;
 
                     default:
-                        Core.Logger.Debug("[Keywarden] " + value);
+                        Core.Logger.Debug("[钥匙守护者] " + value);
                         StatusText = "[Keywarden] " + value;
                         break;
                 }
@@ -123,7 +123,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
                 return false;
             }
             TargetingHelper.TurnCombatOn();
-            Core.Logger.Log("[Keywarden] Lets go find da guy with da machina, shall we?");
+            Core.Logger.Log("[钥匙守护者] 让我们去寻找炼狱装置,可以么?");
             State = AdvDia.CurrentLevelAreaId == _keywardenData.LevelAreaId ? States.Searching : States.TakingWaypoint;
             return false;
         }
@@ -149,7 +149,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
             if (_keywardenLocation != Vector3.Zero && DateTime.UtcNow > MoveCooldownUntil)
             {
                 State = States.Moving;
-                Core.Logger.Log("[Keywarden] It's clobberin time!");
+                Core.Logger.Log("[钥匙守护者] 揍人时间!");
                 return false;
             }
 
@@ -159,7 +159,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
             if (!await ExplorationCoroutine.Explore(_levelAreaIds, null, CanMoveToMarker))
                 return false;
 
-            Core.Logger.Error("[Keywarden] Oh shit, that guy is nowhere to be found.");
+            Core.Logger.Error("[钥匙守护者] Oh,妈的,无法找到这家伙.");
             Core.Scenes.ResetVisited();
             State = States.Searching;
             return false;
@@ -172,13 +172,13 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
 
             if (_minimapMarker.Position.Distance(AdvDia.MyPosition) < 20f)
             {
-                Core.Logger.Log("[Keywarden] Finished Following marker");
+                Core.Logger.Log("[钥匙守护者] 完成标记目标!");
                 return true;
             }
 
             if (_markerCoroutine == null)
             {
-                Core.Logger.Log("[Keywarden] Following a keywarden marker, lets see where it goes");
+                Core.Logger.Log("[钥匙守护者] 跟随标记目标，让我们看看他在哪");
                 _markerCoroutine = new MoveToMapMarkerCoroutine(-1, AdvDia.CurrentWorldId, _minimapMarker.NameHash);
             }
 
@@ -194,11 +194,11 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
                 _markerMoveFailures++;
                 _markerCooldownUntil = DateTime.UtcNow.Add(TimeSpan.FromSeconds(cooldownDurationSeconds));
                 _markerCoroutine = null;
-                Core.Logger.Log($"[Keywarden] Looks like we can't find a path to the keywarden marker :( on cooldown for {cooldownDurationSeconds} seconds");
+                Core.Logger.Log($"[钥匙守护者] 好像找不到前往标记点的路线 :( 等待冷却 {cooldownDurationSeconds} 秒");
                 return true;
             }
 
-            Core.Logger.Log("[Keywarden] Finished Following marker");
+            Core.Logger.Log("[钥匙守护者] 完成标记目标!");
             _markerCoroutine = null;
             return true;
         }
@@ -207,7 +207,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
         {
             if (_markerCooldownUntil > DateTime.UtcNow)
             {
-                Core.Logger.Debug($"Keywarden Marker on Cooldown. {(_markerCooldownUntil.Subtract(DateTime.UtcNow).TotalSeconds)}s remaining");
+                Core.Logger.Debug($"钥匙守护者标记正在冷却. 剩余 {(_markerCooldownUntil.Subtract(DateTime.UtcNow).TotalSeconds)}秒");
                 return false;
             }
 
@@ -238,7 +238,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
                 {
                     State = States.Searching;
                     MoveCooldownUntil = DateTime.UtcNow.AddSeconds(10);
-                    Core.Logger.Debug("[Keywarden] Can't seem to get to the keywarden!");
+                    Core.Logger.Debug("[钥匙守护者] 找不到钥匙守护者!");
                 }
                 return false;
             }
@@ -253,7 +253,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
             }
             else
             {
-                Core.Logger.Log("[Keywarden] Keywarden shish kebab!");
+                Core.Logger.Log("[钥匙守护者] 钥匙守护者被消灭!");
                 State = States.Waiting;
             }
             return false;
@@ -267,7 +267,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
             {
                 _waitCoroutine = new WaitCoroutine(5000);
             }
-            Core.Logger.Log("[Keywarden] Waiting...!");
+            Core.Logger.Log("[钥匙守护者] 等待...!");
             await Coroutine.Sleep(2500);
             State = States.Looting;
             return false;
@@ -279,8 +279,8 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
             var loots = ZetaDia.Actors.GetActorsOfType<DiaObject>(true).OrderBy(x => x.Distance).Where(x => x.IsFullyValid() && KeywardenDataFactory.KeyIds.Contains(x.ActorSnoId)).ToList();
             if (!loots.Any())
             {
-                StatusText = "[Keywarden] No Loot!";
-                Core.Logger.Log("[Keywarden] No Loot!");
+                StatusText = "[钥匙守护者] 没有掉落!";
+                Core.Logger.Log("[钥匙守护者] 没有掉落!");
                 State = States.Completed;
                 return false;
             }
@@ -296,7 +296,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
 
         private async Task<bool> Completed()
         {
-            StatusText = "[Keywarden] Completed";
+            StatusText = "[钥匙守护者] 完成";
             DisablePulse();
             return true;
         }

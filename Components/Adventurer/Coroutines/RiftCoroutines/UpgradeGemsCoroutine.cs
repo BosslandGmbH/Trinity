@@ -60,8 +60,8 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Debug("[UpgradeGems] " + value);
-                    StatusText = "[UpgradeGems] " + value;
+                    Core.Logger.Debug("[升级宝石] " + value);
+                    StatusText = "[升级宝石] " + value;
                 }
                 _state = value;
             }
@@ -145,12 +145,12 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
             if (!await ExplorationCoroutine.Explore(new HashSet<int> { AdvDia.CurrentLevelAreaId }))
             {
-                Core.Logger.Log("[UpgradeGems] Exploration for urshi has failed, the sadness!");
+                Core.Logger.Log("[升级宝石] 寻找乌尔什失败, 真伤心!");
                 State = States.Failed;
                 return false;
             }
 
-            Core.Logger.Log("[UpgradeGems] Where are you, my dear Urshi!");
+            Core.Logger.Log("[升级宝石] 我亲爱的乌尔什你在那里!");
             Core.Scenes.Reset();
             return false;
         }
@@ -176,7 +176,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             var urshi = ZetaDia.Actors.GetActorsOfType<DiaUnit>().FirstOrDefault(a => a.IsFullyValid() && a.ActorSnoId == RiftData.UrshiSNO);
             if (urshi == null)
             {
-                Core.Logger.Debug("[UpgradeGems] Can't find the Urshi lady :(");
+                Core.Logger.Debug("[升级宝石] 无法找到乌尔什 :(");
                 State = States.Failed;
                 return false;
             }
@@ -203,7 +203,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         {
             if (RiftData.VendorDialog.IsVisible && RiftData.ContinueButton.IsVisible && RiftData.ContinueButton.IsEnabled)
             {
-                Core.Logger.Debug("[UpgradeGems] Clicking to Continue button.");
+                Core.Logger.Debug("[升级宝石] 点击继续.");
                 RiftData.ContinueButton.Click();
                 RiftData.VendorCloseButton.Click();
                 await Coroutine.Sleep(250);
@@ -213,22 +213,22 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             var gemToUpgrade = PluginSettings.Current.Gems.GetUpgradeTarget();
             if (gemToUpgrade == null)
             {
-                Core.Logger.Log("[UpgradeGems] I couldn't find any gems to upgrade, failing.");
+                Core.Logger.Log("[升级宝石] 我没有发现任务可升级的宝石.失败.");
                 State = States.Failed;
                 return false;
             }
             _enableGemUpgradeLogs = false;
             if (AdvDia.RiftQuest.Step == RiftStep.Cleared)
             {
-                Core.Logger.Debug("[UpgradeGems] Rift Quest is completed, returning to town");
+                Core.Logger.Debug("[升级宝石] 秘境已完成, 返回城镇.");
                 State = States.Completed;
                 return false;
             }
 
-            Core.Logger.Debug("[UpgradeGems] Gem upgrades left before the attempt: {0}", ZetaDia.Me.JewelUpgradesLeft);
+            Core.Logger.Debug("[升级宝石] 尝试升级之前留下的宝石: {0}", ZetaDia.Me.JewelUpgradesLeft);
             if (!await CommonCoroutines.AttemptUpgradeGem(gemToUpgrade))
             {
-                Core.Logger.Debug("[UpgradeGems] Gem upgrades left after the attempt: {0}", ZetaDia.Me.JewelUpgradesLeft);
+                Core.Logger.Debug("[升级宝石] 尝试升级之前留下的宝石: {0}", ZetaDia.Me.JewelUpgradesLeft);
                 return false;
             }
             var gemUpgradesLeft = ZetaDia.Me.JewelUpgradesLeft;
@@ -239,7 +239,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
             if (gemUpgradesLeft == 0)
             {
-                Core.Logger.Debug("[UpgradeGems] Finished all upgrades, returning to town.");
+                Core.Logger.Debug("[升级宝石] 升级完成, 返回城镇.");
                 State = States.Completed;
                 return false;
             }
@@ -251,7 +251,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         {
             if (!_isPulsing)
             {
-                Core.Logger.Debug("[UpgradeGems] Registered to pulsator.");
+                Core.Logger.Debug("[升级宝石] 注册 Pulsator.");
                 Pulsator.OnPulse += OnPulse;
                 _isPulsing = true;
             }
@@ -261,7 +261,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         {
             if (_isPulsing)
             {
-                Core.Logger.Debug("[UpgradeGems] Unregistered from pulsator.");
+                Core.Logger.Debug("[升级宝石] 注销 Pulsator.");
                 Pulsator.OnPulse -= OnPulse;
                 _isPulsing = false;
             }
@@ -298,9 +298,9 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
             if (_urshiLocation != Vector3.Zero)
             {
-                Core.Logger.Log("[UpgradeGems] Urshi is near.");
+                Core.Logger.Log("[升级宝石] 乌尔什就在附近.");
                 State = States.MovingToUrshi;
-                Core.Logger.Debug("[UpgradeGems] Found Urshi at distance {0}", AdvDia.MyPosition.Distance(_urshiLocation));
+                Core.Logger.Debug("[升级宝石] 找到乌尔什, 距离 {0}", AdvDia.MyPosition.Distance(_urshiLocation));
             }
         }
 

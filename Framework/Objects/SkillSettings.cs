@@ -211,46 +211,46 @@ namespace Trinity.Framework.Objects
 
     public enum UseTime
     {
-        [Description("Use when it seems like a good idea")]
+        [Description("使用时，它似乎是一个不错的想法")]
         Default = 0,
 
-        [Description("Whenever Possible")]
+        [Description("在任何可能的时候")]
         Always,
 
-        [Description("Dont use it")]
+        [Description("不使用它")]
         Never,
 
-        [Description("Use when in combat only")]
+        [Description("仅在战斗中使用")]
         InCombat,
 
-        [Description("Use when not in combat only")]
+        [Description("仅当不在战斗中使用")]
         OutOfCombat,
 
-        [Description("Use restricted by other settings")]
+        [Description("使用其他设置限制")]
         Selective,
     }
 
     public enum UseTarget
     {
-        [Description("Cast on default target")]
+        [Description("在默认的目标施放")]
         Default = 0,
 
-        [Description("Cast on current target")]
+        [Description("对当前目标施放")]
         CurrentTarget,
 
-        [Description("Cast on closest target")]
+        [Description("对最近的目标施放")]
         ClosestMonster,
 
-        [Description("Cast on elite targets")]
+        [Description("对精英施放")]
         ElitesOnly,
 
-        [Description("Cast on the best cluster")]
+        [Description("对最佳集群施放")]
         BestCluster,
 
-        [Description("Cast on a safe location")]
+        [Description("在一个安全的位置施放")]
         SafeSpot,
 
-        [Description("Cast on Self")]
+        [Description("对自己施放")]
         Self,        
     }
 
@@ -259,34 +259,34 @@ namespace Trinity.Framework.Objects
     {
         None = 0,
 
-        [Description("Use when avoiding")]
+        [Description("使用时避免")]
         Avoiding = 1,
 
-        [Description("Use for movement")]
+        [Description("用于移动")]
         Movement = 2,
 
-        [Description("Use when surrounded by monsters")]
+        [Description("当被怪物包围使用")]
         Surrounded = 4,
 
-        [Description("Use when elites are nearby or targetted")]
+        [Description("当精英们都在附近或针对性使用")]
         Elites = 8,
 
-        [Description("Use to continually spend player resource")]
+        [Description("使用持续消耗玩家能量")]
         DumpResource = 16,
 
-        [Description("Use when goblins are nearby or targetted")]
+        [Description("当地精在附近或目标时使用")]
         Goblins = 32,
 
-        [Description("Use when player is in trouble")]
+        [Description("当玩家遇到麻烦时使用")]
         HealthEmergency = 64,
 
-        [Description("Use when the target's movement is blocked")]
+        [Description("当目标的移动被阻挡时使用")]
         Blocked = 128,
 
-        [Description("Use associated with a buff")]
+        [Description("使用与buff相关联")]
         Buff = 256,
 
-        [Description("Use when trash are nearby above cluster size")]
+        [Description("当垃圾怪靠近'群怪数量'以上时使用")]
         Trash = 512,
     }
 

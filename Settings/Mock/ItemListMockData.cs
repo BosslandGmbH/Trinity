@@ -25,22 +25,22 @@ namespace Trinity.Settings.Mock
                     {
                         new LRule
                         {
-                            Id = (int)ItemProperty.Ancient, 
+                            Id = (int)ItemProperty.远古, 
                             RuleType = RuleType.Optional
                         },
                         new LRule
                         {
-                            Id = (int)ItemProperty.PrimaryStat,
+                            Id = (int)ItemProperty.主要属性,
                             Value = 445
                         },
                         new LRule
                         {
-                            Id = (int)ItemProperty.SkillDamage, 
+                            Id = (int)ItemProperty.技能伤害, 
                             RuleType = RuleType.Optional
                         },
                         new LRule
                         {
-                            Id = (int)ItemProperty.AttackSpeed, 
+                            Id = (int)ItemProperty.攻击速度, 
                             RuleType = RuleType.Required
                         }
                     }

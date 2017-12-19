@@ -50,8 +50,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Log("[InteractWithUnit] " + value);
-                    StatusText = "[InteractWithUnit] " + value;
+                    Core.Logger.Log("[互动单位] " + value);
+                    StatusText = "[互动单位] " + value;
                 }
                 _state = value;
             }
@@ -257,7 +257,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 }
                 if (_objectiveLocation != Vector3.Zero)
                 {
-                    Core.Logger.Log("[InteractWithUnit] Found the objective at distance {0}", AdvDia.MyPosition.Distance(_objectiveLocation));
+                    Core.Logger.Log("[互动单位] 在距离{0}处发现目标", AdvDia.MyPosition.Distance(_objectiveLocation));
                 }
             }
         }

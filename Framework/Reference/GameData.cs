@@ -2506,10 +2506,7 @@ namespace Trinity.Framework.Reference
 
             331397, // x1_westm_Graveyard_Floor_Sarcophagus_Undead_Husband_Event
 
-            390498, // Tgoblin_Gold_Pile_A
             386274, // Tgoblin_Gold_Pile_C
-            391765, // Tgoblin_Vase_A
-            392606, // Tgoblin_Vase_C
 
             211861, //Pinata
 
@@ -3229,11 +3226,27 @@ namespace Trinity.Framework.Reference
 
         public static class ItemGameBalanceIds
         {
+            /// <summary>
+            /// 奥术之尘
+            /// </summary>
             public const int ArcaneDust = -1585802162;
+            /// <summary>
+            /// 死亡之息
+            /// </summary>
             public const int DeathsBreath = 2087837753;
+            /// <summary>
+            /// 遗忘之魂
+            /// </summary>
             public const int ForgottenSoul = 2073430088;
+            /// <summary>
+            /// 万用材料
+            /// </summary>
             public const int ReusableParts = -363607620;
+            /// <summary>
+            /// 萦雾水晶
+            /// </summary>
             public const int VeiledCrystal = -605947593;
+
         }
 
         /*

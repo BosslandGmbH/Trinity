@@ -94,7 +94,7 @@ namespace Trinity.Settings
 
         public void UserRequestedReset()
         {
-            Core.Logger.Log("UserRequestedReset called");
+            Core.Logger.Log("用户请求重置");
             Reset(this);
             OnUserRequestedReset();
         }
@@ -153,13 +153,13 @@ namespace Trinity.Settings
                 {
                     if (File.Exists(GlobalSettingsFile))
                     {
-                        Core.Logger.Log("Loading Global Settings, You can use per-battletag settings by removing the Trinity.xml file under your Demonbuddy settings directory");
+                        Core.Logger.Log("加载全局设置, 你可以适用战斗标签设置来移除 Trinity.xml 文件 在您Demonbuddy设置目录下");
                         var globalSettings = LoadSettingsFromFile(filename);
                         loadSuccessful = globalSettings != null;
                     }
                     else if (File.Exists(HeroSpecificSettingsFile))
                     {
-                        Core.Logger.Log("Loading Hero Specific Settings");
+                        Core.Logger.Log("加载英雄特定设置");
                         filename = HeroSpecificSettingsFile;
 
                         var settings = LoadSettingsFromFile(filename);
@@ -167,7 +167,7 @@ namespace Trinity.Settings
                     }
                     else if (File.Exists(BattleTagSettingsFile))
                     {
-                        Core.Logger.Log("Loading BattleTag Settings");
+                        Core.Logger.Log("加载战役标签设置");
                         filename = BattleTagSettingsFile;
 
                         var settings = LoadSettingsFromFile(filename);
@@ -175,7 +175,7 @@ namespace Trinity.Settings
                     }
                     else if (File.Exists(OldBattleTagSettingsFile))
                     {
-                        Core.Logger.Debug(LogCategory.None, "Old configuration file found, need to migrate!");
+                        Core.Logger.Debug(LogCategory.None, "旧配置文件找到, 需要迁移!");
                         filename = OldBattleTagSettingsFile;
                         migrateConfig = true;
 
@@ -188,14 +188,14 @@ namespace Trinity.Settings
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Error(LogCategory.None, "Error while loading Config file: {0}", ex);
+                    Core.Logger.Error(LogCategory.None, "加载配置文件时出现错误: {0}", ex);
                     loadSuccessful = false;
                     migrateConfig = false;
                 }
 
                 if (migrateConfig && loadSuccessful)
                 {
-                    Core.Logger.Debug(LogCategory.None, "Migrating configuration to new Trinity.xml");
+                    Core.Logger.Debug(LogCategory.None, "配置迁移到新的 Trinity.xml");
                     Save();
 
                     if (File.Exists(OldBattleTagSettingsFile))
@@ -245,24 +245,24 @@ namespace Trinity.Settings
 
                     if (applyToThis)
                     {
-                        Core.Logger.Debug($"LoadSettingsFromFile: Copying Storage Objects");
+                        Core.Logger.Debug($"从文件读取配置: 复制存储对象");
                         loadedStorages.CopyTo(this);
                     }
 
                     LoadDynamicSettings();
-                    Core.Logger.Log("Configuration file loaded");
+                    Core.Logger.Log("配置文件加载");
                     OnLoaded();
 
                     if (doc.Root.Name == "TrinitySetting")
                     {
-                        Core.Logger.Debug("Old Settings Format Detected. Migrating and saving copy of old File");
+                        Core.Logger.Debug("检测到旧设置格式。迁移并保存旧文件副本");
                         try
                         {
                             File.Copy(filename, FileManager.GetUniqueFileName(filename + ".backup.xml"));
                         }
                         catch (Exception)
                         {
-                            Core.Logger.Debug("Unable to save a backup of old settings file");
+                            Core.Logger.Debug("无法保存旧设置文件备份.");
                         }
                         Save();
                     }
@@ -270,7 +270,7 @@ namespace Trinity.Settings
             }
             else
             {
-                Core.Logger.Debug(LogCategory.None, "Configuration file not found.");
+                Core.Logger.Debug(LogCategory.None, "没有找到配置文件.");
                 Reset();
             }            
             return loadedStorages;
@@ -280,7 +280,7 @@ namespace Trinity.Settings
         {
             lock (this)
             {
-                Core.Logger.Log("Saving Settings");
+                Core.Logger.Log("保存设置");
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -381,7 +381,7 @@ namespace Trinity.Settings
 
                 _FSWatcher.EnableRaisingEvents = false;
 
-                Core.Logger.Log("Saving Config file");
+                Core.Logger.Log("保存配置文件");
                 using (Stream stream = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
                 {
                     DataContractSerializer serializer = new DataContractSerializer(typeof(TrinityStorage));
@@ -396,7 +396,7 @@ namespace Trinity.Settings
             }
             catch (Exception ex)
             {
-                Core.Logger.Error(LogCategory.None, "Error while saving Config file: {0}", ex);
+                Core.Logger.Error(LogCategory.None, "保存配置文件出现错误: {0}", ex);
             }
             finally
             {
@@ -422,7 +422,7 @@ namespace Trinity.Settings
             try
             {
                 Type type = typeof(T);
-                Core.Logger.Verbose(LogCategory.Configuration, "Starting Reset Object {0}", type.Name);
+                Core.Logger.Verbose(LogCategory.Configuration, "启动复位 {0}", type.Name);
                 foreach (PropertyInfo prop in type.GetProperties(BindingFlags.SetProperty | BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance))
                 {
                     if (Attribute.IsDefined(prop, typeof(IgnoreDataMemberAttribute)))
@@ -456,11 +456,11 @@ namespace Trinity.Settings
 
                 OnReset();
 
-                Core.Logger.Verbose(LogCategory.Configuration, "End Reset Object {0}", type.Name);
+                Core.Logger.Verbose(LogCategory.Configuration, "结束复位 {0}", type.Name);
             }
             catch (Exception ex)
             {
-                Core.Logger.Error(LogCategory.None, "Error while Reset Setting {1} : {0}", ex.Message, typeof(T).Name);
+                Core.Logger.Error(LogCategory.None, "复位设置发生错误 {1} : {0}", ex.Message, typeof(T).Name);
             }
         }
 
@@ -470,7 +470,7 @@ namespace Trinity.Settings
             try
             {
                 Type type = typeof(T);
-                Core.Logger.Verbose(LogCategory.Configuration, "Starting CopyTo Object {0}", type.Name);
+                Core.Logger.Verbose(LogCategory.Configuration, "开始复制设置 {0}", type.Name);
                 foreach (PropertyInfo prop in type.GetProperties(BindingFlags.SetProperty | BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance))
                 {
                     try
@@ -500,14 +500,14 @@ namespace Trinity.Settings
                     }
                     catch (Exception ex)
                     {
-                        Core.Logger.Error(LogCategory.None, "Error while CopyTo Setting {0} : {1} Property: {2} {3}", typeof(T).Name, ex.Message, prop.Name, ex);
+                        Core.Logger.Error(LogCategory.None, "复制与设置错误 {0} : {1} 属性: {2} {3}", typeof(T).Name, ex.Message, prop.Name, ex);
                     }
                 }
-                Core.Logger.Verbose(LogCategory.Configuration, "End CopyTo Object {0}", type.Name);
+                Core.Logger.Verbose(LogCategory.Configuration, "结束复制设置 {0}", type.Name);
             }
             catch (Exception ex)
             {
-                Core.Logger.Error(LogCategory.None, "Error while CopyTo Setting {1} : {0} {2}", ex.Message, typeof(T).Name, ex);
+                Core.Logger.Error(LogCategory.None, "复制与设置错误 {1} : {0} {2}", ex.Message, typeof(T).Name, ex);
             }
         }
 
@@ -515,7 +515,7 @@ namespace Trinity.Settings
         {
             try
             {
-                Core.Logger.Verbose(LogCategory.Configuration, "Starting Clone Object {0}", typeof(T).Name);
+                Core.Logger.Verbose(LogCategory.Configuration, "开始克隆工作 {0}", typeof(T).Name);
                 using (MemoryStream ms = new MemoryStream())
                 {
                     DataContractSerializer serializer = new DataContractSerializer(typeof(T));
@@ -525,12 +525,12 @@ namespace Trinity.Settings
             }
             catch (Exception ex)
             {
-                Core.Logger.Error(LogCategory.None, "Error while Clone Setting {1} : {0}", ex.Message, typeof(T).Name);
+                Core.Logger.Error(LogCategory.None, "克隆设置错误 {1} : {0}", ex.Message, typeof(T).Name);
                 return null;
             }
             finally
             {
-                Core.Logger.Verbose(LogCategory.Configuration, "End Clone Object {0}", typeof(T).Name);
+                Core.Logger.Verbose(LogCategory.Configuration, "结束克隆设置 {0}", typeof(T).Name);
             }
         }
 

@@ -7,7 +7,6 @@ using Trinity.Framework.Actors.ActorTypes;
 
 namespace Trinity.Framework.Helpers
 {
-    // 黑白灰 修改访问级别
     public class GenericCacheObject
     {
         public string Key { get; set; }
@@ -47,7 +46,6 @@ namespace Trinity.Framework.Helpers
         }
     }
 
-    // 黑白灰 修改黑名单支持同时到期时间多个对象
     public class GenericBlacklist
     {
 
@@ -209,7 +207,7 @@ namespace Trinity.Framework.Helpers
                 {
                     if (_manager == null || (_manager != null && !_manager.IsAlive))
                     {
-                        Core.Logger.Log("Starting up Generic Blacklist Manager thread");
+                        Core.Logger.Log("启动通用黑名单管理器线程");
                         _manager = new Thread(Manage)
                         {
                             Name = "TrinityPlugin Generic Blacklist",
@@ -221,7 +219,7 @@ namespace Trinity.Framework.Helpers
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Log("Exception in Generic Blacklist Manager");
+                    Core.Logger.Log("通用黑名单管理中的异常");
                     Core.Logger.Log(ex.ToString());
                 }
             }
@@ -252,7 +250,7 @@ namespace Trinity.Framework.Helpers
                 catch (ThreadAbortException) { }
                 catch (Exception ex)
                 {
-                    Core.Logger.Error("Blacklist manager crashed: {0}", ex.Message);
+                    Core.Logger.Error("黑名单管理器崩溃: {0}", ex.Message);
                 }
             }
         }

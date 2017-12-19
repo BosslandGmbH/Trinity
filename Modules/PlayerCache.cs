@@ -177,7 +177,7 @@ namespace Trinity.Modules
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Debug(LogCategory.CacheManagement, "Safely handled exception for grabbing player data.{0}{1}", Environment.NewLine, ex);
+                    Core.Logger.Debug(LogCategory.CacheManagement, "抓取玩家数据的安全处理异常.{0}{1}", Environment.NewLine, ex);
                 }
             }
         }
@@ -252,7 +252,7 @@ namespace Trinity.Modules
             var averageHealth = HealthHistory.Average();
             IsTakingDamage = averageHealth > CurrentHealth;
             if (IsTakingDamage)
-                Core.Logger.Verbose(LogCategory.Avoidance, "Taking Damage 5TickAvg={0} Current={1}", averageHealth, CurrentHealth);
+                Core.Logger.Verbose(LogCategory.Avoidance, "Taking Damage 5TickAvg={0} 目前={1}", averageHealth, CurrentHealth);
 
             // For WD Angry Chicken
             IsHidden = _me.IsHidden;
@@ -474,7 +474,7 @@ namespace Trinity.Modules
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Error($"Exception finding EquippedHealthPotion {ex}");
+                    Core.Logger.Error($"发现装备药水异常 {ex}");
                 }
                 return InventoryManager.BaseHealthPotion;
             }

@@ -570,14 +570,14 @@ namespace Trinity.Settings.ItemList
                     {
                         if (!ChangeEvents.IsInGame.Value)
                         {
-                            Core.Logger.Log("Must be in a game to use this feature");
+                            Core.Logger.Log("必须在游戏中使用这个功能");
                         }
                         else
                         {
                             using (ZetaDia.Memory.AcquireFrame())
                             {
                                 ZetaDia.Actors.Update();
-                                Core.Logger.Log("Scanning Character for Equipped Items");
+                                Core.Logger.Log("扫描词缀装备物品");
                                 SelectItems(InventoryManager.Equipped);
                             }
                         }
@@ -587,13 +587,13 @@ namespace Trinity.Settings.ItemList
                         if (!BotMain.IsRunning)
                             ZetaDia.Actors.Update();
 
-                        Core.Logger.Log("Scanning Character for Equipped Items");
+                        Core.Logger.Log("扫描词缀装备物品");
                         SelectItems(InventoryManager.Equipped);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Error("Exception in SelectAllCommand {0}", ex);
+                    Core.Logger.Error("选择所有命令中的异常 {0}", ex);
                 }
             });
 
@@ -605,14 +605,14 @@ namespace Trinity.Settings.ItemList
                     {
                         if (BotMain.IsRunning)
                         {
-                            Core.Logger.Log("Must be in a game to use this feature");
+                            Core.Logger.Log("必须在游戏中使用这个功能");
                         }
                         else
                         {
                             using (ZetaDia.Memory.AcquireFrame())
                             {
                                 ZetaDia.Actors.Update();
-                                Core.Logger.Log("Scanning Character for Stashed Items");
+                                Core.Logger.Log("扫描词缀储存物品");
                                 SelectItems(InventoryManager.StashItems);
                             }
                         }
@@ -620,13 +620,13 @@ namespace Trinity.Settings.ItemList
                     else
                     {
                         ZetaDia.Actors.Update();
-                        Core.Logger.Log("Scanning Character for Stashed Items");
+                        Core.Logger.Log("扫描词缀储存物品");
                         SelectItems(InventoryManager.StashItems);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Error("Exception in SelectAllCommand {0}", ex);
+                    Core.Logger.Error("选择所有命令中的异常 {0}", ex);
                 }
             });
 
@@ -637,7 +637,7 @@ namespace Trinity.Settings.ItemList
                     if (parameter == null)
                         return;
 
-                    Core.Logger.Verbose("AdvancedOptionCommand Fired {0}", parameter.ToString());
+                    Core.Logger.Verbose("高级选项命令失败 {0}", parameter.ToString());
 
                     var item = parameter as ComboBoxItem;
                     var selectedPropertyName = item != null ? item.Tag.ToString() : parameter.ToString();
@@ -671,7 +671,7 @@ namespace Trinity.Settings.ItemList
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Error("Exception in AdvancedOptionCommand: {0} {1}", ex.Message, ex.InnerException);
+                    Core.Logger.Error("高级选项命令中的异常: {0} {1}", ex.Message, ex.InnerException);
                 }
             });
 
@@ -681,7 +681,7 @@ namespace Trinity.Settings.ItemList
                 {
                     if (SelectedTab == Tab.Legendary)
                     {
-                        Core.Logger.Log("Selecting all items");
+                        Core.Logger.Log("选择所有的物品");
                         using (Collection.DeferRefresh())
                         {
                             SelectedItems = new List<LItem>(DisplayItems);
@@ -692,13 +692,13 @@ namespace Trinity.Settings.ItemList
 
                     if (SelectedTab == Tab.ItemType)
                     {
-                        Core.Logger.Log("Selecting all item types.");
+                        Core.Logger.Log("选择所有物品的类型.");
                         ItemTypes.ForEach(i => i.IsSelected = true);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Error("Exception in SelectAllCommand {0}", ex);
+                    Core.Logger.Error("选择所有命令中的异常 {0}", ex);
                 }
             });
 
@@ -706,12 +706,12 @@ namespace Trinity.Settings.ItemList
             {
                 try
                 {
-                    Core.Logger.Log("Add24ItemsCommand Not Implemented");
+                    Core.Logger.Log("添加2.4版本物品未执行命令");
                     AddToSelection(item => ItemListPresets.Patch24Items.Contains(item.Id));
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Error("Exception in SelectAllCommand {0}", ex);
+                    Core.Logger.Error("选择所有命令中的异常 {0}", ex);
                 }
             });
 
@@ -719,12 +719,12 @@ namespace Trinity.Settings.ItemList
             {
                 try
                 {
-                    Core.Logger.Log("AddAllSetsCommand Not Implemented");
+                    Core.Logger.Log("添加所有套装物品命令未能实现");
                     AddToSelection(item => item.IsSetItem);
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Error("Exception in SelectAllCommand {0}", ex);
+                    Core.Logger.Error("选择所有命令中的异常 {0}", ex);
                 }
             });
 
@@ -732,12 +732,12 @@ namespace Trinity.Settings.ItemList
             {
                 try
                 {
-                    Core.Logger.Log("Selecting all items with a legendary affix");
+                    Core.Logger.Log("选择所有带词缀的传奇物品");
                     AddToSelection(item => !string.IsNullOrEmpty(item.LegendaryAffix));
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Error("Exception in SelectAllLegendaryAffixCommand {0}", ex);
+                    Core.Logger.Error("选择所有传奇词缀命令 {0}中的异常", ex);
                 }
             });
 
@@ -747,7 +747,7 @@ namespace Trinity.Settings.ItemList
                 {
                     if (SelectedTab == Tab.Legendary)
                     {
-                        Core.Logger.Log("Deselecting all legendary items");
+                        Core.Logger.Log("取消选择所有传奇物品");
                         using (Collection.DeferRefresh())
                         {
                             SelectedItems = new List<LItem>();
@@ -770,7 +770,7 @@ namespace Trinity.Settings.ItemList
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Error("Exception in SelectNoneCommand {0}", ex);
+                    Core.Logger.Error("选择命令 {0}中的异常", ex);
                 }
             });
 
@@ -780,7 +780,7 @@ namespace Trinity.Settings.ItemList
                 {
                     if (SelectedTab == Tab.Legendary)
                     {
-                        Core.Logger.Log("Removing rules from all legendary items.");
+                        Core.Logger.Log("从所有传奇物品中删除规则.");
                         using (Collection.DeferRefresh())
                         {
                             SelectedItems.ForEach(i => i.Rules = new ObservableCollection<LRule>());
@@ -791,13 +791,13 @@ namespace Trinity.Settings.ItemList
 
                     if (SelectedTab == Tab.ItemType)
                     {
-                        Core.Logger.Log("Removing rules from all item types.");
+                        Core.Logger.Log("从所有物品类型中删除规则.");
                         ItemTypes.ForEach(i => i.Rules = new FullyObservableCollection<LRule>());
                     }
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Error("Exception in ClearAllRulesCommand {0}", ex);
+                    Core.Logger.Error("清除规则命令 {0}中的异常", ex);
                 }
             });
 
@@ -805,7 +805,7 @@ namespace Trinity.Settings.ItemList
 
             EnableItemListCommand = new RelayCommand(parameter =>
             {
-                Core.Logger.Log("Setting ItemFilterMode to ItemList");
+                Core.Logger.Log("设置物品捡取规则到捡取列表");
                 UILoader.DataContext.Items.LegendaryMode = LegendaryMode.ItemList;
             });
 
@@ -829,27 +829,27 @@ namespace Trinity.Settings.ItemList
                         ExportCommand.Execute(parameter);
                 }
 
-                Core.Logger.Log("Selecting modal content... {0}", parameter.ToString());
+                Core.Logger.Log("当前选择内容... {0}", parameter.ToString());
             });
 
             CloseModalCommand = new RelayCommand(parameter => { IsModalVisible = false; });
 
             ImportCommand = new RelayCommand(parameter =>
             {
-                Core.Logger.Log("Importing ItemList...");
+                Core.Logger.Log("导入捡取列表...");
 
                 var oldSlected = _selectedItems.Count;
 
                 ImportFromCode(ExportCode);
 
-                Core.Logger.Log("Selected Before = {0} After = {1}", oldSlected, _selectedItems.Count);
+                Core.Logger.Log("选中之前 = {0} 之后 = {1}", oldSlected, _selectedItems.Count);
 
                 IsModalVisible = false;
             });
 
             ExportCommand = new RelayCommand(parameter =>
             {
-                Core.Logger.Log("Exporting ItemList... {0}", parameter);
+                Core.Logger.Log("导出捡取列表... {0}", parameter);
                 ExportCode = CreateExportCode();
             });
         }
@@ -884,8 +884,8 @@ namespace Trinity.Settings.ItemList
         {
             if (string.IsNullOrEmpty(code) || string.IsNullOrWhiteSpace(code))
             {
-                ValidationMessage = "You must enter an import/export code";
-                Core.Logger.Log("You must enter an import/export code");
+                ValidationMessage = "您必须输入一个导入/导出代码";
+                Core.Logger.Log("您必须输入一个导入/导出代码");
             }
             try
             {
@@ -916,7 +916,7 @@ namespace Trinity.Settings.ItemList
             catch (Exception ex)
             {
                 ValidationMessage = $"Error importing itemlist. {ex.Message} {ex.InnerException}";
-                Core.Logger.Log("Error importing itemlist. {0} {1}", ex.Message, ex.InnerException);
+                Core.Logger.Log("导入捡取列表错误. {0} {1}", ex.Message, ex.InnerException);
             }
             return this;
         }
@@ -1021,13 +1021,13 @@ namespace Trinity.Settings.ItemList
                     {
                         // Remove
                         _selectedItems.Remove(match);
-                        Core.Logger.Verbose("Removed {0} ({2}) from Selected Items, NewSelectedCount={1}", item.Name, _selectedItems.Count, item.Id);
+                        Core.Logger.Verbose("删除 {0} ({2}) 从选中的道具中, 新选中数量={1}", item.Name, _selectedItems.Count, item.Id);
                     }
                 }
                 else if (match == null && item.IsSelected)
                 {
                     _selectedItems.Add(item);
-                    Core.Logger.Verbose("Added {0} ({2}) to Selected Items, NewSelectedCount={1}", item.Name, _selectedItems.Count, item.Id);
+                    Core.Logger.Verbose("添加 {0} ({2}) 到选中道具中, 新选中数量={1}", item.Name, _selectedItems.Count, item.Id);
                 }
             }
         }
@@ -1036,7 +1036,7 @@ namespace Trinity.Settings.ItemList
         {
             if (_selectedItems == null || _displayItems == null || _collection == null || _collection.View == null || _collection.View.SourceCollection == null)
             {
-                Core.Logger.Log("Skipping UpdateSelectedItems due to Null");
+                Core.Logger.Log("跳过 更新选中道具为空");
                 return;
             }
 
@@ -1074,7 +1074,7 @@ namespace Trinity.Settings.ItemList
                     {
                         if (item.IsSelected)
                         {
-                            Core.Logger.Verbose("Update: Deselecting {0}", item.Name);
+                            Core.Logger.Verbose("更新: 取消选择 {0}", item.Name);
                             item.IsSelected = false;
                         }
                     }

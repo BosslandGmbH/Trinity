@@ -243,7 +243,7 @@
                                                 <StackPanel>
                                                     <StackPanel>
                                                         <Grid Background="Transparent">
-                                                            <TextBlock TextWrapping="Wrap" Text="Must have properties:"
+                                                            <TextBlock TextWrapping="Wrap" Text="必须具备的属性:"
                                                                        Foreground="White" FontWeight="Regular"
                                                                        HorizontalAlignment="Left">
                                                                 <Run Text="  (" FontWeight="Normal" Foreground="Gray" />
@@ -263,7 +263,7 @@
                                                                 Width="Auto"
                                                                 Height="23" IsSynchronizedWithCurrentItem="False"
                                                                 Template="{DynamicResource ActionsComboBoxControlTemplate}"
-                                                                Tag="Add" />
+                                                                Tag="增加"/>
                                                         </Grid>
                                                         <WrapPanel x:Name="rulesContentContainer"
                                                                    Background="Transparent" Width="Auto">
@@ -278,7 +278,7 @@
                                                     <StackPanel Margin="0,5,0,0">
                                                         <Grid Background="Transparent">
                                                             <WrapPanel>
-                                                                <TextBlock TextWrapping="Wrap" Text="And at least "
+                                                                <TextBlock TextWrapping="Wrap" Text="和以下属性其中"
                                                                            Margin="0,2,0,0" Foreground="White"
                                                                            FontWeight="Regular"
                                                                            HorizontalAlignment="Left" />
@@ -292,10 +292,10 @@
                                                                     Width="Auto" Height="23"
                                                                     ItemsSource="{Binding OpCountNumbers}"
                                                                     SelectedValue="{Binding Path=Ops, Mode=TwoWay}"
-                                                                    Tag="Add"
+                                                                    Tag="增加"
 
-                                                                    ToolTip="The number of optional rules that must be true" />
-                                                                <TextBlock TextWrapping="Wrap" Text=" of:"
+                                                                    ToolTip="The number of optional rules that must be true"/>
+                                                                <TextBlock TextWrapping="Wrap" Text="种:"
                                                                            Margin="0,2,0,0" Foreground="White"
                                                                            FontWeight="Regular"
                                                                            HorizontalAlignment="Left">
@@ -319,7 +319,7 @@
                                                                 Width="Auto" Height="23"
                                                                 IsSynchronizedWithCurrentItem="False"
                                                                 Template="{DynamicResource ActionsComboBoxControlTemplate}"
-                                                                Tag="Add" />
+                                                                Tag="增加"/>
                                                         </Grid>
                                                         <WrapPanel x:Name="optionalRulesContentContainer"
                                                                    Background="Transparent" Width="Auto">
@@ -350,167 +350,164 @@
                 <Setter Property="ContentTemplate" Value="{DynamicResource DefaultFormTemplate}" />
                 <Setter Property="DockPanel.Dock" Value="Top" />
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="Ancient">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="远古">
                         <Setter Property="ContentTemplate" Value="{DynamicResource CheckboxFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="PrimaryStat">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="主要属性">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="CriticalHitChance">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="暴击几率">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="CriticalHitDamage">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="暴击伤害">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="SkillDamage">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="技能伤害">
                         <Setter Property="ContentTemplate" Value="{DynamicResource DropdownSliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="BaseMaxDamage">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="基础最大伤害">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="AttackSpeed">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="攻击速度">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="PercentDamage">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="百分比伤害">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="DamageFromElites">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="减少精英怪造成的伤害">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="DamageAgainstElites">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="对精英怪伤害提高">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="Vitality">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="体能">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="Sockets">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="镶孔">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ResistAll">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="所有抗性">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="Cooldown">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="冷却时间缩短">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ResourceCost">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="减少耗能">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ElementalDamage">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="元素伤害">
                         <Setter Property="ContentTemplate" Value="{DynamicResource DropdownSliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="FireSkills">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="火焰技能">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="LightningSkills">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="闪电技能">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="HolySkills">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="神圣技能">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ColdSkills">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="冰霜技能">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="PhysicalSkills">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="物理技能">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ArcaneSkills">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="奥术技能">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="PoisonSkills">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="毒性技能">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="AreaDamage">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="范围伤害">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
                     <!-- New -->
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="CriticalHitsGrantArcane">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="暴击恢复奥能">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="Armor">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="护甲">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ChanceToBlock">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="格挡几率">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="Cooldown">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="冷却时间缩短">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="DamageFromElites">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="减少精英怪造成的伤害">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="HatredRegen">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="憎恨再生">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="LifePercent">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="百分比生命">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="LifePerFury">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="消耗怒气恢复生命">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="LifePerSpirit">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="消耗内力恢复生命">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="LifePerWrath">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="消耗愤怒值恢复生命">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="LifePerHit">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="击中回复生命">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="RegenerateLifePerSecond">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="每秒恢复生命">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ManaRegen">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="法力恢复">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="MovementSpeed">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="移动速度">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="WrathRegen">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="愤怒值再生">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormDecimalTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="SpiritRegen">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="内力再生">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormDecimalTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="MaximumArcane">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="奥能上限">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="MaximumDiscipline">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="戒律上限">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="MaximumFury">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="怒气上限">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="MaximumMana">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="法力上限">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="MaximumSpirit">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="内力上限">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="MaximumWrath">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="愤怒上限">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="MaximumEssence">
-                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ChanceToBlind">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="击中产生致盲效果几率">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormDecimalTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ChanceToFreeze">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="击中产生冰冻效果几率">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormDecimalTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ChanceToImmobilize">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="击中产生定身效果几率">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormDecimalTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ChanceToStun">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="击中产生昏迷效果几率">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormDecimalTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="AttackersTakeDamage">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="攻击受到伤害">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="Thorns">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="荆棘伤害">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="PassivePower">
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="威能">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormDecimalTemplate}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Path=ItemProperty}" Value="Attribute">
@@ -737,89 +734,88 @@
                 <StackPanel Margin="10">
                     <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" Background="Transparent"
                                Foreground="White" Margin="0,0,10,0">
-                        <Run>Legendary handling is currently set to: </Run>
-                        <Run Text="{Binding Items.LegendaryMode, FallbackValue=[LegendaryMode]}" />
+                        <Run>传奇装备的处理目前设置为: </Run>
+                        <Run Text="{Binding Items.LegendaryMode, FallbackValue=[LegendaryMode]}"/>
                     </TextBlock>
                     <Button Margin="0,5,0,0" VerticalAlignment="Center" Style="{DynamicResource LinkButton}"
-                            Content="Enable ItemList" Command="{Binding ItemList.EnableItemListCommand}" />
+                            Content="使用装备列表" Command="{Binding ItemList.EnableItemListCommand}"/>
                 </StackPanel>
             </StackPanel>
-
             <Grid>
-
                 <DockPanel>
                     <TabControl Margin="0,10,0,0" Padding="0,10,5,2" Background="Transparent"
                                 SelectedIndex="{Binding ItemList.SelectedTabIndex}">
 
                         <!-- List of Legendary Items -->
-                        <TabItem Header="Legendary Item" Style="{DynamicResource TertiaryTabItem}">
-                            <DockPanel Background="#333333">
-                                <Border DockPanel.Dock="Top" Padding="0,0,0,0" BorderThickness="0,0,0,1" BorderBrush="#55555555">
+                        <TabItem Header="传奇装备" Style="{DynamicResource TertiaryTabItem}">
+                            <DockPanel Background="#333333"> 
+                                <Border DockPanel.Dock="Top" Padding="0,0,0,0" BorderThickness="0,0,0,1" BorderBrush="#55555555"> 
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0" DockPanel.Dock="Top" Margin="0,0,0,0" Orientation="Horizontal"
+                                        <StackPanel Grid.Column="0" DockPanel.Dock="Top" Margin="0,0,0,0" Orientation="Horizontal"
                                                     Background="Transparent"
                                                     Height="38" VerticalAlignment="Center">
-                                        <Label Style="{StaticResource StatusLabelStyle}"
+                                        
+                                            <Label Style="{StaticResource StatusLabelStyle}"
                                                    VerticalContentAlignment="Center" Margin="5,0,0,0"
-                                                   Content="Search:" />
-                                        <TextBox Width="140" Height="22" BorderBrush="DarkSlateGray"
+                                                   Content="搜索:"/>
+                                            <TextBox Width="140" Height="22" BorderBrush="DarkSlateGray"
                                                      Text="{Binding ItemList.FilterText, UpdateSourceTrigger=PropertyChanged}"
                                                      Margin="0,8"
                                                      ToolTip="Search by Item Name or Id" />
-                                        <Button Content=" X " Height="21" Width="25" Margin="-27,-1,0,0"
+                                            <Button Content=" X " Height="21" Width="25" Margin="-27,-1,0,0"
                                                     Background="Transparent"
                                                     Command="{Binding ItemList.ResetFilterCommand}"
                                                     BorderBrush="Transparent" FontWeight="Heavy"
                                                     BorderThickness="1"
                                                     Visibility="{Binding ItemList.IsFiltered, Converter={StaticResource BoolToVisibilityConverter}}" />
 
-                                        <Label Style="{StaticResource StatusLabelStyle}"
+                                            <Label Style="{StaticResource StatusLabelStyle}"
                                                    VerticalContentAlignment="Center" Margin="5,0,0,0"
-                                                   Content="Group By:" />
-                                        <ComboBox Tag="" SelectedValuePath="Tag"
+                                                   Content="装备类型:"/>
+                                            <ComboBox Tag="" SelectedValuePath="Tag"
                                                       SelectedValue="{Binding ItemList.Grouping}"
                                                       x:Name="GroupingDropdown" MaxHeight="25" Padding="0,0,15,0">
-                                            <ComboBoxItem Content="None" Tag="None" Foreground="White"
-                                                              Background="Black" />
-                                            <ComboBoxItem Content="LegendaryAffix" Tag="IsLegendaryAffixed"
-                                                              Foreground="White" Background="Black" />
-                                            <ComboBoxItem Content="BaseType" Tag="BaseType" Foreground="White"
-                                                              Background="Black" />
-                                            <ComboBoxItem Content="ItemType" Tag="ItemType" Foreground="White"
-                                                              Background="Black" />
-                                            <ComboBoxItem Content="Sets" Tag="SetName" Foreground="White"
-                                                              Background="Black" />
-                                            <ComboBoxItem Content="Class" Tag="ClassRestriction" Foreground="White"
-                                                              Background="Black" />
-                                            <ComboBoxItem Content="Selected" Tag="IsSelected" Foreground="White"
-                                                              Background="Black" />
-                                        </ComboBox>
+                                                <ComboBoxItem Content="不分类型" Tag="None" Foreground="White"
+                                                                  Background="Black"/>
+                                                <ComboBoxItem Content="装备特效" Tag="IsLegendaryAffixed"
+                                                                  Foreground="White" Background="Black"/>
+                                                <ComboBoxItem Content="装备种类" Tag="BaseType" Foreground="White"
+                                                                  Background="Black"/>
+                                                <ComboBoxItem Content="装备部位" Tag="ItemType" Foreground="White"
+                                                                  Background="Black"/>
+                                                <ComboBoxItem Content="职业套装" Tag="SetName" Foreground="White"
+                                                                  Background="Black"/>
+                                                <ComboBoxItem Content="职业限定" Tag="ClassRestriction" Foreground="White"
+                                                                  Background="Black"/>
+                                                <ComboBoxItem Content="未勾选的" Tag="IsSelected" Foreground="White"
+                                                                  Background="Black"/>
+                                            </ComboBox>
                                       
-                                    </StackPanel>
+                                        </StackPanel>
                                         <ComboBox Grid.Column="1"  Background="Transparent" HorizontalAlignment="Right" 
                                                       FontWeight="Normal"
                                                       behaviors:ComboAlwaysFireSelection.Active="False"
                                                       behaviors:SelectionChangedBehaviour.Command="{Binding ItemList.AdvancedOptionCommand}"
                                                       Width="Auto" Height="23" IsSynchronizedWithCurrentItem="False"
                                                       Template="{DynamicResource ActionsComboBoxControlTemplate}"
-                                                      Tag="More Options..." Margin="0,2,8,2">
-                                            <ComboBoxItem Content="Select None" Tag="SelectNoneCommand"
-                                                              Foreground="White" Background="Black" />
-                                            <ComboBoxItem Content="Select All" Tag="SelectAllCommand"
-                                                              Foreground="White" Background="Black" />
-                                            <ComboBoxItem Content="Add 2.4 Items" Tag="Add24ItemsCommand"
-                                                              Foreground="White" Background="Black" />
-                                            <ComboBoxItem Content="Add Set Items" Tag="AddAllSetsCommand"
-                                                              Foreground="White" Background="Black" />
-                                            <ComboBoxItem Content="Add Legendary Affix Items"
+                                                      Tag="更多选项" Margin="0,2,8,2">
+                                            <ComboBoxItem Content="全不选" Tag="SelectNoneCommand"
+                                                              Foreground="White" Background="Black"/>
+                                            <ComboBoxItem Content="全选" Tag="SelectAllCommand"
+                                                              Foreground="White" Background="Black"/>
+                                            <ComboBoxItem Content="勾上2.4的装备" Tag="Add24ItemsCommand"
+                                                              Foreground="White" Background="Black"/>
+                                            <ComboBoxItem Content="勾上职业套装" Tag="AddAllSetsCommand"
+                                                              Foreground="White" Background="Black"/>
+                                            <ComboBoxItem Content="勾上有特效的"
                                                               Tag="AddAllLegendaryAffixCommand" Foreground="White"
-                                                              Background="Black" />
-                                            <ComboBoxItem Content="Clear All Rules" Tag="ClearRulesCommand"
-                                                              Foreground="White" Background="Black" />
+                                                              Background="Black"/>
+                                            <ComboBoxItem Content="清除所有属性" Tag="ClearRulesCommand"
+                                                              Foreground="White" Background="Black"/>
                                         </ComboBox>
                                     </Grid>
                                 </Border>
@@ -876,25 +872,25 @@
                         </TabItem>
 
                         <!-- List of Item Slots -->
-                        <TabItem Header="Item Type" Style="{DynamicResource TertiaryTabItem}">
+                        <TabItem Header="装备类型" Style="{DynamicResource TertiaryTabItem}">
                             <DockPanel Background="#333333">
                                 <Border DockPanel.Dock="Top">
                                     <Grid>
-                                        <Label Margin="4,0,0,0">Select the types  you want to keep/stash.</Label>
+                                        <Label Margin="4,0,0,0">勾选你想要保留或者存仓的装备类型.</Label>
                                         <ComboBox Background="Transparent" HorizontalAlignment="Right"
                                                   FontWeight="Normal"
                                                   behaviors:ComboAlwaysFireSelection.Active="False"
                                                   behaviors:SelectionChangedBehaviour.Command="{Binding ItemList.AdvancedOptionCommand}"
                                                   Width="Auto" Height="23" IsSynchronizedWithCurrentItem="False"
                                                   Template="{DynamicResource ActionsComboBoxControlTemplate}"
-                                                  Tag="More Options...">
+                                                  Tag="更多选项">
 
-                                            <ComboBoxItem Content="Select None" Tag="SelectNoneCommand"
-                                                          Foreground="White" Background="Black" />
-                                            <ComboBoxItem Content="Select All" Tag="SelectAllCommand"
-                                                          Foreground="White" Background="Black" />
-                                            <ComboBoxItem Content="Clear All Rules" Tag="ClearRulesCommand"
-                                                          Foreground="White" Background="Black" />
+                                            <ComboBoxItem Content="全不选" Tag="SelectNoneCommand"
+                                                          Foreground="White" Background="Black"/>
+                                            <ComboBoxItem Content="全选" Tag="SelectAllCommand"
+                                                          Foreground="White" Background="Black"/>
+                                            <ComboBoxItem Content="清除所有属性" Tag="ClearRulesCommand"
+                                                          Foreground="White" Background="Black"/>
                                         </ComboBox>
                                     </Grid>
                                 </Border>
@@ -919,23 +915,23 @@
                         </TabItem>
                         
 
-                            <TabItem Header="Advanced" Style="{DynamicResource TertiaryTabItem}">
+                            <TabItem Header="高级" Style="{DynamicResource TertiaryTabItem}">
                             <Border Padding="10" Background="#333333">
                                 <StackPanel>
                                     <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top"
                                               Background="#474747">
                                         <GroupBox.Header>
-                                            Load Items from Character
+                                            根据当前人物勾选装备列表页的装备
                                         </GroupBox.Header>
                                         <StackPanel Margin="0,10,0,0">
                                             <UniformGrid Rows="1">
                                                 <Button Height="25"
                                                         Command="{Binding ItemList.LoadEquippedItemsCommand}">
-                                                    Select Equipped
+                                                    勾选已装备的传奇
                                                 </Button>
                                                 <Button Height="25"
                                                         Command="{Binding ItemList.LoadStashedItemsCommand}">
-                                                    Select Stashed
+                                                    勾选仓库里的传奇
                                                 </Button>
                                             </UniformGrid>
                                         </StackPanel>
@@ -943,34 +939,34 @@
                                     <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top"
                                               Background="#474747">
                                         <GroupBox.Header>
-                                            Overrides
+                                            辅助
                                         </GroupBox.Header>
                                         <StackPanel>
 
                                             <CheckBox
                                                 ToolTip="Avoids you having to add an ancient rule to every selected item"
-                                                Content="Always Trash Non-Ancients"
-                                                IsChecked="{Binding ItemList.AlwaysTrashNonAncients}" />
+                                                Content="贩卖或拆解非远古装备"
+                                                IsChecked="{Binding ItemList.AlwaysTrashNonAncients}"/>
                                             <CheckBox
                                                 ToolTip="Allows you to keep itemlist selections AND ancients"
-                                                Content="Always Keep Ancients"
-                                                IsChecked="{Binding ItemList.AlwaysStashAncients}" />
+                                                Content="存仓远古装备和装备列表的选择"
+                                                IsChecked="{Binding ItemList.AlwaysStashAncients}"/>
                                           <CheckBox
-                                              Content="Always Keep Primal Ancients"
-                                              IsChecked="{Binding ItemList.AlwaysStashPrimalAncients}" />
+                                              Content="始终保留太古装备"
+                                              IsChecked="{Binding ItemList.AlwaysStashPrimalAncients}"/>
                                         </StackPanel>
                                     </GroupBox>
                                     <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top"
                                               Background="#474747">
                                         <GroupBox.Header>
-                                            Auto-Upgrade Rules
+                                            自动提升属性数值
                                         </GroupBox.Header>
                                         <StackPanel>
-                                            <TextBlock Margin="0,0,0,10" TextWrapping="Wrap">Items that are evaluated to be stashed will apply their current stat values to any rules you have setup for the item. This will prevent weaker versions of the item being kept in future.</TextBlock>
+                                            <TextBlock Margin="0,0,0,10" TextWrapping="Wrap">如果拾取的新装备对比仓库的同一装备属性值较高,则自动提升传奇装备页中设定的属性数值来防止较差的装备存仓.</TextBlock>
                                             <CheckBox
                                                 ToolTip="Rule sliders will automatically be increased as you find more powerful items."
-                                                Content="Enable Auto-Upgrade"
-                                                IsChecked="{Binding ItemList.UpgradeRules}" />
+                                                Content="开启自动提升"
+                                                IsChecked="{Binding ItemList.UpgradeRules}"/>
                                         </StackPanel>
                                     </GroupBox>
                                 </StackPanel>
@@ -989,12 +985,12 @@
                     <Button
                                                 Command="{Binding Source={x:Static controls:ModalContentCommands.ShowModalContent}}"
                                                 CommandParameter="Export" Width="Auto" Padding="7,2" Margin="10,0,5,0">
-                        Export
+                        导出
                     </Button>
                     <Button
                                                 Command="{Binding Source={x:Static controls:ModalContentCommands.ShowModalContent}}"
                                                 CommandParameter="Import" Width="Auto" Padding="7,2" Margin="0,0,5,0">
-                        Import
+                        导入
                     </Button>
                 </WrapPanel>
 
@@ -1020,10 +1016,10 @@
 
                 <UniformGrid Grid.Row="1"
                              Visibility="{Binding Path=ItemList.SelectedModalPage, Converter={StaticResource EnumVisibilityConverter}, ConverterParameter=Import}">
-                    <Button Content="Import" Margin="0,0,0,-22.5" VerticalContentAlignment="Center"
+                    <Button Content="导入" Margin="0,0,0,-22.5" VerticalContentAlignment="Center"
                             HorizontalContentAlignment="Center" Width="Auto" Height="Auto"
-                            Command="{Binding ItemList.ImportCommand}" />
-                    <Button Content="Close" Margin="0,0,0,-22.5" VerticalContentAlignment="Center"
+                            Command="{Binding ItemList.ImportCommand}"/>
+                    <Button Content="关闭" Margin="0,0,0,-22.5" VerticalContentAlignment="Center"
                             HorizontalContentAlignment="Center" Width="Auto" Height="Auto"
                             Command="{Binding Source={x:Static controls:ModalContentCommands.HideModalContent}}" />
                 </UniformGrid>
@@ -1037,8 +1033,8 @@
 
                 <StackPanel Grid.Row="1"
                             Visibility="{Binding Path=ItemList.SelectedModalPage, Converter={StaticResource EnumVisibilityConverter}, ConverterParameter=Export}">
-                    <Button Content="Close" Margin="0" Padding="10" Height="45"
-                            Command="{Binding Source={x:Static controls:ModalContentCommands.HideModalContent}}" />
+                    <Button Content="关闭" Margin="0" Padding="10" Height="45"
+                            Command="{Binding Source={x:Static controls:ModalContentCommands.HideModalContent}}"/>
                 </StackPanel>
 
             </Grid>

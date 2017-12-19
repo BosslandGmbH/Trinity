@@ -24,7 +24,7 @@ namespace Trinity.Framework.Objects
             }
             catch (Exception ex)
             {
-                Core.Logger.Verbose("Exception finding buff VariantId {0}", ex);
+                Core.Logger.Verbose("异常发现bluff变体标识 {0}", ex);
             }
 
             _buff = buff;

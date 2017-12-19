@@ -75,7 +75,7 @@ namespace Trinity.Framework.Avoidance
                     }
                     catch (Exception ex)
                     {
-                        Core.Logger.Error("Failed to add AvoidanceData for {0} > {1}. Probably a duplicate ActorSnoId ({2})", avoidanceDatum.Name, part.Name, part.ActorSnoId);
+                        Core.Logger.Error("无法添加规避数据 {0} > {1}. 可能是一个重复的 ActorSnoId ({2})", avoidanceDatum.Name, part.Name, part.ActorSnoId);
                     }
                 }
             }

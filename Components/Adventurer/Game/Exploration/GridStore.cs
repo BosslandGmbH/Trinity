@@ -30,7 +30,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     result.Add(grid);
             }
 
-            Core.Logger.Debug("[GridStore] contains {0} grid instances, {1} for Current world", Grids.Count, result.Count);
+            Core.Logger.Debug("[网格存储] 包含 {0} 个网格实例，当前世界有 {1} 个", Grids.Count, result.Count);
 
             return result;
         }

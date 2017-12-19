@@ -15,7 +15,7 @@ namespace Trinity.Framework.Reference
             public static Passive Resolve = new Passive
             {
                 Index = 0,
-                Name = "Resolve",
+                Name = "精诚之心",
                 SNOPower = SNOPower.Monk_Passive_Resolve,
                 RequiredLevel = 10,
                 Slug = "resolve",
@@ -31,7 +31,7 @@ namespace Trinity.Framework.Reference
             public static Passive FleetFooted = new Passive
             {
                 Index = 1,
-                Name = "Fleet Footed",
+                Name = "健步如飞",
                 SNOPower = SNOPower.Monk_Passive_FleetFooted,
                 RequiredLevel = 10,
                 Slug = "fleet-footed",
@@ -47,7 +47,7 @@ namespace Trinity.Framework.Reference
             public static Passive ExaltedSoul = new Passive
             {
                 Index = 2,
-                Name = "Exalted Soul",
+                Name = "奇筋异骨",
                 SNOPower = SNOPower.Monk_Passive_ExaltedSoul,
                 RequiredLevel = 13,
                 Slug = "exalted-soul",
@@ -64,7 +64,7 @@ namespace Trinity.Framework.Reference
             public static Passive Transcendence = new Passive
             {
                 Index = 3,
-                Name = "Transcendence",
+                Name = "脱凡入化",
                 SNOPower = SNOPower.Monk_Passive_Transcendence,
                 RequiredLevel = 16,
                 Slug = "transcendence",
@@ -81,7 +81,7 @@ namespace Trinity.Framework.Reference
             public static Passive ChantOfResonance = new Passive
             {
                 Index = 4,
-                Name = "Chant of Resonance",
+                Name = "真言谐鸣",
                 SNOPower = SNOPower.Monk_Passive_ChantOfResonance,
                 RequiredLevel = 20,
                 Slug = "chant-of-resonance",
@@ -98,7 +98,7 @@ namespace Trinity.Framework.Reference
             public static Passive SeizeTheInitiative = new Passive
             {
                 Index = 5,
-                Name = "Seize the Initiative",
+                Name = "先发制人",
                 SNOPower = SNOPower.Monk_Passive_SeizeTheInitiative,
                 RequiredLevel = 20,
                 Slug = "seize-the-initiative",
@@ -115,7 +115,7 @@ namespace Trinity.Framework.Reference
             public static Passive TheGuardiansPath = new Passive
             {
                 Index = 6,
-                Name = "The Guardian's Path",
+                Name = "以攻为守",
                 SNOPower = SNOPower.Monk_Passive_TheGuardiansPath,
                 RequiredLevel = 24,
                 Slug = "the-guardians-path",
@@ -132,7 +132,7 @@ namespace Trinity.Framework.Reference
             public static Passive SixthSense = new Passive
             {
                 Index = 7,
-                Name = "Sixth Sense",
+                Name = "先知先觉",
                 SNOPower = SNOPower.Monk_Passive_SixthSense,
                 RequiredLevel = 27,
                 Slug = "sixth-sense",
@@ -148,7 +148,7 @@ namespace Trinity.Framework.Reference
             public static Passive Determination = new Passive
             {
                 Index = 8,
-                Name = "Determination",
+                Name = "斗志坚决",
                 SNOPower = SNOPower.p1_Monk_Passive_Provocation,
                 RequiredLevel = 30,
                 Slug = "determination",
@@ -164,7 +164,7 @@ namespace Trinity.Framework.Reference
             public static Passive RelentlessAssault = new Passive
             {
                 Index = 9,
-                Name = "Relentless Assault",
+                Name = "无情猛袭",
                 SNOPower = SNOPower.p1_Monk_Passive_RelentlessAssault,
                 RequiredLevel = 30,
                 Slug = "relentless-assault",
@@ -180,7 +180,7 @@ namespace Trinity.Framework.Reference
             public static Passive BeaconOfYtar = new Passive
             {
                 Index = 10,
-                Name = "Beacon of Ytar",
+                Name = "伊塔之辉",
                 SNOPower = SNOPower.Monk_Passive_BeaconOfYtar,
                 RequiredLevel = 35,
                 Slug = "beacon-of-ytar",
@@ -196,7 +196,7 @@ namespace Trinity.Framework.Reference
             public static Passive Alacrity = new Passive
             {
                 Index = 11,
-                Name = "Alacrity",
+                Name = "动如奔雷",
                 SNOPower = SNOPower.Monk_Passive_GuidingLight,
                 RequiredLevel = 40,
                 Slug = "alacrity",
@@ -212,7 +212,7 @@ namespace Trinity.Framework.Reference
             public static Passive Harmony = new Passive
             {
                 Index = 12,
-                Name = "Harmony",
+                Name = "天人合一",
                 SNOPower = SNOPower.p1_Monk_Passive_Harmony,
                 RequiredLevel = 45,
                 Slug = "harmony",
@@ -229,7 +229,7 @@ namespace Trinity.Framework.Reference
             public static Passive CombinationStrike = new Passive
             {
                 Index = 13,
-                Name = "Combination Strike",
+                Name = "融会贯通",
                 SNOPower = SNOPower.Monk_Passive_CombinationStrike,
                 RequiredLevel = 50,
                 Slug = "combination-strike",
@@ -245,7 +245,7 @@ namespace Trinity.Framework.Reference
             public static Passive NearDeathExperience = new Passive
             {
                 Index = 14,
-                Name = "Near Death Experience",
+                Name = "濒死体验",
                 SNOPower = SNOPower.Monk_Passive_NearDeathExperience,
                 RequiredLevel = 58,
                 Slug = "near-death-experience",
@@ -262,7 +262,7 @@ namespace Trinity.Framework.Reference
             public static Passive Unity = new Passive
             {
                 Index = 15,
-                Name = "Unity",
+                Name = "齐心合力",
                 SNOPower = SNOPower.X1_Monk_Passive_Unity,
                 RequiredLevel = 64,
                 Slug = "unity",
@@ -279,7 +279,7 @@ namespace Trinity.Framework.Reference
             public static Passive Momentum = new Passive
             {
                 Index = 16,
-                Name = "Momentum",
+                Name = "劲力狂增",
                 SNOPower = SNOPower.X1_Monk_Passive_Momentum,
                 RequiredLevel = 66,
                 Slug = "momentum",
@@ -295,7 +295,7 @@ namespace Trinity.Framework.Reference
             public static Passive MythicRhythm = new Passive
             {
                 Index = 17,
-                Name = "Mythic Rhythm",
+                Name = "神秘韵律",
                 SNOPower = SNOPower.X1_Monk_Passive_MythicRhythm,
                 RequiredLevel = 68,
                 Slug = "mythic-rhythm",
@@ -315,7 +315,7 @@ namespace Trinity.Framework.Reference
             public static Passive HeavenlyStrength = new Passive
             {
                 Index = 0,
-                Name = "Heavenly Strength",
+                Name = "天堂之力",
                 SNOPower = SNOPower.X1_Crusader_Passive_HeavenlyStrength,
                 RequiredLevel = 10,
                 Slug = "heavenly-strength",
@@ -332,7 +332,7 @@ namespace Trinity.Framework.Reference
             public static Passive Fervor = new Passive
             {
                 Index = 1,
-                Name = "Fervor",
+                Name = "热忱",
                 SNOPower = SNOPower.X1_Crusader_Passive_Fervor,
                 RequiredLevel = 10,
                 Slug = "fervor",
@@ -349,7 +349,7 @@ namespace Trinity.Framework.Reference
             public static Passive Vigilant = new Passive
             {
                 Index = 2,
-                Name = "Vigilant",
+                Name = "警戒",
                 SNOPower = SNOPower.X1_Crusader_Passive_Vigilant,
                 RequiredLevel = 13,
                 Slug = "vigilant",
@@ -365,7 +365,7 @@ namespace Trinity.Framework.Reference
             public static Passive Righteousness = new Passive
             {
                 Index = 3,
-                Name = "Righteousness",
+                Name = "正义之怒",
                 SNOPower = SNOPower.X1_Crusader_Passive_Righteousness,
                 RequiredLevel = 16,
                 Slug = "righteousness",
@@ -381,7 +381,7 @@ namespace Trinity.Framework.Reference
             public static Passive Insurmountable = new Passive
             {
                 Index = 4,
-                Name = "Insurmountable",
+                Name = "无懈可击",
                 SNOPower = SNOPower.X1_Crusader_Passive_Insurmountable,
                 RequiredLevel = 20,
                 Slug = "insurmountable",
@@ -397,7 +397,7 @@ namespace Trinity.Framework.Reference
             public static Passive Fanaticism = new Passive
             {
                 Index = 5,
-                Name = "Fanaticism",
+                Name = "狂热信念",
                 SNOPower = SNOPower.X1_Crusader_Passive_NephalemMajesty,
                 RequiredLevel = 20,
                 Slug = "fanaticism",
@@ -413,7 +413,7 @@ namespace Trinity.Framework.Reference
             public static Passive Indestructible = new Passive
             {
                 Index = 6,
-                Name = "Indestructible",
+                Name = "钢铁之心",
                 SNOPower = SNOPower.X1_Crusader_Passive_Indestructible,
                 RequiredLevel = 25,
                 Slug = "indestructible",
@@ -430,7 +430,7 @@ namespace Trinity.Framework.Reference
             public static Passive HolyCause = new Passive
             {
                 Index = 7,
-                Name = "Holy Cause",
+                Name = "神圣使命",
                 SNOPower = SNOPower.X1_Crusader_Passive_HolyCause,
                 RequiredLevel = 27,
                 Slug = "holy-cause",
@@ -447,7 +447,7 @@ namespace Trinity.Framework.Reference
             public static Passive Wrathful = new Passive
             {
                 Index = 8,
-                Name = "Wrathful",
+                Name = "愈体盛怒",
                 SNOPower = SNOPower.X1_Crusader_Passive_Wrathful,
                 RequiredLevel = 30,
                 Slug = "wrathful",
@@ -464,7 +464,7 @@ namespace Trinity.Framework.Reference
             public static Passive DivineFortress = new Passive
             {
                 Index = 9,
-                Name = "Divine Fortress",
+                Name = "神圣堡垒",
                 SNOPower = SNOPower.X1_Crusader_Passive_DivineFortress,
                 RequiredLevel = 30,
                 Slug = "divine-fortress",
@@ -480,7 +480,7 @@ namespace Trinity.Framework.Reference
             public static Passive LordCommander = new Passive
             {
                 Index = 10,
-                Name = "Lord Commander",
+                Name = "一统千军",
                 SNOPower = SNOPower.X1_Crusader_Passive_LordCommander,
                 RequiredLevel = 35,
                 Slug = "lord-commander",
@@ -497,7 +497,7 @@ namespace Trinity.Framework.Reference
             public static Passive HoldYourGround = new Passive
             {
                 Index = 11,
-                Name = "Hold Your Ground",
+                Name = "坚守阵地",
                 SNOPower = SNOPower.X1_Crusader_Passive_HoldYourGround,
                 RequiredLevel = 40,
                 Slug = "hold-your-ground",
@@ -513,7 +513,7 @@ namespace Trinity.Framework.Reference
             public static Passive LongArmOfTheLaw = new Passive
             {
                 Index = 12,
-                Name = "Long Arm of the Law",
+                Name = "律法无边",
                 SNOPower = SNOPower.X1_Crusader_Passive_LongArmOfTheLaw,
                 RequiredLevel = 45,
                 Slug = "long-arm-of-the-law",
@@ -529,7 +529,7 @@ namespace Trinity.Framework.Reference
             public static Passive IronMaiden = new Passive
             {
                 Index = 13,
-                Name = "Iron Maiden",
+                Name = "铁处女",
                 SNOPower = SNOPower.X1_Crusader_Passive_IronMaiden,
                 RequiredLevel = 50,
                 Slug = "iron-maiden",
@@ -545,7 +545,7 @@ namespace Trinity.Framework.Reference
             public static Passive Renewal = new Passive
             {
                 Index = 14,
-                Name = "Renewal",
+                Name = "格挡复原",
                 SNOPower = SNOPower.X1_Crusader_Passive_Renewal,
                 RequiredLevel = 55,
                 Slug = "renewal",
@@ -561,7 +561,7 @@ namespace Trinity.Framework.Reference
             public static Passive Finery = new Passive
             {
                 Index = 15,
-                Name = "Finery",
+                Name = "宝石之力",
                 SNOPower = SNOPower.X1_Crusader_Passive_Finery,
                 RequiredLevel = 60,
                 Slug = "finery",
@@ -577,7 +577,7 @@ namespace Trinity.Framework.Reference
             public static Passive Blunt = new Passive
             {
                 Index = 16,
-                Name = "Blunt",
+                Name = "重击之锤",
                 SNOPower = SNOPower.X1_Crusader_Passive_Blunt,
                 RequiredLevel = 65,
                 Slug = "blunt",
@@ -593,7 +593,7 @@ namespace Trinity.Framework.Reference
             public static Passive ToweringShield = new Passive
             {
                 Index = 17,
-                Name = "Towering Shield",
+                Name = "守御之盾",
                 SNOPower = SNOPower.X1_Crusader_Passive_ToweringShield,
                 RequiredLevel = 70,
                 Slug = "towering-shield",
@@ -613,7 +613,7 @@ namespace Trinity.Framework.Reference
             public static Passive JungleFortitude = new Passive
             {
                 Index = 0,
-                Name = "Jungle Fortitude",
+                Name = "丛林坚毅",
                 SNOPower = SNOPower.Witchdoctor_Passive_JungleFortitude,
                 RequiredLevel = 10,
                 Slug = "jungle-fortitude",
@@ -629,7 +629,7 @@ namespace Trinity.Framework.Reference
             public static Passive CircleOfLife = new Passive
             {
                 Index = 1,
-                Name = "Circle of Life",
+                Name = "生命之环",
                 SNOPower = SNOPower.Witchdoctor_Passive_CircleOfLife,
                 RequiredLevel = 10,
                 Slug = "circle-of-life",
@@ -646,7 +646,7 @@ namespace Trinity.Framework.Reference
             public static Passive SpiritualAttunement = new Passive
             {
                 Index = 2,
-                Name = "Spiritual Attunement",
+                Name = "灵魂协调",
                 SNOPower = SNOPower.Witchdoctor_Passive_SpiritualAttunement,
                 RequiredLevel = 13,
                 Slug = "spiritual-attunement",
@@ -663,7 +663,7 @@ namespace Trinity.Framework.Reference
             public static Passive GruesomeFeast = new Passive
             {
                 Index = 3,
-                Name = "Gruesome Feast",
+                Name = "骇人盛宴",
                 SNOPower = SNOPower.Witchdoctor_Passive_GruesomeFeast,
                 RequiredLevel = 16,
                 Slug = "gruesome-feast",
@@ -680,7 +680,7 @@ namespace Trinity.Framework.Reference
             public static Passive BloodRitual = new Passive
             {
                 Index = 4,
-                Name = "Blood Ritual",
+                Name = "鲜血仪式",
                 SNOPower = SNOPower.Witchdoctor_Passive_BloodRitual,
                 RequiredLevel = 20,
                 Slug = "blood-ritual",
@@ -697,7 +697,7 @@ namespace Trinity.Framework.Reference
             public static Passive BadMedicine = new Passive
             {
                 Index = 5,
-                Name = "Bad Medicine",
+                Name = "致命毒药",
                 SNOPower = SNOPower.Witchdoctor_Passive_BadMedicine,
                 RequiredLevel = 20,
                 Slug = "bad-medicine",
@@ -713,7 +713,7 @@ namespace Trinity.Framework.Reference
             public static Passive ZombieHandler = new Passive
             {
                 Index = 6,
-                Name = "Zombie Handler",
+                Name = "僵尸统领",
                 SNOPower = SNOPower.Witchdoctor_Passive_ZombieHandler,
                 RequiredLevel = 24,
                 Slug = "zombie-handler",
@@ -730,7 +730,7 @@ namespace Trinity.Framework.Reference
             public static Passive PierceTheVeil = new Passive
             {
                 Index = 7,
-                Name = "Pierce the Veil",
+                Name = "穿透迷障",
                 SNOPower = SNOPower.Witchdoctor_Passive_PierceTheVeil,
                 RequiredLevel = 27,
                 Slug = "pierce-the-veil",
@@ -746,7 +746,7 @@ namespace Trinity.Framework.Reference
             public static Passive SpiritVessel = new Passive
             {
                 Index = 8,
-                Name = "Spirit Vessel",
+                Name = "灵魂容器",
                 SNOPower = SNOPower.Witchdoctor_Passive_SpiritVessel,
                 RequiredLevel = 30,
                 Slug = "spirit-vessel",
@@ -763,7 +763,7 @@ namespace Trinity.Framework.Reference
             public static Passive FetishSycophants = new Passive
             {
                 Index = 9,
-                Name = "Fetish Sycophants",
+                Name = "鬼娃跟班",
                 SNOPower = SNOPower.Witchdoctor_Passive_FetishSycophants,
                 RequiredLevel = 30,
                 Slug = "fetish-sycophants",
@@ -780,7 +780,7 @@ namespace Trinity.Framework.Reference
             public static Passive RushOfEssence = new Passive
             {
                 Index = 10,
-                Name = "Rush of Essence",
+                Name = "元神奔行",
                 SNOPower = SNOPower.Witchdoctor_Passive_RushOfEssence,
                 RequiredLevel = 36,
                 Slug = "rush-of-essence",
@@ -797,7 +797,7 @@ namespace Trinity.Framework.Reference
             public static Passive VisionQuest = new Passive
             {
                 Index = 11,
-                Name = "Vision Quest",
+                Name = "灵魂追寻",
                 SNOPower = SNOPower.Witchdoctor_Passive_VisionQuest,
                 RequiredLevel = 40,
                 Slug = "vision-quest",
@@ -814,7 +814,7 @@ namespace Trinity.Framework.Reference
             public static Passive FierceLoyalty = new Passive
             {
                 Index = 12,
-                Name = "Fierce Loyalty",
+                Name = "狂热忠诚",
                 SNOPower = SNOPower.Witchdoctor_Passive_FierceLoyalty,
                 RequiredLevel = 45,
                 Slug = "fierce-loyalty",
@@ -831,7 +831,7 @@ namespace Trinity.Framework.Reference
             public static Passive GraveInjustice = new Passive
             {
                 Index = 13,
-                Name = "Grave Injustice",
+                Name = "剥削死者",
                 SNOPower = SNOPower.Witchdoctor_Passive_GraveInjustice,
                 RequiredLevel = 50,
                 Slug = "grave-injustice",
@@ -848,7 +848,7 @@ namespace Trinity.Framework.Reference
             public static Passive TribalRites = new Passive
             {
                 Index = 14,
-                Name = "Tribal Rites",
+                Name = "部族仪式",
                 SNOPower = SNOPower.Witchdoctor_Passive_TribalRites,
                 RequiredLevel = 55,
                 Slug = "tribal-rites",
@@ -865,7 +865,7 @@ namespace Trinity.Framework.Reference
             public static Passive ConfidenceRitual = new Passive
             {
                 Index = 15,
-                Name = "Confidence Ritual",
+                Name = "期满仪式",
                 SNOPower = SNOPower.X1_WitchDoctor_Passive_ConfidenceRitual,
                 RequiredLevel = 60,
                 Slug = "confidence-ritual",
@@ -881,7 +881,7 @@ namespace Trinity.Framework.Reference
             public static Passive CreepingDeath = new Passive
             {
                 Index = 16,
-                Name = "Creeping Death",
+                Name = "死亡蔓延",
                 SNOPower = SNOPower.Witchdoctor_Passive_CreepingDeath,
                 RequiredLevel = 64,
                 Slug = "creeping-death",
@@ -898,7 +898,7 @@ namespace Trinity.Framework.Reference
             public static Passive SwamplandAttunement = new Passive
             {
                 Index = 17,
-                Name = "Swampland Attunement",
+                Name = "沼泽调谐",
                 SNOPower = SNOPower.Witchdoctor_Passive_PhysicalAttunement,
                 RequiredLevel = 66,
                 Slug = "swampland-attunement",
@@ -915,7 +915,7 @@ namespace Trinity.Framework.Reference
             public static Passive MidnightFeast = new Passive
             {
                 Index = 18,
-                Name = "Midnight Feast",
+                Name = "午夜盛宴",
                 SNOPower = SNOPower.Witchdoctor_Passive_MidnightFeast,
                 RequiredLevel = 68,
                 Slug = "midnight-feast",
@@ -935,7 +935,7 @@ namespace Trinity.Framework.Reference
             public static Passive ThrillOfTheHunt = new Passive
             {
                 Index = 0,
-                Name = "Thrill of the Hunt",
+                Name = "追猎快感",
                 SNOPower = SNOPower.DemonHunter_Passive_ThrillOfTheHunt,
                 RequiredLevel = 10,
                 Slug = "thrill-of-the-hunt",
@@ -951,7 +951,7 @@ namespace Trinity.Framework.Reference
             public static Passive TacticalAdvantage = new Passive
             {
                 Index = 1,
-                Name = "Tactical Advantage",
+                Name = "战术优势",
                 SNOPower = SNOPower.DemonHunter_Passive_TacticalAdvantage,
                 RequiredLevel = 10,
                 Slug = "tactical-advantage",
@@ -968,7 +968,7 @@ namespace Trinity.Framework.Reference
             public static Passive BloodVengeance = new Passive
             {
                 Index = 2,
-                Name = "Blood Vengeance",
+                Name = "血腥复仇",
                 SNOPower = SNOPower.DemonHunter_Passive_Vengeance,
                 RequiredLevel = 13,
                 Slug = "blood-vengeance",
@@ -985,7 +985,7 @@ namespace Trinity.Framework.Reference
             public static Passive SteadyAim = new Passive
             {
                 Index = 3,
-                Name = "Steady Aim",
+                Name = "稳固瞄准",
                 SNOPower = SNOPower.DemonHunter_Passive_SteadyAim,
                 RequiredLevel = 16,
                 Slug = "steady-aim",
@@ -1001,7 +1001,7 @@ namespace Trinity.Framework.Reference
             public static Passive CullTheWeak = new Passive
             {
                 Index = 4,
-                Name = "Cull the Weak",
+                Name = "恃强凌弱",
                 SNOPower = SNOPower.DemonHunter_Passive_CullTheWeak,
                 RequiredLevel = 20,
                 Slug = "cull-the-weak",
@@ -1017,7 +1017,7 @@ namespace Trinity.Framework.Reference
             public static Passive NightStalker = new Passive
             {
                 Index = 5,
-                Name = "Night Stalker",
+                Name = "暗夜追踪者",
                 SNOPower = SNOPower.DemonHunter_Passive_NightStalker,
                 RequiredLevel = 20,
                 Slug = "night-stalker",
@@ -1033,7 +1033,7 @@ namespace Trinity.Framework.Reference
             public static Passive Brooding = new Passive
             {
                 Index = 6,
-                Name = "Brooding",
+                Name = "愈体",
                 SNOPower = SNOPower.DemonHunter_Passive_Brooding,
                 RequiredLevel = 25,
                 Slug = "brooding",
@@ -1050,7 +1050,7 @@ namespace Trinity.Framework.Reference
             public static Passive HotPursuit = new Passive
             {
                 Index = 7,
-                Name = "Hot Pursuit",
+                Name = "热力追击",
                 SNOPower = SNOPower.DemonHunter_Passive_HotPursuit,
                 RequiredLevel = 27,
                 Slug = "hot-pursuit",
@@ -1066,7 +1066,7 @@ namespace Trinity.Framework.Reference
             public static Passive Archery = new Passive
             {
                 Index = 8,
-                Name = "Archery",
+                Name = "箭术高超",
                 SNOPower = SNOPower.DemonHunter_Passive_Archery,
                 RequiredLevel = 30,
                 Slug = "archery",
@@ -1083,7 +1083,7 @@ namespace Trinity.Framework.Reference
             public static Passive NumbingTraps = new Passive
             {
                 Index = 9,
-                Name = "Numbing Traps",
+                Name = "麻痹陷阱",
                 SNOPower = SNOPower.DemonHunter_Passive_NumbingTraps,
                 RequiredLevel = 30,
                 Slug = "numbing-traps",
@@ -1100,7 +1100,7 @@ namespace Trinity.Framework.Reference
             public static Passive Perfectionist = new Passive
             {
                 Index = 10,
-                Name = "Perfectionist",
+                Name = "完美主义者",
                 SNOPower = SNOPower.DemonHunter_Passive_Perfectionist,
                 RequiredLevel = 35,
                 Slug = "perfectionist",
@@ -1117,7 +1117,7 @@ namespace Trinity.Framework.Reference
             public static Passive CustomEngineering = new Passive
             {
                 Index = 11,
-                Name = "Custom Engineering",
+                Name = "兵器专家",
                 SNOPower = SNOPower.DemonHunter_Passive_CustomEngineering,
                 RequiredLevel = 40,
                 Slug = "custom-engineering",
@@ -1134,7 +1134,7 @@ namespace Trinity.Framework.Reference
             public static Passive Grenadier = new Passive
             {
                 Index = 12,
-                Name = "Grenadier",
+                Name = "掷弹兵",
                 SNOPower = SNOPower.DemonHunter_Passive_Grenadier,
                 RequiredLevel = 45,
                 Slug = "grenadier",
@@ -1151,7 +1151,7 @@ namespace Trinity.Framework.Reference
             public static Passive Sharpshooter = new Passive
             {
                 Index = 13,
-                Name = "Sharpshooter",
+                Name = "百步穿杨",
                 SNOPower = SNOPower.DemonHunter_Passive_Sharpshooter,
                 RequiredLevel = 50,
                 Slug = "sharpshooter",
@@ -1168,7 +1168,7 @@ namespace Trinity.Framework.Reference
             public static Passive Ballistics = new Passive
             {
                 Index = 14,
-                Name = "Ballistics",
+                Name = "弹道学",
                 SNOPower = SNOPower.DemonHunter_Passive_Ballistics,
                 RequiredLevel = 55,
                 Slug = "ballistics",
@@ -1185,7 +1185,7 @@ namespace Trinity.Framework.Reference
             public static Passive Leech = new Passive
             {
                 Index = 15,
-                Name = "Leech",
+                Name = "吸血",
                 SNOPower = SNOPower.X1_DemonHunter_Passive_Leech,
                 RequiredLevel = 60,
                 Slug = "leech",
@@ -1201,7 +1201,7 @@ namespace Trinity.Framework.Reference
             public static Passive Ambush = new Passive
             {
                 Index = 16,
-                Name = "Ambush",
+                Name = "伏击",
                 SNOPower = SNOPower.X1_DemonHunter_Passive_Ambush,
                 RequiredLevel = 64,
                 Slug = "ambush",
@@ -1217,7 +1217,7 @@ namespace Trinity.Framework.Reference
             public static Passive Awareness = new Passive
             {
                 Index = 17,
-                Name = "Awareness",
+                Name = "濒死本能",
                 SNOPower = SNOPower.X1_DemonHunter_Passive_Awareness,
                 RequiredLevel = 66,
                 Slug = "awareness",
@@ -1234,7 +1234,7 @@ namespace Trinity.Framework.Reference
             public static Passive SingleOut = new Passive
             {
                 Index = 18,
-                Name = "Single Out",
+                Name = "逐一击破",
                 SNOPower = SNOPower.X1_DemonHunter_Passive_SingleOut,
                 RequiredLevel = 68,
                 Slug = "single-out",
@@ -1254,7 +1254,7 @@ namespace Trinity.Framework.Reference
             public static Passive PoundOfFlesh = new Passive
             {
                 Index = 0,
-                Name = "Pound of Flesh",
+                Name = "血肉铸就",
                 SNOPower = SNOPower.Barbarian_Passive_PoundOfFlesh,
                 RequiredLevel = 10,
                 Slug = "pound-of-flesh",
@@ -1271,7 +1271,7 @@ namespace Trinity.Framework.Reference
             public static Passive Ruthless = new Passive
             {
                 Index = 1,
-                Name = "Ruthless",
+                Name = "残酷",
                 SNOPower = SNOPower.Barbarian_Passive_Ruthless,
                 RequiredLevel = 10,
                 Slug = "ruthless",
@@ -1287,7 +1287,7 @@ namespace Trinity.Framework.Reference
             public static Passive NervesOfSteel = new Passive
             {
                 Index = 2,
-                Name = "Nerves of Steel",
+                Name = "钢铁神经",
                 SNOPower = SNOPower.Barbarian_Passive_NervesOfSteel,
                 RequiredLevel = 13,
                 Slug = "nerves-of-steel",
@@ -1304,7 +1304,7 @@ namespace Trinity.Framework.Reference
             public static Passive WeaponsMaster = new Passive
             {
                 Index = 3,
-                Name = "Weapons Master",
+                Name = "武器大师",
                 SNOPower = SNOPower.Barbarian_Passive_WeaponsMaster,
                 RequiredLevel = 16,
                 Slug = "weapons-master",
@@ -1321,7 +1321,7 @@ namespace Trinity.Framework.Reference
             public static Passive InspiringPresence = new Passive
             {
                 Index = 4,
-                Name = "Inspiring Presence",
+                Name = "振奋军心",
                 SNOPower = SNOPower.Barbarian_Passive_InspiringPresence,
                 RequiredLevel = 20,
                 Slug = "inspiring-presence",
@@ -1338,7 +1338,7 @@ namespace Trinity.Framework.Reference
             public static Passive BerserkerRage = new Passive
             {
                 Index = 5,
-                Name = "Berserker Rage",
+                Name = "狂战盛怒",
                 SNOPower = SNOPower.Barbarian_Passive_BerserkerRage,
                 RequiredLevel = 20,
                 Slug = "berserker-rage",
@@ -1354,7 +1354,7 @@ namespace Trinity.Framework.Reference
             public static Passive Bloodthirst = new Passive
             {
                 Index = 6,
-                Name = "Bloodthirst",
+                Name = "嗜血",
                 SNOPower = SNOPower.Barbarian_Passive_Bloodthirst,
                 RequiredLevel = 24,
                 Slug = "bloodthirst",
@@ -1371,7 +1371,7 @@ namespace Trinity.Framework.Reference
             public static Passive Animosity = new Passive
             {
                 Index = 7,
-                Name = "Animosity",
+                Name = "杀意骤起",
                 SNOPower = SNOPower.Barbarian_Passive_Animosity,
                 RequiredLevel = 27,
                 Slug = "animosity",
@@ -1388,7 +1388,7 @@ namespace Trinity.Framework.Reference
             public static Passive Superstition = new Passive
             {
                 Index = 8,
-                Name = "Superstition",
+                Name = "力量信仰",
                 SNOPower = SNOPower.Barbarian_Passive_Superstition,
                 RequiredLevel = 30,
                 Slug = "superstition",
@@ -1405,7 +1405,7 @@ namespace Trinity.Framework.Reference
             public static Passive ToughAsNails = new Passive
             {
                 Index = 9,
-                Name = "Tough as Nails",
+                Name = "坚如刚钉",
                 SNOPower = SNOPower.Barbarian_Passive_ToughAsNails,
                 RequiredLevel = 30,
                 Slug = "tough-as-nails",
@@ -1421,7 +1421,7 @@ namespace Trinity.Framework.Reference
             public static Passive NoEscape = new Passive
             {
                 Index = 10,
-                Name = "No Escape",
+                Name = "无路可逃",
                 SNOPower = SNOPower.Barbarian_Passive_NoEscape,
                 RequiredLevel = 35,
                 Slug = "no-escape",
@@ -1438,7 +1438,7 @@ namespace Trinity.Framework.Reference
             public static Passive Relentless = new Passive
             {
                 Index = 11,
-                Name = "Relentless",
+                Name = "坚韧",
                 SNOPower = SNOPower.Barbarian_Passive_Relentless,
                 RequiredLevel = 40,
                 Slug = "relentless",
@@ -1455,7 +1455,7 @@ namespace Trinity.Framework.Reference
             public static Passive Brawler = new Passive
             {
                 Index = 12,
-                Name = "Brawler",
+                Name = "好斗勇者",
                 SNOPower = SNOPower.Barbarian_Passive_Brawler,
                 RequiredLevel = 45,
                 Slug = "brawler",
@@ -1472,7 +1472,7 @@ namespace Trinity.Framework.Reference
             public static Passive Juggernaut = new Passive
             {
                 Index = 13,
-                Name = "Juggernaut",
+                Name = "势不可挡",
                 SNOPower = SNOPower.Barbarian_Passive_Juggernaut,
                 RequiredLevel = 50,
                 Slug = "juggernaut",
@@ -1489,7 +1489,7 @@ namespace Trinity.Framework.Reference
             public static Passive Unforgiving = new Passive
             {
                 Index = 14,
-                Name = "Unforgiving",
+                Name = "世仇未报",
                 SNOPower = SNOPower.Barbarian_Passive_Unforgiving,
                 RequiredLevel = 55,
                 Slug = "unforgiving",
@@ -1505,7 +1505,7 @@ namespace Trinity.Framework.Reference
             public static Passive BoonOfBulkathos = new Passive
             {
                 Index = 15,
-                Name = "Boon of Bul-Kathos",
+                Name = "布尔凯索庇佑",
                 SNOPower = SNOPower.Barbarian_Passive_BoonOfBulKathos,
                 RequiredLevel = 60,
                 Slug = "boon-of-bulkathos",
@@ -1522,7 +1522,7 @@ namespace Trinity.Framework.Reference
             public static Passive EarthenMight = new Passive
             {
                 Index = 16,
-                Name = "Earthen Might",
+                Name = "大地之力",
                 SNOPower = SNOPower.X1_Barbarian_Passive_EarthenMight,
                 RequiredLevel = 64,
                 Slug = "earthen-might",
@@ -1538,7 +1538,7 @@ namespace Trinity.Framework.Reference
             public static Passive SwordAndBoard = new Passive
             {
                 Index = 17,
-                Name = "Sword and Board",
+                Name = "剑盾合璧",
                 SNOPower = SNOPower.X1_Barbarian_Passive_SwordAndBoard,
                 RequiredLevel = 66,
                 Slug = "sword-and-board",
@@ -1554,7 +1554,7 @@ namespace Trinity.Framework.Reference
             public static Passive Rampage = new Passive
             {
                 Index = 18,
-                Name = "Rampage",
+                Name = "狂暴",
                 SNOPower = SNOPower.X1_Barbarian_Passive_Rampage,
                 RequiredLevel = 68,
                 Slug = "rampage",
@@ -1574,7 +1574,7 @@ namespace Trinity.Framework.Reference
             public static Passive PowerHungry = new Passive
             {
                 Index = 0,
-                Name = "Power Hungry",
+                Name = "奥能渴求",
                 SNOPower = SNOPower.Wizard_Passive_PowerHungry,
                 RequiredLevel = 10,
                 Slug = "power-hungry",
@@ -1590,7 +1590,7 @@ namespace Trinity.Framework.Reference
             public static Passive Blur = new Passive
             {
                 Index = 1,
-                Name = "Blur",
+                Name = "残影",
                 SNOPower = SNOPower.Wizard_Passive_Blur,
                 RequiredLevel = 10,
                 Slug = "blur",
@@ -1606,7 +1606,7 @@ namespace Trinity.Framework.Reference
             public static Passive Evocation = new Passive
             {
                 Index = 2,
-                Name = "Evocation",
+                Name = "启发",
                 SNOPower = SNOPower.Wizard_Passive_Evocation,
                 RequiredLevel = 13,
                 Slug = "evocation",
@@ -1622,7 +1622,7 @@ namespace Trinity.Framework.Reference
             public static Passive GlassCannon = new Passive
             {
                 Index = 3,
-                Name = "Glass Cannon",
+                Name = "玻璃大炮",
                 SNOPower = SNOPower.Wizard_Passive_GlassCannon,
                 RequiredLevel = 16,
                 Slug = "glass-cannon",
@@ -1638,7 +1638,7 @@ namespace Trinity.Framework.Reference
             public static Passive Prodigy = new Passive
             {
                 Index = 4,
-                Name = "Prodigy",
+                Name = "天赋奇才",
                 SNOPower = SNOPower.Wizard_Passive_Prodigy,
                 RequiredLevel = 20,
                 Slug = "prodigy",
@@ -1655,7 +1655,7 @@ namespace Trinity.Framework.Reference
             public static Passive AstralPresence = new Passive
             {
                 Index = 5,
-                Name = "Astral Presence",
+                Name = "星辰之躯",
                 SNOPower = SNOPower.Wizard_Passive_AstralPresence,
                 RequiredLevel = 24,
                 Slug = "astral-presence",
@@ -1672,7 +1672,7 @@ namespace Trinity.Framework.Reference
             public static Passive Illusionist = new Passive
             {
                 Index = 6,
-                Name = "Illusionist",
+                Name = "幻术师",
                 SNOPower = SNOPower.Wizard_Passive_Illusionist,
                 RequiredLevel = 27,
                 Slug = "illusionist",
@@ -1689,7 +1689,7 @@ namespace Trinity.Framework.Reference
             public static Passive ColdBlooded = new Passive
             {
                 Index = 7,
-                Name = "Cold Blooded",
+                Name = "冷血",
                 SNOPower = SNOPower.Wizard_Passive_ColdBlooded,
                 RequiredLevel = 30,
                 Slug = "cold-blooded",
@@ -1706,7 +1706,7 @@ namespace Trinity.Framework.Reference
             public static Passive Conflagration = new Passive
             {
                 Index = 8,
-                Name = "Conflagration",
+                Name = "烧焚",
                 SNOPower = SNOPower.Wizard_Passive_Conflagration,
                 RequiredLevel = 34,
                 Slug = "conflagration",
@@ -1723,7 +1723,7 @@ namespace Trinity.Framework.Reference
             public static Passive Paralysis = new Passive
             {
                 Index = 9,
-                Name = "Paralysis",
+                Name = "瘫痪",
                 SNOPower = SNOPower.Wizard_Passive_Paralysis,
                 RequiredLevel = 37,
                 Slug = "paralysis",
@@ -1739,7 +1739,7 @@ namespace Trinity.Framework.Reference
             public static Passive GalvanizingWard = new Passive
             {
                 Index = 10,
-                Name = "Galvanizing Ward",
+                Name = "法能护体",
                 SNOPower = SNOPower.Wizard_Passive_GalvanizingWard,
                 RequiredLevel = 40,
                 Slug = "galvanizing-ward",
@@ -1756,7 +1756,7 @@ namespace Trinity.Framework.Reference
             public static Passive TemporalFlux = new Passive
             {
                 Index = 11,
-                Name = "Temporal Flux",
+                Name = "时光涌动",
                 SNOPower = SNOPower.Wizard_Passive_TemporalFlux,
                 RequiredLevel = 45,
                 Slug = "temporal-flux",
@@ -1772,7 +1772,7 @@ namespace Trinity.Framework.Reference
             public static Passive Dominance = new Passive
             {
                 Index = 12,
-                Name = "Dominance",
+                Name = "彼消我长",
                 SNOPower = SNOPower.x1_Wizard_Passive_ArcaneAegis,
                 RequiredLevel = 50,
                 Slug = "dominance",
@@ -1789,7 +1789,7 @@ namespace Trinity.Framework.Reference
             public static Passive ArcaneDynamo = new Passive
             {
                 Index = 13,
-                Name = "Arcane Dynamo",
+                Name = "奥能迸发",
                 SNOPower = SNOPower.Wizard_Passive_ArcaneDynamo,
                 RequiredLevel = 55,
                 Slug = "arcane-dynamo",
@@ -1806,7 +1806,7 @@ namespace Trinity.Framework.Reference
             public static Passive UnstableAnomaly = new Passive
             {
                 Index = 14,
-                Name = "Unstable Anomaly",
+                Name = "不稳异能",
                 SNOPower = SNOPower.Wizard_Passive_UnstableAnomaly,
                 RequiredLevel = 60,
                 Slug = "unstable-anomaly",
@@ -1823,7 +1823,7 @@ namespace Trinity.Framework.Reference
             public static Passive UnwaveringWill = new Passive
             {
                 Index = 15,
-                Name = "Unwavering Will",
+                Name = "坚定意志",
                 SNOPower = SNOPower.X1_Wizard_Passive_UnwaveringWill,
                 RequiredLevel = 64,
                 Slug = "unwavering-will",
@@ -1840,7 +1840,7 @@ namespace Trinity.Framework.Reference
             public static Passive Audacity = new Passive
             {
                 Index = 16,
-                Name = "Audacity",
+                Name = "无畏无惧",
                 SNOPower = SNOPower.X1_Wizard_Passive_Audacity,
                 RequiredLevel = 66,
                 Slug = "audacity",
@@ -1856,7 +1856,7 @@ namespace Trinity.Framework.Reference
             public static Passive ElementalExposure = new Passive
             {
                 Index = 17,
-                Name = "Elemental Exposure",
+                Name = "元素易伤",
                 SNOPower = SNOPower.X1_Wizard_Passive_ElementalExposure,
                 RequiredLevel = 68,
                 Slug = "elemental-exposure",

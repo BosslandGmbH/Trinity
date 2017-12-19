@@ -223,7 +223,7 @@ namespace Trinity.Components.Combat
 
                         IsDoingKamakazi = true;
                         KamakaziTarget = target;
-                        Core.Logger.Log($"Going Kamakazi on '{target.InternalName} ({target.ActorSnoId})' Distance={target.Distance}");
+                        Core.Logger.Log($"追击哥布林 '{target.InternalName} ({target.ActorSnoId})' 距离={target.Distance}");
                         target.WeightInfo = "Kamakazi Target";
                         target.Weight = MaxWeight;
                         return target;
@@ -252,8 +252,8 @@ namespace Trinity.Components.Combat
                         u.Position.Distance(ZetaDia.Me.Position) <= TrinityCombat.Routines.Current.TrashRange
                     );
 
-                    //var leaderTarget = TrinityCombat.Party.Leader != null ? PartyHelper.FindLocalActor(TrinityCombat.Party.Leader.Target) : null;
-                    //var isLeader = TrinityCombat.Party.Leader?.IsMe ?? false;
+                    var leaderTarget = TrinityCombat.Party.Leader != null ? PartyHelper.FindLocalActor(TrinityCombat.Party.Leader.Target) : null;
+                    var isLeader = TrinityCombat.Party.Leader?.IsMe ?? false;
 
                     foreach (var cacheObject in objects.Where(x => !x.IsPlayer))
                     {
@@ -750,10 +750,10 @@ namespace Trinity.Components.Combat
                                         //{
                                         //    cacheObject.WeightInfo += $"Questing Mode - Ignoring Trash Pack Size Setting.";
                                         //}
-                                        //else if (leaderTarget != null && leaderTarget.AcdId != cacheObject.AcdId && !isLeader && leaderTarget.Distance < 60f && TrinityCombat.Party.Leader.IsInCombat)
-                                        //{
-                                        //    cacheObject.WeightInfo += $"Ignoring Trash Pack Size for Leader's Target";
-                                        //}
+                                        else if (leaderTarget != null && leaderTarget.AcdId != cacheObject.AcdId && !isLeader && leaderTarget.Distance < 60f && TrinityCombat.Party.Leader.IsInCombat)
+                                        {
+                                            cacheObject.WeightInfo += $"Ignoring Trash Pack Size for Leader's Target";
+                                        }
                                         else if (shouldIgnorePackSize)
                                         {
                                             cacheObject.WeightInfo += $"Routine Ignoring Trash Pack Size.";
@@ -876,14 +876,14 @@ namespace Trinity.Components.Combat
                                     var elite = EliteMonsterNearFormula(cacheObject, elites);
                                     var aoe = AoENearFormula(cacheObject) + AoEInPathFormula(cacheObject);
 
-                                    //var leaderTargetBoost = 1;
-                                    //if (leaderTarget != null && !isLeader && cacheObject.AcdId == leaderTarget.AcdId)
-                                    //{
-                                    //    cacheObject.WeightInfo += $"Doubled weight for Leaders Target";
-                                    //    leaderTargetBoost = 2;
-                                    //}
+                                    var leaderTargetBoost = 1;
+                                    if (leaderTarget != null && !isLeader && cacheObject.AcdId == leaderTarget.AcdId)
+                                    {
+                                        cacheObject.WeightInfo += $"Doubled weight for Leaders Target";
+                                        leaderTargetBoost = 2;
+                                    }
 
-                                    cacheObject.Weight += (dist + last + pack + health + path + reflect + elite + aoe);// * leaderTargetBoost;
+                                    cacheObject.Weight += (dist + last + pack + health + path + reflect + elite + aoe) * leaderTargetBoost;
 
                                     cacheObject.WeightInfo +=
                                         $" dist={dist:0.0} last={last:0.0} pack={pack:0.0} health={health:0.0} path={path:0.0} reflect={reflect:0.0} elite={elite:0.0} aoe={aoe:0.0}";
@@ -1358,8 +1358,8 @@ namespace Trinity.Components.Combat
                                             }
                                         }
                                     }
-
-                                    if (cacheObject.Distance < 20f && cacheObject.IsWalkable && !PlayerMover.IsBlocked)
+                                    // SENY
+                                    if (cacheObject.Distance < 80f && cacheObject.IsWalkable && !PlayerMover.IsBlocked)
                                     {
                                         cacheObject.Weight = MaxWeight;
                                         cacheObject.WeightInfo += $"Shrine so close i can touch it {cacheObject.InternalName}";
@@ -1406,12 +1406,12 @@ namespace Trinity.Components.Combat
                                                           AoEInPathFormula(cacheObject) + 50;
 
 
-                                    if (cacheObject.Distance < 80f && cacheObject.IsWalkable)
+                                    if (cacheObject.Distance < 125f && cacheObject.IsWalkable)
                                     {
                                         cacheObject.Weight *= 4;
                                         cacheObject.WeightInfo += $"Mid-Range Shrine Boost";
                                     }
-                                    if (cacheObject.Distance < 125f)
+                                    if (cacheObject.Distance < 150f)
                                     {
                                         cacheObject.Weight *= 2;
                                         cacheObject.WeightInfo += $"Far-Range Shrine Boost";
@@ -1451,7 +1451,7 @@ namespace Trinity.Components.Combat
                                         break;
                                     }
 
-                                    if (cacheObject.ZDiff >= 8)
+                                    if (cacheObject.ZDiff >= 5)
                                     {
                                         cacheObject.WeightInfo += "Door beneath or above player";
                                         break;
@@ -1527,15 +1527,6 @@ namespace Trinity.Components.Combat
                                 // Fix for WhimsyShire Pinata
                                 if (GameData.ResplendentChestIds.Contains(cacheObject.ActorSnoId))
                                     cacheObject.Weight += 500d;
-
-                                // Gold Piles in the Goblin Real get high priority
-                                var isInGoblinRealm = Core.Player.WorldSnoId == (int)SNOWorld.p1_TGoblin_Realm;
-
-                                if (cacheObject.Distance < 35f && isInGoblinRealm)
-                                {
-                                    cacheObject.Weight = MaxWeight;
-                                    break;
-                                }
 
                                 cacheObject.Weight += 0.5 * (ObjectDistanceFormula(cacheObject) +
                                                            EliteMonsterNearFormula(cacheObject, elites) -
@@ -1671,6 +1662,13 @@ namespace Trinity.Components.Combat
 
                                 if (!cacheObject.IsQuestMonster && !cacheObject.IsMinimapActive)
                                 {
+                                    // SENY
+                                    if ((Core.Rift.IsInRift && Core.Rift.IsGreaterRift) && Core.Settings.SenExtend.IgnoreBoxInGreaterRift)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Ignore containers setting.";
+                                        break;
+                                    }
+
                                     if (Core.Settings.Weighting.ContainerWeighting == SettingMode.Disabled)
                                     {
                                         cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Ignore containers setting.";
@@ -1689,12 +1687,6 @@ namespace Trinity.Components.Combat
                                         break;
                                     }
 
-                                    if (Core.Rift.IsGreaterRift)
-                                    {
-                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Chests are always empty in Greater Rifts.";
-                                        break;
-                                    }
-
                                     if (Core.Settings.Weighting.ContainerWeighting == SettingMode.Selective)
                                     {
                                         var type = GetContainerType(cacheObject);
@@ -1703,15 +1695,6 @@ namespace Trinity.Components.Combat
                                             cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Not a selected container type.";
                                             break;
                                         }
-                                    }
-
-                                    // No point in doing Cow Level runs if we're running past the chests
-                                    var isInCowLevel = ZetaDia.Globals.WorldSnoId == (int)SNOWorld.p2_TotallyNotACowLevel;
-
-                                    if (cacheObject.Distance < 35f && isInCowLevel)
-                                    {
-                                        cacheObject.Weight = MaxWeight;
-                                        break;
                                     }
                                 }
 
@@ -1740,7 +1723,7 @@ namespace Trinity.Components.Combat
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Log($"Exception Inside Weighting Foreach Loop {ex}");
+                    Core.Logger.Log($"遍历内部加权异常 {ex}");
                 }
 
                 return SetTarget(bestTarget);
@@ -2399,9 +2382,6 @@ namespace Trinity.Components.Combat
 
         public ContainerTypes GetContainerType(TrinityActor cacheObject)
         {
-            if (ZetaDia.Globals.WorldSnoId == (int)SNOWorld.p2_TotallyNotACowLevel)
-                return ContainerTypes.CowLevel;
-
             if (cacheObject.IsRareChest)
                 return ContainerTypes.RareChest;
 

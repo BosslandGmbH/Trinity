@@ -53,8 +53,8 @@ namespace Trinity.Components.Adventurer.Coroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Debug("[ClearArea] " + value);
-                    StatusText = "[ClearArea] " + value;
+                    Core.Logger.Debug("[清除区域] " + value);
+                    StatusText = "[清除区域] " + value;
                 }
                 _state = value;
             }
@@ -128,7 +128,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 {
                     return false;
                 }
-                Core.Logger.Error($"[ClearArea] Couldn't get force clear destinations, ending tag. Center={_center} Radius={_radius}");
+                Core.Logger.Error($"[清理区域] 无法得到确切的目的地.取消标记. 中心={_center} 半径={_radius}");
                 State = States.Completed;
                 return true;
             }

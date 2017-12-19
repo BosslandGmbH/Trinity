@@ -37,7 +37,7 @@ namespace Trinity.Components.Adventurer.Settings
 
         public AdventurerGemSetting Settings { get; set; }
 
-        public string DisplayName => $"{Name} (Rank: {Rank}, Upgrade Chance: {UpgradeChance}% @ {CurrentRiftLevel})";
+        public string DisplayName => $"{Name} (等级: {Rank}, 升级几率: {UpgradeChance}% @ {CurrentRiftLevel})";
 
         public AdventurerGem()
         {
@@ -54,7 +54,7 @@ namespace Trinity.Components.Adventurer.Settings
             Settings = PluginSettings.Current.Gems.GemSettings.FirstOrDefault(g => g.Sno == gem.ActorSnoId);
             if (Settings == null)
             {
-                Core.Logger.Error($"Gems Settings Entry not found for {gem.Name} ({gem.ActorSnoId}), if its a new gem, it needs to be added to Trinity's Gems.cs reference");
+                Core.Logger.Error($"宝石设置项没有发现 {gem.Name} ({gem.ActorSnoId}), 如果它的一个新的宝石, 它需要添加到 Trinity's Gems.cs reference");
                 return;
             }
 

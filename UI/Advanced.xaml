@@ -11,7 +11,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Template.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <converters:PropertyValueConverter x:Key="propertyValueConverter" />
+            <converters:PropertyValueConverter x:Key="propertyValueConverter"/>
             <converters:FlagsEnumValueConverter x:Key="flagsEnumValueBooleanConverter"/>
             <converters:BoolToVisibilityConverter x:Key="VisibleWhenTrueConverter" TrueValue="Visible" FalseValue="Collapsed"/>
         </ResourceDictionary>
@@ -24,130 +24,130 @@
 
 
                 <!--TPS-->
-                <GroupBox Header="Ticks Per Second">
+                <GroupBox Header="每秒帧数">
                     <StackPanel>
-                        <TextBlock TextWrapping="Wrap">Set below 10 to reduce CPU use (but dumb the bot down). You can experiment above 10 (Default), but this will eat CPU)</TextBlock>
+                        <TextBlock TextWrapping="Wrap">设置低于10减少CPU占用(但会降低辅助的智能度).你可以设置高于10(DB默认值),数值越高越占用CPU</TextBlock>
                         <UniformGrid Columns="2"  VerticalAlignment="Center">
-                            <CheckBox IsChecked="{Binding Advanced.TpsEnabled}" VerticalAlignment="Center">Enable TPS modification</CheckBox>
+                            <CheckBox IsChecked="{Binding Advanced.TpsEnabled}" VerticalAlignment="Center">修改TPS</CheckBox>
                             <Slider Template="{DynamicResource SliderEditable}" IsEnabled="{Binding Advanced.TpsEnabled}"
-                    Interval="500" Maximum="30" Minimum="1" SmallChange="1" TickFrequency="3" TickPlacement="BottomRight"
+                    Interval="500" Maximum="200" Minimum="1" SmallChange="1" TickFrequency="3" TickPlacement="BottomRight"
                     Value="{Binding Advanced.TpsLimit}" 
                     HorizontalAlignment="Stretch" Margin="5,0,5,0"
-                        ToolTip="Set below 10 to reduce CPU use (but dumb the bot down). You can experiment above 10 (Db Default), but this will eat CPU)"/>
+                        ToolTip="设置低于10以减少CPU占用(但会降低辅助的智能度).你可以尝试高于10(DB默认值),数值越高越占用CPU)"/>
                         </UniformGrid>
                     </StackPanel>
                 </GroupBox>
 
 
-                <GroupBox Header="Reports">
+                <GroupBox Header="报告">
                     <StackPanel>
-                        <CheckBox IsChecked="{Binding Advanced.LogStats}" Content="Log Session Stats" ToolTip="Writes detailed log files in TrinityLogs\[battletag]\ folder with summary stats for each botting session (time between start and stop)" />
-                        <CheckBox IsChecked="{Binding Advanced.LogItems}" Content="Log Item Decisions" ToolTip="Writes detailed log files in TrinityLogs\[battletag]\ folder for each decision taken with items (Salvaged/Sold etc)" />
+                        <CheckBox IsChecked="{Binding Advanced.LogStats}" Content="记录登入统计" ToolTip="Writes detailed log files in TrinityLogs\[battletag]\ folder with summary stats for each botting session (time between start and stop)"/>
+                        <CheckBox IsChecked="{Binding Advanced.LogItems}" Content="记录物品操作" ToolTip="Writes detailed log files in TrinityLogs\[battletag]\ folder for each decision taken with items (Salvaged/Sold etc)"/>
                         <StackPanel Margin="10,5,0,0" Visibility="{Binding Advanced.LogItems, Converter={StaticResource VisibleWhenTrueConverter}}">
-                            <CheckBox IsChecked="{Binding Advanced.LogAllItems}" Content="> Log All Item Qualities" ToolTip="Includes all item types/qualities, not just legendary/set - this will make large file sizes"/>
-                            <CheckBox IsChecked="{Binding Advanced.LogDroppedItems}" Content="> Log All Dropped Items" ToolTip="Includes all items that are dropped (excluding 'Pickup without click' types such as gold) - this will make large file sizes"/>
+                            <CheckBox IsChecked="{Binding Advanced.LogAllItems}" Content=">记录所有装备品质" ToolTip="Includes all item types/qualities, not just legendary/set - this will make large file sizes"/>
+                            <CheckBox IsChecked="{Binding Advanced.LogDroppedItems}" Content=">记录所有丢弃的物品" ToolTip="Includes all items that are dropped (excluding 'Pickup without click' types such as gold) - this will make large file sizes"/>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
 
 
-                <GroupBox Margin="2" Header="Inactivity Timers">
+                <GroupBox Margin="2" Header="计时检测(单位:秒)(下面秒数选择以打大秘境BOSS的时长为准)">
                     <UniformGrid Columns="1" VerticalAlignment="Top">
                         <UniformGrid Columns="2" VerticalAlignment="Top">
-                            <CheckBox IsChecked="{Binding Advanced.GoldInactivityEnabled}" Content="Enable Gold Inactivity" Height="20"/>
-                            <CheckBox IsChecked="{Binding Advanced.XpInactivityEnabled}" Content="Enable Experience Inactivity" Height="20"/>
+                            <CheckBox IsChecked="{Binding Advanced.GoldInactivityEnabled}" Content="开启金币变化检测" Height="20"/>
+                            <CheckBox IsChecked="{Binding Advanced.XpInactivityEnabled}" Content="开启经验变化检测" Height="20"/>
                         </UniformGrid>
                         <Slider Template="{DynamicResource SliderEditable}" 
                 	Interval="500" Maximum="1800" Minimum="0" SmallChange="1" TickFrequency="10" TickPlacement="BottomRight"
                 	Value="{Binding Advanced.InactivityTimer}" IsSnapToTickEnabled="True"
-                	ToolTip="Number of seconds after which if no gold or XP is collected the game will restart" Margin="5,0,5,0"/>
-                        <!--<CheckBox IsChecked="{Binding Advanced.IsDBInactivityEnabled}" Content="Enable DemonBuddy Inactivity" Height="20"/>-->
+                	ToolTip="在#秒后，如果没有金币或经验的增加，将重新建立游戏" Margin="5,0,5,0"/>
+                        <!--<CheckBox IsChecked="{Binding Advanced.IsDBInactivityEnabled}" Content="开启DB闲置检测" Height="20"/>-->
 
                     </UniformGrid>
                 </GroupBox>
 
-                <GroupBox Header="Misc Settings">
+                <GroupBox Header="杂项设置">
                     <UniformGrid Columns="2">
-                        <CheckBox IsChecked="{Binding Advanced.ShowBattleTag}" Content="Show BattleTag in Title bar"/>
-                        <CheckBox IsChecked="{Binding Advanced.ShowHeroName}" Content="Show Hero Name in Title bar"/>
-                        <CheckBox IsChecked="{Binding Advanced.ShowHeroClass}" Content="Show Hero Class in Title bar"/>
-                        <CheckBox IsChecked="{Binding Advanced.LazyRaider}" Content="Lazy Raider Click to Pause"/>
-                        <CheckBox IsChecked="{Binding Advanced.DisableAllMovement}" Content="Disable All Movement"/>
-                        <!--<CheckBox IsChecked="{Binding Advanced.AllowDuplicateMessages}" Content="Allow Duplicate Messages"/>-->
-                        <!--<CheckBox IsChecked="{Binding Advanced.StopOnGoblins}" Content="Stop When Goblins Found"/>-->
-                        <!--<CheckBox IsChecked="{Binding Advanced.UseTrinityDeathHandler}" Content="Use Trinity Death Handler"/>-->
-                        <!--<CheckBox IsChecked="{Binding Advanced.UseExperimentalTownRun}" Content="Use Experimental Town Run"/>-->
-                        <!--<CheckBox IsChecked="{Binding Advanced.UseExperimentalAvoidance}" Content="Use Experimental Avoidance"/>-->
+                        <CheckBox IsChecked="{Binding Advanced.ShowBattleTag}" Content="窗口标题显示战网昵称"/>
+                        <CheckBox IsChecked="{Binding Advanced.ShowHeroName}" Content="窗口标题显示人物名称"/>
+                        <CheckBox IsChecked="{Binding Advanced.ShowHeroClass}" Content="窗口标题显示人物职业"/>
+                        <CheckBox IsChecked="{Binding Advanced.LazyRaider}" Content="点击左键暂停移动转为高级输出模式"/>
+                        <CheckBox IsChecked="{Binding Advanced.DisableAllMovement}" Content="禁止移动"/>
+                        <!--<CheckBox IsChecked="{Binding Advanced.AllowDuplicateMessages}" Content="允许日志显示重复消息"/>-->
+                        <!--<CheckBox IsChecked="{Binding Advanced.StopOnGoblins}" Content="当发现地精群时停止辅助"/>-->
+                        <!--<CheckBox IsChecked="{Binding Advanced.UseTrinityDeathHandler}" Content="使用Trinity角色死亡处理方式"/>-->
+                        <!--<CheckBox IsChecked="{Binding Advanced.UseExperimentalTownRun}" Content="尝试回城"/>-->
+                        <!--<CheckBox IsChecked="{Binding Advanced.UseExperimentalAvoidance}" Content="尝试躲避"/>-->
                     </UniformGrid>
                 </GroupBox>
 
                 <!-- Misc Advanced -->
-                <GroupBox Header="TrinityPlugin Support Required Logs:">
+                <GroupBox Header="Trinity的请求日志:">
                     <UniformGrid Columns="2" HorizontalAlignment="Stretch">
-                        <!--<CheckBox IsChecked="{Binding Path=Advanced.DebugInStatusBar}" ToolTip="Update the DB Status bar with Combat Info">Use TrinityPlugin Status Bar</CheckBox>-->
-                        <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=ProfileTag}">Use Profile Tag Logging</CheckBox>-->
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Targetting}">Log Targetting System</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Behavior}">Log Behavior System</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Routine}">Log Routine</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Spells}">Log Spell Casting</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Avoidance}">Log Avoidance System</CheckBox>
-                        <CheckBox IsChecked="{Binding Advanced.LogCategories, ConverterParameter=Exploration, Converter={StaticResource flagsEnumValueBooleanConverter}}" Content="Log Exploration"/>
+                        <!--<CheckBox IsChecked="{Binding Path=Advanced.DebugInStatusBar}" ToolTip="Update the DB Status bar with Combat Info">使用Trinity状态栏</CheckBox>-->
+                        <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=ProfileTag}">使用文件标签记录</CheckBox>-->
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Targetting}">记录系统版本</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Behavior}">记录系统状态</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Routine}">记录战斗</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Spells}">记录技能施放</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Avoidance}">记录躲避信息</CheckBox>
+                        <CheckBox IsChecked="{Binding Advanced.LogCategories, ConverterParameter=Exploration, Converter={StaticResource flagsEnumValueBooleanConverter}}" Content="记录探索"/>
 
                     </UniformGrid>
                 </GroupBox>
 
-                <!--<GroupBox Header="Unstucker">
+                <!--<GroupBox Header="卡位脱离">
                     <UniformGrid VerticalAlignment="Top">
-                        <CheckBox IsChecked="{Binding Advanced.UnstuckerEnabled}" Content="Enable TrinityPlugin Unstucker"/>
-                        <CheckBox IsChecked="{Binding Advanced.AllowRestartGame}" Content="Allow game restarts"/>
+                        <CheckBox IsChecked="{Binding Advanced.UnstuckerEnabled}" Content="启用Trinity卡位脱离"/>
+                        <CheckBox IsChecked="{Binding Advanced.AllowRestartGame}" Content="允许小退重新开始游戏"/>
                     </UniformGrid>
                 </GroupBox>-->
-                <!--<GroupBox Header="Composite Settings">
+                <!--<GroupBox Header="综合设置">
                     <StackPanel>
                         <Label>When using a Global settings file, force BattleTag Specific Settings for the following components:</Label>
                         <UniformGrid VerticalAlignment="Top">
-                            <CheckBox IsChecked="{Binding Advanced.ForceSpecificGambleSettings}" Content="Gambling"/>
+                            <CheckBox IsChecked="{Binding Advanced.ForceSpecificGambleSettings}" Content="血岩赌博"/>
                         </UniformGrid>
                     </StackPanel>
                 </GroupBox>-->
 
 
 
-                <!--<GroupBox Header="TrinityPluginLogs Directory:">
+                <!--<GroupBox Header="Trinity日志:">
                     <UniformGrid Columns="2" HorizontalAlignment="Stretch">
-                        <CheckBox IsChecked="{Binding Path=Advanced.OutputReports}" ToolTip="Output Reports to TrinityPluginLogs">Output Reports</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogDroppedItems}" ToolTip="Create a CSV file for all dropped items">Log dropped Items</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.OutputReports}" ToolTip="Output Reports to TrinityPluginLogs">输出报告</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogDroppedItems}" ToolTip="Create a CSV file for all dropped items">记录掉落物品</CheckBox>
                     </UniformGrid>
                 </GroupBox>-->
 
-                <GroupBox Header="TrinityPlugin Support Specialized logs">
+                <GroupBox Header="Trinity特殊日志">
                     <UniformGrid Columns="2" HorizontalAlignment="Stretch">
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Performance}">Log System Performance</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=GlobalHandler}">Log Global Handling System</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Movement}">Log Movement System</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Navigator}">Log Navigation System</CheckBox>
-                        <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Configuration}">Log Configuration System</CheckBox>-->
-                        <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=UI}">Log UI Loading</CheckBox>-->
-                        <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Animation}">Log Monster Animations</CheckBox>-->
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=ActiveBuffs}">Log Active Buffs</CheckBox>
-                        <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=SkillSelection}">Log Skill Selection</CheckBox>-->
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Cooldowns}">Log Cooldowns</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=StuckHandler}">Log Stuck Handler</CheckBox>
-                        <CheckBox IsChecked="{Binding Advanced.ItemEvents, ConverterParameter=StuckHandler, Converter={StaticResource flagsEnumValueBooleanConverter}}" Content="Log Item Events"/>
-                        <CheckBox IsChecked="{Binding Advanced.LogCategories, ConverterParameter=Weight, Converter={StaticResource flagsEnumValueBooleanConverter}}" Content="Log Target Weight System"/>
-                        <CheckBox IsChecked="{Binding Advanced.LogCategories, ConverterParameter=CacheManagement, Converter={StaticResource flagsEnumValueBooleanConverter}}" Content="Log Cache System"/>
-                        <CheckBox IsChecked="{Binding Advanced.LogCategories, ConverterParameter=TraceCoroutines, Converter={StaticResource flagsEnumValueBooleanConverter}}" Content="Log Coroutine Trace"/>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Performance}">记录系统信息</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=GlobalHandler}">记录全局线程</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Movement}">记录移动</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Navigator}">记录导航</CheckBox>
+                        <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Configuration}">记录配置</CheckBox>-->
+                        <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=UI}">记录加载UI</CheckBox>-->
+                        <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Animation}">记录登录动画</CheckBox>-->
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=ActiveBuffs}">记录增益BUFF</CheckBox>
+                        <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=SkillSelection}">记录技能设置</CheckBox>-->
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Cooldowns}">记录技能冷却</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=StuckHandler}">记录导航卡住</CheckBox>
+                        <CheckBox IsChecked="{Binding Advanced.ItemEvents, ConverterParameter=StuckHandler, Converter={StaticResource flagsEnumValueBooleanConverter}}" Content="记录物品事件"/>
+                        <CheckBox IsChecked="{Binding Advanced.LogCategories, ConverterParameter=Weight, Converter={StaticResource flagsEnumValueBooleanConverter}}" Content="记录详细系统日志"/>
+                        <CheckBox IsChecked="{Binding Advanced.LogCategories, ConverterParameter=CacheManagement, Converter={StaticResource flagsEnumValueBooleanConverter}}" Content="记录缓存"/>
+                        <CheckBox IsChecked="{Binding Advanced.LogCategories, ConverterParameter=TraceCoroutines, Converter={StaticResource flagsEnumValueBooleanConverter}}" Content="记录线程"/>
 
                     </UniformGrid>
 
                 </GroupBox>
                 <!--APS-->
                 <!--
-                <GroupBox Header="Actions Per Second">
+                <GroupBox Header="每秒施放">
                     <StackPanel>
-                        <TextBlock TextWrapping="Wrap">Prevents TrinityPlugin from casting too many spells in too short of a time peroid. Default=10. Higher settings (or disabling) will allow faster attacks but risks causing a disconnection from diablo3</TextBlock>
+                        <TextBlock TextWrapping="Wrap">防止Trinity在短时间内施放太多技能,启用后数值越高(或禁用不勾)将允许施放越多技能,但风险是造成游戏崩溃</TextBlock>
                         <UniformGrid Columns="2"  VerticalAlignment="Center">
-                            <CheckBox IsChecked="{Binding Path=Advanced.ThrottleAPS}">Enable Action Throttling</CheckBox>
+                            <CheckBox IsChecked="{Binding Path=Advanced.ThrottleAPS}">启用施放限制</CheckBox>
                             <Slider Template="{DynamicResource SliderEditable}" IsEnabled="{Binding Path=Advanced.ThrottleAPS}"
                     Interval="500" Maximum="20" Minimum="1" SmallChange="1" TickFrequency="1" TickPlacement="BottomRight"
                     Value="{Binding Path=Advanced.ThrottleAPSActionCount}" 
@@ -162,10 +162,10 @@
                 <GroupBox Header="Cache">
                     <StackPanel>
                         <TextBlock Text="Cache Refresh Rate (Default 300) - use with caution!" FontWeight="Bold" TextAlignment="Center" Margin="2"/>
-                        <TextBlock Text="May reduce CPU usage very slightly when running > 2 bots per CPU core. Over 400 not recommended. Use only to troubleshoot performance." TextWrapping="Wrap" />
+                        <TextBlock Text="May reduce CPU usage very slightly when running > 2 bots per CPU core. Over 400 not recommended. Use only to troubleshoot performance." TextWrapping="Wrap"/>
                         <UniformGrid VerticalAlignment="Top" Columns="2">
-                            <TextBlock Text="Fast" TextAlignment="Left" />
-                            <TextBlock Text="Slow" TextAlignment="Right" />
+                            <TextBlock Text="Fast" TextAlignment="Left"/>
+                            <TextBlock Text="Slow" TextAlignment="Right"/>
                         </UniformGrid>
                         <Slider Template="{DynamicResource SliderEditable}" IsEnabled="True"
                     Interval="500" Maximum="500" Minimum="0" SmallChange="5" TickFrequency="5"  TickPlacement="BottomRight"
@@ -175,40 +175,40 @@
                     </StackPanel>
                 </GroupBox>
                 -->
-                <!--<GroupBox Header="Low Priority Object Cache">
+                <!--<GroupBox Header="低优先级对象缓存">
                     <StackPanel Margin="10">
-                        <TextBlock Text="Refresh Rate (ms)" TextWrapping="Wrap" Margin="0" />
+                        <TextBlock Text="刷新率(毫秒)" TextWrapping="Wrap" Margin="0"/>
                         <Slider Template="{DynamicResource SliderEditable}" IsEnabled="True"
                     Interval="50" Maximum="2000" Minimum="100" SmallChange="50" TickFrequency="50"  TickPlacement="BottomRight"
                     Value="{Binding Path=Advanced.CacheLowPriorityRefreshRate}" IsSnapToTickEnabled="True"
                     HorizontalAlignment="Stretch"
-                        ToolTip="Default 500."/>
-                        <TextBlock Text="Threshold (Percentage of current target's weight)" TextWrapping="Wrap" Width="341" HorizontalAlignment="Left" />
+                        ToolTip="默认500."/>
+                        <TextBlock Text="阈值（当前目标的重量百分比）" TextWrapping="Wrap" Width="341" HorizontalAlignment="Left" />
                         <Slider Template="{DynamicResource SliderEditable}" IsEnabled="True"
                     Interval="5" Maximum="80" Minimum="20" SmallChange="5" TickFrequency="5"  TickPlacement="BottomRight"
                     Value="{Binding Path=Advanced.CacheWeightThresholdPct}" IsSnapToTickEnabled="True"
                     HorizontalAlignment="Stretch"
-                        ToolTip="Default 50."/>
+                        ToolTip="默认50."/>
                     </StackPanel>
                 </GroupBox>-->
-                <GroupBox Header="Debug/Dev Tools">
+                <GroupBox Header="调试/开发 工具">
                     <StackPanel>
                         <UniformGrid Columns="2">
-                            <Button Content="Dump Skills" Command="{Binding DumpSkillsCommand}"/>
-                            <Button Content="Quick Dump Items" Command="{Binding DumpQuickItemsCommand}" />
-                            <Button Content="Full Dump Backpack Items" Command="{Binding Path=DumpBackpackCommand}"/>
-                            <Button Content="Full Dump Equipped Items" Command="{Binding Path=DumpEquippedCommand}"/>
-                            <Button Content="Full Dump Ground Items" Command="{Binding Path=DumpGroundItemsCommand}"/>
-                            <Button Content="Full Dump Stash items" Command="{Binding Path=DumpStashCommand}"/>
-                            <Button Content="Full Dump Merchant items" Command="{Binding Path=DumpMerchantItemsCommand}"/>
-                            <Button Content="Full Dump ALL items (SLOW!!)" Command="{Binding Path=DumpAllItemsCommand}"/>
-                            <Button Content="Dump Build / Items" Command="{Binding Path=DumpSkillsAndItemsCommand}"/>
-                            <Button Content="Dump Invalid Items" Command="{Binding Path=DumpInvalidItemsCommand}"/>
-                            <Button Content="Dump ItemSNO Reference" Command="{Binding Path=DumpItemSNOReference}"/>
-                            <Button Content="Dump Import Reference" Command="{Binding Path=DumpReferenceItems}"/>
-                            <Button Content="Generate Game Data" Command="{Binding Path=GenerateGameData}"/>
+                            <Button Content="转存技能" Command="{Binding DumpSkillsCommand}"/>
+                            <Button Content="快速转储物品" Command="{Binding DumpQuickItemsCommand}" />
+                            <Button Content="完全转储背包物品" Command="{Binding Path=DumpBackpackCommand}"/>
+                            <Button Content="完全转储装备的物品" Command="{Binding Path=DumpEquippedCommand}"/>
+                            <Button Content="完全转储地面物品" Command="{Binding Path=DumpGroundItemsCommand}"/>
+                            <Button Content="完全转储仓库物品" Command="{Binding Path=DumpStashCommand}"/>
+                            <Button Content="完全倾卸商人物品" Command="{Binding Path=DumpMerchantItemsCommand}"/>
+                            <Button Content="转储全部物品（非常慢!!）" Command="{Binding Path=DumpAllItemsCommand}"/>
+                            <Button Content="转储配装物品" Command="{Binding Path=DumpSkillsAndItemsCommand}"/>
+                            <Button Content="转储无效物品" Command="{Binding Path=DumpInvalidItemsCommand}"/>
+                            <Button Content="转储物品编号引用" Command="{Binding Path=DumpItemSNOReference}"/>
+                            <Button Content="转储导入引用" Command="{Binding Path=DumpReferenceItems}"/>
+                            <Button Content="生成的游戏数据" Command="{Binding Path=GenerateGameData}"/>
                         </UniformGrid>
-                        <TextBlock Margin="0,10,0,0">Stop Bot Events</TextBlock>
+                        <TextBlock Margin="0,10,0,0">停止Bot事件</TextBlock>
                         <ContentPresenter Margin="0,5,0,0" Content="{Binding Advanced, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=StopReasons}" Style="{DynamicResource SimpleItemsControlSelector}" />
                     </StackPanel>
                 </GroupBox>
@@ -216,8 +216,8 @@
 
             <WrapPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
                 <!--Reset Button-->
-                <Button Margin="5,0" HorizontalAlignment="Center" Command="{Binding ResetAdvancedCommand}">Reset</Button>
-                <Button Margin="5,0" HorizontalAlignment="Center" Command="{Binding UseGlobalConfigFileCommand}">Use Global Configuration File</Button>
+                <Button Margin="5,0" HorizontalAlignment="Center" Command="{Binding ResetAdvancedCommand}">恢复默认</Button>
+                <Button Margin="5,0" HorizontalAlignment="Center" Command="{Binding UseGlobalConfigFileCommand}">使用全局配置文件</Button>
             </WrapPanel>
         </DockPanel>
     </ScrollViewer>

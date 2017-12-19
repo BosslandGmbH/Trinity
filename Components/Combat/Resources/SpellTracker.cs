@@ -58,7 +58,7 @@ namespace Trinity.Components.Combat.Resources
 
                 if (duration > 0)
                 {
-                    Core.Logger.Verbose(LogCategory.Behavior, "Tracking unit {0} with power {1} for duration {2:0.00}", AcdId, power, duration);
+                    Core.Logger.Verbose(LogCategory.Behavior, "跟踪装置 {0} 使用能力 {1} 持续时间 {2:0.00}", AcdId, power, duration);
                     TrackSpellOnUnit(new SpellTracker()
                     {
                         AcdId = AcdId,
@@ -69,7 +69,7 @@ namespace Trinity.Components.Combat.Resources
             }
             catch (Exception ex)
             {
-                Core.Logger.Log("Exception in TrackSpellOnUnit: {0}", ex.ToString());
+                Core.Logger.Log("异常: {0}", ex.ToString());
             }
         }
 

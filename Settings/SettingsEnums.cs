@@ -8,23 +8,23 @@ namespace Trinity.Settings
     public enum GambleSlotTypes
     {
         None = 0,
-        OneHanded = 1 << 0,
-        TwoHanded = 1 << 1,
-        Mojo = 1 << 2,
-        Quiver = 1 << 3,
-        Orb = 1 << 4,
-        Amulet = 1 << 5,
-        Ring = 1 << 6,
-        Belt = 1 << 7,
-        Boots = 1 << 8,
-        Bracers = 1 << 9,
-        Chest = 1 << 10,
-        Gloves = 1 << 11,
-        Helm = 1 << 12,
-        Pants = 1 << 13,
-        Shield = 1 << 14,
-        Shoulder = 1 << 15,
-        Phylactery = 1 << 16,
+        单手武器 = 1 << 0,
+        双手武器 = 1 << 1,
+        巫医副手 = 1 << 2,
+        箭袋 = 1 << 3,
+        法球 = 1 << 4,
+        项链 = 1 << 5,
+        戒指 = 1 << 6,
+        腰带 = 1 << 7,
+        鞋子 = 1 << 8,
+        护腕 = 1 << 9,
+        衣服 = 1 << 10,
+        手套 = 1 << 11,
+        头盔 = 1 << 12,
+        裤子 = 1 << 13,
+        盾牌 = 1 << 14,
+        护肩 = 1 << 15,
+        死灵副手 = 1 << 16,
     }
 
     [Flags]
@@ -79,7 +79,6 @@ namespace Trinity.Settings
         GroundClicky = 1 << 3,
         Other = 1 << 4,
         RareChest = 1 << 5,
-        CowLevel = 1 << 6,
     }
 
     [Flags]
@@ -97,7 +96,7 @@ namespace Trinity.Settings
     {
         None = 0,
 
-        [Description("Resurrect Dead Players")]
+        [Description("复活死亡的队友")]
         PlayerTombstone = 1 << 0,
     }
 
@@ -143,13 +142,13 @@ namespace Trinity.Settings
     {
         None = 0,
 
-        [Description("Yellow Elites")]
+        [Description("黄色精英")]
         Rare = 1 << 0,
 
-        [Description("Subordinates of Rare Elites")]
+        [Description("爪牙")]
         Minion = 1 << 1,
 
-        [Description("Blue Elites")]
+        [Description("蓝色精英")]
         Champion = 1 << 2,
     }
 

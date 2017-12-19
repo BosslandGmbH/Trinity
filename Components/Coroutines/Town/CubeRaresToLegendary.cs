@@ -27,12 +27,12 @@ namespace Trinity.Components.Coroutines.Town
             if (!ZetaDia.IsInGame || !ZetaDia.IsInTown)
                 return false;
 
-            var kule = TownInfo.ZoltunKulle?.GetActor() as DiaUnit;
+            var kule = TownInfo.ZultonKule?.GetActor() as DiaUnit;
             if (kule != null)
             {
                 if (kule.IsQuestGiver)
                 {
-                    Core.Logger.Verbose("[CubeRaresToLegendary] Cube is not unlocked yet");
+                    Core.Logger.Verbose("[魔盒稀有升级传奇] 魔盒还没有解锁");
                     HasUnlockedCube = false;
                     return false;
                 }
@@ -44,32 +44,32 @@ namespace Trinity.Components.Coroutines.Town
 
             if (types == null && Core.Settings.KanaisCube.RareUpgradeTypes == ItemSelectionType.Unknown)
             {
-                Core.Logger.Verbose("[CubeRaresToLegendary] No item types selected in settings - (Config => Items => Kanai's Cube)");
+                Core.Logger.Verbose("[魔盒稀有升级传奇] 在设置中没有选择道具类型 - (设置 => 物品 => 卡奈魔盒)");
                 return false;
             }
 
             if (!HasMaterialsRequired && InventoryManager.NumFreeBackpackSlots < 5)
             {
-                Core.Logger.Verbose("[CubeRaresToLegendary] Not enough bag space");
+                Core.Logger.Verbose("[魔盒稀有升级传奇] 没有足够的背包空间");
                 return false;
             }
 
             var dbs = Core.Inventory.Currency.DeathsBreath;
             if (dbs < Core.Settings.KanaisCube.DeathsBreathMinimum)
             {
-                Core.Logger.Verbose("[CubeRaresToLegendary] Not enough deaths breath - Limit is set to {0}, You currently have {1}", Core.Settings.KanaisCube.DeathsBreathMinimum, dbs);
+                Core.Logger.Verbose("[魔盒稀有升级传奇] 没有足够的死亡之息 - 限制设置为 {0}, 你目前只有 {1}", Core.Settings.KanaisCube.DeathsBreathMinimum, dbs);
                 return false;
             }
 
             if (!GetBackPackRares(types).Any())
             {
-                Core.Logger.Verbose("[CubeRaresToLegendary] You need some rares in your backpack for this to work!");
+                Core.Logger.Verbose("[魔盒稀有升级传奇] 你需要在背包中有一些稀有道具才能使魔盒工作!");
                 return false;
             }
 
             if (!HasMaterialsRequired)
             {
-                Core.Logger.Verbose("[CubeRaresToLegendary] Unable to find the materials we need, maybe you don't have them!");
+                Core.Logger.Verbose("[魔盒稀有升级传奇] 无法找到我们所需要的材料, 也许你没有他们!");
                 return false;
             }
 
@@ -86,7 +86,7 @@ namespace Trinity.Components.Coroutines.Town
 
             if (!Core.Inventory.Backpack.Any())
             {
-                Core.Logger.Verbose("[CubeRaresToLegendary] No items were found in backpack!");
+                Core.Logger.Verbose("[魔盒稀有升级传奇] 没有在背包中找到道具!");
             }
 
             var rares = Core.Inventory.Backpack.Where(i =>
@@ -104,7 +104,7 @@ namespace Trinity.Components.Coroutines.Town
 
             }).ToList();
 
-            Core.Logger.Log(LogCategory.Behavior, "[CubeRaresToLegendary] {0} Valid Rares in Backpack", rares.Count);
+            Core.Logger.Log(LogCategory.Behavior, "[魔盒稀有升级传奇] {0} 有效的稀有道具在背包", rares.Count);
             return rares;
         }
 
@@ -135,7 +135,7 @@ namespace Trinity.Components.Coroutines.Town
                 if (!ZetaDia.IsInTown)
                     break;
 
-                //Core.Logger.Log("[CubeRaresToLegendary] CubeRaresToLegendary Started! Wooo!");
+                //Core.Logger.Log("[魔盒稀有升级传奇] 魔盒稀有升级传奇 开始! 喔喔喔!");
 
                 var backpackGuids = new HashSet<int>(InventoryManager.Backpack.Select(i => i.ACDId));
 
@@ -145,13 +145,13 @@ namespace Trinity.Components.Coroutines.Town
                     {
                         if (!await MoveToAndInteract.Execute(TownInfo.KanaisCube))
                         {
-                            Core.Logger.Log("Failed to move to the cube, quite unfortunate.");
+                            Core.Logger.Log("无法移动到魔盒, 很不幸.");
                             break;
                         }
                         continue;
                     }
 
-                    //Core.Logger.Log("[CubeRaresToLegendary] Ready to go, Lets transmute!");
+                    //Core.Logger.Log("[魔盒稀有升级传奇] 准备好了让我们来转换!");
 
                     var item = GetBackPackRares(types).First();
                     var itemName = item.Name;
@@ -168,15 +168,15 @@ namespace Trinity.Components.Coroutines.Town
                         ItemEvents.FireItemCubed(newTrinityItem);
 
                         if(newTrinityItem.IsPrimalAncient)
-                            Core.Logger.Warn($"[CubeRaresToLegendary] Upgraded Rare '{itemName}' ---> '{newLegendaryItem.Name}' ({newItem.ActorSnoId}) PRIMAL!~");
+                            Core.Logger.Warn($"[魔盒稀有升级传奇] 升级稀有 '{itemName}' ---> '{newLegendaryItem.Name}' ({newItem.ActorSnoId}) 最初的 !~");
                         else
-                            Core.Logger.Log($"[CubeRaresToLegendary] Upgraded Rare '{itemName}' ---> '{newLegendaryItem.Name}' ({newItem.ActorSnoId})");
+                            Core.Logger.Log($"[魔盒稀有升级传奇] 升级稀有 '{itemName}' ---> '{newLegendaryItem.Name}' ({newItem.ActorSnoId})");
 
                       
                     }
                     else
                     {
-                        Core.Logger.Log("[CubeRaresToLegendary] Failed to upgrade Item '{0}' {1} DynId={2} HasBackpackMaterials={3}",
+                        Core.Logger.Log("[魔盒稀有升级传奇] 升级道具失败'{0}' {1} DynId={2} 背包有材料={3}",
                             itemName, itemInternalName, itemAnnId, HasMaterialsRequired);
                     }
 
@@ -184,7 +184,7 @@ namespace Trinity.Components.Coroutines.Town
                 }
                 else
                 {
-                    Core.Logger.Log("[CubeRaresToLegendary] Oh no! Out of materials!");
+                    Core.Logger.Log("[魔盒稀有升级传奇] Oh 不! 没有材料了!");
                     return true;
                 }
 

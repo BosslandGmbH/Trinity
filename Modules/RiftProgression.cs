@@ -17,7 +17,7 @@ namespace Trinity.Modules
             IsNephalemRift = ZetaDia.Storage.CurrentRiftType == RiftType.Nephalem;
             IsGreaterRift = ZetaDia.Storage.CurrentRiftType == RiftType.Greater;
 
-            if (!IsNephalemRift && !IsNephalemRift)
+            if (!IsNephalemRift && !IsGreaterRift)
                 return;
 
             CurrentProgressionPct = ZetaDia.Globals.RiftProgressionPercent;

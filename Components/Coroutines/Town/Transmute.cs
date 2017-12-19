@@ -36,11 +36,11 @@ namespace Trinity.Components.Coroutines.Town
             if (!ZetaDia.IsInGame)
                 return false;
 
-            Core.Logger.Log("Transmuting...");
+            Core.Logger.Log("转换中...");
 
             if (!Core.Inventory.Currency.HasCurrency(recipe))
             {
-                Core.Logger.Error($"--> Not enough currency for {recipe}");
+                Core.Logger.Error($"--> 没有足够的货币 {recipe}");
                 return false;
             }
 
@@ -52,11 +52,11 @@ namespace Trinity.Components.Coroutines.Town
 
             if (!UIElements.TransmuteItemsDialog.IsVisible)
             {
-                Core.Logger.Log(" --> Can't transmute without the vendor window open!");
+                Core.Logger.Log(" --> 不能转换无供应商窗口打开!");
                 return false;
             }
 
-            Core.Logger.Log("Zip Zap!");
+            Core.Logger.Log("开始转换吧!");
             InventoryManager.TransmuteItems(transmuteGroupAnnIds.ToArray(), recipe);
             await Coroutine.Sleep(Randomizer.Fudge(500));
             UIElement.FromHash(TransmuteButtonHash)?.Click();

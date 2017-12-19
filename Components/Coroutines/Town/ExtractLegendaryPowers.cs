@@ -55,12 +55,12 @@ namespace Trinity.Components.Coroutines.Town
             if (DateTime.UtcNow < _disabledUntil)
                 return false;
 
-            var kule = TownInfo.ZoltunKulle?.GetActor() as DiaUnit;
+            var kule = TownInfo.ZultonKule?.GetActor() as DiaUnit;
             if (kule != null)
             {
                 if (kule.IsQuestGiver)
                 {
-                    Core.Logger.Verbose("[ExtractLegendaryPowers] Cube is not unlocked yet");
+                    Core.Logger.Verbose("[提取传奇威能] 魔盒还没有解锁");
                     _disabledUntil = DateTime.UtcNow.Add(DisableDuration);
                     HasUnlockedCube = false;
                     return false;
@@ -73,7 +73,7 @@ namespace Trinity.Components.Coroutines.Town
 
             if (!HasCurrencyRequired)
             {
-                Core.Logger.Verbose("[ExtractLegendaryPowers] Unable to find the required materials!");
+                Core.Logger.Verbose("[提取传奇威能] 无法找到需求的材料！");
                 return false;
             }
 
@@ -84,7 +84,7 @@ namespace Trinity.Components.Coroutines.Town
 
             if (!backpackCandidates.Any() && !stashCandidates.Any())
             {
-                Core.Logger.Verbose("[ExtractLegendaryPowers] There are no items that need extraction!");
+                Core.Logger.Verbose("[提取传奇威能] 没有可提取的物品！");
                 _disabledUntil = DateTime.UtcNow.Add(DisableDuration);
                 return false;
             }
@@ -141,7 +141,7 @@ namespace Trinity.Components.Coroutines.Town
         {
             if (Core.Player.IsInventoryLockedForGreaterRift)
             {
-                Core.Logger.Verbose("Can't extract powers: inventory locked by greater rift");
+                Core.Logger.Verbose("无法提取威能: 库存被大秘境锁定");
                 return false;
             }
 
@@ -162,14 +162,14 @@ namespace Trinity.Components.Coroutines.Town
         {
             if (!HasCurrencyRequired)
             {
-                Core.Logger.Log("[ExtractLegendaryPowers] Oh no! Out of materials!");
+                Core.Logger.Log("[提取传奇威能] Oh!不！没有材料了！");
                 return true;
             }
 
             var candidate = GetLegendaryExtractionCandidates(InventorySlot.BackpackItems).FirstOrDefault();
             if (candidate == null)
             {
-                Core.Logger.Log("[ExtractLegendaryPowers] Oh no! Out of materials!");
+                Core.Logger.Log("[提取传奇威能] Oh!不！没有材料了！");
                 return true;
             }
 
@@ -196,13 +196,13 @@ namespace Trinity.Components.Coroutines.Town
             {
                 if (!started)
                 {
-                    Core.Logger.Log("Extraction mode is set to: {0}", Core.Settings.KanaisCube.ExtractLegendaryPowers);
+                    Core.Logger.Log("提取模式设置为: {0}", Core.Settings.KanaisCube.ExtractLegendaryPowers);
                     started = true;
                 }
 
                 if (!HasCurrencyRequired)
                 {
-                    Core.Logger.Log("Not enough currency to transmute");
+                    Core.Logger.Log("没有足够的金币来提取");
                     return false;
                 }
 
@@ -225,7 +225,7 @@ namespace Trinity.Components.Coroutines.Town
                     if (!stashCandidates.Any())
                         return false;
 
-                    Core.Logger.Log("Getting Legendaries from Stash");
+                    Core.Logger.Log("提取仓库中传奇物品的威能");
 
                     if (!await TakeItemsFromStash.Execute(stashCandidates))
                         return false;
@@ -261,13 +261,13 @@ namespace Trinity.Components.Coroutines.Town
             var shouldBeDestroyedItem = InventoryManager.Backpack.FirstOrDefault(i => i.AnnId == itemDynamicId);
             if (shouldBeDestroyedItem == null && ZetaDia.Storage.PlayerDataManager.ActivePlayerData.KanaisPowersExtractedActorSnoIds.Contains(itemSnoId))
             {
-                Core.Logger.Log($"[ExtractLegendaryPowers] Item Power Extracted! '{itemName}' ({itemSnoId}) Description={affixDescription}");
+                Core.Logger.Log($"[提取传奇威能] 获得物品威能! '{itemName}' ({itemSnoId}) 描述={affixDescription}");
                 Core.Inventory.InvalidAnnIds.Add(itemDynamicId);
                 _itemsTakenFromStashAnnId.Remove(itemDynamicId);
                 return true;
             }
 
-            Core.Logger.Log($"[ExtractLegendaryPowers] Failed to Extract Power! '{itemName}' ({itemSnoId}) {itemInternalName} DynId={itemDynamicId}");
+            Core.Logger.Log($"[提取传奇威能] 无法提取威能! '{itemName}' ({itemSnoId}) {itemInternalName} DynId={itemDynamicId}");
             _blacklistedActorSnoIds.Add(itemSnoId);
             return false;
         }

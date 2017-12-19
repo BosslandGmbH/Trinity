@@ -23,7 +23,7 @@ namespace Trinity.Components.Coroutines
                 {
                     if (item.RawItemType == RawItemType.TreasureBag)
                     {
-                        Core.Logger.Log($"Opening Treasure Bag {bagsOpened + 1}, Id={item.AnnId}");
+                        Core.Logger.Log($"打开背包 {bagsOpened + 1}, Id={item.AnnId}");
                         InventoryManager.UseItem(item.AnnId);
                         bagsOpened++;
                         await Coroutine.Sleep(500);
@@ -31,7 +31,7 @@ namespace Trinity.Components.Coroutines
                 }
                 if (bagsOpened > 0)
                 {
-                    Core.Logger.Log($"Waiting for Treasure Bag loot");
+                    Core.Logger.Log($"等待背包战利品");
                     await Coroutine.Sleep(2500);
                     TrinityTownRun.IsWantingTownRun = true;
                     return true;

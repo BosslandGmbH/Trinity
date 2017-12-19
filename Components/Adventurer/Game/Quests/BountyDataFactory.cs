@@ -68,7 +68,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         break;
 
                     default:
-                        Core.Logger.Error("Dynamic Bounty is not supported {0} ({1})", quest.Name, quest.QuestId, type, bountyData);
+                        Core.Logger.Error("不支持动态悬赏 {0} ({1})", quest.Name, quest.QuestId, type, bountyData);
                         break;
                 }
 
@@ -8121,7 +8121,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
-            // A5 - ??? (445158)
+            // A5 - Bounty: The Cursed Wood (445158)
             Bounties.Add(new BountyData
             {
                 QuestId = 445158,

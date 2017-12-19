@@ -36,35 +36,52 @@ namespace Trinity.Components.Combat
 
     public class DefaultLootProvider : ILootProvider
     {
-        public static int FreeBagSlots { get; set; } = 4;
-        public static int FreeBagSlotsInTown { get; set; } = 30;
+        /// <summary>
+        ///  智能包裹整理条件
+        /// </summary>
+        public static bool CanVedonInRift
+        {
+            get
+            {
+                switch (Core.Rift.Quest.Step)
+                {
+                    case Trinity.Components.Adventurer.Game.Rift.RiftStep.UrshiSpawned:
+                        return true;
+                    case Trinity.Components.Adventurer.Game.Rift.RiftStep.Cleared:
+                        return true;
+                };
+                return false;
+            }
+        }
+        public static int FreeBagSlots => Core.Settings.SenExtend.EnableIntelligentFinishing ? Core.Settings.SenExtend.FreeBagSlots : 4;
+        public static int FreeBagSlotsInTown => Core.Settings.SenExtend.EnableIntelligentFinishing ? Core.Settings.SenExtend.FreeBagSlotsInTown : 30;
 
         public bool ShouldPickup(TrinityItem item)
         {
             if (item == null || !item.IsValid)
             {
-                Core.Logger.Debug($"Not a valid item {item?.InternalName} Sno={item?.ActorSnoId} GbId={item?.GameBalanceId}");
+                Core.Logger.Debug($"无效物品 {item?.InternalName} Sno={item?.ActorSnoId} GbId={item?.GameBalanceId}");
                 return false;
             }
 
             if (item.RawItemType == RawItemType.CosmeticPet)
             {
-                Core.Logger.Log($"Pet found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"发现宠物! - 捡起它 {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
             if (item.RawItemType == RawItemType.CosmeticWings)
             {
-                Core.Logger.Log($"Wings found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"发现翅膀! - 捡起它 {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
             if (item.RawItemType == RawItemType.CosmeticPennant)
             {
-                Core.Logger.Log($"Wings found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"发现翅膀! - 捡起它 {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
             if (item.RawItemType == RawItemType.CosmeticPortraitFrame)
             {
-                Core.Logger.Log($"Portrait found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"发现头像框! - 捡起它 {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
 
@@ -110,22 +127,23 @@ namespace Trinity.Components.Combat
 
             if (item.RawItemType == RawItemType.Junk && Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.CultistPage))
                 return true;
-
+            // 死亡之息
             if (item.GameBalanceId == GameData.ItemGameBalanceIds.DeathsBreath)
-                return Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.DeathsBreath);
-
+                return Core.Rift.IsNephalemRift ? Core.Settings.SenExtend.IsPickDeathsBreath : true; //Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.DeathsBreath);
+            // 
             if (item.ActorSnoId == (int)SNOActor.A1_BlackMushroom)
                 return Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.RottenMushroom);
-
+            // 奥术之尘
             if (item.GameBalanceId == GameData.ItemGameBalanceIds.ArcaneDust)
-                return true; //Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.ArcaneDust);
-
+                return Core.Rift.IsNephalemRift ? Core.Settings.SenExtend.IsPickArcaneDust : true; //Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.ArcaneDust);
+            // 萦雾水晶
             if (item.GameBalanceId == GameData.ItemGameBalanceIds.VeiledCrystal)
-                return true; // Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.VeiledCrystals);
-
+                return Core.Rift.IsNephalemRift ? Core.Settings.SenExtend.IsPickVeiledCrystal : true; // Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.VeiledCrystals);
+            // 万用材料
             if (item.GameBalanceId == GameData.ItemGameBalanceIds.ReusableParts)
-                return true; //Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.ReusableParts);
+                return Core.Rift.IsNephalemRift ? Core.Settings.SenExtend.IsPickReusableParts : true; //Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.ReusableParts);
 
+            // 遗忘之魂
             if (item.GameBalanceId == GameData.ItemGameBalanceIds.ForgottenSoul)
                 return true;
 
@@ -134,7 +152,7 @@ namespace Trinity.Components.Combat
 
             if (GameData.TransmogTable.Contains(item.GameBalanceId) || item.InternalName.StartsWith("Transmog") || item.ActorSnoId == 110952) //Rakanishu's Blade
             {
-                Core.Logger.Log($"Transmog found! - Picking it up for its visual goodness {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"发现幻化装备! - 拿起它 {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
 
@@ -312,8 +330,8 @@ namespace Trinity.Components.Combat
                 Core.Logger.Debug($"Not stashing due to item being in a protected slot (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return false;
             }
-
-            if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
+            // 智能包裹整理
+            if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Items.KeepLegendaryUnid && (Core.Player.ParticipatingInTieredLootRun && !CanVedonInRift))
             {
                 Core.Logger.Debug($"Not stashing due to inventory locked, keep unidentified setting or participating in loot run. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return false;
@@ -328,40 +346,40 @@ namespace Trinity.Components.Combat
             if (GameData.TransmogTable.Contains(item.GameBalanceId) || item.InternalName.StartsWith("Transmog") || item.ActorSnoId == 110952) //Rakanishu's Blade
             {
                 var setting = Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.TransmogWhites);
-                Core.Logger.Log($"Transmog found! - Stash Setting={setting} {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"发现幻化装备! - 储存设置={setting} {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return setting;
             }
 
             if (item.RawItemType == RawItemType.CosmeticPet)
             {
-                Core.Logger.Log($"Pet found! - Stashing it {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"发现宠物! - 储存它 {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
             if (item.RawItemType == RawItemType.CosmeticWings)
             {
-                Core.Logger.Log($"Wings found! - Stashing it  {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"发现翅膀! - 储存它  {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
             if (item.RawItemType == RawItemType.CosmeticPennant)
             {
-                Core.Logger.Log($"Wings found! - Stashing it  {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"发现翅膀! - 储存它  {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
             if (item.RawItemType == RawItemType.CosmeticPortraitFrame)
             {
-                Core.Logger.Log($"Portrait found! - Stashing it {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"发现头像框! - 储存它 {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
 
             if (Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.RottenMushroom) && item.ActorSnoId == (int)SNOActor.A1_BlackMushroom)
             {
-                Core.Logger.Log($"Rotten Mushroom found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                Core.Logger.Log($"发现腐烂的蘑菇! - 储存设置. 物品={item.Name} 内部名={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} 原始类型={item.RawItemType}");
                 return true;
             }
 
             if (GameData.HerdingMatsSnoIds.Contains(item.ActorSnoId))
             {
-                Core.Logger.Log($"Staff of Herding Mat found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                Core.Logger.Log($"发现牧牛杖材料! - 储存设置. 物品={item.Name} 内部名={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} 原始类型={item.RawItemType}");
                 return true;
             }
 
@@ -395,13 +413,13 @@ namespace Trinity.Components.Combat
 
                 if (Core.Settings.Items.LegendaryMode == LegendaryMode.Ignore)
                 {
-                    Core.Logger.Log($"TRASHING: Ignore Legendary. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                    Core.Logger.Log($"分解: 忽略传奇. 物品={item.Name} 内部名称={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} 原始类型={item.RawItemType}");
                     return false;
                 }
 
                 if (Core.Settings.Items.LegendaryMode == LegendaryMode.AlwaysStash)
                 {
-                    Core.Logger.Log($"STASHING: Always Stash Legendary Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                    Core.Logger.Log($"储存: 总是存储传奇 物品={item.Name} 内部名称={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} 原始类型={item.RawItemType}");
                     return true;
                 }
 
@@ -409,16 +427,16 @@ namespace Trinity.Components.Combat
                 {
                     if (item.IsAncient)
                     {
-                        Core.Logger.Log($"STASHING: Only Stash Ancients Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                        Core.Logger.Log($"储存: 只存储远古 物品={item.Name} 内部名称={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} 原始类型={item.RawItemType}");
                         return true;
                     }
-                    Core.Logger.Log($"TRASHING: Only Stash Ancients Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                    Core.Logger.Log($"分解: 只存储远古 物品={item.Name} 内部名称={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} 原始类型={item.RawItemType}");
                     return false;
                 }
 
                 if (Core.Settings.ItemList.AlwaysTrashNonAncients && !item.IsAncient)
                 {
-                    Core.Logger.Log($"TRASHING: ItemList Option - Always Sell/Salvage Non-Ancients Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                    Core.Logger.Log($"分解: 捡取列表设置 - 总是出售/分解非远古 物品={item.Name} 内部名称={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} 原始类型={item.RawItemType}");
                     return false;
                 }
             }
@@ -440,35 +458,35 @@ namespace Trinity.Components.Combat
 
             if (item.IsUnidentified)
             {
-                Core.Logger.Log("{0} [{1}] = (autokeep unidentified items)", item.Name, item.InternalName);
+                Core.Logger.Log("{0} [{1}] = (自动保存不明物品)", item.Name, item.InternalName);
                 return true;
             }
 
             if (tItemType == TrinityItemType.StaffOfHerding)
             {
-                Core.Logger.Log(LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep staff of herding)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log(LogCategory.ItemValuation, "{0} [{1}] [{2}] = (总是保存牧牛仗)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
             if (tItemType == TrinityItemType.CraftingMaterial || item.IsCraftingReagent)
             {
-                Core.Logger.Log(LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep craft materials)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log(LogCategory.ItemValuation, "{0} [{1}] [{2}] = (总是保存锻造材料)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
             if (tItemType == TrinityItemType.Emerald || tItemType == TrinityItemType.Amethyst || tItemType == TrinityItemType.Topaz || tItemType == TrinityItemType.Ruby || tItemType == TrinityItemType.Diamond)
             {
-                Core.Logger.Log(LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep gems)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log(LogCategory.ItemValuation, "{0} [{1}] [{2}] = (总是保存 宝石)", item.Name, item.InternalName, tItemType);
                 return true;
             }
             if (tItemType == TrinityItemType.CraftTome)
             {
-                Core.Logger.Log(LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep tomes)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log(LogCategory.ItemValuation, "{0} [{1}] [{2}] = (总是保存 书页)", item.Name, item.InternalName, tItemType);
                 return true;
             }
             if (tItemType == TrinityItemType.InfernalKey)
             {
-                Core.Logger.Log("{0} [{1}] [{2}] = (autokeep infernal key)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (总是保存 炼狱装置)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
@@ -489,68 +507,68 @@ namespace Trinity.Components.Combat
 
             if (tItemType == TrinityItemType.CraftingPlan && item.ItemQualityLevel >= ItemQuality.Legendary)
             {
-                Core.Logger.Log("{0} [{1}] [{2}] = (autokeep legendary plans)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (总是保存 传奇设计图)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
             if (tItemType == TrinityItemType.ConsumableAddSockets)
             {
-                Core.Logger.Log("{0} [{1}] [{2}] = (autokeep Ramaladni's Gift)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (总是保存 拉玛兰迪的礼物)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
             if (tItemType == TrinityItemType.PortalDevice)
             {
-                Core.Logger.Log("{0} [{1}] [{2}] = (autokeep Machines)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (总是保存 机器)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
             if (tItemType == TrinityItemType.UberReagent)
             {
-                Core.Logger.Log("{0} [{1}] [{2}] = (autokeep Uber Reagents)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (总是保存 Uber试剂)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
             if (tItemType == TrinityItemType.TieredLootrunKey)
             {
-                Core.Logger.Log("{0} [{1}] [{2}] = (ignoring Tiered Rift Keys)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (忽略有层数的秘境钥匙)", item.Name, item.InternalName, tItemType);
                 return false;
             }
 
             if (tItemType == TrinityItemType.CraftingPlan)
             {
-                Core.Logger.Log("{0} [{1}] [{2}] = (autokeep plans)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (总是保存 计划书)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
             if (item.ItemQualityLevel <= ItemQuality.Superior && (isEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem))
             {
-                Core.Logger.Log("{0} [{1}] [{2}] = (trash whites)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (丢弃 白色材料)", item.Name, item.InternalName, tItemType);
                 return false;
             }
             if (item.ItemQualityLevel >= ItemQuality.Magic1 && item.ItemQualityLevel <= ItemQuality.Magic3 && (isEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem))
             {
-                Core.Logger.Log("{0} [{1}] [{2}] = (trashing blues)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (丢弃 蓝色材料)", item.Name, item.InternalName, tItemType);
                 return false;
             }
 
             if (item.ItemQualityLevel >= ItemQuality.Rare4 && item.ItemQualityLevel <= ItemQuality.Rare6 && (isEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem))
             {
-                Core.Logger.Log("{0} [{1}] [{2}] = (force salvage rare)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (分解稀有)", item.Name, item.InternalName, tItemType);
                 return false;
             }
 
             if (item.ItemQualityLevel >= ItemQuality.Legendary && Core.Settings.Items.LegendaryMode == LegendaryMode.ItemList && (item.IsEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem || item.IsPotion))
             {
                 var result = ItemListEvaluator.ShouldStashItem(item);
-                Core.Logger.Log("{0} [{1}] [{2}] = {3}", item.Name, item.InternalName, tItemType, "ItemListCheck=" + (result ? "KEEP" : "TRASH"));
+                Core.Logger.Log("{0} [{1}] [{2}] = {3}", item.Name, item.InternalName, tItemType, "核对捡取列表=" + (result ? "保存" : "丢弃"));
 
                 return result;
             }
 
             if (item.ItemQualityLevel >= ItemQuality.Legendary)
             {
-                Core.Logger.Log("{0} [{1}] [{2}] = (autokeep legendaries)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (总是保存 传奇)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
@@ -592,8 +610,8 @@ namespace Trinity.Components.Combat
                     reason = "ItemList Stash Primal Ancients";
                     return false;
                 }
-
-                if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
+                // 智能包裹整理
+                if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Items.KeepLegendaryUnid && (Core.Player.ParticipatingInTieredLootRun && !CanVedonInRift))
                 {
                     reason = "Rift Locked Inventory";
                     return false;
@@ -638,7 +656,7 @@ namespace Trinity.Components.Combat
                     }
                 }
 
-                if (!Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.TransmogWhites) && GameData.TransmogTable.Contains(item.GameBalanceId) || item.InternalName.StartsWith("Transmog") || item.ActorSnoId == 110952) //Rakanishu's Blade
+                if (!Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.TransmogWhites) && (GameData.TransmogTable.Contains(item.GameBalanceId) || item.InternalName.StartsWith("Transmog") || item.ActorSnoId == 110952)) //Rakanishu's Blade
                 {
                     reason = "Transmog Setting";
                     return true;
@@ -671,11 +689,11 @@ namespace Trinity.Components.Combat
             }
             catch (Exception ex)
             {
-                Core.Logger.Error($"Exception in TrinitySalvage Evaluation for {item.Name} ({item.ActorSnoId}) InternalName={item.InternalName} Quality={item.ItemQualityLevel} Ancient={item.IsAncient} Identified={!item.IsUnidentified} RawItemType={item.RawItemType} {ex}");
+                Core.Logger.Error($"评估分解中的 {item.Name} ({item.ActorSnoId}) 异常 内部名称={item.InternalName} 品质={item.ItemQualityLevel} 远古={item.IsAncient} 鉴定={!item.IsUnidentified} 原始类型={item.RawItemType} {ex}");
             }
             finally
             {
-                Core.Logger.Debug($"Salvage Evaluation for: {item.Name} ({item.ActorSnoId}) Reason={reason} InternalName={item.InternalName} Quality={item.ItemQualityLevel} Ancient={item.IsAncient} Identified={!item.IsUnidentified} RawItemType={item.RawItemType}");
+                Core.Logger.Debug($"分解评估: {item.Name} ({item.ActorSnoId}) 理由={reason} 内部名称={item.InternalName} 品质={item.ItemQualityLevel} 远古={item.IsAncient} 鉴定={!item.IsUnidentified} 原始类型={item.RawItemType}");
             }
             return false;
         }
@@ -750,37 +768,37 @@ namespace Trinity.Components.Combat
 
                 if (item.IsEquipment && item.RequiredLevel <= 1)
                 {
-                    reason = "Unable to salvage level 1 items";
+                    reason = "无法分解 1 级物品";
                     return true;
                 }
 
                 if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
                 {
-                    reason = "Rift Locked Inventory";
+                    reason = "秘境中,仓库锁定!";
                     return false;
                 }
 
                 if (item.IsVendorBought)
                 {
-                    reason = "Unable to salvage vendor bought items";
+                    reason = "无法分解商人出售的物品";
                     return false;
                 }
 
                 if (item.IsGem && item.GemQuality >= GemQuality.Marquise && ZetaDia.Me.Level < 70)
                 {
-                    reason = "auto-keep high level gems";
+                    reason = "自动保留高等级宝石";
                     return false;
                 }
 
                 if (GameData.VanityItems.Any(i => item.InternalName.StartsWith(i)))
                 {
-                    reason = "Vantity item";
+                    reason = "无用物品";
                     return false;
                 }
 
                 if (item.ItemType == ItemType.KeystoneFragment)
                 {
-                    reason = "Rift Key";
+                    reason = "秘境钥匙";
                     return false;
                 }
 
@@ -816,11 +834,11 @@ namespace Trinity.Components.Combat
             }
             catch (Exception ex)
             {
-                Core.Logger.Error($"Exception in TrinitySell Evaluation for {item.Name} ({item.ActorSnoId}) InternalName={item.InternalName} Quality={item.ItemQualityLevel} Ancient={item.IsAncient} Identified={!item.IsUnidentified} RawItemType={item.RawItemType} {ex}");
+                Core.Logger.Error($"出售 {item.Name} 异常 ({item.ActorSnoId}) 内部名称={item.InternalName} 品质={item.ItemQualityLevel} 远古={item.IsAncient} 鉴定={!item.IsUnidentified} 原始类型={item.RawItemType} {ex}");
             }
             finally
             {
-                Core.Logger.Debug($"Sell Evaluation for: {item.Name} ({item.ActorSnoId}) Reason={reason} InternalName={item.InternalName} Quality={item.ItemQualityLevel} Ancient={item.IsAncient} Identified={!item.IsUnidentified} RawItemType={item.RawItemType}");
+                Core.Logger.Debug($"出售: {item.Name} ({item.ActorSnoId}) 理由={reason} 内部名称={item.InternalName} 品质={item.ItemQualityLevel} 远古={item.IsAncient} 鉴定={!item.IsUnidentified} 原始类型={item.RawItemType}");
             }
             return false;
         }
@@ -873,10 +891,20 @@ namespace Trinity.Components.Combat
             {
                 try
                 {
+                    //Core.Logger.Warn($"包裹空余:{InventoryManager.NumFreeBackpackSlots}, FreeBagSlotsInTown: {FreeBagSlotsInTown}, IsInTown: {Core.Player.IsInTown}");
+                    // 判断是否需要清理包裹
+                    if (InventoryManager.NumFreeBackpackSlots < FreeBagSlotsInTown && Core.Player.IsInTown && !Core.Player.ParticipatingInTieredLootRun)
+                    {
+                        //Core.Logger.Warn($"在城镇里, 当前空余低于设置值, 需要清理包裹! _lastBackPackLocation: {_lastBackPackLocation}");
+                        _lastBackPackLocation = NoFreeSlot;
+                    }
+
+					//Core.Logger.Warn($"IsInTown={Core.Player.IsInTown}, ParticipatingInTieredLootRun={Core.Player.ParticipatingInTieredLootRun}, _lastBackPackLocation={_lastBackPackLocation}");
                     if (!forceRefresh && _lastBackPackLocation != new Vector2(-2, -2) && _lastBackPackLocation != new Vector2(-1, -1) &&
                         _lastBackPackCount == Core.Inventory.BackpackItemCount &&
                         _lastProtectedSlotsCount == CharacterSettings.Instance.ProtectedBagSlots.Count)
                     {
+                        //Core.Logger.Warn($"不处理,直接返回!");
                         return _lastBackPackLocation;
                     }
 
@@ -902,7 +930,7 @@ namespace Trinity.Components.Combat
                     {
                         if (!item.IsValid)
                         {
-                            Core.Logger.Error("Invalid backpack item detetected! marking down two slots!");
+                            Core.Logger.Error("检测到无效的背包项目！标记下来两个空位!");
                             freeBagSlots -= 2;
                             continue;
                         }
@@ -911,14 +939,14 @@ namespace Trinity.Components.Combat
 
                         if (row < 0 || row > 5)
                         {
-                            Core.Logger.Error("Item {0} ({1}) is reporting invalid backpack row of {2}!",
+                            Core.Logger.Error("无效物品物品 {0} ({1}) 位于背包第 {2} 行!",
                                 item.Name, item.InternalName, item.InventoryRow);
                             continue;
                         }
 
                         if (col < 0 || col > 9)
                         {
-                            Core.Logger.Error("Item {0} ({1}) is reporting invalid backpack column of {2}!",
+                            Core.Logger.Error("无效物品物品 {0} ({1}) 位于背包第 {2} 列!",
                                 item.Name, item.InternalName, item.InventoryColumn);
                             continue;
                         }
@@ -943,12 +971,12 @@ namespace Trinity.Components.Combat
                         {
                             if (item.IsValid && !item.IsDisposed)
                             {
-                                Core.Logger.Debug("Error checking for next slot on item {0}, row={1} col={2} IsTwoSquare={3} ItemType={4}",
+                                Core.Logger.Debug("检查下一个空位的道具错误 {0}, 行={1} col={2} IsTwoSquare={3} 物品种类={4}",
                                     item.Name, item.InventoryRow, item.InventoryColumn, item.IsTwoSquareItem, item.ItemType);
                             }
                             else
                             {
-                                Core.Logger.Debug("Error checking for next slot on item is no longer valid");
+                                Core.Logger.Debug("检查下一个空位的道具错误 不再有效");
                             }
                             continue;
                         }
@@ -968,9 +996,13 @@ namespace Trinity.Components.Combat
                     // free bag slots is less than required
                     if (noFreeSlots || freeBagSlots < minFreeSlots && !forceRefresh)
                     {
-                        Core.Logger.Debug("Free Bag Slots is less than required. FreeSlots={0}, FreeBagSlots={1} FreeBagSlotsInTown={2} IsInTown={3} Protected={4} BackpackCount={5}",
-                            freeBagSlots, FreeBagSlots, FreeBagSlotsInTown, Core.Player.IsInTown,
-                            _lastProtectedSlotsCount, _lastBackPackCount);
+                        Core.Logger.Debug("空间不足. FreeSlots={0}, FreeBagSlots={1} FreeBagSlotsInTown={2} 是否在城里={3} 受保护的={4} 背包计数={5}",
+                            freeBagSlots, 
+							FreeBagSlots, 
+							FreeBagSlotsInTown, 
+							Core.Player.IsInTown,
+                            _lastProtectedSlotsCount, 
+							_lastBackPackCount);
                         _lastBackPackLocation = NoFreeSlot;
                         return _lastBackPackLocation;
                     }
@@ -1015,7 +1047,7 @@ namespace Trinity.Components.Combat
                     }
 
                     // no free slot
-                    Core.Logger.Debug("No Free slots!");
+                    Core.Logger.Debug("没有剩余空间!");
 
                     pos = NoFreeSlot;
                     if (!forceRefresh)
@@ -1027,7 +1059,7 @@ namespace Trinity.Components.Combat
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Log("Error in finding backpack slot");
+                    Core.Logger.Log("获取背包空间错误");
                     Core.Logger.Log("{0}", ex.ToString());
                     return NoFreeSlot;
                 }

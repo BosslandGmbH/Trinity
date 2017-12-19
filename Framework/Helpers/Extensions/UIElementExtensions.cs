@@ -76,7 +76,7 @@ namespace Trinity.Framework.Helpers
             foreach (var child in UIElement.GetChildren(element))
             {
                 var result = child.SafeClick();
-                Core.Logger.Log("Click {0} on {1} ({2})", result, child.Name, child.Hash);
+                Core.Logger.Log("单击 {0} 在 {1} ({2})", result, child.Name, child.Hash);
                 Thread.Sleep(50);
             }
         }
@@ -138,7 +138,7 @@ namespace Trinity.Framework.Helpers
             if (element == null)
                 return;
 
-            Core.Logger.Log(string.Format("[{6}] Element Name={1}, IsVisible={0}, Text={2}, Hash={3}, IsEnabled={4}, HasText={5}",
+            Core.Logger.Log(string.Format("[{6}] 元素名称={1}, 可见={0}, 文本={2}, 散列={3}, 启用={4}, 具有文字={5}",
                 element.IsVisible, element.Name, element.Text, element.Hash, element.IsEnabled, element.HasText, element.BaseAddress));
         }
 

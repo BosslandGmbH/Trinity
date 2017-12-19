@@ -51,7 +51,7 @@ namespace Trinity.Components.Coroutines.Town
 
         public static TownActor BookOfCain => CurrentAct.FirstOrDefault(i => i.ServiceType == ServiceType.Identify);
 
-        public static TownActor ZoltunKulle => CurrentAct.FirstOrDefault(i => i.ServiceType == ServiceType.Zoltun);
+        public static TownActor ZultonKule => CurrentAct.FirstOrDefault(i => i.ServiceType == ServiceType.Zoltun);
 
         public static TownActor Jeweler => CurrentAct.FirstOrDefault(i => JewelerServiceTypes.Contains(i.ServiceType));
 
@@ -134,44 +134,44 @@ namespace Trinity.Components.Coroutines.Town
 
         public static Dictionary<GambleSlotTypes, int> MysterySlotTypeAndId = new Dictionary<GambleSlotTypes, int>
         {
-            {GambleSlotTypes.OneHanded, (int)SNOActor.PH_1HWeapon},
-            {GambleSlotTypes.TwoHanded, (int)SNOActor.PH_2HWeapon},
-            {GambleSlotTypes.Quiver, (int)SNOActor.PH_Quiver},
-            {GambleSlotTypes.Orb, (int)SNOActor.PH_Orb},
-            {GambleSlotTypes.Mojo, (int)SNOActor.PH_Mojo},
-            {GambleSlotTypes.Helm, (int)SNOActor.PH_Helm},
-            {GambleSlotTypes.Gloves, (int)SNOActor.PH_Gloves},
-            {GambleSlotTypes.Boots, (int)SNOActor.PH_Boots},
-            {GambleSlotTypes.Chest, (int)SNOActor.PH_ChestArmor},
-            {GambleSlotTypes.Belt, (int)SNOActor.PH_Belt},
-            {GambleSlotTypes.Pants, (int)SNOActor.PH_Pants},
-            {GambleSlotTypes.Bracers, (int)SNOActor.PH_Bracers},
-            {GambleSlotTypes.Shield, (int)SNOActor.PH_Shield},
-            {GambleSlotTypes.Ring, (int)SNOActor.PH_Ring},
-            {GambleSlotTypes.Amulet,(int)SNOActor.PH_Amulet},
-            {GambleSlotTypes.Shoulder, (int)SNOActor.PH_Shoulders},
-            {GambleSlotTypes.Phylactery, (int)SNOActor.PH_Phylactery}
+            {GambleSlotTypes.单手武器,377355},
+            {GambleSlotTypes.双手武器,377356},
+            {GambleSlotTypes.箭袋,377360},
+            {GambleSlotTypes.法球,377358},
+            {GambleSlotTypes.巫医副手,377359},
+            {GambleSlotTypes.头盔,377344},
+            {GambleSlotTypes.手套,377346},
+            {GambleSlotTypes.鞋子,377347},
+            {GambleSlotTypes.衣服,377345},
+            {GambleSlotTypes.腰带,377349},
+            {GambleSlotTypes.裤子,377350},
+            {GambleSlotTypes.护腕,377351},
+            {GambleSlotTypes.盾牌,377357},
+            {GambleSlotTypes.戒指,377352},
+            {GambleSlotTypes.项链,377353},
+            {GambleSlotTypes.护肩,377348},
+            {GambleSlotTypes.死灵副手, (int)SNOActor.PH_Phylactery}
         };
 
         public static Dictionary<GambleSlotTypes, int> MysterySlotTypeAndPrice = new Dictionary<GambleSlotTypes, int>
         {
-            {GambleSlotTypes.OneHanded,75},
-            {GambleSlotTypes.TwoHanded,75},
-            {GambleSlotTypes.Quiver,25},
-            {GambleSlotTypes.Orb,25},
-            {GambleSlotTypes.Mojo,25},
-            {GambleSlotTypes.Helm,25},
-            {GambleSlotTypes.Gloves,25},
-            {GambleSlotTypes.Boots,25},
-            {GambleSlotTypes.Chest,25},
-            {GambleSlotTypes.Belt,25},
-            {GambleSlotTypes.Pants,25},
-            {GambleSlotTypes.Bracers,25},
-            {GambleSlotTypes.Shield,25},
-            {GambleSlotTypes.Ring,50},
-            {GambleSlotTypes.Amulet,100},
-            {GambleSlotTypes.Shoulder,25},
-            {GambleSlotTypes.Phylactery,25}
+            {GambleSlotTypes.单手武器,75},
+            {GambleSlotTypes.双手武器,75},
+            {GambleSlotTypes.箭袋,25},
+            {GambleSlotTypes.法球,25},
+            {GambleSlotTypes.巫医副手,25},
+            {GambleSlotTypes.头盔,25},
+            {GambleSlotTypes.手套,25},
+            {GambleSlotTypes.鞋子,25},
+            {GambleSlotTypes.衣服,25},
+            {GambleSlotTypes.腰带,25},
+            {GambleSlotTypes.裤子,25},
+            {GambleSlotTypes.护腕,25},
+            {GambleSlotTypes.盾牌,25},
+            {GambleSlotTypes.戒指,50},
+            {GambleSlotTypes.项链,100},
+            {GambleSlotTypes.护肩,25},
+            {GambleSlotTypes.死灵副手,25}
         };
     }
 }

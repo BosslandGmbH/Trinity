@@ -57,21 +57,21 @@ namespace Trinity.Framework
 
         private static void GameEventsOnGameChanged(object sender, EventArgs e)
         {
-            Core.Logger.Debug("GameEventsOnGameChanged Fired");
+            Core.Logger.Debug("GameEventsOnGameChanged 事件触发了");
             IsGameJoined = ZetaDia.IsInGame;
             GetModules().ForEach(m => m.GameChanged());
         }
 
         private static void GameEventsOnGameJoined(object sender, EventArgs e)
         {
-            Core.Logger.Debug("GameEventsOnGameJoined Fired");
+            Core.Logger.Debug("GameEventsOnGameJoined 事件触发了");
             IsGameJoined = true;
             GetModules().ForEach(m => m.GameJoined());
         }
 
         private static void GameEventsOnGameLeft(object sender, EventArgs e)
         {
-            Core.Logger.Debug("GameEventsOnGameLeft Fired");
+            Core.Logger.Debug("GameEventsOnGameLeft 事件触发了");
             IsGameJoined = false;
             GetModules().ForEach(m => m.GameLeft());
         }
@@ -87,7 +87,7 @@ namespace Trinity.Framework
             }
             else
             {
-                Core.Logger.Debug($"Discarding Pulse IsGameJoined={IsGameJoined} BotMain.IsRunning={BotMain.IsRunning} LoadingWorld={ZetaDia.Globals.IsLoadingWorld}");
+                Core.Logger.Debug($"Pulse 丢失 IsGameJoined={IsGameJoined} BotMain.IsRunning={BotMain.IsRunning} LoadingWorld={ZetaDia.Globals.IsLoadingWorld}");
             }
         }
 
@@ -105,19 +105,19 @@ namespace Trinity.Framework
  
         private static void HeroIdOnChanged(ChangeEventArgs<int> args)
         {
-            Core.Logger.Debug("HeroIdOnChanged Fired");
+            Core.Logger.Debug("HeroIdOnChanged 事件触发了");
             SafeExecuteOnInstances(m => m.HeroIdChanged(args));
         }
 
         private static void IsInGameOnChanged(ChangeEventArgs<bool> args)
         {
-            Core.Logger.Debug("IsInGameOnChanged Fired");
+            Core.Logger.Debug("IsInGameOnChanged 事件触发了");
             SafeExecuteOnInstances(m => m.IsInGameChanged(args));
         }
 
         private static void WorldIdOnChanged(ChangeEventArgs<int> args)
         {
-            Core.Logger.Debug("WorldIdOnChanged Fired");
+            Core.Logger.Debug("WorldIdOnChanged 事件触发了");
             SafeExecuteOnInstances(m => m.WorldChanged(args));
         }
 
@@ -155,7 +155,7 @@ namespace Trinity.Framework
                 var partyLocked = ZetaDia.Service.Party.CurrentPartyLockReasonFlags != PartyLockReasonFlag.None;
                 if (notInGame || partyLocked)
                 {
-                    Core.Logger.Debug("Aborting Updates, not in game or party locked.");
+                    Core.Logger.Debug("中止更新, 不在游戏或用户锁定.");
                     return;
                 }
                 try
@@ -164,7 +164,7 @@ namespace Trinity.Framework
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Debug($"Action '{caller}' threw exception for module '{module.Name}'.");
+                    Core.Logger.Debug($"启用 '{caller}' 模块异常, 模块名称 : '{module.Name}'.");
                     Core.Logger.Verbose($"{ex}");
                 }
             }

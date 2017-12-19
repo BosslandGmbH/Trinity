@@ -31,17 +31,17 @@ namespace Trinity.Components.Adventurer.Game.Quests
             var failed = stats.Count(s => s.IsFailed);
             var incomplete = stats.Count(s => s.IsIncomplete);
 
-            Core.Logger.Log("[BountyStatistics] Total Time: {0:dd\\ hh\\:mm\\:ss}", totalTime);
-            Core.Logger.Log("[BountyStatistics] Average Time: {0:hh\\:mm\\:ss}", averageTime);
-            Core.Logger.Log("[BountyStatistics] Per hour: {0:0.##}", bountiesPerHour);
-            Core.Logger.Log("[BountyStatistics] Time Wasted: {0:hh\\:mm\\:ss}", timeWasted);
-            Core.Logger.Log("[BountyStatistics] Completed Acts: {0}", CompletedBountyActs);
-            Core.Logger.Log("[BountyStatistics] Unsupported Act Restarts: {0}", RestartsFromUnsupported);
-            Core.Logger.Log("[BountyStatistics] Total Bounties: {0}", count);
-            Core.Logger.Log("[BountyStatistics] Success Count: {0}", successful);
-            Core.Logger.Log("[BountyStatistics] Failed Count: {0}", failed);
-            Core.Logger.Log("[BountyStatistics] Incomplete Count: {0}", incomplete);
-            Core.Logger.Log("[BountyStatistics] Success Rate: {0:#.##}%", (successful / (double)count) * 100);
+            Core.Logger.Log("[悬赏统计] 共耗时: {0:dd\\ hh\\:mm\\:ss}", totalTime);
+            Core.Logger.Log("[悬赏统计] 平均时间: {0:hh\\:mm\\:ss}", averageTime);
+            Core.Logger.Log("[悬赏统计] 每小时: {0:0.##}", bountiesPerHour);
+            Core.Logger.Log("[悬赏统计] 浪费时间: {0:hh\\:mm\\:ss}", timeWasted);
+            Core.Logger.Log("[悬赏统计] 已完成章节: {0}", CompletedBountyActs);
+            Core.Logger.Log("[悬赏统计] 不支持的章节重新开始: {0}", RestartsFromUnsupported);
+            Core.Logger.Log("[悬赏统计] 悬赏总数: {0}", count);
+            Core.Logger.Log("[悬赏统计] 成功次数: {0}", successful);
+            Core.Logger.Log("[悬赏统计] 失败次数: {0}", failed);
+            Core.Logger.Log("[悬赏统计] 不完整数量: {0}", incomplete);
+            Core.Logger.Log("[悬赏统计] 成功率: {0:#.##}%", (successful / (double)count) * 100);
 
             var incompleteStats = stats.Where(s => !(s.IsCompleted || s.IsFailed)).DistinctBy(s => s.QuestId).ToList();
 
@@ -54,7 +54,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 var wasted = stats.Where(s => s.QuestId == item1.QuestId && !(s.IsCompleted || s.IsFailed));
                 var wastedAvg = wasted.Any() ? 0 : wasted.Average(s => (s.EndTime - s.StartTime).TotalSeconds);
 
-                Core.Logger.Log($"[BountyStatistics][FailedQuest] QuestId: {item1.QuestId}, IncompleteCount: {incompleteCount},  SuccessCount: {successCount}, Act: {item1.Act}, Name: {item1.Name} TimeAvg: {wastedAvg}");
+                Core.Logger.Log($"[悬赏统计][失败的任务]任务 Id: {item1.QuestId}, 不完整 : {incompleteCount},  成功 : {successCount}, 章节 : {item1.Act}, 名称 : {item1.Name} 平均时间  : {wastedAvg}");
             }
 
             foreach (var item in incompleteStats)
@@ -113,7 +113,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
         public static int CompletedBountyActs { get; internal set; }
 
         public static int RestartsFromUnsupported { get; internal set; }
-
+ 
         private static bool _isTurnInInProgress;
 
         public static void Reset()

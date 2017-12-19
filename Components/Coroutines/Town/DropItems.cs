@@ -48,14 +48,14 @@ namespace Trinity.Components.Coroutines.Town
         {
             if (!ZetaDia.IsInTown)
             {
-                Core.Logger.Verbose("[DropItems] Need to be in town to drop items");
+                Core.Logger.Verbose("[丢弃物品] 需要在城里丢弃物品");
                 return false;
             }
 
             var itemsToDrop = Core.Inventory.Backpack.Where(ShouldDrop).ToList();
             if (!itemsToDrop.Any())
             {
-                Core.Logger.Verbose($"[DropItems] Nothing to Drop");
+                Core.Logger.Verbose($"[丢弃物品] 没有什么可以丢弃");
                 return false;
             }
 
@@ -67,7 +67,7 @@ namespace Trinity.Components.Coroutines.Town
             }
 
             await Coroutine.Sleep(2000);
-            Core.Logger.Log($"[DropItems] Dropped {dropCount} Items");
+            Core.Logger.Log($"[丢弃物品] 扔下物品 {dropCount} ");
             return false;
         }
 
@@ -79,7 +79,7 @@ namespace Trinity.Components.Coroutines.Town
             if (!ZetaDia.IsInGame || !ZetaDia.IsInTown || item.IsAccountBound)
                 return false;
 
-            Core.Logger.Log($"[DropItems] --> Dropping {item.Name} ({item.ActorSnoId}) in town. AnnId={item.AnnId} ");
+            Core.Logger.Log($"[丢弃物品] --> 丢弃 {item.Name} ({item.ActorSnoId}) 在城里. AnnId={item.AnnId} ");
 
             bool dropResult = false;
             try
@@ -88,7 +88,7 @@ namespace Trinity.Components.Coroutines.Town
             }
             catch (InjectionSEHException)
             {
-                Core.Logger.Log($"[DropItems] --> Failed to Drop {item.Name} ({item.ActorSnoId}) in town. AnnId={item.AnnId} ");
+                Core.Logger.Log($"[丢弃物品] --> 未能丢弃 {item.Name} ({item.ActorSnoId}) 在城里. AnnId={item.AnnId} ");
                 DroppedItemAnnIds.Add(item.AnnId);
             }
 

@@ -57,9 +57,7 @@
                                       IsChecked="{Binding DataContext.WrathOfTheBerserker.Reasons, ConverterParameter=Surrounded, Converter={converters:FlagsToBoolConverter}}">Surrounded</CheckBox>
                             <CheckBox ToolTip="Use when you're low on health" 
                                       IsChecked="{Binding DataContext.WrathOfTheBerserker.Reasons, ConverterParameter=HealthEmergency, Converter={converters:FlagsToBoolConverter}}">Health emergency</CheckBox>
-                            <CheckBox ToolTip="Use when there are goblins nearby" 
-                                      IsChecked="{Binding DataContext.WrathOfTheBerserker.Reasons, ConverterParameter=Goblins, Converter={converters:FlagsToBoolConverter}}">Goblins</CheckBox>
-            </StackPanel>
+                        </StackPanel>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox>

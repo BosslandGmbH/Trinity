@@ -45,7 +45,7 @@ namespace Trinity.Modules
 
             public override string ToString()
             {
-                return $"Power: {Power}, SRune: {Rune}, Charge:{Charges}, Slot:{Slot}";
+                return $"Power: {Power}, SRune: {Rune}, 充电:{Charges}, 插槽:{Slot}";
             }
         }
 

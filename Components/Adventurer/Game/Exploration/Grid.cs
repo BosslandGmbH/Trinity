@@ -42,7 +42,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             LastUpdated = DateTime.MinValue;
             var worldId = ZetaDia.Globals.WorldId;
       
-            Core.Logger.Debug("[{0}] Creating grid [{1},{1}] ZetaWorldId={2} AdvDiaWorldId={3}", GetType().Name, GridBounds, worldId, AdvDia.CurrentWorldDynamicId);
+            Core.Logger.Debug("[{0}] 建立网格 [{1},{1}] ZetaWorldId={2} AdvDiaWorldId={3}", GetType().Name, GridBounds, worldId, AdvDia.CurrentWorldDynamicId);
 
             InnerGrid = new SplitArray<T>(GridBounds, GridBounds);
             WorldDynamicId = AdvDia.CurrentWorldDynamicId;
@@ -50,7 +50,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             var currentScenes = Core.Scenes.CurrentWorldScenes;
             if (currentScenes.Any() && currentScenes.First().DynamicWorldId == worldId)
             {
-                Core.Logger.Debug("[{0}] Importing Current World Data from SceneStorage", GetType().Name);
+                Core.Logger.Debug("[{0}] 从场景存储中导入当前世界数据", GetType().Name);
                 Update(Core.Scenes.CreateSceneData(currentScenes, currentScenes.First().DynamicWorldId));
             }
 
@@ -59,7 +59,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public void Update(ISceneData newSceneData)
         {
-            Core.Logger.Debug($"Update called for {this.GetType().Name}");
+            Core.Logger.Debug($"更新需求 {this.GetType().Name}");
 
             var data = newSceneData as SceneData;
             if (data?.WorldDynamicId == AdvDia.CurrentWorldDynamicId)
@@ -84,7 +84,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             {                
                 if (node.DynamicWorldId != worldId)
                 {
-                    Core.Logger.Debug("[{0}] A node has different worldId than current world, skipping", GetType().Name);
+                    Core.Logger.Debug("[{0}] 一个节点的 WorldId 不同于当前WorldId,跳过...", GetType().Name);
                     return;
                 }
        

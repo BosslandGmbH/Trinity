@@ -61,7 +61,7 @@ namespace Trinity.Components.Coroutines
                     return false;
                 }
 
-                Core.Logger.Verbose("Moving to " + destinationName);
+                Core.Logger.Verbose("移动到 " + destinationName);
                 PlayerMover.MoveTo(location);
                 await Coroutine.Yield();
             }
@@ -70,7 +70,7 @@ namespace Trinity.Components.Coroutines
             if (distance <= range)
                 Navigator.PlayerMover.MoveStop();
 
-            Core.Logger.Verbose("MoveTo Finished. Distance={0}", distance);
+            Core.Logger.Verbose("移动完成. 距离={0}", distance);
             return true;
         }
     }

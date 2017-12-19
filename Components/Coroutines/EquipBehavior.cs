@@ -46,7 +46,7 @@ namespace Trinity.Components.Coroutines
             {
                 if (ZetaDia.Me == null || ZetaDia.Me.IsDead || ZetaDia.Me.IsGhosted || ZetaDia.Me.IsInCombat || ZetaDia.Me.IsInConversation || ZetaDia.Me.IsInBossEncounter || ZetaDia.Me.LoopingAnimationEndTime != 0)
                 {
-                    Core.Logger.Log("[Auto Skills] Cannot equip build right now");
+                    Core.Logger.Log("[自动技能] 现在不能打造装备");
                     return false;
                 }
 
@@ -135,7 +135,7 @@ namespace Trinity.Components.Coroutines
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("[Auto Skills] Exception in Build.EquipBuild(). {0}", ex);
+                Core.Logger.Error("[装备技能] 构建中的异常.装备构建(). {0}", ex);
             }
 
             return true;
@@ -159,7 +159,7 @@ namespace Trinity.Components.Coroutines
 
             if (skill.Key.Class != ZetaDia.Me.ActorClass || skill.Value.Class != ZetaDia.Me.ActorClass)
             {
-                Core.Logger.Error("[Auto Skills] Attempting to equip skill/rune for the wrong class will crash the game");
+                Core.Logger.Error("[装备技能] 试图装备技能/符文的错误会导致游戏崩溃");
                 return false;
             }
 
@@ -175,7 +175,7 @@ namespace Trinity.Components.Coroutines
 
             //if (currentLevel < knownSkillRecord.RequiredLevel)
             //{
-            //    Core.Logger.Error("[Auto Skills] Skill {0} cannot be equipped until level {1}", skill.Key.Name, knownSkillRecord.RequiredLevel);
+            //    Core.Logger.Error("[自动技能] 技能 {0} 不能装备到等级 {1}", skill.Key.Name, knownSkillRecord.RequiredLevel);
             //    return false;
             //}
 
@@ -217,7 +217,7 @@ namespace Trinity.Components.Coroutines
 
             if (currentLevel < skill.Key.RequiredLevel)
             {
-                Core.Logger.Error("[Auto Skills] Skill {0} cannot be equipped until level {1}", skill.Key.Name, skill.Key.RequiredLevel);
+                Core.Logger.Error("[装备技能] 技能 {0} 不能装备到等级 {1}", skill.Key.Name, skill.Key.RequiredLevel);
                 return false;
             }
 

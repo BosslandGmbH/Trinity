@@ -33,7 +33,7 @@ namespace Trinity.Settings
         private static void HeroIdOnChanged(ChangeEventArgs<int> args)
         {
             if (args.OldValue == 0) return;
-            Core.Logger.Log("Hero changed, reloading settings.");
+            Core.Logger.Log("英雄改变了, 重新设置.");
             Core.Storage.Load();
         }
 
@@ -42,6 +42,10 @@ namespace Trinity.Settings
 
     public class SettingsModel
     {
+        // SENY
+        public SenExtendSettings SenExtend => _senExtendSettings.Object;
+        private readonly DynamicSetting<SenExtendSettings> _senExtendSettings;
+
         public ItemSettings Items => _itemSettings.Object;
         private readonly DynamicSetting<ItemSettings> _itemSettings;
 
@@ -71,6 +75,8 @@ namespace Trinity.Settings
 
         public SettingsModel()
         {
+            // SENY
+            _senExtendSettings = new DynamicSetting<SenExtendSettings>();
             _itemSettings = new DynamicSetting<ItemSettings>();
             _weightingSettings = new DynamicSetting<WeightingSettings>();
             _advancedSettings = new DynamicSetting<AdvancedSettings>();
@@ -84,6 +90,8 @@ namespace Trinity.Settings
         
         public IEnumerable<IDynamicSetting> DynamicSettings => new List<IDynamicSetting>
         {
+             // SENY
+            _senExtendSettings,
             _itemSettings,
             _weightingSettings,
             _advancedSettings,

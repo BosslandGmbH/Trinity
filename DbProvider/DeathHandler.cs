@@ -64,11 +64,11 @@ namespace Trinity.DbProvider
                     DeathsThisSession++;
                     DeathsThisSession++;
 
-                    Core.Logger.Log("[Death] You died lol! RecentDeaths={0} RecentDeathsNeedingRepair={1}", _deathCounter, _deathNeedRepairCounter);
+                    Core.Logger.Log("[死亡] 哈哈哈！你死了！ 死亡次数={0} 耐久度={1}", _deathCounter, _deathNeedRepairCounter);
                 }
                 else
                 {
-                    Core.Logger.Log("[Death] No Longer Dead");
+                    Core.Logger.Log("[死亡] 停止死亡");
 
                     //if (Core.Settings.Combat.Misc.FleeInGhostMode)
                     //{
@@ -77,7 +77,7 @@ namespace Trinity.DbProvider
 
                     if (EquipmentNeedsEmergencyRepair(5))
                     {
-                        BrainBehavior.ForceTownrun("[Death] Item Durability - Need to Repair");
+                        BrainBehavior.ForceTownrun("[死亡] 物品损坏 - 需要修理");
                     }
                 }
                 _isDead = isDead;
@@ -111,7 +111,7 @@ namespace Trinity.DbProvider
             {
                 if (resurrectButtonsVisible)
                 {
-                    Core.Logger.Verbose("[Death] Buttons are now visible");
+                    Core.Logger.Verbose("[死亡] 找到复活选项按钮。");
                     var maxWaitTime = ZetaDia.Me.IsParticipatingInTieredLootRun ? Math.Min(deathCount * 5, 30) - 2 : 4;
                     _corpseReviveAvailableTime = new DateTime(_resButtonsVisibleStart.Ticks).Add(TimeSpan.FromSeconds(maxWaitTime));
                 }
@@ -122,7 +122,7 @@ namespace Trinity.DbProvider
             var resLimit = isInGreaterRift ? 16 : 10;
             if (_deathCounter > resLimit && !ZetaDia.IsInTown && needRepair)
             {
-                Core.Logger.Log("Durability is zero and {0} deaths within 60s of each other - emergency leave game", deathCount);
+                Core.Logger.Log("装备耐久度为0，在1分钟内死亡{0} 次，紧急离开游戏。", deathCount);
                 ZetaDia.Service.Party.LeaveGame(true);
                 await CommonCoroutines.LeaveGame("Durability is zero");
                 _deathCounter = 0;
@@ -135,39 +135,39 @@ namespace Trinity.DbProvider
             }
             else if (IsBeingRevived())
             {
-                Core.Logger.Log("[Death] Waiting while being resurrected");
+                Core.Logger.Log("[死亡] 等待，正在被复活");
             }
             else if (ZetaDia.Me.IsInBossEncounter && !Core.Rift.IsInRift && IsAlivePlayerNearby)
             {
-                Core.Logger.Log("[Death] Waiting because of boss fight");
+                Core.Logger.Log("[死亡] 等待，因为BOSS战");
             }
             else if (corpseButtonReady && !needRepair && !waitingForCorpseResurrect && !noMoreCorpseRevives && !corpseResurrectDisabled)
             {
                 while (reviveAtCorpseButton.IsVisible && ZetaDia.Me.IsDead)
                 {
-                    Core.Logger.Log("[Death] Reviving at corpse");     
+                    Core.Logger.Log("[死亡] 原地复活");     
                     reviveAtCorpseButton.Click();                           
                     await Coroutine.Sleep(1000);
                 }
             }
             else if (townButtonReady && needRepair && _deathNeedRepairCounter > 4)
             {
-                Core.Logger.Log("[Death] We've failed few times to resurrect at checkpoint to repair , now resurrecting in town.");
+                Core.Logger.Log("[死亡]无法在储存点复苏并修理，现在在城镇复活.");
                 reviveInTownButton.Click();
             }
             else if (checkpointButtonReady)
             {
-                Core.Logger.Log("[Death] Reviving at checkpoint (NeedRepair={0})", needRepair);
+                Core.Logger.Log("[死亡] 在最后一个储存点复活。需要维修={0}", needRepair);
                 reviveAtCheckPointButton.Click();
             }
             else if (!corpseButtonReady && !checkpointButtonReady && townButtonReady && DateTime.UtcNow.Subtract(LastDeathTime).TotalSeconds > 45)
             {
-                Core.Logger.Log("[Death] Reviving in town");
+                Core.Logger.Log("[死亡] 在城镇复活");
                 reviveInTownButton.Click();
             }
             else
             {
-                Core.Logger.Verbose("[Death] Waiting...");
+                Core.Logger.Verbose("[死亡]等待...");
             }
 
             await Coroutine.Sleep(250);
@@ -183,7 +183,7 @@ namespace Trinity.DbProvider
 
             if (safespot == Vector3.Zero)
             {
-                Core.Logger.Log("[Death] Unable to find safe spot to escape to :(");
+                Core.Logger.Log("[死亡] 无法找到安全的地方逃脱 :(");
                 return false;
             }
 
@@ -191,8 +191,8 @@ namespace Trinity.DbProvider
             while (DateTime.UtcNow < timeout && ZetaDia.Me.IsGhosted && !ZetaDia.Me.IsDead)
             {
                 Core.Logger.Log(playerNear != null
-                    ? $"[Death] Moving to closest Player: {playerNear.ActorClass} at Distance: {playerNear.Distance}"
-                    : $"[Death] Moving away from Revive Location at Distance: {_deathLocation.Distance(ZetaDia.Me.Position)}");
+                    ? $"[死亡] 移动到附近玩家: {playerNear.ActorClass} 距离: {playerNear.Distance}"
+                    : $"[死亡] 移动到附近复活点, 距离: {_deathLocation.Distance(ZetaDia.Me.Position)}");
                 await Navigator.MoveTo(safespot);
                 await Coroutine.Yield();
             }

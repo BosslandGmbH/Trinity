@@ -44,7 +44,7 @@ namespace Trinity.Framework
             {
                 if (value != null && _currentRoutine != value)
                 {
-                    Core.Logger.Warn($"Routine Changed to: {value.DisplayName} {value.BuildRequirements?.Summary}");
+                    Core.Logger.Warn($"战斗策略已变更至: {value.DisplayName} {value.BuildRequirements?.Summary}");
                     _currentRoutine = value;
                     Changed?.Invoke(value);
                 }
@@ -57,7 +57,7 @@ namespace Trinity.Framework
 
         private void Initialize()
         {
-            Core.Logger.Log($"RoutineManager Initializing from thread {Thread.CurrentThread.ManagedThreadId}");
+            Core.Logger.Log($"策略管理为线程 {Thread.CurrentThread.ManagedThreadId} 初始化");
 
             _routineLoader = new InterfaceLoader<IRoutine>();
             _routineLoader.Load();
@@ -95,23 +95,23 @@ namespace Trinity.Framework
                 {
                     if (routine != CurrentRoutine)
                     {
-                        Core.Logger.Log($"Loading Force-Selected Routine:");
+                        Core.Logger.Log($"加载战斗策略:");
                         CurrentRoutine = routine;
-                        Core.Logger.Warn($"Author: {CurrentRoutine.Author}");
-                        Core.Logger.Warn($"Class: {CurrentRoutine.Class}");
-                        Core.Logger.Warn($"DisplayName: {CurrentRoutine.DisplayName}");
+                        Core.Logger.Warn($"作者: {CurrentRoutine.Author}");
+                        Core.Logger.Warn($"职业: {CurrentRoutine.Class}");
+                        Core.Logger.Warn($"名称: {CurrentRoutine.DisplayName}");
                         //Range
-                        Core.Logger.Warn($"ClusterRadius: {CurrentRoutine.ClusterRadius}");
-                        Core.Logger.Warn($"ClusterSize: {CurrentRoutine.ClusterSize}");
-                        Core.Logger.Warn($"EliteRange: {CurrentRoutine.EliteRange}");
-                        Core.Logger.Warn($"TrashRange: {CurrentRoutine.TrashRange}");
-                        Core.Logger.Warn($"ShrineRange: {CurrentRoutine.ShrineRange}");
+                        Core.Logger.Warn($"怪群半径: {CurrentRoutine.ClusterRadius}");
+                        Core.Logger.Warn($"怪群数量: {CurrentRoutine.ClusterSize}");
+                        Core.Logger.Warn($"精英范围: {CurrentRoutine.EliteRange}");
+                        Core.Logger.Warn($"垃圾怪范围: {CurrentRoutine.TrashRange}");
+                        Core.Logger.Warn($"圣坛范围: {CurrentRoutine.ShrineRange}");
                         //Health
-                        Core.Logger.Warn($"PotionHealthPct: {CurrentRoutine.PotionHealthPct}");
-                        Core.Logger.Warn($"EmergencyHealthPct: {CurrentRoutine.EmergencyHealthPct}");
-                        Core.Logger.Warn($"HealthGlobeRange: {CurrentRoutine.HealthGlobeRange}");
+                        Core.Logger.Warn($"药水血量 %: {CurrentRoutine.PotionHealthPct}");
+                        Core.Logger.Warn($"安全血量 % : {CurrentRoutine.EmergencyHealthPct}");
+                        Core.Logger.Warn($"血球拾取范围: {CurrentRoutine.HealthGlobeRange}");
 
-                        Core.Logger.Warn($"PrimaryEnergyReserve: {CurrentRoutine.PrimaryEnergyReserve}");
+                        Core.Logger.Warn($"主要资源: {CurrentRoutine.PrimaryEnergyReserve}");
                     }
                     
                     return;

@@ -195,7 +195,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
             foreach (var scene in newNodes.Scenes.Where(s => !_processedSceneHashes.Contains(s.SceneHash)))
             {
-                Core.Logger.Verbose($"[{gridName}] Updating grid for scene '{scene.SceneHash}' with {scene.ExplorationNodes.Count} new nodes");
+                Core.Logger.Verbose($"[{gridName}] 更新场景网格 '{scene.SceneHash}' 和 {scene.ExplorationNodes.Count} 个新节点");
 
                 UpdateInnerGrid(scene.ExplorationNodes);
 
@@ -212,7 +212,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 _processedSceneHashes.Add(scene.SceneHash);
             }
 
-            Core.Logger.Debug("[ExplorationGrid] Updated WalkableNodes={0}", WalkableNodes.Count);
+            Core.Logger.Debug("[探索网格] 更新 {0} 个步行节点", WalkableNodes.Count);
         }
     }
 }

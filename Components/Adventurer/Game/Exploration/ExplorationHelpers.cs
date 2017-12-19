@@ -3,14 +3,29 @@ using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using Remit.Core;
+using Trinity.Modules;
 using Trinity.UI.Visualizer;
 using Zeta.Common;
 using Zeta.Game;
+using Zeta.Game.Internals;
+
 
 namespace Trinity.Components.Adventurer.Game.Exploration
 {
     public static class ExplorationHelpers
     {
+        //public static AdventurerNode NearestWeightedUnvisitedNodeLocation(HashSet<int> levelAreaIds = null)
+        //{
+        //    using (new PerformanceLogger("NearestWeightedUnvisitedNodeLocation", true))
+        //    {
+        //        return NodesStorage.CurrentWorldNodes.Where(n => !n.Visited && n.NavigableCenter.Distance2DSqr(AdvDia.MyPosition) > 100 && n.NavigableCenter.IsInLevelAreas(levelAreaIds))
+        //            .OrderByDescending(n => n.NearbyVisitedNodesCount)
+        //            .ThenBy(n => n.NavigableCenter.Distance2DSqr(AdvDia.MyPosition))
+        //            .FirstOrDefault();
+        //    }
+        //}
+
         public static Vector3 PriorityPosition { get; private set; }
 
         public static void ClearExplorationPriority()
@@ -27,7 +42,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
             VisualizerViewModel.DebugPosition = position;
 
-            Core.Logger.Warn($"Setting priority exploration position to '{position}' {position.Distance(Core.Player.Position)} yards away!");
+            Core.Logger.Warn($"优先探索位置 '{position}' 距离 {position.Distance(Core.Player.Position)} 码!");
 
             foreach (var connection in Core.Scenes.CurrentScene.GetConnectedScenes(Core.Scenes.GetScene(position)))
             {
@@ -49,37 +64,39 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public static bool IsInUnexploredScene(Vector3 position) => GetScene(position) != null;
 
-        public static WorldScene GetScene(Vector3 position, Func<WorldScene, bool> func = null)
+        public static WorldScene GetScene(Vector3 position, Func<WorldScene,bool> func = null)
         {
             return Core.Scenes.Where(s => s.ExitPositions.Count > 1).FirstOrDefault(s => s.IsInScene(position) && (func == null || func(s)));
         }
 
         public static ExplorationNode NearestWeightedUnvisitedNode(HashSet<int> levelAreaIds, List<string> ignoreScenes = null)
         {
-            var worldId = AdvDia.CurrentWorldDynamicId;
+            var dynamicWorldId = AdvDia.CurrentWorldDynamicId;
             var myPosition = AdvDia.MyPosition;
+            ExplorationNode node = null;
 
             using (new PerformanceLogger("NearestUnvisitedNodeLocation", true))
             {
                 var nearestNode = ExplorationGrid.Instance.GetNearestWalkableNodeToPosition(myPosition);
 
                 if (Core.Rift.IsInRift && !Core.BlockedCheck.IsBlocked && !Core.StuckHandler.IsStuck)
-                {
+                {           
+                    //Core.Logger.Warn("in rift");
                     // In rift prefer the highest weight nodes because we dont need to explore everything, just need to find the exit.    
+                         
                     var closestUnvisitedNodes = ExplorationGrid.Instance.WalkableNodes
                         .Where(n => !n.IsIgnored && !n.IsVisited && !n.IsBlacklisted && n.HasEnoughNavigableCells &&
-                                    n.DynamicWorldId == worldId && levelAreaIds.Contains(n.LevelAreaId))
+                                    n.DynamicWorldId == dynamicWorldId && levelAreaIds.Contains(n.LevelAreaId))
                         .OrderByDescending(n => n.Priority)
-                        .ThenBy(n => n.Distance)
                         .ThenByDescending(PriorityDistanceFormula);
 
                     var closestUnvisitedNode = closestUnvisitedNodes.FirstOrDefault();
                     if (closestUnvisitedNode != null)
                     {
                         var weight = PriorityDistanceFormula(closestUnvisitedNode);
-                        Core.Logger.Debug(LogCategory.Exploration, $"Explore: Best Rift Weighted Node: [{closestUnvisitedNode.NavigableCenter.X},{closestUnvisitedNode.NavigableCenter.Y},{closestUnvisitedNode.NavigableCenter.Z}] Dist:{closestUnvisitedNode.Distance} Weight: {weight} {(closestUnvisitedNode.Priority ? "(Priority)" : "")} ");
+                        Core.Logger.Debug(LogCategory.Exploration, $"探索: 最有利秘境节点: [{closestUnvisitedNode.NavigableCenter.X},{closestUnvisitedNode.NavigableCenter.Y},{closestUnvisitedNode.NavigableCenter.Z}] 距离:{closestUnvisitedNode.Distance} 权重: {weight} {(closestUnvisitedNode.Priority ? "(Priority)" : "")} ");
                         return closestUnvisitedNode;
-                    }
+                    }                   
                 }
 
                 // Try for nodes nearby walkable nodes first
@@ -87,16 +104,15 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 {
                     var closestUnvisitedNodes = ExplorationGrid.Instance.GetNeighbors(nearestNode, i)
                         .Where(n => !n.IsIgnored && !n.IsVisited && !n.IsBlacklisted && n.HasEnoughNavigableCells &&
-                                    n.DynamicWorldId == worldId && levelAreaIds.Contains(n.LevelAreaId) &&
+                                    n.DynamicWorldId == dynamicWorldId && levelAreaIds.Contains(n.LevelAreaId) && 
                                     Core.Grids.CanRayWalk(myPosition, n.NavigableCenter))
                         .OrderByDescending(n => n.Priority)
-                        .ThenBy(n => n.Distance)
-                        .ThenByDescending(PriorityDistanceFormula);
-
+                        .ThenBy(PriorityDistanceFormula);
+                        
                     var closestUnvisitedNode = closestUnvisitedNodes.FirstOrDefault();
                     if (closestUnvisitedNode != null)
                     {
-                        Core.Logger.Debug(LogCategory.Exploration, $"Explore: Selected Nearby Node: [{closestUnvisitedNode.NavigableCenter.X},{closestUnvisitedNode.NavigableCenter.Y},{closestUnvisitedNode.NavigableCenter.Z}] Dist:{closestUnvisitedNode.Distance} {(closestUnvisitedNode.Priority ? "(Priority)" : "")} ");
+                        Core.Logger.Debug(LogCategory.Exploration, $"探索: 已选附近节点: [{closestUnvisitedNode.NavigableCenter.X},{closestUnvisitedNode.NavigableCenter.Y},{closestUnvisitedNode.NavigableCenter.Z}] 距离:{closestUnvisitedNode.Distance} {(closestUnvisitedNode.Priority ? "(Priority)" : "")} ");
                         return closestUnvisitedNode;
                     }
                 }
@@ -106,36 +122,37 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 {
                     var closestUnvisitedNode = ExplorationGrid.Instance.GetNeighbors(nearestNode, i)
                         .Where(n => !n.IsIgnored && !n.IsVisited && !n.IsBlacklisted && n.HasEnoughNavigableCells &&
-                        n.DynamicWorldId == worldId && levelAreaIds.Contains(n.LevelAreaId))
-                        .OrderByDescending(PriorityDistanceFormula)
+                        n.DynamicWorldId == dynamicWorldId && levelAreaIds.Contains(n.LevelAreaId))
+                        .OrderBy(PriorityDistanceFormula)
                         .FirstOrDefault();
 
                     if (closestUnvisitedNode != null)
                     {
-                        Core.Logger.Debug(LogCategory.Exploration, $"Explore: Selected Nearby Node: [{closestUnvisitedNode.NavigableCenter.X},{closestUnvisitedNode.NavigableCenter.Y},{closestUnvisitedNode.NavigableCenter.Z}] Dist:{closestUnvisitedNode.Distance} {(closestUnvisitedNode.Priority ? "(Priority)" : "")} ");
+                        Core.Logger.Debug(LogCategory.Exploration, $"探索: 已选附近节点: [{closestUnvisitedNode.NavigableCenter.X},{closestUnvisitedNode.NavigableCenter.Y},{closestUnvisitedNode.NavigableCenter.Z}] 距离:{closestUnvisitedNode.Distance} {(closestUnvisitedNode.Priority ? "(Priority)" : "")} ");
                         return closestUnvisitedNode;
                     }
                 }
 
                 // Try any univisted node by distance.
-                var node = ExplorationGrid.Instance.WalkableNodes.Where(n =>
+                node = ExplorationGrid.Instance.WalkableNodes.Where(n =>
                         !n.IsIgnored &&
                         !n.IsVisited &&
                         !n.IsBlacklisted &&
-                        n.NavigableCenter.DistanceSqr(myPosition) > 20
-                    )
+                        //n.DynamicWorldId == dynamicWorldId &&
+                        n.NavigableCenter.DistanceSqr(myPosition) > 50 //&& levelAreaIds.Contains(n.LevelAreaId)
+                        )
                     .OrderByDescending(PriorityDistanceFormula)
                     .FirstOrDefault();
 
                 if (node != null)
                 {
-                    Core.Logger.Debug(LogCategory.Exploration, $"Explore: Selected Nearby Node: [{node.NavigableCenter.X},{node.NavigableCenter.Y},{node.NavigableCenter.Z}] Dist:{node.Distance} {(node.Priority ? "(Priority)" : "")} ");
+                    Core.Logger.Debug(LogCategory.Exploration, $"探索: 已选附近节点: [{node.NavigableCenter.X},{node.NavigableCenter.Y},{node.NavigableCenter.Z}] Dist:{node.Distance} {(node.Priority ? "(Priority)" : "")} ");
                     return node;
                 }
 
                 if (ExplorationGrid.Instance.NearestNode != null && !levelAreaIds.Contains(ZetaDia.CurrentLevelAreaSnoId))
                 {
-                    Core.Logger.Debug("[ExplorationLogic] Adventurer is trying to find nodes that are not in this LevelArea. DefinedIds='{0}' CurrentId='{0}'. Marking current area's nodes as valid.", string.Join(", ", levelAreaIds), ZetaDia.CurrentLevelAreaSnoId);
+                    Core.Logger.Debug("[探索逻辑] Adventurer is trying to find nodes that are not in this LevelArea. DefinedIds='{0}' CurrentId='{0}'. Marking current area's nodes as valid.", string.Join(", ", levelAreaIds), ZetaDia.CurrentLevelAreaSnoId);
                     levelAreaIds.Add(ZetaDia.CurrentLevelAreaSnoId);
 
                     // Ignore level area match
@@ -144,7 +161,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                         !n.IsIgnored &&
                         !n.IsVisited &&
                         !n.IsBlacklisted &&
-                        n.DynamicWorldId == worldId &&
+                        n.DynamicWorldId == dynamicWorldId &&
                         n.NavigableCenter.DistanceSqr(myPosition) > 100)
                     .OrderByDescending(PriorityDistanceFormula)
                     .FirstOrDefault();
@@ -155,15 +172,14 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     var allNodes = ExplorationGrid.Instance.WalkableNodes.Count(n => levelAreaIds.Contains(n.LevelAreaId));
                     var unvisitedNodes = ExplorationGrid.Instance.WalkableNodes.Count(n => !n.IsVisited && levelAreaIds.Contains(n.LevelAreaId));
 
-                    Core.Logger.Log("[ExplorationLogic] Couldn't find any unvisited nodes. Current AdvDia.LevelAreaSnoIdId: {0}, " +
-                                "ZetaDia.CurrentLevelAreaSnoId: {3}, Total Nodes: {1} Unvisited Nodes: {2} Searching In [{4}] HasNavServerData={5}",
+                    Core.Logger.Log("[探索逻辑] 找不到任何未访问过的节点. Current AdvDia.LevelAreaSnoIdId: {0}, " +
+                                "ZetaDia.CurrentLevelAreaSnoId: {3}, 总节点数: {1} 未访问节点: {2} 正在探索 [{4}] HasNavServerData={5}",
                                 AdvDia.CurrentLevelAreaId, allNodes, unvisitedNodes,
                                 ZetaDia.CurrentLevelAreaSnoId, string.Join(", ", levelAreaIds),
                                 AdvDia.MainGridProvider.Width != 0);
 
                     //Core.Scenes.Reset();
                 }
-                Core.Logger.Debug(LogCategory.Exploration, $"Explore: Selected Nearby Node: [{node?.NavigableCenter.X},{node?.NavigableCenter.Y},{node?.NavigableCenter.Z}] Dist:{node?.Distance} Priority: {node?.Priority} ");
 
                 return node;
             }
@@ -171,43 +187,33 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public static double PriorityDistanceFormula(ExplorationNode n)
         {
-            var directionMultiplier = IsInPriorityDirection(n.NavigableCenter, 30) ? 4.5 : 1;
-            var sceneConnectionDirectionMultiplier = IsInSceneConnectionDirection(n.NavigableCenter, 30) ? 1.25 : 1;
-            var nodeInPrioritySceneMultiplier = n.Priority ? 2.25 : 0;
-            var baseDistanceFactor = 50 / n.NavigableCenter.Distance(AdvDia.MyPosition) * 10;
-            var canRayWalk = Core.Grids.CanRayWalk(AdvDia.MyPosition, n.NavigableCenter) ? 1.75 : 1;
+            var directionMultiplier = IsInPriorityDirection(n.NavigableCenter, 30) ? 2 : 1;
+            var sceneConnectionDirectionMultiplier = IsInSceneConnectionDirection(n.NavigableCenter, 30) ? 2 : 1;
+            var nodeInPrioritySceneMultiplier = n.Priority ? 4 : 0;
+            var baseDistanceFactor = 1 / n.NavigableCenter.Distance(AdvDia.MyPosition);
 
             var edgeMultiplier = 1d;
             var visitedMultiplier = 1d;
             var exitSceneMultiplier = 1d;
-            var exploredPercent = ExplorationGrid.Instance.WalkableNodes.Count(x => x.Scene.HasBeenVisited) /
-                                  ExplorationGrid.Instance.WalkableNodes.Count();
 
             // for now.. restrict this group of checks from effecting bounties.
             if (Core.Rift.IsInRift)
             {
                 var isInExitScene = n.Scene.Name.Contains("Exit");
-                exitSceneMultiplier = isInExitScene ? 100 / n.Distance : 1;
-                visitedMultiplier = n.Scene.HasBeenVisited && !isInExitScene ? 0.01f : 1f;
+                exitSceneMultiplier = isInExitScene ? 10 : 1;
+                visitedMultiplier = n.Scene.HasBeenVisited && !isInExitScene ? 0.2f : 1f;
 
                 // Ignore dead end scenes.
                 if (n.Scene.ExitPositions.Count <= 1 && !isInExitScene)
                     return 0;
 
-                if (!Core.Grids.CanRayWalk(Core.Player.Position, n.NavigableCenter))
-                    return 0;
-
                 // Lower weight for scenes near the edge of an open style map.
-                edgeMultiplier = (n.Scene.Name.Contains("Border") || n.Scene.Name.Contains("Edge")) && n.Distance < 100 &&
-                                 exploredPercent > 0.85
-                    ? 2.5
-                    : 1;
+                edgeMultiplier = n.Scene.Name.Contains("Border") || n.Scene.Name.Contains("Edge") ? 0.5 : 1;
             }
 
-            return baseDistanceFactor * exitSceneMultiplier *
-                   directionMultiplier * sceneConnectionDirectionMultiplier
-                   * (n.UnvisitedWeight + nodeInPrioritySceneMultiplier) * visitedMultiplier * edgeMultiplier *
-                   canRayWalk;
+            return baseDistanceFactor * exitSceneMultiplier * 
+                directionMultiplier * sceneConnectionDirectionMultiplier 
+                * (n.UnvisitedWeight + nodeInPrioritySceneMultiplier) * visitedMultiplier * edgeMultiplier;
         }
 
         /// <summary>
@@ -299,13 +305,39 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         public static List<Vector3> GetFourPointsInEachDirection(Vector3 center, int radius)
         {
             var result = new List<Vector3>();
-            var nearestNode = ExplorationGrid.Instance.GetNearestNode(center);
+            var nearestNode = ExplorationGrid.Instance.GetNearestNode(center) as ExplorationNode;
             if (nearestNode == null) return result;
-            return
-                ExplorationGrid.GetExplorationNodesInRadius(nearestNode, radius)
-                    .Where(n => n.HasEnoughNavigableCells & n.NavigableCenter.Distance(AdvDia.MyPosition) > 10)
-                    .Select(n => n.NavigableCenter)
-                    .ToList();
+            return ExplorationGrid.GetExplorationNodesInRadius(nearestNode, radius).Where(n => n.HasEnoughNavigableCells & n.NavigableCenter.Distance(AdvDia.MyPosition) > 10).Select(n => n.NavigableCenter).ToList();
+            try
+            {
+                var node1 = ExplorationGrid.Instance.GetNearestWalkableNodeToPosition(new Vector3(center.X - radius, center.Y + radius, 0));
+                if (node1 != null)
+                {
+                    result.Add(node1.NavigableCenter);
+                }
+                var node2 = ExplorationGrid.Instance.GetNearestWalkableNodeToPosition(new Vector3(center.X + radius, center.Y + radius, 0));
+                if (node2 != null)
+                {
+                    result.Add(node2.NavigableCenter);
+                }
+
+                var node3 = ExplorationGrid.Instance.GetNearestWalkableNodeToPosition(new Vector3(center.X + radius, center.Y - radius, 0));
+                if (node3 != null)
+                {
+                    result.Add(node3.NavigableCenter);
+                }
+
+                var node4 = ExplorationGrid.Instance.GetNearestWalkableNodeToPosition(new Vector3(center.X - radius, center.Y - radius, 0));
+                if (node4 != null)
+                {
+                    result.Add(node4.NavigableCenter);
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            return result;
         }
     }
 }

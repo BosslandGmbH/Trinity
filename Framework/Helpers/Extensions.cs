@@ -205,7 +205,7 @@ namespace Trinity.Framework.Helpers
             }
             catch (Exception ex)
             {
-                Core.Logger.Debug(LogCategory.CacheManagement, "Exception on {0} accessing {1} attribute: {2}", actorACD.Name, type, ex);
+                Core.Logger.Debug(LogCategory.CacheManagement, "异常的 {0} 访问 {1} 属性: {2}", actorACD.Name, type, ex);
             }
             return default(T);
         }
@@ -340,7 +340,7 @@ namespace Trinity.Framework.Helpers
                     break;
 
                 default:
-                    Core.Logger.Log("Invalid Item Link color={0} internalName={1} name={2} gameBalanceId={3}", linkColor, item.InternalName, item.Name, item.GameBalanceId);
+                    Core.Logger.Log("无效的道具链接 颜色={0} 内部名称={1} 名称={2} gameBalanceId={3}", linkColor, item.InternalName, item.Name, item.GameBalanceId);
                     qualityResult = item.ItemQualityLevel;
                     break;
             }

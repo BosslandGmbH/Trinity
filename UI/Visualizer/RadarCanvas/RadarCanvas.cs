@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using System.Collections;
@@ -89,7 +89,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         {
             var startWorldPosition = PointMorph.GetWorldPosition(DragInitialPosition, CanvasData);
             var clickedPosition = Mouse.GetPosition(this);
-            var endWorldPosition = PointMorph.GetWorldPosition(clickedPosition, CanvasData);
+            var endWorldPosition = PointMorph.GetWorldPosition(clickedPosition, CanvasData); 
 
             if (!IsDragging)
             {
@@ -104,24 +104,12 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 }
                 else if (IsLeftClick)
                 {
-                    bool isExplored = ZetaDia.Minimap.IsExplored(startWorldPosition, ZetaDia.Globals.WorldId);
-                    Core.Logger.Log($"Clicked World Position = {startWorldPosition}, Distance={startWorldPosition.Distance(ZetaDia.Me.Position)}, IsExplored: {isExplored}");
-
+                    Core.Logger.Log($"Clicked World Position = {startWorldPosition}, Distance={startWorldPosition.Distance(ZetaDia.Me.Position)}");
 
                     var result = Core.Grids.Avoidance.CanRayWalk(startWorldPosition, Player.Actor.Position);
                     CurrentRayWalk = new Tuple<Vector3, Vector3, bool>(startWorldPosition, Player.Actor.Position, result);
 
-                    //var isConnectedScene = Core.Scenes.CurrentScene.IsConnected(startWorldPosition);
-
-                    SceneConnectionPath?.Clear();
-                    var endScene = Core.Scenes.GetScene(startWorldPosition);
-                    SceneConnectionPath = Core.Scenes.CurrentScene
-                        .GetConnectedScenes(endScene)
-                        .Select(s => s.ExitPosition).ToList();
-                    if (SceneConnectionPath.Any())
-                    {
-                        SceneConnectionPath.Add(startWorldPosition);
-                    }
+                    var isConnectedScene = Core.Scenes.CurrentScene.IsConnected(startWorldPosition);
 
                     //var result = Core.Grids.Avoidance.CanRayCast(clickedWorldPosition, Player.Actor.Position);
                     //CurrentRayCast = new Tuple<Vector3, Vector3, bool>(clickedWorldPosition, Player.Actor.Position, result);
@@ -149,7 +137,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 var node = Core.Avoidance.Grid.GetNearestNode(startWorldPosition);
                 SelectedItem = new TrinityActor
                 {
-                    InternalName = $"Node[{node.GridPoint.X},{node.GridPoint.Y}] World[{(int)startWorldPosition.X},{(int)startWorldPosition.Y}]",
+                    InternalName = $"Node[{node.GridPoint.X},{node.GridPoint.Y}] World[{(int) startWorldPosition.X},{(int) startWorldPosition.Y}]",
                     Distance = startWorldPosition.Distance(ZetaDia.Me.Position),
                     Position = startWorldPosition,
                 };
@@ -159,14 +147,14 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             InvalidateVisual();
         }
 
-        public List<Vector3> SceneConnectionPath { get; set; }
-
 
         private RadarHitTestUtility.HitContainer FindElementUnderClick(object sender, MouseEventArgs e)
         {
             var position = e.GetPosition((UIElement)sender);
             return HitTester.GetHit(position);
         }
+
+        private DateTime LastMoveCursorCheck = DateTime.MinValue;
 
         private void MouseMoveHandler(object sender, MouseEventArgs e)
         {
@@ -413,7 +401,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         static void OnSelectedItemChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
-            Core.Logger.Log("SelectedItem changed from {0} to {1}", args.OldValue, args.NewValue);
+            Core.Logger.Log("所选项目从 {0} 更改为 {1}", args.OldValue, args.NewValue);
 
             //var radarCanvas = obj as RadarCanvas;
             //if (radarCanvas != null)
@@ -563,14 +551,18 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Core.Logger.Log("Exception in RadarUI.UpdateData(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("雷达用户界面中的异常.更新数据(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
         private void UpdateExplorationData()
         {
             _explorationNodes = ExplorationGrid.Instance.WalkableNodes;
+
+
         }
+
+
 
         /// <summary>
         /// Using CenterActor was causing jerkyness, but using an actor for player offset from center actor,
@@ -620,6 +612,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         {
             using (new PerformanceLogger("RadarUI Render"))
             {
+
                 //DrawBackground(dc, CanvasData);
 
                 if (CanvasData.CanvasSize.Width == 0 && CanvasData.CanvasSize.Height == 0 || CanvasData.CenterVector == Vector3.Zero)
@@ -674,8 +667,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                         }
                     }
 
-                    DrawCurrentSceneConnectionPath(dc, CanvasData);
-
+     
                     DrawDebugPosition(dc, CanvasData);
 
                     DrawClickRays(dc, CanvasData);
@@ -714,7 +706,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Log("Exception in RadarUI.OnRender(). {0} {1}", ex.Message, ex.InnerException);
+                    Core.Logger.Log("雷达用户界面中的异常.关于渲染(). {0} {1}", ex.Message, ex.InnerException);
                 }
             }
         }
@@ -882,27 +874,10 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Core.Logger.Log("Exception in RadarUI.DrawCurrentpath(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("雷达用户界面中的异常.DrawCurrentpath(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
-        private void DrawCurrentSceneConnectionPath(DrawingContext dc, CanvasData canvas)
-        {
-            try
-            { 
-                if (SceneConnectionPath == null) return;
-                for (int i = 0; i < SceneConnectionPath.Count; i++)
-                {
-                    var to = SceneConnectionPath[i];
-                    var from = i == 0 ? canvas.CenterVector  : SceneConnectionPath[i - 1];
-                    dc.DrawLine(RadarResources.CurrentPathPen2, from.ToCanvasPoint(), to.ToCanvasPoint());
-                }
-            }
-            catch (Exception ex)
-            {
-                Core.Logger.Log("Exception in RadarUI.DrawCurrentSceneConnectionPath(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
-            }
-        }
 
         private void DrawTargetting(DrawingContext dc, CanvasData canvas)
         {
@@ -944,7 +919,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Core.Logger.Log("Exception in RadarUI.DrawAvoidanceGrid(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("雷达用户界面中的异常.DrawAvoidanceGrid(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
@@ -960,14 +935,14 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                     SolidColorBrush color;
                     if (node.IsVisited)
                         color = RadarResources.Node0;
-                    else if (node.IsBlacklisted || !node.Scene.HasPlayerConnection && node.Scene.IsTopLevel)
+                    else if (node.IsBlacklisted)
                         color = BlackBrush;
                     else
                     {
                         if (weight < 0.05)
                         {
                             color = RadarResources.NodeA;
-                        }
+                        }   
                         else if (weight < 0.15)
                         {
                             color = RadarResources.NodeB;
@@ -1008,7 +983,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Core.Logger.Log("Exception in RadarUI.DrawAvoidanceGrid(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("雷达用户界面中的异常.DrawAvoidanceGrid(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
@@ -1037,7 +1012,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Core.Logger.Verbose("Exception in RadarUI.DrawAvoidanceGrid(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Verbose("雷达用户界面中的异常.DrawAvoidanceGrid(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
@@ -1049,7 +1024,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         internal static readonly SolidColorBrush RedBrush = Brushes.DarkRed;
         internal static readonly SolidColorBrush GreenBrush = Brushes.Green;
         internal static readonly SolidColorBrush DarkGreenBrush = Brushes.DarkGreen;
-
+        
         internal static readonly SolidColorBrush BlackBrush = Brushes.Black;
         internal static readonly SolidColorBrush DarkGrayBrush = Brushes.DarkGray;
 
@@ -1123,7 +1098,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         }
 
 
-
+  
         private Dictionary<DateTime, StaticTelegraph> _telegraphedNodes = new Dictionary<DateTime, StaticTelegraph>();
         private AvoidanceNode _testkiteNode;
 
@@ -1147,7 +1122,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Core.Logger.Log("Exception in RadarUI.DrawKiteDirection(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("雷达用户界面中的异常.DrawKiteDirection(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
@@ -1167,7 +1142,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Core.Logger.Log("Exception in RadarUI.DrawRotatedRectangle(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("雷达用户界面中的异常.DrawRotatedRectangle(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
@@ -1206,7 +1181,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Core.Logger.Log("Exception in RadarUI.DrawRotatedRectangle(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("雷达用户界面中的异常.DrawRotatedRectangle(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
@@ -1386,46 +1361,17 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                 var worldId = Core.Player.WorldDynamicId;
 
-                List<string> connectedScenesStr = new List<string>();
                 foreach (var adventurerScene in Core.Scenes.CurrentWorldScenes.Where(s => s.DynamicWorldId == worldId).ToList())
                 {
-                    connectedScenesStr.Clear();
-                    var connectedScenes = adventurerScene.ConnectedScenes().ToList();
-
-                    if (sceneborders)
+                    foreach (var exitPosition in adventurerScene.ExitPositions.Values)
                     {
-                        foreach (var connectedScene in connectedScenes)
-                        {
-                            if (connectedScene.Scene != null)
-                            {
-                                Vector2 edgePointA = connectedScene.EdgePointA;
-                                Vector2 edgePointB = connectedScene.EdgePointB;
+                        //dc.DrawLine(RadarResources.SceneConnectionPen,
+                        //    connectedScene.EdgePointA.ToVector3().ToCanvasPoint(),
+                        //    connectedScene.EdgePointB.ToVector3().ToCanvasPoint());
 
-                                dc.DrawLine(RadarResources.SceneConnectionPen,
-                                    edgePointA.ToVector3().ToCanvasPoint(),
-                                    edgePointB.ToVector3().ToCanvasPoint());
-
-                                connectedScenesStr.Add(connectedScene.Scene.Name + " " + connectedScene.Direction);
-                            }
-                        }
+                        if (exitPosition != Vector3.Zero)
+                            dc.DrawEllipse(null, RadarResources.EliteLightPen, exitPosition.ToCanvasPoint(), 10, 10);
                     }
-
-                    var exitPositions = adventurerScene.ExitPositions;
-                        var unconnectedExits =
-                            exitPositions.Where(
-                                ep => connectedScenes.FirstOrDefault(cs => cs.Direction == ep.Key) == null).ToList();
-                        foreach (var exitPosition in adventurerScene.ExitPositions.Values)
-                        {
-                            if (exitPosition != Vector3.Zero)
-                            {
-                                if (unconnectedExits.Any(ep => exitPosition.Distance(ep.Value) <= 15))
-                                    dc.DrawEllipse(null, RadarResources.FailurePen, exitPosition.ToCanvasPoint(), 10, 10);
-                                else
-                                    dc.DrawEllipse(null, RadarResources.EliteLightPen, exitPosition.ToCanvasPoint(), 10,
-                                        10);
-                            }
-                        }
-                    
 
                     // Combine navcells into one drawing and store it; because they don't change relative to each other
                     // And because translating geometry for every navcell on every frame is waaaaay too slow.
@@ -1503,15 +1449,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                             textPoint = adventurerScene.Center.ToVector3().ToCanvasPoint();
                             textPoint.Y = textPoint.Y + 20;
                             //(adventurerScene.HasChild ? "HasSubScene" : string.Empty) + " " + 
-                            glyphRun = DrawingUtilities.CreateGlyphRun($"{adventurerScene.Min},{adventurerScene.Max}" + " " + (adventurerScene.SubScene != null ? $" ({adventurerScene.SubScene.Name})" : string.Empty), 8, textPoint);
+                            glyphRun = DrawingUtilities.CreateGlyphRun((adventurerScene.Max - adventurerScene.Min) + " " + (adventurerScene.SubScene != null ? $" ({adventurerScene.SubScene.Name})" : string.Empty), 8, textPoint);
                             groupdc.DrawGlyphRun(Brushes.Wheat, glyphRun);
-
-                            foreach (string conScene in connectedScenesStr)
-                            {
-                                textPoint.Y = textPoint.Y + 20;
-                                glyphRun = DrawingUtilities.CreateGlyphRun(conScene, 8, textPoint);
-                                groupdc.DrawGlyphRun(Brushes.Red, glyphRun);
-                            }
                         }
                         #endregion
                     }
@@ -1543,7 +1482,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Core.Logger.Log("Exception in RadarUI.DrawScenes(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("雷达用户界面中的异常.DrawScenes(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
@@ -1706,7 +1645,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Core.Logger.Log("Exception in RadarUI.DrawActor(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("雷达用户界面中的异常.DrawActor(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 

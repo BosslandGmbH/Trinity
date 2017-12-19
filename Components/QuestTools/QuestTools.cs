@@ -33,12 +33,12 @@ namespace Trinity.Components.QuestTools
 
         protected override void OnPluginEnabled()
         {
-            Core.Logger.Log("QuestTools v{0} Enabled", Version);
+            Core.Logger.Log("QuestTools v{0} 启用", Version);
         }
 
         protected override void OnPluginDisabled()
         {
-            Core.Logger.Log("QuestTools v{0} Disabled", Version);
+            Core.Logger.Log("QuestTools v{0} 禁用", Version);
         }
 
         protected override void OnProfileLoaded()

@@ -35,8 +35,8 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Debug("[MoveToPosition] " + value);
-                    StatusText = "[MoveToPosition] " + value;
+                    Core.Logger.Debug("[移动到位置] " + value);
+                    StatusText = "[移动到位置] " + value;
                 }
                 _state = value;
             }
@@ -116,14 +116,14 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
 
             if (NavigationCoroutine.LastResult == CoroutineResult.Failure)
             {
-                Core.Logger.Debug("[MoveToPosition] CoroutineResult.Failure");
+                Core.Logger.Debug("[移动到位置] 协程的结果失败 CoroutineResult.Failure");
 
                 var canFullyPath = await AdvDia.Navigator.CanFullyClientPathTo(_position);
                 var closeRayCastFail = AdvDia.MyPosition.Distance(_position) < 15f && !Core.Grids.CanRayWalk(AdvDia.MyPosition, _position);//!NavigationGrid.Instance.CanRayWalk(AdvDia.MyPosition, _position);
                 var failedMoveResult = NavigationCoroutine.LastMoveResult == MoveResult.Failed || NavigationCoroutine.LastMoveResult == MoveResult.PathGenerationFailed;
                 if (!canFullyPath || closeRayCastFail || failedMoveResult)
                 {
-                    Core.Logger.Debug("[MoveToPosition] Failed to reach position");
+                    Core.Logger.Debug("[移动到位置] 未能到达位置");
                     State = States.Failed;
                     return false;
                 }

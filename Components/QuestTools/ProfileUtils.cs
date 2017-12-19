@@ -74,7 +74,7 @@ namespace Trinity.Components.QuestTools
                 var difficulty = difficultyAttribute.Value.ChangeType<GameDifficulty>();
                 if (difficulty != CharacterSettings.Instance.GameDifficulty)
                 {
-                    Core.Logger.Log("Difficulty changed to " + difficulty + " by profile: " + ProfileManager.CurrentProfile.Name);                      
+                    Core.Logger.Log("通过" + ProfileManager.CurrentProfile.Name + "改变难度到 " + difficulty);                      
                     CharacterSettings.Instance.GameDifficulty = difficulty;
                 }              
             }

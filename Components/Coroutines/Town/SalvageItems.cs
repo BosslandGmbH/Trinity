@@ -55,26 +55,26 @@ namespace Trinity.Components.Coroutines.Town
         {
             if (!ZetaDia.IsInTown)
             {
-                Core.Logger.Verbose("[SalvageItems] Need to be in town to salvage items");
+                Core.Logger.Verbose("[分解物品] 需要在城里分解物品");
                 return false;
             }
 
             var salvageItems = Core.Inventory.Backpack.Where(ShouldSalvage).ToList();
             if (!salvageItems.Any())
             {
-                Core.Logger.Verbose("[SalvageItems] Nothing to salvage");
+                Core.Logger.Verbose("[分解物品] 没有可分解物品");
                 return false;
             }
 
-            Core.Logger.Verbose("[SalvageItems] Starting salvage for {0} items", salvageItems.Count);
-            salvageItems.ForEach(i => Core.Logger.Debug($"[SalvageItems] Salvaging: {i.Name} ({i.ActorSnoId}) InternalName={i.InternalName} Ancient={i.IsAncient} Ann={i.AnnId}"));
+            Core.Logger.Verbose("[分解物品] 开始分解 {0} 个物品.", salvageItems.Count);
+            salvageItems.ForEach(i => Core.Logger.Debug($"[分解物品] 分解: {i.Name} ({i.ActorSnoId}) InternalName={i.InternalName} Ancient={i.IsAncient} Ann={i.AnnId}"));
 
             GameUI.CloseVendorWindow();
 
             var blacksmith = TownInfo.BlacksmithSalvage;
             if (blacksmith == null)
             {
-                Core.Logger.Error("[SalvageItems] Unable to find a blacksmith info for this area :(");
+                Core.Logger.Error("[分解物品] 无法找到此区域的铁匠 :(");
                 return false;
             }
 
@@ -88,13 +88,13 @@ namespace Trinity.Components.Coroutines.Town
 
                 if (!await MoveTo.Execute(blacksmith.InteractPosition))
                 {
-                    Core.Logger.Error($"[SalvageItems] Failed to move to blacksmith interact position ({blacksmith.Name}) to salvage items :(");
+                    Core.Logger.Error($"[分解物品] 未能移动到与铁匠 ({blacksmith.Name}) 位置交互分解物品 :(");
                     return false;
                 };
 
                 if (!await MoveToAndInteract.Execute(blacksmith, 10f))
                 {
-                    Core.Logger.Error($"[SalvageItems] Failed to move to blacksmith ({blacksmith.Name}) to salvage items :(");
+                    Core.Logger.Error($"[分解物品] 未能移动到与铁匠 ({blacksmith.Name}) 位置交互分解物品 :(");
                     return false;
                 };
                 await Coroutine.Sleep(Rnd.Next(750, 1250));
@@ -109,7 +109,7 @@ namespace Trinity.Components.Coroutines.Town
                     var normals = items.Where(i => NormalQualityLevels.Contains(i.ItemQualityLevel)).ToList();
                     if (normals.Count > 0)
                     {
-                        Core.Logger.Verbose($"[SalvageItems] Bulk Salvaging {normals.Count} Normal");
+                        Core.Logger.Verbose($"[分解物品] 批量分解 {normals.Count} 个一般物品");
                         if (InventoryManager.SalvageItemsOfRarity(SalvageRarity.Normal))
                         {
                             normals.ForEach(ItemEvents.FireItemSalvaged);
@@ -119,7 +119,7 @@ namespace Trinity.Components.Coroutines.Town
                     var magic = items.Where(i => MagicQualityLevels.Contains(i.ItemQualityLevel)).ToList();
                     if (magic.Count > 0)
                     {
-                        Core.Logger.Verbose($"[SalvageItems] Bulk Salvaging {magic.Count} Magic");
+                        Core.Logger.Verbose($"[分解物品] 批量分解 {magic.Count} 个蓝色物品");
                         if (InventoryManager.SalvageItemsOfRarity(SalvageRarity.Magic))
                         {
                             magic.ForEach(ItemEvents.FireItemSalvaged);
@@ -129,7 +129,7 @@ namespace Trinity.Components.Coroutines.Town
                     var rares = items.Where(i => RareQualityLevels.Contains(i.ItemQualityLevel)).ToList();
                     if (rares.Count > 0)
                     {
-                        Core.Logger.Verbose($"[SalvageItems] Bulk Salvaging {rares.Count} Rare");
+                        Core.Logger.Verbose($"[分解物品] 批量分解 {rares.Count} 个稀有物品");
                         if (InventoryManager.SalvageItemsOfRarity(SalvageRarity.Rare))
                         {
                             rares.ForEach(ItemEvents.FireItemSalvaged);
@@ -157,19 +157,19 @@ namespace Trinity.Components.Coroutines.Town
 
                     if (ZetaDia.Actors.GetACDByAnnId(item.AnnId) == null)
                     {
-                        Core.Logger.Log("AnnId doesn't exist, skipping salvage");
+                        Core.Logger.Log("AnnId 不存在，不分解");
                         Core.Inventory.InvalidAnnIds.Add(item.AnnId);
                         continue;
                     }
 
                     if (!Core.Actors.IsAnnIdValid(item.AnnId))
                     {
-                        Core.Logger.Log("AnnId test failed, skipping salvage to prevent disconnect");
+                        Core.Logger.Log("AnnId 测试失败，分解中止!");
                         Core.Inventory.InvalidAnnIds.Add(item.AnnId);
                         continue;
                     }
 
-                    Core.Logger.Log($"Salvaging: {item.Name} ({item.ActorSnoId}) Ancient={item.IsAncient}");
+                    Core.Logger.Log($"分解: {item.Name} ({item.ActorSnoId}) Ancient={item.IsAncient}");
                     InventoryManager.SalvageItem(item.AnnId);
                     Core.Inventory.InvalidAnnIds.Add(item.AnnId);
                     ItemEvents.FireItemSalvaged(item);
@@ -180,7 +180,7 @@ namespace Trinity.Components.Coroutines.Town
                 return true;
             }
 
-            Core.Logger.Error($"[SalvageItems] Failed to salvage items");
+            Core.Logger.Error($"[分解物品] 未能分解物品");
             return false;
         }
 

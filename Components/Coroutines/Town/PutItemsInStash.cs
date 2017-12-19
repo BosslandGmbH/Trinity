@@ -25,13 +25,13 @@ namespace Trinity.Components.Coroutines.Town
         //    var stash = TownInfo.Stash?.GetActor();
         //    if (stash == null)
         //    {
-        //        Core.Logger.Log("[PutItemsInStash] Unable to find Stash");
+        //        Core.Logger.Log("[把物品放入仓库] 无法找到仓库");
         //        return false;
         //    }
 
         //    if (!UIElements.StashWindow.IsVisible && TownInfo.Stash.Distance <= 10f)
         //    {
-        //        Core.Logger.Log("[PutItemsInStash] Stash window not open, interacting");
+        //        Core.Logger.Log("[把物品放入仓库] 仓库界面无法打开, 互动");
         //        stash.Interact();
         //    }
 
@@ -45,7 +45,7 @@ namespace Trinity.Components.Coroutines.Town
         //                continue;
         //            }
 
-        //            Core.Logger.Log($"[PutItemsInStash] Adding {item.Name} ({item.ActorSnoId}) to stash. StackSize={item.ItemStackQuantity} AnnId={item.AnnId} InternalName={item.InternalName} Id={item.ActorSnoId} Quality={item.ItemQualityLevel} AncientRank={item.AncientRank}");
+        //            Core.Logger.Log($"[把物品放入仓库] 添加 {item.Name} ({item.ActorSnoId}) 要存储的. 堆栈大小={item.ItemStackQuantity} AnnId={item.AnnId} 内部名={item.InternalName} Id={item.ActorSnoId} 品质={item.ItemQualityLevel} 远古等级={item.AncientRank}");
         //            InventoryManager.QuickStash(item);
         //        }
         //        catch (Exception ex)
@@ -55,7 +55,7 @@ namespace Trinity.Components.Coroutines.Town
         //    }
 
         //    await Coroutine.Sleep(1000);
-        //    Core.Logger.Log("[PutItemsInStash] Finished!");
+        //    Core.Logger.Log("[把物品放入仓库] 完成!");
         //    return true;
         //}
 
@@ -72,13 +72,13 @@ namespace Trinity.Components.Coroutines.Town
             var stash = TownInfo.Stash?.GetActor();
             if (stash == null)
             {
-                Core.Logger.Log("[PutItemsInStash] Unable to find Stash");
+                Core.Logger.Log("[把物品放入仓库] 无法找到仓库");
                 return false;
             }
 
             if (!UIElements.StashWindow.IsVisible && TownInfo.Stash.Distance <= 10f)
             {
-                Core.Logger.Log("[PutItemsInStash] Stash window not open, interacting");
+                Core.Logger.Log("[把物品放入仓库] 仓库界面无法打开, 互动");
                 stash.Interact();
             }
 
@@ -92,7 +92,7 @@ namespace Trinity.Components.Coroutines.Town
                         continue;
                     }
 
-                    Core.Logger.Log($"[PutItemsInStash] Adding {item.Name} ({item.ActorSnoId}) to stash. StackSize={item.ItemStackQuantity} AnnId={item.AnnId} InternalName={item.InternalName} Id={item.ActorSnoId} Quality={item.ItemQualityLevel} AncientRank={item.AncientRank}");
+                    Core.Logger.Log($"[把物品放入仓库] 添加 {item.Name} ({item.ActorSnoId}) 要存储的. 堆栈大小={item.ItemStackQuantity} AnnId={item.AnnId} 内部名={item.InternalName} Id={item.ActorSnoId} 品质={item.ItemQualityLevel} 远古等级={item.AncientRank}");
                     InventoryManager.QuickStash(item);
                 }
                 catch (Exception ex)

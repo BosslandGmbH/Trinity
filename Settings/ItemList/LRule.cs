@@ -64,7 +64,7 @@ namespace Trinity.Settings.ItemList
         {
             switch (prop)
             {
-                case ItemProperty.Ancient:
+                case ItemProperty.远古:
                     return 1;
             }
             return 0;
@@ -105,7 +105,7 @@ namespace Trinity.Settings.ItemList
                     : ItemDataUtils.GetItemStatRange(ItemReference, ItemProperty);
             }
 
-            if (ItemReference != null && ItemProperty == ItemProperty.SkillDamage)
+            if (ItemReference != null && ItemProperty == ItemProperty.技能伤害)
             {
                 var customRange = ItemDataUtils.GetStatRangeForItemAndSkill(ItemReference, Variant);
                 if (customRange != null)

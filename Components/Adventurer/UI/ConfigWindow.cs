@@ -53,7 +53,7 @@ namespace Trinity.Components.Adventurer.UI
             }
             catch (Exception)
             {
-                Core.Logger.Error($"Couldn't find the file {path}");
+                Core.Logger.Error($"找不到文件 {path}");
                 return;
             }
             Content = mainControl;

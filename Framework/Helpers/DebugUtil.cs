@@ -113,7 +113,7 @@ namespace Trinity.Framework.Helpers
             // Log Animation
             if (!_seenAnimationCache.ContainsKey(name))
             {
-                Core.Logger.Log(LogCategory.Animation, "{0} State={1} By: {2} ({3})", name, state, cacheObject.InternalName, cacheObject.ActorSnoId);
+                Core.Logger.Log(LogCategory.Animation, "{0} 状态={1} By: {2} ({3})", name, state, cacheObject.InternalName, cacheObject.ActorSnoId);
                 _seenAnimationCache.Add(name, DateTime.UtcNow);
             }
 
@@ -128,7 +128,7 @@ namespace Trinity.Framework.Helpers
             // Log Object
             if (!_seenUnknownCache.ContainsKey(diaObject.ActorSnoId))
             {
-                Core.Logger.Log(LogCategory.UnknownObjects, "{0} ({1}) Type={2}", diaObject.Name, diaObject.ActorSnoId, diaObject.ActorType);
+                Core.Logger.Log(LogCategory.UnknownObjects, "{0} ({1}) 类型={2}", diaObject.Name, diaObject.ActorSnoId, diaObject.ActorType);
                 _seenUnknownCache.Add(diaObject.ActorSnoId, DateTime.UtcNow);
             }
 
@@ -182,7 +182,7 @@ namespace Trinity.Framework.Helpers
                     if (Core.Buffs.ActiveBuffs.Any(o => o.Id + o.BuffAttributeSlot == b.Key))
                         return;
 
-                    Core.Logger.Log(LogCategory.ActiveBuffs, "Buff lost '{0}' ({1}) Stacks={2} VariantId={3} VariantName={4}", b.Value.InternalName, b.Value.Id, b.Value.StackCount, b.Value.BuffAttributeSlot, b.Value.VariantName);
+                    Core.Logger.Log(LogCategory.ActiveBuffs, "状态小时 '{0}' ({1}) 建立堆栈={2} VariantId={3} VariantName={4}", b.Value.InternalName, b.Value.Id, b.Value.StackCount, b.Value.BuffAttributeSlot, b.Value.VariantName);
                 });
 
                 Core.Buffs.ActiveBuffs.ForEach(b =>
@@ -192,12 +192,12 @@ namespace Trinity.Framework.Helpers
                     {
                         if (b.StackCount != lastBuff.StackCount)
                         {
-                            Core.Logger.Log(LogCategory.ActiveBuffs, "Buff Stack Changed: '{0}' ({1}) Stacks={2}", b.InternalName, b.Id, b.StackCount);
+                            Core.Logger.Log(LogCategory.ActiveBuffs, "状态改变: '{0}' ({1}) 建立堆栈={2}", b.InternalName, b.Id, b.StackCount);
                         }
                     }
                     else
                     {
-                        Core.Logger.Log(LogCategory.ActiveBuffs, "Buff Gained '{0}' ({1}) Stacks={2} VariantId={3} VariantName={4}", b.InternalName, b.Id, b.StackCount, b.BuffAttributeSlot, b.VariantName);
+                        Core.Logger.Log(LogCategory.ActiveBuffs, "获得状态 '{0}' ({1}) 建立堆栈={2} VariantId={3} VariantName={4}", b.InternalName, b.Id, b.StackCount, b.BuffAttributeSlot, b.VariantName);
                     }
                 });
 
@@ -228,40 +228,40 @@ namespace Trinity.Framework.Helpers
             {
                 Action<Item, TrinityLogLevel> logItem = (i, l) =>
                 {
-                    Core.Logger.Log($"Item: {i.ItemType}: {i.Name} ({i.Id}) is Equipped");
+                    Core.Logger.Log($"道具: {i.ItemType}: {i.Name} ({i.Id}) 被装备");
                 };
 
                 Action<ACDItem, TrinityLogLevel> logACDItem = (i, l) =>
                 {
-                    Core.Logger.Log($"Item: {i.ItemType}: {i.Name} ({i.ActorSnoId}) is Equipped");
+                    Core.Logger.Log($"道具: {i.ItemType}: {i.Name} ({i.ActorSnoId}) 被装备");
                 };
 
                 if (ZetaDia.Me == null || !ZetaDia.Me.IsValid)
                 {
-                    Core.Logger.Log("Error: Not in game");
+                    Core.Logger.Log("错误: 不在游戏");
                     return;
                 }
 
                 var equipped = InventoryManager.Equipped;
                 if (!equipped.Any())
                 {
-                    Core.Logger.Log("Error: No equipped items detected");
+                    Core.Logger.Log("错误: 检查到没有装备道具");
                     return;
                 }
 
                 LogNewItems();
 
                 var equippedItems = Legendary.Equipped.Where(c => (!c.IsSetItem || !c.Set.IsEquipped) && !c.IsEquippedInCube).ToList();
-                Core.Logger.Log("------ Equipped Non-Set Legendaries: Items={0}, Sets={1} ------", equippedItems.Count, Sets.Equipped.Count);
+                Core.Logger.Log("------ 装备非套装传奇: 物品={0}, 套装={1} ------", equippedItems.Count, Sets.Equipped.Count);
                 equippedItems.ForEach(i => logItem(i, level));
 
                 var cubeItems = Legendary.Equipped.Where(c => c.IsEquippedInCube).ToList();
-                Core.Logger.Log("------ Equipped in Kanai's Cube: Items={0} ------", cubeItems.Count, Sets.Equipped.Count);
+                Core.Logger.Log("------ 装备卡奈魔盒威能: 物品={0} ------", cubeItems.Count, Sets.Equipped.Count);
                 cubeItems.ForEach(i => logItem(i, level));
 
                 Sets.Equipped.ForEach(s =>
                 {
-                    Core.Logger.Log("------ Set: {0} {1}: {2}/{3} Equipped. ActiveBonuses={4}/{5} ------",
+                    Core.Logger.Log("------ 套装: {0} {1}: {2}/{3} 装备. 套装属性={4}/{5} ------",
                         s.Name,
                         s.IsClassRestricted ? "(" + s.ClassRestriction + ")" : string.Empty,
                         s.EquippedItems.Count,
@@ -272,28 +272,28 @@ namespace Trinity.Framework.Helpers
                     s.Items.Where(i => i.IsEquipped).ForEach(i => logItem(i, level));
                 });
 
-                Core.Logger.Log("------ Active Skills / Runes ------", SkillUtils.Active.Count, SkillUtils.Active.Count);
+                Core.Logger.Log("------ 激活技能 / 符文 ------", SkillUtils.Active.Count, SkillUtils.Active.Count);
 
                 Action<Skill> logSkill = s =>
                 {
-                    Core.Logger.Log("Skill: {0} Rune={1} Type={2}",
+                    Core.Logger.Log("技能: {0} 符文={1} 类型={2}",
                         s.Name,
                         s.CurrentRune.Name,
-                        (s.IsAttackSpender) ? "Spender" : (s.IsGeneratorOrPrimary) ? "Generator" : "Other"
+                        (s.IsAttackSpender) ? "消耗" : (s.IsGeneratorOrPrimary) ? "生成" : "其他"
                         );
                 };
 
                 SkillUtils.Active.ForEach(logSkill);
 
-                Core.Logger.Log("------ Passives ------", SkillUtils.Active.Count, SkillUtils.Active.Count);
+                Core.Logger.Log("------ 被动 ------", SkillUtils.Active.Count, SkillUtils.Active.Count);
 
-                Action<Passive> logPassive = p => Core.Logger.Log("Passive: {0}", p.Name);
+                Action<Passive> logPassive = p => Core.Logger.Log("被动: {0}", p.Name);
 
                 PassiveUtils.Active.ForEach(logPassive);
             }
             catch (Exception ex)
             {
-                Core.Logger.Log("Exception in DebugUtil > LogBuildAndItems: {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("调试 > 登录构建和项目 异常: {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
@@ -301,16 +301,16 @@ namespace Trinity.Framework.Helpers
         {
             //try
             //{
-            //    Core.Logger.Log("------ System Information ------");
-            //    Core.Logger.Log("Processor: " + SystemInformation.Processor);
-            //    Core.Logger.Log("Current Speed: " + SystemInformation.ActualProcessorSpeed);
-            //    Core.Logger.Log("Operating System: " + SystemInformation.OperatingSystem);
-            //    Core.Logger.Log("Motherboard: " + SystemInformation.MotherBoard);
-            //    Core.Logger.Log("System Type: " + SystemInformation.SystemType);
-            //    Core.Logger.Log("Free Physical Memory: " + SystemInformation.FreeMemory);
-            //    Core.Logger.Log("Hard Drive: " + SystemInformation.HardDisk);
-            //    Core.Logger.Log("Video Card: " + SystemInformation.VideoCard);
-            //    Core.Logger.Log("Resolution: " + SystemInformation.Resolution);
+            //    Core.Logger.Log("------ 系统信息 ------");
+            //    Core.Logger.Log("处理器: " + SystemInformation.Processor);
+            //    Core.Logger.Log("当前速度: " + SystemInformation.ActualProcessorSpeed);
+            //    Core.Logger.Log("操作系统: " + SystemInformation.OperatingSystem);
+            //    Core.Logger.Log("主板: " + SystemInformation.MotherBoard);
+            //    Core.Logger.Log("系统类型: " + SystemInformation.SystemType);
+            //    Core.Logger.Log("可用物理内存: " + SystemInformation.FreeMemory);
+            //    Core.Logger.Log("硬盘: " + SystemInformation.HardDisk);
+            //    Core.Logger.Log("显卡: " + SystemInformation.VideoCard);
+            //    Core.Logger.Log("解析度: " + SystemInformation.Resolution);
             //}
             //catch (Exception)
             //{
@@ -339,7 +339,7 @@ namespace Trinity.Framework.Helpers
                 w.WriteLine("}");
             }
 
-            Core.Logger.Log("Dumped Reference Items to: {0}", path);
+            Core.Logger.Log("转储道具信息到: {0}", path);
         }
 
         public static string RemoveApostophes(string input)
@@ -355,14 +355,14 @@ namespace Trinity.Framework.Helpers
             var dropItems = Legendary.ToList().Where(i => !i.IsCrafted && i.Id == 0).OrderBy(i => i.TrinityItemType).ToList();
             var craftedItems = Legendary.ToList().Where(i => i.IsCrafted && i.Id == 0).OrderBy(i => i.TrinityItemType).ToList();
 
-            Core.Logger.Log("Dropped Items: {0}", dropItems.Count);
+            Core.Logger.Log("掉落的物品: {0}", dropItems.Count);
             foreach (var item in dropItems)
             {
                 Core.Logger.Log("{0} - {1} = 0", item.TrinityItemType, item.Name);
             }
 
             Core.Logger.Log(" ");
-            Core.Logger.Log("Crafted Items: {0}", craftedItems.Count);
+            Core.Logger.Log("制作的物品: {0}", craftedItems.Count);
             foreach (var item in craftedItems)
             {
                 Core.Logger.Log("{0} - {1} = 0", item.TrinityItemType, item.Name);
@@ -377,7 +377,7 @@ namespace Trinity.Framework.Helpers
             //{
             //    if (ZetaDia.Me == null || !ZetaDia.Me.IsValid)
             //    {
-            //        Core.Logger.Log("Not in game");
+            //        Core.Logger.Log("不在游戏");
             //        return;
             //    }
 
@@ -394,11 +394,11 @@ namespace Trinity.Framework.Helpers
             //    if (!newItems.Any())
             //        return;
 
-            //    Core.Logger.Log("------ New/Unknown Items {0} ------", newItems.Count);
+            //    Core.Logger.Log("------ 新/未知物品 {0} ------", newItems.Count);
 
             //    newItems.ForEach(i =>
             //    {
-            //        Core.Logger.Log($"Item: {i.ItemType}: {i.Name} ({i.ActorSnoId})");
+            //        Core.Logger.Log($"道具: {i.ItemType}: {i.Name} ({i.ActorSnoId})");
             //    });
             //}
         }
@@ -421,7 +421,7 @@ namespace Trinity.Framework.Helpers
             }
 
             var path = WriteLinesToLog("ItemSNOReference.log", toLog, true);
-            Core.Logger.Log("Finished Dumping Item SNO Reference to {0}", path);
+            Core.Logger.Log("完成掉落物品SNO刷新到 {0}", path);
         }
 
         public static string WriteLinesToLog(string logFileName, string lines, bool deleteFirst = false)
@@ -458,7 +458,7 @@ namespace Trinity.Framework.Helpers
 
         public static void ItemListTest()
         {
-            Core.Logger.Log("Starting ItemList Backpack Test");
+            Core.Logger.Log("开始捡取列表背包测试");
 
             var backpackItems = Core.Inventory.Backpack;
             var total = backpackItems.Count();
@@ -474,9 +474,9 @@ namespace Trinity.Framework.Helpers
                     toBeStashed++;
             }
 
-            Core.Logger.Log("Finished ItemList Backpack Test");
+            Core.Logger.Log("完成捡取列表背包测试");
 
-            Core.Logger.Log("Finished - Stash {0} / {1}", toBeStashed, total);
+            Core.Logger.Log("完成 - 储存 {0} / {1}", toBeStashed, total);
         }
 
         public enum DumpItemLocation
@@ -498,7 +498,7 @@ namespace Trinity.Framework.Helpers
             }
             catch
             {
-                Core.Logger.Error("QuickDump: Item Errors Detected!");
+                Core.Logger.Error("快速储存: 检测到物品错误!");
                 itemList = ZetaDia.Actors.GetActorsOfType<ACDItem>(true).ToList();
             }
             StringBuilder sbTopList = new StringBuilder();
@@ -554,7 +554,7 @@ namespace Trinity.Framework.Helpers
                         }
                         else
                         {
-                            Core.Logger.Log("Stash window not open!");
+                            Core.Logger.Log("储物箱窗口无法打开!");
                         }
                         break;
                 }
@@ -597,7 +597,7 @@ namespace Trinity.Framework.Helpers
                             float fStatVal = item.Stats.GetStat<float>(stat);
                             int iStatVal = item.Stats.GetStat<int>(stat);
                             if (fStatVal > 0 || iStatVal > 0)
-                                Core.Logger.Log("Stat {0}={1}f ({2})", stat, fStatVal, iStatVal);
+                                Core.Logger.Log("属性 {0}={1}f ({2})", stat, fStatVal, iStatVal);
                         }
                     }
                     catch (Exception ex)
@@ -650,7 +650,7 @@ namespace Trinity.Framework.Helpers
                 }
                 catch
                 {
-                    Core.Logger.Log("Exception reading {0} from object", property.Name);
+                    Core.Logger.Log("从对象读取 {0} 异常", property.Name);
                 }
             }
         }

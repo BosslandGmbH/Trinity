@@ -47,7 +47,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Log("[GuardedGizmo] " + value);
+                    Core.Logger.Log("[交互装置] " + value);
                     StatusText = "[GuardedGizmo] " + value;
                 }
 
@@ -184,7 +184,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 Core.PlayerMover.MoveTowards(_currentGizmo.Position);
                 ObjectSearchRadius = 150;
                 _guardedGizmos.Remove(_currentGizmo.Position);
-                Core.Logger.Log("[Bounty] Gizmo is out of reach, lowering the search radius to {0}", ObjectSearchRadius);
+                Core.Logger.Log("[悬赏] 无法与目标交互, 降低搜索半径为 {0}", ObjectSearchRadius);
                 State = States.SearchingForGizmo;
                 return false;
             }

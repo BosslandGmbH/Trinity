@@ -16,7 +16,7 @@ namespace Trinity.Components.QuestTools
 
             public static void CreateBotThread()
             {
-                Core.Logger.Warn("Spooling up new Bot thread");
+                Core.Logger.Warn("脱机新的Bot线程");
 
                 var isStarted = false;
 
@@ -26,11 +26,11 @@ namespace Trinity.Components.QuestTools
 
                     if (_active == null)
                     {
-                        Core.Logger.Log("Active is null");
+                        Core.Logger.Log("Active 为空");
 
                         if (!Q.Any())
                         {
-                            Core.Logger.Log("Queue is empty");
+                            Core.Logger.Log("队列是空的");
                             return true;
                         }
 
@@ -53,7 +53,7 @@ namespace Trinity.Components.QuestTools
 
                             isStarted = true;
 
-                            Core.Logger.Log("Starting Nodes");
+                            Core.Logger.Log("启动节点");
                         }
 
                         Tick();
@@ -66,7 +66,7 @@ namespace Trinity.Components.QuestTools
 
                     if (BotMain.IsRunning || !Q.Any() && _active == null)
                     {
-                        Core.Logger.Warn("Work is finished, Shutting down Bot thread");
+                        Core.Logger.Warn("工作完成，关闭Bot线程");
                         return true;
                     }
 
@@ -81,7 +81,7 @@ namespace Trinity.Components.QuestTools
                     _logic.Tick(null);
                     _logic.Tick(null);
 
-                    Core.Logger.Log("Tick LastStatus={0}", _logic.LastStatus);
+                    Core.Logger.Log("勾选最后状态={0}", _logic.LastStatus);
 
                     if (_logic.LastStatus != RunStatus.Running)
                     {

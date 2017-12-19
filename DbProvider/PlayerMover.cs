@@ -1,7 +1,5 @@
 ﻿using Buddy.Coroutines;
 using System;
-using System.Collections.Generic;
-using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using Trinity.Components.Combat;
@@ -92,7 +90,7 @@ namespace Trinity.DbProvider
 
             var startPosition = ZetaDia.Me.Position;
 
-            if (ZetaDia.Me.UsePower(power.SNOPower, power.TargetPosition, Core.Player.WorldDynamicId))
+            if (ZetaDia.Me.UsePower(power.SNOPower, power.TargetPosition, Core.Player.WorldDynamicId, -1))
             {
                 if (power.SNOPower != SNOPower.Walk)
                 {
@@ -119,7 +117,7 @@ namespace Trinity.DbProvider
             {
                 if (!ZetaDia.Me.Movement.IsMoving && LastDestination != destination && ZetaDia.IsInGame)
                 {
-                    Core.Logger.Verbose(LogCategory.Movement, "NavigateTo: Starting Movement Towards {0} ({1})", destination, destinationName);
+                    Core.Logger.Verbose(LogCategory.Movement, "导航到: 开始移动 {0} ({1})", destination, destinationName);
                     Instance.MoveTowards(destination);
                 }
                 _navigateToCoroutine = new Coroutine(async () =>

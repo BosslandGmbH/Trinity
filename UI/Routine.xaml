@@ -30,9 +30,9 @@
             <GroupBox>
                 <StackPanel>
                     <WrapPanel Margin="0,-10,0,0">
-                        <TextBlock Margin="0,0,15,0">Routine Mode:</TextBlock>
-                        <RadioButton IsChecked="{Binding Routine.RoutineMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Automatic}">Auto-Select</RadioButton>
-                        <RadioButton IsChecked="{Binding Routine.RoutineMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Manual}">Force Specific Routine</RadioButton>
+                        <TextBlock Margin="0,0,15,0">策略:</TextBlock>
+                        <RadioButton IsChecked="{Binding Routine.RoutineMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Automatic}">自动识别</RadioButton>
+                        <RadioButton IsChecked="{Binding Routine.RoutineMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Manual}">特定策略</RadioButton>
                     </WrapPanel>
                     <Border Margin="0,10,10,0" Background="#333333" CornerRadius="2"  Visibility="{Binding Routine.RoutineMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Manual}">
                        <StackPanel>
@@ -67,7 +67,7 @@
                             <StackPanel>
                                 <Grid Margin="0,0,0,0">
                                     <TextBlock Margin="0,2,0,-5" Foreground="Gold" FontSize="13" FontWeight="SemiBold">
-                                        Current Routine: <Run Text="{Binding Routine.SelectedRoutine.DisplayName, FallbackValue=Unknown}"/>
+                                        当前策略: <Run Text="{Binding Routine.SelectedRoutine.DisplayName, FallbackValue=Unknown}"/>
                                     </TextBlock>
                                     <StackPanel Visibility="{Binding GameInfo.IsInGame, Converter={StaticResource VisibleWhenTrueConverter}}">
                                         <TextBlock Margin="0,2,0,-5" Foreground="LightGray" HorizontalAlignment="Right" FontSize="11">
@@ -108,7 +108,7 @@
                                             <Binding Path="IsRowChecked"/>
                                         </MultiBinding>
                                     </StackPanel.Visibility>-->
-                                    <TextBlock TextDecorations="Underline" HorizontalAlignment="Center" Foreground="Gold">You must be in game to see build-specific settings</TextBlock>
+                                    <TextBlock TextDecorations="Underline" HorizontalAlignment="Center" Foreground="Gold">人物必须在游戏中才能看到本职业的特定策略</TextBlock>
                                 </StackPanel>
                                 <StackPanel Visibility="{Binding GameInfo.IsInGame, Converter={StaticResource VisibleWhenTrueConverter}}">
                                     <ContentControl Content="{Binding Routine.SelectedRoutine.Control}" />
@@ -116,7 +116,7 @@
                             </Grid>
                         </Border>
                         <StackPanel Visibility="{Binding GameInfo.IsInGame, Converter={StaticResource VisibleWhenTrueConverter}}">
-                            <Button Height="26" Command="{Binding Routine.SelectedRoutine.ResetCommand}">Reset to Defaults</Button>
+                            <Button Height="26" Command="{Binding Routine.SelectedRoutine.ResetCommand}">重置本页设置</Button>
                         </StackPanel>
                     </StackPanel>
                 </Border>
@@ -124,10 +124,10 @@
             <!--<StackPanel Grid.Row="6" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0"   Visibility="{Binding Routine.RoutineMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Automatic}">
                 <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
                     <GroupBox.Header>
-                        Other Specialized Builds
+                        其他专业BD
                     </GroupBox.Header>
                     <StackPanel Margin="0,6,0,0">
-                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">Trinity has special handling of the following builds. Builds are selected automatically when you equip the required items and skills on your hero.</TextBlock>
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">Trinity对以下策略有特殊处理.当你的人物用上所需的装备和技能时，会自动选择.</TextBlock>
                         <ItemsControl ItemsSource="{Binding Routine.ClassAvailableRoutines}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>

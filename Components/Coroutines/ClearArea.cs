@@ -35,7 +35,7 @@ namespace Trinity.Components.Coroutines
         {
             if (!IsClearing)
             {
-                Core.Logger.Log("Started Clearing Area");
+                Core.Logger.Log("开始清理区域");
                 IsClearing = true;
                 TrinityTownRun.IsVendoring = false;
                 Combat.TrinityCombat.CombatMode = CombatMode.KillAll;
@@ -48,7 +48,7 @@ namespace Trinity.Components.Coroutines
         {
             if (IsClearing)
             {
-                Core.Logger.Log("Stopped Clearing Area");
+                Core.Logger.Log("停止清理区域");
                 IsClearing = false;
                 Combat.TrinityCombat.CombatMode = CombatMode.Normal;
             }
