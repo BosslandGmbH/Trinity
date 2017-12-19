@@ -331,7 +331,7 @@ namespace Trinity.Modules
             if (actor.ActorType != ActorType.Monster || actor.IsQuestMonster || actor.IsNpc)
                 return;
 
-            var kiteFromBoss = kiteMode == KiteMode.Elites && actor.IsBoss;
+            var kiteFromBoss = kiteMode == KiteMode.Bosses && actor.IsBoss;
             var kiteFromElites = kiteMode == KiteMode.Elites && actor.IsElite;
             var kiteAlways = kiteMode == KiteMode.Always;
             var isKiting = kiteFromBoss || kiteFromElites || kiteAlways;

@@ -13,14 +13,16 @@ using Zeta.Common;
 
 namespace Trinity.Routines.Wizard
 {
-    public sealed class WizardRashaChannelMeteor : WizardBase, IRoutine
+    public sealed class WizardChannelMeteor : WizardBase, IRoutine
     {
         #region Definition
 
-        public string DisplayName => "Rasha Channel Meteor Wizard";
-        public string Description => "Tanky, close range, high-damage build for GR's that uses full Tal Rasha's and Meteor/Channeling bonuses";
+        public string DisplayName => "Channel Meteor Wizard";
+        public string Description => "Channeling immense powers to call forth destruction from the sky, the Meteor Wizard alternates" +
+            " the might of two sets according to his whims and conjures fiery death. This bursty, hard hitting playstyle is available in " +
+            "two Greater Rift solo and regular Rift farming variations, explained in that order.";
         public string Author => "jubisman";
-        public string Version => "0.1";
+        public string Version => "0.1.1";
         public string Url => "https://www.icy-veins.com/d3/wizard-channeling-meteor-firebird-build-patch-2-6-1-season-12";
 
         public Build BuildRequirements => new Build
@@ -28,6 +30,7 @@ namespace Trinity.Routines.Wizard
             Sets = new Dictionary<Set, SetBonus>
             {
                 { Sets.TalRashasElements, SetBonus.Third },
+                //{ Sets.FirebirdsFinery, SetBonus.Third }
             },
             Skills = new Dictionary<Skill, Rune>
             {
@@ -37,7 +40,7 @@ namespace Trinity.Routines.Wizard
 
         #endregion
 
-        public override KiteMode KiteMode => KiteMode.Bosses;
+        public override KiteMode KiteMode => KiteMode.Never;
 
         public TrinityPower GetOffensivePower()
         {
@@ -107,10 +110,10 @@ namespace Trinity.Routines.Wizard
                 return false;
 
             Vector3 bestBuffedPosition;
-            var bestSafeSpot = TargetUtil.GetSafeSpotPosition(50f);
+            var bestSafeSpot = TargetUtil.GetSafeSpotPosition(60f);
 
-            if (TargetUtil.BestBuffPosition(50f, bestSafeSpot, false, out bestBuffedPosition) &&
-                bestBuffedPosition != Vector3.Zero)
+            if (TargetUtil.BestBuffPosition(60f, bestSafeSpot, false, out bestBuffedPosition) &&
+                Player.Position.Distance(bestBuffedPosition) > 10f && bestBuffedPosition != Vector3.Zero)
             {
                 Core.Logger.Log($"Found buff position - distance: {Player.Position.Distance(bestBuffedPosition)} ({bestBuffedPosition})");
                 position = bestBuffedPosition;
@@ -154,9 +157,9 @@ namespace Trinity.Routines.Wizard
         public override float EmergencyHealthPct => Settings.EmergencyHealthPct;
 
         IDynamicSetting IRoutine.RoutineSettings => Settings;
-        public WizardRashaChannelMeteorSettings Settings { get; } = new WizardRashaChannelMeteorSettings();
+        public WizardChannelMeteorSettings Settings { get; } = new WizardChannelMeteorSettings();
 
-        public sealed class WizardRashaChannelMeteorSettings : NotifyBase, IDynamicSetting
+        public sealed class WizardChannelMeteorSettings : NotifyBase, IDynamicSetting
         {
             private SkillSettings _teleport;
             private int _clusterSize;

@@ -156,7 +156,6 @@ namespace Trinity.Components.Adventurer.Coroutines
                     _currentDestination.IsCurrentDestination = false;
                 }
 
-
                 var destination = ExplorationHelpers.NearestWeightedUnvisitedNode(_levelAreaIds);
                 if (destination != null)
                 {
@@ -289,7 +288,6 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         public void DisablePulse()
         {
-
            
         }
 
