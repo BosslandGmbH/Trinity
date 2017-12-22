@@ -149,7 +149,7 @@ namespace Trinity.Routines.Monk
             var bestClusterPoint = TargetUtil.GetBestClusterPoint();
 
             if (TargetUtil.BestBuffPosition(50f, bestClusterPoint, false, out bestBuffedPosition) &&
-                Player.Position.Distance(bestBuffedPosition) > 10f && bestBuffedPosition != Vector3.Zero)
+                Player.Position.Distance2D(bestBuffedPosition) > 10f && bestBuffedPosition != Vector3.Zero)
             {
                 Core.Logger.Log($"Found buff position - distance: {Player.Position.Distance(bestBuffedPosition)} ({bestBuffedPosition})");
                 position = bestBuffedPosition;

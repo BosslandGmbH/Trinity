@@ -219,7 +219,7 @@ namespace Trinity.Routines.Necromancer
             if (Player.PrimaryResource < PrimaryEnergyReserve)
                 return false;
 
-            target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
+            target = TargetUtil.GetBestPierceTarget(60f) ?? CurrentTarget;
             return target != null;
         }
 

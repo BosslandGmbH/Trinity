@@ -113,7 +113,7 @@ namespace Trinity.Routines.Wizard
             var bestSafeSpot = TargetUtil.GetSafeSpotPosition(60f);
 
             if (TargetUtil.BestBuffPosition(60f, bestSafeSpot, false, out bestBuffedPosition) &&
-                Player.Position.Distance(bestBuffedPosition) > 10f && bestBuffedPosition != Vector3.Zero)
+                Player.Position.Distance2D(bestBuffedPosition) > 10f && bestBuffedPosition != Vector3.Zero)
             {
                 Core.Logger.Log($"Found buff position - distance: {Player.Position.Distance(bestBuffedPosition)} ({bestBuffedPosition})");
                 position = bestBuffedPosition;
