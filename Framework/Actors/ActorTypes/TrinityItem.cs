@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Actors.Properties;
@@ -51,6 +52,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsTwoSquareItem { get; set; }
         public bool CanPickupItem { get; set; }
         public TimeSpan ItemTradeEndTime { get; set; }
+        public List<int> TradablePlayers { get; set; }
 
         /// <summary>
         /// If item is assigned - only visible to this player (bounty bag items)

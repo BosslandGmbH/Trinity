@@ -490,8 +490,8 @@ namespace Trinity.Framework.Actors.Attributes
 
         #region Item Attributes
 
-        public IEnumerable<int> ItemTradePlayerLow => GetAttributes<int>(ActorAttributeType.ItemTradePlayerLow);
-        public IEnumerable<int> ItemTradePlayerHigh => GetAttributes<int>(ActorAttributeType.ItemTradePlayerHigh);
+        public int GetTradePlayerLow(int index) => GetAttribute<int>(ActorAttributeType.ItemTradePlayerLow, index);
+        public int GetTradePlayerHigh(int index) => GetAttribute<int>(ActorAttributeType.ItemTradePlayerHigh, index);
 
         public Dictionary<DamageType, float> DamageWeaponPercentTotals => GetAttributes<DamageType, float>(ActorAttributeType.DamageWeaponPercentTotal); // DamageWeaponPercentTotal (240) = i:1035489772 f:0.09 v:0.09 ModifierType=DamageType Modifier=0
         public Dictionary<SNOPower, float> Skills => GetAttributes<SNOPower, float>(ActorAttributeType.Skill); // Skill (125304932) = i:1 f:1.401298E-45 v:1 ModifierType=PowerSnoId Modifier=30592

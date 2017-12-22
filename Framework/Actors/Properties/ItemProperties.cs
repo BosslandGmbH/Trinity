@@ -55,16 +55,32 @@ namespace Trinity.Framework.Actors.Properties
             actor.IsAncient = attributes.IsAncient;
             actor.IsPrimalAncient = attributes.IsPrimalAncient;
             actor.ItemQualityLevel = attributes.ItemQualityLevel;
-            //ItemStackQuantity = Attributes.ItemStackQuantity;
+
             actor.RequiredLevel = Math.Max(actor.Attributes.RequiredLevel, actor.Attributes.ItemLegendaryItemLevelOverride);
             actor.IsCrafted = attributes.IsCrafted;
             actor.IsVendorBought = attributes.IsVendorBought;
             actor.IsAccountBound = attributes.ItemBoundToACDId > 0;
-            actor.IsTradeable = attributes.ItemTradeEndTime != 0;
+
+            #region Trading
 
             int gameTick = ZetaDia.Globals.GameTick;
             int tradeEndTime = attributes.ItemTradeEndTime <= gameTick ? 0 : attributes.ItemTradeEndTime - gameTick;
             actor.ItemTradeEndTime = TimeSpan.FromSeconds(tradeEndTime/60);
+
+            actor.TradablePlayers = new List<int>();
+            for (int i = 0; i < 8; i++)
+            {
+                int playerTradeHigh = attributes.GetTradePlayerHigh(i);
+                int playerTradeLow = attributes.GetTradePlayerLow(i);
+                int playerTrade = (int) ((long) playerTradeHigh << 32 | (uint) playerTradeLow);
+                if (playerTrade != 0)
+                    actor.TradablePlayers.Add(playerTrade);
+            }
+
+            int playerId = ZetaDia.Storage.PlayerDataManager.ActivePlayerData.PlayerId;
+            actor.IsTradeable = attributes.ItemTradeEndTime != 0 && actor.TradablePlayers.Contains(playerId);
+
+            #endregion
 
             var realname = GetName(actor.GameBalanceId);
             actor.Name = string.IsNullOrEmpty(realname) ? actor.InternalName : realname;
