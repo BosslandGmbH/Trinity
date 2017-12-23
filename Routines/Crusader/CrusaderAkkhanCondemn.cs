@@ -56,6 +56,9 @@ namespace Trinity.Routines.Crusader
             if (!Skills.Crusader.Punish.IsBuffActive && ShouldPunish(out target))
                 return Punish(target);
 
+            if (ShouldShieldGlare(out target))
+                return ShieldGlare(target);
+
             if (ShouldSlash(out target))
                 return Slash(target);
 
@@ -87,6 +90,9 @@ namespace Trinity.Routines.Crusader
 
             if (ShouldProvoke())
                 return Provoke();
+
+            if (ShouldJudgement())
+                return Judgement();
 
             TrinityPower power;
             if (TryLaw(out power))
