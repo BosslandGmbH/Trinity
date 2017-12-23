@@ -73,7 +73,7 @@ namespace Trinity.Routines.Crusader
         /// </summary>
         public TrinityPower GetBuffPower()
         {
-            if (!TargetUtil.AnyMobsInRange(180f))
+            if (Player.IsInTown)
                 return null;
 
             if (AllowedToUse(Settings.Akarats, Skills.Crusader.AkaratsChampion) && ShouldAkaratsChampion())
