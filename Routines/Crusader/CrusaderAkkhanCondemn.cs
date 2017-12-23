@@ -53,11 +53,11 @@ namespace Trinity.Routines.Crusader
             if (ShouldWalkToGroundBuff(out buffPosition))
                 return Walk(buffPosition);
 
-            if (!Skills.Crusader.Punish.IsBuffActive && ShouldPunish(out target))
-                return Punish(target);
-
             if (ShouldShieldGlare(out target))
                 return ShieldGlare(target);
+
+            if (ShouldPunish(out target))
+                return Punish(target);
 
             if (ShouldSlash(out target))
                 return Slash(target);
@@ -140,6 +140,14 @@ namespace Trinity.Routines.Crusader
         }
 
         #region Overrides
+
+        protected override bool ShouldJudgement()
+        {
+            if (!Skills.Crusader.Judgment.CanCast())
+                return false;
+
+            return true;
+        }
 
         protected override bool ShouldIronSkin()
         {
