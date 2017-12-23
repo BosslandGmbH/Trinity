@@ -53,7 +53,10 @@ namespace Trinity.Routines.Crusader
             if (ShouldWalkToGroundBuff(out buffPosition))
                 return Walk(buffPosition);
 
-            if (!Skills.Crusader.Punish.IsBuffActive && ShouldPunish(out target))
+            if (ShouldShieldGlare(out target))
+                return ShieldGlare(target);
+
+            if (ShouldPunish(out target))
                 return Punish(target);
 
             if (ShouldSlash(out target))
@@ -73,7 +76,7 @@ namespace Trinity.Routines.Crusader
         /// </summary>
         public TrinityPower GetBuffPower()
         {
-            if (!TargetUtil.AnyMobsInRange(180f))
+            if (Player.IsInTown)
                 return null;
 
             if (AllowedToUse(Settings.Akarats, Skills.Crusader.AkaratsChampion) && ShouldAkaratsChampion())
@@ -87,6 +90,9 @@ namespace Trinity.Routines.Crusader
 
             if (ShouldProvoke())
                 return Provoke();
+
+            if (ShouldJudgement())
+                return Judgement();
 
             TrinityPower power;
             if (TryLaw(out power))
@@ -134,6 +140,14 @@ namespace Trinity.Routines.Crusader
         }
 
         #region Overrides
+
+        protected override bool ShouldJudgement()
+        {
+            if (!Skills.Crusader.Judgment.CanCast())
+                return false;
+
+            return true;
+        }
 
         protected override bool ShouldIronSkin()
         {
