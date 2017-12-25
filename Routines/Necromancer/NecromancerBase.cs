@@ -559,6 +559,9 @@ namespace Trinity.Routines.Necromancer
             if (!Skills.Necromancer.Simulacrum.CanCast())
                 return false;
 
+            if (!Skills.Necromancer.LandOfTheDead.IsBuffActive)
+                return false;
+
             position = TargetUtil.GetBestClusterPoint();
             return position != Vector3.Zero;
         }

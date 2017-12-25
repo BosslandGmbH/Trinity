@@ -11,6 +11,7 @@ using Trinity.UI;
 using Zeta.Common;
 using System.Linq;
 using Zeta.Game.Internals.Actors;
+using System;
 
 namespace Trinity.Routines.Necromancer
 {
@@ -21,7 +22,7 @@ namespace Trinity.Routines.Necromancer
         public string DisplayName => "Pestilence Corpse Lance solo Necromancer";
         public string Description => "The Corpse Lance Necromancer is a powerful elite hunting build, capable of the whole spectrum of content difficulty with minor adjustments";
         public string Author => "jubisman";
-        public string Version => "0.1";
+        public string Version => "0.2";
         public string Url => "https://www.icy-veins.com/d3/necromancer-corpse-lance-build-patch-2-6-1-season-12";
 
         #endregion
@@ -38,6 +39,9 @@ namespace Trinity.Routines.Necromancer
                 { Skills.Necromancer.CorpseLance, null },
             }
         };
+
+        public override Func<bool> ShouldIgnorePackSize => () =>
+        (Skills.Necromancer.LandOfTheDead.IsBuffActive || TargetUtil.CorpseCount(60f) > 0);
 
         public TrinityPower GetBuffPower()
         {
@@ -56,8 +60,17 @@ namespace Trinity.Routines.Necromancer
             Vector3 position;
             TrinityPower power;
 
+            if (ShouldSimulacrum(out position))
+                return Simulacrum(position);
+
+            if (ShouldLandOfTheDead(out target))
+                return LandOfTheDead(target);
+
             if (ShouldWalkToTarget(out target))
+            {
+                Core.Logger.Log("Walking to target");
                 return Walk(target);
+            }
 
             if (ShouldBloodRush(out position))
                 return BloodRush(position);
@@ -67,12 +80,6 @@ namespace Trinity.Routines.Necromancer
 
             if (ShouldCommandSkeletons(out target))
                 return CommandSkeletons(target);
-
-            if (ShouldSimulacrum(out position))
-                return Simulacrum(position);
-
-            if (ShouldLandOfTheDead(out target))
-                return LandOfTheDead(target);
 
             if (ShouldCorpseLance(out target))
                 return CorpseLance(target);
@@ -86,7 +93,8 @@ namespace Trinity.Routines.Necromancer
             if (TryPrimaryPower(out power))
                 return power;
 
-            return Walk(TargetUtil.GetSafeSpotPosition(50f));
+            Core.Logger.Log("Walking to safe spot");
+            return Walk(TargetUtil.GetSafeSpotPosition(40f));
         }
 
         public TrinityPower GetDefensivePower() => GetBuffPower();
@@ -98,7 +106,10 @@ namespace Trinity.Routines.Necromancer
             TrinityPower power;
 
             if (TryBloodrushMovement(destination, out power))
+            {
+                Core.Logger.Log("TryBloodRushMovement");
                 return BloodRush(destination);
+            }
 
             return Walk(destination);
         }
@@ -116,6 +127,22 @@ namespace Trinity.Routines.Necromancer
             return false;
         }
 
+        protected override bool ShouldDecrepify(out TrinityActor target)
+        {
+            target = null;
+            if (!Skills.Necromancer.Decrepify.CanCast())
+                return false;
+
+            if (Skills.Necromancer.LandOfTheDead.IsBuffActive)
+                return false;
+
+            if (Skills.Necromancer.Decrepify.TimeSinceUse < 350)
+                return false;
+
+            target = TargetUtil.BestDecrepifyTarget(60f);
+            return target != null;
+        }
+
         protected override bool ShouldDevour()
         {
             if (!Skills.Necromancer.Devour.CanCast())
@@ -124,10 +151,10 @@ namespace Trinity.Routines.Necromancer
             if (TargetUtil.CorpseCount(60f) <= 0)
                 return false;
 
-            if (Player.PrimaryResourcePct < 0.4f)
-                return true;
+            if (Skills.Necromancer.Devour.TimeSinceUse < 350)
+                return false;
 
-            if (Player.CurrentHealthPct < 0.8f)
+            if (Player.PrimaryResourcePct < 0.4f || Player.CurrentHealthPct < 0.8f)
                 return true;
 
             return false;
@@ -159,7 +186,12 @@ namespace Trinity.Routines.Necromancer
                 return position != Vector3.Zero;
             }
 
-            return true;
+            Core.Logger.Log("Rushing to safe position");
+            position = TargetUtil.GetSafeSpotPosition(50f);
+            if (Player.Position.Distance(position) > 15f)
+                return position != Vector3.Zero;
+
+            return false;
         }
 
         protected override bool ShouldCorpseLance(out TrinityActor target)
@@ -167,19 +199,25 @@ namespace Trinity.Routines.Necromancer
             target = null;
 
             if (!Skills.Necromancer.CorpseLance.CanCast())
-                return false;
+            {
+                Core.Logger.Log("CanCast is false");
+                return false; }
 
             if (Skills.Necromancer.CorpseLance.TimeSinceUse < 150)
-                return false;
+            {
+                Core.Logger.Log("Not enough time has passed");
+                return false; }
 
             var shouldRefreshNays = Legendary.NayrsBlackDeath.IsBuffActive && Core.Buffs.GetBuffStacks(SNOPower.P6_ItemPassive_Unique_Ring_066) < 3;
 
-            if (shouldRefreshNays || Skills.Necromancer.LandOfTheDead.IsBuffActive)
+            if (shouldRefreshNays || Skills.Necromancer.LandOfTheDead.IsBuffActive ||
+                (Settings.UseExtraCorpses && TargetUtil.CorpseCount(60f) > 0))
             {
                 target = TargetUtil.ClosestUnit(60f) ?? CurrentTarget;
                 return target != null;
             }
 
+            Core.Logger.Log("All other checks failed");
             return false;
         }
 
@@ -212,6 +250,7 @@ namespace Trinity.Routines.Necromancer
             private SkillSettings _bloodRush;
             private int _clusterSize;
             private float _emergencyHealthPct;
+            private bool _useExtraCorpses;
 
             [DefaultValue(6)]
             public int ClusterSize
@@ -225,6 +264,13 @@ namespace Trinity.Routines.Necromancer
             {
                 get { return _emergencyHealthPct; }
                 set { SetField(ref _emergencyHealthPct, value); }
+            }
+
+            [DefaultValue(false)]
+            public bool UseExtraCorpses
+            {
+                get { return _useExtraCorpses; }
+                set { SetField(ref _useExtraCorpses, value); }
             }
 
             public SkillSettings BloodRush

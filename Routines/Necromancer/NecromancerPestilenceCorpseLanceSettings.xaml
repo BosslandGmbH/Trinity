@@ -41,6 +41,10 @@
                                 TickPlacement="None" 
                                 Value="{Binding Path=DataContext.EmergencyHealthPct, Converter={StaticResource PercentConverter}}" 
                                 HorizontalAlignment="Stretch" Margin="0"/>
+            <StackPanel Margin="0,5,0,0">
+            <CheckBox ToolTip="Attempt to use all extra corpses nearby instead of leaving them behind"
+                                                            IsChecked="{Binding DataContext.UseExtraCorpses, ConverterParameter=Boolean}">Use extra corpses</CheckBox>
+            </StackPanel>
           </StackPanel>
         </GroupBox>
         <GroupBox>

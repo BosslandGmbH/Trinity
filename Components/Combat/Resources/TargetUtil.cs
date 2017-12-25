@@ -1767,6 +1767,19 @@ namespace Trinity.Components.Combat.Resources
             return units.Any() ? units.FirstOrDefault() : null;
         }
 
+        internal static TrinityActor BestDecrepifyTarget (float range)
+        {
+            var units = (from u in ObjectCache
+                         where u.IsUnit && u.IsValid &&
+                         u.Weight > 0 &&
+                         u.Position.Distance(Player.Position) <= range &&
+                         !(u.Attributes.Powers.ContainsKey(SNOPower.P6_Necro_Decrepify) ||
+                         u.Attributes.Powers.ContainsKey(SNOPower.P6_Necro_PassiveManager_Decrepify))
+                         orderby u.RadiusDistance descending
+                         select u).ToList();
+
+            return units.Any() ? units.FirstOrDefault() : null;
+        }
 
         internal static TrinityActor BestTargetWithoutDebuff(float range, SNOPower debuff, Vector3 position = default(Vector3))
         {
