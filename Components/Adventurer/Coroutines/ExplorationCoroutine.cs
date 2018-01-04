@@ -157,14 +157,17 @@ namespace Trinity.Components.Adventurer.Coroutines
                 }
 
                 var destination = ExplorationHelpers.NearestWeightedUnvisitedNode(_levelAreaIds);
-                if (destination != null)
+
+                // Ignore marking nodes as Visited for bounties.
+                if (destination != null && ZetaDia.Storage.Quests.ActiveBounty == null)
                 {
                     WorldScene destScene = destination.Scene;
                     Vector3 destinationPos = destination.NavigableCenter;
 
                     var exitPositions = destScene.ExitPositions;
                     var connectedScenes = destScene.ConnectedScenes();
-                    var unconnectedExits = exitPositions.Where(ep => connectedScenes.FirstOrDefault(cs => cs.Direction == ep.Key) == null);
+                    var unconnectedExits =
+                        exitPositions.Where(ep => connectedScenes.FirstOrDefault(cs => cs.Direction == ep.Key) == null);
 
                     if (destinationPos.Distance(ExplorationHelpers.PriorityPosition) >= 15)
                     {
