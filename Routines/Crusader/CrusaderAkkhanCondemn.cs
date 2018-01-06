@@ -59,6 +59,9 @@ namespace Trinity.Routines.Crusader
             if (ShouldPunish(out target))
                 return Punish(target);
 
+            if (ShouldShieldGlare(out target))
+                return ShieldGlare(target);
+
             if (ShouldSlash(out target))
                 return Slash(target);
 
