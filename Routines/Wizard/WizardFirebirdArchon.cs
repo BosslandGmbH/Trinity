@@ -22,7 +22,7 @@ namespace Trinity.Routines.Wizard
         public string DisplayName => "Wizard Firebird Archon";
         public string Description => "Specialized combat routine for firebird archon S7 Meta";
         public string Author => "xzjv";
-        public string Version => "0.1";
+        public string Version => "0.1.1";
         public string Url => "https://www.icy-veins.com/d3/wizard-firebird-archon-build-patch-2-6-1-season-12";
 
         public Build BuildRequirements => new Build
@@ -60,7 +60,7 @@ namespace Trinity.Routines.Wizard
                 if (Skills.Wizard.ArchonDisintegrationWave.CanCast())
                 {
                     // Use Wave to pull and ignite monsters that are lined up nicely and are not burning.
-                    var pierceUnits = WeightedUnits.Where(u => u.Distance < 50f && !u.Attributes.HasFirebirdPermanent && !u.Attributes.HasFirebirdTemporary && (u.CountUnitsInFront() + u.CountUnitsBehind(15f)) > 5).ToList();
+                    var pierceUnits = WeightedUnits.Where(u => u.Distance < 50f && !u.Attributes.HasThirdFirebirdStack && !u.Attributes.HasFirstFirebirdStack && (u.CountUnitsInFront() + u.CountUnitsBehind(15f)) > 5).ToList();
                     var bestPierceUnit = pierceUnits.OrderBy(u => u.Distance).FirstOrDefault(u => u.Distance <= 15f);
                     if (bestPierceUnit != null)
                         return ArchonDisintegrationWave(bestPierceUnit);

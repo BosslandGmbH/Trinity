@@ -294,8 +294,8 @@ namespace Trinity.Components.Combat.Resources
             return (from u in SafeList(ignoreElites)
                 where u.IsUnit &&
                       u.Distance <= maxRange && u.IsInLineOfSight &&
-                      !(ignoreUnitsInAoE && u.IsInAvoidance &&
-                        !u.IsAvoidanceOnPath && !u.IsCriticalAvoidanceOnPath) &&
+                      !(ignoreUnitsInAoE && (u.IsInAvoidance ||
+                        u.IsAvoidanceOnPath || u.IsCriticalAvoidanceOnPath)) &&
                       !(ignoreElites && u.IsElite) && !u.IsFrozen
 
                 orderby u.CountUnitsInFront() descending
@@ -1771,7 +1771,6 @@ namespace Trinity.Components.Combat.Resources
         {
             var units = (from u in ObjectCache
                          where u.IsUnit && u.IsValid &&
-                         u.Weight > 0 &&
                          u.Position.Distance(Player.Position) <= range &&
                          !(u.Attributes.Powers.ContainsKey(SNOPower.P6_Necro_Decrepify) ||
                          u.Attributes.Powers.ContainsKey(SNOPower.P6_Necro_PassiveManager_Decrepify))

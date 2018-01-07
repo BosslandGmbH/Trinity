@@ -10,6 +10,7 @@ using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Trinity.UI;
 using Zeta.Common;
+using Trinity.Framework.Avoidance.Structures;
 
 namespace Trinity.Routines.Wizard
 {
@@ -22,7 +23,7 @@ namespace Trinity.Routines.Wizard
             " the might of two sets according to his whims and conjures fiery death. This bursty, hard hitting playstyle is available in " +
             "two Greater Rift solo and regular Rift farming variations, explained in that order.";
         public string Author => "jubisman";
-        public string Version => "0.1.1";
+        public string Version => "0.2";
         public string Url => "https://www.icy-veins.com/d3/wizard-channeling-meteor-firebird-build-patch-2-6-1-season-12";
 
         public Build BuildRequirements => new Build
@@ -41,6 +42,9 @@ namespace Trinity.Routines.Wizard
         #endregion
 
         public override KiteMode KiteMode => KiteMode.Never;
+        public override float TrashRange => 40f;
+        public override float EliteRange => 60f;
+
 
         public TrinityPower GetOffensivePower()
         {
@@ -63,13 +67,15 @@ namespace Trinity.Routines.Wizard
             if (ShouldMeteor(out target))
                 return Meteor(target);
 
-            if (TrySecondaryPower(out power))
-                return power;
+            if (ShouldArcaneTorrent(out target))
+                return ArcaneTorrent(target);
 
             if (TryPrimaryPower(out power))
                 return power;
 
-            return Walk(TargetUtil.GetSafeSpotPosition(20f));
+            Core.Avoidance.Avoider.TryGetSafeSpot(out position, 15f, 40f, Player.Position,
+                node => !TargetUtil.AnyMobsInRangeOfPosition(node.NavigableCenter));
+            return Walk(position);
         }
 
         private static bool ShouldWalkToTarget(out TrinityActor target)
@@ -109,18 +115,26 @@ namespace Trinity.Routines.Wizard
             if (!AllowedToUse(Settings.Teleport, Skills.Wizard.Teleport))
                 return false;
 
-            Vector3 bestBuffedPosition;
-            var bestSafeSpot = TargetUtil.GetSafeSpotPosition(60f);
+            // Dont move from outside avoidance into avoidance.
+            if (!Core.Avoidance.InAvoidance(Player.Position) && Core.Avoidance.Grid.IsLocationInFlags(position, AvoidanceFlags.Avoidance))
+                return false;
 
-            if (TargetUtil.BestBuffPosition(60f, bestSafeSpot, false, out bestBuffedPosition) &&
-                Player.Position.Distance2D(bestBuffedPosition) > 10f && bestBuffedPosition != Vector3.Zero)
+            Vector3 bestBuffedPosition;
+            var bestClusterPoint = TargetUtil.GetBestClusterPoint(15f, 60f, true, false);
+
+            // Try to teleport to Occulus AoE whenever possible
+            if (TargetUtil.BestBuffPosition(25f, bestClusterPoint, false, out bestBuffedPosition) &&
+                Player.Position.Distance2D(bestBuffedPosition) > 10f && bestBuffedPosition != Vector3.Zero &&
+                TargetUtil.NumMobsInRangeOfPosition(bestClusterPoint, 10f) > 7)
             {
                 Core.Logger.Log($"Found buff position - distance: {Player.Position.Distance(bestBuffedPosition)} ({bestBuffedPosition})");
                 position = bestBuffedPosition;
                 return position != Vector3.Zero;
             }
 
-            return false;
+            position = bestClusterPoint;
+
+            return position != Vector3.Zero;
         }
 
         protected override bool ShouldMeteor(out TrinityActor target)
@@ -132,6 +146,19 @@ namespace Trinity.Routines.Wizard
 
             //Core.Logger.Log("Cast Meteor After {0} miliseconds", Skills.Wizard.Meteor.TimeSinceUse);
             return base.ShouldMeteor(out target);
+        }
+
+        protected override bool ShouldArcaneTorrent(out TrinityActor target)
+        {
+            target = null;
+
+            if (!Skills.Wizard.ArcaneTorrent.CanCast())
+                return false;
+
+
+            target = TargetUtil.GetClosestUnit(60f) ?? CurrentTarget;
+            return target != null;
+
         }
 
         public TrinityPower GetDefensivePower() => GetBuffPower();

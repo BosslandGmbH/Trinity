@@ -333,7 +333,19 @@ namespace Trinity.Routines.Necromancer
             return power != null;
         }
 
+        protected virtual bool ShouldLandOfTheDead()
+        {
+            if (!Skills.Necromancer.LandOfTheDead.CanCast())
+                return false;
 
+            if (Player.IsInTown)
+                return false;
+
+            if (!TargetUtil.AnyMobsInRange(60f))
+                return false;
+
+            return true;
+        }
         protected virtual bool ShouldLandOfTheDead(out TrinityActor target)
         {
             target = null;
