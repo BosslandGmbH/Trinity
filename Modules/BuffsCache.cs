@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -33,6 +34,7 @@ namespace Trinity.Modules
         protected override void OnPulse()
         {
             UpdateBuffs();
+            DebugUtil.LogBuffs();
         }
 
         public void UpdateBuffs()

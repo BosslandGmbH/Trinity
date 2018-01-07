@@ -24,7 +24,7 @@ namespace Trinity.Routines.Barbarian
             "Build that uses full IK set for damage bonus and Raekor's for Furious Charge damage";
 
         public string Author => "jubisman";
-        public string Version => "0.2.2";
+        public string Version => "0.2.3";
         public string Url => "http://www.diablofans.com/builds/88896-ik-raekor-charge-v2-0-gr100";
 
         public Build BuildRequirements => new Build
@@ -90,7 +90,9 @@ namespace Trinity.Routines.Barbarian
                 return power;
 
             //Core.Logger.Log("walking to safespot because all other powers failed");
-            return Walk(TargetUtil.GetSafeSpotPosition(20f));
+            Core.Avoidance.Avoider.TryGetSafeSpot(out position, 15f, 40f, Player.Position,
+                node => !TargetUtil.AnyMobsInRangeOfPosition(node.NavigableCenter));
+            return Walk(position);
         }
 
         private static bool ShouldWalkToTarget(out TrinityActor target)
@@ -145,7 +147,7 @@ namespace Trinity.Routines.Barbarian
                 return false;
 
             if (Legendary.AncientParthanDefenders.IsEquipped)
-                position = TargetUtil.FreezePiercePoint(60f);
+                position = TargetUtil.FreezePiercePoint(60f, true);
             position = TargetUtil.GetBestPiercePoint(60f);
 
             return position != Vector3.Zero;
