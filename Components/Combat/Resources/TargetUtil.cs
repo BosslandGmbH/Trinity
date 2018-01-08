@@ -1767,13 +1767,18 @@ namespace Trinity.Components.Combat.Resources
             return units.Any() ? units.FirstOrDefault() : null;
         }
 
+        /// <summary>
+        /// Necromancer's Decrepify has two distinc debuff SNOPowers, both of which are not always applied for some reason,
+        /// so this will also check if the target is already slowed to avoid casting on enemies that are already cursed.
+        /// </summary>
         internal static TrinityActor BestDecrepifyTarget (float range)
         {
             var units = (from u in ObjectCache
                          where u.IsUnit && u.IsValid &&
                          u.Position.Distance(Player.Position) <= range &&
                          !(u.Attributes.Powers.ContainsKey(SNOPower.P6_Necro_Decrepify) ||
-                         u.Attributes.Powers.ContainsKey(SNOPower.P6_Necro_PassiveManager_Decrepify))
+                         u.Attributes.Powers.ContainsKey(SNOPower.P6_Necro_PassiveManager_Decrepify) ||
+                         u.Attributes.IsSlowed)
                          orderby u.RadiusDistance descending
                          select u).ToList();
 

@@ -13,6 +13,7 @@ using System.Linq;
 using Zeta.Game.Internals.Actors;
 using System;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Grid;
 
 namespace Trinity.Routines.Necromancer
 {
@@ -23,7 +24,7 @@ namespace Trinity.Routines.Necromancer
         public string DisplayName => "Pestilence Corpse Lance solo Necromancer";
         public string Description => "The Corpse Lance Necromancer is a powerful elite hunting build, capable of the whole spectrum of content difficulty with minor adjustments";
         public string Author => "jubisman";
-        public string Version => "0.3";
+        public string Version => "0.3.1";
         public string Url => "https://www.icy-veins.com/d3/necromancer-corpse-lance-build-patch-2-6-1-season-12";
 
         #endregion
@@ -70,8 +71,8 @@ namespace Trinity.Routines.Necromancer
                 return Walk(target);
             }
 
-            if (ShouldBloodRush(out position))
-                return BloodRush(position);
+            /*if (ShouldBloodRush(out position))
+                return BloodRush(position);*/
 
             if (ShouldLandOfTheDead())
                 return LandOfTheDead();
@@ -95,26 +96,31 @@ namespace Trinity.Routines.Necromancer
                 return power;
 
             //Core.Logger.Log("Walking to safe spot");
-            Core.Avoidance.Avoider.TryGetSafeSpot(out position, 15f, 40f, Player.Position,
-                node => !TargetUtil.AnyMobsInRangeOfPosition(node.NavigableCenter));
+            Core.Avoidance.Avoider.TryGetSafeSpot(out position, 15f, 60f, Player.Position, AvoidCondition);
             return Walk(position);
+        }
+
+        private bool AvoidCondition(AvoidanceNode n)
+        {
+            return HostileMonsters.FirstOrDefault(u => u.Distance < 10f) != null &&
+                !Core.Avoidance.InAvoidance(n.NavigableCenter) &&
+                Core.Avoidance.Grid.IsIntersectedByFlags(Player.Position, n.NavigableCenter, AvoidanceFlags.CriticalAvoidance);
         }
 
         public TrinityPower GetDefensivePower() => GetBuffPower();
 
         public TrinityPower GetDestructiblePower() => DefaultDestructiblePower();
 
-        public TrinityPower GetMovementPower(Vector3 destination)
+        public TrinityPower GetMovementPower(Vector3 position)
         {
-            TrinityPower power;
-
-            if (TryBloodrushMovement(destination, out power))
+            if (ShouldBloodRush(out position))
             {
                 //Core.Logger.Log("TryBloodRushMovement");
-                return BloodRush(destination);
+                return BloodRush(position);
             }
 
-            return Walk(destination);
+            //Core.Logger.Log("GetMovementPower walk");
+            return Walk(position);
         }
 
         private static bool ShouldWalkToTarget(out TrinityActor target)
@@ -140,10 +146,6 @@ namespace Trinity.Routines.Necromancer
                 return false;
 
             if (Skills.Necromancer.Decrepify.TimeSinceUse < 350)
-                return false;
-
-            if (CurrentTarget.HasDebuff(SNOPower.P6_Necro_Decrepify) ||
-                CurrentTarget.HasDebuff(SNOPower.P6_Necro_PassiveManager_Decrepify))
                 return false;
 
             target = TargetUtil.BestDecrepifyTarget(60f);
@@ -182,7 +184,8 @@ namespace Trinity.Routines.Necromancer
                 return false;
 
             // Dont move from outside avoidance into avoidance.
-            if (!Core.Avoidance.InCriticalAvoidance(Player.Position) && Core.Avoidance.Grid.IsIntersectedByFlags(Player.Position, position, AvoidanceFlags.CriticalAvoidance))
+            if (!Core.Avoidance.InCriticalAvoidance(Player.Position) &&
+                Core.Avoidance.Grid.IsIntersectedByFlags(Player.Position, position, AvoidanceFlags.CriticalAvoidance))
                 return false;
 
             // Try to Rush to Occulus AoE whenever possible
@@ -199,11 +202,10 @@ namespace Trinity.Routines.Necromancer
                 return position != Vector3.Zero;
             }
 
-            // Find a safespot with no monsters within kite range.
-            Core.Avoidance.Avoider.TryGetSafeSpot(out position, 15f, 60f, Player.Position,
-                node => !TargetUtil.AnyMobsInRangeOfPosition(node.NavigableCenter));
+            // Find a safespot with no monsters within range.
+            Core.Avoidance.Avoider.TryGetSafeSpot(out position, 15f, 60f, Player.Position, AvoidCondition);
 
-            return false;
+            return position != null;
         }
 
         protected override bool ShouldCorpseLance(out TrinityActor target)
@@ -218,7 +220,7 @@ namespace Trinity.Routines.Necromancer
             if (shouldRefreshNays || Skills.Necromancer.LandOfTheDead.IsBuffActive ||
                 (Settings.UseExtraCorpses && TargetUtil.CorpseCount(60f) > 0))
             {
-                target = TargetUtil.ClosestUnit(60f) ?? CurrentTarget;
+                target = TargetUtil.BestEliteInRange(60f) ?? CurrentTarget;
                 return target != null;
             }
 

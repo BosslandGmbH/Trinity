@@ -487,6 +487,8 @@ namespace Trinity.Framework.Actors.Attributes
 
         public int EffectOwnerAnnId => GetAttribute<int>(ActorAttributeType.EffectOwnerANN);
 
+        public bool IsSlowed => GetAttribute<bool>(ActorAttributeType.Slow);
+
 
         #endregion
 

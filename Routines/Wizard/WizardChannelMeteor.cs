@@ -23,7 +23,7 @@ namespace Trinity.Routines.Wizard
             " the might of two sets according to his whims and conjures fiery death. This bursty, hard hitting playstyle is available in " +
             "two Greater Rift solo and regular Rift farming variations, explained in that order.";
         public string Author => "jubisman";
-        public string Version => "0.2";
+        public string Version => "0.2.1";
         public string Url => "https://www.icy-veins.com/d3/wizard-channeling-meteor-firebird-build-patch-2-6-1-season-12";
 
         public Build BuildRequirements => new Build
@@ -120,7 +120,7 @@ namespace Trinity.Routines.Wizard
                 return false;
 
             Vector3 bestBuffedPosition;
-            var bestClusterPoint = TargetUtil.GetBestClusterPoint(15f, 60f, true, false);
+            var bestClusterPoint = TargetUtil.GetBestClusterPoint();
 
             // Try to teleport to Occulus AoE whenever possible
             if (TargetUtil.BestBuffPosition(25f, bestClusterPoint, false, out bestBuffedPosition) &&
@@ -155,6 +155,9 @@ namespace Trinity.Routines.Wizard
             if (!Skills.Wizard.ArcaneTorrent.CanCast())
                 return false;
 
+            // Force check because sometimes Trinity won't cast Teleport while channeling, causing us to lose Safe Passage's precious buff
+            if (Runes.Wizard.SafePassage.IsActive && Skills.Wizard.Teleport.CanCast() && Skills.Wizard.Teleport.TimeSinceUse > 4750)
+                return false;
 
             target = TargetUtil.GetClosestUnit(60f) ?? CurrentTarget;
             return target != null;
