@@ -11,6 +11,7 @@ using Trinity.UI;
 using Zeta.Common;
 using System.Linq;
 using Trinity.Settings;
+using Trinity.Framework.Avoidance.Structures;
 
 namespace Trinity.Routines.Monk
 {
@@ -21,7 +22,7 @@ namespace Trinity.Routines.Monk
         public string DisplayName => "DatModz's WK WoL Monk";
         public string Description => "DatModz - GR 110+ Sunwuko WoL Monk: This is a well rounded Solo Pushing Build that works well at high level g-rifts";
         public string Author => "jubisman";
-        public string Version => "0.7";
+        public string Version => "0.7.1";
         public string Url => "http://www.diablofans.com/builds/96442-datmodz-gr-110-sunwuko-wol-monk";
 
         public Build BuildRequirements => new Build
@@ -116,7 +117,9 @@ namespace Trinity.Routines.Monk
             if (TryPrimaryPower(out power))
                 return power;
 
-            return Walk(TargetUtil.GetSafeSpotPosition(20f));
+            Core.Avoidance.Avoider.TryGetSafeSpot(out position, 15f, 40f, Player.Position,
+                node => !TargetUtil.AnyMobsInRangeOfPosition(node.NavigableCenter));
+            return Walk(position);
         }
 
         private static bool ShouldWalkToTarget(out TrinityActor target)
@@ -145,17 +148,26 @@ namespace Trinity.Routines.Monk
             if (!AllowedToUse(Settings.DashingStrike, Skills.Monk.DashingStrike))
                 return false;
 
+            // Dont move from outside avoidance into avoidance.
+            if (!Core.Avoidance.InAvoidance(Player.Position) && Core.Avoidance.Grid.IsLocationInFlags(position, AvoidanceFlags.Avoidance))
+                return false;
+
+            // Try to dash to Occulus AoE whenever possible
             Vector3 bestBuffedPosition;
             var bestClusterPoint = TargetUtil.GetBestClusterPoint();
 
-            if (TargetUtil.BestBuffPosition(50f, bestClusterPoint, false, out bestBuffedPosition) &&
-                Player.Position.Distance(bestBuffedPosition) > 10f && bestBuffedPosition != Vector3.Zero)
+            if (TargetUtil.BestBuffPosition(60f, bestClusterPoint, false, out bestBuffedPosition) &&
+                Player.Position.Distance2D(bestBuffedPosition) > 10f && bestBuffedPosition != Vector3.Zero)
             {
                 Core.Logger.Log($"Found buff position - distance: {Player.Position.Distance(bestBuffedPosition)} ({bestBuffedPosition})");
                 position = bestBuffedPosition;
 
                 return position != Vector3.Zero;
             }
+
+            // Find a safespot with no monsters within kite range.
+            Core.Avoidance.Avoider.TryGetSafeSpot(out position, 15f, 60f, Player.Position,
+                node => !TargetUtil.AnyMobsInRangeOfPosition(node.NavigableCenter));
 
             return true;
         }

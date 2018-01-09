@@ -452,6 +452,7 @@
     <Compile Include="Routines\DemonHunter\DemonHunterShadowImpale.cs" />
     <Compile Include="Routines\DemonHunter\DH_ShadowThreeKnifes.cs" />
     <Compile Include="Routines\Monk\MonkSWKWoL.cs" />
+    <Compile Include="Routines\Necromancer\NecromancerPestilenceCorpseLance.cs" />
     <Compile Include="Routines\Necromancer\NecromancerDefault.cs" />
     <Compile Include="Routines\Necromancer\NecromancerBase.cs" />
     <Compile Include="Routines\Necromancer\NecromancerRathmaFacerollGC.cs" />
@@ -777,6 +778,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Routines\Wizard\WizardChannelMeteorSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Routines\Necromancer\NecromancerPestilenceCorpseLanceSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

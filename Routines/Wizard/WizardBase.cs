@@ -597,7 +597,7 @@ namespace Trinity.Routines.Wizard
             => new TrinityPower(Skills.Wizard.RayOfFrost, 50f, target.AcdId, 25, 25);
 
         protected virtual TrinityPower ArcaneTorrent(TrinityActor target) // Prone to disconnects.
-            => new TrinityPower(Skills.Wizard.ArcaneTorrent, 70f, target.Position, 25, 50);
+            => new TrinityPower(Skills.Wizard.ArcaneTorrent, 70f, target.AcdId, 25, 50);
 
         protected virtual TrinityPower Disintegrate(TrinityActor target)
             => new TrinityPower(Skills.Wizard.Disintegrate, 50f, target.AcdId, 75, 75);

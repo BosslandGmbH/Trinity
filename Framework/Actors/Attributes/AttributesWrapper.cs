@@ -404,9 +404,11 @@ namespace Trinity.Framework.Actors.Attributes
 
         public int MinimapIconOverride => GetAttribute<int>(ActorAttributeType.MinimapIconOverride);
 
-        public bool HasFirebirdTemporary => GetAttribute<bool>(ActorAttributeType.PowerBuff1VisualEffectNone, (int)SNOPower.ItemPassive_Unique_Ring_733_x1);
+        public bool HasFirstFirebirdStack => GetAttribute<bool>(ActorAttributeType.PowerBuff1VisualEffectNone, (int)SNOPower.ItemPassive_Unique_Ring_733_x1);
 
-        public bool HasFirebirdPermanent => GetAttribute<bool>(ActorAttributeType.PowerBuff4VisualEffectNone, (int)SNOPower.ItemPassive_Unique_Ring_733_x1);
+        public bool HasSecondFirebirdStack => GetAttribute<bool>(ActorAttributeType.PowerBuff2VisualEffectNone, (int)SNOPower.ItemPassive_Unique_Ring_733_x1);
+
+        public bool HasThirdFirebirdStack => GetAttribute<bool>(ActorAttributeType.PowerBuff4VisualEffectNone, (int)SNOPower.ItemPassive_Unique_Ring_733_x1);
 
         public bool IsBurrowed => GetAttribute<bool>(ActorAttributeType.Burrowed);
 
@@ -484,6 +486,8 @@ namespace Trinity.Framework.Actors.Attributes
         public bool IsDoorTimed => GetAttribute<int>(ActorAttributeType.DoorTimer) > 0;
 
         public int EffectOwnerAnnId => GetAttribute<int>(ActorAttributeType.EffectOwnerANN);
+
+        public bool IsSlowed => GetAttribute<bool>(ActorAttributeType.Slow);
 
 
         #endregion

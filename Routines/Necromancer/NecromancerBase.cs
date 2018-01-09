@@ -219,7 +219,7 @@ namespace Trinity.Routines.Necromancer
             if (Player.PrimaryResource < PrimaryEnergyReserve)
                 return false;
 
-            target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
+            target = TargetUtil.GetBestPierceTarget(60f) ?? CurrentTarget;
             return target != null;
         }
 
@@ -333,7 +333,19 @@ namespace Trinity.Routines.Necromancer
             return power != null;
         }
 
+        protected virtual bool ShouldLandOfTheDead()
+        {
+            if (!Skills.Necromancer.LandOfTheDead.CanCast())
+                return false;
 
+            if (Player.IsInTown)
+                return false;
+
+            if (!TargetUtil.AnyMobsInRange(60f))
+                return false;
+
+            return true;
+        }
         protected virtual bool ShouldLandOfTheDead(out TrinityActor target)
         {
             target = null;
@@ -557,6 +569,9 @@ namespace Trinity.Routines.Necromancer
             position = Vector3.Zero;
 
             if (!Skills.Necromancer.Simulacrum.CanCast())
+                return false;
+
+            if (!Skills.Necromancer.LandOfTheDead.IsBuffActive)
                 return false;
 
             position = TargetUtil.GetBestClusterPoint();
