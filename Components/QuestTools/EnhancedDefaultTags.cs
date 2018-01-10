@@ -1,18 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity;
-using Trinity.Framework;
-using Trinity.Framework.Actors;
-using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects;
-using Trinity.Framework.Reference;
 using Zeta.Bot.Profile;
 using Zeta.Bot.Profile.Common;
 using Zeta.Bot.Profile.Composites;
 using Zeta.Common;
-using Zeta.Game;
-using Zeta.Game.Internals;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 using Action = Zeta.TreeSharp.Action;

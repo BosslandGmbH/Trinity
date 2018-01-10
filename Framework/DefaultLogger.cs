@@ -1,7 +1,6 @@
 ﻿using log4net;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
-using Zeta.Common;
 
 namespace Trinity.Framework
 {

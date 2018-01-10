@@ -3,7 +3,6 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using Microsoft.Scripting.Utils;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Modules;
 

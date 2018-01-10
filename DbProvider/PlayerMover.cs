@@ -1,7 +1,5 @@
 ﻿using Buddy.Coroutines;
 using System;
-using System.Collections.Generic;
-using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using Trinity.Components.Combat;

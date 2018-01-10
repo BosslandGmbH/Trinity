@@ -8,7 +8,6 @@ using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.Adventurer.Util;
-using Trinity.UI.Visualizer;
 using Zeta.Common;
 using Zeta.Game;
 

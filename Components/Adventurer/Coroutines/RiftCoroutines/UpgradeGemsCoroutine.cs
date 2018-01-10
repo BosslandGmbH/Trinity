@@ -1,12 +1,10 @@
 ﻿using Buddy.Coroutines;
 using System;
 using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Game.Actors;
-using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Framework.Reference;

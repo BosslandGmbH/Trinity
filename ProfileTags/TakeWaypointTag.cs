@@ -7,10 +7,8 @@ using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.QuestTools;
 using Trinity.Framework;
 using Zeta.Bot;
-using Zeta.Bot.Profile;
 using Zeta.Game;
 using Zeta.Game.Internals;
-using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags

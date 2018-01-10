@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Controls;
-using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
@@ -14,8 +12,6 @@ using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Trinity.UI;
 using Zeta.Common;
-using Zeta.Game;
-using Zeta.Game.Internals.Actors;
 
 
 namespace Trinity.Routines.Necromancer

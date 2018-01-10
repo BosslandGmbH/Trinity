@@ -2,7 +2,6 @@
 using System.Linq;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Actors.Attributes;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Reference;
 using Trinity.Settings;

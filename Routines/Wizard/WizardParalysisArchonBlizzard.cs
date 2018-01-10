@@ -10,7 +10,6 @@ using Trinity.Settings;
 using Trinity.UI;
 using Zeta.Common;
 using Trinity.Framework.Reference;
-using System.Linq;
 using Trinity.Framework.Actors.ActorTypes;
 
 namespace Trinity.Routines.Wizard

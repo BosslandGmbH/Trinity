@@ -1,7 +1,6 @@
 ﻿using Trinity.Framework.Helpers;
 using System.Linq;
 using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Controls;

@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
-using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Routines.Necromancer
 {

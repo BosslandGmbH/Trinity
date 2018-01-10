@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel;
-using Trinity.Settings;
-using Zeta.Game.Internals.Actors;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags.EmbedTags

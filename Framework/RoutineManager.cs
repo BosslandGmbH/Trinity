@@ -1,20 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Trinity.Framework.Helpers;
 using System.Linq;
 using System.Threading;
-using Trinity;
-using Trinity.Framework;
-using Trinity.Framework.Actors;
 using Trinity.Framework.Helpers.AutoFollow.Resources;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Trinity.Routines;
 using Trinity.Settings;
-using Zeta.Bot;
-using Zeta.Common;
 using Zeta.Game;
-using Zeta.Game.Internals;
 
 namespace Trinity.Framework
 {

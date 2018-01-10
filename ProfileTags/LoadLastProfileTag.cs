@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using Trinity;
 using Trinity.Components.QuestTools;
 using Trinity.Framework;
-using Trinity.Framework.Actors;
-using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects;
-using Trinity.Framework.Reference;
 using Zeta.Bot;
-using Zeta.Common;
-using Zeta.Game;
-using Zeta.Game.Internals;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags

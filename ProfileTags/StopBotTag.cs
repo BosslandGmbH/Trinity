@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Trinity.Components.QuestTools;
 using Zeta.Bot;
-using Zeta.Bot.Profile;
-using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags

@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Resources;
 using Trinity.Components.QuestTools;
 using Trinity.Framework;
-using Zeta.Bot;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags

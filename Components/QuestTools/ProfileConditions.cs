@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Trinity;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Framework;
-using Trinity.Framework.Actors;
 using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Reference;
 using Trinity.ProfileTags;

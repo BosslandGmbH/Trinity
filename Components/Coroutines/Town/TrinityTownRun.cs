@@ -13,7 +13,6 @@ using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
 using Zeta.Bot.Navigation;
-using Zeta.Bot.Profile;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;

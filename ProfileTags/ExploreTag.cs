@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Trinity.Framework;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
-using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.QuestTools;
-using Trinity.Framework.Objects.Enums;
 using Trinity.ProfileTags.EmbedTags;
-using Zeta.Common;
 using Zeta.Game;
-using Zeta.Game.Internals.Actors;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags

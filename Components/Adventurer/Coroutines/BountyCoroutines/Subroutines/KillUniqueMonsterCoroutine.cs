@@ -7,7 +7,6 @@ using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
 using Trinity.Framework.Helpers;
-using Trinity.UI.Visualizer;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;

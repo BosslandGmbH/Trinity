@@ -6,7 +6,6 @@ using Buddy.Coroutines;
 using GreyMagic;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Events;
-using Trinity.Framework.Helpers;
 using Zeta.Bot;
 using Zeta.Game;
 

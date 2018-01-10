@@ -1,24 +1,12 @@
 ﻿using Trinity.Framework;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
-using Trinity.Components.Coroutines.Town;
 using Trinity.Components.QuestTools;
-using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
-using Trinity.Framework.Reference;
-using Trinity.ProfileTags.EmbedTags;
-using Trinity.Settings;
-using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.Game.Internals;
-using Zeta.Game.Internals.Actors;
-using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags

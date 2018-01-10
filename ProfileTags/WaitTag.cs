@@ -1,18 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using Buddy.Coroutines;
-using Trinity.Components.Adventurer.Coroutines;
 using Trinity.Components.QuestTools;
-using Trinity.Framework;
 using Trinity.Framework.Helpers;
-using Zeta.Bot;
-using Zeta.Bot.Profile;
-using Zeta.Game;
-using Zeta.Game.Internals;
-using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags
