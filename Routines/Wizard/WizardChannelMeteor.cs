@@ -11,6 +11,9 @@ using Trinity.Settings;
 using Trinity.UI;
 using Zeta.Common;
 using Trinity.Framework.Avoidance.Structures;
+using System;
+using Trinity.Components.Combat;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Routines.Wizard
 {
@@ -23,7 +26,7 @@ namespace Trinity.Routines.Wizard
             " the might of two sets according to his whims and conjures fiery death. This bursty, hard hitting playstyle is available in " +
             "two Greater Rift solo and regular Rift farming variations, explained in that order.";
         public string Author => "jubisman";
-        public string Version => "0.2.1";
+        public string Version => "0.3";
         public string Url => "https://www.icy-veins.com/d3/wizard-channeling-meteor-firebird-build-patch-2-6-1-season-12";
 
         public Build BuildRequirements => new Build
@@ -41,16 +44,30 @@ namespace Trinity.Routines.Wizard
 
         #endregion
 
-        public override KiteMode KiteMode => KiteMode.Never;
         public override float TrashRange => 40f;
         public override float EliteRange => 60f;
+        public override Func<bool> ShouldIgnoreKiting => IgnoreCondition;
+        public override Func<bool> ShouldIgnorePackSize => () => Player.IsChannelling;
+        public override Func<bool> ShouldIgnoreNonUnits => () => Player.IsChannelling && Player.CurrentHealthPct > 0.35;
 
+        private bool IgnoreCondition()
+        {
+            var isArcaneTorrentSelected = TrinityCombat.Targeting.CurrentPower?.SNOPower == SNOPower.Wizard_ArcaneTorrent;
+            var isInAvoidance = Core.Avoidance.InCriticalAvoidance(Player.Position);
+            if (isArcaneTorrentSelected && TargetUtil.AnyMobsInRange(30f) && Player.CurrentHealthPct > 0.5f && !isInAvoidance)
+                return true;
+
+            return Player.IsChannelling && Player.CurrentHealthPct > 0.35;
+        }
 
         public TrinityPower GetOffensivePower()
         {
             Vector3 position;
             TrinityActor target;
             TrinityPower power;
+
+            if (ShouldContinueChanneling(out target))
+                return ArcaneTorrent(target);
 
             if (ShouldWalkToTarget(out target))
                 return Walk(target);
@@ -120,20 +137,21 @@ namespace Trinity.Routines.Wizard
                 return false;
 
             Vector3 bestBuffedPosition;
+            var hasAPDs = Legendary.AncientParthanDefenders.IsEquipped;
             var bestClusterPoint = TargetUtil.GetBestClusterPoint();
+            var teleportPoint = hasAPDs ? bestClusterPoint : TargetUtil.GetSafeSpotPosition(40f);
+            var oculusMobs = hasAPDs ? TargetUtil.NumMobsInRangeOfPosition(teleportPoint, 10f) > 3 : true;
+            var distance = hasAPDs ? 25f : 50f;
 
-            // Try to teleport to Occulus AoE whenever possible
-            if (TargetUtil.BestBuffPosition(25f, bestClusterPoint, false, out bestBuffedPosition) &&
-                Player.Position.Distance2D(bestBuffedPosition) > 10f && bestBuffedPosition != Vector3.Zero &&
-                TargetUtil.NumMobsInRangeOfPosition(bestClusterPoint, 10f) > 7)
+            if (TargetUtil.BestBuffPosition(distance, bestClusterPoint, false, out bestBuffedPosition) &&
+                Player.Position.Distance2D(bestBuffedPosition) > 10f && bestBuffedPosition != Vector3.Zero && oculusMobs)
             {
                 Core.Logger.Log($"Found buff position - distance: {Player.Position.Distance(bestBuffedPosition)} ({bestBuffedPosition})");
                 position = bestBuffedPosition;
                 return position != Vector3.Zero;
             }
 
-            position = bestClusterPoint;
-
+            position = teleportPoint;
             return position != Vector3.Zero;
         }
 
@@ -155,13 +173,30 @@ namespace Trinity.Routines.Wizard
             if (!Skills.Wizard.ArcaneTorrent.CanCast())
                 return false;
 
-            // Force check because sometimes Trinity won't cast Teleport while channeling, causing us to lose Safe Passage's precious buff
-            if (Runes.Wizard.SafePassage.IsActive && Skills.Wizard.Teleport.CanCast() && Skills.Wizard.Teleport.TimeSinceUse > 4750)
+            target = TargetUtil.GetBestClusterUnit(15f, 40f) ?? CurrentTarget;
+            return target != null;
+        }
+
+        bool ShouldContinueChanneling(out TrinityActor target)
+        {
+            Vector3 position;
+            var interruptForTeleport = ShouldTeleport(out position);
+            var interruptForMeteor = ShouldMeteor(out target);
+
+            if (!Player.IsChannelling)
                 return false;
+
+            if (Player.IsChannelling)
+            {
+                if (interruptForTeleport)
+                    return false;
+
+                if (interruptForMeteor)
+                    return false;
+            }
 
             target = TargetUtil.GetClosestUnit(60f) ?? CurrentTarget;
             return target != null;
-
         }
 
         public TrinityPower GetDefensivePower() => GetBuffPower();
@@ -185,6 +220,8 @@ namespace Trinity.Routines.Wizard
 
         public override int ClusterSize => Settings.ClusterSize;
         public override float EmergencyHealthPct => Settings.EmergencyHealthPct;
+        public override float KiteDistance => 5f;
+        public override int KiteHealthPct => 35;
 
         IDynamicSetting IRoutine.RoutineSettings => Settings;
         public WizardChannelMeteorSettings Settings { get; } = new WizardChannelMeteorSettings();

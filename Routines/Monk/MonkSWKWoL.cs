@@ -22,7 +22,7 @@ namespace Trinity.Routines.Monk
         public string DisplayName => "DatModz's WK WoL Monk";
         public string Description => "DatModz - GR 110+ Sunwuko WoL Monk: This is a well rounded Solo Pushing Build that works well at high level g-rifts";
         public string Author => "jubisman";
-        public string Version => "0.7.1";
+        public string Version => "0.7.2";
         public string Url => "http://www.diablofans.com/builds/96442-datmodz-gr-110-sunwuko-wol-monk";
 
         public Build BuildRequirements => new Build
@@ -165,11 +165,11 @@ namespace Trinity.Routines.Monk
                 return position != Vector3.Zero;
             }
 
-            // Find a safespot with no monsters within kite range.
+            // Find a safespot with no monsters within range.
             Core.Avoidance.Avoider.TryGetSafeSpot(out position, 15f, 60f, Player.Position,
                 node => !TargetUtil.AnyMobsInRangeOfPosition(node.NavigableCenter));
 
-            return true;
+            return position != Vector3.Zero;
         }
 
         protected override bool ShouldWaveOfLight(out TrinityActor target)
