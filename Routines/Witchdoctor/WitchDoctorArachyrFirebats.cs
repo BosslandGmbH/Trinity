@@ -94,8 +94,11 @@ namespace Trinity.Routines.Witchdoctor
 
                 if (!HasJeramsRevengeBuff && ZetaDia.Me.IsInCombat && Skills.WitchDoctor.WallOfDeath.CanCast())
                 {
-                    //Core.Logger.Log(LogCategory.Routine, $"Casting Wall of Death on {allUnits.FirstOrDefault()}");
-                    return WallOfDeath(allUnits.FirstOrDefault());
+                    if (allUnits != null)
+                    {
+                        //Core.Logger.Log(LogCategory.Routine, $"Casting Wall of Death on {allUnits.FirstOrDefault()}");
+                        return WallOfDeath(allUnits.FirstOrDefault());
+                    }
                 }
 
                 // SpiritWalk for the invulnerability
