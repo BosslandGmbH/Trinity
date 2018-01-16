@@ -25,7 +25,7 @@ namespace Trinity.Routines.Witchdoctor
         public string DisplayName => "Arachyr Firebats";
         public string Description => "Specialized combat for channelling firebats with Arachyr set.";
         public string Author => "xzjv";
-        public string Version => "0.1";
+        public string Version => "0.2";
         public string Url => "http://www.icy-veins.com/d3/witch-doctor-firebats-angry-chicken-with-arachyr-or-helltooth-sets-patch-2-4-3-season-9";
 
 
@@ -62,7 +62,6 @@ namespace Trinity.Routines.Witchdoctor
         public TrinityPower GetOffensivePower()
         {
             Vector3 position;
-            TrinityPower power;
 
             var allUnits = Core.Targets.ByType[TrinityObjectType.Unit].Where(u => u.IsUnit && u.RadiusDistance <= 50f).ToList();
 
@@ -80,7 +79,6 @@ namespace Trinity.Routines.Witchdoctor
             //10 second 60% damage reduction should always be on to survive
             if (!HasJeramsRevengeBuff && Player.CurrentHealthPct > 0.4 && !Core.Avoidance.InCriticalAvoidance(Player.Position) && (ZetaDia.Me.IsInCombat || Player.CurrentHealthPct < 0.4) && bestClusterUnit != null && Skills.WitchDoctor.WallOfDeath.CanCast())
             {
-                Core.Logger.Log(LogCategory.Routine, $"Casting Wall of Death on {allUnits.FirstOrDefault()}");
                 return WallOfDeath(allUnits.FirstOrDefault());
             }
 
@@ -88,29 +86,36 @@ namespace Trinity.Routines.Witchdoctor
             {
                 if (Player.HasBuff(SNOPower.Witchdoctor_Hex))
                 {
-                    Core.Logger.Log(LogCategory.Routine, $"Casting Explode Chicken");
                     Vector3 explodePos = PlayerMover.IsBlocked ? Player.Position : bestClusterUnit.Position;
                     return ExplodeChicken(explodePos);
                 }
 
                 if (!HasJeramsRevengeBuff && ZetaDia.Me.IsInCombat && Skills.WitchDoctor.WallOfDeath.CanCast())
                 {
-                    Core.Logger.Log(LogCategory.Routine, $"Casting Wall of Death on {allUnits.FirstOrDefault()}");
-                    return WallOfDeath(allUnits.FirstOrDefault());
+                    var target = allUnits.FirstOrDefault();
+                    if (target != null)
+                        return WallOfDeath(target);
                 }
 
-                if (!Player.HasBuff(SNOPower.Witchdoctor_Hex) && Skills.WitchDoctor.Hex.CanCast())
+                // SpiritWalk for the invulnerability
+                if (Skills.WitchDoctor.SpiritWalk.CanCast() && Settings.SpiritWalk.UseMode == UseTime.Default && TargetUtil.AnyMobsInRange(20f))
                 {
-                    Core.Logger.Log(LogCategory.Routine, $"Casting Hex");
-                    return Hex(CurrentTarget.Position);
+                    return SpiritWalk();
+                }
+
+                // Spam hex for the 50% damage reduction
+                var closeUnit = HostileMonsters.FirstOrDefault(u => u.Distance < 40f);
+                if (!Player.HasBuff(SNOPower.Witchdoctor_Hex) && Skills.WitchDoctor.Hex.CanCast() && closeUnit != null)
+                {
+                    return Hex(TargetUtil.GetBestClusterPoint(15f, 20f));
                 }
 
                 var targetsWithoutLocust = clusterUnits.Where(u => !u.HasDebuff(SNOPower.Witchdoctor_Locust_Swarm)).OrderBy(u => u.Distance);
                 var isAnyTargetWithLocust = clusterUnits.Any(u => u.HasDebuff(SNOPower.Witchdoctor_Locust_Swarm) && u.Distance < 45f);
                 var percentTargetsWithHaunt = TargetUtil.DebuffedPercent(SNOPower.Witchdoctor_Haunt, 8f);
                 var percentTargetsWithLocust = TargetUtil.DebuffedPercent(SNOPower.Witchdoctor_Locust_Swarm, 12f);
-                var isEliteWithoutHaunt = clusterUnits.Any(u => u.IsElite && !u.HasDebuff(SNOPower.Witchdoctor_Haunt));
-                var isElitewithoutLocust = clusterUnits.Any(u => u.IsElite && !u.HasDebuff(SNOPower.Witchdoctor_Locust_Swarm));
+                var isEliteWithoutHaunt = clusterUnits.Any(u => u.IsElite && !u.HasDebuff(SNOPower.Witchdoctor_Haunt) && u.Distance <= 20f);
+                var isElitewithoutLocust = clusterUnits.Any(u => u.IsElite && !u.HasDebuff(SNOPower.Witchdoctor_Locust_Swarm) && u.Distance <= 20f);
                 var harvestStacks = Skills.WitchDoctor.SoulHarvest.BuffStacks;
                 var harvestBuffCooldown = Core.Cooldowns.GetBuffCooldown(SNOPower.Witchdoctor_SoulHarvest);
                 var harvestPossibleStackGain = 10 - harvestStacks;
@@ -119,24 +124,16 @@ namespace Trinity.Routines.Witchdoctor
                 var interruptForHaunt = percentTargetsWithHaunt < 0.2f || isEliteWithoutHaunt;  
                 var needToSwarmElite = isElitewithoutLocust && !((Legendary.VileHive.IsEquipped || Runes.WitchDoctor.Pestilence.IsActive) && isAnyTargetWithLocust);
                 var interruptForLocust = (percentTargetsWithLocust < 0.1f || needToSwarmElite) && Player.PrimaryResource > 300 && Skills.WitchDoctor.LocustSwarm.CanCast();
+                var interruptForHex = Skills.WitchDoctor.Hex.CanCast();
+                var interruptForSpiritWalk = Skills.WitchDoctor.SpiritWalk.CanCast() && Settings.SpiritWalk.UseMode == UseTime.Default && Player.CurrentHealthPct < 0.9f;
 
                 // continue channelling firebats?
                 if (Player.IsChannelling)
                 {
-                    if (!interruptForHaunt && !interruptForLocust && !interruptForHarvest)
+                    if (!interruptForHaunt && !interruptForLocust && !interruptForHarvest && !interruptForHex && !interruptForSpiritWalk)
                     {
-                        Core.Logger.Log(LogCategory.Routine, "Continuation of Firebats.");
                         return new TrinityPower(SNOPower.Witchdoctor_Firebats, 30f, Player.Position, 75, 250);
                     }
-
-                    if (interruptForHaunt)
-                        Core.Logger.Log(LogCategory.Routine, "Interrupted Firebats to haunt");
-
-                    if (interruptForLocust)
-                        Core.Logger.Log(LogCategory.Routine, "Interrupted Firebats to locust");
-
-                    if (interruptForHarvest)
-                        Core.Logger.Log(LogCategory.Routine, "Interrupted Firebats to harvest");
                 }
 
                 // Emergency health situation
@@ -144,19 +141,16 @@ namespace Trinity.Routines.Witchdoctor
                 {
                     if (Skills.WitchDoctor.SpiritWalk.CanCast())
                     {
-                        Core.Logger.Log(LogCategory.Routine, $"Defensive Spirit Walking");
                         return SpiritWalk();
                     }
 
                     if (TargetUtil.AnyMobsInRange(12f) && Skills.WitchDoctor.SoulHarvest.CanCast())
                     {
-                        Core.Logger.Log(LogCategory.Routine, "Emergency Harvest");
                         return SoulHarvest();
                     }
 
                     if (!HasJeramsRevengeBuff && Skills.WitchDoctor.WallOfDeath.CanCast() && allUnits.Any())
                     {
-                        Core.Logger.Log(LogCategory.Routine, $"Casting Defensive WallOfDeath on {allUnits.FirstOrDefault()}");
                         return WallOfDeath(allUnits.FirstOrDefault());
                     }
                 }
@@ -166,19 +160,15 @@ namespace Trinity.Routines.Witchdoctor
                 {
                     if ((percentTargetsWithLocust < Settings.LocustPct || needToSwarmElite) && Player.PrimaryResource > 300 && targetsWithoutLocust.Any())
                     {
-                        Core.Logger.Log(LogCategory.Routine, "Locust");
-                        return new TrinityPower(SNOPower.Witchdoctor_Locust_Swarm, 10f, targetsWithoutLocust.First().Position, 0, 0);
+                        return new TrinityPower(SNOPower.Witchdoctor_Locust_Swarm, 10f, targetsWithoutLocust.First().AcdId, 0, 0);
                     }
                 }
 
                 // Soul harvest for the damage reduction of Okumbas Ornament
                 if (Skills.WitchDoctor.SoulHarvest.CanCast() && (bestClusterUnit.Distance < 12f || harvestStacks < 4 && TargetUtil.AnyMobsInRange(10f)) && harvestStacks < 10)
                 {
-                    Core.Logger.Log(LogCategory.Routine, $"Harvest State: StackGainPossible={harvestPossibleStackGain} Units={harvestUnitsInRange} BuffRemainingSecs:{harvestBuffCooldown?.Remaining.TotalSeconds:N2}");
-
                     if (harvestPossibleStackGain <= harvestUnitsInRange)
                     {
-                        Core.Logger.Log(LogCategory.Routine, $"Soul Harvest.");
                         return SoulHarvest();
                     }
                 }
@@ -198,7 +188,6 @@ namespace Trinity.Routines.Witchdoctor
                 if ((percentTargetsWithHaunt < Settings.HauntPct || isEliteWithoutHaunt) && targetsWithoutHaunt.Any() && Player.PrimaryResource > 100)
                 {
                     var target = targetsWithoutHaunt.First();
-                    Core.Logger.Log(LogCategory.Routine, $"Haunt on {target}");
                     return Haunt(target);
                 }
 
@@ -206,18 +195,17 @@ namespace Trinity.Routines.Witchdoctor
                 TargetUtil.BestBuffPosition(16f, bestClusterUnit.Position, true, out bestBuffedPosition);
                 var bestClusterUnitRadiusPosition = MathEx.GetPointAt(bestClusterUnit.Position, bestClusterUnit.CollisionRadius * 1.1f, bestClusterUnit.Rotation);
                 var bestFirebatsPosition = bestBuffedPosition != Vector3.Zero ? bestBuffedPosition : bestClusterUnitRadiusPosition;
-                var distance = bestFirebatsPosition.Distance(Player.Position);
+                var distance = bestFirebatsPosition.Distance2D(Player.Position);
 
                 // Walk into cluster or buffed location.
-                if (distance > 10f && !PlayerMover.IsBlocked)
+                if (distance > 10f && distance < 35f && !PlayerMover.IsBlocked)
                 {
                     if (distance > 20f && Skills.WitchDoctor.SpiritWalk.CanCast())
                     {
-                        Core.Logger.Log(LogCategory.Routine, $"Spirit Walking");
                         return SpiritWalk();
                     }
 
-                    Core.Logger.Warn($"Walking to cluster position. Dist: {bestFirebatsPosition.Distance(Player.Position)}");    
+                    //Core.Logger.Warn($"Walking to cluster position. Dist: {bestFirebatsPosition.Distance(Player.Position)}");    
                     return new TrinityPower(SNOPower.Walk, 3f, bestFirebatsPosition, 0, 0);
                 }
 
@@ -226,23 +214,10 @@ namespace Trinity.Routines.Witchdoctor
                     var closestUnit = allUnits.OrderBy(u => u.Distance).FirstOrDefault();
                     if (closestUnit != null)
                     {
-                        Core.Logger.Log(LogCategory.Routine, $"Casting Firebats");
                         return Firebats(closestUnit);
                     }
                 }
             }
-
-            //if (IsChannellingFirebats && Player.CurrentHealthPct > 0.5f && TargetUtil.AnyMobsInRange(FireBatsRange))
-            //    return Firebats();
-
-            //if (TrySpecialPower(out power))
-            //    return power;
-
-            //if (TrySecondaryPower(out power))
-            //    return power;
-
-            //if (TryPrimaryPower(out power))
-            //    return power;
 
             return Walk(TargetUtil.GetLoiterPosition(CurrentTarget, 15f));
         }
@@ -303,7 +278,7 @@ namespace Trinity.Routines.Witchdoctor
         public override int ClusterSize => Settings.ClusterSize;
         public override float EmergencyHealthPct => Settings.EmergencyHealthPct;
         public override float KiteDistance => 5f;
-        public override int KiteHealthPct => 90;
+        public override int KiteHealthPct => 35;
 
         IDynamicSetting IRoutine.RoutineSettings => Settings;
         public WitchDoctorArachyrFirebatsSettings Settings { get; } = new WitchDoctorArachyrFirebatsSettings();
