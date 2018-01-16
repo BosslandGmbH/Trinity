@@ -1,12 +1,10 @@
 ﻿using System;
 using Trinity.Framework;
 using System.Threading.Tasks;
-using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
 using Zeta.Common;
-using Zeta.Game;
 
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines

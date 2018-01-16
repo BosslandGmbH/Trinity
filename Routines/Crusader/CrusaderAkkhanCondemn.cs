@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;

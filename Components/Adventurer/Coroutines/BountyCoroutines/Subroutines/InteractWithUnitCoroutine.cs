@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
-using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
 using Zeta.Bot.Navigation;

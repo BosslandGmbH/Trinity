@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using Trinity.Framework;
 using System.Windows.Forms;
 using System.Windows.Media;

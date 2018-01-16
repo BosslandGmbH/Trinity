@@ -4,10 +4,7 @@ using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines;
 using Trinity.Components.Adventurer.Game.Events;
 using Trinity.Components.QuestTools;
-using Zeta.Bot;
-using Zeta.Bot.Profile;
 using Zeta.Game;
-using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags

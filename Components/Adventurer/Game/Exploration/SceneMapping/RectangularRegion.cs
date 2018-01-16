@@ -1,4 +1,3 @@
-using System.Windows;
 using Zeta.Common;
 
 namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping

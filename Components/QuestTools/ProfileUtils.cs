@@ -4,13 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Trinity;
 using Trinity.Components.QuestTools.Helpers;
 using Trinity.Framework;
-using Trinity.Framework.Actors;
-using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects;
-using Trinity.Framework.Reference;
 using Zeta.Bot;
 using Zeta.Bot.Profile;
 using Zeta.Bot.Profile.Common;
@@ -18,7 +13,6 @@ using Zeta.Bot.Profile.Composites;
 using Zeta.Bot.Settings;
 using Zeta.Common;
 using Zeta.Game;
-using Zeta.Game.Internals;
 
 namespace Trinity.Components.QuestTools
 {

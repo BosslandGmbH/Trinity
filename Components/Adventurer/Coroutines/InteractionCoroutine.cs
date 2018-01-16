@@ -1,19 +1,16 @@
 ﻿using Buddy.Coroutines;
 using System;
-using System.Collections.Generic;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Actors;
-using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Framework.Reference;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
-using Zeta.Game.Internals.SNO;
 
 
 namespace Trinity.Components.Adventurer.Coroutines

@@ -1,12 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using Demonbuddy;
-using Zeta.Bot;
 
 namespace Trinity.Framework.Helpers
 {

@@ -1,12 +1,10 @@
 using System;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using Trinity.DbProvider;
 using Trinity.Framework.Reference;
-using Trinity.ProfileTags;
 using Trinity.Settings;
 using Trinity.UI;
 using Trinity.UI.Visualizer;

@@ -3,8 +3,6 @@
 using System;
 using System.Windows;
 using Zeta.Bot;
-using Zeta.Bot.Settings;
-using Zeta.Common;
 using Zeta.Common.Plugins;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;

@@ -1,14 +1,11 @@
 ﻿using System;
 using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.DbProvider;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Grid;
 using Trinity.Framework.Objects;
-using Zeta.Game;
-using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Modules
 {

@@ -8,8 +8,6 @@ using Trinity.Components.Coroutines.Town;
 using Trinity.Components.QuestTools;
 using Trinity.ProfileTags.EmbedTags;
 using Trinity.Settings;
-using Zeta.Bot;
-using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags

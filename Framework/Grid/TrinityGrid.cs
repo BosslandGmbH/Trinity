@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Trinity.Components.Adventurer.Game.Exploration;
-using Trinity.Components.Combat;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance;

@@ -9,7 +9,6 @@ using System.Windows.Controls;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
-using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
 using Trinity.Settings;
 using Trinity.UI;

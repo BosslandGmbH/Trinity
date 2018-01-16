@@ -1,8 +1,6 @@
 ﻿using System;
 using Trinity.Framework.Helpers;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 using Trinity.Components.Coroutines.Town;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Actors.Attributes;
@@ -257,13 +255,16 @@ namespace Trinity.Framework.Actors.Properties
             if (actor.InventorySlot != InventorySlot.None)
                 return false;
 
-            if (actor.Attributes?.ItemBoundToACDId > 0)
+            if (actor.Attributes?.ItemBoundToACDId != -1)
             {
-                return actor.Attributes.ItemBoundToACDId == Core.Actors.Me?.AcdId;
+                return actor.Attributes != null && actor.Attributes.ItemBoundToACDId == Core.Actors.Me?.AcdId;
             }
 
             if (actor.ItemQualityLevel >= ItemQuality.Legendary || actor.IsCraftingReagent)
             {
+                if (actor.Attributes?.ItemBoundToACDId == -1)
+                    return true;
+
                 return actor.Attributes != null && actor.IsTradeable;
             }
 

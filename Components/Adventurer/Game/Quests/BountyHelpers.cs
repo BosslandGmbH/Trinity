@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using Trinity.Framework;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Events;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.Adventurer.Util;
-using Trinity.Framework.Actors;
 using Trinity.Framework.Helpers;
 using Zeta.Common;
 using Zeta.Game;

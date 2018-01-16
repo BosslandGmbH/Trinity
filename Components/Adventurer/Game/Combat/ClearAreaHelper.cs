@@ -1,14 +1,10 @@
 ﻿using System;
 using Trinity.Framework;
-using System.Collections.Generic;
-using System.Linq;
 using Trinity.Components.Adventurer.Game.Actors;
-using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Zeta.Bot;
 using Zeta.Common;
-using Zeta.Game.Internals.SNO;
 
 
 namespace Trinity.Components.Adventurer.Game.Combat

@@ -10,7 +10,6 @@ using Trinity.Framework.Reference;
 using Trinity.UI;
 using Zeta.Common;
 using System.Linq;
-using Trinity.Settings;
 using Trinity.Framework.Avoidance.Structures;
 
 namespace Trinity.Routines.Monk

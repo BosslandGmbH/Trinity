@@ -1,7 +1,6 @@
 ﻿using Buddy.Coroutines;
 using System;
 using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Framework.Reference;

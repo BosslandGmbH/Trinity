@@ -1,14 +1,9 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.RiftCoroutines;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.QuestTools;
-using Trinity.Framework;
-using Zeta.Bot;
-using Zeta.Bot.Profile;
 using Zeta.Game.Internals;
-using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags

@@ -4,7 +4,6 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Xml.Serialization;
 using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Modules;
 using Zeta.Common;

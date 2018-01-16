@@ -30,7 +30,6 @@ using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Trinity.UI.Visualizer;
-using Zeta.Game.Internals;
 using CurrencyType = Zeta.Game.CurrencyType;
 
 

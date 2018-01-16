@@ -3,10 +3,7 @@ using Trinity.Framework;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.QuestTools;
-using Zeta.Bot;
-using Zeta.Bot.Profile;
 using Zeta.Game;
-using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 using System.Threading.Tasks;
 

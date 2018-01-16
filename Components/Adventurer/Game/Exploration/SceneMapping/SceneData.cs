@@ -1,12 +1,5 @@
-﻿using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
-using System.Collections.Generic;
-using System.Linq;
-using Trinity.Components.Adventurer.Game.Rift;
-using Zeta.Bot;
+﻿using System.Collections.Generic;
 using Zeta.Common;
-using Zeta.Game;
 
 
 namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping

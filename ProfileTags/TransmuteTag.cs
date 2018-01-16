@@ -9,10 +9,7 @@ using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Reference;
 using Trinity.ProfileTags.EmbedTags;
 using Trinity.Settings;
-using Zeta.Bot;
 using Zeta.Game;
-using Zeta.Game.Internals.Actors;
-using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags
