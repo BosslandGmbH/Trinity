@@ -290,7 +290,7 @@ namespace Trinity.Routines.Monk
             private static readonly SkillSettings EpiphanyDefaults = new SkillSettings
             {
                 UseMode = UseTime.Selective,
-                Reasons = UseReasons.Elites | UseReasons.HealthEmergency
+                Reasons = UseReasons.Elites | UseReasons.Surrounded | UseReasons.HealthEmergency,
             };
 
             private static readonly SkillSettings DashingStrikeDefaults = new SkillSettings

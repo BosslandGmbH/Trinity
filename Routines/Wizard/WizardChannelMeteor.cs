@@ -177,7 +177,7 @@ namespace Trinity.Routines.Wizard
             return target != null;
         }
 
-        bool ShouldContinueChanneling(out TrinityActor target)
+        private bool ShouldContinueChanneling(out TrinityActor target)
         {
             Vector3 position;
             var interruptForTeleport = ShouldTeleport(out position);
