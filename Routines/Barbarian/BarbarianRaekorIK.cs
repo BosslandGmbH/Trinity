@@ -137,7 +137,6 @@ namespace Trinity.Routines.Barbarian
         protected override bool ShouldFuriousCharge(out Vector3 position)
         {
             position = Vector3.Zero;
-            TrinityActor target = null;
 
             if (!Skills.Barbarian.FuriousCharge.CanCast())
                 return false;

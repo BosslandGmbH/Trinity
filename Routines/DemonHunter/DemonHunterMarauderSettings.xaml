@@ -16,7 +16,8 @@
             <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
             <converters:EnumVisibilityConverter x:Key="HiddenWhenEnumTrueConverter" Reverse="True"/>
             <converters:EnumVisibilityConverter x:Key="VisibleWhenEnumTrueConverter" />
-        </ResourceDictionary>
+            <converters:FlagsToBoolConverter x:Key="FlagsToValueConverter" />
+    </ResourceDictionary>
     </UserControl.Resources>
     <Border Padding="10">
         <Grid>
@@ -65,11 +66,11 @@
                         </WrapPanel>
                         <StackPanel Margin="0,5,0,0" Visibility="{Binding DataContext.Vengeance.UseMode, ConverterParameter=Selective, Converter={StaticResource VisibleWhenEnumTrueConverter}}">
                             <CheckBox ToolTip="Use when there are elites close nearby" 
-                                      IsChecked="{Binding DataContext.Epiphany.Reasons, ConverterParameter=Elites, Converter={converters:FlagsToBoolConverter}}">Elites nearby</CheckBox>
+                                      IsChecked="{Binding DataContext.Vengeance.Reasons, ConverterParameter=Elites, Converter={converters:FlagsToBoolConverter}}">Elites nearby</CheckBox>
                             <CheckBox ToolTip="Use when you are surrounded by enemies" 
-                                      IsChecked="{Binding DataContext.Epiphany.Reasons, ConverterParameter=Surrounded, Converter={converters:FlagsToBoolConverter}}">Surrounded</CheckBox>
+                                      IsChecked="{Binding DataContext.Vengeance.Reasons, ConverterParameter=Surrounded, Converter={converters:FlagsToBoolConverter}}">Surrounded</CheckBox>
                             <CheckBox ToolTip="Use when you're low on health" 
-                                      IsChecked="{Binding DataContext.Epiphany.Reasons, ConverterParameter=HealthEmergency, Converter={converters:FlagsToBoolConverter}}">Health emergency</CheckBox>                        </StackPanel>
+                                      IsChecked="{Binding DataContext.Vengeance.Reasons, ConverterParameter=HealthEmergency, Converter={converters:FlagsToBoolConverter}}">Health emergency</CheckBox>                        </StackPanel>
                     </StackPanel>
                 </GroupBox>                
                 <GroupBox>

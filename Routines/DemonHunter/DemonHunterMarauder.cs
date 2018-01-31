@@ -7,7 +7,8 @@ using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Trinity.UI;
 using Zeta.Common;
-
+using Trinity.Framework;
+using Zeta.Common.Helpers;
 
 namespace Trinity.Routines.DemonHunter
 {
@@ -15,17 +16,17 @@ namespace Trinity.Routines.DemonHunter
     {
         #region Definition
 
-        public string DisplayName => "Marauder Cluster Arrow Routine";
+        public string DisplayName => "Marauder/Natalya's Cluster Arrow Routine";
         public string Description => "A focus on sentry placement and cluster arrow from range.";
         public string Author => "xzjv";
-        public string Version => "0.1";
+        public string Version => "0.2";
         public string Url => "http://www.icy-veins.com/d3/demon-hunter-sentry-cluster-arrow-build-with-the-embodiment-of-the-marauder-set-patch-2-4-2-season-7";
 
         public Build BuildRequirements => new Build
         {
             Sets = new Dictionary<Set, SetBonus>
             {
-                { Sets.EmbodimentOfTheMarauder, SetBonus.Third }
+                { Sets.EmbodimentOfTheMarauder, SetBonus.Second }
             },
             Items = new List<Item>
             {
@@ -43,7 +44,11 @@ namespace Trinity.Routines.DemonHunter
         public TrinityPower GetOffensivePower()
         {
             TrinityPower power;
-            Vector3 position;            
+            Vector3 position;
+
+            Vector3 buffPosition;
+            if (ShouldWalkToGroundBuff(out buffPosition))
+                return Walk(buffPosition);
 
             if (AllowedToUse(Settings.Vault, Skills.DemonHunter.Vault) && ShouldVault(out position))
                 return Vault(position);
@@ -51,10 +56,14 @@ namespace Trinity.Routines.DemonHunter
             if (ShouldRefreshBastiansGenerator && TryPrimaryPower(out power))
                 return power;
 
+            if (ShouldRefreshWrapsOfClarity() && TryPrimaryPower(out power))
+                return power;
+
             if (TrySpecialPower(out power))
                 return power;
 
-            if (TrySecondaryPower(out power))
+            var shouldInterruptCasting = Core.Avoidance.Avoider.ShouldKite || Core.Avoidance.Avoider.ShouldAvoid;
+            if (!shouldInterruptCasting && TrySecondaryPower(out power))
                 return power;
 
             if (TryPrimaryPower(out power))
@@ -64,6 +73,91 @@ namespace Trinity.Routines.DemonHunter
                 return Walk(CurrentTarget);
 
             return null;
+        }
+
+        private static bool ShouldRefreshWrapsOfClarity()
+        {
+            if (!Legendary.WrapsOfClarity.IsEquipped)
+                return false;
+
+            if (Player.IsInTown)
+                return false;
+
+            if (!TargetUtil.AnyMobsInRange(65f))
+                return false;
+
+            if (IsNoPrimary)
+                return false;
+
+            if (SpellHistory.TimeSinceGeneratorCast < 4750)
+                return false;
+
+            return true;
+        }
+
+        protected override bool ShouldVault(out Vector3 destination)
+        {
+            destination = Vector3.Zero;
+
+            if (!Skills.DemonHunter.Vault.CanCast())
+                return false;
+
+            // The more we stand still the more damage we deal
+            if (IsInCombat && !Core.Avoidance.Avoider.ShouldAvoid && !Core.Avoidance.Avoider.ShouldKite && Sets.EndlessWalk.IsEquipped)
+                return false;
+
+            // Try to vault to Occulus AoE whenever possible
+            Vector3 bestBuffedPosition;
+            var bestClusterPoint = TargetUtil.GetBestClusterPoint();
+
+            if (TargetUtil.BestBuffPosition(45f, bestClusterPoint, false, out bestBuffedPosition) &&
+                Player.Position.Distance2D(bestBuffedPosition) > 25f && bestBuffedPosition != Vector3.Zero)
+            {
+                Core.Logger.Log($"Found buff position - distance: {Player.Position.Distance(bestBuffedPosition)} ({bestBuffedPosition})");
+                destination = bestBuffedPosition;
+
+                return destination != Vector3.Zero;
+            }
+
+            return base.ShouldVault(out destination);
+        }
+
+        private Vector3 _lastBuffPosition;
+        readonly WaitTimer _groundBuffWalkTimer = WaitTimer.FiveSeconds;
+        private bool ShouldWalkToGroundBuff(out Vector3 buffPosition)
+        {
+            buffPosition = Vector3.Zero;
+            if (CurrentTarget == null)
+                return false;
+
+            if (_lastBuffPosition != Vector3.Zero && _lastBuffPosition.Distance2D(CurrentTarget.Position) > 20)
+                return false;
+
+            if (_lastBuffPosition != Vector3.Zero && Player.Position.Distance2D(_lastBuffPosition) > 9f && !_groundBuffWalkTimer.IsFinished)
+            {
+                Core.Logger.Log($"Moving to buff: {_lastBuffPosition} - Distance: {Player.Position.Distance2D(_lastBuffPosition)}");
+                return true;
+            }
+
+            _lastBuffPosition = Vector3.Zero;
+
+            Vector3 bestBuffedPosition;
+            var bestClusterPoint = TargetUtil.GetBestClusterPoint();
+
+            if (TargetUtil.BestBuffPosition(20f, bestClusterPoint, false, out bestBuffedPosition) &&
+                bestBuffedPosition != Vector3.Zero)
+            {
+                Core.Logger.Log($"Found buff: {bestBuffedPosition} - Distance: {Player.Position.Distance2D(bestBuffedPosition)}");
+                buffPosition = bestBuffedPosition;
+                if (bestBuffedPosition != Vector3.Zero)
+                {
+                    _lastBuffPosition = bestBuffedPosition;
+                    _groundBuffWalkTimer.Reset();
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public TrinityPower GetDefensivePower()
@@ -124,7 +218,7 @@ namespace Trinity.Routines.DemonHunter
 
         public override int KiteStutterDuration => 800;
         public override int KiteStutterDelay => 800;
-        public override int KiteHealthPct => 100;
+        public override int KiteHealthPct => 90;
         public override float KiteDistance => Settings.KiteDistance;
         public override int ClusterSize => Settings.ClusterSize;
         public override float EmergencyHealthPct => Settings.EmergencyHealthPct;
@@ -179,13 +273,13 @@ namespace Trinity.Routines.DemonHunter
             {
                 UseMode = UseTime.Default,
                 RecastDelayMs = 1000,
-                PrimaryResourcePct = 90f,
+                SecondaryResourcePct = 90f,
             };
 
             private static readonly SkillSettings VengeanceDefaults = new SkillSettings
             {
                 UseMode = UseTime.Selective,
-                Reasons = UseReasons.Elites | UseReasons.HealthEmergency,
+                Reasons = UseReasons.Elites | UseReasons.Surrounded | UseReasons.HealthEmergency,
             };
 
             #endregion

@@ -25,7 +25,7 @@ namespace Trinity.Routines.Witchdoctor
         public string DisplayName => "Arachyr Firebats";
         public string Description => "Specialized combat for channelling firebats with Arachyr set.";
         public string Author => "xzjv";
-        public string Version => "0.2";
+        public string Version => "0.2.1";
         public string Url => "http://www.icy-veins.com/d3/witch-doctor-firebats-angry-chicken-with-arachyr-or-helltooth-sets-patch-2-4-3-season-9";
 
 
@@ -77,7 +77,8 @@ namespace Trinity.Routines.Witchdoctor
             var bestClusterUnit = clusterUnits.FirstOrDefault();
 
             //10 second 60% damage reduction should always be on to survive
-            if (!HasJeramsRevengeBuff && Player.CurrentHealthPct > 0.4 && !Core.Avoidance.InCriticalAvoidance(Player.Position) && (ZetaDia.Me.IsInCombat || Player.CurrentHealthPct < 0.4) && bestClusterUnit != null && Skills.WitchDoctor.WallOfDeath.CanCast())
+            if (!HasJeramsRevengeBuff && Player.CurrentHealthPct > 0.4 && !Core.Avoidance.InCriticalAvoidance(Player.Position) &&
+                (ZetaDia.Me.IsInCombat || Player.CurrentHealthPct < 0.4) && bestClusterUnit != null && Skills.WitchDoctor.WallOfDeath.CanCast())
             {
                 return WallOfDeath(allUnits.FirstOrDefault());
             }
@@ -97,7 +98,24 @@ namespace Trinity.Routines.Witchdoctor
                         return WallOfDeath(target);
                 }
 
+                // Make sure we approach carefully when our defenses are down
+                var harvestStacks = Skills.WitchDoctor.SoulHarvest.BuffStacks;
+                var bestHarvestCluster = TargetUtil.GetBestClusterPoint(18f, 50f);
+                if (Core.Rift.IsGreaterRift && harvestStacks < 10 && Legendary.LakumbasOrnament.IsEquipped)
+                {
+                    if (Skills.WitchDoctor.SpiritWalk.CanCast() && TargetUtil.ClusterExists(18f, 50f, 2))
+                    {
+                        return SpiritWalk();
+                    }
+
+                    if (Skills.WitchDoctor.SpiritWalk.IsBuffActive && bestHarvestCluster != null)
+                    {
+                        return Walk(bestHarvestCluster);
+                    }
+                }
+
                 // SpiritWalk for the invulnerability
+                var shouldBecomeInvulnerable = Core.Avoidance.Avoider.ShouldAvoid || Core.Avoidance.Avoider.ShouldKite || (Player.CurrentHealthPct < 0.9f && Core.Rift.IsGreaterRift);
                 if (Skills.WitchDoctor.SpiritWalk.CanCast() && Settings.SpiritWalk.UseMode == UseTime.Default && TargetUtil.AnyMobsInRange(20f))
                 {
                     return SpiritWalk();
@@ -116,7 +134,6 @@ namespace Trinity.Routines.Witchdoctor
                 var percentTargetsWithLocust = TargetUtil.DebuffedPercent(SNOPower.Witchdoctor_Locust_Swarm, 12f);
                 var isEliteWithoutHaunt = clusterUnits.Any(u => u.IsElite && !u.HasDebuff(SNOPower.Witchdoctor_Haunt) && u.Distance <= 20f);
                 var isElitewithoutLocust = clusterUnits.Any(u => u.IsElite && !u.HasDebuff(SNOPower.Witchdoctor_Locust_Swarm) && u.Distance <= 20f);
-                var harvestStacks = Skills.WitchDoctor.SoulHarvest.BuffStacks;
                 var harvestBuffCooldown = Core.Cooldowns.GetBuffCooldown(SNOPower.Witchdoctor_SoulHarvest);
                 var harvestPossibleStackGain = 10 - harvestStacks;
                 var harvestUnitsInRange = allUnits.Count(u => u.Distance < 12f);
@@ -125,7 +142,7 @@ namespace Trinity.Routines.Witchdoctor
                 var needToSwarmElite = isElitewithoutLocust && !((Legendary.VileHive.IsEquipped || Runes.WitchDoctor.Pestilence.IsActive) && isAnyTargetWithLocust);
                 var interruptForLocust = (percentTargetsWithLocust < 0.1f || needToSwarmElite) && Player.PrimaryResource > 300 && Skills.WitchDoctor.LocustSwarm.CanCast();
                 var interruptForHex = Skills.WitchDoctor.Hex.CanCast();
-                var interruptForSpiritWalk = Skills.WitchDoctor.SpiritWalk.CanCast() && Settings.SpiritWalk.UseMode == UseTime.Default && Player.CurrentHealthPct < 0.9f;
+                var interruptForSpiritWalk = Skills.WitchDoctor.SpiritWalk.CanCast() && Settings.SpiritWalk.UseMode == UseTime.Default && shouldBecomeInvulnerable;
 
                 // continue channelling firebats?
                 if (Player.IsChannelling)
@@ -155,21 +172,21 @@ namespace Trinity.Routines.Witchdoctor
                     }
                 }
 
-                // Locust
-                if (Skills.WitchDoctor.LocustSwarm.CanCast() && Skills.WitchDoctor.LocustSwarm.TimeSinceUse > 1000 && targetsWithoutLocust.Any() && (!Runes.WitchDoctor.Pestilence.IsActive || !isAnyTargetWithLocust))
-                {
-                    if ((percentTargetsWithLocust < Settings.LocustPct || needToSwarmElite) && Player.PrimaryResource > 300 && targetsWithoutLocust.Any())
-                    {
-                        return new TrinityPower(SNOPower.Witchdoctor_Locust_Swarm, 10f, targetsWithoutLocust.First().AcdId, 0, 0);
-                    }
-                }
-
                 // Soul harvest for the damage reduction of Okumbas Ornament
                 if (Skills.WitchDoctor.SoulHarvest.CanCast() && (bestClusterUnit.Distance < 12f || harvestStacks < 4 && TargetUtil.AnyMobsInRange(10f)) && harvestStacks < 10)
                 {
                     if (harvestPossibleStackGain <= harvestUnitsInRange)
                     {
                         return SoulHarvest();
+                    }
+                }
+
+                // Locust
+                if (Skills.WitchDoctor.LocustSwarm.CanCast() && Skills.WitchDoctor.LocustSwarm.TimeSinceUse > 1000 && targetsWithoutLocust.Any() && (!Runes.WitchDoctor.Pestilence.IsActive || !isAnyTargetWithLocust))
+                {
+                    if ((percentTargetsWithLocust < Settings.LocustPct || needToSwarmElite) && Player.PrimaryResource > 300 && targetsWithoutLocust.Any())
+                    {
+                        return new TrinityPower(SNOPower.Witchdoctor_Locust_Swarm, 10f, targetsWithoutLocust.First().AcdId, 0, 0);
                     }
                 }
 
@@ -288,7 +305,7 @@ namespace Trinity.Routines.Witchdoctor
             private int _clusterSize;
             private float _emergencyHealthPct;
             private SkillSettings _spiritWalk;
-                        private float _hauntPct;
+            private float _hauntPct;
             private float _locustPct;
 
             [DefaultValue(8)]

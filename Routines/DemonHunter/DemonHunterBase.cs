@@ -153,11 +153,11 @@ namespace Trinity.Routines.DemonHunter
                 return false;
 
             // Find a safespot with no monsters within kite range.
-            Core.Avoidance.Avoider.TryGetSafeSpot(out destination, 23f, 27f, Player.Position, 
+            Core.Avoidance.Avoider.TryGetSafeSpot(out destination, 33f, 37f, Player.Position, 
                 node => !TargetUtil.AnyMobsInRangeOfPosition(node.NavigableCenter, KiteDistance));
 
             // Vault is a fixed distance spell, predict our actual landing position
-            destination = MathEx.CalculatePointFrom(destination, ZetaDia.Me.Position, 25);
+            destination = MathEx.CalculatePointFrom(destination, ZetaDia.Me.Position, 35);
 
             // Prevent vaulting away from stuff that needs to be interacted with.
             if (ZetaDia.Actors.GetActorsOfType<DiaGizmo>().Any(g => g.Distance < 10f && g.ActorInfo.GizmoType != GizmoType.DestroyableObject))
