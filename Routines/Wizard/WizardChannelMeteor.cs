@@ -26,7 +26,7 @@ namespace Trinity.Routines.Wizard
             " the might of two sets according to his whims and conjures fiery death. This bursty, hard hitting playstyle is available in " +
             "two Greater Rift solo and regular Rift farming variations, explained in that order.";
         public string Author => "jubisman";
-        public string Version => "0.3";
+        public string Version => "0.3.1";
         public string Url => "https://www.icy-veins.com/d3/wizard-channeling-meteor-firebird-build-patch-2-6-1-season-12";
 
         public Build BuildRequirements => new Build
@@ -210,7 +210,8 @@ namespace Trinity.Routines.Wizard
 
         public TrinityPower GetMovementPower(Vector3 destination)
         {
-            if (AllowedToUse(Settings.Teleport, Skills.Wizard.Teleport) && CanTeleportTo(destination))
+            var shouldAvoid = Core.Avoidance.Avoider.ShouldAvoid;
+            if ((AllowedToUse(Settings.Teleport, Skills.Wizard.Teleport) || shouldAvoid) && CanTeleportTo(destination))
                 return Teleport(destination);
 
             return Walk(destination);

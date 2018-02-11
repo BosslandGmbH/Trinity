@@ -1528,7 +1528,7 @@ namespace Trinity.Components.Combat
                                 if (GameData.ResplendentChestIds.Contains(cacheObject.ActorSnoId))
                                     cacheObject.Weight += 500d;
 
-                                // Gold Piles in the Goblin Real get high priority
+                                // Gold Piles in the Goblin Realm get high priority
                                 var isInGoblinRealm = Core.Player.WorldSnoId == (int)SNOWorld.p1_TGoblin_Realm;
 
                                 if (cacheObject.Distance < 35f && isInGoblinRealm)

@@ -21,7 +21,7 @@ namespace Trinity.Routines.Monk
         public string DisplayName => "DatModz's WK WoL Monk";
         public string Description => "DatModz - GR 110+ Sunwuko WoL Monk: This is a well rounded Solo Pushing Build that works well at high level g-rifts";
         public string Author => "jubisman";
-        public string Version => "0.7.2";
+        public string Version => "0.7.3";
         public string Url => "http://www.diablofans.com/builds/96442-datmodz-gr-110-sunwuko-wol-monk";
 
         public Build BuildRequirements => new Build
@@ -221,7 +221,8 @@ namespace Trinity.Routines.Monk
 
         public TrinityPower GetMovementPower(Vector3 destination)
         {
-            if (AllowedToUse(Settings.DashingStrike, Skills.Monk.DashingStrike) && CanDashTo(destination))
+            var shouldAvoid = Core.Avoidance.Avoider.ShouldAvoid;
+            if ((AllowedToUse(Settings.DashingStrike, Skills.Monk.DashingStrike) || shouldAvoid) && CanDashTo(destination))
                 return DashingStrike(destination);
 
             return Walk(destination);
