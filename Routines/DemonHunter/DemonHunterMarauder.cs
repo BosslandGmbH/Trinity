@@ -19,7 +19,7 @@ namespace Trinity.Routines.DemonHunter
         public string DisplayName => "Marauder/Natalya's Cluster Arrow Routine";
         public string Description => "A focus on sentry placement and cluster arrow from range.";
         public string Author => "xzjv";
-        public string Version => "0.2";
+        public string Version => "0.2.1";
         public string Url => "http://www.icy-veins.com/d3/demon-hunter-sentry-cluster-arrow-build-with-the-embodiment-of-the-marauder-set-patch-2-4-2-season-7";
 
         public Build BuildRequirements => new Build
@@ -205,8 +205,9 @@ namespace Trinity.Routines.DemonHunter
 
         public TrinityPower GetMovementPower(Vector3 destination)
         {
-            if (!Player.IsInTown && AllowedToUse(Settings.Vault, Skills.DemonHunter.Vault) && CanVaultTo(destination))
-                return Vault(destination);            
+            var shouldAvoid = Core.Avoidance.Avoider.ShouldAvoid;
+            if (!Player.IsInTown && (AllowedToUse(Settings.Vault, Skills.DemonHunter.Vault) || shouldAvoid) && CanVaultTo(destination))
+            return Vault(destination);            
             
             if (!Player.IsInTown && CanStrafeTo(destination))
                 return Strafe(destination);

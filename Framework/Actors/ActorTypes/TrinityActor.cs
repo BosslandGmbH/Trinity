@@ -225,6 +225,8 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public int CountUnitsInFront() => TargetUtil.CountUnitsInFront(this);
 
+        public int CountUnitsInFront(float radius) => TargetUtil.CountUnitsInFront(this, radius);
+
         /// <summary>
         /// Includes temporary avoidances like monsters with telgraphing charge animations.
         /// </summary>

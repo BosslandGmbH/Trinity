@@ -10,43 +10,45 @@ using Trinity.Framework.Reference;
 using Trinity.UI;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
+using System.Linq;
 using Zeta.Game;
 using Trinity.Framework.Avoidance.Structures;
 
 namespace Trinity.Routines.Barbarian
 {
-    public sealed class BarbarianRaekorIK : BarbarianBase, IRoutine
+    public sealed class BarbarianRaekorIstvans : BarbarianBase, IRoutine
     {
         #region Definition
 
-        public string DisplayName => "Barbarian Raekor IK";
+        public string DisplayName => "Barbarian Raekor Istvan's";
 
         public string Description =>
-            "Build that uses full IK set for damage bonus and Raekor's for Furious Charge damage";
+            "GR build based on building charges during the CoE rotation and then using HotA to consume them during the Fire phase to deal enormous amounts of damage";
 
         public string Author => "jubisman";
-        public string Version => "0.2.4";
-        public string Url => "http://www.diablofans.com/builds/88896-ik-raekor-charge-v2-0-gr100";
+        public string Version => "0.1";
+        public string Url => "https://www.diablofans.com/builds/97646-asdfasdfasdfasdfasdf";
 
         public Build BuildRequirements => new Build
         {
             Sets = new Dictionary<Set, SetBonus>
             {
-                {Sets.ImmortalKingsCall, SetBonus.Third},
-                {Sets.TheLegacyOfRaekor, SetBonus.First},
+                {Sets.TheLegacyOfRaekor, SetBonus.Third},
+                {Sets.IstvansPairedBlades, SetBonus.First }
             },
             Skills = new Dictionary<Skill, Rune>
             {
                 {Skills.Barbarian.FuriousCharge, null},
-                {Skills.Barbarian.WrathOfTheBerserker, null},
-                {Skills.Barbarian.CallOfTheAncients, null},
+                {Skills.Barbarian.HammerOfTheAncients, null},
             }
         };
 
         #endregion
-        
+
         public TrinityPower GetBuffPower()
         {
+            Vector3 position;
+
             if (ShouldIgnorePain())
                 return IgnorePain();
 
@@ -59,6 +61,9 @@ namespace Trinity.Routines.Barbarian
             if (ShouldWarCry())
                 return WarCry();
 
+            if (ShouldThreateningShout(out position))
+                return ThreateningShout(position);
+
             if (ShouldCallOfTheAncients())
                 return CallOfTheAncients();
 
@@ -67,7 +72,6 @@ namespace Trinity.Routines.Barbarian
 
             return null;
         }
-
 
         public TrinityPower GetOffensivePower()
         {
@@ -78,8 +82,8 @@ namespace Trinity.Routines.Barbarian
             if (ShouldWalkToTarget(out target))
                 return Walk(target);
 
-            if (ShouldAncientSpear(out target))
-                return AncientSpear(target);
+            if (ShouldHammerOfTheAncients(out target))
+                return HammerOfTheAncients(target);
 
             if (ShouldFuriousCharge(out position))
                 return FuriousCharge(position);
@@ -110,30 +114,29 @@ namespace Trinity.Routines.Barbarian
             return false;
         }
 
-        protected override bool ShouldAncientSpear(out TrinityActor target)
+        protected override bool ShouldBattleRage()
         {
-            target = null;
+            if (!Skills.Barbarian.BattleRage.CanCast())
+                return false;
 
             if (Player.IsInTown)
                 return false;
 
-            if (!Skills.Barbarian.AncientSpear.CanCast())
+            if (Skills.Barbarian.BattleRage.TimeSinceUse > 4750)
+                return true;
+
+            if (Core.Buffs.GetBuffStacks(SNOPower.ItemPassive_Unique_Ring_734_x1) < 5 && Skills.Barbarian.BattleRage.TimeSinceUse > 500)
+                return true;
+
+            return false;
+        }
+
+        protected override bool ShouldWrathOfTheBerserker()
+        {
+            if (ShouldWaitForConventionofElements(Skills.Barbarian.WrathOfTheBerserker, Element.Fire, 300))
                 return false;
 
-            // No use casting AS if we don't have a lot of Fury
-            if (Player.PrimaryResourcePct < 0.9f)
-                return false;
-
-            // Fury dumping is useful as a way of healing (if you have Life Per Fury Spent on your gear), or as a means of keeping WotB up
-            if (Player.CurrentHealthPct < Settings.DumpHealthPct ||
-                Skills.Barbarian.WrathOfTheBerserker.TimeSinceUse > 5000 &&
-                !Skills.Barbarian.WrathOfTheBerserker.CanCast())
-            {
-                //Core.Logger.Log("Casting AncientSpear to Restore Health/Reduce Cooldowns");
-                target = TargetUtil.GetBestClusterUnit();
-            }
-
-            return target != null;
+            return base.ShouldWrathOfTheBerserker();
         }
 
         protected override bool ShouldFuriousCharge(out Vector3 position)
@@ -149,47 +152,65 @@ namespace Trinity.Routines.Barbarian
             if (Core.Avoidance.Grid.IsIntersectedByFlags(ZetaDia.Me.Position, position, AvoidanceFlags.CriticalAvoidance))
                 return false;
 
-            if (Legendary.AncientParthanDefenders.IsEquipped)
-                position = TargetUtil.FreezePiercePoint(60f, 6f, true);
-            position = TargetUtil.GetBestPiercePoint(60f, 6f);
+            // Try to charge to Occulus AoE before the Whack-a-mole frenzy begins
+            Vector3 bestBuffedPosition;
+            var bestClusterPoint = TargetUtil.GetBestClusterPoint();
+
+            if (TargetUtil.BestBuffPosition(60f, bestClusterPoint, false, out bestBuffedPosition) &&
+                Player.Position.Distance2D(bestBuffedPosition) > 10f && bestBuffedPosition != Vector3.Zero &&
+                !ShouldWaitForConventionofElements(Skills.Crusader.Provoke, Element.Fire, 350))
+            {
+                Core.Logger.Log($"Found buff position - distance: {Player.Position.Distance(bestBuffedPosition)} ({bestBuffedPosition})");
+                position = bestBuffedPosition;
+
+                return position != Vector3.Zero;
+            }
+
+            var chargeStacks = Core.Buffs.GetBuffStacks(SNOPower.P2_ItemPassive_Unique_Ring_026);
+            if (Core.Buffs.ConventionElement == Element.Fire && chargeStacks > 0)
+                return false;
+
+            // Quickest way to build stacks is to charge in place (if we can get a refund for every charge)
+            var twelveYardsUnitCount = TargetUtil.UnitsInRangeOfPosition(Player.Position, 12f).Count(u => u.IsUnit);
+            var twentyYardsUnitCount = TargetUtil.UnitsInRangeOfPosition(Player.Position, 20f).Count(u => u.IsUnit);
+            if (twelveYardsUnitCount >= 3 || twentyYardsUnitCount == 1)
+                position = Player.Position;
+            position = TargetUtil.GetBestClusterPoint(15f, 20f, true, false);
 
             return position != Vector3.Zero;
+        }
+
+        protected override bool ShouldHammerOfTheAncients(out TrinityActor target)
+        {
+            target = null;
+            var chargeStacks = Core.Buffs.GetBuffStacks(SNOPower.P2_ItemPassive_Unique_Ring_026);
+
+            if (!Skills.Barbarian.HammerOfTheAncients.CanCast())
+                return false;
+
+            if (Core.Buffs.ConventionElement != Element.Fire && chargeStacks < 100)
+                return false;
+
+            // Check for FuriousCharge stacks
+            if (chargeStacks <= 0)
+                return false;
+
+            Core.Logger.Log("Stop! Hammer time!");
+            target = TargetUtil.ClosestUnit(30f, u => u.IsInLineOfSight) ?? CurrentTarget;
+            return target != null;
         }
 
         public TrinityPower GetDefensivePower() => GetBuffPower();
 
         public TrinityPower GetDestructiblePower() => DefaultDestructiblePower();
 
-        protected override bool ShouldWrathOfTheBerserker()
-        {
-            if (Player.IsInTown)
-                return false;
-
-            // Don't Recast WotB unless the buff is about to end
-            if (Core.Buffs.HasBuff(SNOPower.Barbarian_WrathOfTheBerserker) &&
-                Core.Buffs.GetBuffTimeRemainingMilliseconds(SNOPower.Barbarian_WrathOfTheBerserker) > 1000)
-                return false;
-
-            return base.ShouldWrathOfTheBerserker();
-        }
-
-        protected override bool ShouldSprint()
-        {
-            if (!Skills.Barbarian.Sprint.CanCast())
-                return false;
-
-            if (Skills.Barbarian.Sprint.TimeSinceUse < 3750)
-                return false;
-
-            return true;
-        }
-
         public TrinityPower GetMovementPower(Vector3 destination)
         {
+            var charges = Skills.Barbarian.FuriousCharge.Charges;
             var shouldAvoid = Core.Avoidance.Avoider.ShouldAvoid;
             if (CanChargeTo(destination) && (AllowedToUse(Settings.FuriousCharge, Skills.Barbarian.FuriousCharge) || shouldAvoid))
             {
-                if (IsBlocked && Skills.Barbarian.FuriousCharge.Charges > 0)
+                if (IsBlocked && charges > 0)
                     return FuriousCharge(destination);
 
                 var chargeRange = Player.Position.Distance(destination);
@@ -200,9 +221,9 @@ namespace Trinity.Routines.Barbarian
                     return FuriousCharge(destination);
                 }
 
-                if (!IsBlocked && Skills.Barbarian.FuriousCharge.Charges > 1)
+                if (!IsBlocked && charges > 1)
                     return FuriousCharge(destination);
-            } 
+            }
 
             return Walk(destination);
         }
@@ -213,13 +234,12 @@ namespace Trinity.Routines.Barbarian
         public override float EmergencyHealthPct => Settings.EmergencyHealthPct;
 
         IDynamicSetting IRoutine.RoutineSettings => Settings;
-        public BarbarianRaekorIKSettings Settings { get; } = new BarbarianRaekorIKSettings();
+        public BarbarianRaekorIstvansSettings Settings { get; } = new BarbarianRaekorIstvansSettings();
 
-        public sealed class BarbarianRaekorIKSettings : NotifyBase, IDynamicSetting
+        public sealed class BarbarianRaekorIstvansSettings : NotifyBase, IDynamicSetting
         {
             private int _clusterSize;
             private float _emergencyHealthPct;
-            private float  _dumpHealthPct;
 
             [DefaultValue(8)]
             public int ClusterSize
@@ -256,17 +276,6 @@ namespace Trinity.Routines.Barbarian
             {
                 base.LoadDefaults();
                 FuriousCharge = VaultDefaults.Clone();
-            }
-
-            #endregion
-
-            #region AncientSpear
-
-            [DefaultValue(0.8f)]
-            public float DumpHealthPct
-            {
-                get { return _dumpHealthPct; }
-                set { SetField(ref _dumpHealthPct, value); }
             }
 
             #endregion

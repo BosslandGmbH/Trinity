@@ -8,7 +8,7 @@ using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Trinity.UI;
 using Zeta.Common;
-
+using Trinity.Framework;
 
 namespace Trinity.Routines.DemonHunter
 {
@@ -19,7 +19,7 @@ namespace Trinity.Routines.DemonHunter
         public string DisplayName => "Unhallowed Essense";
         public string Description => "Specialized combat routine for the Unhallowed Essense Multishot Build.";
         public string Author => "xzjv";
-        public string Version => "0.1";
+        public string Version => "0.1.1";
         public string Url => "http://www.icy-veins.com/d3/demon-hunter-multishot-fire-build-with-yangs-recurve-patch-2-4-2-season-7";
 
         /// <summary>
@@ -117,7 +117,8 @@ namespace Trinity.Routines.DemonHunter
 
         public TrinityPower GetMovementPower(Vector3 destination)
         {
-            if (!Player.IsInTown && AllowedToUse(Settings.Vault, Skills.DemonHunter.Vault) && CanVaultTo(destination))
+            var shouldAvoid = Core.Avoidance.Avoider.ShouldAvoid;
+            if (!Player.IsInTown && (AllowedToUse(Settings.Vault, Skills.DemonHunter.Vault) || shouldAvoid) && CanVaultTo(destination))
                 return Vault(destination);
 
             return Walk(destination);

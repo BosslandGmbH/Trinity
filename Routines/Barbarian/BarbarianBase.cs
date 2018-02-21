@@ -235,6 +235,9 @@ namespace Trinity.Routines.Barbarian
             if (!Skills.Barbarian.IgnorePain.CanCast())
                 return false;
 
+            if (Player.IsInTown)
+                return false;
+
             if (Legendary.PrideOfCassius.IsEquipped)
                 return true;
 
@@ -349,6 +352,9 @@ namespace Trinity.Routines.Barbarian
             if (!Skills.Barbarian.ThreateningShout.CanCast())
                 return false;
 
+            if (Player.IsInTown)
+                return false;
+
             position = TargetUtil.GetBestClusterPoint();
             return position != Vector3.Zero;
         }
@@ -425,6 +431,9 @@ namespace Trinity.Routines.Barbarian
 
         protected virtual bool ShouldWrathOfTheBerserker()
         {
+            if (Player.IsInTown)
+                return false;
+
             return Skills.Barbarian.WrathOfTheBerserker.CanCast();
         }
 

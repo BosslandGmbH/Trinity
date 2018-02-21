@@ -279,6 +279,18 @@ namespace Trinity.Components.Combat.Resources
                     select u).ToList();
         }
 
+        internal static List<TrinityActor> TargetsInFrontOfMe(float maxRange, float skillRadius, bool ignoreUnitsInAoE = false,
+            bool ignoreElites = false)
+        {
+            return (from u in SafeList(ignoreElites)
+                    where (u.IsUnit || u.IsDestroyable) &&
+                          u.Distance <= maxRange && u.IsInLineOfSight &&
+                          !(ignoreUnitsInAoE && u.IsInAvoidance) &&
+                          !(ignoreElites && u.IsElite)
+                    orderby u.CountUnitsInFront(skillRadius) descending
+                    select u).ToList();
+        }
+
         public static List<TrinityActor> UnitsBetweenLocations(Vector3 fromLocation, Vector3 toLocation)
         {
             return
@@ -288,7 +300,7 @@ namespace Trinity.Components.Combat.Resources
                  select u).ToList();
         }
 
-        internal static List<TrinityActor> FreezeTargetsInFrontOfMe(float maxRange,
+        internal static List<TrinityActor> FreezeTargetsInFrontOfMe(float maxRange, float skillRadius,
             bool ignoreUnitsInAoE = false, bool ignoreElites = false)
         {
             return (from u in SafeList(ignoreElites)
@@ -298,22 +310,10 @@ namespace Trinity.Components.Combat.Resources
                         u.IsAvoidanceOnPath || u.IsCriticalAvoidanceOnPath)) &&
                       !(ignoreElites && u.IsElite) && !u.IsFrozen
 
-                orderby u.CountUnitsInFront() descending
+                orderby u.CountUnitsInFront(skillRadius) descending
                 select u).ToList();
         }
 
-        internal static List<TrinityActor> UnitOrDestructibleInFrontOfMe(float maxRange, bool ignoreUnitsInAoE = false,
-            bool ignoreElites = false)
-        {
-            return (from u in SafeList(ignoreElites)
-                where (u.IsUnit || u.IsDestroyable) &&
-                      u.Distance <= maxRange && u.IsInLineOfSight &&
-                      !(ignoreUnitsInAoE && u.IsInAvoidance) &&
-                      !(ignoreElites && u.IsElite)
-                orderby u.CountUnitsInFront() descending
-                select u).ToList();
-        }
-        
         internal static TrinityActor GetBestPierceTarget(float maxRange, bool ignoreUnitsInAoE = false,
             bool ignoreElites = false)
         {
@@ -321,9 +321,22 @@ namespace Trinity.Components.Combat.Resources
             return result ?? BestAoeUnit(maxRange, !ignoreUnitsInAoE);
         }
 
+        internal static TrinityActor GetBestPierceTarget(float maxRange, float skillRadius, bool ignoreUnitsInAoE = false,
+            bool ignoreElites = false)
+        {
+            var result = TargetsInFrontOfMe(maxRange, skillRadius, ignoreUnitsInAoE, ignoreElites).FirstOrDefault();
+            return result ?? BestAoeUnit(maxRange, !ignoreUnitsInAoE);
+        }
+
         internal static Vector3 GetBestPiercePoint(float maxRange, bool ignoreUnitsInAoE = false, bool ignoreElites = false)
         {
             var unit = GetBestPierceTarget(maxRange, ignoreUnitsInAoE, ignoreElites);
+            return unit?.Position ?? Vector3.Zero;
+        }
+
+        internal static Vector3 GetBestPiercePoint(float maxRange, float skillRadius, bool ignoreUnitsInAoE = false, bool ignoreElites = false)
+        {
+            var unit = GetBestPierceTarget(maxRange, skillRadius, ignoreUnitsInAoE, ignoreElites);
             return unit?.Position ?? Vector3.Zero;
         }
 
@@ -335,10 +348,10 @@ namespace Trinity.Components.Combat.Resources
             return Core.Grids.Avoidance.IsIntersectedByFlags(Player.Position, position, AvoidanceFlags.Monster);
         }
 
-        internal static Vector3 FreezePiercePoint(float maxRange,
+        internal static Vector3 FreezePiercePoint(float maxRange, float skillRadius,
             bool ignoreUnitsInAoE = false, bool ignoreElites = false)
         {
-            var unit = FreezeTargetsInFrontOfMe(maxRange, ignoreUnitsInAoE, ignoreElites).FirstOrDefault();
+            var unit = FreezeTargetsInFrontOfMe(maxRange, skillRadius, ignoreUnitsInAoE, ignoreElites).FirstOrDefault();
             return unit?.Position ?? Vector3.Zero;
         }
 
@@ -586,6 +599,16 @@ namespace Trinity.Components.Combat.Resources
                  where u.RActorId != actor.RActorId &&
                        u.IsUnit &&
                        MathUtil.IntersectsPath(u.Position, u.Radius, Core.Player.Position, actor.Position)
+                 select u).Count();
+        }
+
+        public static int CountUnitsInFront(TrinityActor actor, float skillRadius)
+        {
+            return
+                (from u in Core.Targets
+                 where u.RActorId != actor.RActorId &&
+                       u.IsUnit &&
+                       MathUtil.IntersectsPath(u.Position, u.Radius + skillRadius, Core.Player.Position, actor.Position)
                  select u).Count();
         }
 
