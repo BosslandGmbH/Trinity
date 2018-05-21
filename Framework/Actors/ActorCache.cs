@@ -92,8 +92,7 @@ namespace Trinity.Framework.Actors
                 ZetaDia.Actors.Update();
 
             ActivePlayerRActorId = ZetaDia.ActivePlayerRActorId;
-            var player = ZetaDia.RActors[(short)ActivePlayerRActorId];
-            ActivePlayerPosition = player.Position;
+            ActivePlayerPosition = ZetaDia.Me.Position;
 
             UpdateAcds();
             UpdateRActors();
