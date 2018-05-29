@@ -86,6 +86,8 @@ namespace Trinity.Modules
 
                 if (grid.NearestNode == null || grid.NearestNode.DynamicWorldId != ZetaDia.Globals.WorldId)
                 {
+                    Core.Scenes.Reset();
+                    Core.Scenes.Update();
                     Core.Logger.Debug(LogCategory.Avoidance, $"No Player Nearest Node or WorldId Mismatch");
                     return;
                 }
