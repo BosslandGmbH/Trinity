@@ -432,8 +432,8 @@ namespace Trinity.Framework.Actors.Attributes
 
         public bool IsBountyObjective => GetAttribute<bool>(ActorAttributeType.BountyObjective);
 
-        public float Hitpoints => GetAttribute<float>(ActorAttributeType.HitpointsCur);
-
+        public float Hitpoints => _commonData.HitpointsCur;
+        
         public float HitpointsMax => GetAttribute<float>(ActorAttributeType.HitpointsMax);
 
         public float HitpointsMaxTotal => GetAttribute<float>(ActorAttributeType.HitpointsMaxTotal);
@@ -452,9 +452,9 @@ namespace Trinity.Framework.Actors.Attributes
 
         public bool IsDoorLocked => GetAttribute<bool>(ActorAttributeType.DoorLocked);
 
-        public int TeamOverride => GetAttribute<int>(ActorAttributeType.TeamOverride);
+        public int TeamOverride => _commonData.TeamOverride;
 
-        public int TeamId => GetAttribute<int>(ActorAttributeType.TeamId);
+        public int TeamId => _commonData.TeamId;
 
         public MarkerType MarkerType => GetAttribute<MarkerType>(ActorAttributeType.ConversationIcon, 0); // 483: ConversationIcon(-3613)
 
