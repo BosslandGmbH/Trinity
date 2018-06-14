@@ -371,7 +371,7 @@ namespace Trinity.Routines
                     }
                 }
 
-                var safe = (!Core.Player.IsTakingDamage || Core.Player.CurrentHealthPct > 0.5f) && !Core.Player.Actor.IsInCriticalAvoidance;
+                var safe = (!Core.Player.IsTakingDamage || Core.Player.CurrentHealthPct > 0.5f) && Core.Player.Actor != null && !Core.Player.Actor.IsInCriticalAvoidance;
 
                 //if (newTarget?.Position == LastTarget?.Position && newTarget.IsAvoidanceOnPath && safe)
                 //{
