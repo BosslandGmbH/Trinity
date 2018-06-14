@@ -192,17 +192,23 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         private void FastUpdate()
         {
-            CommonProperties.Update(this);
-            UnitProperties.Update(this);
-            GizmoProperties.Update(this);
+            try
+            {
+                CommonProperties.Update(this);
+                UnitProperties.Update(this);
+                GizmoProperties.Update(this);
+            } catch {}
         }
 
         private void FullUpdate()
         {
-            CommonProperties.Populate(this);
-            UnitProperties.Populate(this);
-            GizmoProperties.Populate(this);
-            LastFullUpdate = DateTime.UtcNow;
+            try
+            {
+                CommonProperties.Populate(this);
+                UnitProperties.Populate(this);
+                GizmoProperties.Populate(this);
+                LastFullUpdate = DateTime.UtcNow;
+            } catch {}
         }
 
         public bool CanWalkTo(Vector3 destination = default(Vector3))
