@@ -21,7 +21,7 @@ namespace Trinity
     {
         private static TrinityPlugin _instance;
         public string Name => "Trinity";
-        public Version Version => new Version(2, 6, 447);
+        public Version Version => new Version(2, 6, 448);
         public string Author => "xzjv, TarasBulba, rrrix, jubisman, Phelon and many more";
         public string Description => $"v{Version} provides combat, exploration and much more";
         public Window DisplayWindow => UILoader.GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));
@@ -87,19 +87,22 @@ namespace Trinity
 
         public void OnEnabled()
         {
-            if (IsEnabled || !Application.Current.CheckAccess())
-                return;
+            using (ZetaDia.Memory.AcquireFrame())
+            {
+                if (IsEnabled || !Application.Current.CheckAccess())
+                    return;
 
-            Core.Init();
-            BotMain.OnStop += OnStop;
-            TrinitySettings.InitializeSettings();
-            SkillUtils.UpdateActiveSkills();            
-            TabUi.InstallTab();
-            SetupDemonBuddy();
-            UILoader.PreLoadWindowContent();
-            ModuleManager.Enable();
-            Core.Logger.Log($"is now ENABLED: {Description} - now in action!");                        
-            IsEnabled = true;            
+                Core.Init();
+                BotMain.OnStop += OnStop;
+                TrinitySettings.InitializeSettings();
+                SkillUtils.UpdateActiveSkills();            
+                TabUi.InstallTab();
+                SetupDemonBuddy();
+                UILoader.PreLoadWindowContent();
+                ModuleManager.Enable();
+                Core.Logger.Log($"is now ENABLED: {Description} - now in action!");                        
+                IsEnabled = true;
+            }
         }
 
         /// <summary>
