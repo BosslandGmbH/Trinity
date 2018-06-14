@@ -45,9 +45,9 @@ namespace Trinity.Framework.Actors.Properties
             var commonData = actor.CommonData;
             var attributes = actor.Attributes;
 
-            actor.InventorySlot = ZetaDia.Memory.Read<InventorySlot>(commonData.BaseAddress + 0x114); //actor.AcdItemTemp.InventorySlot;
-            actor.InventoryColumn = ZetaDia.Memory.Read<int>(commonData.BaseAddress + 0x118);  //actor.AcdItemTemp.InventoryColumn;
-            actor.InventoryRow = ZetaDia.Memory.Read<int>(commonData.BaseAddress + 0x11c);  //actor.AcdItemTemp.InventoryRow;
+            actor.InventorySlot = ZetaDia.Memory.Read<InventorySlot>(commonData.BaseAddress + 0x164); //actor.AcdItemTemp.InventorySlot;
+            actor.InventoryColumn = ZetaDia.Memory.Read<int>(commonData.BaseAddress + 0x168);  //actor.AcdItemTemp.InventoryColumn;
+            actor.InventoryRow = ZetaDia.Memory.Read<int>(commonData.BaseAddress + 0x16c);  //actor.AcdItemTemp.InventoryRow;
 
             actor.IsUnidentified = attributes.IsUnidentified;
             actor.IsAncient = attributes.IsAncient;
@@ -160,9 +160,9 @@ namespace Trinity.Framework.Actors.Properties
             var commonData = actor.CommonData;
             actor.AcdId = commonData.ACDId;
 
-            var slot = ZetaDia.Memory.Read<InventorySlot>(commonData.BaseAddress + 0x114);
-            var col = ZetaDia.Memory.Read<int>(commonData.BaseAddress + 0x118);
-            var row = ZetaDia.Memory.Read<int>(commonData.BaseAddress + 0x11c);
+            var slot = ZetaDia.Memory.Read<InventorySlot>(commonData.BaseAddress + 0x164);
+            var col = ZetaDia.Memory.Read<int>(commonData.BaseAddress + 0x168);
+            var row = ZetaDia.Memory.Read<int>(commonData.BaseAddress + 0x16c);
 
             var columnChanged = col != actor.InventoryColumn;
             var rowChanged = row != actor.InventoryRow;

@@ -126,8 +126,8 @@ namespace Trinity.Framework.Actors.Properties
 
         private static int GetTeamId(ACD acd)
         {
-            var overrideId = acd.GetAttribute<int>(ActorAttributeType.TeamOverride);
-            return overrideId == -1 ? acd.GetAttribute<int>(ActorAttributeType.TeamId) : overrideId;
+            var overrideId = acd.TeamOverride;
+            return overrideId == -1 ? acd.TeamId : overrideId;
         }
 
         private static bool IsHostile(int a1, int a2)
@@ -202,7 +202,8 @@ namespace Trinity.Framework.Actors.Properties
                 }
 
                 var hpA = monster.Attributes.Hitpoints <= 0.01;
-                var hpB = monster.CommonData.GetAttribute<float>(ActorAttributeType.HitpointsCur) <= 0.01;
+                var hpB = monster.CommonData.HitpointsCur <= 0.01;
+
                 if (hpA)
                 {
                     return true;
