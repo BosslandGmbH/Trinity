@@ -93,20 +93,21 @@ namespace Trinity.Framework.Reference
         {
             //Core.Logger.Debug($"UpdateActiveSkills: BotMain.BotThread.ThreadState={BotMain.BotThread?.ThreadState} BotMain.BotThread.IsAlive={BotMain.BotThread?.IsAlive} BotMain.IsRunning={BotMain.IsRunning} BotEvents.IsBotRunning={BotEvents.IsBotRunning}");
 
-            if (!BotEvents.IsBotRunning && ZetaDia.Service.IsInGame)
+            if (ZetaDia.Service.IsInGame)
             {
-            //    Core.Logger.Debug($"UpdateActiveSkills: Before UpdateActors: BotMain.BotThread.ThreadState={BotMain.BotThread?.ThreadState} BotMain.BotThread.IsAlive={BotMain.BotThread?.IsAlive} BotMain.IsRunning={BotMain.IsRunning} BotEvents.IsBotRunning={BotEvents.IsBotRunning}");
-
-            //    ZetaDia.Actors.Update();
-
-            //    Core.Logger.Debug($"UpdateActiveSkills: Before AcquireFrame: BotMain.BotThread.ThreadState={BotMain.BotThread?.ThreadState} BotMain.BotThread.IsAlive={BotMain.BotThread?.IsAlive} BotMain.IsRunning={BotMain.IsRunning} BotEvents.IsBotRunning={BotEvents.IsBotRunning}");
-
-                using (ZetaDia.Memory.AcquireFrame())
+				using (ZetaDia.Memory.AcquireFrame())
                 {
-            //        Core.Logger.Debug($"UpdateActiveSkills: Before Hotbar.Update: BotMain.BotThread.ThreadState={BotMain.BotThread?.ThreadState} BotMain.BotThread.IsAlive={BotMain.BotThread?.IsAlive} BotMain.IsRunning={BotMain.IsRunning} BotEvents.IsBotRunning={BotEvents.IsBotRunning}");
+					//Core.Logger.Debug($"UpdateActiveSkills: Before UpdateActors: BotMain.BotThread.ThreadState={BotMain.BotThread?.ThreadState} BotMain.BotThread.IsAlive={BotMain.BotThread?.IsAlive} BotMain.IsRunning={BotMain.IsRunning} BotEvents.IsBotRunning={BotEvents.IsBotRunning}");
+					if(!Zeta.Bot.BotMain.IsRunning)
+					{
+						ZetaDia.Actors.Update();
+					}
+					//Core.Logger.Debug($"UpdateActiveSkills: Before AcquireFrame: BotMain.BotThread.ThreadState={BotMain.BotThread?.ThreadState} BotMain.BotThread.IsAlive={BotMain.BotThread?.IsAlive} BotMain.IsRunning={BotMain.IsRunning} BotEvents.IsBotRunning={BotEvents.IsBotRunning}");
+
+                    //Core.Logger.Debug($"UpdateActiveSkills: Before Hotbar.Update: BotMain.BotThread.ThreadState={BotMain.BotThread?.ThreadState} BotMain.BotThread.IsAlive={BotMain.BotThread?.IsAlive} BotMain.IsRunning={BotMain.IsRunning} BotEvents.IsBotRunning={BotEvents.IsBotRunning}");
 
                     Core.Hotbar.Update();
-                }                                    
+                }
             }
             _lastUpdatedActiveSkills = DateTime.UtcNow;
             _active = CurrentClass.Where(s => Core.Hotbar.ActivePowers.Contains(s.SNOPower)).ToList();
