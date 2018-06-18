@@ -197,7 +197,11 @@ namespace Trinity.Framework.Actors.ActorTypes
                 CommonProperties.Update(this);
                 UnitProperties.Update(this);
                 GizmoProperties.Update(this);
-            } catch {}
+            }
+            catch (Exception ex)
+            {
+                Core.Logger.Warn($"Fast Update Failed.", ex);
+            }
         }
 
         private void FullUpdate()
@@ -208,7 +212,11 @@ namespace Trinity.Framework.Actors.ActorTypes
                 UnitProperties.Populate(this);
                 GizmoProperties.Populate(this);
                 LastFullUpdate = DateTime.UtcNow;
-            } catch {}
+            }
+            catch (Exception ex)
+            {
+                Core.Logger.Warn($"Full Update Failed.", ex);
+            }
         }
 
         public bool CanWalkTo(Vector3 destination = default(Vector3))
@@ -291,7 +299,7 @@ namespace Trinity.Framework.Actors.ActorTypes
             }
             //else
             //    Core.Logger.Log($"Unit Died: {Name} Acd={AcdId} Sno={ActorSnoId}");
-      
+
             ActorEvents.FireUnitKilled(this);
         }
 
@@ -321,7 +329,7 @@ namespace Trinity.Framework.Actors.ActorTypes
                     return false;
             }
         }
-        
+
         public DiaObject ToDiaObject() => RActor.IsValid ? RActor.BaseAddress.UnsafeCreate<DiaObject>() : null;
 
         public DiaObject ToDiaUnit() => RActor.IsValid ? RActor.BaseAddress.UnsafeCreate<DiaUnit>() : null;
@@ -329,4 +337,3 @@ namespace Trinity.Framework.Actors.ActorTypes
     }
 
 }
-
