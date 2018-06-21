@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
@@ -48,7 +48,7 @@ namespace Trinity.Framework.Reference
             Name = "Talisman of Akkhan",
             Quality = ItemQuality.Legendary,
             Slug = "talisman-of-akkhan",
-            ItemType = ItemType.Helm,
+            ItemType = ItemType.Amulet,
             TrinityItemType = TrinityItemType.Amulet,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Jewelry,
@@ -1501,7 +1501,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item JessethSkullscythe = new Item
         {
-            Id = 467580, 
+            Id = 454765,
             Name = "Jesseth Skullscythe",
             Quality = ItemQuality.Legendary,
             Slug = "jesseth-skullscythe",
@@ -10129,7 +10129,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item JessethSkullshield = new Item
         {
-            Id = 454765,
+            Id = 467580,
             Name = "Jesseth Skullshield",
             Quality = ItemQuality.Legendary,
             Slug = "jesseth-skullshield",
