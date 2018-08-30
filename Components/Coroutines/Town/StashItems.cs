@@ -491,7 +491,6 @@ namespace Trinity.Components.Coroutines.Town
 
         private static InventoryMap GetInventoryMap()
         {
-            Core.Actors.Update();
             var stashItems = Core.Actors.Inventory.Where(i => i.InventorySlot == InventorySlot.SharedStash).ToList();
             var itemDict = new Dictionary<Tuple<int, int>,TrinityItem>();
             foreach (var item in stashItems)
