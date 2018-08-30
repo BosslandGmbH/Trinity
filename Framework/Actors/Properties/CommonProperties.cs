@@ -92,7 +92,7 @@ namespace Trinity.Framework.Actors.Properties
                     actor.AnimationNameLowerCase = string.Empty;
                 }
 
-                var inventorySlot = ZetaDia.Memory.Read<InventorySlot>(commonData.BaseAddress + 0x114); //actor.AcdItemTemp.InventorySlot;
+                var inventorySlot = actor.InventorySlot;
                 actor.IsGroundItem = actor.IsItem && inventorySlot == InventorySlot.None && actor.Position != Vector3.Zero;
             }
 

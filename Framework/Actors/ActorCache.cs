@@ -233,10 +233,6 @@ namespace Trinity.Framework.Actors
                 if (type != ActorType.Item)
                     continue;
 
-                var inventorySlot = commonData.GetInventorySlot();
-                if (inventorySlot == InventorySlot.Merchant)
-                    continue;
-
                 var annId = commonData.AnnId;
                 if (annId == -1)
                     continue;
@@ -247,6 +243,9 @@ namespace Trinity.Framework.Actors
                 if (!_inventory.ContainsKey(annId))
                 {
                     var newObj = ActorFactory.CreateActor<TrinityItem>(commonData);
+                    if (newObj.InventorySlot == InventorySlot.Merchant)
+                        continue;
+
                     _inventory.TryAdd(annId, newObj);
                 }
                 else
