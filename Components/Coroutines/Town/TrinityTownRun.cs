@@ -143,7 +143,7 @@ namespace Trinity.Components.Coroutines.Town
 
                     if (await Any(
                         DropItems.Execute,
-                        () => StashItems.Execute(true),
+                        /*() => StashItems.Execute(true),*/
                         SellItems.Execute,
                         SalvageItems.Execute))
                         continue;
@@ -160,16 +160,17 @@ namespace Trinity.Components.Coroutines.Town
 
                 Core.Logger.Log("Finished Town Run woo!");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(15);
+                IsWantingTownRun = false;
 
                 if (StartedOutOfTown)
                 {
                     StartedOutOfTown = false;
                     await TakeReturnPortal();
                 }
-                IsWantingTownRun = false;
             }
             finally
             {
+                IsWantingTownRun = false;
                 IsInTownVendoring = false;
                 IsVendoring = false;
             }

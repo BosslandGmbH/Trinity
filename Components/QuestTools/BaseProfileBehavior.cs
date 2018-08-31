@@ -107,6 +107,7 @@ namespace Trinity.Components.QuestTools
             catch (Exception ex)
             {
                 Core.Logger.Error($"Exception in {TagClassName}: {ex}");
+                Console.WriteLine($"Exception in {TagClassName}: {ex}");
             }
             Done();
             return true;

@@ -45,9 +45,21 @@ namespace Trinity.Framework.Actors.Properties
             var commonData = actor.CommonData;
             var attributes = actor.Attributes;
 
-            actor.InventorySlot = ZetaDia.Memory.Read<InventorySlot>(commonData.BaseAddress + 0x164); //actor.AcdItemTemp.InventorySlot;
-            actor.InventoryColumn = ZetaDia.Memory.Read<int>(commonData.BaseAddress + 0x168);  //actor.AcdItemTemp.InventoryColumn;
-            actor.InventoryRow = ZetaDia.Memory.Read<int>(commonData.BaseAddress + 0x16c);  //actor.AcdItemTemp.InventoryRow;
+            try
+            {
+                var acd = ZetaDia.Actors.GetACDItemById(actor.AcdId);
+                actor.InventorySlot = acd.InventorySlot;
+                actor.InventoryColumn = acd.InventoryColumn;
+                actor.InventoryRow = acd.InventoryRow;
+            }
+            catch (Exception)
+            {
+                actor.InventorySlot = InventorySlot.None;
+            }
+
+            actor.LastInventorySlot = 0;
+            actor.LastInventoryColumn = 0;
+            actor.LastInventoryRow = 0;
 
             actor.IsUnidentified = attributes.IsUnidentified;
             actor.IsAncient = attributes.IsAncient;
@@ -160,21 +172,13 @@ namespace Trinity.Framework.Actors.Properties
             var commonData = actor.CommonData;
             actor.AcdId = commonData.ACDId;
 
-            var slot = ZetaDia.Memory.Read<InventorySlot>(commonData.BaseAddress + 0x164);
-            var col = ZetaDia.Memory.Read<int>(commonData.BaseAddress + 0x168);
-            var row = ZetaDia.Memory.Read<int>(commonData.BaseAddress + 0x16c);
-
-            var columnChanged = col != actor.InventoryColumn;
-            var rowChanged = row != actor.InventoryRow;
-            var slotChanged = slot != actor.InventorySlot;
+            var columnChanged = actor.InventoryColumn != actor.LastInventoryColumn;
+            var rowChanged = actor.InventoryRow != actor.LastInventoryRow;
+            var slotChanged = actor.InventorySlot != actor.LastInventorySlot;
 
             actor.LastInventorySlot = actor.InventorySlot;
             actor.LastInventoryRow = actor.InventoryRow;
             actor.LastInventoryColumn = actor.InventoryColumn;
-
-            actor.InventorySlot = slot;
-            actor.InventoryRow = row;
-            actor.InventoryColumn = col;
 
             //if (!actor.IsEquipment && Core.Player.IsInTown)
             //{
