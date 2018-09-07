@@ -118,6 +118,7 @@ namespace Trinity.Framework.Actors
             foreach (var acd in ZetaDia.Storage.ActorCommonData)
             {
                 var acdId = acd.ACDId;
+                if (acdId == 0 || acdId == -1) continue;
 
                 _annToAcdIndex[acd.AnnId] = (short)acdId;
                 _commonData.AddOrUpdate(acdId,
