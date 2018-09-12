@@ -59,7 +59,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private States State
         {
-            get { return _state; }
+            get => _state;
             set
             {
                 if (_state == value) return;
@@ -115,8 +115,6 @@ namespace Trinity.Components.Adventurer.Coroutines
             return false;
         }
 
-        private bool _usedWaypoint;
-
         private async Task<bool> UsingTownPortal()
         {
             if (HasReachedDestionation)
@@ -146,9 +144,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 return false;
             }
-
-            _usedWaypoint = false;
-
+            
             State = HasReachedDestionation ? States.Completed : States.NotStarted;
 
             Navigator.Clear();
@@ -165,9 +161,6 @@ namespace Trinity.Components.Adventurer.Coroutines
             return true;
         }
 
-        private bool HasReachedDestionation
-        {
-            get { return ZetaDia.IsInTown; }
-        }
+        private bool HasReachedDestionation => ZetaDia.IsInTown;
     }
 }

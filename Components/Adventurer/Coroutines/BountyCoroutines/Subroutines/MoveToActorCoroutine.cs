@@ -37,7 +37,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public States State
         {
-            get { return _state; }
+            get => _state;
             protected set
             {
                 if (_state == value) return;
@@ -52,10 +52,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         #endregion State
 
-        public bool IsDone
-        {
-            get { return _isDone || AdvDia.CurrentWorldId != _worldId; }
-        }
+        public bool IsDone => _isDone || AdvDia.CurrentWorldId != _worldId;
 
         public MoveToActorCoroutine(int questId, int worldId, int actorId, int maxRange = 5000, 
             bool isExploreAllowed = true, Func<TrinityActor,bool> actorSelector = null, float stopDistance = -1, int markerId = 0)
@@ -111,10 +108,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         {
         }
 
-        public BountyData BountyData
-        {
-            get { return _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId)); }
-        }
+        public BountyData BountyData => _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId));
 
         private async Task<bool> NotStarted()
         {
@@ -188,9 +182,9 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private long _lastScanTime;
         private BountyData _bountyData;
-        private Func<TrinityActor, bool> _actorSelector;
+        private readonly Func<TrinityActor, bool> _actorSelector;
         private float _stopDistance;
-        private int _markerId;
+        private readonly int _markerId;
 
         private async Task<bool> ScanForObjective()
         {

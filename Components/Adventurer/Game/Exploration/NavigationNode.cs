@@ -22,15 +22,15 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         public Vector2 TopRight { get; private set; }
         public Vector2 BottomRight { get; private set; }
 
-        public WorldScene Scene { get { return _scene; } }
-        public IGroupNode ExplorationNode { get { return _explorationNode; } }
+        public WorldScene Scene => _scene;
+        public IGroupNode ExplorationNode => _explorationNode;
 
         //public bool IsVisited { get { return _explorationNode.IsVisited; } }
         //public bool IsIgnored { get { return _explorationNode.IsVisited; } }
-        public int LevelAreaId { get { return _scene.LevelAreaId; } }
+        public int LevelAreaId => _scene.LevelAreaId;
 
         //public float Distance2DSqr { get { return NavigableCenter2D.DistanceSqr(AdvDia.MyPosition.ToVector2()); } }
-        public int DynamicWorldId { get { return _scene.DynamicWorldId; } }
+        public int DynamicWorldId => _scene.DynamicWorldId;
 
         public NodeFlags NodeFlags { get; set; }
 

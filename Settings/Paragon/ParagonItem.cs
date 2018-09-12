@@ -40,16 +40,16 @@ namespace Trinity.Settings.Paragon
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public int Limit
         {
-            get { return _limit; }
-            set { SetField(ref _limit, value); }
+            get => _limit;
+            set => SetField(ref _limit, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         [DefaultValue(false)]
         public bool IsLimited
         {
-            get { return _isLimited; }
-            set { SetField(ref _isLimited, value); }
+            get => _isLimited;
+            set => SetField(ref _isLimited, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -65,10 +65,7 @@ namespace Trinity.Settings.Paragon
         public TrinityParagonBonusType Type { get; set; }
 
         [IgnoreDataMember]
-        public ParagonBonusType DynamicType
-        {
-            get { return GetDynamicType(Type); }
-        }
+        public ParagonBonusType DynamicType => GetDynamicType(Type);
 
         [IgnoreDataMember]
         public ParagonCategory Category { get; set; }

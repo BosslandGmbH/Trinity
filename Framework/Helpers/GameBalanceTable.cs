@@ -36,8 +36,8 @@ namespace Trinity.Framework.Helpers
 
         public GameBalanceTableEntry this[int index]
         {
-            get { return _byIndex[index]; }
-            set { _byIndex[index] = value; }
+            get => _byIndex[index];
+            set => _byIndex[index] = value;
         }
 
         public bool Contains(string name)

@@ -11,7 +11,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
         public readonly Act Act;
         private States _state;
         private CompleteActBountiesCoroutine _completeActBountiesCoroutine;
-        private List<BountyCoroutine> _bountyCoroutines;
+        private readonly List<BountyCoroutine> _bountyCoroutines;
         private BountyCoroutine _currentBountyCoroutine;
 
         #region State
@@ -41,7 +41,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         public States State
         {
-            get { return _state; }
+            get => _state;
             protected set
             {
                 if (_state == value) return;

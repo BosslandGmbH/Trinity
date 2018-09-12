@@ -52,32 +52,32 @@ namespace Trinity.UI.UIComponents
 
         public bool IsInGame
         {
-            get { return _isInGame; }
-            set { SetField(ref _isInGame, value); }
+            get => _isInGame;
+            set => SetField(ref _isInGame, value);
         }
 
         public bool IsRunning
         {
-            get { return _isRunning; }
-            set { SetField(ref _isRunning, value); }
+            get => _isRunning;
+            set => SetField(ref _isRunning, value);
         }
 
         public bool IsExternalLootProvider
         {
-            get { return _isExternalLootProvider; }
-            set { SetField(ref _isExternalLootProvider, value); }
+            get => _isExternalLootProvider;
+            set => SetField(ref _isExternalLootProvider, value);
         }
 
         public string LootProviderName
         {
-            get { return _lootProviderName; }
-            set { SetField(ref _lootProviderName, value); }
+            get => _lootProviderName;
+            set => SetField(ref _lootProviderName, value);
         }
 
         public int HeroId
         {
-            get { return _heroId; }
-            set { SetField(ref _heroId, value); }
+            get => _heroId;
+            set => SetField(ref _heroId, value);
         }
     }
 

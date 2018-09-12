@@ -61,9 +61,6 @@ namespace Trinity.Routines.Witchdoctor
 
         public TrinityPower GetOffensivePower()
         {
-            Vector3 position;
-            TrinityPower power;
-
             var allUnits = Core.Targets.ByType[TrinityObjectType.Unit].Where(u => u.IsUnit && u.RadiusDistance <= 50f).ToList();
 
             var clusterUnits =
@@ -214,7 +211,7 @@ namespace Trinity.Routines.Witchdoctor
                     }
                 }
 
-                if (ShouldBigBadVoodoo(out position))
+                if (ShouldBigBadVoodoo(out var position))
                     return BigBadVoodoo(position);
 
                 if (Skills.WitchDoctor.Firebats.CanCast())
@@ -319,42 +316,42 @@ namespace Trinity.Routines.Witchdoctor
             [DefaultValue(8)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             public SkillSettings SpiritWalk
             {
-                get { return _spiritWalk; }
-                set { SetField(ref _spiritWalk, value); }
+                get => _spiritWalk;
+                set => SetField(ref _spiritWalk, value);
             }
 
             [DefaultValue(0.13f)]
             public float LocustPct
             {
-                get { return _locustPct; }
-                set { SetField(ref _locustPct, value); }
+                get => _locustPct;
+                set => SetField(ref _locustPct, value);
             }
              
             [DefaultValue(0.13f)]
             public float HauntPct
             {
-                get { return _hauntPct; }
-                set { SetField(ref _hauntPct, value); }
+                get => _hauntPct;
+                set => SetField(ref _hauntPct, value);
             }
 
             [DefaultValue(true)]
             public bool AllowKiting 
             {
-                get { return _allowKiting; }
-                set { SetField(ref _allowKiting, value); }
+                get => _allowKiting;
+                set => SetField(ref _allowKiting, value);
             }
 
             private static readonly SkillSettings DefaultSpiritWalkSettings = new SkillSettings

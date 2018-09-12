@@ -15,7 +15,7 @@ using Trinity.Framework.Actors.ActorTypes;
 
 namespace Trinity.Routines.Wizard
 {
-    public class WizardParalysisArchonHydra : WizardBase, IRoutine
+    public sealed class WizardParalysisArchonHydra : WizardBase, IRoutine
     {
 
         #region Definition
@@ -66,11 +66,11 @@ namespace Trinity.Routines.Wizard
             var target = default(TrinityActor);
 
             if (IsArchonActive)
-                target = TargetUtil.SafeList(true).Where(a => a.IsBoss && !a.IsShadowClone && a.Distance < 125f).FirstOrDefault() ??
+                target = TargetUtil.SafeList(true).FirstOrDefault(a => a.IsBoss && !a.IsShadowClone && a.Distance < 125f) ??
                     TargetUtil.SafeList(true).Where(a => a.IsElite && a.EliteType != EliteTypes.Minion && !a.IsIllusion && a.Distance < 125f).OrderBy(a => a.NearbyUnitsWithinDistance(6f)).FirstOrDefault() ??
                     TargetUtil.SafeList(true).Where(a => a.IsTrashMob && a.IsInLineOfSight && !a.IsSummoner && !a.IsSummoned && a.Distance < 50f).OrderByDescending(a => a.NearbyUnitsWithinDistance(6f)).FirstOrDefault() ?? CurrentTarget;
             else
-                target = TargetUtil.SafeList(true).Where(a => a.IsBoss && !a.IsShadowClone && a.Distance < 125f).FirstOrDefault() ??
+                target = TargetUtil.SafeList(true).FirstOrDefault(a => a.IsBoss && !a.IsShadowClone && a.Distance < 125f) ??
                     TargetUtil.SafeList(true).Where(a => a.IsMonster && a.Distance < 50f && a.IsInLineOfSight).OrderBy(a => a.Distance).FirstOrDefault(a => Core.Grids.CanRayWalk(Player.Position, a.Position)) ?? CurrentTarget;
 
 
@@ -119,7 +119,7 @@ namespace Trinity.Routines.Wizard
                 if (Skills.Wizard.Archon.CanCast() && TalRashaStacks < 3)
                 {
                     if (Player.Summons.HydraCount < 2 || hydra.TimeSinceUse > 6000)
-                        return Hydra(elite == null ? target.Position : elite.Position);
+                        return Hydra(elite?.Position ?? target.Position);
 
                     if (rayOfFrost.TimeSinceUse > 6000)
                         return RayOfFrost(target);
@@ -204,21 +204,21 @@ namespace Trinity.Routines.Wizard
             [DefaultValue(10)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.6f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             public SkillSettings Teleport
             {
-                get { return _teleport; }
-                set { SetField(ref _teleport, value); }
+                get => _teleport;
+                set => SetField(ref _teleport, value);
             }
 
             #region Skill Defaults

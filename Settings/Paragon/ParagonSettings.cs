@@ -37,45 +37,45 @@ namespace Trinity.Settings.Paragon
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ParagonCollection CoreParagonPriority
         {
-            get { return _coreParagonPriority; }
-            set { SetField(ref _coreParagonPriority, value); }
+            get => _coreParagonPriority;
+            set => SetField(ref _coreParagonPriority, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         [DefaultValue(true)]
         public bool IsEnabled
         {
-            get { return _isEnabled; }
-            set { SetField(ref _isEnabled, value); }
+            get => _isEnabled;
+            set => SetField(ref _isEnabled, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         [DefaultValue(false)]
         public bool IsCustomize
         {
-            get { return _isCustomize; }
-            set { SetField(ref _isCustomize, value); }
+            get => _isCustomize;
+            set => SetField(ref _isCustomize, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ParagonCollection OffenseParagonPriority
         {
-            get { return _offenseParagonPriority; }
-            set { SetField(ref _offenseParagonPriority, value); }
+            get => _offenseParagonPriority;
+            set => SetField(ref _offenseParagonPriority, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ParagonCollection DefenseParagonPriority
         {
-            get { return _defenseParagonPriority; }
-            set { SetField(ref _defenseParagonPriority, value); }
+            get => _defenseParagonPriority;
+            set => SetField(ref _defenseParagonPriority, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ParagonCollection UtilityParagonPriority
         {
-            get { return _utilityParagonPriority; }
-            set { SetField(ref _utilityParagonPriority, value); }
+            get => _utilityParagonPriority;
+            set => SetField(ref _utilityParagonPriority, value);
         }
 
         //public void OnSave()

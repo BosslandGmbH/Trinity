@@ -20,8 +20,8 @@ namespace Trinity.UI.UIComponents
     /// </remarks>
     public class DropInfo : IDropInfo
   {
-    private ItemsControl itemParent = null;
-    private UIElement item = null;
+    private readonly ItemsControl itemParent = null;
+    private readonly UIElement item = null;
     
     /// <summary>
     /// Initializes a new instance of the DropInfo class.

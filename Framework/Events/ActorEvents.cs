@@ -1,23 +1,21 @@
-﻿using Trinity.Framework.Actors.ActorTypes;
+﻿using System;
+using Trinity.Framework.Actors.ActorTypes;
 
 namespace Trinity.Framework.Events
 {
     public class ActorEvents
     {
-        public delegate void ActorEvent(TrinityActor actor);
-
-        public static event ActorEvent OnActorFound;
-
-        public static event ActorEvent OnUnitKilled;
+        public static event EventHandler<TrinityActor> OnActorFound;
+        public static event EventHandler<TrinityActor> OnUnitKilled;
 
         public static void FireActorFound(TrinityActor actor)
         {
-            OnActorFound?.Invoke(actor);
+            OnActorFound?.Invoke(actor, actor);
         }
 
         public static void FireUnitKilled(TrinityActor actor)
         {
-            OnUnitKilled?.Invoke(actor);
+            OnUnitKilled?.Invoke(actor, actor);
         }
     }
 }

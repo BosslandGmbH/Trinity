@@ -36,7 +36,6 @@ namespace Trinity.UI.UIComponents
         //public event PropertyChangedEventHandler PropertyChanged;
         private List<object> _source = new List<object>();
         public static Dictionary<string, bool> GroupStatus = new Dictionary<string, bool>();
-        private Range _range;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -204,7 +203,7 @@ namespace Trinity.UI.UIComponents
                 _excludeMask = excludeFlagsAttr?.Mask ?? 0;
                 return _excludeMask.Value;
             }
-            set { _excludeMask = value; }
+            set => _excludeMask = value;
         }
 
         public bool IsIndented => IsGroupChild && !IsInline;
@@ -213,8 +212,8 @@ namespace Trinity.UI.UIComponents
 
         public BoundSource Source
         {
-            get { return _source1; }
-            set { SetField(ref _source1, value); }
+            get => _source1;
+            set => SetField(ref _source1, value);
         }
 
         private MemberInfo GetMember(BindingAttribute bindingAttr)
@@ -342,26 +341,17 @@ namespace Trinity.UI.UIComponents
             return default(T);
         }
 
-        private Range Range;
+        private readonly Range Range;
 
-        private LimitBindingAttribute _limitBindingAttribute;
+        private readonly LimitBindingAttribute _limitBindingAttribute;
 
-        private List<BindingAttribute> _BindingAttributes;
+        private readonly List<BindingAttribute> _BindingAttributes;
 
-        public float Min
-        {
-            get { return Range.AbsMin; }
-        }
+        public float Min => Range.AbsMin;
 
-        public float Max
-        {
-            get { return Range.AbsMax; }
-        }
+        public float Max => Range.AbsMax;
 
-        public float Step
-        {
-            get { return Range.AbsStep; }
-        }
+        public float Step => Range.AbsStep;
 
         private float CoerceValue(float value)
         {
@@ -379,39 +369,30 @@ namespace Trinity.UI.UIComponents
 
             public BindingMember Member
             {
-                get { return _member; }
-                set { SetField(ref _member, value); }
+                get => _member;
+                set => SetField(ref _member, value);
             }
 
             public List<PropertyValueBindingItem> Items
             {
-                get { return _items; }
-                set { SetField(ref _items, value); }
+                get => _items;
+                set => SetField(ref _items, value);
             }
         }
 
-        public bool IsSingleSourced
-        {
-            get { return BoundSources.Count == 1; }
-        }
+        public bool IsSingleSourced => BoundSources.Count == 1;
 
-        public bool IsDoubleSourced
-        {
-            get { return BoundSources.Count == 2; }
-        }
+        public bool IsDoubleSourced => BoundSources.Count == 2;
 
-        public bool IsTripleSourced
-        {
-            get { return BoundSources.Count == 3; }
-        }
+        public bool IsTripleSourced => BoundSources.Count == 3;
 
         public List<BoundSource> BoundSources { get; set; }
 
-        public BoundSource BoundSource1 { get { return BoundSources.Any() ? BoundSources.ElementAt(0) : null; } }
+        public BoundSource BoundSource1 => BoundSources.Any() ? BoundSources.ElementAt(0) : null;
 
-        public BoundSource BoundSource2 { get { return BoundSources.Any() ? BoundSources.ElementAt(1) : null; } }
+        public BoundSource BoundSource2 => BoundSources.Any() ? BoundSources.ElementAt(1) : null;
 
-        public BoundSource BoundSource3 { get { return BoundSources.Any() ? BoundSources.ElementAt(2) : null; } }
+        public BoundSource BoundSource3 => BoundSources.Any() ? BoundSources.ElementAt(2) : null;
 
         public static bool IsGroupEnabled(string groupName)
         {
@@ -419,35 +400,17 @@ namespace Trinity.UI.UIComponents
             return !GroupStatus.TryGetValue(groupName, out status) || status;
         }
 
-        public bool ControllerExists
-        {
-            get { return Group != null && GroupStatus.ContainsKey(GroupId); }
-        }
+        public bool ControllerExists => Group != null && GroupStatus.ContainsKey(GroupId);
 
-        public bool IsEnabled
-        {
-            get { return (IsGroupController || IsGroupEnabled(GroupId)); }
-        }
+        public bool IsEnabled => (IsGroupController || IsGroupEnabled(GroupId));
 
-        public bool IsGroupChild
-        {
-            get { return !IsGroupController && ControllerExists; }
-        }
+        public bool IsGroupChild => !IsGroupController && ControllerExists;
 
-        public string Group
-        {
-            get { return _groupAttribute != null ? _groupAttribute.Name : null; }
-        }
+        public string Group => _groupAttribute != null ? _groupAttribute.Name : null;
 
-        public string GroupId
-        {
-            get { return _type.FullName + Group; }
-        }
+        public string GroupId => _type.FullName + Group;
 
-        public bool IsGroupController
-        {
-            get { return _isGroupControllerAttribute != null;  }
-        }
+        public bool IsGroupController => _isGroupControllerAttribute != null;
 
         private string GetDisplayName()
         {
@@ -470,55 +433,25 @@ namespace Trinity.UI.UIComponents
             return displayname;
         }
 
-        public Type Type
-        {
-            get { return _propertyInfo.PropertyType; }
-        }
+        public Type Type => _propertyInfo.PropertyType;
 
-        public string Name
-        {
-            get { return _propertyInfo.Name; }
-        }
+        public string Name => _propertyInfo.Name;
 
-        public PropertyInfo PropertyInfo
-        {
-            get { return _propertyInfo; }
-        }
+        public PropertyInfo PropertyInfo => _propertyInfo;
 
-        public Type PropertyType
-        {
-            get { return _propertyInfo.PropertyType; }
-        }
+        public Type PropertyType => _propertyInfo.PropertyType;
 
-        public object DefaultValue
-        {
-            get { return _defaultValueAttribute != null ? _defaultValueAttribute.Value : null; }
-        }
+        public object DefaultValue => _defaultValueAttribute != null ? _defaultValueAttribute.Value : null;
 
-        public bool IsAdvanced
-        {
-            get { return _advancedAttribute != null; }
-        }
+        public bool IsAdvanced => _advancedAttribute != null;
 
-        public Range Limit
-        {
-            get { return _limitAttribute != null ? new Range { Min = _limitAttribute.Low, Max = _limitAttribute.High } : new Range(); }
-        }
+        public Range Limit => _limitAttribute != null ? new Range { Min = _limitAttribute.Low, Max = _limitAttribute.High } : new Range();
 
-        public string DisplayName
-        {
-            get { return _displayName ?? (_displayName = GetDisplayName()); }
-        }
+        public string DisplayName => _displayName ?? (_displayName = GetDisplayName());
 
-        public string Category
-        {
-            get { return _categoryAttribute != null ? _categoryAttribute.Category : null; }
-        }
+        public string Category => _categoryAttribute != null ? _categoryAttribute.Category : null;
 
-        public string Description
-        {
-            get { return _descriptionAttribute != null ? _descriptionAttribute.Description : null; }
-        }
+        public string Description => _descriptionAttribute != null ? _descriptionAttribute.Description : null;
 
         private static T GetAttribute<T>(MemberInfo type) where T : class
         {
@@ -655,17 +588,11 @@ namespace Trinity.UI.UIComponents
                     throw;
                 }
             }
-            set
-            {
-                SetValue(value);
-            }
+            set => SetValue(value);
         }
 
         private object _actualDefaultValue;
-        public object ActualDefaultValue
-        {
-            get { return _actualDefaultValue ?? (_actualDefaultValue = Type.IsValueType ? Activator.CreateInstance(Type) : null); }           
-        }
+        public object ActualDefaultValue => _actualDefaultValue ?? (_actualDefaultValue = Type.IsValueType ? Activator.CreateInstance(Type) : null);
 
         public static object GetFirstEnumValue(Type type)
         {

@@ -174,28 +174,28 @@ namespace Trinity.Routines.DemonHunter
             [DefaultValue(1)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             public SkillSettings Vault
             {
-                get { return _vault; }
-                set { SetField(ref _vault, value); }
+                get => _vault;
+                set => SetField(ref _vault, value);
             }
             
             [DefaultValue(15f)]
             public float KiteDistance
             {
-                get { return _kiteDistance; }
-                set { SetField(ref _kiteDistance, value); }
+                get => _kiteDistance;
+                set => SetField(ref _kiteDistance, value);
             }
 
             #region Skill Defaults

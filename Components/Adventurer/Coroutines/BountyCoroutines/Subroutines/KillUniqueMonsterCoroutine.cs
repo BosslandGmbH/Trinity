@@ -44,7 +44,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public States State
         {
-            get { return _state; }
+            get => _state;
             protected set
             {
                 if (_state == value) return;
@@ -59,10 +59,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         #endregion State
 
-        public bool IsDone
-        {
-            get { return _isDone || AdvDia.CurrentWorldId != _worldId || !BountyData.QuestData.IsObjectiveActive(QuestStepObjectiveType.KillMonster); }
-        }
+        public bool IsDone => _isDone || AdvDia.CurrentWorldId != _worldId || !BountyData.QuestData.IsObjectiveActive(QuestStepObjectiveType.KillMonster);
 
         public KillUniqueMonsterCoroutine(int questId, int worldId, int actorId, int marker)
         {
@@ -117,10 +114,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         {
         }
 
-        public BountyData BountyData
-        {
-            get { return _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId)); }
-        }
+        public BountyData BountyData => _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId));
 
         private async Task<bool> NotStarted()
         {

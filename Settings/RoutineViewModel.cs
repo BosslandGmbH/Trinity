@@ -19,7 +19,7 @@ namespace Trinity.Settings
     {
         private bool _isCurrent;
         private bool _isSelected;
-        private IRoutine _routine;
+        private readonly IRoutine _routine;
         private object _dataContext;
         private UserControl _control;
 
@@ -76,8 +76,8 @@ namespace Trinity.Settings
         [IgnoreDataMember]
         public System.Windows.Controls.UserControl Control
         {
-            get { return _control; }
-            set { SetField(ref _control, value); }
+            get => _control;
+            set => SetField(ref _control, value);
         }
 
         [IgnoreDataMember]
@@ -86,8 +86,8 @@ namespace Trinity.Settings
         [IgnoreDataMember]
         public object DataContext
         {
-            get { return _dataContext; }
-            set { SetField(ref _dataContext, value); }
+            get => _dataContext;
+            set => SetField(ref _dataContext, value);
         }
 
         [DataMember]
@@ -111,15 +111,15 @@ namespace Trinity.Settings
         [IgnoreDataMember]
         public bool IsSelected
         {
-            get { return _isSelected; }
-            set { SetField(ref _isSelected, value); }
+            get => _isSelected;
+            set => SetField(ref _isSelected, value);
         }
 
         [IgnoreDataMember]
         public bool IsCurrent
         {
-            get { return _isCurrent; }
-            set { SetField(ref _isCurrent, value); }
+            get => _isCurrent;
+            set => SetField(ref _isCurrent, value);
         }
 
         [IgnoreDataMember]

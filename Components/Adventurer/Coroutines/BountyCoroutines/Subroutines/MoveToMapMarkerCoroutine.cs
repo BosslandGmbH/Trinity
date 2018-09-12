@@ -38,7 +38,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public States State
         {
-            get { return _state; }
+            get => _state;
             protected set
             {
                 if (_state == value) return;
@@ -53,10 +53,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         #endregion State
 
-        public bool IsDone
-        {
-            get { return _isDone || AdvDia.CurrentWorldId != _worldId; }
-        }
+        public bool IsDone => _isDone || AdvDia.CurrentWorldId != _worldId;
 
         public MoveToMapMarkerCoroutine(int questId, int worldId, int markerHash, WorldMarkerType type, bool zergAllowSafe = true)
         {
@@ -159,10 +156,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         {
         }
 
-        public BountyData BountyData
-        {
-            get { return _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId)); }
-        }
+        public BountyData BountyData => _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId));
 
         private async Task<bool> NotStarted()
         {
@@ -263,9 +257,9 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private long _lastScanTime;
         private BountyData _bountyData;
-        private bool _allowSafeZerg;
-        private WorldMarkerType _markerType;
-        private string _markerName;
+        private readonly bool _allowSafeZerg;
+        private readonly WorldMarkerType _markerType;
+        private readonly string _markerName;
 
         private void ScanForObjective()
         {

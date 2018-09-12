@@ -22,10 +22,7 @@ namespace Trinity.Modules
             public int RuneIndex { get; set; }
             public bool HasRuneEquipped { get; set; }
 
-            public Rune Rune
-            {
-                get { return Skill.CurrentRune; }
-            }
+            public Rune Rune => Skill.CurrentRune;
 
             public int Charges
             {
@@ -89,7 +86,7 @@ namespace Trinity.Modules
             {
                 isOverrideActive = ZetaDia.Me.SkillOverrideActive;
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 // nesox?
 

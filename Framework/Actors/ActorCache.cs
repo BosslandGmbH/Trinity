@@ -42,7 +42,7 @@ namespace Trinity.Framework.Actors
     /// </summary>
     public class ActorCache : Module, IActorCache
     {
-        private Stopwatch _timer = new Stopwatch();
+        private readonly Stopwatch _timer = new Stopwatch();
 
         private readonly ConcurrentDictionary<int, ACD> _commonData = new ConcurrentDictionary<int, ACD>();
 

@@ -26,7 +26,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private MoveToSceneCoroutine _moveToSceneCoroutine;
         private InteractionCoroutine _interactionCoroutine;
         private int _moveAttempts;
-        private int _maxFailedMoveToGateAttempts = 8;
+        private readonly int _maxFailedMoveToGateAttempts = 8;
         private DateTime _sceneDataBufferStartTime = DateTime.MinValue;
 
         public Vector3 TargetGatePosition { get; set; }
@@ -355,7 +355,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public States State
         {
-            get { return _state; }
+            get => _state;
             protected set
             {
                 if (_state == value) return;

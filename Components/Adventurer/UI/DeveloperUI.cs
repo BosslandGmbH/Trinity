@@ -81,7 +81,7 @@ namespace Trinity.Components.Adventurer.UI
                     dumpers.Children.Add(CreateButton("Unsupported Bounties", DumpUnsupportedBounties_Click));
                     dumpers.Children.Add(CreateButton("Scenes", DumpLevelAreaScenes_Click));
                     dumpers.Children.Add(CreateButton("SceneData Entry", DumpSceneInfo));
-                    
+
 
                     var coroutineHelpers = new StackPanel { Background = Brushes.DimGray, Height = 176, Margin = new Thickness(2, 2, 0, 2) };
                     coroutineHelpers.Children.Add(CreateTitle("Coroutines"));
@@ -576,7 +576,6 @@ namespace Trinity.Components.Adventurer.UI
 
         private static Dictionary<int, int> _partyMembersFirstHit = new Dictionary<int, int>();
         private static Dictionary<int, int> _partyMembersSecondtHit = new Dictionary<int, int>();
-        private static bool isFirstHit = true;
 
         private static void DumpParty_Click(object sender, RoutedEventArgs e)
         {
@@ -747,7 +746,7 @@ namespace Trinity.Components.Adventurer.UI
                     var bountiesNoCoroutines = ZetaDia.Storage.Quests.Bounties.Where(
                         b =>
                         {
-                            BountyData bd = BountyDataFactory.GetBountyData((int) b.Quest);
+                            BountyData bd = BountyDataFactory.GetBountyData((int)b.Quest);
                             if (bd != null && bd.Coroutines.Count == 0)
                                 return true;
 
@@ -799,7 +798,6 @@ namespace Trinity.Components.Adventurer.UI
         public static void DumpNearbyWaypoint()
         {
             var wp = ZetaDia.Actors.GetActorsOfType<GizmoWaypoint>().OrderBy(g => g.Distance).FirstOrDefault();
-            var wpNr = 0;
             if (wp != null)
             {
                 if (!UIElements.WaypointMap.IsVisible)
@@ -908,7 +906,7 @@ namespace Trinity.Components.Adventurer.UI
             Core.Logger.Raw($"    Type = SceneType.Normal,");
             Core.Logger.Raw($"    IgnoreRegions = new RegionGroup");
             Core.Logger.Raw($"    {{");
-            Core.Logger.Raw($"        new RectangularRegion({Math.Round(startPos.X,0)}, {Math.Round(startPos.Y,0)}, {Math.Round(endPos.X,0)}, {Math.Round(endPos.Y,0)}, CombineType.Add)");
+            Core.Logger.Raw($"        new RectangularRegion({Math.Round(startPos.X, 0)}, {Math.Round(startPos.Y, 0)}, {Math.Round(endPos.X, 0)}, {Math.Round(endPos.Y, 0)}, CombineType.Add)");
             Core.Logger.Raw($"    }}");
             Core.Logger.Raw($"}});");
             Core.Logger.Raw($"");

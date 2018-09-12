@@ -40,9 +40,9 @@ namespace Trinity.UI.UIComponents.Controls
     {
         #region private fields
 
-        private Panel layoutRoot;                               // Used to layout the content and modal content.
-        private ContentPresenter primaryContentPresenter;       // Hosts the primary content.
-        private ContentPresenter modalContentPresenter;         // Hosts the modal content.
+        private readonly Panel layoutRoot;                               // Used to layout the content and modal content.
+        private readonly ContentPresenter primaryContentPresenter;       // Hosts the primary content.
+        private readonly ContentPresenter modalContentPresenter;         // Hosts the modal content.
 
         /*
          * This covers the primary content whilst the modal content is being shown which
@@ -50,7 +50,7 @@ namespace Trinity.UI.UIComponents.Controls
          * By default the overlay is DarkGray with 80% opacity but this can be changed
          * using the 'OverlayBrush' property.
          */
-        private Border overlay;
+        private readonly Border overlay;
 
         /*
          * This is required for tracking the logical elements that make up this custom 
@@ -59,7 +59,7 @@ namespace Trinity.UI.UIComponents.Controls
          * and modal content ContentPresenters (The ContentPresenters should not be part of
          * the logical tree because they are an implementation detail of this element).
          */
-        private object[] logicalChildren;
+        private readonly object[] logicalChildren;
 
         /*
          * When the modal content is displayed, the directional and tabbed keyboard navigation 
@@ -150,8 +150,8 @@ namespace Trinity.UI.UIComponents.Controls
         /// </summary>
         public ICommand OpenCommand
         {
-            get { return (ICommand) GetValue(OpenCommandProperty); }
-            set { SetValue(OpenCommandProperty, value); }
+            get => (ICommand) GetValue(OpenCommandProperty);
+            set => SetValue(OpenCommandProperty, value);
         }
 
         /// <summary>
@@ -159,8 +159,8 @@ namespace Trinity.UI.UIComponents.Controls
         /// </summary>
         public bool IsModal
         {
-            get { return (bool)GetValue(IsModalProperty); }
-            set { SetValue(IsModalProperty, value); }
+            get => (bool)GetValue(IsModalProperty);
+            set => SetValue(IsModalProperty, value);
         }
 
         /// <summary>
@@ -168,8 +168,8 @@ namespace Trinity.UI.UIComponents.Controls
         /// </summary>
         public object Content
         {
-            get { return (object)GetValue(ContentProperty); }
-            set { SetValue(ContentProperty, value); }
+            get => (object)GetValue(ContentProperty);
+            set => SetValue(ContentProperty, value);
         }
 
         /// <summary>
@@ -177,8 +177,8 @@ namespace Trinity.UI.UIComponents.Controls
         /// </summary>
         public object ModalContent
         {
-            get { return (object)GetValue(ModalContentProperty); }
-            set { SetValue(ModalContentProperty, value); }
+            get => (object)GetValue(ModalContentProperty);
+            set => SetValue(ModalContentProperty, value);
         }
 
         /// <summary>
@@ -186,8 +186,8 @@ namespace Trinity.UI.UIComponents.Controls
         /// </summary>
         public Brush OverlayBrush
         {
-            get { return (Brush)GetValue(OverlayBrushProperty); }
-            set { SetValue(OverlayBrushProperty, value); }
+            get => (Brush)GetValue(OverlayBrushProperty);
+            set => SetValue(OverlayBrushProperty, value);
         }
 
         #endregion
@@ -247,8 +247,8 @@ namespace Trinity.UI.UIComponents.Controls
         /// </summary>
         public event RoutedEventHandler PreviewModalContentShown
         {
-            add { AddHandler(PreviewModalContentShownEvent, value); }
-            remove { RemoveHandler(PreviewModalContentShownEvent, value); }
+            add => AddHandler(PreviewModalContentShownEvent, value);
+            remove => RemoveHandler(PreviewModalContentShownEvent, value);
         }
 
         /// <summary>
@@ -256,8 +256,8 @@ namespace Trinity.UI.UIComponents.Controls
         /// </summary>
         public event RoutedEventHandler ModalContentShown
         {
-            add { AddHandler(ModalContentShownEvent, value); }
-            remove { RemoveHandler(ModalContentShownEvent, value); }
+            add => AddHandler(ModalContentShownEvent, value);
+            remove => RemoveHandler(ModalContentShownEvent, value);
         }
 
         /// <summary>
@@ -265,8 +265,8 @@ namespace Trinity.UI.UIComponents.Controls
         /// </summary>
         public event RoutedEventHandler PreviewModalContentHidden
         {
-            add { AddHandler(PreviewModalContentHiddenEvent, value); }
-            remove { RemoveHandler(PreviewModalContentHiddenEvent, value); }
+            add => AddHandler(PreviewModalContentHiddenEvent, value);
+            remove => RemoveHandler(PreviewModalContentHiddenEvent, value);
         }
 
         /// <summary>
@@ -274,8 +274,8 @@ namespace Trinity.UI.UIComponents.Controls
         /// </summary>
         public event RoutedEventHandler ModalContentHidden
         {
-            add { AddHandler(ModalContentHiddenEvent, value); }
-            remove { RemoveHandler(ModalContentHiddenEvent, value); }
+            add => AddHandler(ModalContentHiddenEvent, value);
+            remove => RemoveHandler(ModalContentHiddenEvent, value);
         }
 
         #endregion
@@ -541,15 +541,9 @@ namespace Trinity.UI.UIComponents.Controls
             return layoutRoot;
         }
 
-        protected override int VisualChildrenCount 
-        {
-            get { return 1; }
-        }
+        protected override int VisualChildrenCount => 1;
 
-        protected override IEnumerator LogicalChildren
-        {
-            get { return logicalChildren.GetEnumerator(); }
-        }
+        protected override IEnumerator LogicalChildren => logicalChildren.GetEnumerator();
 
         protected override Size ArrangeOverride(Size finalSize)
         {

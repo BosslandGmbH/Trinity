@@ -401,7 +401,7 @@ namespace Trinity.Components.Coroutines.Town
             return -1;
         }
 
-        private static HashSet<RawItemType> _specialCaseNonStackableItems = new HashSet<RawItemType>
+        private static readonly HashSet<RawItemType> _specialCaseNonStackableItems = new HashSet<RawItemType>
         {
             RawItemType.CraftingPlan,
             RawItemType.CraftingPlan_Jeweler,

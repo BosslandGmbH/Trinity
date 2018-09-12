@@ -8,7 +8,7 @@ using Zeta.Game;
 
 namespace Trinity.Framework.Actors.ActorTypes
 {
-    public class TrinityPlayer : TrinityActor, IPartyMember
+    public sealed class TrinityPlayer : TrinityActor, IPartyMember
     {
         public override AttributesWrapper Attributes { get; set; }
         public int HeroId { get; set; }

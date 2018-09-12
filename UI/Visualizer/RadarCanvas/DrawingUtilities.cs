@@ -95,7 +95,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                              rect.Top + rect.Height / 2);
         }
 
-        private static Dictionary<ushort,double> _glyphWidths = new Dictionary<ushort, double>();
+        private static readonly Dictionary<ushort,double> _glyphWidths = new Dictionary<ushort, double>();
         private static GlyphTypeface _glyphTypeface;
         public static GlyphRun CreateGlyphRun(string text, double size, Point position)
         {
@@ -114,14 +114,13 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 double[] advanceWidths = new double[text.Length];
 
                 var totalWidth = 0d;
-                double glyphWidth;
 
                 for (int n = 0; n < text.Length; n++)
                 {
                     ushort glyphIndex = (ushort)(text[n] - 29);
                     glyphIndexes[n] = glyphIndex;
 
-                    if (!_glyphWidths.TryGetValue(glyphIndex, out glyphWidth))
+                    if (!_glyphWidths.TryGetValue(glyphIndex, out var glyphWidth))
                     {
                         glyphWidth = _glyphTypeface.AdvanceWidths[glyphIndex] * size;
                         _glyphWidths.Add(glyphIndex, glyphWidth);
@@ -135,7 +134,9 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                 var offsetPosition = new Point(position.X - (totalWidth / 2), position.Y - 10 - size);
 
+#pragma warning disable CS0618 // Type or member is obsolete
                 glyphRun = new GlyphRun(_glyphTypeface, 0, false, size, glyphIndexes, offsetPosition, advanceWidths, null, null, null, null, null, null);
+#pragma warning restore CS0618 // Type or member is obsolete
             }
             catch (Exception ex)
             {
@@ -148,13 +149,11 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         internal static T GetScaledResource<T>(T resource, float scale) where T : class
         {
-            var cloneableT = resource as ICloneable;
-            if (cloneableT != null)
+            if (resource is ICloneable cloneableT)
             {
                 var clone = cloneableT.Clone();
 
-                var pen = clone as Pen;
-                if (pen != null)
+                if (clone is Pen pen)
                 {
                     pen.Width = pen.Width * scale;
                     return pen as T;

@@ -30,8 +30,8 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         private readonly WorldScene _scene;
 
         public IDetailNode NavigableCenterNode { get; set; }
-        public Vector3 NavigableCenter { get { return NavigableCenterNode != null ? NavigableCenterNode.NavigableCenter : Center.ToVector3(); } }
-        public Vector2 NavigableCenter2D { get { return NavigableCenterNode != null ? NavigableCenterNode.NavigableCenter2D : Center; } }
+        public Vector3 NavigableCenter => NavigableCenterNode != null ? NavigableCenterNode.NavigableCenter : Center.ToVector3();
+        public Vector2 NavigableCenter2D => NavigableCenterNode != null ? NavigableCenterNode.NavigableCenter2D : Center;
         public Vector2 Center { get; private set; }
         public Vector2 TopLeft { get; private set; }
         public Vector2 BottomLeft { get; private set; }
@@ -43,7 +43,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         public bool HasEnoughNavigableCells { get; private set; }
 
         public List<IDetailNode> Nodes { get; private set; }
-        public WorldScene Scene { get { return _scene; } }
+        public WorldScene Scene => _scene;
         public bool IsKnown { get; set; }
         public bool IsVisited { get; set; }
         public NodeFlags NodeFlags { get; set; }
@@ -51,25 +51,13 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         //public uint CustomFlags { get; set; }
         public GridPoint GridPoint { get; set; }
 
-        public int LevelAreaId
-        {
-            get { return _scene.LevelAreaId; }
-        }
+        public int LevelAreaId => _scene.LevelAreaId;
 
-        public float Distance2DSqr
-        {
-            get { return NavigableCenter2D.DistanceSqr(AdvDia.MyPosition.ToVector2()); }
-        }
+        public float Distance2DSqr => NavigableCenter2D.DistanceSqr(AdvDia.MyPosition.ToVector2());
 
-        public float Distance
-        {
-            get { return NavigableCenter.DistanceSqr(AdvDia.MyPosition); }
-        }
+        public float Distance => NavigableCenter.DistanceSqr(AdvDia.MyPosition);
 
-        public int DynamicWorldId
-        {
-            get { return _scene.DynamicWorldId; }
-        }
+        public int DynamicWorldId => _scene.DynamicWorldId;
 
         public bool IsInNode(Vector3 position)
         {
@@ -188,7 +176,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public bool IsIgnored
         {
-            get { return _isIgnored; }
+            get => _isIgnored;
             set
             {
                 if (_isIgnored) return;

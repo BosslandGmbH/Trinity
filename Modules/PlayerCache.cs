@@ -557,25 +557,18 @@ namespace Trinity.Modules
             return false;
         }
 
-        public bool IsCastingOrLoading
-        {
-            get
-            {
-                return
-                    ZetaDia.Me != null &&
-                    ZetaDia.Me.IsValid &&
-                    ZetaDia.Me.CommonData != null &&
-                    ZetaDia.Me.CommonData.IsValid &&
-                    !ZetaDia.Me.IsDead &&
-                    (
-                        ZetaDia.Globals.IsLoadingWorld ||
-                        ZetaDia.Me.CommonData.AnimationState == AnimationState.Casting ||
-                        ZetaDia.Me.CommonData.AnimationState == AnimationState.Channeling ||
-                        //ZetaDia.Me.CommonData.AnimationState == AnimationState.Transform || //archon is transform
-                        ZetaDia.Me.CommonData.AnimationState.ToString() == "13"
-                    );
-            }
-        }
+        public bool IsCastingOrLoading => ZetaDia.Me != null &&
+                                          ZetaDia.Me.IsValid &&
+                                          ZetaDia.Me.CommonData != null &&
+                                          ZetaDia.Me.CommonData.IsValid &&
+                                          !ZetaDia.Me.IsDead &&
+                                          (
+                                              ZetaDia.Globals.IsLoadingWorld ||
+                                              ZetaDia.Me.CommonData.AnimationState == AnimationState.Casting ||
+                                              ZetaDia.Me.CommonData.AnimationState == AnimationState.Channeling ||
+                                              //ZetaDia.Me.CommonData.AnimationState == AnimationState.Transform || //archon is transform
+                                              ZetaDia.Me.CommonData.AnimationState.ToString() == "13"
+                                          );
 
         public object FacingAngle { get; set; }
         public int FreeBackpackSlots { get; set; }

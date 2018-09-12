@@ -20,7 +20,7 @@ namespace Trinity.Framework.Helpers
 
         public T CachedValue
         {
-            get { return _cachedValue; }
+            get => _cachedValue;
             set
             {
                 if (!IsValueCreated)

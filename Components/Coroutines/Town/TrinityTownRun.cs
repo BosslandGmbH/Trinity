@@ -293,8 +293,8 @@ namespace Trinity.Components.Coroutines.Town
 
         public static bool IsVendoring
         {
-            get { return BrainBehavior.IsVendoring; }
-            set { VendorProperty.Value.SetValue(null, value); }
+            get => BrainBehavior.IsVendoring;
+            set => VendorProperty.Value.SetValue(null, value);
         }
 
         public static async Task<bool> GoToTown()
@@ -426,19 +426,20 @@ namespace Trinity.Components.Coroutines.Town
         private static void CheckForDBVendoringBug()
         {
             // An exception in DB core during town run will cause IsVendoring to never be set to false.
-
             var isVendoring = BrainBehavior.IsVendoring;
             if (isVendoring != _isVendoring)
             {
                 if (isVendoring)
                 {
                     _brainVendoringStarted = DateTime.UtcNow;
+                    _isVendoring = true;
                     return;
                 }
             }
 
             if (isVendoring && DateTime.UtcNow.Subtract(_brainVendoringStarted).TotalSeconds > 200)
             {
+                _isVendoring = false;
                 IsVendoring = false;
             }
         }

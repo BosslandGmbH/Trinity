@@ -12,20 +12,20 @@ namespace Trinity.UI.Visualizer.RadarCanvas
     /// </summary>
     public static class RadarResources
     {
-        private static SolidColorBrush _NodeP9;
-        private static SolidColorBrush _nodeP8;
-        private static SolidColorBrush _nodeP7;
-        private static SolidColorBrush _nodeP6;
-        private static SolidColorBrush _nodeP5;
-        private static SolidColorBrush _nodeP4;
-        private static SolidColorBrush _nodeP3;
-        private static SolidColorBrush _nodeP2;
-        private static SolidColorBrush _nodeP1;
+        private static readonly SolidColorBrush _NodeP9;
+        private static readonly SolidColorBrush _nodeP8;
+        private static readonly SolidColorBrush _nodeP7;
+        private static readonly SolidColorBrush _nodeP6;
+        private static readonly SolidColorBrush _nodeP5;
+        private static readonly SolidColorBrush _nodeP4;
+        private static readonly SolidColorBrush _nodeP3;
+        private static readonly SolidColorBrush _nodeP2;
+        private static readonly SolidColorBrush _nodeP1;
         public static SolidColorBrush BlankNode;
         public static SolidColorBrush BackTrackNode;
-        private static SolidColorBrush _nodeN2;
+        private static readonly SolidColorBrush _nodeN2;
         private static SolidColorBrush _nodeN1;
-        private static SolidColorBrush _Node0;
+        private static readonly SolidColorBrush _Node0;
 
 
         public class ResourceSet

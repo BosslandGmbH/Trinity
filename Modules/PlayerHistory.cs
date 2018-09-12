@@ -40,7 +40,7 @@ namespace Trinity.Modules
 
         private const int CacheLimit = 50;
         private const int RecentPositionsLimit = 20;
-        private CacheField<Vector3> _centroid = new CacheField<Vector3>(UpdateSpeed.Fast);
+        private readonly CacheField<Vector3> _centroid = new CacheField<Vector3>(UpdateSpeed.Fast);
         public DateTime LastRecordedTime;
         public Vector3 LastRecordedPosition;
         public IndexedList<PositionHistory> Cache = new IndexedList<PositionHistory>();

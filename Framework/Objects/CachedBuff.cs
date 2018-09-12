@@ -49,15 +49,9 @@ namespace Trinity.Framework.Objects
 
         public int GetStackCount() => _buff?.StackCount ?? 0;
 
-        public TimeSpan Elapsed
-        {
-            get { return Core.Cooldowns.GetBuffCooldownElapsed(SNOPower); }
-        }
+        public TimeSpan Elapsed => Core.Cooldowns.GetBuffCooldownElapsed(SNOPower);
 
-        public TimeSpan Remaining
-        {
-            get { return Core.Cooldowns.GetBuffCooldownRemaining(SNOPower); }
-        }
+        public TimeSpan Remaining => Core.Cooldowns.GetBuffCooldownRemaining(SNOPower);
 
         public void Cancel()
         {

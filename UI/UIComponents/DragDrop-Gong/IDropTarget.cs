@@ -1,4 +1,6 @@
-﻿namespace Trinity.UI.UIComponents
+﻿using System.Windows;
+
+namespace Trinity.UI.UIComponents
 {
     /// <summary>
     /// Interface implemented by Drop Handlers.

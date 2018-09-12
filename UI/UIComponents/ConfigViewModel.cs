@@ -19,7 +19,7 @@ namespace Trinity.UI.UIComponents
     {
         private readonly TrinityStorage _storage;
         private readonly TrinityStorage _originalStorage;
-        private SettingsModel _model;
+        private readonly SettingsModel _model;
 
         public TrinityStorage ViewStorage => _storage;
 

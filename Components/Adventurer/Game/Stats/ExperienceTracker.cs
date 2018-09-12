@@ -13,7 +13,7 @@ namespace Trinity.Components.Adventurer.Game.Stats
         public double MinExperienceRun = 0;
         public double MaxExperienceRun = 0;
         public double TotalExperience = 0;
-        public TimeSpan CurrentTime { get { return DateTime.UtcNow - _startTime; } }
+        public TimeSpan CurrentTime => DateTime.UtcNow - _startTime;
         private DateTime _startTime;
         private DateTime _tickStartTime;
         private TimeSpan _bestTime = TimeSpan.Zero;

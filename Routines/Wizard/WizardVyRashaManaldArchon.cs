@@ -664,22 +664,22 @@ namespace Trinity.Routines.Wizard
             [DefaultValue(4)]
             public int ArchonClusterSize
             {
-                get { return _archonClusterSize; }
-                set { SetField(ref _archonClusterSize, value); }
+                get => _archonClusterSize;
+                set => SetField(ref _archonClusterSize, value);
             }
 
             [DefaultValue(1)]
             public int NonArchonClusterSize
             {
-                get { return _nonArchonClusterSize; }
-                set { SetField(ref _nonArchonClusterSize, value); }
+                get => _nonArchonClusterSize;
+                set => SetField(ref _nonArchonClusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
 
@@ -687,15 +687,15 @@ namespace Trinity.Routines.Wizard
             [DefaultValue(40f)]
             public float TeleportKiteMinDistance
             {
-                get { return _teleportKiteMinDistance; }
-                set { SetField(ref _teleportKiteMinDistance, value); }
+                get => _teleportKiteMinDistance;
+                set => SetField(ref _teleportKiteMinDistance, value);
             }
 
             [DefaultValue(50)]
             public float TeleportKiteMaxDistance
             {
-                get { return _teleportKiteMaxDistance; }
-                set { SetField(ref _teleportKiteMaxDistance, value); }
+                get => _teleportKiteMaxDistance;
+                set => SetField(ref _teleportKiteMaxDistance, value);
             }
 
 
@@ -703,36 +703,36 @@ namespace Trinity.Routines.Wizard
             [DefaultValue(0.4f)]
             public float TeleportHealthEmergency
             {
-                get { return _teleportHealthEmergency; }
-                set { SetField(ref _teleportHealthEmergency, value); }
+                get => _teleportHealthEmergency;
+                set => SetField(ref _teleportHealthEmergency, value);
             }
 
             [DefaultValue(0.3f)]
             public float ArchonTeleportHealthEmergency
             {
-                get { return _archonTeleportHealthEmergency; }
-                set { SetField(ref _archonTeleportHealthEmergency, value); }
+                get => _archonTeleportHealthEmergency;
+                set => SetField(ref _archonTeleportHealthEmergency, value);
             }
 
             [DefaultValue(30)]
             public float TeleportEliteKiteRange
             {
-                get { return _teleportEliteKiteRange; }
-                set { SetField(ref _teleportEliteKiteRange, value); }
+                get => _teleportEliteKiteRange;
+                set => SetField(ref _teleportEliteKiteRange, value);
             }
 
             [DefaultValue(20)]
             public float TeleportTrashKiteRange
             {
-                get { return _teleportTrashKiteRange; }
-                set { SetField(ref _teleportTrashKiteRange, value); }
+                get => _teleportTrashKiteRange;
+                set => SetField(ref _teleportTrashKiteRange, value);
             }
 
             [DefaultValue(3)]
             public int TeleportTrashInRangeCount
             {
-                get { return _teleportTrashInRangeCount; }
-                set { SetField(ref _teleportTrashInRangeCount, value); }
+                get => _teleportTrashInRangeCount;
+                set => SetField(ref _teleportTrashInRangeCount, value);
             }
 
 
@@ -740,22 +740,22 @@ namespace Trinity.Routines.Wizard
             [DefaultValue(1000)]
             public int ArchonTeleportHealthDelay
             {
-                get { return _archonTeleportHealthDelay; }
-                set { SetField(ref _archonTeleportHealthDelay, value); }
+                get => _archonTeleportHealthDelay;
+                set => SetField(ref _archonTeleportHealthDelay, value);
             }
 
             [DefaultValue(2000)]
             public int Archon4StackDelay
             {
-                get { return _archon4StackDelay; }
-                set { SetField(ref _archon4StackDelay, value); }
+                get => _archon4StackDelay;
+                set => SetField(ref _archon4StackDelay, value);
             }
 
             [DefaultValue(1000)]
             public int Archon1StackDelay
             {
-                get { return _archon1StackDelay; }
-                set { SetField(ref _archon1StackDelay, value); }
+                get => _archon1StackDelay;
+                set => SetField(ref _archon1StackDelay, value);
             }
 
 
@@ -763,29 +763,29 @@ namespace Trinity.Routines.Wizard
             [DefaultValue(0.4f)]
             public float ShouldArchonHealthPct
             {
-                get { return _shouldArchonHealthPct; }
-                set { SetField(ref _shouldArchonHealthPct, value); }
+                get => _shouldArchonHealthPct;
+                set => SetField(ref _shouldArchonHealthPct, value);
             }
 
             [DefaultValue(20)]
             public int ShouldArchonLowResource
             {
-                get { return _shouldArchonLowResource; }
-                set { SetField(ref _shouldArchonLowResource, value); }
+                get => _shouldArchonLowResource;
+                set => SetField(ref _shouldArchonLowResource, value);
             }
 
             [DefaultValue(50f)]
             public float DisintegrationWaveRange
             {
-                get { return _disintegrationWaveRange; }
-                set { SetField(ref _disintegrationWaveRange, value); }
+                get => _disintegrationWaveRange;
+                set => SetField(ref _disintegrationWaveRange, value);
             }
 
             [DefaultValue(10f)]
             public float DisintegrationWaveMinClusterRadius
             {
-                get { return _disintegrationWaveMinClusterRadius; }
-                set { SetField(ref _disintegrationWaveMinClusterRadius, value); }
+                get => _disintegrationWaveMinClusterRadius;
+                set => SetField(ref _disintegrationWaveMinClusterRadius, value);
             }
 
 
@@ -793,15 +793,15 @@ namespace Trinity.Routines.Wizard
             [DefaultValue(55)]
             public float ArcaneTorrentRange
             {
-                get { return _arcaneTorrentRange; }
-                set { SetField(ref _arcaneTorrentRange, value); }
+                get => _arcaneTorrentRange;
+                set => SetField(ref _arcaneTorrentRange, value);
             }
 
             [DefaultValue(25)]
             public int ArcaneResourceReserve
             {
-                get { return _arcaneResourceReserve; }
-                set { SetField(ref _arcaneResourceReserve, value); }
+                get => _arcaneResourceReserve;
+                set => SetField(ref _arcaneResourceReserve, value);
             }
 
 
@@ -809,36 +809,36 @@ namespace Trinity.Routines.Wizard
             [DefaultValue(6000)]
             public int BlackHoleDelay
             {
-                get { return _blackHoleDelay; }
-                set { SetField(ref _blackHoleDelay, value); }
+                get => _blackHoleDelay;
+                set => SetField(ref _blackHoleDelay, value);
             }
 
             [DefaultValue(2000)]
             public int BlizzardSnowboundDelay
             {
-                get { return _blizzardSnowboundDelay; }
-                set { SetField(ref _blizzardSnowboundDelay, value); }
+                get => _blizzardSnowboundDelay;
+                set => SetField(ref _blizzardSnowboundDelay, value);
             }
 
             [DefaultValue(6000)]
             public int BlizzardFrozenSolidDelay
             {
-                get { return _blizzardFrozenSolidDelay; }
-                set { SetField(ref _blizzardFrozenSolidDelay, value); }
+                get => _blizzardFrozenSolidDelay;
+                set => SetField(ref _blizzardFrozenSolidDelay, value);
             }
 
             [DefaultValue(4000)]
             public int EnergyTwisterDelay
             {
-                get { return _energyTwisterDelay; }
-                set { SetField(ref _energyTwisterDelay, value); }
+                get => _energyTwisterDelay;
+                set => SetField(ref _energyTwisterDelay, value);
             }
 
             [DefaultValue(4000)]
             public int ExplosiveBlastDelay
             {
-                get { return _explosiveBlastDelay; }
-                set { SetField(ref _explosiveBlastDelay, value); }
+                get => _explosiveBlastDelay;
+                set => SetField(ref _explosiveBlastDelay, value);
             }
 
 

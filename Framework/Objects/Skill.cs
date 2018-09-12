@@ -67,7 +67,7 @@ namespace Trinity.Framework.Objects
                 }
                 return _snoPower;
             }
-            set { _snoPower = value; }
+            set => _snoPower = value;
         }
 
         /// <summary>
@@ -113,8 +113,8 @@ namespace Trinity.Framework.Objects
         /// </summary>
         public int Cost
         {
-            get { return CurrentRune.ModifiedCost ?? _cost; }
-            set { _cost = value; }
+            get => CurrentRune.ModifiedCost ?? _cost;
+            set => _cost = value;
         }
 
         /// <summary>
@@ -123,8 +123,8 @@ namespace Trinity.Framework.Objects
         /// </summary>
         public float AreaEffectRadius
         {
-            get { return CurrentRune.ModifiedAreaEffectRadius ?? _areaEffectRadius; }
-            set { _areaEffectRadius = value; }
+            get => CurrentRune.ModifiedAreaEffectRadius ?? _areaEffectRadius;
+            set => _areaEffectRadius = value;
         }
 
         /// <summary>
@@ -132,8 +132,8 @@ namespace Trinity.Framework.Objects
         /// </summary>
         public TimeSpan Duration
         {
-            get { return CurrentRune.ModifiedDuration ?? _duration; }
-            set { _duration = value; }
+            get => CurrentRune.ModifiedDuration ?? _duration;
+            set => _duration = value;
         }
 
         /// <summary>
@@ -141,8 +141,8 @@ namespace Trinity.Framework.Objects
         /// </summary>
         public bool IsDamaging
         {
-            get { return CurrentRune.ModifiedIsDamaging ?? _isDamaging; }
-            set { _isDamaging = value; }
+            get => CurrentRune.ModifiedIsDamaging ?? _isDamaging;
+            set => _isDamaging = value;
         }
         
         /// <summary>
@@ -158,7 +158,7 @@ namespace Trinity.Framework.Objects
 
                 return CurrentRune.ModifiedDuration ?? _cooldown;
             }
-            set { _cooldown = value; }
+            set => _cooldown = value;
         }
 
         /// <summary>
@@ -171,8 +171,8 @@ namespace Trinity.Framework.Objects
         /// </summary>
         public Element Element
         {
-            get { return CurrentRune.ModifiedElement.HasValue ? CurrentRune.ModifiedElement.Value : _element; }
-            set { _element = value; }
+            get => CurrentRune.ModifiedElement.HasValue ? CurrentRune.ModifiedElement.Value : _element;
+            set => _element = value;
         }
 
         /// <summary>

@@ -245,10 +245,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         /// </summary>        
         public int GridSize = DefaultGridSize;
 
-        public float Scale
-        {
-            get { return GridSize / (float)DefaultGridSize; }
-        }
+        public float Scale => GridSize / (float)DefaultGridSize;
 
         /// <summary>
         /// The number of grid squares/yards to draw horizontal/vertical lines on
@@ -287,8 +284,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         public IList ItemsSource
         {
-            set { SetValue(ItemsSourceProperty, value); }
-            get { return (IList)GetValue(ItemsSourceProperty); }
+            set => SetValue(ItemsSourceProperty, value);
+            get => (IList)GetValue(ItemsSourceProperty);
         }
 
         static void OnItemsSourceChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
@@ -310,8 +307,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         public ICommand ClickCommand
         {
-            get { return (ICommand)GetValue(ClickCommandProperty); }
-            set { SetValue(ClickCommandProperty, value); }
+            get => (ICommand)GetValue(ClickCommandProperty);
+            set => SetValue(ClickCommandProperty, value);
         }
 
         #endregion
@@ -326,8 +323,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         public int Zoom
         {
-            set { SetValue(ZoomProperty, value); }
-            get { return (int)GetValue(ZoomProperty); }
+            set => SetValue(ZoomProperty, value);
+            get => (int)GetValue(ZoomProperty);
         }
 
         static void OnZoomChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
@@ -363,8 +360,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         public bool IsDragging
         {
-            set { SetValue(IsDraggingProperty, value); }
-            get { return (bool)GetValue(IsDraggingProperty); }
+            set => SetValue(IsDraggingProperty, value);
+            get => (bool)GetValue(IsDraggingProperty);
         }
 
         #endregion
@@ -379,8 +376,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         public int Pan
         {
-            set { SetValue(PanProperty, value); }
-            get { return (int)GetValue(PanProperty); }
+            set => SetValue(PanProperty, value);
+            get => (int)GetValue(PanProperty);
         }
 
         static void OnPanChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
@@ -405,8 +402,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         public TrinityActor SelectedItem
         {
-            get { return (TrinityActor)GetValue(SelectedItemProperty); }
-            set { SetValue(SelectedItemProperty, value); }
+            get => (TrinityActor)GetValue(SelectedItemProperty);
+            set => SetValue(SelectedItemProperty, value);
         }
 
         static void OnSelectedItemChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
@@ -432,8 +429,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         public RadarVisibilityFlags VisibilityFlags
         {
-            set { SetValue(VisibilityFlagsProperty, value); }
-            get { return (RadarVisibilityFlags)GetValue(VisibilityFlagsProperty); }
+            set => SetValue(VisibilityFlagsProperty, value);
+            get => (RadarVisibilityFlags)GetValue(VisibilityFlagsProperty);
         }
 
         static void OnVisibilityFlagsChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
@@ -1119,11 +1116,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
 
         }
-
-
-
+        
         private Dictionary<DateTime, StaticTelegraph> _telegraphedNodes = new Dictionary<DateTime, StaticTelegraph>();
-        private AvoidanceNode _testkiteNode;
 
         public class StaticTelegraph
         {
@@ -1292,7 +1286,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 }
             }
 
-            public static double RelativeTolerance { get { return 1e-10; } }
+            public static double RelativeTolerance => 1e-10;
 
             public static bool NearlyEqual(Vector3 a, Vector3 b)
             {
@@ -1554,7 +1548,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             {
                 var radius = GridSize * i;
                 dc.DrawEllipse(RadarResources.TransparentBrush, RadarResources.RangeGuidePen, Player.Point, radius, radius);
-                dc.DrawText(new FormattedText(i.ToString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 12, Brushes.LightYellow),
+                dc.DrawText(new FormattedText(i.ToString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 12, Brushes.LightYellow, VisualTreeHelper.GetDpi(this).PixelsPerDip),
                     new Point(Player.Point.X - (radius + 20), Player.Point.Y));
             }
         }

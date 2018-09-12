@@ -24,35 +24,17 @@ namespace Trinity.Components.Adventurer.Game.Rift
         public static Vector3 Act1OrekPosition = new Vector3(391, 591, 24);
         public static Vector3 Act1RiftStonePosition = new Vector3(375, 586, 24);
 
-        public static UIElement VendorDialog
-        {
-            get { return UIElement.FromHash(0x244BD04C84DF92F1); }
-        }
+        public static UIElement VendorDialog => UIElement.FromHash(0x244BD04C84DF92F1);
 
-        public static UIElement UpgradeKeystoneButton
-        {
-            get { return UIElement.FromHash(0x4BDE2D63B5C36134); }
-        }
+        public static UIElement UpgradeKeystoneButton => UIElement.FromHash(0x4BDE2D63B5C36134);
 
-        public static UIElement UpgradeGemButton
-        {
-            get { return UIElement.FromHash(0x826E5716E8D4DD05); }
-        }
+        public static UIElement UpgradeGemButton => UIElement.FromHash(0x826E5716E8D4DD05);
 
-        public static UIElement ContinueButton
-        {
-            get { return UIElement.FromHash(0x1A089FAFF3CB6576); }
-        }
+        public static UIElement ContinueButton => UIElement.FromHash(0x1A089FAFF3CB6576);
 
-        public static UIElement UpgradeButton
-        {
-            get { return UIElement.FromHash(0xD365EA84F587D2FE); }
-        }
+        public static UIElement UpgradeButton => UIElement.FromHash(0xD365EA84F587D2FE);
 
-        public static UIElement VendorCloseButton
-        {
-            get { return UIElement.FromHash(0xF98A8466DE237BD5); }
-        }
+        public static UIElement VendorCloseButton => UIElement.FromHash(0xF98A8466DE237BD5);
 
         // Cow Rift X1_LR_Level_01 (WorldID: 288454, LevelAreaSnoIdId: 276150)
         // TentacleLord (209133) Distance: 5.491129
@@ -61,10 +43,7 @@ namespace Trinity.Components.Adventurer.Game.Rift
         // TentacleLord (209133) Distance: 25.51409
         //new InteractWithUnitCoroutine(0, 288454, 209133, 0, 5),
 
-        public static List<int> RiftWorldIds
-        {
-            get { return riftWorldIds; }
-        }
+        public static List<int> RiftWorldIds => riftWorldIds;
 
         private static readonly List<int> riftWorldIds = new List<int>
         {
@@ -83,10 +62,7 @@ namespace Trinity.Components.Adventurer.Game.Rift
         /// <summary>
         /// Contains all the Exit Name Hashes in Rifts
         /// </summary>
-        public static List<int> RiftPortalHashes
-        {
-            get { return riftPortalHashes; }
-        }
+        public static List<int> RiftPortalHashes => riftPortalHashes;
 
         private static readonly List<int> riftPortalHashes = new List<int>
         {

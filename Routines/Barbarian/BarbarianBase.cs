@@ -584,14 +584,12 @@ namespace Trinity.Routines.Barbarian
 
         protected bool TrySecondaryPower(out TrinityPower power)
         {
-            TrinityActor target;
-            Vector3 position;
             power = null;
 
-            if (ShouldRend(out position))
+            if (ShouldRend(out var position))
                 power = Rend(position);
 
-            else if (ShouldAncientSpear(out target))
+            else if (ShouldAncientSpear(out var target))
                 power = AncientSpear(target);
 
             else if (ShouldWhirlwind(out position))
@@ -611,11 +609,9 @@ namespace Trinity.Routines.Barbarian
 
         protected bool TrySpecialPower(out TrinityPower power)
         {
-            TrinityActor target;
-            Vector3 position;
             power = null;
 
-            if (ShouldLeap(out position))
+            if (ShouldLeap(out var position))
                 power = Leap(position);
 
             else if (ShouldGroundStomp(out position))
@@ -641,8 +637,6 @@ namespace Trinity.Routines.Barbarian
 
         protected bool TryBuffPower(out TrinityPower power)
         {
-            TrinityActor target;
-            Vector3 position;
             power = null;
 
             if (ShouldIgnorePain())
@@ -668,8 +662,7 @@ namespace Trinity.Routines.Barbarian
 
         public TrinityPower DefaultBuffPower()
         {
-            TrinityPower power;
-            return TryBuffPower(out power) ? power : null;
+            return TryBuffPower(out var power) ? power : null;
         }
 
         public TrinityPower DefaultDestructiblePower()

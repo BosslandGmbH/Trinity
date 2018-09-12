@@ -40,10 +40,7 @@ namespace Trinity.Routines.Crusader
 
         public TrinityPower GetOffensivePower()
         {
-            TrinityPower power;
-            TrinityActor target;
-                
-            if (TrySpecialPower(out power))
+            if (TrySpecialPower(out var power))
                 return power;
 
             if (TrySecondaryPower(out power))
@@ -238,35 +235,35 @@ protected override bool ShouldFallingSword(out Vector3 position)
             [DefaultValue(10)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             public SkillSettings Akarats
             {
-                get { return _akarats; }
-                set { SetField(ref _akarats, value); }
+                get => _akarats;
+                set => SetField(ref _akarats, value);
             }
 
             [DefaultValue(8000)]
             public int FallingSwordDelay
             {
-                get { return _fallingSwordDelay; }
-                set { SetField(ref _fallingSwordDelay, value); }
+                get => _fallingSwordDelay;
+                set => SetField(ref _fallingSwordDelay, value);
             }
             
             [DefaultValue(15)]
             public int FallingSwordMobsRange
             {
-                get { return _fallingSwordMobsRange; }
-                set { SetField(ref _fallingSwordMobsRange, value); }
+                get => _fallingSwordMobsRange;
+                set => SetField(ref _fallingSwordMobsRange, value);
             }
 
 

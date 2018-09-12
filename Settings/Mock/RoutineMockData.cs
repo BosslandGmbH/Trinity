@@ -41,14 +41,14 @@ namespace Trinity.Settings.Mock
 
         public List<SkillSettings> ActiveSkills
         {
-            get { return _activeSkills; }
-            set { SetField(ref _activeSkills, value); }
+            get => _activeSkills;
+            set => SetField(ref _activeSkills, value);
         }
 
         public List<WeightSettings> WeightOverrides
         {
-            get { return _weightOverrides; }
-            set { SetField(ref _weightOverrides, value); }
+            get => _weightOverrides;
+            set => SetField(ref _weightOverrides, value);
         }
 
     }

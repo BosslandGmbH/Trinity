@@ -46,22 +46,16 @@ namespace Trinity.Components.Combat.Resources
 
         private static DateTime _lastSpenderCast = DateTime.MinValue;
 
-        public static double TimeSinceSpenderCast
-        {
-            get { return DateTime.UtcNow.Subtract(_lastSpenderCast).TotalMilliseconds; }
-        }
+        public static double TimeSinceSpenderCast => DateTime.UtcNow.Subtract(_lastSpenderCast).TotalMilliseconds;
 
         private static DateTime _lastGeneratorCast = DateTime.MinValue;
 
-        public static double TimeSinceGeneratorCast
-        {
-            get { return DateTime.UtcNow.Subtract(_lastGeneratorCast).TotalMilliseconds; }
-        }
+        public static double TimeSinceGeneratorCast => DateTime.UtcNow.Subtract(_lastGeneratorCast).TotalMilliseconds;
 
         internal static List<SpellHistoryItem> History
         {
-            get { return _history; }
-            set { _history = value; }
+            get => _history;
+            set => _history = value;
         }
 
         public static void RecordSpell(TrinityPower power)

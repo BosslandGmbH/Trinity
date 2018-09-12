@@ -6372,7 +6372,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Act = Act.A3,
                 WorldId = 95804,
                 QuestType = BountyQuestType.KillMonster,
-				WaypointNumber = 37,
+				WaypointLevelAreaId = 37,
                 Coroutines = new List<ISubroutine>
                     {
                         new KillUniqueMonsterCoroutine (349216,95804, 220775, -1037000755),

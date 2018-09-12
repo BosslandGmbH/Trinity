@@ -6,8 +6,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
 {
     public class DeathGateScene
     {
-        private WorldScene _worldScene;
-
         public string Name { get; set; }
         public int SnoId { get; set; }
         public DeathGateType Type { get; set; }

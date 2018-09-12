@@ -14,7 +14,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
     public static class DeathGates
     {
         public static Dictionary<int, DeathGateScene> SceneDefs = new Dictionary<int, DeathGateScene>();
-        private static Dictionary<string, DeathGateScene> _scenes = new Dictionary<string, DeathGateScene>();
+        private static readonly Dictionary<string, DeathGateScene> _scenes = new Dictionary<string, DeathGateScene>();
 
         static DeathGates()
         {

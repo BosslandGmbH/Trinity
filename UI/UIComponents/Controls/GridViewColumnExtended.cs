@@ -12,8 +12,8 @@ namespace Trinity.UI.UIComponents.Controls
         // PropertyLoader
         public Boolean Visible
         {
-            get { return (Boolean)GetValue(VisibleProperty); }
-            set { SetValue(VisibleProperty, value); }
+            get => (Boolean)GetValue(VisibleProperty);
+            set => SetValue(VisibleProperty, value);
         }
 
         // Constructors

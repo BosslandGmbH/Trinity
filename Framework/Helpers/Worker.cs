@@ -24,10 +24,7 @@ namespace Trinity.Framework.Helpers
 
         public static event WorkerEvent OnStarted = () => { };
 
-        public static bool IsRunning
-        {
-            get { return _thread != null && _thread.IsAlive; }
-        }
+        public static bool IsRunning => _thread != null && _thread.IsAlive;
 
         /// <summary>
         /// Run code in a new worker thread. WorkerDelegate should return true to end, false to repeat.

@@ -94,7 +94,6 @@ namespace Trinity.Routines.Barbarian
             // Credit: phelon's raekor.
 
             position = Vector3.Zero;
-            TrinityActor target = null;
 
             if (!Skills.Barbarian.FuriousCharge.CanCast())
                 return false;
@@ -228,15 +227,15 @@ namespace Trinity.Routines.Barbarian
             [DefaultValue(8)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             #region IDynamicSetting

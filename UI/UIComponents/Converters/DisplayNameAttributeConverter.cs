@@ -19,8 +19,7 @@ namespace Trinity.UI.UIComponents.Converters
                 var type = value.GetType();
 
                 // Parameter is a proeprty to use for display name
-                var propertyName = parameter as string;
-                if (propertyName != null)
+                if (parameter is string propertyName)
                 {
                     var prop = type.GetProperty(propertyName);
                     var propName = prop.PropertyType.GetAttributeValue((DisplayNameAttribute dna) => dna.DisplayName);
@@ -37,7 +36,7 @@ namespace Trinity.UI.UIComponents.Converters
 
                 return ToFriendlyName(type.Name);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Log.Info("Exception {0}", ex);
             }

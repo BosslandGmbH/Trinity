@@ -40,13 +40,10 @@ namespace Trinity.Routines.Barbarian
 
         public TrinityPower GetOffensivePower()
         {
-            TrinityActor target;
-            Vector3 position;
-
-            if (ShouldHammerOfTheAncients(out target))
+            if (ShouldHammerOfTheAncients(out var target))
                 return HammerOfTheAncients(target);
 
-            if (ShouldFuriousCharge(out position))
+            if (ShouldFuriousCharge(out var position))
                 return FuriousCharge(position);
 
             return Walk(Avoider.SafeSpot);
@@ -59,7 +56,6 @@ namespace Trinity.Routines.Barbarian
             // Credit: phelon's raekor.
 
             position = Vector3.Zero;
-            TrinityActor target = null;
 
             if (!Skills.Barbarian.FuriousCharge.CanCast())
                 return false;
@@ -221,23 +217,23 @@ namespace Trinity.Routines.Barbarian
             [DefaultValue(8)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             #region FuriousCharge
 
             public SkillSettings FuriousCharge
             {
-                get { return _furiousCharge; }
-                set { SetField(ref _furiousCharge, value); }
+                get => _furiousCharge;
+                set => SetField(ref _furiousCharge, value);
             }
 
             private static readonly SkillSettings VaultDefaults = new SkillSettings

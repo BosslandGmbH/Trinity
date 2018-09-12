@@ -123,27 +123,27 @@ namespace Trinity.Routines.Barbarian
             [DefaultValue(1)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             public SkillSettings WrathOfTheBerserker
             {
-                get { return _wrathOfTheBerserker; }
-                set { SetField(ref _wrathOfTheBerserker, value); }
+                get => _wrathOfTheBerserker;
+                set => SetField(ref _wrathOfTheBerserker, value);
             }
 
             public SkillSettings FuriousCharge
             {
-                get { return _furiousCharge; }
-                set { SetField(ref _furiousCharge, value); }
+                get => _furiousCharge;
+                set => SetField(ref _furiousCharge, value);
             }
 
             #region Skill Defaults

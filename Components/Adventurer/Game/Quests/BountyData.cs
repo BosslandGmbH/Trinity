@@ -31,13 +31,10 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
                 return _levelAreaIds;
             }
-            set { _levelAreaIds = value; }
+            set => _levelAreaIds = value;
         }
 
-        public QuestData QuestData
-        {
-            get { return _questData ?? (_questData = QuestData.GetQuestData(QuestId)); }
-        }
+        public QuestData QuestData => _questData ?? (_questData = QuestData.GetQuestData(QuestId));
 
         public bool IsAvailable
         {
@@ -69,7 +66,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
                 return 0;
             }
-            set { _waypointNumber = value; }
+            set => _waypointNumber = value;
         }
 
         public virtual void Reset()
@@ -79,7 +76,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 coroutine.Reset();
             }
 
-            if (WaypointNumber == 13)
+            if (WaypointLevelAreaId == 13)
             {
                 var firstCoroutine = Coroutines.FirstOrDefault();
                 if (firstCoroutine != null && !(firstCoroutine is MoveToPositionCoroutine))

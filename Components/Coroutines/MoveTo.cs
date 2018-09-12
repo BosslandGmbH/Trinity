@@ -21,6 +21,7 @@ namespace Trinity.Components.Coroutines
         /// <param name="location">where to move to</param>
         /// <param name="destinationName">name of location for debugging purposes</param>
         /// <param name="range">how close it should get</param>
+        /// <param name="stopCondition"></param>
         public static async Task<bool> Execute(Vector3 location, string destinationName = "", float range = 10f, Func<bool> stopCondition = null)
         {
             if (string.IsNullOrEmpty(destinationName))

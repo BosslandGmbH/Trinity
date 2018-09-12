@@ -13,7 +13,6 @@ namespace Trinity.Components.Adventurer.Coroutines
     public sealed class ClearAreaCoroutine : ICoroutine
     {
         private static ClearAreaCoroutine _clearAreaCoroutine;
-        private static Vector3 _clearCenter;
         private static int _clearRadius;
         private static bool _clearForce;
         private static bool _clearReturnToCenter = true;
@@ -47,14 +46,14 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private States State
         {
-            get { return _state; }
+            get => _state;
             set
             {
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Debug("[ClearArea] " + value);
-                    StatusText = "[ClearArea] " + value;
+                    Core.Logger.Debug($"[ClearArea] {value}");
+                    StatusText = $"[ClearArea] {value}";
                 }
                 _state = value;
             }
@@ -65,7 +64,6 @@ namespace Trinity.Components.Adventurer.Coroutines
             if (_clearAreaCoroutine == null || radius != _clearRadius || forceMoveAround != _clearForce ||
                 returnToCenter != _clearReturnToCenter)
             {
-                _clearCenter = center;
                 _clearRadius = radius;
                 _clearForce = forceMoveAround;
                 _clearReturnToCenter = returnToCenter;

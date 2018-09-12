@@ -26,7 +26,7 @@ namespace Trinity.Framework.Avoidance.Handlers
 
                     grid.FlagAvoidanceNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance, avoidance, 10);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Core.Logger.Debug($"AnimationBeamAvoidanceHandler Exception reading Animation/Rotation for actor: {actor.InternalName}");
                 }

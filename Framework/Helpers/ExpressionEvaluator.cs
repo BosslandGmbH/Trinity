@@ -30,7 +30,7 @@ namespace Trinity.Framework.Helpers
             Parser = new Parser(expression) { TypeRegistry = TypeRegistry };
         }
 
-        public object Global { set { Parser.Global = value; } }
+        public object Global { set => Parser.Global = value; }
 
         public Func<T> Compile(bool isCall = false)
         {
@@ -99,7 +99,7 @@ namespace Trinity.Framework.Helpers
             Parser = new Parser(expression) { TypeRegistry = TypeRegistry };
         }
 
-        public object Global { set { Parser.Global = value; } }
+        public object Global { set => Parser.Global = value; }
 
         public Func<object> Compile()
         {
@@ -169,7 +169,7 @@ namespace Trinity.Framework.Helpers
 
         public string StringToParse
         {
-            get { return Parser.StringToParse; }
+            get => Parser.StringToParse;
             set
             {
                 Parser.StringToParse = value;
@@ -431,11 +431,9 @@ namespace Trinity.Framework.Helpers
             Type type = null;
 
             var isDynamic = false;
-            var isRuntimeType = false;
 
             if (le.Type.Name == "RuntimeType")
             {
-                isRuntimeType = true;
                 type = ((Type)((ConstantExpression)le).Value);
             }
             else
@@ -1033,7 +1031,7 @@ namespace Trinity.Framework.Helpers
 
         public string StringToParse
         {
-            get { return _pstr; }
+            get => _pstr;
             set
             {
                 _pstr = value;

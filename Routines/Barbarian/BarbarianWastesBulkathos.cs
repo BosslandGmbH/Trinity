@@ -43,10 +43,7 @@ namespace Trinity.Routines.Barbarian
 
         public TrinityPower GetOffensivePower()
         {
-            TrinityPower power;
-            TrinityActor target;
-
-            if (TrySpecialPower(out power))
+            if (TrySpecialPower(out var power))
                 return power;
 
             if (TrySecondaryPower(out power) && (power.SNOPower != SNOPower.Barbarian_GroundStomp || Skills.Barbarian.IgnorePain.CanCast()))
@@ -126,14 +123,14 @@ namespace Trinity.Routines.Barbarian
             [DefaultValue(6)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             public SkillSettings WrathOfTheBerserker
             {
-                get { return _wrathOfTheBerserker; }
-                set { SetField(ref _wrathOfTheBerserker, value); }
+                get => _wrathOfTheBerserker;
+                set => SetField(ref _wrathOfTheBerserker, value);
             }
 
             private static readonly SkillSettings WrathOfTheBerserkerDefaults = new SkillSettings
@@ -151,8 +148,8 @@ namespace Trinity.Routines.Barbarian
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             #region IDynamicSetting

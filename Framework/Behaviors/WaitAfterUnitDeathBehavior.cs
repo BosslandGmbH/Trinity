@@ -15,7 +15,7 @@ namespace Trinity.Framework.Behaviors
             ActorEvents.OnUnitKilled += UnitKilled;
         }
 
-        private void UnitKilled(TrinityActor actor)
+        private void UnitKilled(object sender, TrinityActor actor)
         {
             if (!IsRunning)
             {

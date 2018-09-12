@@ -49,7 +49,7 @@ namespace Trinity.Framework.Reference
                 return _all;
             }
         }
-        private static List<Rune> _all = new List<Rune>();
+        private static readonly List<Rune> _all = new List<Rune>();
 
         /// <summary>
         /// All skills for the specified class
@@ -82,10 +82,7 @@ namespace Trinity.Framework.Reference
         /// <summary>
         /// Skills for the current class
         /// </summary>
-        public static IEnumerable<Rune> CurrentClass
-        {
-            get { return ZetaDia.Me.IsValid ? ByActorClass(ZetaDia.Me.ActorClass) : new List<Rune>(); }
-        }
+        public static IEnumerable<Rune> CurrentClass => ZetaDia.Me.IsValid ? ByActorClass(ZetaDia.Me.ActorClass) : new List<Rune>();
 
 
         /// <summary>

@@ -17,10 +17,7 @@ namespace Trinity.Components.Coroutines
         private int _lastLevel;
 
         private static AutoEquipSkills _instance;
-        public static AutoEquipSkills Instance
-        {
-            get { return _instance ?? (_instance = (new AutoEquipSkills())); }
-        }
+        public static AutoEquipSkills Instance => _instance ?? (_instance = (new AutoEquipSkills()));
 
         private DateTime _lastSkillChange = DateTime.MinValue;
 

@@ -264,28 +264,28 @@ namespace Trinity.Routines.Necromancer
             [DefaultValue(6)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             [DefaultValue(false)]
             public bool UseExtraCorpses
             {
-                get { return _useExtraCorpses; }
-                set { SetField(ref _useExtraCorpses, value); }
+                get => _useExtraCorpses;
+                set => SetField(ref _useExtraCorpses, value);
             }
 
             public SkillSettings BloodRush
             {
-                get { return _bloodRush; }
-                set { SetField(ref _bloodRush, value); }
+                get => _bloodRush;
+                set => SetField(ref _bloodRush, value);
             }
 
             #region Skill Defaults

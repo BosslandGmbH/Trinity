@@ -32,15 +32,15 @@ namespace Trinity.Framework.Actors.ActorTypes
         public SNORecordActor ActorInfo
         {
             // Map on these records is causing d3 to crash.
-            get { return CommonData != null && CommonData.IsValid && _actorInfo != null && _actorInfo.IsValid ? _actorInfo : default(SNORecordActor); }
-            set { _actorInfo = value; }
+            get => CommonData != null && CommonData.IsValid && _actorInfo != null && _actorInfo.IsValid ? _actorInfo : default(SNORecordActor);
+            set => _actorInfo = value;
         }
 
         public SNORecordMonster MonsterInfo
         {
             // Map on these records is causing d3 to crash.
-            get { return CommonData != null && CommonData.IsValid && _monsterInfo != null && _monsterInfo.IsValid ? _monsterInfo : default(SNORecordMonster); }
-            set { _monsterInfo = value; }
+            get => CommonData != null && CommonData.IsValid && _monsterInfo != null && _monsterInfo.IsValid ? _monsterInfo : default(SNORecordMonster);
+            set => _monsterInfo = value;
         }
 
         public bool IsValid => (!IsRActorBased || RActor.IsValid) && (!IsAcdBased || IsAcdValid) && (ActorInfo?.IsValid ?? true);

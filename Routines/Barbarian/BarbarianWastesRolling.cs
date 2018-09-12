@@ -43,10 +43,7 @@ namespace Trinity.Routines.Barbarian
 
         public TrinityPower GetOffensivePower()
         {
-            TrinityPower power;
-            TrinityActor target;
-
-            if (TrySpecialPower(out power))
+            if (TrySpecialPower(out var power))
                 return power;
 
             if (TrySecondaryPower(out power))
@@ -117,15 +114,15 @@ namespace Trinity.Routines.Barbarian
             [DefaultValue(6)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             #region IDynamicSetting

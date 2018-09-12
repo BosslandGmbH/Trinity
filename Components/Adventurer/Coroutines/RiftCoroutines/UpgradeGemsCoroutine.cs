@@ -28,7 +28,6 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         private readonly WaitTimer _pulseTimer = new WaitTimer(TimeSpan.FromMilliseconds(250));
         private int _gemUpgradesLeft;
-        private bool _enableGemUpgradeLogs;
         private bool _isPulsing;
         private Vector3 _urshiLocation;
 
@@ -52,7 +51,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         private States State
         {
-            get { return _state; }
+            get => _state;
             set
             {
                 if (_state == value) return;
@@ -192,7 +191,6 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
 
             _gemUpgradesLeft = 3;
-            _enableGemUpgradeLogs = false;
             State = States.UpgradingGems;
             return false;
         }
@@ -215,7 +213,6 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 State = States.Failed;
                 return false;
             }
-            _enableGemUpgradeLogs = false;
             if (AdvDia.RiftQuest.Step == RiftStep.Cleared)
             {
                 Core.Logger.Debug("[UpgradeGems] Rift Quest is completed, returning to town");
@@ -233,7 +230,6 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             if (_gemUpgradesLeft != gemUpgradesLeft)
             {
                 _gemUpgradesLeft = gemUpgradesLeft;
-                _enableGemUpgradeLogs = true;
             }
             if (gemUpgradesLeft == 0)
             {

@@ -32,8 +32,8 @@ namespace Trinity.Framework.Objects
         [DataMember(EmitDefaultValue = false)]
         public SNOPower SNOPower
         {
-            get { return _SNOPower; }
-            set { SetField(ref _SNOPower, value); }
+            get => _SNOPower;
+            set => SetField(ref _SNOPower, value);
         }
 
         [IgnoreDataMember]
@@ -61,8 +61,8 @@ namespace Trinity.Framework.Objects
         [DefaultValue(60f)]
         public float CastRange
         {
-            get { return _castRange; }
-            set { SetField(ref _castRange, value); }
+            get => _castRange;
+            set => SetField(ref _castRange, value);
         }
 
         /// <summary>
@@ -71,8 +71,8 @@ namespace Trinity.Framework.Objects
         [DataMember(EmitDefaultValue = false)]
         public float ClusterSize
         {
-            get { return _clusterSize; }
-            set { SetField(ref _clusterSize, value); }
+            get => _clusterSize;
+            set => SetField(ref _clusterSize, value);
         }
 
         /// <summary>
@@ -81,8 +81,8 @@ namespace Trinity.Framework.Objects
         [DataMember(EmitDefaultValue = false)]
         public float PrimaryResourcePct
         {
-            get { return _primaryResourcePct; }
-            set { SetField(ref _primaryResourcePct, value); }
+            get => _primaryResourcePct;
+            set => SetField(ref _primaryResourcePct, value);
         }
 
         /// <summary>
@@ -92,8 +92,8 @@ namespace Trinity.Framework.Objects
         [DefaultValue(100f)]
         public float PrimaryResourcePctBelow
         {
-            get { return _primaryResourcePctBelow; }
-            set { SetField(ref _primaryResourcePctBelow, value); }
+            get => _primaryResourcePctBelow;
+            set => SetField(ref _primaryResourcePctBelow, value);
         }
 
         /// <summary>
@@ -102,8 +102,8 @@ namespace Trinity.Framework.Objects
         [DataMember(EmitDefaultValue = false)]
         public float SecondaryResourcePct
         {
-            get { return _secondaryResourcePct; }
-            set { SetField(ref _secondaryResourcePct, value); }
+            get => _secondaryResourcePct;
+            set => SetField(ref _secondaryResourcePct, value);
         }
 
         /// <summary>
@@ -113,8 +113,8 @@ namespace Trinity.Framework.Objects
         [DefaultValue(100f)]
         public float SecondaryResourcePctBelow
         {
-            get { return _secondaryResourcePctBelow; }
-            set { SetField(ref _secondaryResourcePctBelow, value); }
+            get => _secondaryResourcePctBelow;
+            set => SetField(ref _secondaryResourcePctBelow, value);
         }
 
         /// <summary>
@@ -124,8 +124,8 @@ namespace Trinity.Framework.Objects
         [DefaultValue(1f)]
         public float HealthPct
         {
-            get { return _healthPct; }
-            set { SetField(ref _healthPct, value); }
+            get => _healthPct;
+            set => SetField(ref _healthPct, value);
         }
 
         /// <summary>
@@ -134,8 +134,8 @@ namespace Trinity.Framework.Objects
         [DataMember(EmitDefaultValue = false)]
         public int RecastDelayMs
         {
-            get { return _recastDelayMs; }
-            set { SetField(ref _recastDelayMs, value); }
+            get => _recastDelayMs;
+            set => SetField(ref _recastDelayMs, value);
         }
 
         /// <summary>
@@ -145,8 +145,8 @@ namespace Trinity.Framework.Objects
         [DefaultValue(UseTime.Always)]
         public UseTime UseMode
         {
-            get { return _useMode; }
-            set { SetField(ref _useMode, value); }
+            get => _useMode;
+            set => SetField(ref _useMode, value);
         }
 
         /// <summary>
@@ -155,8 +155,8 @@ namespace Trinity.Framework.Objects
         [DataMember(EmitDefaultValue = false)]
         public ConventionMode WaitForConvention
         {
-            get { return _waitForConvention; }
-            set { SetField(ref _waitForConvention, value); }
+            get => _waitForConvention;
+            set => SetField(ref _waitForConvention, value);
         }
 
         /// <summary>
@@ -165,8 +165,8 @@ namespace Trinity.Framework.Objects
         [DataMember(EmitDefaultValue = false)]
         public UseReasons Reasons
         {
-            get { return _reasons; }
-            set { SetField(ref _reasons, value); }
+            get => _reasons;
+            set => SetField(ref _reasons, value);
         }
 
         /// <summary>
@@ -175,8 +175,8 @@ namespace Trinity.Framework.Objects
         [DataMember(EmitDefaultValue = false)]
         public UseTarget Target
         {
-            get { return _target; }
-            set { SetField(ref _target, value); }
+            get => _target;
+            set => SetField(ref _target, value);
         }
 
         #region Delegates
@@ -190,8 +190,8 @@ namespace Trinity.Framework.Objects
         [DataMember(EmitDefaultValue = false)]
         public int Order
         {
-            get { return _order; }
-            set { SetField(ref _order, value); }
+            get => _order;
+            set => SetField(ref _order, value);
         } 
 
         #endregion

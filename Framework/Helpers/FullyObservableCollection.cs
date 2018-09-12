@@ -54,8 +54,7 @@ namespace Trinity.Framework.Helpers
             {
                 foreach (T item in e.NewItems)
                 {
-                    var convertedItem = item as INotifyPropertyChanged;
-                    if (convertedItem != null)
+                    if (item is INotifyPropertyChanged convertedItem)
                     {
                         convertedItem.PropertyChanged -= convertedItem_PropertyChanged;
                         convertedItem.PropertyChanged += convertedItem_PropertyChanged;
@@ -66,15 +65,13 @@ namespace Trinity.Framework.Helpers
             {
                 foreach (T item in e.OldItems)
                 {
-                    var convertedItem = item as INotifyPropertyChanged;
-                    if (convertedItem != null)
+                    if (item is INotifyPropertyChanged convertedItem)
                         convertedItem.PropertyChanged -= convertedItem_PropertyChanged;
                 }
             }
         }
 
         public bool ForceResetOnChildChanges = false;
-        private int _deferLevel;
 
         private void convertedItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -90,8 +87,7 @@ namespace Trinity.Framework.Helpers
         {
             foreach (T unknown in Items)
             {
-                var changeSupportedItem = unknown as INotifyPropertyChanged;
-                if (changeSupportedItem != null)
+                if (unknown is INotifyPropertyChanged changeSupportedItem)
                     changeSupportedItem.PropertyChanged -= convertedItem_PropertyChanged;
             }
             base.ClearItems();

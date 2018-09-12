@@ -73,7 +73,7 @@ namespace Trinity.Framework.Avoidance
                             AvoidanceDataDictionary.Add(part.ActorSnoId, part);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         Core.Logger.Error("Failed to add AvoidanceData for {0} > {1}. Probably a duplicate ActorSnoId ({2})", avoidanceDatum.Name, part.Name, part.ActorSnoId);
                     }

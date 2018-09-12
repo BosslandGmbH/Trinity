@@ -83,7 +83,7 @@ namespace Trinity.Settings.ItemList
 
         public bool IsSelected
         {
-            get { return _isSelected; }
+            get => _isSelected;
             set
             {
                 if (_isSelected != value)
@@ -153,10 +153,7 @@ namespace Trinity.Settings.ItemList
             }
         }
 
-        public ObservableCollection<int> OpCountNumbers
-        {
-            get { return new ObservableCollection<int>(new List<int> { 1, 2, 3, 4 }); }
-        }
+        public ObservableCollection<int> OpCountNumbers => new ObservableCollection<int>(new List<int> { 1, 2, 3, 4 });
 
         public void Reset()
         {
@@ -186,7 +183,7 @@ namespace Trinity.Settings.ItemList
         [DataMember(EmitDefaultValue = false, IsRequired = false)]
         public ObservableCollection<LRule> Rules
         {
-            get { return _rules; }
+            get => _rules;
             set
             {
                 if (_rules != value)

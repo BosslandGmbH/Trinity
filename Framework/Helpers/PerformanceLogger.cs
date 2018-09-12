@@ -31,7 +31,7 @@ namespace Trinity.Framework.Helpers
         private readonly string _BlockName;
         private readonly Stopwatch _Stopwatch;
         private bool _IsDisposed;
-        private bool _ForceLog;
+        private readonly bool _ForceLog;
 
         public PerformanceLogger(string blockName, bool forceLog = false)
         {

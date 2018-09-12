@@ -8,11 +8,11 @@ namespace Trinity.UI.UIComponents.Converters
 {
     public class FlagListParentUpdateMultiConverter : IMultiValueConverter
     {
-        private FlagsEnumValueConverter _flagsConverter = new FlagsEnumValueConverter();
+        private readonly FlagsEnumValueConverter _flagsConverter = new FlagsEnumValueConverter();
         private Enum _itemsSource;
         private PropertyValueBindingItem _itemBinding;
         private string _name;
-        private List<string> _names = new List<string>();
+        private readonly List<string> _names = new List<string>();
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

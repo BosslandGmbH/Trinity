@@ -15,7 +15,7 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
         private bool _isDone;
         private States _state;
         private DateTime _startTime;
-        private bool _straightLinePathing;
+        private readonly bool _straightLinePathing;
 
         #region State
 
@@ -29,7 +29,7 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
 
         public States State
         {
-            get { return _state; }
+            get => _state;
             protected set
             {
                 if (_state == value) return;
@@ -44,10 +44,7 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
 
         #endregion State
 
-        public bool IsDone
-        {
-            get { return _isDone || AdvDia.CurrentWorldId != _worldId; }
-        }
+        public bool IsDone => _isDone || AdvDia.CurrentWorldId != _worldId;
 
         public MoveToPositionCoroutine(int worldId, Vector3 position, int distance = 1, bool forceStraightLinePathing = false)
         {
@@ -95,10 +92,7 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
         {
         }
 
-        public BountyData BountyData
-        {
-            get { return null; }
-        }
+        public BountyData BountyData => null;
 
         private bool NotStarted()
         {

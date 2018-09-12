@@ -43,17 +43,13 @@ namespace Trinity.Routines.Monk
 
         public TrinityPower GetOffensivePower()
         {
-            TrinityActor target;
-            TrinityPower power = null;
-            Vector3 position;
-
-            if (ShouldDashingStrike(out position))
+            if (ShouldDashingStrike(out var position))
                 return DashingStrike(position);
 
             if (ShouldCycloneStrike())
                 return CycloneStrike();
 
-            if (ShouldSevenSidedStrike(out target))
+            if (ShouldSevenSidedStrike(out var target))
                 return SevenSidedStrike(target);
 
             if (!WeightedUnits.Any(u => u.Distance < 20f && HasEP(u)))
@@ -237,27 +233,27 @@ namespace Trinity.Routines.Monk
             [DefaultValue(6)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             public SkillSettings Epiphany
             {
-                get { return _epiphany; }
-                set { SetField(ref _epiphany, value); }
+                get => _epiphany;
+                set => SetField(ref _epiphany, value);
             }
 
             public SkillSettings DashingStrike
             {
-                get { return _dashingStrike; }
-                set { SetField(ref _dashingStrike, value); }
+                get => _dashingStrike;
+                set => SetField(ref _dashingStrike, value);
             }
 
             #region Skill Defaults

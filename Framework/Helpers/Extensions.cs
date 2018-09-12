@@ -265,7 +265,7 @@ namespace Trinity.Framework.Helpers
         /// <summary>
         /// The _item quality regex
         /// </summary>
-        private static Regex _itemQualityRegex = new Regex("{c:[a-zA-Z0-9]{8}}", RegexOptions.Compiled);
+        private static readonly Regex _itemQualityRegex = new Regex("{c:[a-zA-Z0-9]{8}}", RegexOptions.Compiled);
 
         /// <summary>
         /// Items the link color quality.

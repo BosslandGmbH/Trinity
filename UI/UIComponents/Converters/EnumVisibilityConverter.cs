@@ -29,7 +29,7 @@ namespace Trinity.UI.UIComponents.Converters
 
                 return parameterValue.Equals(value) ? Visibility.Collapsed : Visibility.Visible;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Log.Error("Exception in EnumVisibilityConverter. Value={0} TargetType={1} Param={2} Exception={3} {4} {5}", value, targetType, parameter, ex.Message, ex.InnerException, ex.ToString());
             }

@@ -25,15 +25,18 @@ namespace Trinity.UI
 {
     public class UILoader
     {
-        private static ConcurrentDictionary<string, string> _paths;
-        private static ConcurrentDictionary<string, byte[]> _xaml;
+        private static readonly ConcurrentDictionary<string, string> _paths = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, byte[]> _xaml = new ConcurrentDictionary<string, byte[]>();
 
         static UILoader()
         {
-            var paths = Directory.GetFiles(FileManager.PluginPath, "*.xaml", SearchOption.AllDirectories);
-            var pairs = paths.DistinctBy(Path.GetFileName).Select(p => new KeyValuePair<string, string>(Path.GetFileName(p)?.ToLower(), p));
-            _paths = new ConcurrentDictionary<string, string>(pairs);
-            _xaml = new ConcurrentDictionary<string, byte[]>();
+            if (Directory.Exists(FileManager.PluginPath))
+            {
+                var paths = Directory.GetFiles(FileManager.PluginPath, "*.xaml", SearchOption.AllDirectories);
+                var pairs = paths.DistinctBy(Path.GetFileName)
+                    .Select(p => new KeyValuePair<string, string>(Path.GetFileName(p)?.ToLower(), p));
+                _paths = new ConcurrentDictionary<string, string>(pairs);
+            }
         }
 
         public static void Preload()
@@ -65,8 +68,6 @@ namespace Trinity.UI
         {
             ConfigWindow.Close();
         }
-
-        private static int _currentHeroId;
 
         public static Window GetDisplayWindow()
         {

@@ -17,7 +17,7 @@ namespace Trinity.Settings
 {
     public class SettingsManager
     {
-        private static List<IDynamicSetting> _settings = new List<IDynamicSetting>();
+        private static readonly List<IDynamicSetting> _settings = new List<IDynamicSetting>();
 
         public static void Add(IDynamicSetting dynamicSettings)
         {

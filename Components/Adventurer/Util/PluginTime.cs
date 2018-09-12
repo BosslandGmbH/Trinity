@@ -11,10 +11,7 @@ namespace Trinity.Components.Adventurer.Util
             Stopwatch.Start();
         }
 
-        public static long CurrentMillisecond
-        {
-            get { return Stopwatch.ElapsedMilliseconds; }
-        }
+        public static long CurrentMillisecond => Stopwatch.ElapsedMilliseconds;
 
         public static bool ReadyToUse(long lastCast, long cooldown)
         {

@@ -35,7 +35,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private long _returnTimeForPreviousLocation;
         private WorldScene _scene;
         private States _state;
-        private bool _zergEnabled;
+        private readonly bool _zergEnabled;
         private int _failureCount;
 
         public MoveToSceneCoroutine(int questId, int worldId, int sceneSnoId, bool zergSafe = false, bool explore = true)
@@ -63,10 +63,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public string SceneName { get; }
 
-        public bool IsDone
-        {
-            get { return _isDone || AdvDia.CurrentWorldId != _worldId; }
-        }
+        public bool IsDone => _isDone || AdvDia.CurrentWorldId != _worldId;
 
         public async Task<bool> GetCoroutine()
         {
@@ -124,10 +121,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         {
         }
 
-        public BountyData BountyData
-        {
-            get { return _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId)); }
-        }
+        public BountyData BountyData => _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId));
 
         private async Task<bool> NotStarted()
         {
@@ -251,7 +245,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public States State
         {
-            get { return _state; }
+            get => _state;
             protected set
             {
                 if (_state == value) return;

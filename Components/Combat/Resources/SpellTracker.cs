@@ -24,7 +24,7 @@ namespace Trinity.Components.Combat.Resources
         public DateTime Expiration { get; set; }
 
         internal static HashSet<SpellTracker> TrackedUnits { get; set; }
-        private static Thread MaintenanceThread;
+        private static readonly Thread MaintenanceThread;
 
         internal static void TrackSpellOnUnit(SpellTracker trackedUnit)
         {
@@ -164,7 +164,7 @@ namespace Trinity.Components.Combat.Resources
 
         #endregion IEquatable Implimentation
 
-        private static HashSet<TrackedSpell> TrackedSpells = new HashSet<TrackedSpell>();
+        private static readonly HashSet<TrackedSpell> TrackedSpells = new HashSet<TrackedSpell>();
 
         /// <summary>
         /// Populates the static TrackedSpells Hashset. Called once from Static Constructor. Do not call anywhere else...

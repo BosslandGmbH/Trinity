@@ -14,13 +14,10 @@ namespace Trinity.Components.Adventurer.Coroutines
         private readonly TimeSpan _waitTime;
         private bool _isDone;
 
-        public bool IsDone
-        {
-            get { return _isDone; }
-        }
+        public bool IsDone => _isDone;
 
         private WaitTimer _waitTimer;
-        private int _worldId;
+        private readonly int _worldId;
         private int _questId;
 
         public WaitCoroutine(int milliSeconds)
@@ -80,9 +77,6 @@ namespace Trinity.Components.Adventurer.Coroutines
         {
         }
 
-        public BountyData BountyData
-        {
-            get { return null; }
-        }
+        public BountyData BountyData => null;
     }
 }

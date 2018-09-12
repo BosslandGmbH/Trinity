@@ -126,27 +126,27 @@ namespace Trinity.Routines.Crusader
             [DefaultValue(1)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             public SkillSettings Akarats
             {
-                get { return _akarats; }
-                set { SetField(ref _akarats, value); }
+                get => _akarats;
+                set => SetField(ref _akarats, value);
             }
 
             public SkillSettings SteedCharge
             {
-                get { return _steedCharge; }
-                set { SetField(ref _steedCharge, value); }
+                get => _steedCharge;
+                set => SetField(ref _steedCharge, value);
             }
 
             #region Skill Defaults

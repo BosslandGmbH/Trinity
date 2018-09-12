@@ -13,10 +13,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         public static ICoroutine Current
         {
-            get
-            {
-                return _current;
-            }
+            get => _current;
             set
             {
                 if (!Equals(_current, value))
@@ -57,7 +54,7 @@ namespace Trinity.Components.Adventurer.Coroutines
     {
         private T[] _items;
         private int _top;
-        private int _capacity;
+        private readonly int _capacity;
 
         public DropOutStack(int capacity)
         {

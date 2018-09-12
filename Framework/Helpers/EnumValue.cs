@@ -26,32 +26,32 @@ namespace Trinity.Framework.Helpers
 
         public Type Type
         {
-            get { return _type; }
-            set { _type = value; }
+            get => _type;
+            set => _type = value;
         }
 
         public T Value
         {
-            get { return _value; }
-            set { _value = value; }
+            get => _value;
+            set => _value = value;
         }
 
         public string ValueString
         {
-            get { return _valueString; }
-            set { _valueString = value; }
+            get => _valueString;
+            set => _valueString = value;
         }
 
         public string Name
         {
-            get { return _name; }
-            set { _name = value; }
+            get => _name;
+            set => _name = value;
         }
 
         public int Id
         {
-            get { return _id; }
-            set { _id = value; }
+            get => _id;
+            set => _id = value;
         }
 
         public static implicit operator T(EnumValue<T> x)

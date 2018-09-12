@@ -12,7 +12,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
     {
         public delegate void GridUpdatedEventHandler(object sender, SceneData newNodes);
 
-        public event GridUpdatedEventHandler Updated;
+        //public event GridUpdatedEventHandler Updated;
 
         public SplitArray<T> InnerGrid;
 

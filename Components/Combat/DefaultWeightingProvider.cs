@@ -2036,7 +2036,6 @@ namespace Trinity.Components.Combat
 
         public const double MaxWeight = 50000d;
         private const double MinWeight = -1d;
-        private static bool _riftProgressionKillAll;
 
         private List<MonsterAffixes> _ignoredAffixes;
 

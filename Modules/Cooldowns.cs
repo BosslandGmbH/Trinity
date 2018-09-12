@@ -77,10 +77,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Percentage of cooldown remaining
             /// </summary>
-            public double Percent
-            {
-                get { return DurationGameTime > 0 ? RemainingGameTime / (double)DurationGameTime : 0; }
-            }
+            public double Percent => DurationGameTime > 0 ? RemainingGameTime / (double)DurationGameTime : 0;
 
             public int AttributeIndex { get; set; }
             public int Offset { get; set; }

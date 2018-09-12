@@ -35,40 +35,40 @@ namespace Trinity.Framework.Avoidance.Settings
         [DataMember]
         public int Id
         {
-            get { return _id; }
-            set { SetField(ref _id, value); }
+            get => _id;
+            set => SetField(ref _id, value);
         }
 
         [DefaultValue(true)]
         [DataMember]
         public bool IsEnabled
         {
-            get { return _isEnabled; }
-            set { SetField(ref _isEnabled, value); }
+            get => _isEnabled;
+            set => SetField(ref _isEnabled, value);
         }
 
         [DefaultValue(60)]
         [DataMember(EmitDefaultValue = false)]
         public int HealthPct
         {
-            get { return _healthPct; }
-            set { SetField(ref _healthPct, value); }
+            get => _healthPct;
+            set => SetField(ref _healthPct, value);
         }
 
         [DefaultValue(false)]
         [DataMember(EmitDefaultValue = false)]
         public bool Prioritize
         {
-            get { return _prioritize; }
-            set { SetField(ref _prioritize, value); }
+            get => _prioritize;
+            set => SetField(ref _prioritize, value);
         }
 
         [DefaultValue(1)]
         [DataMember(EmitDefaultValue = false, Name = "DistM")]
         public float DistanceMultiplier
         {
-            get { return _distanceMultiplier; }
-            set { SetField(ref _distanceMultiplier, value); }
+            get => _distanceMultiplier;
+            set => SetField(ref _distanceMultiplier, value);
         }
 
         public override void LoadDefaults()

@@ -16,22 +16,6 @@ namespace Trinity.Modules
 
         private void UpdateTicksPerSecond()
         {
-            if (Core.Settings.Advanced.TpsEnabled)
-            {
-                if (BotMain.TicksPerSecond != Core.Settings.Advanced.TpsLimit)
-                {
-                    BotMain.TicksPerSecond = Core.Settings.Advanced.TpsLimit;
-                    Core.Logger.Verbose(LogCategory.None, "Bot TPS set to {0}", Core.Settings.Advanced.TpsLimit);
-                }
-            }
-            else
-            {
-                if (BotMain.TicksPerSecond != DefaultTPS)
-                {
-                    BotMain.TicksPerSecond = DefaultTPS;
-                    Core.Logger.Verbose(LogCategory.None, "Reset bot TPS to default: {0}", BotMain.TicksPerSecond);
-                }
-            }
         }
     }
 }

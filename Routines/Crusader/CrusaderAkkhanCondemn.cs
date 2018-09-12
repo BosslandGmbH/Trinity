@@ -262,70 +262,70 @@ namespace Trinity.Routines.Crusader
             [DefaultValue(false)]
             public bool MoveToGroundBuffs
             {
-                get { return _moveToGroundBuffs; }
-                set { SetField(ref _moveToGroundBuffs, value); }
+                get => _moveToGroundBuffs;
+                set => SetField(ref _moveToGroundBuffs, value);
             }
 
             private bool _spamCondemn;
             [DefaultValue(true)]
             public bool SpamCondemn
             {
-                get { return _spamCondemn; }
-                set { SetField(ref _spamCondemn, value); }
+                get => _spamCondemn;
+                set => SetField(ref _spamCondemn, value);
             }
 
             private bool _spamLawsOfValor;
             [DefaultValue(true)]
             public bool SpamLawsOfValor
             {
-                get { return _spamLawsOfValor; }
-                set { SetField(ref _spamLawsOfValor, value); }
+                get => _spamLawsOfValor;
+                set => SetField(ref _spamLawsOfValor, value);
             }
 
             private bool _spamProvoke;
             [DefaultValue(true)]
             public bool SpamProvoke
             {
-                get { return _spamProvoke; }
-                set { SetField(ref _spamProvoke, value); }
+                get => _spamProvoke;
+                set => SetField(ref _spamProvoke, value);
             }
 
             private bool _spamIronSkin;
             [DefaultValue(true)]
             public bool SpamIronSkin
             {
-                get { return _spamIronSkin; }
-                set { SetField(ref _spamIronSkin, value); }
+                get => _spamIronSkin;
+                set => SetField(ref _spamIronSkin, value);
             }
 
             private int _clusterSize;
             [DefaultValue(1)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             private float _emergencyHealthPct;
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             private SkillSettings _akarats;
             public SkillSettings Akarats
             {
-                get { return _akarats; }
-                set { SetField(ref _akarats, value); }
+                get => _akarats;
+                set => SetField(ref _akarats, value);
             }
 
             private SkillSettings _steedCharge;
             public SkillSettings SteedCharge
             {
-                get { return _steedCharge; }
-                set { SetField(ref _steedCharge, value); }
+                get => _steedCharge;
+                set => SetField(ref _steedCharge, value);
             }
 
             #region Skill Defaults

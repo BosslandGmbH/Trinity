@@ -19,7 +19,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
     {
         private const int TYRAEL = 114622;
 
-        private static Dictionary<Act, Vector3> TyraelPositions = new Dictionary<Act, Vector3>
+        private static readonly Dictionary<Act, Vector3> TyraelPositions = new Dictionary<Act, Vector3>
         {
             {Act.A1, new Vector3(414, 537, 24)},
             {Act.A2, new Vector3(316, 264, 0)},
@@ -59,7 +59,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         public States State
         {
-            get { return _state; }
+            get => _state;
             protected set
             {
                 if (_state == value) return;
@@ -110,7 +110,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
         }
 
         private bool _isDone;
-        public bool IsDone { get { return _isDone; } }
+        public bool IsDone => _isDone;
 
         private async Task<bool> NotStarted()
         {
@@ -219,12 +219,6 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
             return true;
         }
 
-        public bool IsInZone
-        {
-            get
-            {
-                return ExplorationData.ActHubWorldIds[_act] == AdvDia.CurrentWorldId;
-            }
-        }
+        public bool IsInZone => ExplorationData.ActHubWorldIds[_act] == AdvDia.CurrentWorldId;
     }
 }
