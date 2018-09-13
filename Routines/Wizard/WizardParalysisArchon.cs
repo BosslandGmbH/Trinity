@@ -131,9 +131,7 @@ namespace Trinity.Routines.Wizard
 		
         public TrinityPower GetDefensivePower()
         {
-            Vector3 position;
-
-            if (ShouldTeleport(out position))
+            if (ShouldTeleport(out var position))
                     return Teleport(position);
 
             return null;
@@ -143,8 +141,6 @@ namespace Trinity.Routines.Wizard
 
         public TrinityPower GetBuffPower()
         {
-            Vector3 position;
-
             if (!IsArchonActive && Skills.Wizard.Archon.CanCast() && !Player.IsInTown)
             {
                 if (Settings.GetStacksBeforeArchon && !HasTalRashaStacks)
@@ -215,28 +211,28 @@ namespace Trinity.Routines.Wizard
             [DefaultValue(8)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(true)]
             public bool GetStacksBeforeArchon
             {
-                get { return _getStacksBeforeArchon; }
-                set { SetField(ref _getStacksBeforeArchon, value); }
+                get => _getStacksBeforeArchon;
+                set => SetField(ref _getStacksBeforeArchon, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             public SkillSettings Teleport
             {
-                get { return _teleport; }
-                set { SetField(ref _teleport, value); }
+                get => _teleport;
+                set => SetField(ref _teleport, value);
             }
 
             #region Skill Defaults

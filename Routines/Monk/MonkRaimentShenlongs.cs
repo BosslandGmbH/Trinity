@@ -256,36 +256,36 @@ namespace Trinity.Routines.Monk
             [DefaultValue(true)]
             public bool ConserveSpirit
             {
-                get { return _conserveSpirit; }
-                set { SetField(ref _conserveSpirit, value); }
+                get => _conserveSpirit;
+                set => SetField(ref _conserveSpirit, value);
             }
 
             [DefaultValue(6)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             [DefaultValue(false)]
             public bool SpamBreathHeaven
             {
-                get { return _spamBreathHeaven; }
-                set { SetField(ref _spamBreathHeaven, value); }
+                get => _spamBreathHeaven;
+                set => SetField(ref _spamBreathHeaven, value);
             }
 
             [DefaultValue(true)]
             public bool BeastMode
             {
-                get { return _beastMode; }
-                set { SetField(ref _beastMode, value); }
+                get => _beastMode;
+                set => SetField(ref _beastMode, value);
             }
 
             #region IDynamicSetting

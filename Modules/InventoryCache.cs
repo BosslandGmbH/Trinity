@@ -171,7 +171,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Extracts a legendary power; requires legendary item.
             /// </summary>
-            private static Dictionary<CurrencyType, int> _currencyRecipeExtractLegendaryPower = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> _currencyRecipeExtractLegendaryPower = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.KhanduranRune, 1},
                 {CurrencyType.CaldeumNightshade, 1},
@@ -184,7 +184,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces random legendary; requires legendary item.
             /// </summary>
-            private static Dictionary<CurrencyType, int> _currencyRecipeReforgeLegendary = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> _currencyRecipeReforgeLegendary = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.KhanduranRune, 5},
                 {CurrencyType.CaldeumNightshade, 5},
@@ -197,7 +197,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces legendary item; requires rare item.
             /// </summary>
-            private static Dictionary<CurrencyType, int> _currencyRecipeUpgradeRareItem = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> _currencyRecipeUpgradeRareItem = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.ReusableParts, 50},
                 {CurrencyType.ArcaneDust, 50},
@@ -208,7 +208,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces random set item; requires set item.
             /// </summary>
-            private static Dictionary<CurrencyType, int> _currencyRecipeConvertSetItem = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> _currencyRecipeConvertSetItem = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.ForgottenSoul, 10},
                 {CurrencyType.DeathsBreath, 10}
@@ -217,7 +217,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces ReusableParts (requires normal item) -or- Veiled Crystals (requires rare item)
             /// </summary>
-            private static Dictionary<CurrencyType, int> _currencyRecipeConvertFromMagic = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> _currencyRecipeConvertFromMagic = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.ArcaneDust, 100},
                 {CurrencyType.DeathsBreath, 1}
@@ -226,7 +226,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces Arcane Dust (requires magic item) -or- Veiled Crystals (requires rare item)
             /// </summary>
-            private static Dictionary<CurrencyType, int> _currencyRecipeConvertFromNormal = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> _currencyRecipeConvertFromNormal = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.ReusableParts, 100},
                 {CurrencyType.DeathsBreath, 1}
@@ -235,7 +235,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces ReusableParts (requires normal item) -or- Arcane Dust (requires magic item)
             /// </summary>
-            private static Dictionary<CurrencyType, int> _currencyRecipeConvertFromRare = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> _currencyRecipeConvertFromRare = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.VeiledCrystal, 100},
                 {CurrencyType.DeathsBreath, 1}

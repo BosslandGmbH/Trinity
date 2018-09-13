@@ -30,40 +30,40 @@ namespace Trinity.Settings
         [DefaultValue(false)]
         public bool CreateReusableParts
         {
-            get { return _createReusableParts; }
-            set { SetField(ref _createReusableParts, value); }
+            get => _createReusableParts;
+            set => SetField(ref _createReusableParts, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool CreateVeiledCrystals
         {
-            get { return _createVeiledCrystals; }
-            set { SetField(ref _createVeiledCrystals, value); }
+            get => _createVeiledCrystals;
+            set => SetField(ref _createVeiledCrystals, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool CreateArcaneDust
         {
-            get { return _createArcaneDust; }
-            set { SetField(ref _createArcaneDust, value); }
+            get => _createArcaneDust;
+            set => SetField(ref _createArcaneDust, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(25000)]
         public int ConversionQuantityThreshold
         {
-            get { return _conversionQuantityThreshold; }
-            set { SetField(ref _conversionQuantityThreshold, value); }
+            get => _conversionQuantityThreshold;
+            set => SetField(ref _conversionQuantityThreshold, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(0)]
         public int DeathsBreathMinimum
         {
-            get { return _deathsBreathMinimum; }
-            set { SetField(ref _deathsBreathMinimum, value); }
+            get => _deathsBreathMinimum;
+            set => SetField(ref _deathsBreathMinimum, value);
         }
 
 
@@ -71,24 +71,24 @@ namespace Trinity.Settings
         [DefaultValue(default(ItemSelectionType))]
         public ItemSelectionType RareUpgradeTypes
         {
-            get { return _rareUpgradeTypes; }
-            set { SetField(ref _rareUpgradeTypes, value); }
+            get => _rareUpgradeTypes;
+            set => SetField(ref _rareUpgradeTypes, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(CubeExtractOption.None)]
         public CubeExtractOption ExtractLegendaryPowers
         {
-            get { return _extractLegendaryPowers; }
-            set { SetField(ref _extractLegendaryPowers, value); }
+            get => _extractLegendaryPowers;
+            set => SetField(ref _extractLegendaryPowers, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool CubeExtractFromStash
         {
-            get { return _cubeExtractFromStash; }
-            set { SetField(ref _cubeExtractFromStash, value); }
+            get => _cubeExtractFromStash;
+            set => SetField(ref _cubeExtractFromStash, value);
         }
 
         public HashSet<ItemSelectionType> GetRareUpgradeSettings()

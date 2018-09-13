@@ -24,6 +24,7 @@ namespace Trinity.Framework.Helpers
         /// <typeparam name="TTarget">Type of the target</typeparam>
         /// <param name="source">Source to copy properties from</param>
         /// <param name="target">Target to copy properties to</param>
+        /// <param name="options"></param>
         public static void Copy<TSource, TTarget>(TSource source, TTarget target, PropertyCopyOptions options = null)
             where TSource : class
             where TTarget : class
@@ -77,7 +78,7 @@ namespace Trinity.Framework.Helpers
 
     public static class DefaultValueCache
     {
-        private static Dictionary<Type, object> defaultMap = new Dictionary<Type, object>();
+        private static readonly Dictionary<Type, object> defaultMap = new Dictionary<Type, object>();
 
         public static object GetDefault(Type type)
         {

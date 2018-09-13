@@ -10,7 +10,7 @@ namespace Trinity.Framework.Avoidance.Structures
         private int _nodesTotal;
         private double _weightPctAvg;
         private double _weightPctTotal;
-        private DateTime _lastUpdated = DateTime.MinValue;
+        private readonly DateTime _lastUpdated = DateTime.MinValue;
         private double _highestWeight;
 
         public void Update(IList<AvoidanceNode> nodes)
@@ -38,26 +38,26 @@ namespace Trinity.Framework.Avoidance.Structures
 
         public int NodesTotal
         {
-            get { return _nodesTotal; }
-            set { SetField(ref _nodesTotal, value); }
+            get => _nodesTotal;
+            set => SetField(ref _nodesTotal, value);
         }
 
         public double WeightPctAvg
         {
-            get { return _weightPctAvg; }
-            set { SetField(ref _weightPctAvg, value); }
+            get => _weightPctAvg;
+            set => SetField(ref _weightPctAvg, value);
         }
 
         public double WeightPctTotal
         {
-            get { return _weightPctTotal; }
-            set { SetField(ref _weightPctTotal, value); }
+            get => _weightPctTotal;
+            set => SetField(ref _weightPctTotal, value);
         }
 
         public double HighestWeight
         {
-            get { return _highestWeight; }
-            set { SetField(ref _highestWeight, value); }
+            get => _highestWeight;
+            set => SetField(ref _highestWeight, value);
         }
     }
 }

@@ -404,12 +404,12 @@ namespace Trinity.Framework.Helpers
             return new Vector3((float)x, (float)y, 0);
         }
 
-        /// <span class="code-SummaryComment"><summary></span>
+        /// <summary>
         /// Uses the Douglas Peucker algorithm to reduce the number of points.
-        /// <span class="code-SummaryComment"></summary></span>
-        /// <span class="code-SummaryComment"><param name="Points">The points.</param></span>
-        /// <span class="code-SummaryComment"><param name="Tolerance">The tolerance.</param></span>
-        /// <span class="code-SummaryComment"><returns></returns></span>
+        /// </summary>
+        /// <param name="Points">The points.</param>
+        /// <param name="Tolerance">The tolerance.</param>
+        /// <returns></returns>
         public static List<Vector3> DouglasPeuckerReduction(List<Vector3> Points, Double Tolerance)
         {
             if (Points == null || Points.Count < 3)
@@ -442,14 +442,14 @@ namespace Trinity.Framework.Helpers
             return returnPoints;
         }
 
-        /// <span class="code-SummaryComment"><summary></span>
+        /// <summary>
         /// Douglases the peucker reduction.
-        /// <span class="code-SummaryComment"></summary></span>
-        /// <span class="code-SummaryComment"><param name="points">The points.</param></span>
-        /// <span class="code-SummaryComment"><param name="firstPoint">The first point.</param></span>
-        /// <span class="code-SummaryComment"><param name="lastPoint">The last point.</param></span>
-        /// <span class="code-SummaryComment"><param name="tolerance">The tolerance.</param></span>
-        /// <span class="code-SummaryComment"><param name="pointIndexsToKeep">The point index to keep.</param></span>
+        /// </summary>
+        /// <param name="points">The points.</param>
+        /// <param name="firstPoint">The first point.</param>
+        /// <param name="lastPoint">The last point.</param>
+        /// <param name="tolerance">The tolerance.</param>
+        /// <param name="pointIndexsToKeep">The point index to keep.</param>
         private static void DouglasPeuckerReduction(List<Vector3> points, Int32 firstPoint, Int32 lastPoint, Double tolerance, ref List<Int32> pointIndexsToKeep)
         {
             Double maxDistance = 0;
@@ -478,13 +478,13 @@ namespace Trinity.Framework.Helpers
             }
         }
 
-        /// <span class="code-SummaryComment"><summary></span>
+        /// <summary>
         /// The distance of a point from a line made from point1 and point2.
-        /// <span class="code-SummaryComment"></summary></span>
-        /// <span class="code-SummaryComment"><param name="pt1">The PT1.</param></span>
-        /// <span class="code-SummaryComment"><param name="pt2">The PT2.</param></span>
-        /// <span class="code-SummaryComment"><param name="p">The p.</param></span>
-        /// <span class="code-SummaryComment"><returns></returns></span>
+        /// </summary>
+        /// <param name="Point1">The PT1.</param>
+        /// <param name="Point2">The PT2.</param>
+        /// <param name="Point">The p.</param>
+        /// <returns></returns>
         public static Double PerpendicularDistance(Vector3 Point1, Vector3 Point2, Vector3 Point)
         {
             //Area = |(1/2)(x1y2 + x2y3 + x3y1 - x2y1 - x3y2 - x1y3)|   *Area of triangle

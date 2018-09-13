@@ -25,7 +25,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
     {
         private readonly KeywardenData _keywardenData;
         private Vector3 _keywardenLocation = Vector3.Zero;
-        private HashSet<int> _levelAreaIds;
+        private readonly HashSet<int> _levelAreaIds;
         private WaitCoroutine _waitCoroutine;
         private DateTime _markerCooldownUntil = DateTime.MinValue;
 
@@ -45,7 +45,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
 
         private States State
         {
-            get { return _state; }
+            get => _state;
             set
             {
                 if (_state == value) return;

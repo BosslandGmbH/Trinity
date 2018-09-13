@@ -61,10 +61,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         /// <summary>
         /// If the point is Zero
         /// </summary>
-        public bool IsZero
-        {
-            get { return Point.X == 0 || Point.Y == 0; }
-        }
+        public bool IsZero => Point.X == 0 || Point.Y == 0;
 
         /// <summary>
         /// Game world distance from this point to the center actor on X-Axis

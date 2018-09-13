@@ -26,18 +26,12 @@ namespace Trinity.DbProvider
         {
             get
             {
-                try
+                foreach (PluginContainer plugin in PluginManager.Plugins)
                 {
-                    foreach (PluginContainer plugin in PluginManager.Plugins)
+                    if (plugin.Plugin.Name == "Trinity")
                     {
-                        if (plugin.Plugin.Name == "Trinity")
-                        {
-                            return plugin.Plugin.DisplayWindow;
-                        }
+                        return plugin.Plugin.DisplayWindow;
                     }
-                }
-                catch (Exception ex)
-                {
                 }
                 return null;
             }

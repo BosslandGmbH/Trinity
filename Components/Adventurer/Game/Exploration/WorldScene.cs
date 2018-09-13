@@ -31,7 +31,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         public bool IsIgnored { get; private set; }
         public bool HasParent { get; set; }
         public bool HasChild { get; set; }
-        public bool IsTopLevel { get { return !HasParent; } }
+        public bool IsTopLevel => !HasParent;
         public bool GridCreated { get; private set; }
         public int DynamicWorldId { get; private set; }
         public int SceneId { get; private set; }

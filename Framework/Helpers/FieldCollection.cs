@@ -53,10 +53,7 @@ namespace Trinity.Framework.Helpers
             return Items.OrderByDescending(predicate);
         }
 
-        public int Count
-        {
-            get { return Items.Count; }
-        }
+        public int Count => Items.Count;
 
         public static bool IsCloneableType(Type type)
         {

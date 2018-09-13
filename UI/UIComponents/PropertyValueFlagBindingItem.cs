@@ -42,7 +42,7 @@ namespace Trinity.UI.UIComponents
 
         public BindingMember Source
         {
-            get { return _source; }
+            get => _source;
             set
             {
                 if (_source != value)
@@ -68,7 +68,6 @@ namespace Trinity.UI.UIComponents
         public Type Type { get; set; }
 
         private readonly RelayCommand _instancedCommand;
-        private readonly bool _isAllFlag;
 
         public PropertyValueFlagBindingItem()
         {

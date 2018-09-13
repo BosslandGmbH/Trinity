@@ -30,8 +30,9 @@ namespace Trinity.Components.Adventurer.Settings
         [DataMember]
         public FullyObservableCollection<AdventurerGemSetting> GemSettings
         {
-            get { return _gemSettings ?? (_gemSettings = GetDefaultGemSettings()); }
-            set { LoadGemSettings(value); } // Called with value deserialized from XML
+            get => _gemSettings ?? (_gemSettings = GetDefaultGemSettings());
+            set => LoadGemSettings(value);
+// Called with value deserialized from XML
         }
 
         /// <summary>

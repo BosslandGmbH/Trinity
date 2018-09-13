@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -581,7 +582,7 @@ namespace Trinity.Framework.Helpers
                             float fVal = item.Item.GetAttribute<float>((ActorAttributeType)val);
 
                             if (iVal > 0 || fVal > 0)
-                                Core.Logger.Log("Attribute: {0}, iVal: {1}, fVal: {2}", val, iVal, (fVal != fVal) ? "" : fVal.ToString());
+                                Core.Logger.Log("Attribute: {0}, iVal: {1}, fVal: {2}", val, iVal, fVal.ToString(CultureInfo.InvariantCulture));
                         }
                     }
                     catch (Exception ex)

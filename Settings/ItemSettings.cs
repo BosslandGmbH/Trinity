@@ -68,8 +68,8 @@ namespace Trinity.Settings
         [DefaultValue(PickupItemQualities.None)]
         public PickupItemQualities PickupQualities
         {
-            get { return _pickupTypes; }
-            set { SetField(ref _pickupTypes, value); }
+            get => _pickupTypes;
+            set => SetField(ref _pickupTypes, value);
         }
 
         //[DataMember]
@@ -84,16 +84,16 @@ namespace Trinity.Settings
         [DefaultValue(true)]
         public bool BuyStashTabs
         {
-            get { return _buyStashTabs; }
-            set { SetField(ref _buyStashTabs, value); }
+            get => _buyStashTabs;
+            set => SetField(ref _buyStashTabs, value);
         }
 
         [DataMember]
         [DefaultValue(false)]
         public bool DontWalkToLowQuality
         {
-            get { return _dontWalkToLowQuality; }
-            set { SetField(ref _dontWalkToLowQuality, value); }
+            get => _dontWalkToLowQuality;
+            set => SetField(ref _dontWalkToLowQuality, value);
         }
 
         [DataMember]
@@ -101,8 +101,8 @@ namespace Trinity.Settings
         [DefaultValue(SpecialItemTypes.Defaults)]
         public SpecialItemTypes SpecialItems
         {
-            get { return _specialItems; }
-            set { SetField(ref _specialItems, value); }
+            get => _specialItems;
+            set => SetField(ref _specialItems, value);
         }
 
         [DataMember]
@@ -110,24 +110,24 @@ namespace Trinity.Settings
         [DefaultValue(TrinityGemType.All)]
         public TrinityGemType GemTypes
         {
-            get { return _gemTypes; }
-            set { SetField(ref _gemTypes, value); }
+            get => _gemTypes;
+            set => SetField(ref _gemTypes, value);
         }
 
         [DataMember(EmitDefaultValue = false, IsRequired = false)]
         [Setting, UIControl(UIControlType.FlagsCheckboxes)]
         public GambleSlotTypes GamblingTypes
         {
-            get { return _gamblingTypes; }
-            set { SetField(ref _gamblingTypes, value); }
+            get => _gamblingTypes;
+            set => SetField(ref _gamblingTypes, value);
         }
 
         [DataMember]
         [DefaultValue(SettingMode.Enabled)]
         public SettingMode GamblingMode
         {
-            get { return _gamblingMode; }
-            set { SetField(ref _gamblingMode, value); }
+            get => _gamblingMode;
+            set => SetField(ref _gamblingMode, value);
         }
 
         //[DataMember]
@@ -142,136 +142,136 @@ namespace Trinity.Settings
         [DefaultValue(DropInTownOption.None)]
         public DropInTownOption DropInTownMode
         {
-            get { return _dropInTownMode; }
-            set { SetField(ref _dropInTownMode, value); }
+            get => _dropInTownMode;
+            set => SetField(ref _dropInTownMode, value);
         }
 
         [DataMember]
         [DefaultValue(LegendaryMode.AlwaysStash)]
         public LegendaryMode LegendaryMode
         {
-            get { return _legendaryMode; }
-            set { SetField(ref _legendaryMode, value); }
+            get => _legendaryMode;
+            set => SetField(ref _legendaryMode, value);
         }
 
         [DataMember]
         [DefaultValue(25)]
         public int GamblingMinShards
         {
-            get { return _gamblingMinShards; }
-            set { SetField(ref _gamblingMinShards, value); }
+            get => _gamblingMinShards;
+            set => SetField(ref _gamblingMinShards, value);
         }
 
         [DataMember]
         [DefaultValue(100)]
         public int GamblingMinSpendingShards
         {
-            get { return _gamblingMinSpendingShards; }
-            set { SetField(ref _gamblingMinSpendingShards, value); }
+            get => _gamblingMinSpendingShards;
+            set => SetField(ref _gamblingMinSpendingShards, value);
         }
 
         [DataMember]
         [DefaultValue(false)]
         public bool DontPickupInTown
         {
-            get { return _dontPickupInTown; }
-            set { SetField(ref _dontPickupInTown, value); }
+            get => _dontPickupInTown;
+            set => SetField(ref _dontPickupInTown, value);
         }
 
         [DataMember]
         [DefaultValue(15)]
         public int GemLevel
         {
-            get { return _gemLevel; }
-            set { SetField(ref _gemLevel, value); }
+            get => _gemLevel;
+            set => SetField(ref _gemLevel, value);
         }
 
         [DataMember]
         [DefaultValue(false)]
         public bool KeepLegendaryUnid
         {
-            get { return _keepLegendaryUnid; }
-            set { SetField(ref _keepLegendaryUnid, value); }
+            get => _keepLegendaryUnid;
+            set => SetField(ref _keepLegendaryUnid, value);
         }
 
         [DataMember]
         [DefaultValue(false)]
         public bool StashTreasureBags
         {
-            get { return _stashTreasureBags; }
-            set { SetField(ref _stashTreasureBags, value); }
+            get => _stashTreasureBags;
+            set => SetField(ref _stashTreasureBags, value);
         }
 
         [DataMember]
         [DefaultValue(false)]
         public bool PickupGold
         {
-            get { return _pickupGold; }
-            set { SetField(ref _pickupGold, value); }
+            get => _pickupGold;
+            set => SetField(ref _pickupGold, value);
         }
 
         [DataMember]
         [DefaultValue(200)]
         public int MinGoldStack
         {
-            get { return _minGoldStack; }
-            set { SetField(ref _minGoldStack, value); }
+            get => _minGoldStack;
+            set => SetField(ref _minGoldStack, value);
         }
 
         [DataMember]
         [DefaultValue(true)]
         public bool AutoEquipItems
         {
-            get { return _autoEquipItems; }
-            set { SetField(ref _autoEquipItems, value); }
+            get => _autoEquipItems;
+            set => SetField(ref _autoEquipItems, value);
         }
 
         [DataMember]
         [DefaultValue(true)]
         public bool AutoEquipSkills
         {
-            get { return _autoEquipSkills; }
-            set { SetField(ref _autoEquipSkills, value); }
+            get => _autoEquipSkills;
+            set => SetField(ref _autoEquipSkills, value);
         }
 
         [DataMember]
         [DefaultValue(true)]
         public bool AutoEquipAutoDisable
         {
-            get { return _autoEquipAutoDisable; }
-            set { SetField(ref _autoEquipAutoDisable, value); }
+            get => _autoEquipAutoDisable;
+            set => SetField(ref _autoEquipAutoDisable, value);
         }
 
         [DataMember]
         [DefaultValue(true)]
         public bool AutoEquipIgnoreWeapons
         {
-            get { return _autoEquipIgnoreWeapons; }
-            set { SetField(ref _autoEquipIgnoreWeapons, value); }
+            get => _autoEquipIgnoreWeapons;
+            set => SetField(ref _autoEquipIgnoreWeapons, value);
         }
 
         [DataMember]
         [DefaultValue(false)]
         public bool DisableLootingInCombat
         {
-            get { return _disableLootingInCombat; }
-            set { SetField(ref _disableLootingInCombat, value); }
+            get => _disableLootingInCombat;
+            set => SetField(ref _disableLootingInCombat, value);
         }
 
         [DataMember]
         [DefaultValue(false)]
         public bool UseTypeStashingEquipment
         {
-            get { return _useTypeStashingEquipment; }
-            set { SetField(ref _useTypeStashingEquipment, value); }
+            get => _useTypeStashingEquipment;
+            set => SetField(ref _useTypeStashingEquipment, value);
         }
 
         [DataMember]
         [DefaultValue(false)]
         public bool UseTypeStashingOther
         {
-            get { return _useTypeStashingOther; }
-            set { SetField(ref _useTypeStashingOther, value); }
+            get => _useTypeStashingOther;
+            set => SetField(ref _useTypeStashingOther, value);
         }
 
 

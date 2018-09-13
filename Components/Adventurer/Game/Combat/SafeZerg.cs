@@ -16,10 +16,7 @@ namespace Trinity.Components.Adventurer.Game.Combat
     {
         private static SafeZerg _instance;
 
-        public static SafeZerg Instance
-        {
-            get { return _instance ?? (_instance = new SafeZerg()); }
-        }
+        public static SafeZerg Instance => _instance ?? (_instance = new SafeZerg());
 
         private SafeZerg()
         {

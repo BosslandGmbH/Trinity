@@ -77,15 +77,9 @@ namespace Trinity.Framework.Helpers
             return _lookup.Contains(key);
         }
 
-        public int Count
-        {
-            get { return _lookup.Count; }
-        }
+        public int Count => _lookup.Count;
 
-        public IEnumerable<TElement> this[TKey key]
-        {
-            get { return _lookup[key]; }
-        }
+        public IEnumerable<TElement> this[TKey key] => _lookup[key];
 
         public object SyncRoot { get; private set; }
         public bool IsSynchronized { get; private set; }

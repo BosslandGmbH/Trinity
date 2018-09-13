@@ -15,7 +15,7 @@ namespace Trinity.Framework
     {
         public delegate void RoutineChangedEvent(IRoutine newRoutine);
 
-        private static Lazy<RoutineManager> _instance = new Lazy<RoutineManager>(() => new RoutineManager());
+        private static readonly Lazy<RoutineManager> _instance = new Lazy<RoutineManager>(() => new RoutineManager());
 
         private IRoutine _currentRoutine;
 
@@ -32,7 +32,7 @@ namespace Trinity.Framework
 
         public IRoutine CurrentRoutine
         {
-            get { return _currentRoutine; }
+            get => _currentRoutine;
             set
             {
                 if (value != null && _currentRoutine != value)

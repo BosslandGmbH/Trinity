@@ -38,8 +38,8 @@ namespace Trinity.Components.Coroutines.Town
             Legendary.CorruptedAshbringer.Id
         };
 
-        private static List<int> _itemsTakenFromStashAnnId = new List<int>();
-        private static HashSet<int> _blacklistedActorSnoIds = new HashSet<int>();
+        private static readonly List<int> _itemsTakenFromStashAnnId = new List<int>();
+        private static readonly HashSet<int> _blacklistedActorSnoIds = new HashSet<int>();
 
         public static bool HasCurrencyRequired
             => Core.Inventory.Currency.HasCurrency(TransmuteRecipe.ExtractLegendaryPower);

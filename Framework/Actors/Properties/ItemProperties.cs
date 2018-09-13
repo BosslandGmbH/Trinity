@@ -32,7 +32,7 @@ namespace Trinity.Framework.Actors.Properties
             }
         }
 
-        private static HashSet<string> _seenActorAnnIds = new HashSet<string>();
+        private static readonly HashSet<string> _seenActorAnnIds = new HashSet<string>();
 
         public static void Create(TrinityItem actor)
         {

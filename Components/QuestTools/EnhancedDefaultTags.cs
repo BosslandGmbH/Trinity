@@ -41,10 +41,7 @@ namespace Trinity.Components.QuestTools
         }
 
         private bool _isDone;
-        public override bool IsDone
-        {
-            get { return !IsActiveQuestStep || _isDone || base.IsDone; }
-        }
+        public override bool IsDone => !IsActiveQuestStep || _isDone || base.IsDone;
 
         #region IEnhancedProfileBehavior
 
@@ -74,10 +71,7 @@ namespace Trinity.Components.QuestTools
         }
 
         private bool _isDone;
-        public override bool IsDone
-        {
-            get { return !IsActiveQuestStep || _isDone || base.IsDone; }
-        }
+        public override bool IsDone => !IsActiveQuestStep || _isDone || base.IsDone;
 
         #region IEnhancedProfileBehavior
 
@@ -102,10 +96,7 @@ namespace Trinity.Components.QuestTools
     public class EnhancedLogMessageTag : LogMessageTag, IEnhancedProfileBehavior
     {
         private bool _isDone;
-        public override bool IsDone
-        {
-            get { return _isDone || base.IsDone; }
-        }
+        public override bool IsDone => _isDone || base.IsDone;
 
         #region IEnhancedProfileBehavior
 
@@ -130,10 +121,7 @@ namespace Trinity.Components.QuestTools
     public class EnhancedUseWaypointTag : UseWaypointTag, IEnhancedProfileBehavior
     {
         private bool _isDone;
-        public override bool IsDone
-        {
-            get { return _isDone || base.IsDone; }
-        }
+        public override bool IsDone => _isDone || base.IsDone;
 
         #region IEnhancedProfileBehavior
 
@@ -163,10 +151,7 @@ namespace Trinity.Components.QuestTools
         }
 
         private bool _isDone;
-        public override bool IsDone
-        {
-            get { return !IsActiveQuestStep || _isDone || base.IsDone; }
-        }
+        public override bool IsDone => !IsActiveQuestStep || _isDone || base.IsDone;
 
         #region IEnhancedProfileBehavior
 
@@ -196,10 +181,7 @@ namespace Trinity.Components.QuestTools
         }
 
         private bool _isDone;
-        public override bool IsDone
-        {
-            get { return _isDone || base.IsDone; }
-        }
+        public override bool IsDone => _isDone || base.IsDone;
 
         #region IEnhancedProfileBehavior
 
@@ -229,10 +211,7 @@ namespace Trinity.Components.QuestTools
         }
 
         private bool _isDone;
-        public override bool IsDone
-        {
-            get { return _isDone || base.IsDone; }
-        }
+        public override bool IsDone => _isDone || base.IsDone;
 
         #region IEnhancedProfileBehavior
 
@@ -262,10 +241,7 @@ namespace Trinity.Components.QuestTools
         }
 
         private bool _isDone;
-        public override bool IsDone
-        {
-            get { return !IsActiveQuestStep || _isDone || base.IsDone; }
-        }
+        public override bool IsDone => !IsActiveQuestStep || _isDone || base.IsDone;
 
         public override void OnStart() { }
 
@@ -301,10 +277,7 @@ namespace Trinity.Components.QuestTools
     public class EnhancedWaitWhileTag : WaitWhileTag, IEnhancedProfileBehavior
     {
         private bool _isDone;
-        public override bool IsDone
-        {
-            get { return _isDone || base.IsDone; }
-        }
+        public override bool IsDone => _isDone || base.IsDone;
 
         #region IEnhancedProfileBehavior
 
@@ -378,8 +351,8 @@ namespace Trinity.Components.QuestTools
 
         public List<ProfileBehavior> Children
         {
-            get { return Body; }
-            set { Body = value; }
+            get => Body;
+            set => Body = value;
         }
 
     }
@@ -440,8 +413,8 @@ namespace Trinity.Components.QuestTools
 
         public List<ProfileBehavior> Children
         {
-            get { return Body; }
-            set { Body = value; }
+            get => Body;
+            set => Body = value;
         }
 
     }

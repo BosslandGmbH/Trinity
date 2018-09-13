@@ -68,7 +68,7 @@ namespace Trinity.Framework.Actors.Attributes
                 var attribute = _commonData.GetAttribute<T>(type, modifier);
                 return attribute;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Core.Logger.Debug($" Unable to get Attribute for Type: {type} | Modifier: {modifier}");
             }
@@ -92,7 +92,7 @@ namespace Trinity.Framework.Actors.Attributes
                 var attribute = _commonData.GetAttribute<T>(type);
                 return attribute;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Core.Logger.Debug($" Unable to get Attribute for Type: {type}");
             }
@@ -129,7 +129,6 @@ namespace Trinity.Framework.Actors.Attributes
         /// <summary>
         /// Find an attribute using a base type (will match any modifier)
         /// </summary>
-        /// <typeparam name="T">the type of return value</typeparam>
         /// <param name="type">the attribute type</param>
         /// <returns>the attribute value</returns>
         internal AttributeEntry GetAttributeEntry(ActorAttributeType type)
@@ -204,7 +203,7 @@ namespace Trinity.Framework.Actors.Attributes
         }
 
         /// <summary>
-        /// Dictionary of attribute values by native key (ActorAttributeType && Modifier)
+        /// Dictionary of attribute values by native key (ActorAttributeType &amp;&amp; Modifier)
         /// It can include duplicates of the same ActorAttributeType
         /// </summary>
         public Dictionary<ActorAttributeType, float> ToDictionary()
@@ -331,8 +330,8 @@ namespace Trinity.Framework.Actors.Attributes
             /// </summary>
             public int DescripterId
             {
-                get { return (Value & 0xFFF); }
-                set { Value = (int)((Value & 0xFFFFF000) + (int)value); }
+                get => (Value & 0xFFF);
+                set => Value = (int)((Value & 0xFFFFF000) + (int)value);
             }
 
             /// <summary>
@@ -350,8 +349,8 @@ namespace Trinity.Framework.Actors.Attributes
             /// </summary>
             public int ModifierId
             {
-                get { return Value >> 12; }
-                set { Value = (Value & 0x00000FFF) + (value << 12); }
+                get => Value >> 12;
+                set => Value = (Value & 0x00000FFF) + (value << 12);
             }
 
             /// <summary>

@@ -33,7 +33,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         public States State
         {
-            get { return _state; }
+            get => _state;
             private set
             {
                 if (_state == value) return;
@@ -59,12 +59,12 @@ namespace Trinity.Components.Adventurer.Coroutines
         private bool _isNephalemStone;
         private bool _isOrek;
         private int _startingWorldId;
-        private bool _ignoreSanityChecks;
-        private string _endAnimation;
-        private string _startAnimation;
+        private readonly bool _ignoreSanityChecks;
+        private readonly string _endAnimation;
+        private readonly string _startAnimation;
         private bool _isQuestGiver;
         private DateTime _castWaitStartTime = DateTime.MinValue;
-        private int _markerHash;
+        private readonly int _markerHash;
 
         public InteractionCoroutine(int actorId, TimeSpan timeOut, TimeSpan sleepTime, int interactAttempts = 3, 
             bool ignoreSanityChecks = false, string startAnimation ="", string endAnimation="", int markerHash = 0)

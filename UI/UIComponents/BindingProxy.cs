@@ -3,7 +3,7 @@
 namespace Trinity.UI.UIComponents
 {
     /// <summary>
-    /// Add Proxy <ut:BindingProxy x:Key="Proxy" Data="{Binding}" /> to Resources
+    /// Add Proxy <![CDATA[<ut:BindingProxy x:Key="Proxy" Data="{Binding}" />]]> to Resources
     /// Bind like <Element Property="{Binding Data.MyValue, Source={StaticResource Proxy}}" />   
     /// </summary>
     public class BindingProxy : Freezable
@@ -19,8 +19,8 @@ namespace Trinity.UI.UIComponents
 
         public object Data
         {
-            get { return (object)GetValue(DataProperty); }
-            set { SetValue(DataProperty, value); }
+            get => (object)GetValue(DataProperty);
+            set => SetValue(DataProperty, value);
         }
 
         public static readonly DependencyProperty DataProperty =

@@ -37,7 +37,7 @@ namespace Trinity.Components.Adventurer.UI
             }
         }
 
-        private PluginSettings _pluginSettings;
+        private readonly PluginSettings _pluginSettings;
 
         public int BattleNetHeroId { get; set; }
 

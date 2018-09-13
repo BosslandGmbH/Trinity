@@ -122,7 +122,7 @@ namespace Trinity.Framework.Helpers
                         Core.Logger.Log(LogCategory.Configuration, "Attempted to load Dictionary key={1} value={2} but 0 values found!", keyName, valueName, ret.Count);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Core.Logger.Log("Exception in FileManager Dictionary Load");
                 }
@@ -165,78 +165,36 @@ namespace Trinity.Framework.Helpers
         /// <summary>
         /// The full path to the built-in TrinityPlugin combat routine, for auto-installation
         /// </summary>
-        public static string CombatRoutineSourcePath
-        {
-            get
-            {
-                return Path.Combine(PluginPath, "DbProvider", CombatRoutineFileName);
-            }
-        }
+        public static string CombatRoutineSourcePath => Path.Combine(PluginPath, "DbProvider", CombatRoutineFileName);
 
         /// <summary>
         /// The full path to the Demonbuddy combat routine for TrinityPlugin
         /// </summary>
-        public static string CombatRoutineDestinationPath
-        {
-            get
-            {
-                return Path.Combine(DemonBuddyPath, "Routines", TrinityRoutineName, CombatRoutineFileName);
-            }
-        }
+        public static string CombatRoutineDestinationPath => Path.Combine(DemonBuddyPath, "Routines", TrinityRoutineName, CombatRoutineFileName);
 
-        public static string RoutinesDirectory
-        {
-            get
-            {
-                return Path.Combine(DemonBuddyPath, "Routines");
-            }
-        }
+        public static string RoutinesDirectory => Path.Combine(DemonBuddyPath, "Routines");
 
         /// <summary>
         /// The string name of TrinityPlugin
         /// </summary>
-        public static string TrinityName
-        {
-            get
-            {
-                return "Trinity";
-            }
-        }
+        public static string TrinityName => "Trinity";
 
         /// <summary>
         /// Gets the name of the trinity routine.
         /// </summary>
         /// <value>The name of the trinity routine.</value>
-        public static string TrinityRoutineName
-        {
-            get
-            {
-                return "TrinityRoutine";
-            }
-        }
+        public static string TrinityRoutineName => "TrinityRoutine";
 
         /// <summary>
         /// The file name of the TrinityPlugin Combat Routine
         /// </summary>
-        public static string CombatRoutineFileName
-        {
-            get
-            {
-                return "TrinityRoutine.cs";
-            }
-        }
+        public static string CombatRoutineFileName => "TrinityRoutine.cs";
 
         /// <summary>
         /// Gets the settings path.
         /// </summary>
         /// <value>The settings path.</value>
-        public static string SettingsPath
-        {
-            get
-            {
-                return Path.Combine(DemonBuddyPath, "Settings");
-            }
-        }
+        public static string SettingsPath => Path.Combine(DemonBuddyPath, "Settings");
 
         /// <summary>
         /// Gets the settings path specific to current hero.
@@ -306,25 +264,13 @@ namespace Trinity.Framework.Helpers
         /// Gets the scripted item rules path.
         /// </summary>
         /// <value>The item rule path.</value>
-        public static string ItemRulePath
-        {
-            get
-            {
-                return Path.Combine(PluginPath, "ItemRules");
-            }
-        }
+        public static string ItemRulePath => Path.Combine(PluginPath, "ItemRules");
 
         /// <summary>
         /// Gets the scripted item rules path specific to current hero.
         /// </summary>
         /// <value>The item rule path.</value>
-        public static string SpecificItemRulePath
-        {
-            get
-            {
-                return Path.Combine(DemonBuddyPath, "ItemRules", BattleTagName);
-            }
-        }
+        public static string SpecificItemRulePath => Path.Combine(DemonBuddyPath, "ItemRules", BattleTagName);
 
         /// <summary>
         /// Creates the directory structure.

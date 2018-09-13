@@ -77,8 +77,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
             //}
         }
 
-        private static long _lastPulseTime;
-
         public static void Pulse()
         {
             //if (!Core.TrinityIsReady) return;
@@ -113,8 +111,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         public static int RestartsFromUnsupported { get; internal set; }
 
-        private static bool _isTurnInInProgress;
-
         public static void Reset()
         {
             Stats.Clear();
@@ -136,11 +132,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         public DateTime EndTime
         {
-            get
-            {
-                return _endTime == default(DateTime) ? LastSeen : _endTime;
-            }
-            set { _endTime = value; }
+            get => _endTime == default(DateTime) ? LastSeen : _endTime;
+            set => _endTime = value;
         }
 
         public DateTime LastSeen { get; set; }

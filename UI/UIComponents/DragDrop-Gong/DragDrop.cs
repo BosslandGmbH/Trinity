@@ -343,7 +343,7 @@ namespace Trinity.UI.UIComponents
 
         return m_DefaultDragHandler;
       }
-      set { m_DefaultDragHandler = value; }
+      set => m_DefaultDragHandler = value;
     }
 
     public static IDropTarget DefaultDropHandler
@@ -356,7 +356,7 @@ namespace Trinity.UI.UIComponents
 
         return m_DefaultDropHandler;
       }
-      set { m_DefaultDropHandler = value; }
+      set => m_DefaultDropHandler = value;
     }
 
     private static void IsDragSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -961,8 +961,8 @@ namespace Trinity.UI.UIComponents
 
     private static DragAdorner DragAdorner
     {
-      get { return m_DragAdorner; }
-      set
+      get => m_DragAdorner;
+        set
       {
         if (m_DragAdorner != null) {
           m_DragAdorner.Detatch();
@@ -974,8 +974,8 @@ namespace Trinity.UI.UIComponents
 
     private static DragAdorner EffectAdorner
     {
-      get { return m_EffectAdorner; }
-      set
+      get => m_EffectAdorner;
+        set
       {
         if (m_EffectAdorner != null) {
           m_EffectAdorner.Detatch();
@@ -987,8 +987,8 @@ namespace Trinity.UI.UIComponents
 
     private static DropTargetAdorner DropTargetAdorner
     {
-      get { return m_DropTargetAdorner; }
-      set
+      get => m_DropTargetAdorner;
+        set
       {
         if (m_DropTargetAdorner != null) {
           m_DropTargetAdorner.Detatch();

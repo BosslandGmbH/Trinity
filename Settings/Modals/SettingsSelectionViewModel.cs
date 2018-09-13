@@ -16,8 +16,6 @@ namespace Trinity.Settings.Modals
         private string _title;
         private string _description;
         private DialogResult _dialogResult;
-        private int _windowWidth;
-        private int _windowHeight;
         private string _okButtonText;
 
         public SettingsSelectionViewModel()
@@ -45,44 +43,44 @@ namespace Trinity.Settings.Modals
     
         public bool IsWindowOpen
         {
-            get { return _isWindowOpen; }
-            set { SetField(ref _isWindowOpen, value); }
+            get => _isWindowOpen;
+            set => SetField(ref _isWindowOpen, value);
         }
 
         public FullyObservableCollection<SettingsSelectionItem> Items
         {
-            get { return new FullyObservableCollection<SettingsSelectionItem>(Selections); }
-            set { Selections = value.ToList(); }
+            get => new FullyObservableCollection<SettingsSelectionItem>(Selections);
+            set => Selections = value.ToList();
         }
 
         public List<SettingsSelectionItem> Selections
         {
-            get { return _selections; }
-            set { SetField(ref _selections, value); }
+            get => _selections;
+            set => SetField(ref _selections, value);
         }
 
         public string Title
         {
-            get { return _title; }
-            set { SetField(ref _title, value); }
+            get => _title;
+            set => SetField(ref _title, value);
         }
 
         public string Description
         {
-            get { return _description; }
-            set { SetField(ref _description, value); }
+            get => _description;
+            set => SetField(ref _description, value);
         }
 
         public string OkButtonText
         {
-            get { return _okButtonText; }
-            set { SetField(ref _okButtonText, value); }
+            get => _okButtonText;
+            set => SetField(ref _okButtonText, value);
         }
 
         public DialogResult DialogResult
         {
-            get { return _dialogResult; }
-            set { SetField(ref _dialogResult, value); }
+            get => _dialogResult;
+            set => SetField(ref _dialogResult, value);
         }
 
         public ICommand OkCommand => new RelayCommand(param =>

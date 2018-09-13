@@ -37,40 +37,40 @@ namespace Trinity.Settings
         [DefaultValue(LogCategory.None | LogCategory.Behavior | LogCategory.Routine | LogCategory.Avoidance | LogCategory.Targetting)]
         public LogCategory LogCategories
         {
-            get { return _logCategories; }
-            set { SetField(ref _logCategories, value); }
+            get => _logCategories;
+            set => SetField(ref _logCategories, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool LogAllItems
         {
-            get { return _logAllItems; }
-            set { SetField(ref _logAllItems, value); }
+            get => _logAllItems;
+            set => SetField(ref _logAllItems, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool LogDroppedItems
         {
-            get { return _logDroppedItems; }
-            set { SetField(ref _logDroppedItems, value); }
+            get => _logDroppedItems;
+            set => SetField(ref _logDroppedItems, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool LazyRaider
         {
-            get { return _lazyRaider; }
-            set { SetField(ref _lazyRaider, value); }
+            get => _lazyRaider;
+            set => SetField(ref _lazyRaider, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(true)]
         public bool GoldInactivityEnabled
         {
-            get { return _goldInactivityEnabled; }
-            set { SetField(ref _goldInactivityEnabled, value); }
+            get => _goldInactivityEnabled;
+            set => SetField(ref _goldInactivityEnabled, value);
         }
 
 
@@ -78,96 +78,96 @@ namespace Trinity.Settings
         [DefaultValue(true)]
         public bool XpInactivityEnabled
         {
-            get { return _xpInactivityEnabled; }
-            set { SetField(ref _xpInactivityEnabled, value); }
+            get => _xpInactivityEnabled;
+            set => SetField(ref _xpInactivityEnabled, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(800)]
         public int InactivityTimer
         {
-            get { return _inactivityTimer; }
-            set { SetField(ref _inactivityTimer, value); }
+            get => _inactivityTimer;
+            set => SetField(ref _inactivityTimer, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool TpsEnabled
         {
-            get { return _tpsEnabled; }
-            set { SetField(ref _tpsEnabled, value); }
+            get => _tpsEnabled;
+            set => SetField(ref _tpsEnabled, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(20)]
         public int TpsLimit
         {
-            get { return _tpsLimit; }
-            set { SetField(ref _tpsLimit, value); }
+            get => _tpsLimit;
+            set => SetField(ref _tpsLimit, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool OutputReports
         {
-            get { return _outputReports; }
-            set { SetField(ref _outputReports, value); }
+            get => _outputReports;
+            set => SetField(ref _outputReports, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool ShowBattleTag
         {
-            get { return _showBattleTag; }
-            set { SetField(ref _showBattleTag, value); }
+            get => _showBattleTag;
+            set => SetField(ref _showBattleTag, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(true)]
         public bool ShowHeroName
         {
-            get { return _showHeroName; }
-            set { SetField(ref _showHeroName, value); }
+            get => _showHeroName;
+            set => SetField(ref _showHeroName, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(true)]
         public bool ShowHeroClass
         {
-            get { return _showHeroClass; }
-            set { SetField(ref _showHeroClass, value); }
+            get => _showHeroClass;
+            set => SetField(ref _showHeroClass, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool DisableAllMovement
         {
-            get { return _disableAllMovement; }
-            set { SetField(ref _disableAllMovement, value); }
+            get => _disableAllMovement;
+            set => SetField(ref _disableAllMovement, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool LogStats
         {
-            get { return _logStats; }
-            set { SetField(ref _logStats, value); }
+            get => _logStats;
+            set => SetField(ref _logStats, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool LogItems
         {
-            get { return _logItems; }
-            set { SetField(ref _logItems, value); }
+            get => _logItems;
+            set => SetField(ref _logItems, value);
         }
 
         [DataMember(IsRequired = false)]
         [Setting, UIControl(UIControlType.FlagsCheckboxes)]
         public GameStopReasons StopReasons
         {            
-            get { return _stopReasons; }
-            set { SetField(ref _stopReasons, value); }
+            get => _stopReasons;
+            set => SetField(ref _stopReasons, value);
         }
 
     }

@@ -13,7 +13,7 @@ namespace Trinity.Settings.Mock
     /// mc:Ignorable="d" 
     /// 
     /// Add Resource: 
-    /// <mock:MockData x:Key="DesignViewModel"/>
+    /// <![CDATA[<mock:MockData x:Key="DesignViewModel"/>]]>
     /// 
     /// Redirect DataContext where required
     /// d:DataContext="{Binding Source={StaticResource DesignViewModel}}"

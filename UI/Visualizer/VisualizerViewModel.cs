@@ -50,7 +50,7 @@ namespace Trinity.UI.Visualizer
         private List<GridColumnFlags> _allGridColumnFlags;
         private bool _showWeighted;
         private const int RefreshRateMs = 50;
-        private DateTime LastRefresh = DateTime.MinValue;
+        private DateTime _lastRefresh = DateTime.MinValue;
         private string _pauseButtonText = "Pause";
         private bool _isPaused;
         private TrinityActor _selectedObject;
@@ -62,8 +62,6 @@ namespace Trinity.UI.Visualizer
         private bool _showUncategorized;
         private TrinityActor _currentTarget;
         private TrinityActor _player;
-        private string _blacklistButtonText;
-        private bool _isBlacklisted;
         private SortDirection _sortDirection;
 
         public VisualizerViewModel() : base(Path.Combine(FileManager.SpecificSettingsPath, "Visualizer.xml"))
@@ -161,10 +159,10 @@ namespace Trinity.UI.Visualizer
 
             using (new PerformanceLogger("Visualizer Update"))
             {
-                if (DateTime.UtcNow.Subtract(LastRefresh).TotalMilliseconds <= RefreshRateMs || IsPaused)
+                if (DateTime.UtcNow.Subtract(_lastRefresh).TotalMilliseconds <= RefreshRateMs || IsPaused)
                     return;
 
-                LastRefresh = DateTime.UtcNow;
+                _lastRefresh = DateTime.UtcNow;
 
                 var objects = Core.Targets.ToList();
                 foreach (var obj in objects)
@@ -237,28 +235,28 @@ namespace Trinity.UI.Visualizer
 
         public ObservableCollection<TrinityMinimapIcon> AllMinimap
         {
-            get { return _allMinimap; }
-            set { SetField(ref _allMinimap, value); }
+            get => _allMinimap;
+            set => SetField(ref _allMinimap, value);
         }
 
         public ObservableCollection<TrinityMarker> AllMarkers
         {
-            get { return _allMarkers; }
-            set { SetField(ref _allMarkers, value); }
+            get => _allMarkers;
+            set => SetField(ref _allMarkers, value);
         }
 
         public ObservableCollection<TrinityActor> AllObjects
         {
-            get { return _allObjects; }
-            set { SetField(ref _allObjects, value); }
+            get => _allObjects;
+            set => SetField(ref _allObjects, value);
         }
 
         public DateTime LastUpdatedNotInCacheObjects = DateTime.MinValue;
 
         public List<TrinityActor> NotInCacheObjects
         {
-            get { return _notInCacheObjects; }
-            set { SetField(ref _notInCacheObjects, value); }
+            get => _notInCacheObjects;
+            set => SetField(ref _notInCacheObjects, value);
         }
 
         private bool _listeningForStatChanges;
@@ -283,71 +281,71 @@ namespace Trinity.UI.Visualizer
         [XmlIgnore]
         public float PlayerPositionX
         {
-            get { return _playerPositionX; }
-            set { SetField(ref _playerPositionX, value); }
+            get => _playerPositionX;
+            set => SetField(ref _playerPositionX, value);
         }
 
         [XmlIgnore]
         public float PlayerPositionY
         {
-            get { return _playerPositionY; }
-            set { SetField(ref _playerPositionY, value); }
+            get => _playerPositionY;
+            set => SetField(ref _playerPositionY, value);
         }
 
         [XmlIgnore]
         public float PlayerPositionZ
         {
-            get { return _playerPositionZ; }
-            set { SetField(ref _playerPositionZ, value); }
+            get => _playerPositionZ;
+            set => SetField(ref _playerPositionZ, value);
         }
 
         [XmlIgnore]
         public double PlayerRotation
         {
-            get { return _playerRotation; }
-            set { SetField(ref _playerRotation, value); }
+            get => _playerRotation;
+            set => SetField(ref _playerRotation, value);
         }
 
         [XmlIgnore]
         public bool IsStuck
         {
-            get { return _isStuck; }
-            set { SetField(ref _isStuck, value); }
+            get => _isStuck;
+            set => SetField(ref _isStuck, value);
         }
 
         [XmlIgnore]
         public bool IsBlocked
         {
-            get { return _isBlocked; }
-            set { SetField(ref _isBlocked, value); }
+            get => _isBlocked;
+            set => SetField(ref _isBlocked, value);
         }
 
         [XmlIgnore]
         public bool IsAvoiding
         {
-            get { return _isAvoiding; }
-            set { SetField(ref _isAvoiding, value); }
+            get => _isAvoiding;
+            set => SetField(ref _isAvoiding, value);
         }
 
         [XmlIgnore]
         public int WorldSnoId
         {
-            get { return _worldSnoId; }
-            set { SetField(ref _worldSnoId, value); }
+            get => _worldSnoId;
+            set => SetField(ref _worldSnoId, value);
         }
 
         [XmlIgnore]
         public int LevelAreaSnoId
         {
-            get { return _levelAreaSnoId; }
-            set { SetField(ref _levelAreaSnoId, value); }
+            get => _levelAreaSnoId;
+            set => SetField(ref _levelAreaSnoId, value);
         }
 
         [XmlIgnore]
         public TrinityActor Player
         {
-            get { return _player; }
-            set { SetField(ref _player, value); }
+            get => _player;
+            set => SetField(ref _player, value);
         }
 
         private List<TrinityActor> ApplyFilter(IList<TrinityActor> objects)
@@ -378,21 +376,21 @@ namespace Trinity.UI.Visualizer
         [XmlIgnore]
         public static VisualizerViewModel Instance
         {
-            get { return _instance ?? (_instance = new VisualizerViewModel()); }
-            set { _instance = value; }
+            get => _instance ?? (_instance = new VisualizerViewModel());
+            set => _instance = value;
         }
 
         [XmlIgnore]
         public ObservableCollection<TrinityActor> Objects
         {
-            get { return _objects; }
-            set { SetField(ref _objects, value); }
+            get => _objects;
+            set => SetField(ref _objects, value);
         }
 
         [XmlIgnore]
         public TrinityActor SelectedObject
         {
-            get { return _selectedObject; }
+            get => _selectedObject;
             set
             {
                 if (_selectedObject != value)
@@ -421,58 +419,55 @@ namespace Trinity.UI.Visualizer
         [XmlIgnore]
         public TrinityMarker SelectedMarker
         {
-            get { return _selectedMarker; }
-            set { SetField(ref _selectedMarker, value); }
+            get => _selectedMarker;
+            set => SetField(ref _selectedMarker, value);
         }
 
         [XmlIgnore]
         public TrinityMinimapIcon SelectedIcon
         {
-            get { return _selectedIcon; }
-            set { SetField(ref _selectedIcon, value); }
+            get => _selectedIcon;
+            set => SetField(ref _selectedIcon, value);
         }
 
         [Zeta.XmlEngine.XmlElement("WindowWidth")]
         [DefaultValue(400)]
         public int WindowWidth
         {
-            get { return _windowWidth; }
-            set { SetField(ref _windowWidth, value); }
+            get => _windowWidth;
+            set => SetField(ref _windowWidth, value);
         }
 
-        public TrinityStorage Storage
-        {
-            get { return Core.Storage; }
-        }
+        public TrinityStorage Storage => Core.Storage;
 
         [Zeta.XmlEngine.XmlElement("WindowHeight")]
         [DefaultValue(300)]
         public int WindowHeight
         {
-            get { return _windowHeight; }
-            set { SetField(ref _windowHeight, value); }
+            get => _windowHeight;
+            set => SetField(ref _windowHeight, value);
         }
 
         [Zeta.XmlEngine.XmlElement("Zoom")]
         [DefaultValue(5)]
         public int Zoom
         {
-            get { return _zoom; }
-            set { SetField(ref _zoom, value); }
+            get => _zoom;
+            set => SetField(ref _zoom, value);
         }
 
         [Zeta.XmlEngine.XmlElement("ShowWeighted")]
         [DefaultValue(true)]
         public bool ShowWeighted
         {
-            get { return _showWeighted; }
-            set { SetField(ref _showWeighted, value); }
+            get => _showWeighted;
+            set => SetField(ref _showWeighted, value);
         }
 
         public bool IsMouseOverGrid
         {
-            get { return _isMouseOverGrid; }
-            set { SetField(ref _isMouseOverGrid, value); }
+            get => _isMouseOverGrid;
+            set => SetField(ref _isMouseOverGrid, value);
         }
 
         //[Zeta.XmlEngine.XmlElement("ShowGrid")]
@@ -552,8 +547,8 @@ namespace Trinity.UI.Visualizer
         [DefaultValue(true)]
         public bool IsGridPanelExpanded
         {
-            get { return _isGridPanelExpanded; }
-            set { SetField(ref _isGridPanelExpanded, value); }
+            get => _isGridPanelExpanded;
+            set => SetField(ref _isGridPanelExpanded, value);
         }
 
         [IgnoreDataMember]
@@ -561,7 +556,7 @@ namespace Trinity.UI.Visualizer
 
         public int SelectedTabIndex
         {
-            get { return _selectedTabIndex; }
+            get => _selectedTabIndex;
             set
             {
                 SetField(ref _selectedTabIndex, value);
@@ -615,15 +610,15 @@ namespace Trinity.UI.Visualizer
         [DefaultValue(true)]
         public bool IsSidePanelExpanded
         {
-            get { return _isSidePanelExpanded || _sidePanelWidth.IsAuto || _sidePanelWidth.IsStar; }
-            set { SetField(ref _isSidePanelExpanded, value); }
+            get => _isSidePanelExpanded || _sidePanelWidth.IsAuto || _sidePanelWidth.IsStar;
+            set => SetField(ref _isSidePanelExpanded, value);
         }
         
         [IgnoreDataMember]
         public bool IsDragging
         {
-            get { return _isDragging; }
-            set { SetField(ref _isDragging, value); }
+            get => _isDragging;
+            set => SetField(ref _isDragging, value);
         }
 
         readonly GridLengthConverter _gridLengthConverter = new GridLengthConverter();
@@ -650,30 +645,27 @@ namespace Trinity.UI.Visualizer
         [DefaultValue(true)]
         public bool ShowPriority
         {
-            get { return _showPriority; }
-            set { SetField(ref _showPriority, value); }
+            get => _showPriority;
+            set => SetField(ref _showPriority, value);
         }
 
         [Zeta.XmlEngine.XmlElement("ShowIgnored")]
         [DefaultValue(false)]
         public bool ShowIgnored
         {
-            get { return _showIgnored; }
-            set { SetField(ref _showIgnored, value); }
+            get => _showIgnored;
+            set => SetField(ref _showIgnored, value);
         }
 
         [IgnoreDataMember]
-        public AvoidanceAreaStats NearbyStats
-        {
-            get { return Core.Avoidance.NearbyStats; }
-        }
+        public AvoidanceAreaStats NearbyStats => Core.Avoidance.NearbyStats;
 
         [Zeta.XmlEngine.XmlElement("ShowUncategorized")]
         [DefaultValue(false)]
         public bool ShowUncategorized
         {
-            get { return _showUncategorized; }
-            set { SetField(ref _showUncategorized, value); }
+            get => _showUncategorized;
+            set => SetField(ref _showUncategorized, value);
         }
 
         [Zeta.XmlEngine.XmlElement("VisibilityFlags1")]
@@ -692,14 +684,14 @@ namespace Trinity.UI.Visualizer
         [UIControl(UIControlType.FlagsCheckboxes, UIControlOptions.Inline | UIControlOptions.NoLabel)]
         public RadarVisibilityFlags VisibilityFlags
         {
-            get { return _visibilityFlags; }
-            set { SetField(ref _visibilityFlags, value); }
+            get => _visibilityFlags;
+            set => SetField(ref _visibilityFlags, value);
         }
 
         [XmlIgnore]
         public bool IsPaused
         {
-            get { return _isPaused; }
+            get => _isPaused;
             set
             {
                 PauseButtonText = value ? "Unpause" : "Pause";
@@ -710,22 +702,19 @@ namespace Trinity.UI.Visualizer
         [XmlIgnore]
         public string PauseButtonText
         {
-            get { return _pauseButtonText; }
-            set { SetField(ref _pauseButtonText, value); }
+            get => _pauseButtonText;
+            set => SetField(ref _pauseButtonText, value);
         }
 
         [XmlIgnore]
         public string BlacklistButtonText
         {
-            get { return _pauseButtonText; }
-            set { SetField(ref _pauseButtonText, value); }
+            get => _pauseButtonText;
+            set => SetField(ref _pauseButtonText, value);
         }
 
         [XmlIgnore]
-        public bool IsSelectedBlacklisted
-        {
-            get { return false; } //return _selectedObject != null && CustomBlacklist.Instance.IsBlacklisted(_selectedObject.ActorSnoId); }
-        }
+        public bool IsSelectedBlacklisted => false;
 
         public GridViewColumnCollection GridViewColumns { get; set; }
 
@@ -762,8 +751,8 @@ namespace Trinity.UI.Visualizer
         [Zeta.XmlEngine.XmlElement("SortDirection")]
         public SortDirection SortDirection
         {
-            get { return _sortDirection; }
-            set { SetField(ref _sortDirection, value); }
+            get => _sortDirection;
+            set => SetField(ref _sortDirection, value);
         }
 
         public static IQueryable<T> OrderByField<T>(IQueryable<T> q, string SortField, bool Ascending)
@@ -778,16 +767,13 @@ namespace Trinity.UI.Visualizer
         }
 
         [XmlIgnore]
-        public List<GridColumnFlags> AllGridColumnFlags
-        {
-            get { return _allGridColumnFlags ?? (_allGridColumnFlags = Enum.GetValues(typeof(GridColumnFlags)).Cast<GridColumnFlags>().ToList()); }
-        }
+        public List<GridColumnFlags> AllGridColumnFlags => _allGridColumnFlags ?? (_allGridColumnFlags = Enum.GetValues(typeof(GridColumnFlags)).Cast<GridColumnFlags>().ToList());
 
         [Zeta.XmlEngine.XmlElement("SelectedSort")]
         public GridColumnFlags SelectedSort
         {
-            get { return _selectedSort; }
-            set { SetField(ref _selectedSort, value); }
+            get => _selectedSort;
+            set => SetField(ref _selectedSort, value);
         }
 
         [Zeta.XmlEngine.XmlElement("SelectedColumnsA")]
@@ -795,8 +781,8 @@ namespace Trinity.UI.Visualizer
         [UIControl(UIControlType.FlagsCheckboxes, UIControlOptions.Inline | UIControlOptions.NoLabel)]
         public GridColumnFlags SelectedColumns
         {
-            get { return _selectedColumns; }
-            set { SetField(ref _selectedColumns, value); }
+            get => _selectedColumns;
+            set => SetField(ref _selectedColumns, value);
         }
 
         public enum ExpandingPanels
@@ -812,15 +798,15 @@ namespace Trinity.UI.Visualizer
         [Zeta.XmlEngine.XmlElement("ExpandedPanel")]
         public ExpandingPanels ExpandedPanel
         {
-            get { return _expandedPanel; }
-            set { SetField(ref _expandedPanel, value); }
+            get => _expandedPanel;
+            set => SetField(ref _expandedPanel, value);
         }
 
         [XmlIgnore]
         public TrinityActor CurrentTarget
         {
-            get { return _currentTarget; }
-            set { SetField(ref _currentTarget, value); }
+            get => _currentTarget;
+            set => SetField(ref _currentTarget, value);
         }
 
         [XmlIgnore]
@@ -1068,16 +1054,13 @@ namespace Trinity.UI.Visualizer
         private bool _isBotRunning;
         public bool IsBotRunning
         {
-            get { return _isBotRunning; }
-            set { SetField(ref _isBotRunning, value); }
+            get => _isBotRunning;
+            set => SetField(ref _isBotRunning, value);
         }
 
         private bool _startThreadAllowed = true;
-        private bool _statsLocalPctAvg;
-        private bool _showGrid;
         private bool _isGridPanelExpanded;
         private bool _isSidePanelExpanded;
-        private Vector3 _playerPosition;
         private int _worldSnoId;
         private int _levelAreaSnoId;
         private double _playerRotation;
@@ -1100,13 +1083,13 @@ namespace Trinity.UI.Visualizer
 
         public bool StartThreadAllowed
         {
-            get { return _startThreadAllowed; }
-            set { SetField(ref _startThreadAllowed, value); }
+            get => _startThreadAllowed;
+            set => SetField(ref _startThreadAllowed, value);
         }
 
         public Window Window
         {
-            get { return _window; }
+            get => _window;
             set
             {
                 if(_window != null)

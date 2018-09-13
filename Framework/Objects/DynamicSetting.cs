@@ -60,15 +60,15 @@ namespace Trinity.Framework.Objects
         [DataMember(Order = 0)]
         public string Name
         {
-            get { return _name; }
-            set { SetField(ref _name, value); }
+            get => _name;
+            set => SetField(ref _name, value);
         }
 
         [DataMember(Order = 1)]
         public string Code
         {
-            get { return _code; }
-            set { SetField(ref _code, value); }
+            get => _code;
+            set => SetField(ref _code, value);
         }
 
         public override string ToString() => $"{GetType().Name}: {Name}";
@@ -86,8 +86,8 @@ namespace Trinity.Framework.Objects
         [DataMember]
         public DynamicNodeCollection Settings
         {
-            get { return _settings; }
-            set { SetField(ref _settings, value); }
+            get => _settings;
+            set => SetField(ref _settings, value);
         }
 
         public void Reset() => Extensions.ForEach(_settings, s => s.Setting?.Reset());

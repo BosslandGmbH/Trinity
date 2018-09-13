@@ -66,14 +66,14 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private States State
         {
-            get { return _state; }
+            get => _state;
             set
             {
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Debug("[Waypoint] " + value);
-                   StatusText = "[Waypoint] " + value;
+                    Core.Logger.Debug($"[Waypoint] {value}");
+                   StatusText = $"[Waypoint] {value}";
                 }
                 _state = value;
             }

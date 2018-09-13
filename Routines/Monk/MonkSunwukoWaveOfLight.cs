@@ -48,10 +48,7 @@ namespace Trinity.Routines.Monk
 
         public TrinityPower GetOffensivePower()
         {
-            TrinityPower power;
-            Vector3 position;
-
-            if (TrySpecialPower(out power))
+            if (TrySpecialPower(out var power))
                 return power;            
 
             if (Core.Buffs.HasCastingShrine)
@@ -274,41 +271,41 @@ namespace Trinity.Routines.Monk
             [DefaultValue(50)]
             public float WoLRange
             {
-                get { return _woLRange; }
-                set { SetField(ref _woLRange, value); }
+                get => _woLRange;
+                set => SetField(ref _woLRange, value);
             }			
 			
             [DefaultValue(65)]
             public float WoLEliteRange
             {
-                get { return _woLEliteRange; }
-                set { SetField(ref _woLEliteRange, value); }
+                get => _woLEliteRange;
+                set => SetField(ref _woLEliteRange, value);
             }				
 			
             [DefaultValue(6)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             public SkillSettings Epiphany
             {
-                get { return _epiphany; }
-                set { SetField(ref _epiphany, value); }
+                get => _epiphany;
+                set => SetField(ref _epiphany, value);
             }
 
             public SkillSettings DashingStrike
             {
-                get { return _dashingStrike; }
-                set { SetField(ref _dashingStrike, value); }
+                get => _dashingStrike;
+                set => SetField(ref _dashingStrike, value);
             }
 
             #region Skill Defaults

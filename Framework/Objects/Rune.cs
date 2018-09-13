@@ -73,10 +73,7 @@ namespace Trinity.Framework.Objects
         /// <summary>
         /// Skill that this rune belongs to
         /// </summary>
-        public Skill Skill
-        {
-            get { return SkillUtils.ByActorClass(Class).ElementAtOrDefault(SkillIndex); } 
-        }
+        public Skill Skill => SkillUtils.ByActorClass(Class).ElementAtOrDefault(SkillIndex);
 
         /// <summary>
         /// New duration of the associated skill's effect.

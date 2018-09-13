@@ -73,7 +73,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         public States State
         {
-            get { return _state; }
+            get => _state;
             protected set
             {
                 if (_state == value) return;
@@ -159,7 +159,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         private async Task<bool> TakingWaypoint()
         {
-            if (!await WaypointCoroutine.UseWaypoint(BountyData.WaypointNumber))
+            if (!await WaypointCoroutine.UseWaypoint(BountyData.WaypointLevelAreaId))
                 return false;
 
             State = States.InZone;

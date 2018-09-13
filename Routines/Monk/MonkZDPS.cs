@@ -272,56 +272,56 @@ namespace Trinity.Routines.Monk
             [DefaultValue(1)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(2000)]
             public float CycloneStrikeDelay
             {
-                get { return _cycloneStrikeDelay; }
-                set { SetField(ref _cycloneStrikeDelay, value); }
+                get => _cycloneStrikeDelay;
+                set => SetField(ref _cycloneStrikeDelay, value);
             }
 
             [DefaultValue(3)]
             public int CycloneStrikeMinMobs
             {
-                get { return _cycloneStrikeMinMobs; }
-                set { SetField(ref _cycloneStrikeMinMobs, value); }
+                get => _cycloneStrikeMinMobs;
+                set => SetField(ref _cycloneStrikeMinMobs, value);
             }
 
             [DefaultValue(5000)]
             public float InnerSanctuaryDelay
             {
-                get { return _innerSanctuaryDelay; }
-                set { SetField(ref _innerSanctuaryDelay, value); }
+                get => _innerSanctuaryDelay;
+                set => SetField(ref _innerSanctuaryDelay, value);
             }
 
             [DefaultValue(15)]
             public int InnerSanctuaryMinRange
             {
-                get { return _innerSanctuaryMinRange; }
-                set { SetField(ref _innerSanctuaryMinRange, value); }
+                get => _innerSanctuaryMinRange;
+                set => SetField(ref _innerSanctuaryMinRange, value);
             }
 
             [DefaultValue(3000)]
             public float MantraDelay
             {
-                get { return _mantraDelay; }
-                set { SetField(ref _mantraDelay, value); }
+                get => _mantraDelay;
+                set => SetField(ref _mantraDelay, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             public SkillSettings Epiphany
             {
-                get { return _epiphany; }
-                set { SetField(ref _epiphany, value); }
+                get => _epiphany;
+                set => SetField(ref _epiphany, value);
             }
 
 

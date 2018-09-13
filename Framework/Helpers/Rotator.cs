@@ -107,7 +107,7 @@ namespace Trinity.Framework.Helpers
 
                 return 0;
             }
-            set { _angle = value; }
+            set => _angle = value;
         }
 
         /// <summary>

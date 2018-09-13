@@ -146,8 +146,8 @@ namespace Trinity.Framework.Grid
 
         public List<AvoidanceNode> AdjacentNodes
         {
-            get { return _adjacentNodes ?? (_adjacentNodes = TrinityGrid.Instance.GetNeighbors(this)); }
-            set { _adjacentNodes = value; }
+            get => _adjacentNodes ?? (_adjacentNodes = TrinityGrid.Instance.GetNeighbors(this));
+            set => _adjacentNodes = value;
         }
 
         public float NearbyWeightPct { get; set; }

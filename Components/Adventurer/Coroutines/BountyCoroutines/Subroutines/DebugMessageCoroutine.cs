@@ -8,7 +8,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
     public class DebugMessageCoroutine : IBountySubroutine
     {
-        private string _message;
+        private readonly string _message;
         private bool _isDone;
 
         public DebugMessageCoroutine(string message)

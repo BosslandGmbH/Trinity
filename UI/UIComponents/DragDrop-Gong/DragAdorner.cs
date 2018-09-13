@@ -20,8 +20,8 @@ namespace Trinity.UI.UIComponents
 
     public Point MousePosition
     {
-      get { return this.m_MousePosition; }
-      set
+      get => this.m_MousePosition;
+        set
       {
         if (this.m_MousePosition != value) {
           this.m_MousePosition = value;
@@ -61,12 +61,9 @@ namespace Trinity.UI.UIComponents
       return this.m_Adornment.DesiredSize;
     }
 
-    protected override int VisualChildrenCount
-    {
-      get { return 1; }
-    }
+    protected override int VisualChildrenCount => 1;
 
-    private readonly AdornerLayer m_AdornerLayer;
+      private readonly AdornerLayer m_AdornerLayer;
     private readonly UIElement m_Adornment;
     private Point m_MousePosition;
   }

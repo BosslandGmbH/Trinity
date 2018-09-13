@@ -62,26 +62,8 @@ namespace Trinity.Modules
 
         public BountyData CurrentBountyData { get; private set; }
 
-        public bool IsKillAllRequired
-        {
-            get
-            {
-                return false;
-
-                // Needs work - better detection of when inside the area/level that needs to have things killed.
-
-                //if (CurrentQuest == null || !CurrentQuest.IsValid)
-                //    return false;
-
-                //if (CurrentStepData == null || CurrentObjective == null)
-                //    return false;
-
-                //if (!CurrentStepData.IsActive || !CurrentObjective.IsActive)
-                //    return false;
-
-                //return KillAllTypes.Contains(CurrentObjective.ObjectiveType);
-            }
-        }
+        // TODO: return KillAllTypes.Contains(CurrentObjective.ObjectiveType);
+        public bool IsKillAllRequired => false;
 
         public HashSet<QuestStepObjectiveType> KillAllTypes { get; } = new HashSet<QuestStepObjectiveType>
         {

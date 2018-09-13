@@ -27,8 +27,8 @@ namespace Trinity.Framework.Avoidance.Settings
         [DataMember]
         public List<AvoidanceSettingsEntry> Entries
         {
-            get { return _entries; }
-            set { SetField(ref _entries, value); }
+            get => _entries;
+            set => SetField(ref _entries, value);
         }
 
         [DefaultValue(1)]

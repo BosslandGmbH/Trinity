@@ -33,7 +33,7 @@ namespace Trinity
         public TrinityPlugin()
         {
             _instance = this;
-            UILoader.Preload();            
+            UILoader.Preload();
             PluginManager.OnPluginsReloaded += PluginManager_OnPluginsReloaded;
             InstallRoutine();
         }

@@ -69,7 +69,6 @@ namespace Trinity.Settings.ItemList
         private string _validationMessage;
         private ModalPage _selectedModalPage;
         private bool _isModalVisible;
-        private Dictionary<int, LItem> _viewPortal;
         private bool _alwaysStashAncients;
         private bool _alwaysTrashNonAncients;
         private FullyObservableCollection<LItem> _itemTypes;
@@ -314,7 +313,7 @@ namespace Trinity.Settings.ItemList
         [DefaultValue(false)]
         public bool AlwaysTrashNonAncients
         {
-            get { return _alwaysTrashNonAncients; }
+            get => _alwaysTrashNonAncients;
             set
             {
                 if (_alwaysTrashNonAncients != value)
@@ -329,7 +328,7 @@ namespace Trinity.Settings.ItemList
         [DefaultValue(false)]
         public bool AlwaysStashAncients
         {
-            get { return _alwaysStashAncients; }
+            get => _alwaysStashAncients;
             set
             {
                 if (_alwaysStashAncients != value)
@@ -344,7 +343,7 @@ namespace Trinity.Settings.ItemList
         [DefaultValue(true)]
         public bool AlwaysStashPrimalAncients
         {
-            get { return _alwaysStashPrimalAncients; }
+            get => _alwaysStashPrimalAncients;
             set
             {
                 if (_alwaysStashPrimalAncients != value)
@@ -359,7 +358,7 @@ namespace Trinity.Settings.ItemList
         [DefaultValue(false)]
         public bool UpgradeRules
         {
-            get { return _upgradeRules; }
+            get => _upgradeRules;
             set
             {
                 if (_upgradeRules != value)
@@ -373,7 +372,7 @@ namespace Trinity.Settings.ItemList
         [IgnoreDataMember]
         public CollectionViewSource Collection
         {
-            get { return _collection; }
+            get => _collection;
             set
             {
                 if (_collection != value)
@@ -387,10 +386,7 @@ namespace Trinity.Settings.ItemList
         [IgnoreDataMember]
         public FullyObservableCollection<LItem> ItemTypes
         {
-            get
-            {
-                return _itemTypes;
-            }
+            get => _itemTypes;
             set
             {
                 if (_itemTypes == null || !_itemTypes.Any())
@@ -407,8 +403,8 @@ namespace Trinity.Settings.ItemList
 
         public int SelectedTabIndex
         {
-            get { return _selectedTabIndex; }
-            set { SetField(ref _selectedTabIndex, value); }
+            get => _selectedTabIndex;
+            set => SetField(ref _selectedTabIndex, value);
         }
 
         public enum Tab
@@ -420,7 +416,7 @@ namespace Trinity.Settings.ItemList
         [DataMember]
         public GroupingType Grouping
         {
-            get { return _grouping; }
+            get => _grouping;
             set
             {
                 if (_grouping != value)
@@ -435,7 +431,7 @@ namespace Trinity.Settings.ItemList
         [IgnoreDataMember]
         public string FilterText
         {
-            get { return _filterText; }
+            get => _filterText;
             set
             {
                 if (_filterText != value)
@@ -449,15 +445,12 @@ namespace Trinity.Settings.ItemList
         }
 
         [IgnoreDataMember]
-        public bool IsFiltered
-        {
-            get { return !string.IsNullOrEmpty(FilterText); }
-        }
+        public bool IsFiltered => !string.IsNullOrEmpty(FilterText);
 
         [IgnoreDataMember]
         public FullyObservableCollection<LItem> DisplayItems
         {
-            get { return _displayItems; }
+            get => _displayItems;
             set
             {
                 if (_displayItems != value)
@@ -471,7 +464,7 @@ namespace Trinity.Settings.ItemList
         [DataMember(IsRequired = false)]
         public List<LItem> SelectedItems
         {
-            get { return _selectedItems; }
+            get => _selectedItems;
             set
             {
                 if (_selectedItems != value)
@@ -486,7 +479,7 @@ namespace Trinity.Settings.ItemList
 
         public string ExportCode
         {
-            get { return _exportCode; }
+            get => _exportCode;
             set
             {
                 if (_exportCode != value)
@@ -499,20 +492,20 @@ namespace Trinity.Settings.ItemList
 
         public string ValidationMessage
         {
-            get { return _validationMessage; }
-            set { SetField(ref _validationMessage, value); }
+            get => _validationMessage;
+            set => SetField(ref _validationMessage, value);
         }
 
         public ModalPage SelectedModalPage
         {
-            get { return _selectedModalPage; }
-            set { SetField(ref _selectedModalPage, value); }
+            get => _selectedModalPage;
+            set => SetField(ref _selectedModalPage, value);
         }
 
         public bool IsModalVisible
         {
-            get { return _isModalVisible; }
-            set { SetField(ref _isModalVisible, value); }
+            get => _isModalVisible;
+            set => SetField(ref _isModalVisible, value);
         }
 
         [IgnoreDataMember]

@@ -495,33 +495,33 @@ namespace Trinity.Routines.Monk
             [DefaultValue(8)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             public SkillSettings Epiphany
             {
-                get { return _epiphany; }
-                set { SetField(ref _epiphany, value); }
+                get => _epiphany;
+                set => SetField(ref _epiphany, value);
             }
 
             public SkillSettings DashingStrike
             {
-                get { return _dashingStrike; }
-                set { SetField(ref _dashingStrike, value); }
+                get => _dashingStrike;
+                set => SetField(ref _dashingStrike, value);
             }
  
             public bool LTKFromRange
             {
-                get { return _LTKFromRange; }
-                set { SetField(ref _LTKFromRange, value); }
+                get => _LTKFromRange;
+                set => SetField(ref _LTKFromRange, value);
             }
 
             #region Skill Defaults

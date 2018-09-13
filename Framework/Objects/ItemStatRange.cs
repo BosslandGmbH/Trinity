@@ -30,10 +30,7 @@ namespace Trinity.Framework.Objects
             }
         }
 
-        public double AbsStep
-        {
-            get { return GetStep(AbsMin, AbsMax); }
-        }
+        public double AbsStep => GetStep(AbsMin, AbsMax);
 
         /// <summary>
         /// Friendly Increment amount between maximum and minimum

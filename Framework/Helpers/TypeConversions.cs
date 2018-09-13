@@ -291,7 +291,7 @@ namespace Trinity.Framework.Helpers
 
         private static readonly Regex ItemExpansionRegex = new Regex(@"^[xp]\d_", RegexOptions.Compiled);
 
-        [Obsolete]
+        //[Obsolete] Not sure why this is obsoleted or whate the right replacement is...
         public static TrinityItemType DetermineItemType(string name, ItemType dbItemType, FollowerType dbFollowerType = FollowerType.None)
         {
             name = name.ToLower();

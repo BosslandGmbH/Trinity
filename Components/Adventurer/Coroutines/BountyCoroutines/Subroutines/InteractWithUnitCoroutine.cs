@@ -43,7 +43,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public States State
         {
-            get { return _state; }
+            get => _state;
             protected set
             {
                 if (_state == value) return;
@@ -58,10 +58,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         #endregion State
 
-        public bool IsDone
-        {
-            get { return _isDone | AdvDia.CurrentWorldId != _worldId; }
-        }
+        public bool IsDone => _isDone | AdvDia.CurrentWorldId != _worldId;
 
         public InteractWithUnitCoroutine(int questId, int worldId, int actorId, int marker, int interactAttemps = 3, int secondsToSleepAfterInteraction = 1, int secondsToTimeout = 4)
         {
@@ -77,7 +74,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public Guid Id { get; }
 
-        private WaitTimer _timeout = new WaitTimer(TimeSpan.FromSeconds(30));
+        private readonly WaitTimer _timeout = new WaitTimer(TimeSpan.FromSeconds(30));
 
         public async Task<bool> GetCoroutine()
         {
@@ -120,10 +117,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         {
         }
 
-        public BountyData BountyData
-        {
-            get { return _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId)); }
-        }
+        public BountyData BountyData => _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId));
 
         private async Task<bool> NotStarted()
         {

@@ -15,7 +15,7 @@ namespace Trinity.Framework.Objects.Memory
 
     public class UXBlinker : UXLabel
     {
-        public new const int SizeOf = 0xB90; //2960
+        public const int SizeOf = 0xB90; //2960
         public new const int VTable = 0x01826888;
 
         public int xC88 => ReadOffset<int>(0xC88);
@@ -74,7 +74,7 @@ namespace Trinity.Framework.Objects.Memory
 
     public class UXButton : UXLabel
     {
-        public new const int SizeOf = 0xE40; //3648
+        public const int SizeOf = 0xE40; //3648
         public new const int VTable = 0x018265A0;
 
         public int _xB78 => ReadOffset<int>(0xB78);
@@ -327,10 +327,10 @@ namespace Trinity.Framework.Objects.Memory
 
     public class UXItemsControlBase : UXControl
     {
-        public new const int SizeOf = 0x468; //1128
+        public const int SizeOf = 0x468; //1128
         public new const int VTable = 0x017D2D80;
 
-        public LightVector<UXReference> Children => ReadObject<LightVector<UXReference>>(0x450);
+        public new LightVector<UXReference> Children => ReadObject<LightVector<UXReference>>(0x450);
         public UXControl x45C_Ptr_UIControl => ReadPointer<UXControl>(0x45C);
         public UXControl x460_Ptr_UIControl => ReadPointer<UXControl>(0x460);
         public int _x464 => ReadOffset<int>(0x464);

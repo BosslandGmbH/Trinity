@@ -32,10 +32,7 @@ namespace Trinity.Components.Coroutines
 
         private static AutoEquipItems _instance;
 
-        public static AutoEquipItems Instance
-        {
-            get { return _instance ?? (_instance = (new AutoEquipItems())); }
-        }
+        public static AutoEquipItems Instance => _instance ?? (_instance = (new AutoEquipItems()));
 
         public async Task<bool> Execute()
         {
@@ -351,7 +348,7 @@ namespace Trinity.Components.Coroutines
             }
         }
 
-        private IEnumerable<InventorySlot> _slots = new List<InventorySlot>
+        private readonly IEnumerable<InventorySlot> _slots = new List<InventorySlot>
         {
             InventorySlot.Bracers,
             InventorySlot.Feet,
@@ -723,11 +720,11 @@ namespace Trinity.Components.Coroutines
                     InventoryColumn = item.InventoryColumn,
                     ItemLink = item.ItemLink,
                     GameBalanceId = item.GameBalanceId,
-                    TrinityItemType = TypeConversions.DetermineItemType(item.InternalName, item.ItemType, item.FollowerSpecialType),
+                    TrinityItemType =  TypeConversions.DetermineItemType(item.InternalName, item.ItemType, item.FollowerSpecialType),
                     IsAncient = item.GetAttribute<int>(ActorAttributeType.AncientRank) > 0,
                     InventorySlot = item.InventorySlot,
                 };
-
+                
                 TrinityItemBaseType trinityItemBaseType = TypeConversions.GetTrinityItemBaseType(TypeConversions.DetermineItemType(item.InternalName, item.ItemType, item.FollowerSpecialType));
                 cItem.TrinityItemBaseType = trinityItemBaseType;
                 cItem.IsEquipment = GetIsEquipment(trinityItemBaseType);

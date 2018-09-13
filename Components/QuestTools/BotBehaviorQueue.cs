@@ -11,7 +11,7 @@ using Action = Zeta.TreeSharp.Action;
 namespace Trinity.Components.QuestTools
 {
     /// <summary>
-    /// Runs ProfileBehaviors using the BotBehavior hook && IEnhancedProfileBehavior
+    /// Runs ProfileBehaviors using the BotBehavior hook &amp;&amp; IEnhancedProfileBehavior
     /// Usage: BotBehaviorQueue.Queue(myProfileBehavior); 
     /// </summary>
     public static partial class BotBehaviorQueue
@@ -25,7 +25,7 @@ namespace Trinity.Components.QuestTools
         private static QueueItem _active;
         public static List<QueueItem> Shelf = new List<QueueItem>();
         private static DateTime LastChecked = DateTime.UtcNow;
-        private static int MinCheckInterval = 100;
+        private static readonly int MinCheckInterval = 100;
 
         static BotBehaviorQueue()
         {
@@ -35,25 +35,13 @@ namespace Trinity.Components.QuestTools
                 InsertHooks();
         }
 
-        public static int Count
-        {
-            get { return Q.Count; }
-        }
+        public static int Count => Q.Count;
 
-        public static bool IsActive
-        {
-            get { return Q.Any() || (_active != null && _active.ActiveNode != null && !_active.ActiveNode.IsDone); }
-        }
+        public static bool IsActive => Q.Any() || (_active != null && _active.ActiveNode != null && !_active.ActiveNode.IsDone);
 
-        public static bool IsEnabled
-        {
-            get { return _hooksInserted && _wired; }
-        }
+        public static bool IsEnabled => _hooksInserted && _wired;
 
-        public static ProfileBehavior CurrentBehavior
-        {
-            get { return _active != null ? _active.ActiveNode : null; }
-        }
+        public static ProfileBehavior CurrentBehavior => _active != null ? _active.ActiveNode : null;
 
         private static bool CheckCondition(QueueItem item)
         {
@@ -416,7 +404,7 @@ namespace Trinity.Components.QuestTools
 
         public int CompletedNodes = 0;
 
-        public bool IsComplete { get { return CompletedNodes == Nodes.Count; } }
+        public bool IsComplete => CompletedNodes == Nodes.Count;
 
         public BotBehaviorQueue.ShouldRunCondition Condition;
 
@@ -446,7 +434,7 @@ namespace Trinity.Components.QuestTools
 
         public List<ProfileBehavior> Nodes
         {
-            get { return _nodes; }
+            get => _nodes;
             set
             {
                 var hash = value.Aggregate(0, (current, node) => current ^ node.GetHashCode());

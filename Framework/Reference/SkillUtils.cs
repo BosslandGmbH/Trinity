@@ -41,7 +41,7 @@ namespace Trinity.Framework.Reference
             }
         }
 
-        private static Dictionary<SNOPower, Skill> _allSkillBySnoPower = new Dictionary<SNOPower, Skill>();
+        private static readonly Dictionary<SNOPower, Skill> _allSkillBySnoPower = new Dictionary<SNOPower, Skill>();
 
         public static Skill ByName(string name)
         {
@@ -116,11 +116,8 @@ namespace Trinity.Framework.Reference
 
         private static DateTime _lastUpdatedActiveSkills = DateTime.MinValue;
 
-        private static bool ShouldUpdateActiveSkills
-        {
-            get { return DateTime.UtcNow.Subtract(_lastUpdatedActiveSkills) > TimeSpan.FromMilliseconds(100); }
-        }
-     
+        private static bool ShouldUpdateActiveSkills => DateTime.UtcNow.Subtract(_lastUpdatedActiveSkills) > TimeSpan.FromMilliseconds(100);
+
         public static HashSet<SNOPower> CurrentClassIds
         {
             get { return new HashSet<SNOPower>(CurrentClass.Select(s => s.SNOPower)); }
@@ -143,7 +140,7 @@ namespace Trinity.Framework.Reference
                 return _all;
             }
         }
-        private static List<Skill> _all = new List<Skill>();
+        private static readonly List<Skill> _all = new List<Skill>();
 
         public static List<Skill> ByActorClass(ActorClass Class)
         {
@@ -167,10 +164,6 @@ namespace Trinity.Framework.Reference
             return new List<Skill>();
         }
 
-        public static IEnumerable<Skill> CurrentClass
-        {
-            get { return ZetaDia.Service?.Hero != null ? ByActorClass(ZetaDia.Service.Hero.Class) : new List<Skill>(); }
-        }
-
+        public static IEnumerable<Skill> CurrentClass => ZetaDia.Service?.Hero != null ? ByActorClass(ZetaDia.Service.Hero.Class) : new List<Skill>();
     }
 }

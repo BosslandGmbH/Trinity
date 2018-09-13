@@ -53,31 +53,19 @@ namespace Trinity.Framework.Objects
         /// <summary>
         /// If this item is currently equipped
         /// </summary>
-        public bool IsEquipped
-        {
-            get { return Core.Inventory.PlayerEquippedIds.Contains(Id) || IsEquippedInCube; }
-        }
+        public bool IsEquipped => Core.Inventory.PlayerEquippedIds.Contains(Id) || IsEquippedInCube;
 
         /// <summary>
         /// Item is one of the three selected in Kanais cube
         /// </summary>
-        public bool IsEquippedInCube
-        {
-            get { return Core.Inventory.KanaisCubeIds.Contains(Id); }
-        }
+        public bool IsEquippedInCube => Core.Inventory.KanaisCubeIds.Contains(Id);
 
         /// <summary>
         /// If this item belongs to a set
         /// </summary>
-        public bool IsSetItem
-        {
-            get { return Sets.SetItemIds.Contains(Id); }
-        }
+        public bool IsSetItem => Sets.SetItemIds.Contains(Id);
 
-        public bool IsLegendaryAffixed
-        {
-            get { return !string.IsNullOrEmpty(LegendaryAffix); }
-        }
+        public bool IsLegendaryAffixed => !string.IsNullOrEmpty(LegendaryAffix);
 
         /// <summary>
         /// The set this item belongs to, if applicable.
@@ -114,10 +102,7 @@ namespace Trinity.Framework.Objects
             }
         }
 
-        public ActorClass ClassRestriction
-        {
-            get { return GetClassRestriction(TrinityItemType); }
-        }
+        public ActorClass ClassRestriction => GetClassRestriction(TrinityItemType);
 
         public static ActorClass GetClassRestriction(TrinityItemType type)
         {

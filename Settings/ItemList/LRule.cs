@@ -27,8 +27,6 @@ namespace Trinity.Settings.ItemList
         private double _value;
         private int _variant;
         private List<object> _variants = new List<object>();
-        private RuleType _type;
-        private RuleType _ruleType;
         private string _attributeValue;
         private string _attributeModifier;
         private string _attributeKey;
@@ -82,7 +80,7 @@ namespace Trinity.Settings.ItemList
         [DataMember(EmitDefaultValue = false)]
         public int Variant
         {
-            get { return _variant; }
+            get => _variant;
             set
             {
                 if (_variant != value)
@@ -132,22 +130,22 @@ namespace Trinity.Settings.ItemList
         [DataMember(EmitDefaultValue = false, Name = "AttKey")]
         public string AttributeKey
         {
-            get { return _attributeKey; }
-            set { SetField(ref _attributeKey, value); }
+            get => _attributeKey;
+            set => SetField(ref _attributeKey, value);
         }
 
         [DataMember(EmitDefaultValue = false, Name = "AttMod")]
         public string AttributeModifier
         {
-            get { return _attributeModifier; }
-            set { SetField(ref _attributeModifier, value); }
+            get => _attributeModifier;
+            set => SetField(ref _attributeModifier, value);
         }
 
         [DataMember(EmitDefaultValue = false, Name = "AttVal")]
         public string AttributeValue
         {
-            get { return _attributeValue; }
-            set { SetField(ref _attributeValue, value); }
+            get => _attributeValue;
+            set => SetField(ref _attributeValue, value);
         }
 
         public List<object> Variants
@@ -188,8 +186,8 @@ namespace Trinity.Settings.ItemList
         public int TypeId { get; set; }
         public RuleType RuleType
         {
-            get { return (RuleType)TypeId; }
-            set { TypeId = (int)value; }
+            get => (RuleType)TypeId;
+            set => TypeId = (int)value;
         }
 
         public double Min => ItemStatRange.AbsMin;

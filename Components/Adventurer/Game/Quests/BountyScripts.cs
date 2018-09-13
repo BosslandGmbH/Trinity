@@ -160,10 +160,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return GetEnumerator();
         }
 
-        public int Count
-        {
-            get { return Items.Count; }
-        }
+        public int Count => Items.Count;
 
         public bool ContainsKey(int key)
         {
@@ -175,20 +172,11 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return Items.TryGetValue(key, out value);
         }
 
-        public BountyScript this[int key]
-        {
-            get { return Items[key]; }
-        }
+        public BountyScript this[int key] => Items[key];
 
-        public IEnumerable<int> Keys
-        {
-            get { return Items.Keys; }
-        }
+        public IEnumerable<int> Keys => Items.Keys;
 
-        public IEnumerable<BountyScript> Values
-        {
-            get { return Items.Values; }
-        }
+        public IEnumerable<BountyScript> Values => Items.Values;
     }
 
     public class BountyScript

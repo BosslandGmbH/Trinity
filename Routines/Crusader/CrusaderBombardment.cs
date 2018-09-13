@@ -54,9 +54,6 @@ namespace Trinity.Routines.Crusader
 
         public TrinityPower GetOffensivePower()
         {
-            TrinityPower power;
-            TrinityActor target;
-
             // Credit: Phelon's LoN Bombardment routine.
 
             if (AllowedToUse(Settings.Akarats, Skills.Crusader.AkaratsChampion) && ShouldAkaratsChampion())
@@ -83,7 +80,7 @@ namespace Trinity.Routines.Crusader
                 return Judgement();
             }
 
-            if (TryBombard(out power))
+            if (TryBombard(out var power))
             {
                 Core.Logger.Verbose(LogCategory.Routine, $"Bombard");
                 return power;
@@ -323,42 +320,42 @@ namespace Trinity.Routines.Crusader
             [DefaultValue(false)]
             public bool IgnoreTrash
             {
-                get { return _ignoreTrash; }
-                set { SetField(ref _ignoreTrash, value); }
+                get => _ignoreTrash;
+                set => SetField(ref _ignoreTrash, value);
             }
 
             [DefaultValue(25)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             public SkillSettings Akarats
             {
-                get { return _akarats; }
-                set { SetField(ref _akarats, value); }
+                get => _akarats;
+                set => SetField(ref _akarats, value);
             }
 
             public SkillSettings Bombardment
             {
-                get { return _bombardment; }
-                set { SetField(ref _bombardment, value); }
+                get => _bombardment;
+                set => SetField(ref _bombardment, value);
             }
 
 
             [DefaultValue(false)]
             public bool BombardmentOOC
             {
-                get { return _bombardmentOOC; }
-                set { SetField(ref _bombardmentOOC, value); }
+                get => _bombardmentOOC;
+                set => SetField(ref _bombardmentOOC, value);
             }
 
 

@@ -14,7 +14,7 @@ namespace Trinity.Settings.ItemList
             get { return _patch24NewOnlyItems ?? (_patch24NewOnlyItems = new HashSet<int>(_patch24ItemsNewOnlySource.DistinctBy(i => i.Id).Select(i => i.Id))); }
         }
 
-        private static List<Item> _patch24ItemsNewOnlySource = new List<Item>()
+        private static readonly List<Item> _patch24ItemsNewOnlySource = new List<Item>()
         {
             // Barb NEW/CHANGED
             Legendary.Standoff,
@@ -97,7 +97,7 @@ namespace Trinity.Settings.ItemList
             get { return _patch24items ?? (_patch24items = new HashSet<int>(_patch24ItemsSource.DistinctBy(i => i.Id).Select(i => i.Id))); }
         }
 
-        private static List<Item> _patch24ItemsSource = new List<Item>()
+        private static readonly List<Item> _patch24ItemsSource = new List<Item>()
         {
             // Barb NEW/CHANGED
             Legendary.Standoff,

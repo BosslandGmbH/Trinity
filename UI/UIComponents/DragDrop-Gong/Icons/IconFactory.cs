@@ -12,10 +12,10 @@ namespace Trinity.UI.UIComponents.Icons
     /// </summary>
     public static class IconFactory
     {
-        public static BitmapImage EffectNone { get { return GetImage("EffectNone.png", 12); } }
-        public static BitmapImage EffectCopy { get { return GetImage("EffectCopy.png", 12); } }
-        public static BitmapImage EffectMove { get { return GetImage("EffectMove.png", 12); } }
-        public static BitmapImage EffectLink { get { return GetImage("EffectLink.png", 12); } }
+        public static BitmapImage EffectNone => GetImage("EffectNone.png", 12);
+        public static BitmapImage EffectCopy => GetImage("EffectCopy.png", 12);
+        public static BitmapImage EffectMove => GetImage("EffectMove.png", 12);
+        public static BitmapImage EffectLink => GetImage("EffectLink.png", 12);
 
         /// <summary>
         /// Loads an image based on the name and size required.

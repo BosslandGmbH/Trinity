@@ -220,21 +220,21 @@ namespace Trinity.Routines.Wizard
             [DefaultValue(6)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.6f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             public SkillSettings Teleport
             {
-                get { return _teleport; }
-                set { SetField(ref _teleport, value); }
+                get => _teleport;
+                set => SetField(ref _teleport, value);
             }
 
             #region Skill Defaults

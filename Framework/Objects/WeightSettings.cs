@@ -76,36 +76,36 @@ namespace Trinity.Framework.Objects
         [DataMember(EmitDefaultValue = false)]
         public ActorWeightType ActorWeightType
         {
-            get { return _actorWeightType; }
-            set { SetField(ref _actorWeightType, value); }
+            get => _actorWeightType;
+            set => SetField(ref _actorWeightType, value);
         }
 
         [DataMember(EmitDefaultValue = false)]
         public int Order
         {
-            get { return _order; }
-            set { SetField(ref _order, value); }
+            get => _order;
+            set => SetField(ref _order, value);
         }
 
         [DataMember(EmitDefaultValue = false)]
         public bool IsEnabled
         {
-            get { return _isEnabled; }
-            set { SetField(ref _isEnabled, value); }
+            get => _isEnabled;
+            set => SetField(ref _isEnabled, value);
         }
 
         [DataMember(EmitDefaultValue = false)]
         public string Name
         {
-            get { return _name; }
-            set { SetField(ref _name, value); }
+            get => _name;
+            set => SetField(ref _name, value);
         }
 
         [DataMember(EmitDefaultValue = false)]
         public string Formula
         {
-            get { return _formula; }
-            set { SetField(ref _formula, value); }
+            get => _formula;
+            set => SetField(ref _formula, value);
         }
 
         [IgnoreDataMember]

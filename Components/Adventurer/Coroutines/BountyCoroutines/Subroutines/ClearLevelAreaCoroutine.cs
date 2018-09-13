@@ -23,7 +23,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private Vector3 _hostileLocation = Vector3.Zero;
         private Vector3 _objectiveLocation = Vector3.Zero;
         private BountyData _bountyData;
-        private bool _stopWhenExplored;
+        private readonly bool _stopWhenExplored;
 
         public enum States
         {
@@ -52,7 +52,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public States State
         {
-            get { return _state; }
+            get => _state;
             protected set
             {
                 if (_state == value) return;

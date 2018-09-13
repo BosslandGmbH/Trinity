@@ -14,7 +14,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
     {
         private States _state;
         private DiaObject _actor;
-        private int _actorId;
+        private readonly int _actorId;
         private float _attackRange;
         private SNOPower _attackSkill;
 
@@ -29,7 +29,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
         #region ISubroutine
 
         private bool _isDone;
-        public bool IsDone { get { return _isDone; } }
+        public bool IsDone => _isDone;
 
         public void Reset()
         {
@@ -62,7 +62,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         private States State
         {
-            get { return _state; }
+            get => _state;
             set
             {
                 if (_state == value) return;

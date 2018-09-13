@@ -309,11 +309,9 @@ namespace Trinity.Routines.Necromancer
 
         protected bool TryReanimationPower(out TrinityPower power)
         {
-            TrinityActor target;
-            Vector3 position;
             power = null;
 
-            if (ShouldCommandSkeletons(out target))
+            if (ShouldCommandSkeletons(out var target))
                 power = CommandSkeletons(target);
 
             else if (ShouldCommandGolem(out target))
@@ -428,11 +426,9 @@ namespace Trinity.Routines.Necromancer
 
         protected bool TryCursePower(out TrinityPower power)
         {
-            TrinityActor target;
-            Vector3 position;
             power = null;
 
-            if (ShouldLeech(out target))
+            if (ShouldLeech(out var target))
                 power = Leech(target);
 
             else if (ShouldDecrepify(out target))

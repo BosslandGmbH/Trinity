@@ -37,10 +37,7 @@ namespace Trinity.Components.Adventurer.Game.Combat
             }
         }
 
-        public static CombatState CombatState
-        {
-            get { return CombatTargeting.Instance.AllowedToKillMonsters ? CombatState.Enabled : CombatState.Disabled; }
-        }
+        public static CombatState CombatState => CombatTargeting.Instance.AllowedToKillMonsters ? CombatState.Enabled : CombatState.Disabled;
     }
 
     public enum CombatState

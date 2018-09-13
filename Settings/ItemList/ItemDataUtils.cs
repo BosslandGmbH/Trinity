@@ -329,6 +329,7 @@ namespace Trinity.Settings.ItemList
         /// </summary>
         /// <param name="item"></param>
         /// <param name="prop"></param>
+        /// <param name="variant"></param>
         /// <returns></returns>
         public static bool IsValidPropertyForItem(Item item, ItemProperty prop, int variant = 0)
         {

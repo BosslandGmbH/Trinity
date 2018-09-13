@@ -322,133 +322,133 @@ namespace Trinity.Routines.Advanced
             [IgnoreDataMember]
             public FullyObservableCollection<SkillSettings> ActiveSkills
             {
-                get { return _activeSkills; }
-                set { SetField(ref _activeSkills, value); }
+                get => _activeSkills;
+                set => SetField(ref _activeSkills, value);
             }
 
             [IgnoreDataMember]
             public FullyObservableCollection<WeightSettings> WeightOverrides
             {
-                get { return _weightOverrides; }
-                set { SetField(ref _weightOverrides, value); }
+                get => _weightOverrides;
+                set => SetField(ref _weightOverrides, value);
             }
 
             [DataMember]
             public List<SkillSettings> Skills
             {
-                get { return _skills; }
-                set { SetField(ref _skills, value); }
+                get => _skills;
+                set => SetField(ref _skills, value);
             }
 
             [DataMember]
             public List<WeightSettings> Weights
             {
-                get { return _weights; }
-                set { SetField(ref _weights, value); }
+                get => _weights;
+                set => SetField(ref _weights, value);
             }
 
             [DataMember(EmitDefaultValue = false)]
             [DefaultValue(8)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DataMember(EmitDefaultValue = false)]
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             [DataMember(EmitDefaultValue = false)]
             [DefaultValue(KiteMode.Never)]
             public KiteMode KiteMode
             {
-                get { return _kiteMode; }
-                set { SetField(ref _kiteMode, value); }
+                get => _kiteMode;
+                set => SetField(ref _kiteMode, value);
             }
 
             [DataMember(EmitDefaultValue = false)]
             [DefaultValue(15f)]
             public float KiteDistance
             {
-                get { return _kiteDistance; }
-                set { SetField(ref _kiteDistance, value); }
+                get => _kiteDistance;
+                set => SetField(ref _kiteDistance, value);
             }
 
             [DataMember(EmitDefaultValue = false)]
             [DefaultValue(800)]
             public int KiteStutterDuration
             {
-                get { return _kiteStutterDuration; }
-                set { SetField(ref _kiteStutterDuration, value); }
+                get => _kiteStutterDuration;
+                set => SetField(ref _kiteStutterDuration, value);
             }
 
             [DataMember(EmitDefaultValue = false)]
             [DefaultValue(800)]
             public int KiteStutterDelay
             {
-                get { return _kiteStutterDelay; }
-                set { SetField(ref _kiteStutterDelay, value); }
+                get => _kiteStutterDelay;
+                set => SetField(ref _kiteStutterDelay, value);
             }
 
             [DataMember(EmitDefaultValue = false)]
             [DefaultValue(100)]
             public int KiteHealthPct
             {
-                get { return _kiteHealthPct; }
-                set { SetField(ref _kiteHealthPct, value); }
+                get => _kiteHealthPct;
+                set => SetField(ref _kiteHealthPct, value);
             }
 
             [DataMember(EmitDefaultValue = false)]
             [DefaultValue(80f)]
             public float TrashRange
             {
-                get { return _trashRange; }
-                set { SetField(ref _trashRange, value); }
+                get => _trashRange;
+                set => SetField(ref _trashRange, value);
             }
 
             [DataMember(EmitDefaultValue = false)]
             [DefaultValue(80f)]
             public float EliteRange
             {
-                get { return _eliteRange; }
-                set { SetField(ref _eliteRange, value); }
+                get => _eliteRange;
+                set => SetField(ref _eliteRange, value);
             }
 
             [DataMember(EmitDefaultValue = false)]
             [DefaultValue(80f)]
             public float HealthGlobeRange
             {
-                get { return _healthGlobeRange; }
-                set { SetField(ref _healthGlobeRange, value); }
+                get => _healthGlobeRange;
+                set => SetField(ref _healthGlobeRange, value);
             }
 
             [DataMember(EmitDefaultValue = false)]
             [DefaultValue(80f)]
             public float ShrineRange
             {
-                get { return _shrineRange; }
-                set { SetField(ref _shrineRange, value); }
+                get => _shrineRange;
+                set => SetField(ref _shrineRange, value);
             }
 
             [DataMember(EmitDefaultValue = false)]
             [DefaultValue(50)]
             public int SecondaryEnergyReserve
             {
-                get { return _secondaryEnergyReserve; }
-                set { SetField(ref _secondaryEnergyReserve, value); }
+                get => _secondaryEnergyReserve;
+                set => SetField(ref _secondaryEnergyReserve, value);
             }
 
             [DataMember(EmitDefaultValue = false)]
             [DefaultValue(50)]
             public int PrimaryEnergyReserve
             {
-                get { return _primaryEnergyReserve; }
-                set { SetField(ref _primaryEnergyReserve, value); }
+                get => _primaryEnergyReserve;
+                set => SetField(ref _primaryEnergyReserve, value);
             }
 
             public override void LoadDefaults()

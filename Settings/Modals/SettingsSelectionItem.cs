@@ -22,32 +22,32 @@ namespace Trinity.Settings.Modals
         [DefaultValue(SettingsSection.None)]
         public SettingsSection Section
         {
-            get { return _section; }
-            set { SetField(ref _section, value); }
+            get => _section;
+            set => SetField(ref _section, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue("")]
         public string SectionName
         {
-            get { return _sectionName; }
-            set { SetField(ref _sectionName, value); }
+            get => _sectionName;
+            set => SetField(ref _sectionName, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool IsSelected
         {
-            get { return _isSelected; }
-            set { SetField(ref _isSelected, value); }
+            get => _isSelected;
+            set => SetField(ref _isSelected, value);
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool IsEnabled
         {
-            get { return _isEnabled; }
-            set { SetField(ref _isEnabled, value); }
+            get => _isEnabled;
+            set => SetField(ref _isEnabled, value);
         }
 
         public override string ToString() => Section == SettingsSection.Dynamic ? $"{SectionName} (Dynamic)" : SectionName;

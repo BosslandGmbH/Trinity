@@ -28,8 +28,8 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public T this[int indexX, int indexY]
         {
-            get { return Get(indexX, indexY); }
-            set { Set(indexX, indexY, value); }
+            get => Get(indexX, indexY);
+            set => Set(indexX, indexY, value);
         }
 
         private void Set(int x, int y, T value)

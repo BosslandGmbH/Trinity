@@ -154,10 +154,7 @@ namespace Trinity.Framework.Avoidance
             }
         }
 
-        private static float TargetZDif
-        {
-            get { return TrinityCombat.Targeting.CurrentTarget == null ? 0 : Math.Abs(TrinityCombat.Targeting.CurrentTarget.Position.Z - ZetaDia.Me.Position.Z); }
-        }
+        private static float TargetZDif => TrinityCombat.Targeting.CurrentTarget == null ? 0 : Math.Abs(TrinityCombat.Targeting.CurrentTarget.Position.Z - ZetaDia.Me.Position.Z);
 
         public Vector3 SafeSpot
         {

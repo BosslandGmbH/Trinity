@@ -18,8 +18,8 @@ namespace Trinity.Settings
         [DefaultValue(FollowerBossFightMode.DeclineInBounty)]
         public FollowerBossFightMode FollowerBossFightDialogMode
         {
-            get { return _followerBossFightDialogMode; }
-            set { SetField(ref _followerBossFightDialogMode, value); }
+            get => _followerBossFightDialogMode;
+            set => SetField(ref _followerBossFightDialogMode, value);
         }
 
 

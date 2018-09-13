@@ -12,8 +12,8 @@ namespace Trinity.Framework.Helpers
         private static TabControl _mainMenu;
         public static TabControl MainMenu
         {
-            get { return _mainMenu ?? (_mainMenu = FindMainMenu()); }
-            set { _mainMenu = value; }
+            get => _mainMenu ?? (_mainMenu = FindMainMenu());
+            set => _mainMenu = value;
         }
 
         private static TabControl FindMainMenu()
@@ -24,16 +24,16 @@ namespace Trinity.Framework.Helpers
         private static string _version;
         public static string Version
         {
-            get { return _version ?? (_version = Assembly.GetEntryAssembly().GetName().Version.ToString()); }
-            set { _version = value; }
+            get => _version ?? (_version = Assembly.GetEntryAssembly().GetName().Version.ToString());
+            set => _version = value;
         }
 
 
         private static MainWindow _mainWindow;
         public static MainWindow MainWindow
         {
-            get { return _mainWindow ?? (_mainWindow = FindMainWindow()); }
-            set { _mainWindow = value; }
+            get => _mainWindow ?? (_mainWindow = FindMainWindow());
+            set => _mainWindow = value;
         }
 
         private static MainWindow FindMainWindow()
@@ -44,8 +44,8 @@ namespace Trinity.Framework.Helpers
         private static StatusBar _statusBar;
         public static StatusBar StatusBar
         {
-            get { return _statusBar ?? (_statusBar = FindStatusBar()); }
-            set { _statusBar = value; }
+            get => _statusBar ?? (_statusBar = FindStatusBar());
+            set => _statusBar = value;
         }
 
         private static StatusBar FindStatusBar()
@@ -56,8 +56,8 @@ namespace Trinity.Framework.Helpers
         private static StatusBarItem _statusBarText;
         public static StatusBarItem StatusBarText
         {
-            get { return _statusBarText ?? (_statusBarText = FindStatusBarText()); }
-            set { _statusBarText = value; }
+            get => _statusBarText ?? (_statusBarText = FindStatusBarText());
+            set => _statusBarText = value;
         }
 
         private static StatusBarItem FindStatusBarText()
@@ -68,8 +68,8 @@ namespace Trinity.Framework.Helpers
         private static SplitButton _settingsButton;
         public static SplitButton SettingsButton
         {
-            get { return _settingsButton ?? (_settingsButton = FindSettingsButton()); }
-            set { _settingsButton = value; }
+            get => _settingsButton ?? (_settingsButton = FindSettingsButton());
+            set => _settingsButton = value;
         }
 
         private static SplitButton FindSettingsButton()

@@ -24,8 +24,6 @@ namespace Trinity.Components.Adventurer.Settings
     public class PluginSettings : NotifyBase
     {
         private AdventurerGems _gems;
-        private int highestUnlockedRiftLevel;
-        private int _highestUnlockedRiftLevel;
         private bool _normalRiftForXpShrine;
         private int _greaterRiftLevel;
         private bool _greaterRiftRunNephalem;
@@ -54,8 +52,7 @@ namespace Trinity.Components.Adventurer.Settings
         private int _minimumKeys;
         private long _minimumGold;
 
-        private static Lazy<PluginSettings> _instance = new Lazy<PluginSettings>(() => new PluginSettings());
-        private bool _gemUpgradeFocusMode;
+        private static readonly Lazy<PluginSettings> _instance = new Lazy<PluginSettings>(() => new PluginSettings());
         private GemPriority _gemUpgradePriority;
 
         public static PluginSettings Current => _instance.Value;
@@ -63,53 +60,42 @@ namespace Trinity.Components.Adventurer.Settings
         [DataMember]
         public int HighestUnlockedRiftLevel
         {
-            get
-            {
-                //var level = 0;
-                //if (ZetaDia.Me != null)
-                //{
-                //    SafeFrameLock.ExecuteWithinFrameLock(() =>
-                //    {
-                //        level = PropertyReader<int>.SafeReadValue(() => ZetaDia.Me.HighestUnlockedRiftLevel);
-                //    });
-                //}
-                //return level == 0 ? 120 : level;
-                return 150;
-            }
+            // TODO: return level == 0 ? 120 : level;
+            get => 150;
             set { }
         }
 
         public PluginSettings GetDataContext()
         {
-            //UpdateGemList(); // >>> causing freeze on ActorCache accessing ActivePlayerData
+            //UpdateGemList(); // TODO: >>> causing freeze on ActorCache accessing ActivePlayerData
             return this;
         }
 
         [DataMember]
         public int MinimumKeys
         {
-            get { return _minimumKeys; }
-            set { SetField(ref _minimumKeys, value); }
+            get => _minimumKeys;
+            set => SetField(ref _minimumKeys, value);
         }
 
         [DataMember]
         public long MinimumGold
         {
-            get { return _minimumGold; }
-            set { SetField(ref _minimumGold, value); }
+            get => _minimumGold;
+            set => SetField(ref _minimumGold, value);
         }
 
         [DataMember]
         public bool NormalRiftForXPShrine
         {
-            get { return _normalRiftForXpShrine; }
-            set { SetField(ref _normalRiftForXpShrine, value); }
+            get => _normalRiftForXpShrine;
+            set => SetField(ref _normalRiftForXpShrine, value);
         }
 
         [DataMember]
         public int GreaterRiftLevel
         {
-            get { return _greaterRiftLevel; }
+            get => _greaterRiftLevel;
             set
             {
                 SetField(ref _greaterRiftLevel, value);
@@ -120,141 +106,141 @@ namespace Trinity.Components.Adventurer.Settings
         [DataMember]
         public bool GreaterRiftRunNephalem
         {
-            get { return _greaterRiftRunNephalem; }
-            set { SetField(ref _greaterRiftRunNephalem, value); }
+            get => _greaterRiftRunNephalem;
+            set => SetField(ref _greaterRiftRunNephalem, value);
         }
 
         [DataMember]
         public int GreaterRiftGemUpgradeChance
         {
-            get { return _greaterRiftGemUpgradeChance; }
-            set { SetField(ref _greaterRiftGemUpgradeChance, value); }
+            get => _greaterRiftGemUpgradeChance;
+            set => SetField(ref _greaterRiftGemUpgradeChance, value);
         }
 
         [DataMember]
         public bool GreaterRiftPrioritizeEquipedGems
         {
-            get { return _greaterRiftPrioritizeEquipedGems; }
-            set { SetField(ref _greaterRiftPrioritizeEquipedGems, value); }
+            get => _greaterRiftPrioritizeEquipedGems;
+            set => SetField(ref _greaterRiftPrioritizeEquipedGems, value);
         }
 
         [DataMember]
         public bool BountyAct1
         {
-            get { return _bountyAct1; }
-            set { SetField(ref _bountyAct1, value); }
+            get => _bountyAct1;
+            set => SetField(ref _bountyAct1, value);
         }
 
         [DataMember]
         public bool BountyAct2
         {
-            get { return _bountyAct2; }
-            set { SetField(ref _bountyAct2, value); }
+            get => _bountyAct2;
+            set => SetField(ref _bountyAct2, value);
         }
 
         [DataMember]
         public bool BountyAct3
         {
-            get { return _bountyAct3; }
-            set { SetField(ref _bountyAct3, value); }
+            get => _bountyAct3;
+            set => SetField(ref _bountyAct3, value);
         }
 
         [DataMember]
         public bool BountyAct4
         {
-            get { return _bountyAct4; }
-            set { SetField(ref _bountyAct4, value); }
+            get => _bountyAct4;
+            set => SetField(ref _bountyAct4, value);
         }
 
         [DataMember]
         public bool BountyAct5
         {
-            get { return _bountyAct5; }
-            set { SetField(ref _bountyAct5, value); }
+            get => _bountyAct5;
+            set => SetField(ref _bountyAct5, value);
         }
 
         [DataMember]
         public bool BountyZerg
         {
-            get { return _bountyZerg; }
-            set { SetField(ref _bountyZerg, value); }
+            get => _bountyZerg;
+            set => SetField(ref _bountyZerg, value);
         }
 
         [DataMember]
         public bool BountyPrioritizeBonusAct
         {
-            get { return _bountyPrioritizeBonusAct; }
-            set { SetField(ref _bountyPrioritizeBonusAct, value); }
+            get => _bountyPrioritizeBonusAct;
+            set => SetField(ref _bountyPrioritizeBonusAct, value);
         }
 
         [DataMember]
         public bool? BountyMode0
         {
-            get { return _bountyMode0; }
-            set { SetField(ref _bountyMode0, value); }
+            get => _bountyMode0;
+            set => SetField(ref _bountyMode0, value);
         }
 
         [DataMember]
         public bool? BountyMode1
         {
-            get { return _bountyMode1; }
-            set { SetField(ref _bountyMode1, value); }
+            get => _bountyMode1;
+            set => SetField(ref _bountyMode1, value);
         }
 
         [DataMember]
         public bool? BountyMode2
         {
-            get { return _bountyMode2; }
-            set { SetField(ref _bountyMode2, value); }
+            get => _bountyMode2;
+            set => SetField(ref _bountyMode2, value);
         }
 
         [DataMember]
         public bool? BountyMode3
         {
-            get { return _bountyMode3; }
-            set { SetField(ref _bountyMode3, value); }
+            get => _bountyMode3;
+            set => SetField(ref _bountyMode3, value);
         }
 
         [DataMember]
         public bool NephalemRiftFullExplore
         {
-            get { return _nephalemRiftFullExplore; }
-            set { SetField(ref _nephalemRiftFullExplore, value); }
+            get => _nephalemRiftFullExplore;
+            set => SetField(ref _nephalemRiftFullExplore, value);
         }
 
         [DataMember]
         public bool? KeywardenZergMode
         {
-            get { return _keywardenZergMode; }
-            set { SetField(ref _keywardenZergMode, value); }
+            get => _keywardenZergMode;
+            set => SetField(ref _keywardenZergMode, value);
         }
 
         [DataMember]
         public bool DebugLogging
         {
-            get { return _debugLogging; }
-            set { SetField(ref _debugLogging, value); }
+            get => _debugLogging;
+            set => SetField(ref _debugLogging, value);
         }
 
         [DataMember]
         public bool UseEmpoweredRifts
         {
-            get { return _useEmpoweredRifts; }
-            set { SetField(ref _useEmpoweredRifts, value); }
+            get => _useEmpoweredRifts;
+            set => SetField(ref _useEmpoweredRifts, value);
         }
 
         [DataMember]
         [DefaultValue(40)]
         public int EmpoweredRiftLevelLimit
         {
-            get { return _empoweredRiftLevelLimit; }
-            set { SetField(ref _empoweredRiftLevelLimit, value); }
+            get => _empoweredRiftLevelLimit;
+            set => SetField(ref _empoweredRiftLevelLimit, value);
         }
 
         [DataMember]
         public int RiftCount
         {
-            get { return _riftCount; }
+            get => _riftCount;
             set
             {
                 SetField(ref _riftCount, value);
@@ -265,23 +251,23 @@ namespace Trinity.Components.Adventurer.Settings
         [DataMember]
         public bool UseGemAutoLevel
         {
-            get { return _useGemAutoLevel; }
-            set { SetField(ref _useGemAutoLevel, value); }
+            get => _useGemAutoLevel;
+            set => SetField(ref _useGemAutoLevel, value);
         }
 
         [DataMember]
         public string GreaterRiftLevelMax
         {
-            get { return _greaterRiftLevelMax; }
-            set { SetField(ref _greaterRiftLevelMax, value); }
+            get => _greaterRiftLevelMax;
+            set => SetField(ref _greaterRiftLevelMax, value);
         }
 
         [DataMember]
         [DefaultValue(20)]
         public int GemAutoLevelReductionLimit
         {
-            get { return _gemAutoLevelReductionLimit; }
-            set { SetField(ref _gemAutoLevelReductionLimit, value); }
+            get => _gemAutoLevelReductionLimit;
+            set => SetField(ref _gemAutoLevelReductionLimit, value);
         }
 
 
@@ -289,16 +275,16 @@ namespace Trinity.Components.Adventurer.Settings
         [DefaultValue(GemPriority.Rank)]
         public GemPriority GemUpgradePriority
         {
-            get { return _gemUpgradePriority; }
-            set { SetField(ref _gemUpgradePriority, value); }
+            get => _gemUpgradePriority;
+            set => SetField(ref _gemUpgradePriority, value);
         }
 
 
         [DataMember]
         public AdventurerGems Gems
         {
-            get { return _gems ?? (_gems = new AdventurerGems()); }
-            set { SetField(ref _gems, value); }
+            get => _gems ?? (_gems = new AdventurerGems());
+            set => SetField(ref _gems, value);
         }
 
         /// <summary>
@@ -426,23 +412,14 @@ namespace Trinity.Components.Adventurer.Settings
         }
 
         [IgnoreDataMember]
-        public List<int> GemUpgradeChances
-        {
-            get { return new List<int> { 100, 90, 80, 70, 60, 30, 15, 8, 4, 2, 1 }; }
-        }
+        public List<int> GemUpgradeChances => new List<int> { 100, 90, 80, 70, 60, 30, 15, 8, 4, 2, 1 };
 
         [IgnoreDataMember]
-        public List<string> RiftCounts
-        {
-            get { return new List<string> { "Infinity", "1", "5", "10", "20", "50" }; }
-        }
+        public List<string> RiftCounts => new List<string> { "Infinity", "1", "5", "10", "20", "50" };
 
         public string RiftCountSetting
         {
-            get
-            {
-                return RiftCount <= 0 ? "Infinity" : RiftCount.ToString();
-            }
+            get => RiftCount <= 0 ? "Infinity" : RiftCount.ToString();
             set
             {
                 if (value == "Infinity")

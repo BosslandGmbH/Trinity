@@ -13,10 +13,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
         public int WaypointLevelAreaId { get; set; }
         public SNOBossEncounter BossEncounter { get; set; }
 
-        public bool IsAlive
-        {
-            get { return !ZetaDia.Storage.Quests.IsBossEncounterCompleted(BossEncounter); }
-        }
+        public bool IsAlive => !ZetaDia.Storage.Quests.IsBossEncounterCompleted(BossEncounter);
 
         public long MachinesCount
         {

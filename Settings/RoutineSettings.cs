@@ -20,14 +20,14 @@ namespace Trinity.Settings
         [DataMember(IsRequired = false)]
         public string SelectedRoutineClassName
         {
-            get { return _selectedRoutineClassName; }
-            set { SetField(ref _selectedRoutineClassName, value); }
+            get => _selectedRoutineClassName;
+            set => SetField(ref _selectedRoutineClassName, value);
         }
 
         [DataMember(IsRequired = false)]
         public RoutineMode RoutineMode
         {
-            get { return _routineMode; }
+            get => _routineMode;
             set
             {
                 if (SetField(ref _routineMode, value))
@@ -47,22 +47,22 @@ namespace Trinity.Settings
         [IgnoreDataMember]
         public List<RoutineViewModel> AllRoutines
         {
-            get { return _allRoutines; }
-            set { SetField(ref _allRoutines, value); }
+            get => _allRoutines;
+            set => SetField(ref _allRoutines, value);
         }
 
         [IgnoreDataMember]
         public List<RoutineViewModel> ClassAvailableRoutines
         {
-            get { return _classAvailableRoutines; }
-            set { SetField(ref _classAvailableRoutines, value); }
+            get => _classAvailableRoutines;
+            set => SetField(ref _classAvailableRoutines, value);
         }
 
         [IgnoreDataMember]
         public List<RoutineViewModel> ClassRoutines
         {
-            get { return _classRoutines; }
-            set { SetField(ref _classRoutines, value); }
+            get => _classRoutines;
+            set => SetField(ref _classRoutines, value);
         }
 
         public bool IsInGameOrManual => GameInfo.Instance.IsInGame || RoutineMode == RoutineMode.Manual;
@@ -134,7 +134,7 @@ namespace Trinity.Settings
         [IgnoreDataMember]
         public RoutineViewModel CurrentRoutine
         {
-            get { return _currentRoutine; }
+            get => _currentRoutine;
             set
             {
                 if (value != null)
@@ -149,7 +149,7 @@ namespace Trinity.Settings
         [IgnoreDataMember]
         public RoutineViewModel SelectedRoutine
         {
-            get { return _selectedRoutine; }
+            get => _selectedRoutine;
             set
             {
                 if (value != null && _selectedRoutine != value)

@@ -8,7 +8,7 @@ using Zeta.TreeSharp;
 namespace Trinity.Framework.Helpers
 {
     /// <summary>
-    /// Runs a Task<T> as a Buddy Coroutine (via TreeSharp Composite) in a new thread.
+    /// Runs a <see cref="Task"/> as a Buddy Coroutine (via TreeSharp Composite) in a new thread.
     /// </summary>
     public class TaskDispatcher
     {

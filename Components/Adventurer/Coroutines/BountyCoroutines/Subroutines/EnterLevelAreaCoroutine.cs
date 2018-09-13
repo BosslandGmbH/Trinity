@@ -27,10 +27,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private readonly int _sourceWorldId;
         private int _destinationWorldId;
         private readonly int _portalMarker;
-        private HashSet<int> _portalMarkers;
         private int _portalActorId;
         private int _discoveredPortalActorId;
-        private bool _exitSceneUnreachable;
         private int _prePortalWorldDynamicId;
         private bool _isDone;
         private States _state;
@@ -54,7 +52,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public States State
         {
-            get { return _state; }
+            get => _state;
             protected set
             {
                 if (_state == value) return;
@@ -83,15 +81,9 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             }
         }
 
-        public int SourceWorldId
-        {
-            get { return _sourceWorldId; }
-        }
+        public int SourceWorldId => _sourceWorldId;
 
-        public int DestinationWorldId
-        {
-            get { return _destinationWorldId; }
-        }
+        public int DestinationWorldId => _destinationWorldId;
 
         public EnterLevelAreaCoroutine(int questId, int sourceWorldId, int destinationWorldId, int portalMarker, IEnumerable<int> portalActorIds, bool prioritizeExitScene = false)
         {
@@ -193,7 +185,6 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _objectiveScanRange = 5000;
             _objectiveLocation = Vector3.Zero;
             _exitSceneLocation = Vector3.Zero;
-            _exitSceneUnreachable = false;
             _timeoutStartTime = DateTime.MinValue;
             _timeoutEndTime = DateTime.MaxValue;
         }
@@ -204,10 +195,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         {
         }
 
-        public BountyData BountyData
-        {
-            get { return _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId)); }
-        }
+        public BountyData BountyData => _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId));
 
         private async Task<bool> NotStarted()
         {
@@ -371,7 +359,6 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             {
                 Core.Logger.Debug("[EnterLevelArea] Exit scene is unreachable, going back to the normal routine");
                 _exitSceneLocation = Vector3.Zero;
-                _exitSceneUnreachable = true;
             }
             State = States.Searching;
             return false;
@@ -435,16 +422,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private Vector3 _previouslyFoundLocation = Vector3.Zero;
         private long _returnTimeForPreviousLocation;
         private BountyData _bountyData;
-        private int v1;
-        private int v2;
-        private Dictionary<int, BountyHelpers.ObjectiveActor>.ValueCollection values;
-        private IList<BountyHelpers.ObjectiveActor> _objectives;
+        private readonly IList<BountyHelpers.ObjectiveActor> _objectives;
         private BountyHelpers.ObjectiveActor _objective;
         private WorldScene _nearestScene;
         private Vector3 _deathGateLocation;
         private DateTime _nearestSceneCooldown = DateTime.MinValue;
-        private IEnumerable<int> _portalActorIds;
-        private TimeSpan _timeoutDuration;
+        private readonly IEnumerable<int> _portalActorIds;
+        private readonly TimeSpan _timeoutDuration;
         private DateTime _timeoutStartTime = DateTime.MinValue;
         private DateTime _timeoutEndTime = DateTime.MaxValue;
         private bool _prioritizeExitScene;

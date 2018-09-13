@@ -40,7 +40,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public States State
         {
-            get { return _state; }
+            get => _state;
             protected set
             {
                 if (_state == value) return;
@@ -66,7 +66,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 }
                 return _objectSearchRadius;
             }
-            set { _objectSearchRadius = value; }
+            set => _objectSearchRadius = value;
         }
 
         public GuardedGizmoCoroutine(int questId, int actorId)
@@ -79,10 +79,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public Guid Id { get; }
 
-        public bool IsDone
-        {
-            get { return _isDone; }
-        }
+        public bool IsDone => _isDone;
 
         public async Task<bool> GetCoroutine()
         {
@@ -124,10 +121,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public string StatusText { get; set; }
 
-        public BountyData BountyData
-        {
-            get { return _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId)); }
-        }
+        public BountyData BountyData => _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId));
 
         private bool NotStarted()
         {

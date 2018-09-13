@@ -311,35 +311,35 @@ namespace Trinity.Routines.Witchdoctor
             [DefaultValue(8)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             public SkillSettings SpiritWalk
             {
-                get { return _spiritWalk; }
-                set { SetField(ref _spiritWalk, value); }
+                get => _spiritWalk;
+                set => SetField(ref _spiritWalk, value);
             }
 
             [DefaultValue(0.35f)]
             public float LocustPct
             {
-                get { return _locustPct; }
-                set { SetField(ref _locustPct, value); }
+                get => _locustPct;
+                set => SetField(ref _locustPct, value);
             }
              
             [DefaultValue(0.35f)]
             public float HauntPct
             {
-                get { return _hauntPct; }
-                set { SetField(ref _hauntPct, value); }
+                get => _hauntPct;
+                set => SetField(ref _hauntPct, value);
             }
 
             private static readonly SkillSettings DefaultSpiritWalkSettings = new SkillSettings

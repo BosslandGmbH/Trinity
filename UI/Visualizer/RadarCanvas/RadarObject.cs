@@ -12,8 +12,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
     /// </summary>
     public class RadarObject // : INotifyPropertyChanged
     {
-        private TrinityActor _actor;
-
         /// <summary>
         /// Contains the actors position and other useful information.
         /// </summary>
@@ -34,10 +32,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         /// <summary>
         /// Actors current position on canvas (in pixels).
         /// </summary>
-        public Point Point
-        {
-            get { return Morph.Point; }
-        }
+        public Point Point => Morph.Point;
 
         /// <summary>
         /// RadarObject wraps a TrinityObject to add a canvas plot location.

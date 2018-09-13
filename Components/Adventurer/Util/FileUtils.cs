@@ -55,13 +55,7 @@ namespace Trinity.Components.Adventurer.Util
             }
         }
 
-        public static string SettingsPath
-        {
-            get
-            {
-                return Path.Combine(DemonBuddyPath, "Settings", AdvDia.BattleNetBattleTagName, "Adventurer", AdvDia.BattleNetHeroId.ToString(), "Config.json");
-            }
-        }
+        public static string SettingsPath => Path.Combine(DemonBuddyPath, "Settings", AdvDia.BattleNetBattleTagName, "Adventurer", AdvDia.BattleNetHeroId.ToString(), "Config.json");
 
         public static void WriteToTextFile(string path, string value)
         {
@@ -82,7 +76,7 @@ namespace Trinity.Components.Adventurer.Util
             {
                 return File.Exists(path) ? File.ReadAllText(path) : null;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Core.Logger.Debug("Exception in ReadFromTextFile");
                 return null;

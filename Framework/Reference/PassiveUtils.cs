@@ -67,7 +67,7 @@ namespace Trinity.Framework.Reference
                 return _all;
             }
         }
-        private static List<Passive> _all = new List<Passive>();
+        private static readonly List<Passive> _all = new List<Passive>();
 
 
         /// <summary>
@@ -101,9 +101,6 @@ namespace Trinity.Framework.Reference
         /// <summary>
         /// Passives for the current class
         /// </summary>
-        public static IEnumerable<Passive> CurrentClass
-        {
-            get { return ZetaDia.Me.IsValid ? ByActorClass(ZetaDia.Me.ActorClass) : new List<Passive>(); }
-        }
+        public static IEnumerable<Passive> CurrentClass => ZetaDia.Me.IsValid ? ByActorClass(ZetaDia.Me.ActorClass) : new List<Passive>();
     }
 }

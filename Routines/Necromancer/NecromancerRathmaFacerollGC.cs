@@ -603,71 +603,71 @@ namespace Trinity.Routines.Necromancer
             [DefaultValue(1)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             [DefaultValue(true)]
             public bool CollectForHealth
             {
-                get { return _collectForHealth; }
-                set { SetField(ref _collectForHealth, value); }
+                get => _collectForHealth;
+                set => SetField(ref _collectForHealth, value);
             }
 
             [DefaultValue(0.80f)]
             public float CastMagesPct
             {
-                get { return _castMagesPct; }
-                set { SetField(ref _castMagesPct, value); }
+                get => _castMagesPct;
+                set => SetField(ref _castMagesPct, value);
             }
 
             [DefaultValue(4)]
             public float MagesToQuickCast
             {
-                get { return _magesToQuickCast; }
-                set { SetField(ref _magesToQuickCast, value); }
+                get => _magesToQuickCast;
+                set => SetField(ref _magesToQuickCast, value);
             }
 
             [DefaultValue(25f)]
             public float MinimumRange
             {
-                get { return _minimumRange; }
-                set { SetField(ref _minimumRange, value); }
+                get => _minimumRange;
+                set => SetField(ref _minimumRange, value);
             }
 
             [DefaultValue(40f)]
             public float MaximumRange
             {
-                get { return _maximumRange; }
-                set { SetField(ref _maximumRange, value); }
+                get => _maximumRange;
+                set => SetField(ref _maximumRange, value);
             }
 
             [DefaultValue(40f)]
             public float LotDRange
             {
-                get { return _lotDRange; }
-                set { SetField(ref _lotDRange, value); }
+                get => _lotDRange;
+                set => SetField(ref _lotDRange, value);
             }
 
             [DefaultValue(false)]
             public bool AlwaysSimulacrum
             {
-                get { return _alwaysSimulacrum; }
-                set { SetField(ref _alwaysSimulacrum, value); }
+                get => _alwaysSimulacrum;
+                set => SetField(ref _alwaysSimulacrum, value);
             }
 
             [DefaultValue(true)]
             public bool IgnoreRange
             {
-                get { return _ignoreRange; }
-                set { SetField(ref _ignoreRange, value); }
+                get => _ignoreRange;
+                set => SetField(ref _ignoreRange, value);
             }
 
             //public SkillSettings WrathOfTheBerserker

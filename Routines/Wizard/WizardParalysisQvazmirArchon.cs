@@ -47,9 +47,6 @@ namespace Trinity.Routines.Wizard
         #endregion
         public TrinityPower GetOffensivePower()
         {
-            TrinityPower power;
-            TrinityActor target;
-
             var bestClusterUnit = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
 
             if (IsArchonActive)
@@ -66,7 +63,7 @@ namespace Trinity.Routines.Wizard
             }
             //frost nova to proc tal rasha
 
-            if (TrySpecialPower(out power))
+            if (TrySpecialPower(out var power))
                 return power;
 
             if (TrySecondaryPower(out power))
@@ -194,21 +191,21 @@ namespace Trinity.Routines.Wizard
             [DefaultValue(6)]
             public int ClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get => _clusterSize;
+                set => SetField(ref _clusterSize, value);
             }
 
             [DefaultValue(0.4f)]
             public float EmergencyHealthPct
             {
-                get { return _emergencyHealthPct; }
-                set { SetField(ref _emergencyHealthPct, value); }
+                get => _emergencyHealthPct;
+                set => SetField(ref _emergencyHealthPct, value);
             }
 
             public SkillSettings Teleport
             {
-                get { return _teleport; }
-                set { SetField(ref _teleport, value); }
+                get => _teleport;
+                set => SetField(ref _teleport, value);
             }
 
             #region Skill Defaults

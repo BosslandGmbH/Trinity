@@ -90,7 +90,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private States State
         {
-            get { return _state; }
+            get => _state;
             set
             {
                 if (_state == value) return;
@@ -173,7 +173,6 @@ namespace Trinity.Components.Adventurer.Coroutines
         }
 
         private DateTime _lastResortTimeoutBase = DateTime.MaxValue;
-        private DateTime _startedLastResortTime;
         private async Task<bool> LastResortMovement()
         {
             State = States.Failed;
@@ -258,7 +257,6 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 Core.Logger.Log($"Movement Failed (Timeout)");
                 LastMoveResult = MoveResult.Failed;
-                _startedLastResortTime = default(DateTime);
                 _lastResortTimeoutBase = DateTime.MaxValue;
                 State = States.Failed;
                 return false;
@@ -267,7 +265,6 @@ namespace Trinity.Components.Adventurer.Coroutines
         }
 
         private Mover _mover;
-        private long _lastRaywalkCheck;
         private readonly WaitTimer _pathGenetionTimer = new WaitTimer(TimeSpan.FromSeconds(1));
 
         private async Task<bool> NotStarted()
@@ -405,7 +402,6 @@ namespace Trinity.Components.Adventurer.Coroutines
                         Core.Logger.Debug($"Navigator reports Failed movement attempt. Mover={_mover}");
                         State = States.LastResortMovement;
                         return false;
-                        break;
 
                     case MoveResult.PathGenerationFailed:
                         Core.Logger.Debug("[Navigation] Path generation failed.");
@@ -450,7 +446,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private DiaGizmo _deathGate;
 
-        private static Dictionary<Vector3, DateTime> _deathGateIgnoreList = new Dictionary<Vector3, DateTime>();
+        private static readonly Dictionary<Vector3, DateTime> _deathGateIgnoreList = new Dictionary<Vector3, DateTime>();
 
         private InteractionCoroutine _interactionCoroutine;
         private DateTime _timeout = DateTime.MaxValue;
@@ -462,8 +458,6 @@ namespace Trinity.Components.Adventurer.Coroutines
         }
 
         private MoveThroughDeathGates _deathGateCoroutine;
-        private Vector3 _lastPosition;
-        private DateTime _lastResortTotalTimeout;
         private bool _useStraightLine;
 
         private async Task<bool> MovingToDeathGate()

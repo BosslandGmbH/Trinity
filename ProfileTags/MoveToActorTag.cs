@@ -15,7 +15,6 @@ namespace Trinity.ProfileTags
 
     public class MoveToActorProfileBehavior : MoveToPositionProfileBehavior
     {
-        private TrinityActor _actor;
         private string _startAnimLower;
         private string _endAnimLower;
 

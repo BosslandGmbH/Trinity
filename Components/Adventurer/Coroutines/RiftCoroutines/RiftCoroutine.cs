@@ -58,7 +58,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         private Vector3 _nextLevelPortalLocation = Vector3.Zero;
         private DateTime _riftStartTime;
         private DateTime _riftEndTime;
-        private ExperienceTracker _experienceTracker = new ExperienceTracker();
+        private readonly ExperienceTracker _experienceTracker = new ExperienceTracker();
 
         private readonly MoveToPositionCoroutine _moveToRiftStoneCoroutine = new MoveToPositionCoroutine(ExplorationData.ActHubWorldIds[Act.A1], RiftData.Act1RiftStonePosition, 1);
         private readonly InteractionCoroutine _interactWithRiftStoneInteractionCoroutine = new InteractionCoroutine(RiftData.RiftStoneSNO, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(1), 1);
@@ -109,7 +109,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         public States State
         {
-            get { return _state; }
+            get => _state;
             set
             {
                 if (_state == value) return;
@@ -143,10 +143,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         private readonly Guid _id;
 
-        public Guid Id
-        {
-            get { return _id; }
-        }
+        public Guid Id => _id;
 
         public void Reset()
         {
@@ -778,8 +775,6 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         private WorldScene _currentExitScene;
 
-        private string lastError = null;
-
         private async Task<bool> SearchingForExitPortal()
         {
             if (_RiftType == RiftType.Nephalem && PluginSettings.Current.NephalemRiftFullExplore && AdvDia.RiftQuest.Step == RiftStep.Cleared)
@@ -1106,13 +1101,11 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
 
             _gemUpgradesLeft = 3;
-            _enableGemUpgradeLogs = false;
             State = States.UpgradingGems;
             return false;
         }
 
         private int _gemUpgradesLeft;
-        private bool _enableGemUpgradeLogs;
 
         private async Task<bool> UpgradingGems()
         {
@@ -1132,7 +1125,6 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 State = States.Failed;
                 return false;
             }
-            _enableGemUpgradeLogs = false;
             if (AdvDia.RiftQuest.Step == RiftStep.Cleared)
             {
                 Core.Logger.Debug("[Rift] Rift Quest is completed, returning to town");
@@ -1150,7 +1142,6 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             if (_gemUpgradesLeft != gemUpgradesLeft)
             {
                 _gemUpgradesLeft = gemUpgradesLeft;
-                _enableGemUpgradeLogs = true;
             }
             if (AdvDia.RiftQuest.State == QuestState.Completed && AdvDia.RiftQuest.Step != RiftStep.UrshiSpawned)//gemUpgradesLeft == 0)
             {
@@ -1552,12 +1543,11 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         private readonly WaitTimer _pulseTimer = new WaitTimer(TimeSpan.FromMilliseconds(250));
         private bool _isPulsing;
-        private States _startingState;
-        private RiftOptions _options;
+        private readonly RiftOptions _options;
         private int _riftCounter;
         private int _nextLevelPortalZRequirement;
 
-        private List<string> _entranceSceneNames = new List<string>();
+        private readonly List<string> _entranceSceneNames = new List<string>();
         private WorldScene _currentEntranceScene;
 
         private void EnablePulse()
@@ -1594,6 +1584,13 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        public void Dispose(bool dispose)
+        {
+            _experienceTracker.Dispose();
             DisablePulse();
         }
     }

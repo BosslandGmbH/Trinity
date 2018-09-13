@@ -23,7 +23,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         public new States State
         {
-            get { return _state; }
+            get => _state;
             protected set
             {
                 if (_state == value) return;

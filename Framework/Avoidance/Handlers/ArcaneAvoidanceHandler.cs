@@ -12,7 +12,7 @@ namespace Trinity.Framework.Avoidance.Handlers
 {
     internal class ArcaneAvoidanceHandler : IAvoidanceHandler
     {
-        private static Dictionary<int, Rotator> _rotators = new Dictionary<int, Rotator>();
+        private static readonly Dictionary<int, Rotator> _rotators = new Dictionary<int, Rotator>();
 
         public void UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
         {

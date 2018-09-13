@@ -48,20 +48,13 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             _lastGrid = null;
         }
 
-        public static ExplorationGrid Instance
-        {
-            get { return GetWorldGrid(AdvDia.CurrentWorldDynamicId); }
-        }
+        public static ExplorationGrid Instance => GetWorldGrid(AdvDia.CurrentWorldDynamicId);
 
         public List<ExplorationNode> WalkableNodes = new List<ExplorationNode>();
-        private static WorldScene _currentScene;
 
         public override float BoxSize { get; } = 20;
 
-        public override int GridBounds
-        {
-            get { return GRID_BOUNDS; }
-        }
+        public override int GridBounds => GRID_BOUNDS;
 
         public override bool CanRayCast(Vector3 from, Vector3 to)
         {
@@ -183,7 +176,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             }
         }
 
-        private HashSet<string> _processedSceneHashes = new HashSet<string>();
+        private readonly HashSet<string> _processedSceneHashes = new HashSet<string>();
 
         protected override void OnUpdated(SceneData newNodes)
         {

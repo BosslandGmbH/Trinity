@@ -11,7 +11,9 @@ namespace Trinity.UI.UIComponents.Converters
         /// Wraps a property as a binding member instance
         /// </summary>
         /// <param name="value">a property</param>
+        /// <param name="targetType"></param>
         /// <param name="parameter">the parent class of value property</param>
+        /// <param name="culture"></param>
         /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

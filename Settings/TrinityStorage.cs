@@ -22,7 +22,7 @@ namespace Trinity.Settings
     public class TrinityStorage : NotifyBase, ITrinitySetting<TrinityStorage>
     {
 
-        private FileSystemWatcher _FSWatcher;
+        private readonly FileSystemWatcher _FSWatcher;
         private DateTime _LastLoadedSettings;
         public delegate void SettingsEvent();
         public static event SettingsEvent OnSave = () => { };
@@ -55,8 +55,8 @@ namespace Trinity.Settings
         [DataMember(IsRequired = false)]
         public DynamicSettingGroup Dynamic
         {
-            get { return _dynamic; }
-            set { SetField(ref _dynamic, value); }
+            get => _dynamic;
+            set => SetField(ref _dynamic, value);
         }
 
         [IgnoreDataMember]

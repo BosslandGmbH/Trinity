@@ -356,16 +356,16 @@ namespace Trinity.Components.Combat.Resources
         }
 
         /// <summary>
-            ///
-            /// </summary>
-            /// <param name="radius">Cluster Radius</param>
-            /// <param name="maxRange">Unit Max Distance</param>
-            /// <param name="count">Minimum number of mobs</param>
-            /// <param name="useWeights">Include Mobs with Weight or not</param>
-            /// <param name="includeUnitsInAoe">Include mobs in AoE or not</param>
-            /// <param name="ignoreElites">Ingore elites or not/param>
-            /// <returns></returns>
-            internal static TrinityActor GetBestClusterUnit(
+        ///
+        /// </summary>
+        /// <param name="clusterRadius">Cluster Radius</param>
+        /// <param name="maxSearchRange">Unit Max Distance</param>
+        /// <param name="useWeights">Include Mobs with Weight or not</param>
+        /// <param name="includeUnitsInAoe">Include mobs in AoE or not</param>
+        /// <param name="ignoreElites">Ingore elites or not</param>
+        /// <param name="inLineOfSight">Requires Line of Sight</param>
+        /// <returns></returns>
+        internal static TrinityActor GetBestClusterUnit(
             float clusterRadius = 15f, float maxSearchRange = 65f, bool useWeights = true, bool includeUnitsInAoe = true,
             bool ignoreElites = false, bool inLineOfSight = false)
         {
@@ -656,6 +656,7 @@ namespace Trinity.Components.Combat.Resources
         /// Gets the number of units player is facing
         /// </summary>
         /// <param name="range"></param>
+        /// <param name="arcDegrees"></param>
         /// <returns></returns>
         internal static int UnitsPlayerFacing(float range, float arcDegrees = 70f)
         {
@@ -696,9 +697,7 @@ namespace Trinity.Components.Combat.Resources
         /// Checks to make sure there's at least one valid cluster with the minimum monster count
         /// </summary>
         /// <param name="radius"></param>
-        /// <param name="maxRange"></param>
         /// <param name="minCount"></param>
-        /// <param name="forceElites"></param>
         /// <returns></returns>
         internal static bool ClusterExists(float radius = 15f, int minCount = 2)
         {
@@ -1046,6 +1045,7 @@ namespace Trinity.Components.Combat.Resources
         /// Fast check to see if there are any attackable units within a certain distance
         /// </summary>
         /// <param name="range"></param>
+        /// <param name="useWeights"></param>
         /// <returns></returns>
         internal static bool AnyMobsInRange(float range = 10f, bool useWeights = true)
         {
@@ -1056,6 +1056,8 @@ namespace Trinity.Components.Combat.Resources
         /// Fast check to see if there are any attackable units within a certain distance
         /// </summary>
         /// <param name="range"></param>
+        /// <param name="minCount"></param>
+        /// <param name="useWeights"></param>
         /// <returns></returns>
         internal static bool AnyMobsInRange(float range = 10f, int minCount = 1, bool useWeights = true)
         {
@@ -1169,6 +1171,7 @@ namespace Trinity.Components.Combat.Resources
         /// Fast check to see if there are any attackable Elite units within a certain distance
         /// </summary>
         /// <param name="range"></param>
+        /// <param name="minCount"></param>
         /// <returns></returns>
         internal static bool AnyElitesInRange(float range = 10f, int minCount = 1)
         {
@@ -2134,7 +2137,7 @@ namespace Trinity.Components.Combat.Resources
             return sample;
         }
 
-        private static HashSet<ActorAttributeType> _debuffSlots = new HashSet<ActorAttributeType>
+        private static readonly HashSet<ActorAttributeType> _debuffSlots = new HashSet<ActorAttributeType>
         {
             ActorAttributeType.PowerBuff0VisualEffect,
             ActorAttributeType.PowerBuff0VisualEffectNone,

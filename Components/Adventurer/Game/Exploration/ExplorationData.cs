@@ -10,23 +10,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         //    get { return OpenWorldIds.Contains(AdvDia.CurrentWorldSnoId) ? 8 : 4; }
         //}
 
-        public static float ExplorationNodeBoxSize
-        {
-            get
-            {
-                return OpenWorldIds.Contains(AdvDia.CurrentWorldId) ? 40 : 20;
-                //return OpenWorldIds.Contains(AdvDia.CurrentWorldSnoId) ? 30 : 15;
-            }
-        }
+        public static float ExplorationNodeBoxSize => OpenWorldIds.Contains(AdvDia.CurrentWorldId) ? 40 : 20;
 
-        public static float ExplorationNodeBoxTolerance
-        {
-            get
-            {
-                return OpenWorldIds.Contains(AdvDia.CurrentWorldId) ? 0.2f : 0.1f;
-                //return OpenWorldIds.Contains(AdvDia.CurrentWorldSnoId) ? 0.1f : 0.03f;
-            }
-        }
+        public static float ExplorationNodeBoxTolerance => OpenWorldIds.Contains(AdvDia.CurrentWorldId) ? 0.2f : 0.1f;
 
         public static HashSet<int> OpenWorldIds = new HashSet<int>
                                                 {

@@ -47,7 +47,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         public States State
         {
-            get { return _state; }
+            get => _state;
             set
             {
                 if (_state == value) return;
