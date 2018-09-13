@@ -60,13 +60,14 @@ namespace Trinity.Components.Adventurer.Settings
         [DataMember]
         public int HighestUnlockedRiftLevel
         {
+            // TODO: return level == 0 ? 120 : level;
             get => 150;
             set { }
         }
 
         public PluginSettings GetDataContext()
         {
-            //UpdateGemList(); // >>> causing freeze on ActorCache accessing ActivePlayerData
+            //UpdateGemList(); // TODO: >>> causing freeze on ActorCache accessing ActivePlayerData
             return this;
         }
 

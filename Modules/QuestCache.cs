@@ -62,6 +62,7 @@ namespace Trinity.Modules
 
         public BountyData CurrentBountyData { get; private set; }
 
+        // TODO: return KillAllTypes.Contains(CurrentObjective.ObjectiveType);
         public bool IsKillAllRequired => false;
 
         public HashSet<QuestStepObjectiveType> KillAllTypes { get; } = new HashSet<QuestStepObjectiveType>
