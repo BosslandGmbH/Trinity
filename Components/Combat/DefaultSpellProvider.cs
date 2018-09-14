@@ -144,7 +144,9 @@ namespace Trinity.Components.Combat
             if (Core.Player.IsIncapacitated)
                 return false;
 
-            if (!Core.Hotbar.ActivePowers.Contains(skill.SNOPower))
+            var snoPower = skill.SNOPower;
+
+            if (!Core.Hotbar.ActivePowers.Contains(snoPower))
                 return false;
 
             if (!HasEnoughCharges(skill))
@@ -153,12 +155,11 @@ namespace Trinity.Components.Combat
             if (!HasEnoughResource(skill))
                 return false;
 
-            PowerManager.CanCastFlags reason;
-            if (!PowerManager.CanCast(skill.SNOPower, out reason))
+            if (!PowerManager.CanCast(snoPower, out var reason))
             {
-                if (reason != PowerManager.CanCastFlags.PowerInvalidTarget || !AllowInvalidTargetPowers.Contains(skill.SNOPower))
+                if (reason != PowerManager.CanCastFlags.PowerInvalidTarget || !AllowInvalidTargetPowers.Contains(snoPower))
                 {
-                    Core.Logger.Debug(LogCategory.Spells, $"PowerManager CanCast failed for {skill.SNOPower} with flags: {reason}");
+                    Core.Logger.Debug(LogCategory.Spells, $"PowerManager CanCast failed for {snoPower} with flags: {reason}");
                     return false;
                 }
             }

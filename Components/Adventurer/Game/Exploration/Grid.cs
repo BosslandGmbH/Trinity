@@ -41,7 +41,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             Created = DateTime.UtcNow;
             LastUpdated = DateTime.MinValue;
             var worldId = ZetaDia.Globals.WorldId;
-      
+
             Core.Logger.Debug("[{0}] Creating grid [{1},{1}] ZetaWorldId={2} AdvDiaWorldId={3}", GetType().Name, GridBounds, worldId, AdvDia.CurrentWorldDynamicId);
 
             InnerGrid = new SplitArray<T>(GridBounds, GridBounds);
@@ -54,7 +54,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 Update(Core.Scenes.CreateSceneData(currentScenes, currentScenes.First().DynamicWorldId));
             }
 
-            GridStore.Grids.Add(new WeakReference<IGrid>(this));           
+            GridStore.Grids.Add(new WeakReference<IGrid>(this));
         }
 
         public void Update(ISceneData newSceneData)
@@ -81,13 +81,13 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             var worldId = AdvDia.CurrentWorldDynamicId;
 
             foreach (var node in nodes)
-            {                
+            {
                 if (node.DynamicWorldId != worldId)
                 {
                     Core.Logger.Debug("[{0}] A node has different worldId than current world, skipping", GetType().Name);
                     return;
                 }
-       
+
                 var nodeX = ToGridDistance(node.Center.X);  //(int)Math.Round((node.Center.X - MinX - boxSize / 2) / boxSize);
                 var nodeY = ToGridDistance(node.Center.Y);  //(int)Math.Round((node.Center.Y - MinY - boxSize / 2) / boxSize);
                 InnerGrid[nodeX, nodeY] = (T)node;
@@ -188,10 +188,24 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public List<T> GetNodesInRadius(Vector3 center, Func<T, bool> condition, float maxDistance = 30f, float minDistance = 0f)
         {
+            return GetNodesInRadius(GetNearestNode(center), condition, maxDistance, minDistance);
+        }
+
+        public List<T> GetNodesInRadius(Vector3 center, float radius)
+        {
+            return GetNodesInRadius(GetNearestNode(center), radius);
+        }
+
+        public List<T> GetNodesInRadius(T node, float radius)
+        {
+            return GetNodesInRadius(node, n => true, radius);
+        }
+
+        public List<T> GetNodesInRadius(T node, Func<T, bool> condition, float maxDistance = 30f, float minDistance = 0f)
+        {
             var neighbors = new List<T>();
-            var node = GetNearestNode(center);
             if (node == null)
-                return neighbors;
+                return new List<T>();
 
             // Snapping to nearest grid point causes an offset of the circle retreived from the proper original position.
             // To get an accurate circle of points we need to draw further and measure distance back to v3 center.
@@ -211,7 +225,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             var isRoughRounded = gridDistanceMax > 10;
             var roundWidth = gridDistanceMax >= 3 ? (int)Math.Round(gridDistanceMax * 0.35, 0, MidpointRounding.AwayFromZero) : 0;
             var edgelength = gridDistanceMax * 2 + 1;
-            var v2Center = center.ToVector2();
+            var v2Center = node.Center;
 
             var worldDistanceMaxSqr = maxDistance * maxDistance;
             var worldDistanceMinSqr = minDistance * minDistance;
@@ -258,17 +272,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 }
             }
             return neighbors;
-        }
-
-        public List<T> GetNodesInRadius(Vector3 center, float radius)
-        {
-            var node = GetNearestNode(center);
-            return node != null ? GetNodesInRadius(node, radius) : new List<T>();
-        }
-
-        public List<T> GetNodesInRadius(T node, float radius)
-        {
-            return GetNodesInRadius(node.Center.ToVector3(), n => true, radius);
         }
 
         public T GetNodeInDirection(T node, Direction direction)

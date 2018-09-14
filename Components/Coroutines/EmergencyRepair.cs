@@ -6,8 +6,9 @@ namespace Trinity.Components.Coroutines
 {
     public class EmergencyRepair
     {
-        public async static Task<bool> Execute()
+        public static async Task<bool> Execute()
         {
+            // TODO: that one is a performance hog...
             var equippedItems = InventoryManager.Equipped.Where(i => i.IsValid);
             bool needEmergencyRepair = false;
 
@@ -23,7 +24,9 @@ namespace Trinity.Components.Coroutines
                 }
                 catch
                 {
+                    // ignored
                 }
+
                 if (itemCount > 0 && durabilitySum / itemCount < 0.05)
                     needEmergencyRepair = true;
             }
