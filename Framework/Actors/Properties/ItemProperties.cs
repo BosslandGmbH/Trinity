@@ -56,11 +56,7 @@ namespace Trinity.Framework.Actors.Properties
             {
                 actor.InventorySlot = InventorySlot.None;
             }
-
-            actor.LastInventorySlot = 0;
-            actor.LastInventoryColumn = 0;
-            actor.LastInventoryRow = 0;
-
+            
             actor.IsUnidentified = attributes.IsUnidentified;
             actor.IsAncient = attributes.IsAncient;
             actor.IsPrimalAncient = attributes.IsPrimalAncient;
