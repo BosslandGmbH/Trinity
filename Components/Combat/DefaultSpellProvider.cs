@@ -159,7 +159,8 @@ namespace Trinity.Components.Combat
             {
                 if (reason != PowerManager.CanCastFlags.PowerInvalidTarget || !AllowInvalidTargetPowers.Contains(snoPower))
                 {
-                    Core.Logger.Debug(LogCategory.Spells, $"PowerManager CanCast failed for {snoPower} with flags: {reason}");
+                    // TODO: This call is very expensive, 27636ms/31065ms spent in this func.
+                    // Core.Logger.Debug(LogCategory.Spells, $"PowerManager CanCast failed for {snoPower} with flags: {reason}");
                     return false;
                 }
             }
