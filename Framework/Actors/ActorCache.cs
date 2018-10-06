@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using Trinity.Framework.Helpers;
 using System.Collections.Concurrent;
@@ -122,37 +122,12 @@ namespace Trinity.Framework.Actors
         /// </summary>
         private void UpdateRActors()
         {
+            _rActors.Clear();
             _acdToRActorIndex.Clear();
 
-            var untouchedIds = new List<int>(_rActors.Keys.ToList());
-
-            var actors = ZetaDia.RActors.ToList<DiaObject>();
-            foreach (var rActor in actors)
+            foreach (var zetaActor in ZetaDia.Actors.RActorList)
             {
-                var rActorId = rActor.RActorId;
-                if (rActorId == -1)
-                    continue;
-
-                if (rActor.IsACDBased && !rActor.IsFullyValid())
-                    continue;
-
-                var result = true;
-
-                _rActors.AddOrUpdate(rActorId,
-                    (id) => TryAddRActor(id, rActor, out result),
-                    (id, actor) => TryUpdateRActor(id, actor, rActor, out result));
-
-                if (result)
-                    untouchedIds.Remove(rActorId);
-            }
-
-            foreach (var key in untouchedIds)
-            {
-                TrinityActor item;
-                if (_rActors.TryRemove(key, out item))
-                {
-                    item?.OnDestroyed();
-                }
+                TryAddRActor(zetaActor.RActorId, zetaActor, out bool result);
             }
         }
 
@@ -167,24 +142,6 @@ namespace Trinity.Framework.Actors
             _timer.Stop();
             actor.CreateTime = _timer.Elapsed.TotalMilliseconds;
             actor.Created = DateTime.UtcNow;
-            result = true;
-            return actor;
-        }
-
-        private TrinityActor TryUpdateRActor(int id, TrinityActor actor, DiaObject rActor, out bool result)
-        {
-            if (!actor.IsRActorValid)
-            {
-                result = false;
-                return actor;
-            }
-
-            _timer.Restart();
-            actor.RActor = rActor;
-            actor.OnUpdated();
-            _acdToRActorIndex[actor.AcdId] = actor.RActorId;
-            _timer.Stop();
-            actor.UpdateTime = _timer.Elapsed.TotalMilliseconds;
             result = true;
             return actor;
         }
