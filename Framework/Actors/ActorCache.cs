@@ -42,7 +42,7 @@ namespace Trinity.Framework.Actors
     {
         private readonly Stopwatch _timer = new Stopwatch();
 
-        public readonly ConcurrentDictionary<int, TrinityActor> _rActors = new ConcurrentDictionary<int, TrinityActor>();
+        public ConcurrentDictionary<int, TrinityActor> _rActors = new ConcurrentDictionary<int, TrinityActor>();
         private readonly ConcurrentDictionary<int, TrinityItem> _inventory = new ConcurrentDictionary<int, TrinityItem>();
 
         private readonly Dictionary<int, short> _annToAcdIndex = new Dictionary<int, short>();
@@ -122,17 +122,32 @@ namespace Trinity.Framework.Actors
         /// </summary>
         private void UpdateRActors()
         {
-            _rActors.Clear();
             _acdToRActorIndex.Clear();
+
+            var newRactors = new ConcurrentDictionary<int, TrinityActor>();
 
             foreach (var zetaActor in ZetaDia.Actors.RActorList)
             {
-                var actor = TryAddRActor(zetaActor.RActorId, zetaActor, out bool result);
-                if (result)
+                if (_rActors.ContainsKey(zetaActor.RActorId))
                 {
-                    _rActors.TryAdd(zetaActor.RActorId, actor);
+                    var existing = _rActors[zetaActor.RActorId];
+                    _timer.Restart();
+                    existing.OnUpdated();
+                    _timer.Stop();
+                    existing.UpdateTime = _timer.Elapsed.TotalMilliseconds;
+                    newRactors.TryAdd(zetaActor.RActorId, existing);
+                }
+                else
+                {
+                    var actor = TryAddRActor(zetaActor.RActorId, zetaActor, out bool result);
+                    if (result)
+                    {
+                        newRactors.TryAdd(zetaActor.RActorId, actor);
+                    }
                 }
             }
+
+            _rActors = newRactors;
         }
 
         private TrinityActor TryAddRActor(int id, DiaObject rActor, out bool result)
