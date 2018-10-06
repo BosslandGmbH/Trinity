@@ -127,7 +127,11 @@ namespace Trinity.Framework.Actors
 
             foreach (var zetaActor in ZetaDia.Actors.RActorList)
             {
-                TryAddRActor(zetaActor.RActorId, zetaActor, out bool result);
+                var actor = TryAddRActor(zetaActor.RActorId, zetaActor, out bool result);
+                if (result)
+                {
+                    _rActors.TryAdd(zetaActor.RActorId, actor);
+                }
             }
         }
 
