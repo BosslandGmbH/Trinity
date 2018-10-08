@@ -12,11 +12,11 @@ namespace Trinity.Framework.Helpers
          * Reference implementation: http://msdn.microsoft.com/en-us/library/s02tk69a.aspx
          */
 
-        public static string GenerateObjectHash(Vector3 position, int actorSNO, string name, int worldID)
+        public static string GenerateObjectHash(Vector3 position, int actorSNO, string name)
         {
             using (MD5 md5 = MD5.Create())
             {
-                string itemHashBase = String.Format("{0}{1}{2}{3}", position, actorSNO, name, worldID);
+                string itemHashBase = String.Format("{0}{1}{2}", position, actorSNO, name);
                 string itemHash = GetMd5Hash(md5, itemHashBase);
                 return itemHash;
             }

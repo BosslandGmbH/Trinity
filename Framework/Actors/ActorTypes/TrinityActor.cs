@@ -28,7 +28,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public TrinityActor(DiaObject actor) : base(actor)
         {
             Attributes = new AttributesWrapper(CommonData);
-            ObjectHash = HashGenerator.GenerateObjectHash(Position, ActorSnoId, InternalName, WorldDynamicId);
+            ObjectHash = HashGenerator.GenerateObjectHash(Position, ActorSnoId, InternalName);
             IsProfileBlacklisted = ProfileManager.CurrentProfile?.TargetBlacklists?.Any(b => b.ActorId == ActorSnoId) ?? false;
             MonsterQuality = CommonData?.MonsterQualityLevel ?? MonsterQuality.Normal;
         }
