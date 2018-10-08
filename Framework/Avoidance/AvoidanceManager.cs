@@ -94,9 +94,9 @@ namespace Trinity.Framework.Avoidance
                     else
                     {
                         //Core.Logger.Verbose($"Updated Avoidance Actor {actor}");
-                        existingActor.Position = actor.Position;
-                        existingActor.Distance = actor.Distance;
-                        existingActor.Animation = actor.Animation;
+                        //existingActor.Position = actor.Position;
+                        //existingActor.Distance = actor.Distance;
+                        //existingActor.Animation = actor.Animation;
                     }
                     continue;
                 }

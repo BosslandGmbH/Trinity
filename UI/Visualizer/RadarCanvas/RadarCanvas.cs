@@ -145,12 +145,14 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 }
 
                 var node = Core.Avoidance.Grid.GetNearestNode(startWorldPosition);
-                SelectedItem = new TrinityActor
-                {
-                    InternalName = $"Node[{node.GridPoint.X},{node.GridPoint.Y}] World[{(int)startWorldPosition.X},{(int)startWorldPosition.Y}]",
-                    Distance = startWorldPosition.Distance(ZetaDia.Me.Position),
-                    Position = startWorldPosition,
-                };
+
+                // TODO: Replace with custom selectable item as TrinityActor cannot be used here.
+                //SelectedItem = new TrinityActor
+                //{
+                //    InternalName = $"Node[{node.GridPoint.X},{node.GridPoint.Y}] World[{(int)startWorldPosition.X},{(int)startWorldPosition.Y}]",
+                //    Distance = startWorldPosition.Distance(ZetaDia.Me.Position),
+                //    Position = startWorldPosition,
+                //};
             }
 
             // Trigger Canvas to Render

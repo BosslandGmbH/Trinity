@@ -13,43 +13,6 @@ namespace Trinity.Framework.Actors.Properties
     {
         public static void Populate(TrinityActor actor)
         {
-            if (!IsValidGizmo(actor))
-                return;
-
-            var attributes = actor.Attributes;
-            var commonData = actor.CommonData;
-            var rActor = actor.RActor;
-
-            actor.IsPlayerHeadstone = actor.ActorSnoId == GameData.PlayerHeadstoneSNO;
-            actor.IsRareChest = actor.InternalNameLowerCase.Contains("chest_rare") || GameData.ResplendentChestIds.Contains(actor.ActorSnoId);
-            actor.IsCorpse = actor.InternalNameLowerCase.Contains("corpse");
-            actor.IsWeaponRack = actor.InternalNameLowerCase.Contains("rack");
-            actor.IsGroundClicky = actor.InternalNameLowerCase.Contains("ground_clicky");
-            actor.IsContainer = actor.IsRareChest || actor.IsChest || actor.IsCorpse || actor.IsWeaponRack || actor.IsGroundClicky;
-            actor.IsCursedChest = actor.Type == TrinityObjectType.CursedChest;
-            actor.IsCursedShrine = actor.Type == TrinityObjectType.CursedShrine;
-            actor.IsChest = actor.IsCursedChest || actor.IsRareChest || actor.InternalNameLowerCase.Contains("chest") || GameData.ContainerWhiteListIds.Contains(actor.ActorSnoId);
-            actor.IsEventObject = actor.IsCursedChest || actor.IsCursedShrine;
-            actor.IsInteractableType = GameData.InteractableTypes.Contains(actor.Type);
-            actor.IsUntargetable = actor.Attributes.IsUntargetable && !GameData.IgnoreUntargettableAttribute.Contains(actor.ActorSnoId);
-            actor.IsInvulnerable = actor.Attributes.IsInvulnerable;
-            actor.IsUsed = GetIsGizmoUsed(actor);
-            actor.IsLockedDoor = (actor.Attributes.IsDoorLocked || actor.Attributes.IsDoorTimed) && !actor.Attributes.IsGizmoBeenOperated;
-            actor.ShrineType = GetShrineType(actor);
-            actor.IsPortal = GameData.PortalTypes.Contains(actor.GizmoType);
-            actor.ContainerType = GetContainerType(actor);
-            actor.IsInteractWhitelisted = GameData.InteractWhiteListIds.Contains(actor.ActorSnoId);
-
-            // todo why is this needed for gizmos? 
-            var movement = rActor.Movement;
-            if (movement != null && movement.IsValid)
-            {
-                actor.Rotation = movement.Rotation;
-                actor.RotationDegrees = MathEx.ToDegrees(actor.Rotation);
-                actor.DirectionVector = movement.DirectionVector;
-                actor.IsMoving = movement.IsMoving;
-                actor.MovementSpeed = movement.SpeedXY;
-            }
         }
 
         private static bool IsValidGizmo(TrinityActor actor)
@@ -65,14 +28,6 @@ namespace Trinity.Framework.Actors.Properties
 
         public static void Update(TrinityActor actor)
         {
-            if (!IsValidGizmo(actor))
-                return;
-
-            if (!actor.IsUsed)
-            {
-                actor.IsUsed = GetIsGizmoUsed(actor);
-                actor.IsUntargetable = actor.Attributes.IsUntargetable && !GameData.IgnoreUntargettableAttribute.Contains(actor.ActorSnoId);
-            }
         }
 
         public static ShrineTypes GetShrineType(TrinityActor cacheObject)

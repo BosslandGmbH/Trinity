@@ -40,13 +40,11 @@ namespace Trinity.Framework.Actors
     /// </summary>
     public class ActorCache : Module, IActorCache
     {
-        private readonly Stopwatch _timer = new Stopwatch();
-
-        public ConcurrentDictionary<int, TrinityActor> _rActors = new ConcurrentDictionary<int, TrinityActor>();
+        public Dictionary<int, TrinityActor> _rActors = new Dictionary<int, TrinityActor>();
         private readonly ConcurrentDictionary<int, TrinityItem> _inventory = new ConcurrentDictionary<int, TrinityItem>();
 
         private readonly Dictionary<int, short> _annToAcdIndex = new Dictionary<int, short>();
-        private readonly Dictionary<int, int> _acdToRActorIndex = new Dictionary<int, int>();
+        private Dictionary<int, int> _acdToRActorIndex = new Dictionary<int, int>();
         private GameId _gameId;
         public ulong LastUpdatedFrame { get; private set; }
         public int ActivePlayerRActorId { get; private set; }
@@ -122,47 +120,49 @@ namespace Trinity.Framework.Actors
         /// </summary>
         private void UpdateRActors()
         {
-            _acdToRActorIndex.Clear();
-
-            var newRactors = new ConcurrentDictionary<int, TrinityActor>();
+            var newRactors = new Dictionary<int, TrinityActor>();
+            var newAcdToRactorDict = new Dictionary<int, int>();
 
             foreach (var zetaActor in ZetaDia.Actors.RActorList)
             {
+                if (zetaActor.ActorType == ActorType.Item) continue;
+
                 if (_rActors.ContainsKey(zetaActor.RActorId))
                 {
-                    var existing = _rActors[zetaActor.RActorId];
-                    _timer.Restart();
-                    existing.OnUpdated();
-                    _timer.Stop();
-                    existing.UpdateTime = _timer.Elapsed.TotalMilliseconds;
-                    newRactors.TryAdd(zetaActor.RActorId, existing);
+                    var existingTrinityActor = _rActors[zetaActor.RActorId];
+
+                    newRactors.Add(zetaActor.RActorId, existingTrinityActor);
+                    if (existingTrinityActor.AcdId > 0)
+                        newAcdToRactorDict.Add(existingTrinityActor.AcdId, existingTrinityActor.RActorId);
+                    existingTrinityActor.OnUpdated();
                 }
                 else
                 {
-                    var actor = TryAddRActor(zetaActor.RActorId, zetaActor, out bool result);
-                    if (result)
+                    var newTrinityActor = ActorFactory.CreateActor(zetaActor);
+
+                    newRactors.Add(newTrinityActor.RActorId, newTrinityActor);
+                    if (newTrinityActor.AcdId > 0)
+                        newAcdToRactorDict.Add(newTrinityActor.AcdId, newTrinityActor.RActorId);
+                    newTrinityActor.OnCreated();
+                    if (newTrinityActor.IsMe)
                     {
-                        newRactors.TryAdd(zetaActor.RActorId, actor);
+                        Me = newTrinityActor as TrinityPlayer;
                     }
                 }
             }
 
-            _rActors = newRactors;
-        }
+            //foreach (var kvp in _rActors)
+            //{
+            //    var ractor = kvp.Value;
+            //    if (!kvp.Value.IsRActorDisposed && !newRactors.ContainsKey(ractor.RActorId))
+            //    {
+            //        newRactors.Add(ractor.RActorId, ractor);
+            //        newAcdToRactorDict.Add(ractor.AcdId, ractor.RActorId);
+            //    }
+            //}
 
-        private TrinityActor TryAddRActor(int id, DiaObject rActor, out bool result)
-        {
-            _timer.Restart();
-            var actor = ActorFactory.CreateActor(rActor);
-            var player = actor as TrinityPlayer;
-            if (player != null && player.IsMe)
-                Me = player;
-            _acdToRActorIndex[actor.AcdId] = actor.RActorId;
-            _timer.Stop();
-            actor.CreateTime = _timer.Elapsed.TotalMilliseconds;
-            actor.Created = DateTime.UtcNow;
-            result = true;
-            return actor;
+            _rActors = newRactors;
+            _acdToRActorIndex = newAcdToRactorDict;
         }
 
         /// <summary>
@@ -170,67 +170,67 @@ namespace Trinity.Framework.Actors
         /// </summary>
         private void UpdateInventory()
         {
-            var untouchedIds = new List<int>(_inventory.Keys);
-            foreach (var commonData in ZetaDia.Actors.ACDList)
-            {
-                var type = commonData.ActorType;
-                if (type != ActorType.Item)
-                    continue;
+            // TODO: The inventory is based on ACD actors.
+            //var untouchedIds = new List<int>(_inventory.Keys);
+            //foreach (var commonData in ZetaDia.Actors.ACDList)
+            //{
+            //    var type = commonData.ActorType;
+            //    if (type != ActorType.Item)
+            //        continue;
 
-                var inventorySlot = commonData.GetInventorySlot();
-                if (inventorySlot == InventorySlot.Merchant)
-                    continue;
-                var annId = commonData.AnnId;
-                if (annId == -1)
-                    continue;
+            //    var inventorySlot = commonData.GetInventorySlot();
+            //    if (inventorySlot == InventorySlot.Merchant)
+            //        continue;
+            //    var annId = commonData.AnnId;
+            //    if (annId == -1)
+            //        continue;
 
-                if (!commonData.IsValid || commonData.IsDisposed)
-                    continue;
+            //    if (!commonData.IsValid || commonData.IsDisposed)
+            //        continue;
 
-                if (!_inventory.ContainsKey(annId))
-                {
-                    var newObj = ActorFactory.CreateActor<TrinityItem>(commonData);
-                    _inventory.TryAdd(annId, newObj);
-                }
-                else
-                {
-                    var oldObj = _inventory[annId];
-                    if (!UpdateInventoryItem(oldObj, commonData))
-                        continue;
+            //    if (!_inventory.ContainsKey(annId))
+            //    {
+            //        var newObj = ActorFactory.CreateActor<TrinityItem>(commonData);
+            //        _inventory.TryAdd(annId, newObj);
+            //    }
+            //    else
+            //    {
+            //        var oldObj = _inventory[annId];
+            //        if (!UpdateInventoryItem(oldObj, commonData))
+            //            continue;
 
-                }
+            //    }
 
-                //_inventory.AddOrUpdate(annId,
-                //    id => AddInventoryItem(id, commonData),
-                //    (id, existingItem) => UpdateInventoryItem(id, existingItem, commonData));
+            //    //_inventory.AddOrUpdate(annId,
+            //    //    id => AddInventoryItem(id, commonData),
+            //    //    (id, existingItem) => UpdateInventoryItem(id, existingItem, commonData));
 
-                untouchedIds.Remove(annId);
-            }
+            //    untouchedIds.Remove(annId);
+            //}
 
-            foreach (var key in untouchedIds)
-            {
-                TrinityItem item;
-                if (_inventory.TryRemove(key, out item) && item != null)
-                {
-                    //item.RActor?.UpdatePointer(IntPtr.Zero);
-                    //item.CommonData?.UpdatePointer(IntPtr.Zero);
-                    //item.ActorInfo?.UpdatePointer(IntPtr.Zero);
-                    //item.MonsterInfo?.UpdatePointer(IntPtr.Zero);
-                    item.OnDestroyed();
-                }
-            }
+            //foreach (var key in untouchedIds)
+            //{
+            //    TrinityItem item;
+            //    if (_inventory.TryRemove(key, out item) && item != null)
+            //    {
+            //        //item.RActor?.UpdatePointer(IntPtr.Zero);
+            //        //item.CommonData?.UpdatePointer(IntPtr.Zero);
+            //        //item.ActorInfo?.UpdatePointer(IntPtr.Zero);
+            //        //item.MonsterInfo?.UpdatePointer(IntPtr.Zero);
+            //        item.OnDestroyed();
+            //    }
+            //}
         }
 
 
         private bool UpdateInventoryItem(TrinityItem item, ACD commonData)
         {
-            _timer.Start();
-            item.CommonData = commonData;
+            // This should not be needed anymore.
+            // item.CommonData = commonData;
+
             item.OnUpdated();
             if (!item.IsValid)
                 return false;
-            _timer.Stop();
-            item.UpdateTime = _timer.Elapsed.TotalMilliseconds;
             return true;
         }
 
@@ -267,18 +267,19 @@ namespace Trinity.Framework.Actors
 
         public TrinityItem ItemByAnnId(int annId)
         {
-            TrinityItem item;
-            if (_inventory.TryGetValue(annId, out item))
-            {
-                return item;
-            }
+            // TODO: Fix Items.
+            //TrinityItem item;
+            //if (_inventory.TryGetValue(annId, out item))
+            //{
+            //    return item;
+            //}
 
-            var acd = ZetaDia.Actors.GetACDByAnnId(annId);
-            if (acd != null && acd.IsValid)
-            {
-                var bones = ActorFactory.GetActorSeed(acd);
-                return ActorFactory.CreateActor<TrinityItem>(bones);
-            }
+            //var acd = ZetaDia.Actors.GetACDByAnnId(annId);
+            //if (acd != null && acd.IsValid)
+            //{
+            //    var bones = ActorFactory.GetActorSeed(acd);
+            //    return ActorFactory.CreateActor<TrinityItem>(bones);
+            //}
             return null;
         }
 
@@ -316,9 +317,10 @@ namespace Trinity.Framework.Actors
             foreach (var pair in _rActors)
             {
                 pair.Value.Attributes?.Destroy();
-                pair.Value.RActor = null;
-                pair.Value.CommonData = null;
-                pair.Value.Attributes = null;
+                // TODO: Cleanup once verified.
+                //pair.Value.RActor = null;
+                //pair.Value.CommonData = null;
+                //pair.Value.Attributes = null;
             }
             _rActors.Clear();
             _inventory.Clear();
