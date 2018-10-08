@@ -29,10 +29,13 @@ namespace Trinity.Framework.Actors.ActorTypes
         {
             Attributes = new AttributesWrapper(CommonData);
             ObjectHash = HashGenerator.GenerateObjectHash(Position, ActorSnoId, InternalName, WorldDynamicId);
+            IsProfileBlacklisted = ProfileManager.CurrentProfile?.TargetBlacklists?.Any(b => b.ActorId == ActorSnoId) ?? false;
+            MonsterQuality = CommonData?.MonsterQualityLevel ?? MonsterQuality.Normal;
         }
 
-        public string ObjectHash { get; private set; } 
-
+        public string ObjectHash { get; private set; }
+        public bool IsProfileBlacklisted { get; private set; }
+        public MonsterQuality MonsterQuality { get; private set; }
 
         public TargetCategory TargetCategory { get; set; }
         public TargetingInfo Targeting { get; set; } = new TargetingInfo();
@@ -139,7 +142,6 @@ namespace Trinity.Framework.Actors.ActorTypes
         public double RiftValuePct => Core.Rift.GetRiftValue(this);
         public bool IsHostile => UnitProperties.IsHostile(CommonData, ZetaDia.Me.CommonData) || (Attributes?.LastDamageAnnId ?? 0) == Core.Player.MyDynamicID;
         public bool IsBoss => MonsterQuality == MonsterQuality.Boss;
-        public MonsterQuality MonsterQuality => CommonData?.MonsterQualityLevel ?? MonsterQuality.Normal;
         public bool IsFriendly => !UnitProperties.IsHostile(CommonData, ZetaDia.Me.CommonData);
         public MarkerType MarkerType => Attributes?.MarkerType ?? MarkerType.Invalid;
         public bool IsNpc => Attributes?.IsNPC ?? false;
@@ -187,7 +189,6 @@ namespace Trinity.Framework.Actors.ActorTypes
         public int MinimapIconOverride => Attributes?.MinimapIconOverride ?? 0;
         public int EffectOwnerAnnId => Attributes?.EffectOwnerAnnId ?? 0;
         public bool IsInteractWhitelisted => GameData.InteractWhiteListIds.Contains(ActorSnoId);
-        public bool IsProfileBlacklisted => ProfileManager.CurrentProfile?.TargetBlacklists?.Any(b => b.ActorId == ActorSnoId) ?? false;
         public bool IsUsingBossbar => IsBoss && (Attributes?.IsUsingBossbar ?? false);
         public bool IsShadowClone => Core.Player.IsInBossEncounter ? (Attributes?.IsShadowClone ?? false) : false;
         public bool IsCorruptGrowth => GameData.CorruptGrowthIds.Contains(ActorSnoId);

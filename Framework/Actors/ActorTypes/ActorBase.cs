@@ -26,14 +26,21 @@ namespace Trinity.Framework.Actors.ActorTypes
             {
                 InternalName = _actor.CommonData?.Name;
             }
+
+            // A property that is accessed very often from other properties. In Zeta this one
+            // is hold per frame (which is ok there). But here in Trinity we should keep it
+            // persistent per object.
+            ActorType = _actor.ActorType;
         }
+
+        public ActorType ActorType { get; private set; }
+
 
         public bool IsAcdBased => _actor == null;
         public bool IsRActorBased => _actor != null;
         public Vector3 Position => _actor.Position;
         public int AcdId => CommonData?.ACDId ?? 0;
         public int AnnId => CommonData?.AnnId ?? 0;
-        public ActorType ActorType => _actor.ActorType;
         public int RActorId => _actor.RActorId;
         public string InternalName { get; internal set; }
         public int ActorSnoId => CommonData?.ActorSnoId ?? 0;
