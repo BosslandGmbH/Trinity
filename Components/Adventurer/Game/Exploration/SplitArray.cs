@@ -9,42 +9,22 @@ namespace Trinity.Components.Adventurer.Game.Exploration
     /// </summary>
     public class SplitArray<T>
     {
+        private readonly T[] _nodes;
+        private readonly int _stride;
+
+        public int Columns => _nodes.Length / Rows;
+        public int Rows => _nodes.Length / _stride;
+
         public SplitArray(int sizeX, int sizeY)
         {
-            LengthX = sizeX;
-            LengthY = sizeY;
-            _nodes = new IndexedList<T[]>(sizeX);
-
-            for (int ix = 0; ix < sizeX; ++ix)
-            {
-                _nodes.Add(new T[sizeY]);
-            }
+            _nodes = new T[sizeX * sizeY];
+            _stride = sizeY;
         }
-
-        public int LengthX;
-        public int LengthY;
-
-        private readonly IndexedList<T[]> _nodes;
 
         public T this[int indexX, int indexY]
         {
-            get => Get(indexX, indexY);
-            set => Set(indexX, indexY, value);
-        }
-
-        private void Set(int x, int y, T value)
-        {
-            _nodes[x][y] = value;
-        }
-
-        private T Get(int x, int y)
-        {
-            return _nodes[x][y];
-        }
-
-        public int GetLength(int dimension)
-        {
-            return dimension > 1 ? 0 : dimension == 1 ? LengthY : LengthX;
+            get => _nodes[indexX * _stride + indexY];
+            set => _nodes[indexX * _stride + indexY] = value;
         }
     }
 }
