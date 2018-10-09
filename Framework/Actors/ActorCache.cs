@@ -158,8 +158,6 @@ namespace Trinity.Framework.Actors
         /// </summary>
         private void UpdateInventory()
         {
-            _inventory.Clear();
-
             foreach (var acd in ZetaDia.Actors.ACDList)
             {
                 var type = acd.ActorType;
