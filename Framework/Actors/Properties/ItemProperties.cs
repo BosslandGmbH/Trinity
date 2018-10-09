@@ -39,7 +39,7 @@ namespace Trinity.Framework.Actors.Properties
             if (actor.ActorType != ActorType.Item)
                 return;
 
-            if (!actor.IsAcdBased) // || !actor.IsAcdValid)
+            if (actor.CommonData == null)
                 return;
 
             var attributes = actor.Attributes;
@@ -98,7 +98,7 @@ namespace Trinity.Framework.Actors.Properties
             if (actor.ActorType != ActorType.Item)
                 return;
 
-            if (!actor.IsAcdBased || !actor.IsAcdValid)
+            if (actor.CommonData == null)
                 return;
 
             var columnChanged = actor.InventoryColumn != actor.LastInventoryColumn;

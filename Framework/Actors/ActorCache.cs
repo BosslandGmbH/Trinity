@@ -125,8 +125,6 @@ namespace Trinity.Framework.Actors
 
             foreach (var zetaActor in ZetaDia.Actors.RActorList)
             {
-                if (zetaActor.ActorType == ActorType.Item) continue;
-
                 if (_rActors.ContainsKey(zetaActor.RActorId))
                 {
                     var existingTrinityActor = _rActors[zetaActor.RActorId];
