@@ -16,14 +16,15 @@ using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Helpers;
 using Trinity.Components.Coroutines.Town;
 using Zeta.Common;
+using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Framework.Actors.ActorTypes
 {
     public class TrinityItem : TrinityActor
     {
-        public TrinityItem(DiaObject seed) : base(seed)
+        public TrinityItem(ACD seed) : base(seed, ActorType.Item)
         {
-            Attributes = new AttributesWrapper(CommonData);
+            Attributes = new AttributesWrapper(seed);
         }
 
         public bool IsCosmeticItem => RawItemType == RawItemType.CosmeticPet || RawItemType == RawItemType.CosmeticPennant || RawItemType == RawItemType.CosmeticPortraitFrame || RawItemType == RawItemType.CosmeticWings;

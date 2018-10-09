@@ -151,16 +151,6 @@ namespace Trinity.Framework.Actors
                 }
             }
 
-            //foreach (var kvp in _rActors)
-            //{
-            //    var ractor = kvp.Value;
-            //    if (!kvp.Value.IsRActorDisposed && !newRactors.ContainsKey(ractor.RActorId))
-            //    {
-            //        newRactors.Add(ractor.RActorId, ractor);
-            //        newAcdToRactorDict.Add(ractor.AcdId, ractor.RActorId);
-            //    }
-            //}
-
             _rActors = newRactors;
             _acdToRActorIndex = newAcdToRactorDict;
         }
@@ -170,64 +160,50 @@ namespace Trinity.Framework.Actors
         /// </summary>
         private void UpdateInventory()
         {
-            // TODO: The inventory is based on ACD actors.
-            //var untouchedIds = new List<int>(_inventory.Keys);
-            //foreach (var commonData in ZetaDia.Actors.ACDList)
-            //{
-            //    var type = commonData.ActorType;
-            //    if (type != ActorType.Item)
-            //        continue;
+            var untouchedIds = new List<int>(_inventory.Keys);
+            foreach (var acd in ZetaDia.Actors.ACDList)
+            {
+                var type = acd.ActorType;
+                if (type != ActorType.Item) continue;
 
-            //    var inventorySlot = commonData.GetInventorySlot();
-            //    if (inventorySlot == InventorySlot.Merchant)
-            //        continue;
-            //    var annId = commonData.AnnId;
-            //    if (annId == -1)
-            //        continue;
+                var inventorySlot = acd.GetInventorySlot();
+                if (inventorySlot == InventorySlot.Merchant)
+                    continue;
 
-            //    if (!commonData.IsValid || commonData.IsDisposed)
-            //        continue;
+                var annId = acd.AnnId;
+                if (annId == -1) continue;
 
-            //    if (!_inventory.ContainsKey(annId))
-            //    {
-            //        var newObj = ActorFactory.CreateActor<TrinityItem>(commonData);
-            //        _inventory.TryAdd(annId, newObj);
-            //    }
-            //    else
-            //    {
-            //        var oldObj = _inventory[annId];
-            //        if (!UpdateInventoryItem(oldObj, commonData))
-            //            continue;
+                if (!acd.IsValid || acd.IsDisposed) continue;
 
-            //    }
+                if (!_inventory.ContainsKey(annId))
+                {
+                    var newObj = ActorFactory.CreateItem(acd);
+                    newObj.OnCreated();
+                    _inventory.TryAdd(annId, newObj);
+                }
+                else
+                {
+                    var oldObj = _inventory[annId];
+                    if (!UpdateInventoryItem(oldObj, acd))
+                        continue;
 
-            //    //_inventory.AddOrUpdate(annId,
-            //    //    id => AddInventoryItem(id, commonData),
-            //    //    (id, existingItem) => UpdateInventoryItem(id, existingItem, commonData));
+                }
 
-            //    untouchedIds.Remove(annId);
-            //}
+                untouchedIds.Remove(annId);
+            }
 
-            //foreach (var key in untouchedIds)
-            //{
-            //    TrinityItem item;
-            //    if (_inventory.TryRemove(key, out item) && item != null)
-            //    {
-            //        //item.RActor?.UpdatePointer(IntPtr.Zero);
-            //        //item.CommonData?.UpdatePointer(IntPtr.Zero);
-            //        //item.ActorInfo?.UpdatePointer(IntPtr.Zero);
-            //        //item.MonsterInfo?.UpdatePointer(IntPtr.Zero);
-            //        item.OnDestroyed();
-            //    }
-            //}
+            foreach (var key in untouchedIds)
+            {
+                TrinityItem item;
+                if (_inventory.TryRemove(key, out item) && item != null)
+                {
+                }
+            }
         }
 
 
         private bool UpdateInventoryItem(TrinityItem item, ACD commonData)
         {
-            // This should not be needed anymore.
-            // item.CommonData = commonData;
-
             item.OnUpdated();
             if (!item.IsValid)
                 return false;

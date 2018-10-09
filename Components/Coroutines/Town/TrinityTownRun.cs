@@ -143,7 +143,7 @@ namespace Trinity.Components.Coroutines.Town
 
                     if (await Any(
                         DropItems.Execute,
-                        /*() => StashItems.Execute(true),*/
+                        () => StashItems.Execute(true),
                         SellItems.Execute,
                         SalvageItems.Execute))
                         continue;

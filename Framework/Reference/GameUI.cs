@@ -225,8 +225,6 @@ namespace Trinity.Framework.Reference
                 return false;
             if (!element.IsVisible)
                 return false;
-            if (!element.IsEnabled)
-                return false;
 
             return true;
         }

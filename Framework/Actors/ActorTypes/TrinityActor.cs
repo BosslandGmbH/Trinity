@@ -33,6 +33,12 @@ namespace Trinity.Framework.Actors.ActorTypes
             MonsterQuality = CommonData?.MonsterQualityLevel ?? MonsterQuality.Normal;
         }
 
+        public TrinityActor(ACD acd, ActorType type) : base(acd, type)
+        {
+            Attributes = new AttributesWrapper(CommonData);
+            ObjectHash = HashGenerator.GenerateObjectHash(Position, ActorSnoId, InternalName);
+        }
+
         public string ObjectHash { get; private set; }
         public bool IsProfileBlacklisted { get; private set; }
         public MonsterQuality MonsterQuality { get; private set; }

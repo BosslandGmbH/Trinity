@@ -15,6 +15,16 @@ namespace Trinity.Framework.Actors.ActorTypes
     public class ActorBase
     {
         protected readonly DiaObject _actor;
+        private readonly ACD _fixedACD;
+
+        public ActorBase(ACD acd, ActorType type)
+        {
+            _fixedACD = acd;
+            _actor = null;
+
+            InternalName = CommonData?.Name ?? string.Empty;
+            ActorType = type;
+        }
 
         public ActorBase(DiaObject actor)
         {
@@ -38,13 +48,13 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public bool IsAcdBased => _actor == null;
         public bool IsRActorBased => _actor != null;
-        public Vector3 Position => _actor.Position;
+        public Vector3 Position => _fixedACD?.Position ?? _actor?.Position ?? Vector3.Zero;
         public int AcdId => CommonData?.ACDId ?? 0;
         public int AnnId => CommonData?.AnnId ?? 0;
         public int RActorId => _actor.RActorId;
         public string InternalName { get; internal set; }
         public int ActorSnoId => CommonData?.ActorSnoId ?? 0;
-        public ACD CommonData => _actor.CommonData;
+        public ACD CommonData => _fixedACD ?? _actor.CommonData;
         public DiaObject RActor => _actor;
 
         public SNORecordActor ActorInfo => CommonData?.ActorInfo ?? default(SNORecordActor);
