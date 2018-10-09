@@ -158,7 +158,8 @@ namespace Trinity.Framework.Actors
         /// </summary>
         private void UpdateInventory()
         {
-            var untouchedIds = new List<int>(_inventory.Keys);
+            _inventory.Clear();
+
             foreach (var acd in ZetaDia.Actors.ACDList)
             {
                 var type = acd.ActorType;
@@ -185,16 +186,6 @@ namespace Trinity.Framework.Actors
                     if (!UpdateInventoryItem(oldObj, acd))
                         continue;
 
-                }
-
-                untouchedIds.Remove(annId);
-            }
-
-            foreach (var key in untouchedIds)
-            {
-                TrinityItem item;
-                if (_inventory.TryRemove(key, out item) && item != null)
-                {
                 }
             }
         }
