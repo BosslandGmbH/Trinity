@@ -995,7 +995,7 @@ namespace Trinity.Components.Combat
                                     }
 
                                     // Give legendaries max weight, always
-                                    if (cacheObject.ItemQualityLevel >= ItemQuality.Legendary)
+                                    if (cacheObject.GetItemQualityLevel() >= ItemQuality.Legendary)
                                     {
                                         cacheObject.Weight = MaxWeight;
                                         cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} - Legendary";
@@ -1003,7 +1003,7 @@ namespace Trinity.Components.Combat
                                     }
 
                                     //Non Legendaries
-                                    if (cacheObject.ItemQualityLevel < ItemQuality.Legendary)
+                                    if (cacheObject.GetItemQualityLevel() < ItemQuality.Legendary)
                                     {
                                         if (IgnoreWhenInAvoidance(cacheObject))
                                             break;
@@ -2024,7 +2024,7 @@ namespace Trinity.Components.Combat
             switch (currentTarget.Type)
             {
                 case TrinityObjectType.Item:
-                    return currentTarget.ItemQualityLevel >= ItemQuality.Legendary ? 400 : 75;
+                    return currentTarget.GetItemQualityLevel() >= ItemQuality.Legendary ? 400 : 75;
                 case TrinityObjectType.Door:
                 case TrinityObjectType.ProgressionGlobe:
                     return 300;

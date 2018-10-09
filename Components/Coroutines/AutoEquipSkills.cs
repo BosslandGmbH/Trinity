@@ -58,7 +58,7 @@ namespace Trinity.Components.Coroutines
         private async Task<bool> Equip()
         {           
             var builds = GetBuildsForClass(Core.Player.ActorClass);
-            var build = builds.OrderByDescending(b => b.Level).FirstOrDefault(b => b.Level <= Core.Player.Level);
+            var build = builds?.OrderByDescending(b => b.Level)?.FirstOrDefault(b => b.Level <= Core.Player.Level);
             if (build == null)
                 return false;
 
@@ -90,6 +90,9 @@ namespace Trinity.Components.Coroutines
                     return BarbarianLevelingBuilds;
                 case ActorClass.Monk:
                     return MonkLevelingBuilds;
+                case ActorClass.Necromancer:
+                    // TODO: Handle Necromancer here!!!
+                    break;
             }
 
             return null;

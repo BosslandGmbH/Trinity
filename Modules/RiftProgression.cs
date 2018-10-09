@@ -34,16 +34,6 @@ namespace Trinity.Modules
         public bool IsGaurdianSpawned { get; private set; }
         public bool RiftComplete { get; private set; }
 
-        public void SetRiftValue(TrinityActor actor)
-        {
-            if (IsInRift)
-            {
-                double riftValue;
-                TryGetRiftValue(actor, out riftValue);
-                actor.RiftValuePct = riftValue;
-            }
-        }
-
         public double GetRiftValue(TrinityActor actor)
         {
             var riftValue = 0d;

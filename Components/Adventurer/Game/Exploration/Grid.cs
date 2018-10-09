@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Trinity.Framework;
 using System.Collections.Generic;
 using System.Linq;
@@ -98,8 +98,8 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 node.GridPoint = new GridPoint(nodeX, nodeY);
             }
 
-            GridMaxX = InnerGrid.GetLength(0);
-            GridMaxY = InnerGrid.GetLength(1);
+            GridMaxX = InnerGrid.Rows;
+            GridMaxY = InnerGrid.Columns;
             BaseSize = (int)Math.Round(BoxSize / 4, MidpointRounding.AwayFromZero);
         }
 

@@ -39,14 +39,16 @@ namespace Trinity.Framework.Actors.Properties
             if (actor.ActorType != ActorType.Item)
                 return;
 
-            if (!actor.IsAcdBased) // || !actor.IsAcdValid)
+            if (actor.CommonData == null)
                 return;
 
-            var commonData = actor.CommonData;
             var attributes = actor.Attributes;
+            if (attributes == null)
+                return;
 
             try
             {
+                // TODO: This should be the same ACD as actor.CommonData?!
                 var acd = ZetaDia.Actors.GetACDItemById(actor.AcdId);
                 actor.InventorySlot = acd.InventorySlot;
                 actor.InventoryColumn = acd.InventoryColumn;
@@ -57,16 +59,6 @@ namespace Trinity.Framework.Actors.Properties
                 actor.InventorySlot = InventorySlot.None;
             }
             
-            actor.IsUnidentified = attributes.IsUnidentified;
-            actor.IsAncient = attributes.IsAncient;
-            actor.IsPrimalAncient = attributes.IsPrimalAncient;
-            actor.ItemQualityLevel = attributes.ItemQualityLevel;
-
-            actor.RequiredLevel = Math.Max(actor.Attributes.RequiredLevel, actor.Attributes.ItemLegendaryItemLevelOverride);
-            actor.IsCrafted = attributes.IsCrafted;
-            actor.IsVendorBought = attributes.IsVendorBought;
-            actor.IsAccountBound = attributes.ItemBoundToACDId > 0;
-
             #region Trading
 
             int gameTick = ZetaDia.Globals.GameTick;
@@ -88,63 +80,7 @@ namespace Trinity.Framework.Actors.Properties
 
             #endregion
 
-            var realname = GetName(actor.GameBalanceId);
-            actor.Name = string.IsNullOrEmpty(realname) ? actor.InternalName : realname;
-
-            var gbi = GameBalanceHelper.GetRecord<SnoGameBalanceItem>(SnoGameBalanceType.Items, actor.GameBalanceId);
-            actor.ItemLevel = actor.RequiredLevel; //gbi.ItemLevel;
-            actor.InternalName = gbi.InternalName;
-            actor.MaxStackCount = gbi.StackSize;
-            actor.GemType = gbi.GemType;
-            actor.RawItemType = (RawItemType)gbi.ItemTypesGameBalanceId;
-            actor.GemQuality = attributes.GemQuality;
-            actor.ItemType = TypeConversions.GetItemType(actor.RawItemType);
-            actor.ItemBaseType = TypeConversions.GetItemBaseType(actor.ItemType);
-            actor.TrinityItemType = TypeConversions.GetTrinityItemType(actor.RawItemType, actor.GemType);
-            actor.TrinityItemBaseType = TypeConversions.GetTrinityItemBaseType(actor.TrinityItemType);
-            actor.IsGem = actor.RawItemType == RawItemType.Gem || actor.RawItemType == RawItemType.UpgradeableJewel;
-            actor.IsCraftingReagent = actor.RawItemType == RawItemType.CraftingReagent || actor.RawItemType == RawItemType.CraftingReagent_Bound;
-            actor.IsGold = actor.RawItemType == RawItemType.Gold;
-            actor.IsEquipment = TypeConversions.GetIsEquipment(actor.TrinityItemBaseType);
-            actor.IsClassItem = TypeConversions.GetIsClassItem(actor.ItemType);
-            actor.IsOffHand = TypeConversions.GetIsOffhand(actor.ItemType);
-            actor.IsPotion = actor.RawItemType == RawItemType.HealthPotion;
-            actor.IsSalvageable = actor.IsEquipment && !actor.IsVendorBought && actor.RequiredLevel > 1 || actor.IsPotion;
-            actor.IsLegendaryGem = actor.RawItemType == RawItemType.UpgradeableJewel;
-            actor.IsMiscItem = actor.ItemBaseType == ItemBaseType.Misc;
-            actor.IsTwoSquareItem = TypeConversions.GetIsTwoSlot(actor.ItemBaseType, actor.ItemType);
-            actor.FollowerType = GetFollowerType(actor.ActorSnoId);
-            actor.ItemStackQuantity = attributes.ItemStackQuantity;
-            actor.TrinityItemQuality = TypeConversions.GetTrinityItemQuality(actor.ItemQualityLevel);
-            actor.IsCosmeticItem = actor.RawItemType == RawItemType.CosmeticPet || actor.RawItemType == RawItemType.CosmeticPennant || actor.RawItemType == RawItemType.CosmeticPortraitFrame || actor.RawItemType == RawItemType.CosmeticWings;
-
-            actor.IsLowQuality = actor.TrinityItemQuality == TrinityItemQuality.Common ||
-                                 actor.TrinityItemQuality == TrinityItemQuality.Inferior ||
-                                 actor.TrinityItemQuality == TrinityItemQuality.Magic ||
-                                 actor.TrinityItemQuality == TrinityItemQuality.Rare;
-
-            actor.GlobeType = GetGlobeType(actor);
-            actor.IsWeapon = TypeConversions.IsWeapon(actor);
-            actor.IsArmor = TypeConversions.IsArmor(actor);
-
-            actor.ObjectHash = HashGenerator.GenerateItemHash(
-                actor.Position,
-                actor.ActorSnoId,
-                actor.InternalName,
-                actor.WorldDynamicId,
-                actor.ItemQualityLevel,
-                actor.ItemLevel);
-
-            if (actor.IsGroundItem)
-            {
-                actor.IsPickupNoClick = GameData.NoPickupClickItemTypes.Contains(actor.TrinityItemType) || GameData.NoPickupClickTypes.Contains(actor.Type);
-                actor.IsMyDroppedItem = DropItems.DroppedItemAnnIds.Contains(actor.AnnId);
-                actor.CanPickupItem = CanPickupItem(actor);
-                actor.IsItemAssigned = actor.Attributes.ItemBoundToACDId == 0 && actor.Attributes.ItemAssignedHero == ZetaDia.Service.Hero.HeroId;
-            }
-
-            if (actor.Type == TrinityObjectType.Gold)
-                actor.GoldAmount = attributes.Gold;
+            actor.InternalName = actor.Gbi?.InternalName ?? string.Empty;
 
             if (!_seenActorAnnIds.Contains(actor.PositionHash))
             {
@@ -162,11 +98,8 @@ namespace Trinity.Framework.Actors.Properties
             if (actor.ActorType != ActorType.Item)
                 return;
 
-            if (!actor.IsAcdBased || !actor.IsAcdValid)
+            if (actor.CommonData == null)
                 return;
-
-            var commonData = actor.CommonData;
-            actor.AcdId = commonData.ACDId;
 
             var columnChanged = actor.InventoryColumn != actor.LastInventoryColumn;
             var rowChanged = actor.InventoryRow != actor.LastInventoryRow;
@@ -176,15 +109,8 @@ namespace Trinity.Framework.Actors.Properties
             actor.LastInventoryRow = actor.InventoryRow;
             actor.LastInventoryColumn = actor.InventoryColumn;
 
-            //if (!actor.IsEquipment && Core.Player.IsInTown)
-            //{
-                actor.ItemStackQuantity = actor.Attributes.ItemStackQuantity;
-            //}
-
             if (actor.LastInventorySlot == InventorySlot.None && actor.InventorySlot == InventorySlot.BackpackItems)
             {
-                UpdateBasicProperties(actor);
-                actor.Attributes = new AttributesWrapper(commonData);
                 Create(actor);
                 actor.OnPickedUp();
             }
@@ -196,22 +122,10 @@ namespace Trinity.Framework.Actors.Properties
 
             if (actor.InventorySlot == InventorySlot.BackpackItems && actor.IsUnidentified && !actor.Attributes.IsUnidentified)
             {
-                //actor.Attributes = new AttributesWrapper(commonData);
-                UpdateBasicProperties(actor);
                 Create(actor);
                 actor.OnIdentified();
             }
         }
-
-        public static void UpdateBasicProperties(TrinityActor cacheObject)
-        {
-            cacheObject.ActorSnoId = cacheObject.CommonData.ActorSnoId;
-            cacheObject.GameBalanceId = cacheObject.CommonData.GameBalanceId;
-            cacheObject.FastAttributeGroupId = cacheObject.CommonData.FastAttribGroupId;
-            cacheObject.AnnId = cacheObject.CommonData.AnnId;
-            cacheObject.AcdId = cacheObject.CommonData.ACDId;
-        }
-
 
         public static GlobeTypes GetGlobeType(TrinityActor cacheObject)
         {

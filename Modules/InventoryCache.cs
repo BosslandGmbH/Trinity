@@ -42,6 +42,9 @@ namespace Trinity.Modules
 
         public void Update()
         {
+            return;
+
+            /*
             if (!ZetaDia.IsInGame || ZetaDia.Storage.PlayerDataManager.ActivePlayerData == null)
                 return;
 
@@ -90,7 +93,7 @@ namespace Trinity.Modules
             Equipped = equipped;
             EquippedIds = equippedIds;
             PlayerEquippedIds = playerEquippedIds;
-            BackpackItemCount = backpackItemCount;
+            BackpackItemCount = backpackItemCount;*/
         }
 
         public void Clear()

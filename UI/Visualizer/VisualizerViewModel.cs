@@ -165,10 +165,6 @@ namespace Trinity.UI.Visualizer
                 _lastRefresh = DateTime.UtcNow;
 
                 var objects = Core.Targets.ToList();
-                foreach (var obj in objects)
-                {
-                    obj.Position = obj.Position;
-                }
                 var queryableObjects = ApplySort(objects.AsQueryable());
 
                 Objects = new ObservableCollection<TrinityActor>(queryableObjects);

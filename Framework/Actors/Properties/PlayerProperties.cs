@@ -8,21 +8,6 @@ namespace Trinity.Framework.Actors.Properties
 {
     public class PlayerProperties
     {
-        public static void Populate(TrinityPlayer actor)
-        {
-            if (actor.ActorType != ActorType.Player)
-                return;
-
-            if (!actor.IsAcdBased || !actor.IsAcdValid)
-                return;
-
-            var attributes = actor.Attributes as AttributesWrapper;
-            actor.ActorClass = GetActorClass(actor.ActorSnoId);
-            actor.IsMe = actor.RActorId == Core.Actors.ActivePlayerRActorId;
-            actor.HeroId = ZetaDia.Service.Hero.HeroId;
-            actor.HeroName = ZetaDia.Service.Hero.Name;          
-        }
-
         public static int GetAcdIdByHeroId(int heroId)
         {
             // Only works if player is in the same area.

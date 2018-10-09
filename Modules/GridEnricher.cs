@@ -71,7 +71,7 @@ namespace Trinity.Modules
         public TrinityGrid Grid => Core.Grids.Avoidance;
         public AvoidanceSettings Settings => Core.Avoidance.Settings;
 
-        protected override int UpdateIntervalMs => 200;
+        protected override int UpdateIntervalMs => 1000;
         protected override void OnPulse() => UpdateGrid();
 
         public void UpdateGrid()
