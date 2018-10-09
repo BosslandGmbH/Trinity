@@ -128,8 +128,8 @@ namespace Trinity.Framework.Actors
                 if (_rActors.ContainsKey(zetaActor.RActorId))
                 {
                     var existingTrinityActor = _rActors[zetaActor.RActorId];
-
-                    newRactors.Add(zetaActor.RActorId, existingTrinityActor);
+                    if (!newRactors.ContainsKey(zetaActor.RActorId))
+                        newRactors.Add(zetaActor.RActorId, existingTrinityActor);
                     if (existingTrinityActor.AcdId > 0)
                         newAcdToRactorDict.Add(existingTrinityActor.AcdId, existingTrinityActor.RActorId);
                     existingTrinityActor.OnUpdated();
@@ -137,8 +137,8 @@ namespace Trinity.Framework.Actors
                 else
                 {
                     var newTrinityActor = ActorFactory.CreateActor(zetaActor);
-
-                    newRactors.Add(newTrinityActor.RActorId, newTrinityActor);
+                    if (!newRactors.ContainsKey(zetaActor.RActorId))
+                        newRactors.Add(newTrinityActor.RActorId, newTrinityActor);
                     if (newTrinityActor.AcdId > 0)
                         newAcdToRactorDict.Add(newTrinityActor.AcdId, newTrinityActor.RActorId);
                     newTrinityActor.OnCreated();
