@@ -329,7 +329,7 @@ namespace Trinity.Framework.Reference
                 return;
             if (isInGame && SafeClickElement(ConfirmTimedDungeonOK, "Confirm Timed Dungeon OK Button", true))
                 return;
-            if (isInGame && SafeClickElement(StashBuyNewTabButton, "Buying new Stash Tab"))
+            if (isInGame && Core.Settings.Items.BuyStashTabs && SafeClickElement(StashBuyNewTabButton, "Buying new Stash Tab"))
                 return;
             if (isInGame && SafeClickElement(TieredRiftRewardContinueButton, "Tiered Rift Reward Continue Button"))
                 return;
