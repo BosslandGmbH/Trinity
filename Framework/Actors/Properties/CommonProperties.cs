@@ -29,9 +29,6 @@ namespace Trinity.Framework.Actors.Properties
 
         public static void UpdateLineOfSight(TrinityActor actor)
         {
-            if (actor.ActorType == ActorType.Item)
-                return;
-
             var grid = TrinityGrid.GetUnsafeGrid();
             if (grid == null)
                 return;
