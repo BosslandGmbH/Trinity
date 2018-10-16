@@ -18,35 +18,34 @@ namespace Trinity.Framework.Avoidance.Handlers
                     continue;
 
                 var part = avoidance.Definition.GetPart(actor.ActorSnoId);
-                if (part != null)
+                if (part == null) continue;
+
+                try
                 {
-                    try
+                    if (part.Type == PartType.Telegraph)
                     {
-                        if (part.Type == PartType.Telegraph)
-                        {
-                            var nodes = new List<AvoidanceNode>();
-                            nodes.AddRange(grid.GetRayLineAsNodes(actor.Position,
-                                MathEx.GetPointAt(actor.Position, 60f, (float)(Math.PI / 2))));
-                            nodes.AddRange(grid.GetRayLineAsNodes(actor.Position,
-                                MathEx.GetPointAt(actor.Position, 60f, (float)(2 * Math.PI))));
-                            nodes.AddRange(grid.GetRayLineAsNodes(actor.Position,
-                                MathEx.GetPointAt(actor.Position, 60f, (float)(3 * Math.PI / 2))));
-                            nodes.AddRange(grid.GetRayLineAsNodes(actor.Position,
-                                MathEx.GetPointAt(actor.Position, 60f, (float)(Math.PI))));
-                            grid.FlagAvoidanceNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance,
-                                avoidance, 10);
-                        }
-                        else
-                        {
-                            var nodes = grid.GetRayLineAsNodes(actor.Position, avoidance.StartPosition)
-                                .SelectMany(n => n.AdjacentNodes);
-                            grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 10);
-                        }
+                        var nodes = new List<AvoidanceNode>();
+                        nodes.AddRange(grid.GetRayLineAsNodes(actor.Position,
+                            MathEx.GetPointAt(actor.Position, 60f, (float)(Math.PI / 2))));
+                        nodes.AddRange(grid.GetRayLineAsNodes(actor.Position,
+                            MathEx.GetPointAt(actor.Position, 60f, (float)(2 * Math.PI))));
+                        nodes.AddRange(grid.GetRayLineAsNodes(actor.Position,
+                            MathEx.GetPointAt(actor.Position, 60f, (float)(3 * Math.PI / 2))));
+                        nodes.AddRange(grid.GetRayLineAsNodes(actor.Position,
+                            MathEx.GetPointAt(actor.Position, 60f, (float)(Math.PI))));
+                        grid.FlagAvoidanceNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance,
+                            avoidance, 10);
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Core.Logger.Error("Exception {0}", ex);
+                        var nodes = grid.GetRayLineAsNodes(actor.Position, avoidance.StartPosition)
+                            .SelectMany(n => n.AdjacentNodes);
+                        grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 10);
                     }
+                }
+                catch (Exception ex)
+                {
+                    Core.Logger.Error("Exception {0}", ex);
                 }
             }
         }
