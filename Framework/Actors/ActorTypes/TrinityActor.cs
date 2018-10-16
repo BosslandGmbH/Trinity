@@ -81,7 +81,7 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public bool IsObstacle => GameData.NavigationObstacleIds.Contains(ActorSnoId) || GameData.PathFindingObstacles.ContainsKey(ActorSnoId);
         public int WorldDynamicId => _actor.WorldId; // TODO: Why doesn't this one work anymore? => _actor.WorldDynamicId
-        public float Radius => _actor?.CollisionSphere.Radius ?? 0.0f;
+        public float Radius => _actor?.InteractDistance ?? 0.0f;
         public TrinityObjectType Type => CommonProperties.GetObjectType(ActorType, ActorSnoId, GizmoType, InternalName);
         public float CollisionRadius => GameData.CustomObjectRadius.ContainsKey(ActorSnoId) ? GameData.CustomObjectRadius[ActorSnoId] : Math.Max(1f, AxialRadius * 0.60f);
         public int GameBalanceId => CommonData?.GameBalanceId ?? 0;
