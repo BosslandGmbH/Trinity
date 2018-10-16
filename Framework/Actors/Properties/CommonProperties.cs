@@ -181,8 +181,7 @@ namespace Trinity.Framework.Actors.Properties
 
         public static float GetRequiredRange(TrinityActor actor)
         {
-            float result;
-            if (GameData.CustomObjectRadius.TryGetValue(actor.ActorSnoId, out result))
+            if (GameData.CustomObjectRadius.TryGetValue(actor.ActorSnoId, out var result))
                 return result;
 
             switch (actor.Type)

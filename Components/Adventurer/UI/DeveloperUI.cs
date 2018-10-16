@@ -78,6 +78,8 @@ namespace Trinity.Components.Adventurer.UI
                     dumpers.Children.Add(CreateButton("Map Markers", DumpMapMarkers_Click));
                     dumpers.Children.Add(CreateButton("All Actors", DumpObjects_Click));
                     //dumpers.Children.Add(CreateButton("Specific Actor", DumpActor_Click));
+                    dumpers.Children.Add(CreateButton("Dynamic Bounties", DumpDynamicBounty_Click));
+                    dumpers.Children.Add(CreateButton("Bounty Quests", DumpBountyQuests_Click));
                     dumpers.Children.Add(CreateButton("Unsupported Bounties", DumpUnsupportedBounties_Click));
                     dumpers.Children.Add(CreateButton("Scenes", DumpLevelAreaScenes_Click));
                     dumpers.Children.Add(CreateButton("SceneData Entry", DumpSceneInfo));
@@ -435,14 +437,14 @@ namespace Trinity.Components.Adventurer.UI
                                                         {Act.A5,SNOQuest.x1_AdventureMode_BountyTurnin_A5},
                                                     };
 
-                    var quests = ZetaDia.Storage.Quests.AllQuests.Where(q => actBountyFinishingQuests.ContainsValue(q.Quest)).ToList();
+                    var quests = ZetaDia.Storage.Quests.AllQuests.ToList();
                     foreach (var quest in quests)
                     {
-                        ObjectDumper.Write(quest, 1);
+                        ObjectDumper.Write(quest, 5);
                     }
 
                     Core.Logger.Raw(" ");
-                    ObjectDumper.Write(ZetaDia.Me, 1);
+                    // ObjectDumper.Write(ZetaDia.Me, 1);
                 }
             }
             catch (Exception ex)
