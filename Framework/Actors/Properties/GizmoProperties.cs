@@ -149,7 +149,7 @@ namespace Trinity.Framework.Actors.Properties
 
                 if (actor.Type == TrinityObjectType.Destructible || actor.Type == TrinityObjectType.Barricade)
                 {
-                    if (actor.IsUntargetable || actor.IsInvulnerable || Math.Abs(actor.HitPointsMax - actor.HitPoints) > 0.0001)
+                    if (actor.IsUntargetable || actor.IsInvulnerable || actor.HitPoints < double.Epsilon)
                         return true;
 
                     if (attributes.IsDeletedOnServer)
@@ -157,8 +157,7 @@ namespace Trinity.Framework.Actors.Properties
                 }
             }
 
-            int endAnimation;
-            if (actor.IsInteractableType && GameData.InteractEndAnimations.TryGetValue(actor.ActorSnoId, out endAnimation)
+            if (actor.IsInteractableType && GameData.InteractEndAnimations.TryGetValue(actor.ActorSnoId, out var endAnimation)
                 && endAnimation == (int)actor.Animation)
                 return true;
 
