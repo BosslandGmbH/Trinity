@@ -111,7 +111,6 @@ namespace Trinity.Framework.Actors.Properties
 
             if (actor.LastInventorySlot == InventorySlot.None && actor.InventorySlot == InventorySlot.BackpackItems)
             {
-                Create(actor);
                 actor.OnPickedUp();
             }
 
@@ -122,9 +121,10 @@ namespace Trinity.Framework.Actors.Properties
 
             if (actor.InventorySlot == InventorySlot.BackpackItems && actor.IsUnidentified && !actor.Attributes.IsUnidentified)
             {
-                Create(actor);
                 actor.OnIdentified();
             }
+
+            Create(actor);
         }
 
         public static GlobeTypes GetGlobeType(TrinityActor cacheObject)
