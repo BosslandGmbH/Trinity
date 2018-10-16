@@ -41,7 +41,7 @@ namespace Trinity.Framework.Actors
     public class ActorCache : Module, IActorCache
     {
         public Dictionary<int, TrinityActor> _rActors = new Dictionary<int, TrinityActor>();
-        private readonly ConcurrentDictionary<int, TrinityItem> _inventory = new ConcurrentDictionary<int, TrinityItem>();
+        private ConcurrentDictionary<int, TrinityItem> _inventory = new ConcurrentDictionary<int, TrinityItem>();
 
         private readonly Dictionary<int, short> _annToAcdIndex = new Dictionary<int, short>();
         private Dictionary<int, int> _acdToRActorIndex = new Dictionary<int, int>();
@@ -158,6 +158,8 @@ namespace Trinity.Framework.Actors
         /// </summary>
         private void UpdateInventory()
         {
+            var newInventory = new ConcurrentDictionary<int, TrinityItem>();
+
             foreach (var acd in ZetaDia.Actors.ACDList)
             {
                 var type = acd.ActorType;
@@ -176,7 +178,7 @@ namespace Trinity.Framework.Actors
                 {
                     var newObj = ActorFactory.CreateItem(acd);
                     newObj.OnCreated();
-                    _inventory.TryAdd(annId, newObj);
+                    newInventory.TryAdd(annId, newObj);
                 }
                 else
                 {
@@ -184,10 +186,12 @@ namespace Trinity.Framework.Actors
                     if (!UpdateInventoryItem(oldObj, acd))
                         continue;
 
+                    newInventory.TryAdd(annId, oldObj);
                 }
             }
-        }
 
+            _inventory = newInventory;
+        }
 
         private bool UpdateInventoryItem(TrinityItem item, ACD commonData)
         {

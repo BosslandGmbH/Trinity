@@ -328,9 +328,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 return false;
             }
 
-            _interactRange = portal.CollisionSphere.Radius;
-            // Add some tolerance, sometimes the radius is pretty low and it will keep stuck trying to move to it even when it's right besides it.
-            _interactRange += ZetaDia.Me.CollisionSphere.Radius;
+            _interactRange = portal.InteractDistance;
             
             Core.Logger.Debug($"[EnterLevelArea] Using interact range from portal: {_interactRange}");
 

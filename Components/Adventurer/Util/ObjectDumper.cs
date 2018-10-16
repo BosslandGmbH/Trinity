@@ -21,9 +21,8 @@ namespace Trinity.Components.Adventurer.Util
 
         private void WriteObject(object element, int level, int extraDepth = 0)
         {
-            if (element is IEnumerable)
+            if (element is IEnumerable enumValues)
             {
-                var enumValues = element as IEnumerable;
                 foreach (var enumValue in enumValues)
                 {
                     if (enumValue.GetType().IsValueType || enumValue is string)
@@ -99,26 +98,14 @@ namespace Trinity.Components.Adventurer.Util
 
         private static void LogValue(int level, int extraDepth, object value)
         {
-            if (value is string)
-            {
-                Core.Logger.Raw("{0}\"{1},\"", GetIndent(level, extraDepth), RemoveNewLines(value.ToString()));
-            }
-            else
-            {
-                Core.Logger.Raw("{0}{1},", GetIndent(level, extraDepth), RemoveNewLines(value.ToString()));
-            }
+            Core.Logger.Raw(value is string ? "{0}\"{1},\"" : "{0}{1},", GetIndent(level, extraDepth),
+                RemoveNewLines(value.ToString()));
         }
 
         private static void LogValue(int level, int extraDepth, string name, object value)
         {
-            if (value is string)
-            {
-                Core.Logger.Raw("{0}{1}: \"{2}\"", GetIndent(level, extraDepth), name, RemoveNewLines(value.ToString()));
-            }
-            else
-            {
-                Core.Logger.Raw("{0}{1}: {2}", GetIndent(level, extraDepth), name, RemoveNewLines(value.ToString()));
-            }
+            Core.Logger.Raw(value is string ? "{0}{1}: \"{2}\"" : "{0}{1}: {2}", GetIndent(level, extraDepth), name,
+                RemoveNewLines(value.ToString()));
         }
 
         private static string RemoveNewLines(string value)

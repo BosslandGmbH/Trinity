@@ -33,7 +33,7 @@ namespace Trinity.Components.Coroutines
                 return false;
 
             if (interactLimit < 1) interactLimit = 5;
-            if (range < 0) range = obj.CollisionSphere.Radius;
+            if (range < 0) range = obj.InteractDistance;
 
             if (Core.Player.IsInTown)
                 GameUI.CloseVendorWindow();
@@ -50,7 +50,7 @@ namespace Trinity.Components.Coroutines
             }
 
             var distance = obj.Position.Distance(ZetaDia.Me.Position);
-            if (distance <= range || distance - obj.CollisionSphere.Radius <= range)
+            if (distance <= range || distance - obj.InteractDistance <= range)
             {
                 for (int i = 1; i <= interactLimit; i++)
                 {
@@ -145,7 +145,7 @@ namespace Trinity.Components.Coroutines
 
             // Do the interaction
             var startingWorldId = ZetaDia.Globals.WorldSnoId;
-            if (distance <= Math.Max(actor.CollisionSphere.Radius, 10f))
+            if (distance <= Math.Max(actor.InteractDistance, 10f))
             {
                 Navigator.PlayerMover.MoveStop();
 

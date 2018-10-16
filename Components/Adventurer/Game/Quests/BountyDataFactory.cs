@@ -36,8 +36,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return Bounties.FirstOrDefault(b => b.QuestId == questId) ?? GetDynamicBounty(QuestData.GetQuestData(questId));
         }
 
-
-
         private static BountyData GetDynamicBounty(QuestData quest)
         {
             if (quest == null)

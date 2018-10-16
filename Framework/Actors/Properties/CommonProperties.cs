@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Trinity.Components.Combat;
@@ -29,9 +29,6 @@ namespace Trinity.Framework.Actors.Properties
 
         public static void UpdateLineOfSight(TrinityActor actor)
         {
-            if (actor.ActorType == ActorType.Item)
-                return;
-
             var grid = TrinityGrid.GetUnsafeGrid();
             if (grid == null)
                 return;
@@ -181,8 +178,7 @@ namespace Trinity.Framework.Actors.Properties
 
         public static float GetRequiredRange(TrinityActor actor)
         {
-            float result;
-            if (GameData.CustomObjectRadius.TryGetValue(actor.ActorSnoId, out result))
+            if (GameData.CustomObjectRadius.TryGetValue(actor.ActorSnoId, out var result))
                 return result;
 
             switch (actor.Type)

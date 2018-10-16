@@ -276,18 +276,16 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     throw;
                 }
 
-                GuardedGizmo guardedGizmo;
                 if (!_guardedGizmos.ContainsKey(position))
                 {
-                    guardedGizmo = new GuardedGizmo();
-                    guardedGizmo.Position = position;
-                    guardedGizmo.InteractDistance = (int)Math.Round(gizmo.CollisionSphere.Radius + 1, MidpointRounding.AwayFromZero);
-                    _guardedGizmos.Add(position, guardedGizmo);
+                    _guardedGizmos.Add(position, new GuardedGizmo
+                    {
+                        Position = position,
+                        InteractDistance = (int)Math.Round(gizmo.InteractDistance, MidpointRounding.AwayFromZero)
+                    });
                 }
-                else
-                {
-                    guardedGizmo = _guardedGizmos[gizmo.Position];
-                }
+
+                var guardedGizmo = _guardedGizmos[gizmo.Position];
                 guardedGizmo.HasBeenOperated = !ActorFinder.IsGizmoInteractable(gizmo);
                 guardedGizmo.Untargateble = untargetable;
             }
