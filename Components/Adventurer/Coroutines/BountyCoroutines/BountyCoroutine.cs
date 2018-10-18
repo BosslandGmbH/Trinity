@@ -159,7 +159,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         private async Task<bool> TakingWaypoint()
         {
-            if (!await WaypointCoroutine.UseWaypoint(BountyData.WaypointLevelAreaId))
+            if (!await WaypointCoroutine.UseWaypoint(BountyData.WaypointNumber))
                 return false;
 
             State = States.InZone;
