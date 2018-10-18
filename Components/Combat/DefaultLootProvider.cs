@@ -41,7 +41,7 @@ namespace Trinity.Components.Combat
 
         public bool ShouldPickup(TrinityItem item)
         {
-            if (item == null || !item.IsValid)
+            if (item == null || !item.IsValid || item.ActorSnoId == 0 || item.GameBalanceId == 0)
             {
                 Core.Logger.Debug($"Not a valid item {item?.InternalName} Sno={item?.ActorSnoId} GbId={item?.GameBalanceId}");
                 return false;
@@ -644,7 +644,7 @@ namespace Trinity.Components.Combat
                     return true;
                 }
 
- 
+
 
                 reason = "Default";
                 switch (item.TrinityItemType)
