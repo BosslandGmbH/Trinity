@@ -96,7 +96,7 @@ namespace Trinity.Components.Coroutines.Town
                     Core.Logger.Error($"[SalvageItems] Failed to move to blacksmith ({blacksmith.Name}) to salvage items :(");
                     return false;
                 };
-                await Coroutine.Sleep(Rnd.Next(750, 1250));
+                await Coroutine.Yield();
             }
 
             if (UIElements.SalvageWindow.IsVisible)
@@ -136,7 +136,6 @@ namespace Trinity.Components.Coroutines.Town
                     }
                 }
 
-                await Coroutine.Sleep(500);
                 await Coroutine.Yield();
 
                 var timeout = DateTime.UtcNow.Add(TimeSpan.FromSeconds(30));
@@ -145,7 +144,7 @@ namespace Trinity.Components.Coroutines.Town
                     if (!UIElements.SalvageWindow.IsVisible)
                         break;
 
-                    await Coroutine.Sleep(Rnd.Next(200, 300));
+                    await Coroutine.Yield();
                     Core.Actors.Update();
 
                     var freshItems = Core.Inventory.Backpack.Where(i => ShouldSalvage(i) && !Core.Inventory.InvalidAnnIds.Contains(i.AnnId)).ToList();
@@ -174,7 +173,7 @@ namespace Trinity.Components.Coroutines.Town
                     ItemEvents.FireItemSalvaged(item);
                 }
 
-                await Coroutine.Sleep(Rnd.Next(750, 1250));
+                await Coroutine.Yield();
                 await RepairItems.Execute();
                 return true;
             }

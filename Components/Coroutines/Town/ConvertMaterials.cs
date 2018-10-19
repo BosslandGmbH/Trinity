@@ -85,12 +85,11 @@ namespace Trinity.Components.Coroutines.Town
             Core.Logger.Verbose($"[ConvertMaterials] Starting Material Counts DeathsBreath={Core.Inventory.Currency.DeathsBreath} {from}={fromAmount} {to}={toAmount} SacraficialItems={sacraficialItems.Count}");
 
             while (CanRun(from, to))
-            {                
+            {
                 var item = GetSacraficialItems(to).First();
                 var recipe = GetRecipeFromCurrency(from);
 
                 await Transmute.Execute(item, recipe);
-                await Coroutine.Sleep(1250);
                 await Coroutine.Yield();
                 Core.Update();
 
@@ -114,7 +113,6 @@ namespace Trinity.Components.Coroutines.Town
                     return false;
                 }
 
-                await Coroutine.Sleep(100);
                 await Coroutine.Yield();
             }
 
@@ -151,8 +149,8 @@ namespace Trinity.Components.Coroutines.Town
             switch (to)
             {
                 case CurrencyType.ArcaneDust:
-                    return quality == TrinityItemQuality.Rare 
-                        ? TransmuteRecipe.ConvertCraftingMaterialsFromRare 
+                    return quality == TrinityItemQuality.Rare
+                        ? TransmuteRecipe.ConvertCraftingMaterialsFromRare
                         : TransmuteRecipe.ConvertCraftingMaterialsFromNormal;
 
                 case CurrencyType.VeiledCrystal:
@@ -270,13 +268,8 @@ namespace Trinity.Components.Coroutines.Town
                 if (!isVendor && stackQuantity != 0 || isVendor && stackQuantity > 1)
                     return false;
 
-                if (!qualities.Contains(i.ItemQualityLevel))
-                    return false;
-
-                return true;
-
+                return qualities.Contains(i.ItemQualityLevel);
             }).ToList();
         }
-
     }
 }

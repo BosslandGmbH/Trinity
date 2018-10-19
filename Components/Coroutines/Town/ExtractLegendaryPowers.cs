@@ -38,8 +38,8 @@ namespace Trinity.Components.Coroutines.Town
             Legendary.CorruptedAshbringer.Id
         };
 
-        private static readonly List<int> _itemsTakenFromStashAnnId = new List<int>();
-        private static readonly HashSet<int> _blacklistedActorSnoIds = new HashSet<int>();
+        private static readonly List<int> ItemsTakenFromStashAnnId = new List<int>();
+        private static readonly HashSet<int> BlacklistedActorSnoIds = new HashSet<int>();
 
         public static bool HasCurrencyRequired
             => Core.Inventory.Currency.HasCurrency(TransmuteRecipe.ExtractLegendaryPower);
@@ -55,8 +55,7 @@ namespace Trinity.Components.Coroutines.Town
             if (DateTime.UtcNow < _disabledUntil)
                 return false;
 
-            var kule = TownInfo.ZoltunKulle?.GetActor() as DiaUnit;
-            if (kule != null)
+            if (TownInfo.ZoltunKulle?.GetActor() is DiaUnit kule)
             {
                 if (kule.IsQuestGiver)
                 {
@@ -120,7 +119,7 @@ namespace Trinity.Components.Coroutines.Town
                 if (alreadyCubedIds.Contains(item.ActorSnoId))
                     continue;
 
-                if (_blacklistedActorSnoIds.Contains(item.ActorSnoId))
+                if (BlacklistedActorSnoIds.Contains(item.ActorSnoId))
                     continue;
 
                 if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyTrashed && Combat.TrinityCombat.Loot.ShouldStash(item))
@@ -150,10 +149,10 @@ namespace Trinity.Components.Coroutines.Town
             // Make sure we put back anything we removed from stash. Its possible for example that we ran out of materials
             // and the current backpack contents do no longer match the loot rules. Don't want them to be lost.
 
-            if (_itemsTakenFromStashAnnId.Any())
+            if (ItemsTakenFromStashAnnId.Any())
             {
-                await PutItemsInStash.Execute(_itemsTakenFromStashAnnId);
-                _itemsTakenFromStashAnnId.Clear();
+                await PutItemsInStash.Execute(ItemsTakenFromStashAnnId);
+                ItemsTakenFromStashAnnId.Clear();
             }
             return result;
         }
@@ -217,7 +216,7 @@ namespace Trinity.Components.Coroutines.Town
 
                     if (!await ExtractPower(backpackCandidate))
                         return false;
-              
+
                 }
                 else if (Core.Settings.KanaisCube.CubeExtractFromStash)
                 {
@@ -230,7 +229,7 @@ namespace Trinity.Components.Coroutines.Town
                     if (!await TakeItemsFromStash.Execute(stashCandidates))
                         return false;
 
-                    _itemsTakenFromStashAnnId.AddRange(stashCandidates.Select(i => i.AnnId));
+                    ItemsTakenFromStashAnnId.AddRange(stashCandidates.Select(i => i.AnnId));
                 }
                 else
                 {
@@ -238,7 +237,6 @@ namespace Trinity.Components.Coroutines.Town
                     return false;
                 }
 
-                await Coroutine.Sleep(500);
                 await Coroutine.Yield();
             }
             return true;
@@ -256,19 +254,19 @@ namespace Trinity.Components.Coroutines.Town
             var affixDescription = item.Reference.LegendaryAffix;
 
             await Transmute.Execute(item, TransmuteRecipe.ExtractLegendaryPower);
-            await Coroutine.Sleep(1500);
+            await Coroutine.Yield();
 
             var shouldBeDestroyedItem = InventoryManager.Backpack.FirstOrDefault(i => i.AnnId == itemDynamicId);
             if (shouldBeDestroyedItem == null && ZetaDia.Storage.PlayerDataManager.ActivePlayerData.KanaisPowersExtractedActorSnoIds.Contains(itemSnoId))
             {
                 Core.Logger.Log($"[ExtractLegendaryPowers] Item Power Extracted! '{itemName}' ({itemSnoId}) Description={affixDescription}");
                 Core.Inventory.InvalidAnnIds.Add(itemDynamicId);
-                _itemsTakenFromStashAnnId.Remove(itemDynamicId);
+                ItemsTakenFromStashAnnId.Remove(itemDynamicId);
                 return true;
             }
 
             Core.Logger.Log($"[ExtractLegendaryPowers] Failed to Extract Power! '{itemName}' ({itemSnoId}) {itemInternalName} DynId={itemDynamicId}");
-            _blacklistedActorSnoIds.Add(itemSnoId);
+            BlacklistedActorSnoIds.Add(itemSnoId);
             return false;
         }
 
@@ -283,10 +281,7 @@ namespace Trinity.Components.Coroutines.Town
             if (TownInfo.KanaisCube.Distance > 350f || TownInfo.KanaisCube.Position == Vector3.Zero)
                 return false;
 
-            if (!await MoveToAndInteract.Execute(TownInfo.KanaisCube))
-                return false;
-
-            return true;
+            return await MoveToAndInteract.Execute(TownInfo.KanaisCube);
         }
     }
 }

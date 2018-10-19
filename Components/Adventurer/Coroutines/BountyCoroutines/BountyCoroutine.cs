@@ -39,7 +39,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
                 if ((BountyData.LevelAreaIds != null && BountyData.LevelAreaIds.Contains(AdvDia.CurrentLevelAreaId)))
                     return true;
-                
+
                 if (ZetaDia.Storage.Quests.ActiveBounty != null && (int)ZetaDia.Storage.Quests.ActiveBounty.Quest == QuestId)
                     return true;
 
@@ -131,7 +131,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
             }
             if (!_returningToTownWaitTimer.IsFinished) return false;
             _returningToTownWaitTimer = null;
-         
+
             Stats = BountyStatistic.GetInstance(QuestId);
 
             LastBountyStats = Stats;
@@ -187,12 +187,11 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
             _completedWaitTimer = null;
             _isDone = true;
-            if (Stats != null)
-            {
-                Stats.EndTime = DateTime.UtcNow;
-                Stats.IsCompleted = true;
-                Core.Logger.Log("[Bounty] Completed {0} ({1}) Time {2:hh\\:mm\\:ss}", QuestData.Name, QuestId, Stats.EndTime - Stats.StartTime);
-            }
+            if (Stats == null) return true;
+
+            Stats.EndTime = DateTime.UtcNow;
+            Stats.IsCompleted = true;
+            Core.Logger.Log("[Bounty] Completed {0} ({1}) Time {2:hh\\:mm\\:ss}", QuestData.Name, QuestId, Stats.EndTime - Stats.StartTime);
 
             return true;
         }
@@ -203,19 +202,18 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
             _isDone = true;
             Stats.EndTime = DateTime.UtcNow;
             Stats.IsFailed = true;
-            await Coroutine.Sleep(1000);
+            await Coroutine.Yield();
             return true;
         }
 
         protected void CheckBountyStatus()
         {
-            if (!BountyData.IsAvailable)
+            if (BountyData.IsAvailable) return;
+
+            State = States.Completed;
+            foreach (var coroutine in BountyData.Coroutines)
             {
-                State = States.Completed;
-                foreach (var coroutine in BountyData.Coroutines)
-                {
-                    coroutine.DisablePulse();
-                }
+                coroutine.DisablePulse();
             }
         }
 

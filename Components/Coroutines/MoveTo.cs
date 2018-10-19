@@ -36,7 +36,7 @@ namespace Trinity.Components.Coroutines
 
             while (ZetaDia.Me.LoopingAnimationEndTime > 0)
             {
-                await Coroutine.Sleep(50);
+                await Coroutine.Yield();
             }
 
             Navigator.PlayerMover.MoveTowards(location);

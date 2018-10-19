@@ -38,10 +38,10 @@ namespace Trinity.Components.Coroutines
             if (thisItem.DynamicId == thatItem.DynamicId)
                 return 0;
 
-            string thisInternalName = thisItem.InternalName.ToLower().Replace("x1_", "").Replace("p1_", "");
-            string thatInternalName = thatItem.InternalName.ToLower().Replace("x1_", "").Replace("p1_", "");
-            string thisSortName = thisItem.Name;
-            string thatSortName = thatItem.Name;
+            var thisInternalName = thisItem.InternalName.ToLower().Replace("x1_", "").Replace("p1_", "");
+            var thatInternalName = thatItem.InternalName.ToLower().Replace("x1_", "").Replace("p1_", "");
+            var thisSortName = thisItem.Name;
+            var thatSortName = thatItem.Name;
 
             // Compare front to back, or back to front
             if (!thisItem.IsEquipment)
@@ -146,7 +146,7 @@ namespace Trinity.Components.Coroutines
                 // Sort Sets
                 if (thisItem.IsSetItem && thatItem.IsSetItem && thisItem.IsTwoSquareItem)
                 {
-                    bool isSameSet = thisItem.ItemSetName == thatItem.ItemSetName;
+                    var isSameSet = thisItem.ItemSetName == thatItem.ItemSetName;
                     if (isSameSet)
                     {
                         return String.Compare(thisSortName, thatSortName, StringComparison.InvariantCulture);
@@ -356,7 +356,7 @@ namespace Trinity.Components.Coroutines
 
                 _usedGrid = new bool[10, 6];
                 // Block off the entire of any "protected bag slots"
-                foreach (InventorySquare square in CharacterSettings.Instance.ProtectedBagSlots)
+                foreach (var square in CharacterSettings.Instance.ProtectedBagSlots)
                 {
                     _usedGrid[square.Column, square.Row] = true;
                     Core.Logger.Verbose("Slot {0},{1} is protected", square.Column, square.Row);
@@ -366,7 +366,7 @@ namespace Trinity.Components.Coroutines
             {
                 wrappedItems = InventoryManager.StashItems.Where(i => i.IsValid).Select(i => new ItemWrapper(i)).ToList();
 
-                int maxStashRow = InventoryManager.NumSharedStashSlots / 7;
+                var maxStashRow = InventoryManager.NumSharedStashSlots / 7;
                 // 7 columns, 10 rows x 5 pages
                 _usedGrid = new bool[7, maxStashRow];
             }
@@ -377,7 +377,7 @@ namespace Trinity.Components.Coroutines
             }
 
 
-            var equipment = wrappedItems.Where(i => i.IsEquipment).OrderByDescending(i => i);
+            var equipment = wrappedItems.Where(i => i.IsEquipment).OrderByDescending(i => i).ToArray();
             _sortedItemsQueue = new Queue<ItemWrapper>(equipment);
             Core.Logger.Verbose("Queued {0} items for forward sort", _sortedItemsQueue.Count());
 
@@ -386,7 +386,7 @@ namespace Trinity.Components.Coroutines
                 Core.Logger.Verbose("{0}", item.Name);
             }
 
-            var misc = wrappedItems.Where(i => !i.IsEquipment).OrderByDescending(i => i);
+            var misc = wrappedItems.Where(i => !i.IsEquipment).OrderByDescending(i => i).ToArray();
             _reverseSortedItemsQueue = new Queue<ItemWrapper>(misc);
             Core.Logger.Verbose("Queued {0} items for reverse sort", _reverseSortedItemsQueue.Count());
 
@@ -411,7 +411,6 @@ namespace Trinity.Components.Coroutines
                 if (inventoryButton != null && inventoryButton.IsEnabled && inventoryButton.IsVisible)
                 {
                     inventoryButton.Click();
-                    await Coroutine.Sleep(100);
                     await Coroutine.Yield();
                 }
                 else
@@ -428,7 +427,7 @@ namespace Trinity.Components.Coroutines
 
                 Core.Logger.Log("Waiting 5 seconds...");
                 BotMain.StatusText = "Waiting 5 seconds...";
-                await Coroutine.Sleep(5000);
+                await Coroutine.Yield();
 
                 if (ReturnToStash.StartedOutOfTown && ZetaDia.IsInTown)
                     await CommonBehaviors.TakeTownPortalBack().ExecuteCoroutine();
@@ -451,8 +450,8 @@ namespace Trinity.Components.Coroutines
                 Core.Logger.Verbose("Initiating sort task 1");
 
                 var myDynamicId = ZetaDia.Me.CommonData.AnnId;
-                int currentRow = 0;
-                int currentCol = 0;
+                var currentRow = 0;
+                var currentCol = 0;
                 int maxCol = 0, maxRow = 0;
                 switch (inventorySlot)
                 {
@@ -508,7 +507,7 @@ namespace Trinity.Components.Coroutines
 
                     await ClearSpot(inventorySlot, currentCol, currentRow, i.IsTwoSquareItem, isForward: true);
 
-                    string msg = String.Format("Moving item {0} from {1},{2} to {3},{4}", i.Name, i.Item.InventoryColumn, i.Item.InventoryRow, currentCol, currentRow);
+                    var msg = $"Moving item {i.Name} from {i.Item.InventoryColumn},{i.Item.InventoryRow} to {currentCol},{currentRow}";
                     BotMain.StatusText = msg;
                     Core.Logger.Verbose(msg);
                     InventoryManager.MoveItem(i.DynamicId, myDynamicId, inventorySlot, currentCol, currentRow);
@@ -516,7 +515,6 @@ namespace Trinity.Components.Coroutines
                     MarkCellAsUsed(currentRow, currentCol, i);
                     currentCol++;
 
-                    await Coroutine.Sleep(ItemMovementDelay);
                     await Coroutine.Yield();
                 }
             }
@@ -535,8 +533,8 @@ namespace Trinity.Components.Coroutines
                 Core.Logger.Verbose("Initiating sort task 2");
 
                 var myDynamicId = ZetaDia.Me.CommonData.AnnId;
-                int currentRow = 5;
-                int currentCol = 9;
+                var currentRow = 5;
+                var currentCol = 9;
                 int maxCol = 0, maxRow = 0;
                 switch (inventorySlot)
                 {
@@ -571,11 +569,9 @@ namespace Trinity.Components.Coroutines
                     {
                         Core.Logger.Verbose("Grid location {0},{1} is used already", currentCol, currentRow);
                         currentCol--;
-                        if (currentCol < 0)
-                        {
-                            currentCol = maxCol;
-                            currentRow--;
-                        }
+                        if (currentCol >= 0) continue;
+                        currentCol = maxCol;
+                        currentRow--;
                     }
 
                     if (i.Item.InventoryColumn == currentCol && i.Item.InventoryRow == currentRow)
@@ -586,26 +582,25 @@ namespace Trinity.Components.Coroutines
                         continue;
                     }
 
-                    int desiredStashPage = await SetStashpage(currentRow);
+                    var desiredStashPage = await SetStashpage(currentRow);
 
                     if (i.Item.MaxStackCount > 1 && InventoryManager.CanStackItemInStashPage(i.Item, desiredStashPage) && GetNumberOfStacks(i.Item, inventorySlot) > 1)
                     {
                         InventoryManager.QuickWithdraw(i.Item);
-                        await Coroutine.Sleep(100);
                         await Coroutine.Yield();
 
                         var sameItem = InventoryManager.Backpack.FirstOrDefault(item => item.ActorSnoId == i.ActorSnoId && item.Name.StartsWith(i.Name.Substring(0, 4)));
                         if (sameItem != null)
                         {
                             InventoryManager.QuickStash(sameItem);
-                            await Coroutine.Sleep(100);
+                            await Coroutine.Yield();
                         }
                         continue;
                     }
 
                     await ClearSpot(inventorySlot, currentCol, currentRow, i.IsTwoSquareItem, isForward: false);
 
-                    string msg = String.Format("Moving item {0} from {1},{2} to {3},{4}", i.Name, i.Item.InventoryColumn, i.Item.InventoryRow, currentCol, currentRow);
+                    var msg = $"Moving item {i.Name} from {i.Item.InventoryColumn},{i.Item.InventoryRow} to {currentCol},{currentRow}";
                     BotMain.StatusText = msg;
                     Core.Logger.Verbose(msg);
                     InventoryManager.MoveItem(i.DynamicId, myDynamicId, inventorySlot, currentCol, currentRow);
@@ -613,7 +608,6 @@ namespace Trinity.Components.Coroutines
                     MarkCellAsUsed(currentRow, currentCol, i);
                     currentCol--;
 
-                    await Coroutine.Sleep(ItemMovementDelay);
                     await Coroutine.Yield();
 
                 }
@@ -645,11 +639,10 @@ namespace Trinity.Components.Coroutines
 
         private static async Task<int> SetStashpage(int currentRow)
         {
-            int desiredStashPage = (int)Math.Floor((double)currentRow / 10);
+            var desiredStashPage = (int)Math.Floor((double)currentRow / 10);
             if (InventoryManager.CurrentStashPage != desiredStashPage)
             {
                 InventoryManager.SwitchStashPage(desiredStashPage);
-                await Coroutine.Sleep(100);
                 await Coroutine.Yield();
             }
             return desiredStashPage;
@@ -669,7 +662,7 @@ namespace Trinity.Components.Coroutines
         public static async Task<bool> ClearSpot(InventorySlot location, int col, int row, bool isTwoSquare, bool isForward)
         {
             var myDynamicId = ZetaDia.Me.CommonData.AnnId;
-            int lastRow = isTwoSquare ? row + 1 : row;
+            var lastRow = isTwoSquare ? row + 1 : row;
 
             for (; row <= lastRow; row++)
             {
@@ -683,12 +676,11 @@ namespace Trinity.Components.Coroutines
 
                         if (newSpot.Item1 != -1 && newSpot.Item2 != -1)
                         {
-                            string msg = $"Clearing location {col},{row} - Moving item {item.Name} to {newSpot.Item1},{newSpot.Item2}";
+                            var msg = $"Clearing location {col},{row} - Moving item {item.Name} to {newSpot.Item1},{newSpot.Item2}";
                             BotMain.StatusText = msg;
                             Core.Logger.Verbose(msg);
                             InventoryManager.MoveItem(item.AnnId, myDynamicId, location, newSpot.Item1, newSpot.Item2);
 
-                            await Coroutine.Sleep(ItemMovementDelay);
                             await Coroutine.Yield();
                         }
                         else
@@ -708,13 +700,13 @@ namespace Trinity.Components.Coroutines
 
         private static ACDItem GetItemInLocation(InventorySlot location, int col, int row)
         {
-            Func<ACDItem, bool> twoSlot1 = i => i.InventorySlot == location && i.InventoryRow == row && i.InventoryColumn == col;
-            Func<ACDItem, bool> twoSlot2 = i => i.InventorySlot == location && i.InventoryRow == row - 1 && i.InventoryColumn == col && i.IsTwoSquareItem;
+            bool TwoSlot1(ACDItem i) => i.InventorySlot == location && i.InventoryRow == row && i.InventoryColumn == col;
+            bool TwoSlot2(ACDItem i) => i.InventorySlot == location && i.InventoryRow == row - 1 && i.InventoryColumn == col && i.IsTwoSquareItem;
 
             return ZetaDia.Actors.ACDList
                 .Where(i => i is ACDItem && i.IsValid)
                 .Cast<ACDItem>()
-                .FirstOrDefault(i => twoSlot1(i) || twoSlot2(i));
+                .FirstOrDefault(i => TwoSlot1(i) || TwoSlot2(i));
         }
 
         internal static Tuple<int, int> FindEmptySquare(InventorySlot inventorySlot, int targetCol, int targetRow, bool isTwoSquare, bool isForward)
@@ -735,8 +727,8 @@ namespace Trinity.Components.Coroutines
         {
             try
             {
-                int stashRows = InventoryManager.NumSharedStashSlots / 7;
-                bool[,] stashSlotBlocked = new bool[7, stashRows];
+                var stashRows = InventoryManager.NumSharedStashSlots / 7;
+                var stashSlotBlocked = new bool[7, stashRows];
 
                 if (targetCol >= 0 && targetRow >= 0)
                 {
@@ -745,7 +737,7 @@ namespace Trinity.Components.Coroutines
                         stashSlotBlocked[targetCol, targetRow + 1] = true;
                 }
                 // Map out all the items already in the backpack
-                foreach (ACDItem item in InventoryManager.StashItems)
+                foreach (var item in InventoryManager.StashItems)
                 {
                     if (!item.IsValid)
                     {
@@ -753,8 +745,8 @@ namespace Trinity.Components.Coroutines
                         continue;
                     }
 
-                    int col = item.InventoryColumn;
-                    int row = item.InventoryRow;
+                    var col = item.InventoryColumn;
+                    var row = item.InventoryRow;
 
                     stashSlotBlocked[col, row] = true;
 
@@ -767,10 +759,10 @@ namespace Trinity.Components.Coroutines
                 if (isForward)
                 {
                     // 50 rows
-                    for (int row = 0; row <= stashRows - 1; row++)
+                    for (var row = 0; row <= stashRows - 1; row++)
                     {
                         // 7 columns
-                        for (int col = 0; col <= 6; col++)
+                        for (var col = 0; col <= 6; col++)
                         {
                             if (InventoryManager.ItemInLocation(InventorySlot.SharedStash, col, row))
                                 continue;
@@ -804,10 +796,10 @@ namespace Trinity.Components.Coroutines
                 else
                 {
                     // 10 columns
-                    for (int col = 6; col >= 0; col--)
+                    for (var col = 6; col >= 0; col--)
                     {
                         // 6 rows
-                        for (int row = stashRows - 1; row >= 0; row--)
+                        for (var row = stashRows - 1; row >= 0; row--)
                         {
                             if (InventoryManager.ItemInLocation(InventorySlot.SharedStash, col, row))
                                 continue;
@@ -864,10 +856,10 @@ namespace Trinity.Components.Coroutines
         {
             try
             {
-                bool[,] backpackSlotBlocked = new bool[10, 6];
+                var backpackSlotBlocked = new bool[10, 6];
 
                 // Block off the entire of any "protected bag slots"
-                foreach (InventorySquare square in CharacterSettings.Instance.ProtectedBagSlots)
+                foreach (var square in CharacterSettings.Instance.ProtectedBagSlots)
                 {
                     backpackSlotBlocked[square.Column, square.Row] = true;
                     Core.Logger.Verbose("Slot {0},{1} is protected", square.Column, square.Row);
@@ -881,7 +873,7 @@ namespace Trinity.Components.Coroutines
                 }
 
                 // Map out all the items already in the backpack
-                foreach (ACDItem item in InventoryManager.Backpack)
+                foreach (var item in InventoryManager.Backpack)
                 {
                     if (!item.IsValid)
                     {
@@ -889,8 +881,8 @@ namespace Trinity.Components.Coroutines
                         continue;
                     }
 
-                    int col = item.InventoryColumn;
-                    int row = item.InventoryRow;
+                    var col = item.InventoryColumn;
+                    var row = item.InventoryRow;
 
                     if (row < 0 || row > 5)
                     {
@@ -917,10 +909,10 @@ namespace Trinity.Components.Coroutines
                 if (isForward)
                 {
                     // 10 columns
-                    for (int col = 0; col <= 9; col++)
+                    for (var col = 0; col <= 9; col++)
                     {
                         // 6 rows
-                        for (int row = 0; row <= 5; row++)
+                        for (var row = 0; row <= 5; row++)
                         {
                             if (InventoryManager.ItemInLocation(InventorySlot.BackpackItems, col, row))
                                 continue;
@@ -955,10 +947,10 @@ namespace Trinity.Components.Coroutines
                 else
                 {
                     // 10 columns
-                    for (int col = 9; col >= 0; col--)
+                    for (var col = 9; col >= 0; col--)
                     {
                         // 6 rows
-                        for (int row = 5; row >= 0; row--)
+                        for (var row = 5; row >= 0; row--)
                         {
                             if (InventoryManager.ItemInLocation(InventorySlot.BackpackItems, col, row))
                                 continue;
@@ -1025,7 +1017,7 @@ namespace Trinity.Components.Coroutines
                 if (!stats.Item.IsValid)
                     return default(ItemStatsData);
 
-                ItemStatsData itemStatsData = new ItemStatsData()
+                var itemStatsData = new ItemStatsData()
                 {
                     Sockets = stats.Sockets,
                     WeaponMinDamage = stats.WeaponMinDamage,
@@ -1068,7 +1060,7 @@ namespace Trinity.Components.Coroutines
         public bool IsSetItem { get; set; }
         public string ItemSetName { get; set; }
 
-        public ACDItem Item { get; private set; }
+        public ACDItem Item { get; }
         public ItemStats Stats { get; private set; }
         public ItemStatsData StatsData { get; private set; }
 
@@ -1130,10 +1122,7 @@ namespace Trinity.Components.Coroutines
             if (IsOneHand)
                 return false;
 
-            if (ItemType == ItemType.Ring)
-                return false;
-
-            return true;
+            return ItemType != ItemType.Ring;
         }
 
         public int CompareTo(ItemWrapper other)
@@ -1164,10 +1153,7 @@ namespace Trinity.Components.Coroutines
         {
             if (ReferenceEquals(a, null))
                 return false;
-            if (ReferenceEquals(b, null))
-                return false;
-
-            return a.Equals(b);
+            return !ReferenceEquals(b, null) && a.Equals(b);
         }
 
         public override bool Equals(object obj)

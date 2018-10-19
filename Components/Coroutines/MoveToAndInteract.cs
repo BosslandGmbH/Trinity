@@ -58,7 +58,6 @@ namespace Trinity.Components.Coroutines
                     if (obj.Interact() && i > 1)
                         break;
 
-                    await Coroutine.Sleep(500);
                     await Coroutine.Yield();
                 }
             }
@@ -66,11 +65,11 @@ namespace Trinity.Components.Coroutines
             // Better to be redundant than failing to interact.
 
             Navigator.PlayerMover.MoveTowards(obj.Position);
-            await Coroutine.Sleep(500);
+            await Coroutine.Yield();
             obj.Interact();
 
             Navigator.PlayerMover.MoveStop();
-            await Coroutine.Sleep(1000);
+            await Coroutine.Yield();
             await Interact(obj);
             return true;
         }
@@ -158,7 +157,6 @@ namespace Trinity.Components.Coroutines
                     if (actor.Interact() && i > 1)
                         break;
 
-                    await Coroutine.Sleep(100);
                     await Coroutine.Yield();
 
                     if (IsInteracting())
@@ -166,7 +164,6 @@ namespace Trinity.Components.Coroutines
                 }
             }
 
-            await Coroutine.Sleep(100);
             await Coroutine.Yield();
 
             // Better to be redundant than failing to interact.
@@ -174,14 +171,14 @@ namespace Trinity.Components.Coroutines
             if (!IsInteracting())
             {
                 Navigator.PlayerMover.MoveTowards(actor.Position);
-                await Coroutine.Sleep(100);
+                await Coroutine.Yield();
                 actor.Interact();
             }
 
             if (!IsInteracting())
             {
                 Navigator.PlayerMover.MoveStop();
-                await Coroutine.Sleep(100);
+                await Coroutine.Yield();
                 await Interact(actor);
             }
 
@@ -232,7 +229,7 @@ namespace Trinity.Components.Coroutines
 
             // Doubly-make sure we interact
             actor.Interact();
-            await Coroutine.Sleep(100);
+            await Coroutine.Yield();
             return retVal;
         }
     }
