@@ -337,7 +337,7 @@ namespace Trinity.Routines
         public virtual async Task<bool> HandleKiting()
         {
             if (!Core.Avoidance.Avoider.ShouldKite) return false;
-            if (!Core.Avoidance.Avoider.TryGetSafeSpot(out var safespot) || safespot.Distance(ZetaDia.Me.Position) < 3f) return false;
+            if (!Core.Avoidance.Avoider.TryGetSafeSpot(out var safespot) || safespot.Distance(ZetaDia.Me.Position) < 5f) return false;
 
             Core.Logger.Log(LogCategory.Avoidance, "Kiting");
             await CastDefensiveSpells();
@@ -350,11 +350,10 @@ namespace Trinity.Routines
             {
                 if (!Core.Avoidance.Avoider.ShouldAvoid) return false;
 
-                var isCloseToSafeSpot = Core.Player.Position.Distance(Core.Avoidance.Avoider.SafeSpot) < 3f;
-                if (CurrentTarget == null || (CurrentTarget.IsInAvoidance && !isCloseToSafeSpot)) return true;
-
-                var canReachTarget = CurrentTarget.Distance < CurrentPower?.MinimumRange;
-                if (!canReachTarget || !CurrentTarget.IsAvoidanceOnPath || Core.Player.Actor.IsInAvoidance) return true;
+                var isCloseToSafeSpot = Core.Player.Position.Distance(Core.Avoidance.Avoider.SafeSpot) < 5f;
+                if (Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) > 5f && (Core.Player.Actor.IsInAvoidance || (CurrentTarget != null && ((CurrentTarget.IsInAvoidance && !isCloseToSafeSpot)
+                    || CurrentTarget.Distance > CurrentPower?.MinimumRange
+                    || !CurrentTarget.IsAvoidanceOnPath)))) return true;
 
                 Core.Logger.Log(LogCategory.Avoidance, "Not avoiding due to being safe and target is within range");
                 return false;
@@ -369,13 +368,13 @@ namespace Trinity.Routines
             if (!TrinityCombat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
             {
                 Core.Logger.Log(LogCategory.Avoidance, "Waiting for avoidance to clear (out of combat)");
-                return await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f, () => Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) < 5f || !IsAvoidanceRequired);
+                return await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f, () => !IsAvoidanceRequired);
             }
 
             if (Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) < 5f) return false;
 
             Core.Logger.Log(LogCategory.Avoidance, "Moving away from Critical Avoidance.");
-            if (await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f, () => Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) < 5f || !IsAvoidanceRequired))
+            if (await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f, () => !IsAvoidanceRequired))
                 return true;
 
             await CastDefensiveSpells();

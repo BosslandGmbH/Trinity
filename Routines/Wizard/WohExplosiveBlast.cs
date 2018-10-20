@@ -9,7 +9,6 @@ using System.Windows.Controls;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.Components.Coroutines;
-using Trinity.DbProvider;
 using Trinity.Framework.Objects;
 using Trinity.Settings;
 using Trinity.UI;
@@ -24,7 +23,7 @@ namespace Trinity.Routines.Wizard
         #region Definition
         public string DisplayName => System.Globalization.CultureInfo.InstalledUICulture.Name.ToLower().StartsWith("zh") ? "沃尔贤者气息速刷专用" : "WohExplosiveBlast Nephalem Rift Beta";
         public string Description => System.Globalization.CultureInfo.InstalledUICulture.Name.ToLower().StartsWith("zh") ? "平均一小时死亡之息可以获得600-800个，如果装备足够好的话，可以速刷T12" : "You can got every hour 600-800 death breath.Godly gears can farm T12.";
-        public string Author => System.Globalization.CultureInfo.InstalledUICulture.Name.ToLower().StartsWith("zh") ? "晚风清徐" :"Night Breeze";
+        public string Author => System.Globalization.CultureInfo.InstalledUICulture.Name.ToLower().StartsWith("zh") ? "晚风清徐" : "Night Breeze";
         public string Version => "1.0.0";
         public string Url => System.Globalization.CultureInfo.InstalledUICulture.Name.ToLower().StartsWith("zh") ? "http://db.178.com/d3/s/632908684" : "http://www.d3planner.com/822977979";
 
@@ -91,11 +90,11 @@ namespace Trinity.Routines.Wizard
             if (!TrinityCombat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
             {
                 Core.Logger.Log(LogCategory.Avoidance, "Waiting for avoidance to clear (out of combat)");
-                return await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f, () => Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) < 5f || !IsAvoidanceRequired);
+                return await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f, () => !IsAvoidanceRequired);
             }
 
             Core.Logger.Log(LogCategory.Avoidance, "Avoiding");
-            return await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f, () => Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) < 5f || !IsAvoidanceRequired);
+            return await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f, () => !IsAvoidanceRequired);
         }
 
         public TrinityPower GetOffensivePower()
@@ -110,7 +109,7 @@ namespace Trinity.Routines.Wizard
             }
 
             // 锁定奥拉什
-            var target = Core.Actors.Actors.Where(u => u.ActorSnoId == 360636).ToList().FirstOrDefault() ?? (TargetUtil.BestEliteInRange(50) ?? TrinityCombat.Targeting.CurrentTarget);
+            var target = Core.Actors.Actors.FirstOrDefault(u => u.ActorSnoId == 360636) ?? (TargetUtil.BestEliteInRange(50) ?? TrinityCombat.Targeting.CurrentTarget);
 
             if (target.Distance > 15 && Skills.Wizard.Teleport.CanCast())
                 return Teleport(target.Position);
@@ -123,13 +122,13 @@ namespace Trinity.Routines.Wizard
 
             return null;
         }
-		
+
         public TrinityPower GetDefensivePower()
         {
             return null;
         }
 
-        public TrinityPower GetBuffPower() 
+        public TrinityPower GetBuffPower()
         {
             if (Player.IsInTown)
                 return null;
@@ -156,7 +155,7 @@ namespace Trinity.Routines.Wizard
         {
             return null;
         }
-        
+
         public TrinityPower GetMovementPower(Vector3 destination)
         {
             if (Player.IsCastingPortal)
@@ -176,7 +175,7 @@ namespace Trinity.Routines.Wizard
 
 
         #region Settings
-        
+
         public override int ClusterSize => Settings.ClusterSize;
         public override float EmergencyHealthPct => Settings.EmergencyHealthPct;
 
