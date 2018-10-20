@@ -88,7 +88,7 @@ namespace Trinity.Modules
                 {
                     Core.Scenes.Reset();
                     Core.Scenes.Update();
-                    Core.Logger.Debug(LogCategory.Avoidance, $"No Player Nearest Node or WorldId Mismatch");
+                    Core.Logger.Debug(LogCategory.Avoidance, "No Player Nearest Node or WorldId Mismatch");
                     return;
                 }
 

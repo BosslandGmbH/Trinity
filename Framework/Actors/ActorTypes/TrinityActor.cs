@@ -80,15 +80,15 @@ namespace Trinity.Framework.Actors.ActorTypes
         public float AxialRadius => ActorInfo?.AxialCylinder.Ax1 ?? 0.0f;
 
         public bool IsObstacle => GameData.NavigationObstacleIds.Contains(ActorSnoId) || GameData.PathFindingObstacles.ContainsKey(ActorSnoId);
-        public int WorldDynamicId => _actor.WorldId; // TODO: Why doesn't this one work anymore? => _actor.WorldDynamicId
-        public float Radius => _actor?.InteractDistance ?? 0.0f;
+        public int WorldDynamicId => Actor.WorldId; // TODO: Why doesn't this one work anymore? => _actor.WorldDynamicId
+        public float Radius => Actor?.InteractDistance ?? 0.0f;
         public TrinityObjectType Type => CommonProperties.GetObjectType(ActorType, ActorSnoId, GizmoType, InternalName);
         public float CollisionRadius => GameData.CustomObjectRadius.ContainsKey(ActorSnoId) ? GameData.CustomObjectRadius[ActorSnoId] : Math.Max(1f, AxialRadius * 0.60f);
         public int GameBalanceId => CommonData?.GameBalanceId ?? 0;
 
         // TODO: Make it possible to have some "invalid" GameBalanceTypes.
         public GameBalanceType GameBalanceType => CommonData?.GameBalanceType ?? GameBalanceType.ItemTypes;
-        public bool IsMe => _actor.IsMe;
+        public bool IsMe => Actor.IsMe;
         public bool IsUnit => Type == TrinityObjectType.Unit || ActorType == ActorType.Monster || ActorType == ActorType.Player;
         public bool IsItem => Type == TrinityObjectType.Item || ActorType == ActorType.Item;
         public bool IsPlayer => Type == TrinityObjectType.Player || ActorType == ActorType.Player;
@@ -174,8 +174,8 @@ namespace Trinity.Framework.Actors.ActorTypes
         {
             get
             {
-                if (_actor.Movement != null && _actor.Movement.IsValid)
-                    return _actor.Movement;
+                if (Actor.Movement != null && Actor.Movement.IsValid)
+                    return Actor.Movement;
 
                 return null;
             }

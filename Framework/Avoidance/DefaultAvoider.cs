@@ -49,8 +49,6 @@ namespace Trinity.Framework.Avoidance
             TrinityObjectType.Shrine
         };
 
-        //public static AvoidanceSetting Settings => Core.Avoidance.Settings;
-
         public static DateTime KiteStutterCooldownEndTime = DateTime.MinValue;
         public static DateTime LastAvoidTime = DateTime.MinValue;
         public static DateTime LastKiteTime = DateTime.MinValue;
@@ -72,14 +70,8 @@ namespace Trinity.Framework.Avoidance
         {
             get
             {
-                if (Settings.Entries == null)
+                if (Settings.Entries == null || !Settings.Entries.Any(a => a.IsEnabled))
                     return false;
-
-                if (!Settings.Entries.Any(a => a.IsEnabled))
-                    return false;
-
-                //if (Settings.OnlyAvoidWhileInGrifts && (!Core.Rift.IsInRift || ZetaDia.Storage.CurrentRiftType != RiftType.Greater))
-                //    return false;
 
                 if (Core.Avoidance.GridEnricher.ActiveAvoidanceSnoIds == null || !Core.Avoidance.GridEnricher.ActiveAvoidanceSnoIds.Any())
                     return false;
@@ -99,27 +91,23 @@ namespace Trinity.Framework.Avoidance
                     return false;
                 }
 
-                if (Core.Avoidance.GridEnricher.HighestNodeWeight >= 2 &&
-                    Core.Avoidance.NearbyStats.HighestWeight >= Settings.MinimumHighestNodeWeightTrigger &&
-                    Core.Avoidance.NearbyStats.WeightPctTotal >= Settings.MinimumNearbyWeightPctTotalTrigger &&
-                    Core.Avoidance.NearbyStats.WeightPctAvg >= Settings.AvoiderNearbyPctAvgTrigger)
-                {
-                    Core.Logger.Debug(LogCategory.Avoidance, "Avoidance Local PctAvg: {0:0.00} / {1:0.00} PctTotal={2:0.00} / {3:0.00} Highest={4} / {5} ({6} Nodes, AbsHighest={7})",
-                        Core.Avoidance.NearbyStats.WeightPctAvg,
-                        Settings.AvoiderNearbyPctAvgTrigger,
-                        Core.Avoidance.NearbyStats.WeightPctTotal,
-                        Settings.MinimumNearbyWeightPctTotalTrigger,
-                        Core.Avoidance.NearbyStats.HighestWeight,
-                        Settings.MinimumHighestNodeWeightTrigger,
-                        Core.Avoidance.NearbyStats.NodesTotal,
-                        Core.Avoidance.GridEnricher.HighestNodeWeight);
+                if (Core.Avoidance.GridEnricher.HighestNodeWeight < 2 ||
+                    !(Core.Avoidance.NearbyStats.HighestWeight >= Settings.MinimumHighestNodeWeightTrigger) ||
+                    !(Core.Avoidance.NearbyStats.WeightPctTotal >= Settings.MinimumNearbyWeightPctTotalTrigger) ||
+                    !(Core.Avoidance.NearbyStats.WeightPctAvg >= Settings.AvoiderNearbyPctAvgTrigger)) return false;
 
-                    LastAvoidTime = DateTime.UtcNow;
-                    {
-                        return true;
-                    }
-                }
-                return false;
+                Core.Logger.Debug(LogCategory.Avoidance, "Avoidance Local PctAvg: {0:0.00} / {1:0.00} PctTotal={2:0.00} / {3:0.00} Highest={4} / {5} ({6} Nodes, AbsHighest={7})",
+                    Core.Avoidance.NearbyStats.WeightPctAvg,
+                    Settings.AvoiderNearbyPctAvgTrigger,
+                    Core.Avoidance.NearbyStats.WeightPctTotal,
+                    Settings.MinimumNearbyWeightPctTotalTrigger,
+                    Core.Avoidance.NearbyStats.HighestWeight,
+                    Settings.MinimumHighestNodeWeightTrigger,
+                    Core.Avoidance.NearbyStats.NodesTotal,
+                    Core.Avoidance.GridEnricher.HighestNodeWeight);
+
+                LastAvoidTime = DateTime.UtcNow;
+                return true;
             }
         }
 
@@ -127,30 +115,27 @@ namespace Trinity.Framework.Avoidance
         {
             get
             {
-                if (TargetZDif < 8 && Settings.Entries != null && Settings.Entries.Any(a => a.IsEnabled))
+                if (!(TargetZDif < 8) || Settings.Entries == null || !Settings.Entries.Any(a => a.IsEnabled)) return false;
+
+                var standingInCritical = Core.Grids.Avoidance.IsStandingInFlags(AvoidanceFlags.CriticalAvoidance);
+                if (standingInCritical)
                 {
-                    var standingInCritical = Core.Grids.Avoidance.IsStandingInFlags(AvoidanceFlags.CriticalAvoidance);
-                    if (standingInCritical)
-                    {
-                        Core.Logger.Debug(LogCategory.Avoidance, "IsStandingInFlags... CriticalAvoidance");
-                        LastAvoidTime = DateTime.UtcNow;
-                        return true;
-                    }
-
-                    if (TrinityCombat.Targeting.CurrentTarget != null && Core.Grids.Avoidance.IsIntersectedByFlags(ZetaDia.Me.Position, TrinityCombat.Targeting.CurrentTarget.Position, AvoidanceFlags.CriticalAvoidance))
-                    {
-                        TargetUtil.ClearCurrentTarget("Current Target Intersects Critical Avoidance.");
-                    }
-
-                    if (Core.Grids.Avoidance.IsPathingOverFlags(AvoidanceFlags.CriticalAvoidance))
-                    {
-                        Core.Logger.Debug(LogCategory.Avoidance, "IsPathingOverFlags... CriticalAvoidance");
-                        Navigator.Clear();
-                        LastAvoidTime = DateTime.UtcNow;
-                        return true;
-                    }
+                    Core.Logger.Debug(LogCategory.Avoidance, "IsStandingInFlags... CriticalAvoidance");
+                    LastAvoidTime = DateTime.UtcNow;
+                    return true;
                 }
-                return false;
+
+                if (TrinityCombat.Targeting.CurrentTarget != null && Core.Grids.Avoidance.IsIntersectedByFlags(ZetaDia.Me.Position, TrinityCombat.Targeting.CurrentTarget.Position, AvoidanceFlags.CriticalAvoidance))
+                {
+                    TargetUtil.ClearCurrentTarget("Current Target Intersects Critical Avoidance.");
+                }
+
+                if (!Core.Grids.Avoidance.IsPathingOverFlags(AvoidanceFlags.CriticalAvoidance)) return false;
+
+                Core.Logger.Debug(LogCategory.Avoidance, "IsPathingOverFlags... CriticalAvoidance");
+                Navigator.Clear();
+                LastAvoidTime = DateTime.UtcNow;
+                return true;
             }
         }
 
@@ -206,22 +191,14 @@ namespace Trinity.Framework.Avoidance
             if (Core.Player.IsInTown)
                 return false;
 
-            //if (!Core.Settings.Combat.Misc.AvoidAoEOutOfCombat && !Combat.IsInCombat)
-            //    return false;
-
             if (ShouldAvoidCritical)
                 return true;
 
-            if (TrinityCombat.Routines.Current?.ShouldIgnoreAvoidance() ?? false)
-            {
-                Core.Logger.Debug(LogCategory.Avoidance, "Not Avoiding because routine has said no");
-                return false;
-            }
+            if (!(TrinityCombat.Routines.Current?.ShouldIgnoreAvoidance() ?? false)) return ShouldAvoidNormal;
 
-            if (ShouldAvoidNormal)
-                return true;
-
+            Core.Logger.Debug(LogCategory.Avoidance, "Not Avoiding because routine has said no");
             return false;
+
         }
 
         private static bool GetShouldKite()
@@ -289,28 +266,23 @@ namespace Trinity.Framework.Avoidance
             }
 
             var isAtKiteHealth = playerHealthPct <= TrinityCombat.Routines.Current.KiteHealthPct;
-            if (isAtKiteHealth && TargetZDif < 4 && TrinityCombat.Routines.Current.KiteMode != KiteMode.Never)
-            {
-                var canSeeTarget = TrinityCombat.Targeting.CurrentTarget != null || Core.Avoidance.Grid.CanRayCast(ZetaDia.Me.Position, TrinityCombat.Targeting.CurrentTarget.Position);
-                if (canSeeTarget)
-                {
-                    if (Core.Grids.Avoidance.IsStandingInFlags(AvoidanceFlags.KiteFrom))
-                    {
-                        if (DateTime.UtcNow.Subtract(LastKiteTime).TotalMilliseconds > TrinityCombat.Routines.Current.KiteStutterDelay)
-                        {
-                            Core.Logger.Debug(LogCategory.Avoidance, "Kite Shutter Triggered");
-                            LastKiteTime = DateTime.UtcNow;
-                            KiteStutterCooldownEndTime = DateTime.UtcNow.AddMilliseconds(TrinityCombat.Routines.Current.KiteStutterDuration);
-                            return true;
-                        }
+            if (!isAtKiteHealth || !(TargetZDif < 4) || TrinityCombat.Routines.Current.KiteMode == KiteMode.Never) return false;
 
-                        Core.Logger.Debug(LogCategory.Avoidance, "IsStandingInFlags... KiteFromNode");
-                        LastAvoidTime = DateTime.UtcNow;
-                        return true;
-                    }
-                }
+            var canSeeTarget = TrinityCombat.Targeting.CurrentTarget != null && (TrinityCombat.Targeting.CurrentTarget != null || Core.Avoidance.Grid.CanRayCast(ZetaDia.Me.Position, TrinityCombat.Targeting.CurrentTarget.Position));
+
+            if (!canSeeTarget || !Core.Grids.Avoidance.IsStandingInFlags(AvoidanceFlags.KiteFrom)) return false;
+
+            if (DateTime.UtcNow.Subtract(LastKiteTime).TotalMilliseconds > TrinityCombat.Routines.Current.KiteStutterDelay)
+            {
+                Core.Logger.Debug(LogCategory.Avoidance, "Kite Shutter Triggered");
+                LastKiteTime = DateTime.UtcNow;
+                KiteStutterCooldownEndTime = DateTime.UtcNow.AddMilliseconds(TrinityCombat.Routines.Current.KiteStutterDuration);
+                return true;
             }
-            return false;
+
+            Core.Logger.Debug(LogCategory.Avoidance, "IsStandingInFlags... KiteFromNode");
+            LastAvoidTime = DateTime.UtcNow;
+            return true;
         }
     }
 }
