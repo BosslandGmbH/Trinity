@@ -85,17 +85,17 @@ namespace Trinity.Routines.Wizard
 
         public override async Task<bool> HandleAvoiding()
         {
-            if (Core.Player.Actor == null || !await IsAvoidanceRequired()) return false;
+            if (Core.Player.Actor == null || !IsAvoidanceRequired) return false;
 
             var safe = (!Core.Player.IsTakingDamage || Core.Player.CurrentHealthPct > 0.5f) && Core.Player.Actor != null && !Core.Player.Actor.IsInCriticalAvoidance;
             if (!TrinityCombat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
             {
                 Core.Logger.Log(LogCategory.Avoidance, "Waiting for avoidance to clear (out of combat)");
-                return await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f);
+                return await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f, () => Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) < 5f || !IsAvoidanceRequired);
             }
 
             Core.Logger.Log(LogCategory.Avoidance, "Avoiding");
-            return await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f);
+            return await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f, () => Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) < 5f || !IsAvoidanceRequired);
         }
 
         public TrinityPower GetOffensivePower()
@@ -156,8 +156,7 @@ namespace Trinity.Routines.Wizard
         {
             return null;
         }
-
-
+        
         public TrinityPower GetMovementPower(Vector3 destination)
         {
             if (Player.IsCastingPortal)

@@ -44,8 +44,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         }
 
         public ActorType ActorType { get; private set; }
-
-
+        
         public bool IsAcdBased => Actor == null;
         public bool IsRActorBased => Actor != null;
         public Vector3 Position => _fixedACD?.Position ?? Actor?.Position ?? Vector3.Zero;
