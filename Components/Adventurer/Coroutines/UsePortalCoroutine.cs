@@ -156,6 +156,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             if (ZetaDia.Globals.IsLoadingWorld)
             {
                 Core.Logger.Debug("[UsePortal] Waiting for the world to load");
+                await Coroutine.Sleep(200);
                 await Coroutine.Wait(30000, () => !ZetaDia.Globals.IsLoadingWorld);
                 return false;
             }
@@ -220,7 +221,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
             _interactAttempts++;
             //GameEvents.FireWorldTransferStart();
-            await Coroutine.Yield();
+            await Coroutine.Sleep(200);
             return retVal;
         }
     }

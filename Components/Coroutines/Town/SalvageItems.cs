@@ -14,6 +14,7 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Components.Coroutines.Town
 {
+    // TODO: Make sure there is only one Salvage Routine. Might need to merge them and finetune it.
     public static class SalvageItems
     {
         static SalvageItems()
@@ -50,6 +51,39 @@ namespace Trinity.Components.Coroutines.Town
             return decision;
         }
 
+        public static async Task<bool> EnsureSalvageWindow()
+        {
+            var blacksmith = TownInfo.BlacksmithSalvage;
+            if (blacksmith == null)
+            {
+                Core.Logger.Error("[SalvageItems] Unable to find a blacksmith info for this area :(");
+                return false;
+            }
+
+            while (!UIElements.SalvageWindow.IsVisible)
+            {
+                var blacksmithNpc = TownInfo.Blacksmith;
+                if (blacksmithNpc != null)
+                {
+                    Core.DBGridProvider.AddCellWeightingObstacle(blacksmithNpc.ActorId, 4);
+                }
+
+                if (!await MoveTo.Execute(blacksmith.InteractPosition))
+                {
+                    Core.Logger.Error($"[SalvageItems] Failed to move to blacksmith interact position ({blacksmith.Name}) to salvage items :(");
+                    return false;
+                };
+
+                if (!await MoveToAndInteract.Execute(blacksmith, 10f))
+                {
+                    Core.Logger.Error($"[SalvageItems] Failed to move to blacksmith ({blacksmith.Name}) to salvage items :(");
+                    return false;
+                };
+                await Coroutine.Wait(1000, () => UIElements.SalvageWindow.IsVisible);
+            }
+            return true;
+        }
+
         public static async Task<bool> Execute()
         {
             if (!ZetaDia.IsInTown)
@@ -70,74 +104,48 @@ namespace Trinity.Components.Coroutines.Town
 
             GameUI.CloseVendorWindow();
 
-            var blacksmith = TownInfo.BlacksmithSalvage;
-            if (blacksmith == null)
+            if (!await EnsureSalvageWindow())
             {
-                Core.Logger.Error("[SalvageItems] Unable to find a blacksmith info for this area :(");
+                Core.Logger.Error($"[SalvageItems] Failed to salvage items");
                 return false;
             }
 
-            if (!UIElements.SalvageWindow.IsVisible)
+            if (ZetaDia.Me.Level >= 70 && UIElements.SalvageAllWrapper.IsVisible)
             {
-                var blacksmithNpc = TownInfo.Blacksmith;
-                if (blacksmithNpc != null)
+                var items = Core.Inventory.Backpack.Where(i => Combat.TrinityCombat.Loot.ShouldSalvage(i)).ToList();
+
+                var normals = items.Where(i => NormalQualityLevels.Contains(i.ItemQualityLevel)).ToList();
+                if (normals.Count > 0)
                 {
-                    Core.DBGridProvider.AddCellWeightingObstacle(blacksmithNpc.ActorId, 4);
+                    Core.Logger.Verbose($"[SalvageItems] Bulk Salvaging {normals.Count} Normal");
+                    if (InventoryManager.SalvageItemsOfRarity(SalvageRarity.Normal))
+                    {
+                        normals.ForEach(ItemEvents.FireItemSalvaged);
+                    }
                 }
 
-                if (!await MoveTo.Execute(blacksmith.InteractPosition))
+                var magic = items.Where(i => MagicQualityLevels.Contains(i.ItemQualityLevel)).ToList();
+                if (magic.Count > 0)
                 {
-                    Core.Logger.Error($"[SalvageItems] Failed to move to blacksmith interact position ({blacksmith.Name}) to salvage items :(");
-                    return false;
-                };
+                    Core.Logger.Verbose($"[SalvageItems] Bulk Salvaging {magic.Count} Magic");
+                    if (InventoryManager.SalvageItemsOfRarity(SalvageRarity.Magic))
+                    {
+                        magic.ForEach(ItemEvents.FireItemSalvaged);
+                    }
+                }
 
-                if (!await MoveToAndInteract.Execute(blacksmith, 10f))
+                var rares = items.Where(i => RareQualityLevels.Contains(i.ItemQualityLevel)).ToList();
+                if (rares.Count > 0)
                 {
-                    Core.Logger.Error($"[SalvageItems] Failed to move to blacksmith ({blacksmith.Name}) to salvage items :(");
-                    return false;
-                };
-                await Coroutine.Yield();
+                    Core.Logger.Verbose($"[SalvageItems] Bulk Salvaging {rares.Count} Rare");
+                    if (InventoryManager.SalvageItemsOfRarity(SalvageRarity.Rare))
+                    {
+                        rares.ForEach(ItemEvents.FireItemSalvaged);
+                    }
+                }
             }
-
-            if (UIElements.SalvageWindow.IsVisible)
+            else
             {
-                if (ZetaDia.Me.Level >= 70 && UIElements.SalvageAllWrapper.IsVisible)
-                {
-                    var items = Core.Inventory.Backpack.Where(i => Combat.TrinityCombat.Loot.ShouldSalvage(i)).ToList();
-
-                    var normals = items.Where(i => NormalQualityLevels.Contains(i.ItemQualityLevel)).ToList();
-                    if (normals.Count > 0)
-                    {
-                        Core.Logger.Verbose($"[SalvageItems] Bulk Salvaging {normals.Count} Normal");
-                        if (InventoryManager.SalvageItemsOfRarity(SalvageRarity.Normal))
-                        {
-                            normals.ForEach(ItemEvents.FireItemSalvaged);
-                        }
-                    }
-
-                    var magic = items.Where(i => MagicQualityLevels.Contains(i.ItemQualityLevel)).ToList();
-                    if (magic.Count > 0)
-                    {
-                        Core.Logger.Verbose($"[SalvageItems] Bulk Salvaging {magic.Count} Magic");
-                        if (InventoryManager.SalvageItemsOfRarity(SalvageRarity.Magic))
-                        {
-                            magic.ForEach(ItemEvents.FireItemSalvaged);
-                        }
-                    }
-
-                    var rares = items.Where(i => RareQualityLevels.Contains(i.ItemQualityLevel)).ToList();
-                    if (rares.Count > 0)
-                    {
-                        Core.Logger.Verbose($"[SalvageItems] Bulk Salvaging {rares.Count} Rare");
-                        if (InventoryManager.SalvageItemsOfRarity(SalvageRarity.Rare))
-                        {
-                            rares.ForEach(ItemEvents.FireItemSalvaged);
-                        }
-                    }
-                }
-
-                await Coroutine.Yield();
-
                 var timeout = DateTime.UtcNow.Add(TimeSpan.FromSeconds(30));
                 while (DateTime.UtcNow < timeout)
                 {
@@ -172,14 +180,12 @@ namespace Trinity.Components.Coroutines.Town
                     Core.Inventory.InvalidAnnIds.Add(item.AnnId);
                     ItemEvents.FireItemSalvaged(item);
                 }
-
-                await Coroutine.Yield();
-                await RepairItems.Execute();
-                return true;
             }
 
-            Core.Logger.Error($"[SalvageItems] Failed to salvage items");
-            return false;
+            await Coroutine.Yield();
+
+            await RepairItems.Execute();
+            return true;
         }
 
         private static readonly HashSet<ItemQuality> RareQualityLevels = new HashSet<ItemQuality>

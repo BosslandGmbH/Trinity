@@ -52,7 +52,7 @@ namespace Trinity.Components.Coroutines
             var distance = obj.Position.Distance(ZetaDia.Me.Position);
             if (distance <= range || distance - obj.InteractDistance <= range)
             {
-                for (int i = 1; i <= interactLimit; i++)
+                for (var i = 1; i <= interactLimit; i++)
                 {
                     Core.Logger.Verbose("Interacting with {0} ({1}) Attempt={2}", obj.Name, obj.ActorSnoId, i);
                     if (obj.Interact() && i > 1)
@@ -148,7 +148,7 @@ namespace Trinity.Components.Coroutines
             {
                 Navigator.PlayerMover.MoveStop();
 
-                for (int i = 1; i <= interactLimit; i++)
+                for (var i = 1; i <= interactLimit; i++)
                 {
                     if (ZetaDia.Globals.WorldSnoId != startingWorldId)
                         return true;
@@ -159,7 +159,7 @@ namespace Trinity.Components.Coroutines
 
                     await Coroutine.Yield();
 
-                    if (IsInteracting())
+                    if (IsInteracting)
                         break;
                 }
             }
@@ -168,14 +168,14 @@ namespace Trinity.Components.Coroutines
 
             // Better to be redundant than failing to interact.
 
-            if (!IsInteracting())
+            if (!IsInteracting)
             {
                 Navigator.PlayerMover.MoveTowards(actor.Position);
                 await Coroutine.Yield();
                 actor.Interact();
             }
 
-            if (!IsInteracting())
+            if (!IsInteracting)
             {
                 Navigator.PlayerMover.MoveStop();
                 await Coroutine.Yield();
@@ -185,15 +185,9 @@ namespace Trinity.Components.Coroutines
             return true;
         }
 
-        private static bool IsInteracting()
-        {
-            if (ZetaDia.Me.LoopingAnimationEndTime > 0 || _castingAnimationStates.Contains(ZetaDia.Me.CommonData.AnimationState))
-                return true;
+        private static bool IsInteracting => ZetaDia.Me.LoopingAnimationEndTime > 0 || CastingAnimationStates.Contains(ZetaDia.Me.CommonData.AnimationState);
 
-            return false;
-        }
-
-        private static readonly HashSet<AnimationState> _castingAnimationStates = new HashSet<AnimationState>
+        private static readonly HashSet<AnimationState> CastingAnimationStates = new HashSet<AnimationState>
         {
             AnimationState.Channeling,
             AnimationState.Casting,
@@ -204,7 +198,7 @@ namespace Trinity.Components.Coroutines
             if (!actor.IsFullyValid())
                 return false;
 
-            bool retVal = false;
+            var retVal = false;
             switch (actor.ActorType)
             {
                 case ActorType.Gizmo:
