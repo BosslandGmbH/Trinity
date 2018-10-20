@@ -109,7 +109,7 @@ namespace Trinity.Routines.Wizard
             }
 
             // 锁定奥拉什
-            var target = Core.Actors.Actors.FirstOrDefault(u => u.ActorSnoId == 360636) ?? (TargetUtil.BestEliteInRange(50) ?? TrinityCombat.Targeting.CurrentTarget);
+            var target = Core.Actors.Actors.FirstOrDefault(u => u.ActorSnoId == 360636) ?? TargetUtil.BestEliteInRange(50) ?? TrinityCombat.Targeting.CurrentTarget;
 
             if (target.Distance > 15 && Skills.Wizard.Teleport.CanCast())
                 return Teleport(target.Position);
