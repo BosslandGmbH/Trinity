@@ -27,7 +27,7 @@ namespace Trinity.Framework.Avoidance.Handlers
 
                 var part = avoidance.Definition.GetPart(actor.ActorSnoId);
 
-                if (part.MovementType == MovementType.Rotation)
+                if (part?.MovementType == MovementType.Rotation)
                 {
                     Rotator rotator;
                     if (!_rotators.TryGetValue(actor.RActorId, out rotator))
