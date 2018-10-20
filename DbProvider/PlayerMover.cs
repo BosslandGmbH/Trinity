@@ -42,7 +42,7 @@ namespace Trinity.DbProvider
             var zDiff = Math.Abs(destination.Z - Core.Player.Position.Z);
             if (zDiff < 3f && !IsBlocked && !Core.StuckHandler.IsStuck)
             {
-                if (Core.Player.Position.Distance(destination) < double.Epsilon)
+                if (Core.Player.Position.Distance2D(destination) < 3)
                     return MoveResult.ReachedDestination;
 
                 var isVeryClose = Core.Player.Position.Distance(destination) <= 8f;
