@@ -198,31 +198,8 @@ namespace Trinity.Components.Coroutines
             if (!actor.IsFullyValid())
                 return false;
 
-            var retVal = false;
-            switch (actor.ActorType)
-            {
-                case ActorType.Gizmo:
-                    switch (actor.ActorInfo.GizmoType)
-                    {
-                        case GizmoType.BossPortal:
-                        case GizmoType.Portal:
-                        case GizmoType.ReturnPortal:
-                            retVal = ZetaDia.Me.UsePower(SNOPower.GizmoOperatePortalWithAnimation, actor.Position);
-                            break;
-
-                        default:
-                            retVal = ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, actor.Position);
-                            break;
-                    }
-                    break;
-
-                case ActorType.Monster:
-                    retVal = ZetaDia.Me.UsePower(SNOPower.Axe_Operate_NPC, actor.Position);
-                    break;
-            }
-
             // Doubly-make sure we interact
-            actor.Interact();
+            var retVal = actor.Interact();
             await Coroutine.Yield();
             return retVal;
         }

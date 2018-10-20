@@ -156,9 +156,9 @@ namespace Trinity.Components.Coroutines.Town
                     var itemAnnId = item.AnnId;
                     var itemInternalName = item.InternalName;
                     await Transmute.Execute(item, TransmuteRecipe.UpgradeRareItem);
-                    await Coroutine.Yield();
-
                     var newItem = InventoryManager.Backpack.FirstOrDefault(i => !backpackGuids.Contains(i.ACDId));
+                    await Coroutine.Wait(2000, () => (newItem = InventoryManager.Backpack.FirstOrDefault(i => !backpackGuids.Contains(i.ACDId))) != null);
+
                     if (newItem != null)
                     {
                         var newLegendaryItem = Legendary.GetItemByACD(newItem);
