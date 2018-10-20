@@ -60,7 +60,7 @@ namespace Trinity.Components.Coroutines.Town
             {
                 Core.Logger.Verbose($"[CubeItemsToMaterials] Selected {highestCountType} as the material with highest count - {Core.Inventory.Currency.GetCurrency(highestCountType)}");
             }
-            
+
             LastCanRunCheck = DateTime.UtcNow;
             LastCanRunResult = result;
             return result;
@@ -85,7 +85,8 @@ namespace Trinity.Components.Coroutines.Town
 
             var settingsTypes = Core.Settings.KanaisCube.GetCraftingMaterialTypes();
             var allTypes = GetAllConversionTypes();
-            var orderedTypes = OrderByAmount(allTypes);
+            var orderedTypes = OrderByAmount(allTypes).ToArray();
+
             var highestCount = orderedTypes.First();
             var allowedTypes = settingsTypes.Select(GetCurrencyType);
             var otherTypes = orderedTypes.Skip(1).Where(t => allowedTypes.Contains(t)).ToList();
@@ -97,7 +98,6 @@ namespace Trinity.Components.Coroutines.Town
                     Core.Logger.Log("[Cube] Failed! Finished!");
                     return true;
                 }
-                await Coroutine.Sleep(100);
                 await Coroutine.Yield();
             }
 

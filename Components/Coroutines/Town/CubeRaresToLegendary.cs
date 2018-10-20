@@ -27,8 +27,7 @@ namespace Trinity.Components.Coroutines.Town
             if (!ZetaDia.IsInGame || !ZetaDia.IsInTown)
                 return false;
 
-            var kule = TownInfo.ZoltunKulle?.GetActor() as DiaUnit;
-            if (kule != null)
+            if (TownInfo.ZoltunKulle?.GetActor() is DiaUnit kule)
             {
                 if (kule.IsQuestGiver)
                 {
@@ -110,8 +109,7 @@ namespace Trinity.Components.Coroutines.Town
 
         public static ItemSelectionType GetItemSelectionType(TrinityItem item)
         {
-            ItemSelectionType result;
-            return Enum.TryParse(item.TrinityItemType.ToString(), out result) ? result : ItemSelectionType.Unknown;
+            return Enum.TryParse(item.TrinityItemType.ToString(), out ItemSelectionType result) ? result : ItemSelectionType.Unknown;
         }
 
         public static HashSet<ItemQuality> RareQualities = new HashSet<ItemQuality>
@@ -121,7 +119,7 @@ namespace Trinity.Components.Coroutines.Town
             ItemQuality.Rare6,
         };
 
-        public static bool HasMaterialsRequired 
+        public static bool HasMaterialsRequired
             => Core.Inventory.Currency.HasCurrency(TransmuteRecipe.UpgradeRareItem);
 
         /// <summary>
@@ -158,21 +156,19 @@ namespace Trinity.Components.Coroutines.Town
                     var itemAnnId = item.AnnId;
                     var itemInternalName = item.InternalName;
                     await Transmute.Execute(item, TransmuteRecipe.UpgradeRareItem);
-                    await Coroutine.Sleep(1500);
-
                     var newItem = InventoryManager.Backpack.FirstOrDefault(i => !backpackGuids.Contains(i.ACDId));
+                    await Coroutine.Wait(2000, () => (newItem = InventoryManager.Backpack.FirstOrDefault(i => !backpackGuids.Contains(i.ACDId))) != null);
+
                     if (newItem != null)
                     {
                         var newLegendaryItem = Legendary.GetItemByACD(newItem);
                         var newTrinityItem = Core.Actors.ItemByAnnId(newItem.AnnId);
                         ItemEvents.FireItemCubed(newTrinityItem);
 
-                        if(newTrinityItem.IsPrimalAncient)
+                        if (newTrinityItem.IsPrimalAncient)
                             Core.Logger.Warn($"[CubeRaresToLegendary] Upgraded Rare '{itemName}' ---> '{newLegendaryItem.Name}' ({newItem.ActorSnoId}) PRIMAL!~");
                         else
                             Core.Logger.Log($"[CubeRaresToLegendary] Upgraded Rare '{itemName}' ---> '{newLegendaryItem.Name}' ({newItem.ActorSnoId})");
-
-                      
                     }
                     else
                     {
@@ -188,7 +184,6 @@ namespace Trinity.Components.Coroutines.Town
                     return true;
                 }
 
-                await Coroutine.Sleep(500);
                 await Coroutine.Yield();
             }
 

@@ -199,7 +199,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             if (ZetaDia.Me.Movement.IsMoving)
             {
                 Navigator.PlayerMover.MoveStop();
-                await Coroutine.Sleep(500);
+                await Coroutine.Yield();
             }
 
             if (await _interactionCoroutine.GetCoroutine())

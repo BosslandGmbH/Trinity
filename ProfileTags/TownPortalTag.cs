@@ -52,11 +52,7 @@ namespace Trinity.ProfileTags
                 return true;
             }
 
-            if (!await GoToTown())
-                return false;
-
-            await Coroutine.Sleep(3000);
-            return true;
+            return await GoToTown();
         }
 
         public static async Task<bool> GoToTown()
@@ -71,7 +67,6 @@ namespace Trinity.ProfileTags
                 ZetaDia.Me.UseTownPortal();
             }
 
-            await Coroutine.Sleep(500);
             await Coroutine.Wait(5000, () => !Core.CastStatus.StoneOfRecall.IsCasting && !ZetaDia.IsInTown);
             return true;
         }

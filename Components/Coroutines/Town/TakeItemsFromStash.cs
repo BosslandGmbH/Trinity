@@ -109,13 +109,11 @@ namespace Trinity.Components.Coroutines.Town
 
                                 var newPosition = TrinityCombat.Loot.FindBackpackSlot(item.IsTwoSquareItem);
                                 InventoryManager.MoveItem(item.AnnId, ZetaDia.Me.CommonData.AnnId, InventorySlot.BackpackItems, (int)newPosition.X, (int)newPosition.Y);
-                                
+
                                 amountWithdrawn[item.ActorSnoId] += stackSize;
                                 lastStackTaken[item.ActorSnoId] = item;
                             }
                         }
-
-                        await Coroutine.Sleep(25);
                         await Coroutine.Yield();
                     }
                 }
@@ -125,7 +123,7 @@ namespace Trinity.Components.Coroutines.Town
                 }
             }
 
-            await Coroutine.Sleep(1000);
+            await Coroutine.Yield();
             return true;
         }
 
@@ -171,7 +169,7 @@ namespace Trinity.Components.Coroutines.Town
                 }
             }
 
-            await Coroutine.Sleep(1000);
+            await Coroutine.Yield();
             return true;
         }
     }

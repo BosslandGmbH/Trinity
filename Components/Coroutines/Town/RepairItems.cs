@@ -14,7 +14,7 @@ namespace Trinity.Components.Coroutines.Town
 {
     public static class RepairItems
     {
-        public async static Task<bool> Execute()
+        public static async Task<bool> Execute()
         {
             if (!ZetaDia.IsInTown)
             {
@@ -38,7 +38,7 @@ namespace Trinity.Components.Coroutines.Town
 
             if (UIElements.VendorWindow.IsVisible)
             {
-                await Coroutine.Sleep(1000);
+                await Coroutine.Yield();
                 Core.Logger.Verbose("[RepairItems] Repairing equipment while at this vendor");
                 Repair(shouldRepairAll);
                 return true;
@@ -63,12 +63,12 @@ namespace Trinity.Components.Coroutines.Town
             if (repairActor.Distance <= 10f)
             {
                 Navigator.PlayerMover.MoveStop();
-                await Coroutine.Sleep(1500);
+                await Coroutine.Yield();
             }
 
             if (GameUI.IsBlackSmithWindowOpen || UIElements.VendorWindow.IsVisible)
             {
-                await Coroutine.Sleep(1500);
+                await Coroutine.Yield();
                 Core.Logger.Verbose($"[RepairItems] Repairing Equipment at {repairActor.Name} :)");
                 Repair(shouldRepairAll);
                 return true;
@@ -79,7 +79,7 @@ namespace Trinity.Components.Coroutines.Town
 
             if (GameUI.IsBlackSmithWindowOpen || UIElements.VendorWindow.IsVisible)
             {
-                await Coroutine.Sleep(1000);
+                await Coroutine.Yield();
                 Core.Logger.Verbose($"[RepairItems] Repairing Equipment at {repairActor.Name} :) (Attempt Two)");
                 Repair(shouldRepairAll);
                 return true;
@@ -91,8 +91,7 @@ namespace Trinity.Components.Coroutines.Town
 
         private static void Repair(bool shouldRepairAll)
         {
-            // todo: figure out why these repair calls don't work while at a blacksmith window.
-
+            // TODO: figure out why these repair calls don't work while at a blacksmith window.
             if (shouldRepairAll)
             {
                 InventoryManager.RepairAllItems();

@@ -54,11 +54,11 @@ namespace Trinity.Components.QuestTools
         }
 
         internal static void LoadAdditionalGameParams()
-        {           
+        {
             // Only worry about GameParams if we're about to start a new game
             if (ZetaDia.IsInGame || ProfileManager.CurrentProfile == null)
                 return;
-           
+
             var document = ProfileManager.CurrentProfile.Element;
 
             // Set Difficulty
@@ -68,9 +68,9 @@ namespace Trinity.Components.QuestTools
                 var difficulty = difficultyAttribute.Value.ChangeType<GameDifficulty>();
                 if (difficulty != CharacterSettings.Instance.GameDifficulty)
                 {
-                    Core.Logger.Log("Difficulty changed to " + difficulty + " by profile: " + ProfileManager.CurrentProfile.Name);                      
+                    Core.Logger.Log("Difficulty changed to " + difficulty + " by profile: " + ProfileManager.CurrentProfile.Name);
                     CharacterSettings.Instance.GameDifficulty = difficulty;
-                }              
+                }
             }
 
         }
@@ -83,7 +83,7 @@ namespace Trinity.Components.QuestTools
             // All unrecognized tags are set as null and moved to root.
             // Avoid these tags throwing exception by removing them.
             ProfileManager.CurrentProfile?.Order?.RemoveAll(t => t == null);
-        }        
+        }
 
         internal static void ReplaceTags(IList<ProfileBehavior> tags)
         {
@@ -154,18 +154,18 @@ namespace Trinity.Components.QuestTools
             {
                 if (nodes[i] == null)
                     continue;
-                 
+
                 var node = nodes[i];
                 var type = node.GetType();
-                
+
                 nodes[i] = replacementDelegate.Invoke(node, i, type);
 
-                if(nodes[i] == null)
+                if (nodes[i] == null)
                     continue;
 
                 if (node is INodeContainer)
                 {
-                    RecurseBehaviors((node as INodeContainer).GetNodes() 
+                    RecurseBehaviors((node as INodeContainer).GetNodes()
                         as List<ProfileBehavior>, replacementDelegate, depth + 1, maxDepth);
                 }
 
