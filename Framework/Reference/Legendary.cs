@@ -10957,7 +10957,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheBarber = new Item
         {
-            Id = 195400,
+            Id = 195174,
             Name = "The Barber",
             Quality = ItemQuality.Legendary,
             Slug = "the-barber-49S3Pa",

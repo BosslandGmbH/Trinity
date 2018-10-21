@@ -79,7 +79,7 @@ namespace Trinity.Components.Coroutines.Town
                     Core.Logger.Error($"[SalvageItems] Failed to move to blacksmith ({blacksmith.Name}) to salvage items :(");
                     return false;
                 };
-                await Coroutine.Wait(1000, () => UIElements.SalvageWindow.IsVisible);
+                await Coroutine.Wait(2000, () => UIElements.SalvageWindow.IsVisible);
             }
             return true;
         }

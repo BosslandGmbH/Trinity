@@ -106,7 +106,9 @@ namespace Trinity.Components.Coroutines.Town
                 }
 
                 await Coroutine.Wait(8000, () => Core.Actors.Inventory.Any());
-                await Coroutine.Yield();
+                Core.Actors.Update();
+                Core.Player.Update();
+                await Coroutine.Sleep(1000);
 
                 Core.Logger.Debug("Started Town Run Loop");
 
