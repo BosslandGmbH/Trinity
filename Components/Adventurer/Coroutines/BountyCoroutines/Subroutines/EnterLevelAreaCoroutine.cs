@@ -329,7 +329,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             }
 
             _interactRange = portal.InteractDistance;
-            
+
             Core.Logger.Debug($"[EnterLevelArea] Using interact range from portal: {_interactRange}");
 
             if (portal.Position.Distance(_objectiveLocation) > _interactRange)
@@ -345,7 +345,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _prePortalWorldDynamicId = AdvDia.CurrentWorldDynamicId;
 
             Core.PlayerMover.MoveTowards(portal.Position);
-            await Coroutine.Sleep(1000);
+            await Coroutine.Yield();
             return false;
         }
 
@@ -405,7 +405,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private async Task<bool> Completed()
         {
             EntryPortals.AddEntryPortal();
-            await Coroutine.Sleep(1000);
+            await Coroutine.Yield();
             _isDone = true;
             return false;
         }

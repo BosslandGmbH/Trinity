@@ -65,7 +65,7 @@ namespace Trinity.Components.Coroutines.Town
                     dropCount++;
             }
 
-            await Coroutine.Sleep(2000);
+            await Coroutine.Yield();
             Core.Logger.Log($"[DropItems] Dropped {dropCount} Items");
             return false;
         }
@@ -95,7 +95,7 @@ namespace Trinity.Components.Coroutines.Town
             {
                 DroppedItemAnnIds.Add(item.AnnId);
                 ItemEvents.FireItemDropped(item);
-                await Coroutine.Sleep(500);
+                await Coroutine.Yield();
                 return true;
             }
 

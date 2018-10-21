@@ -37,7 +37,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             public bool NormalRiftForXPShrine;
         }
 
-        private RiftType _RiftType;
+        private RiftType _riftType;
         private bool _runningNephalemInsteadOfGreaterRift;
         private int _level;
         private States _state;
@@ -126,7 +126,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         public RiftCoroutine(RiftType RiftType, RiftOptions options = null)
         {
-            _RiftType = RiftType;
+            _riftType = RiftType;
             if (RiftType == RiftType.Nephalem)
             {
                 _level = -1;
@@ -136,14 +136,12 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 _level = RiftData.GetGreaterRiftLevel();
             }
 
-            _id = Guid.NewGuid();
+            Id = Guid.NewGuid();
 
             _options = options ?? new RiftOptions();
         }
 
-        private readonly Guid _id;
-
-        public Guid Id => _id;
+        public Guid Id { get; }
 
         public void Reset()
         {
@@ -292,23 +290,23 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             if (!_experienceTracker.IsStarted) _experienceTracker.Start();
             SafeZerg.Instance.DisableZerg();
 
-            if (_RiftType == RiftType.Greater)
+            if (_riftType == RiftType.Greater)
             {
                 _level = RiftData.GetGreaterRiftLevel();
             }
             if (_runningNephalemInsteadOfGreaterRift && CurrentRiftKeyCount > PluginSettings.Current.MinimumKeys)
             {
                 _level = RiftData.GetGreaterRiftLevel();
-                _RiftType = RiftType.Greater;
+                _riftType = RiftType.Greater;
                 _runningNephalemInsteadOfGreaterRift = false;
                 return false;
             }
-            if (AdvDia.RiftQuest.State == QuestState.NotStarted && _RiftType == RiftType.Greater && CurrentRiftKeyCount <= PluginSettings.Current.MinimumKeys)
+            if (AdvDia.RiftQuest.State == QuestState.NotStarted && _riftType == RiftType.Greater && CurrentRiftKeyCount <= PluginSettings.Current.MinimumKeys)
             {
                 if (PluginSettings.Current.GreaterRiftRunNephalem)
                 {
                     _level = -1;
-                    _RiftType = RiftType.Nephalem;
+                    _riftType = RiftType.Nephalem;
                     _runningNephalemInsteadOfGreaterRift = true;
                     return false;
                 }
@@ -322,7 +320,6 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             _currentWorldDynamicId = AdvDia.CurrentWorldDynamicId;
             if (AdvDia.RiftQuest.State == QuestState.InProgress && RiftData.RiftWorldIds.Contains(AdvDia.CurrentWorldId))
             {
-                //State = States.SearchingForExitPortal;
                 State = States.OnNewRiftLevel;
                 return false;
             }
@@ -457,7 +454,6 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                     State = States.MoveToOrek;
                     return false;
                 }
-                await Coroutine.Sleep(1200);
                 await Coroutine.Wait(TimeSpan.FromSeconds(5), () => !ZetaDia.Me.IsParticipatingInTieredLootRun);
                 if (ZetaDia.Me.IsParticipatingInTieredLootRun)
                 {
@@ -565,23 +561,22 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
 
             _entranceSceneNames.Clear();
-            long empoweredCost = 0;
-            bool haveMoneyForEmpower = RiftData.EmpoweredRiftCost.TryGetValue(_level, out empoweredCost) && ZetaDia.Storage.PlayerDataManager.ActivePlayerData.Coinage >= (empoweredCost + PluginSettings.Current.MinimumGold);
-            bool canEmpower = (_RiftType == RiftType.Greater && haveMoneyForEmpower);
+            bool haveMoneyForEmpower = RiftData.EmpoweredRiftCost.TryGetValue(_level, out var empoweredCost) && ZetaDia.Storage.PlayerDataManager.ActivePlayerData.Coinage >= (empoweredCost + PluginSettings.Current.MinimumGold);
+            bool canEmpower = (_riftType == RiftType.Greater && haveMoneyForEmpower);
 
             var settings = PluginSettings.Current;
             bool shouldEmpower = _options.IsEmpowered && _level <= settings.EmpoweredRiftLevelLimit;
 
             _riftStartTime = DateTime.UtcNow;
-            var maximizeXp = _RiftType == RiftType.Greater && _options.NormalRiftForXPShrine && (ZetaDia.Me.RestExperience < 5000000000 && ZetaDia.Me.RestExperience > -1);
+            var maximizeXp = _riftType == RiftType.Greater && _options.NormalRiftForXPShrine && (ZetaDia.Me.RestExperience < 5000000000 && ZetaDia.Me.RestExperience > -1);
             if (maximizeXp)
             {
-                Core.Logger.Log("Opening Normal Rift for XP Shrine", _RiftType);
+                Core.Logger.Log("Opening Normal Rift for XP Shrine", _riftType);
                 ZetaDia.Me.OpenRift(-1);
             }
             else
             {
-                if (settings.UseGemAutoLevel && _RiftType == RiftType.Greater)
+                if (settings.UseGemAutoLevel && _riftType == RiftType.Greater)
                 {
                     int maxLevel = _level;
                     int minLevel = Math.Min(maxLevel, Math.Max(13, maxLevel - settings.GemAutoLevelReductionLimit));
@@ -633,21 +628,21 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                     }
                 }
 
-                if (_RiftType == RiftType.Greater && shouldEmpower && canEmpower && PluginSettings.Current.UseEmpoweredRifts)
+                if (_riftType == RiftType.Greater && shouldEmpower && canEmpower && PluginSettings.Current.UseEmpoweredRifts)
                 {
                     Core.Logger.Log("Opening Empowered Greater Rift (Cost={0})", empoweredCost);
                     ZetaDia.Me.OpenRift(Math.Min(_level, ZetaDia.Me.CommonData.HighestUnlockedRiftLevel), true);
                 }
                 else
                 {
-                    Core.Logger.Log("Opening {0} Rift", _RiftType);
+                    Core.Logger.Log("Opening {0} Rift", _riftType);
                     ZetaDia.Me.OpenRift(Math.Min(_level, ZetaDia.Me.CommonData.HighestUnlockedRiftLevel));
                 }
             }
 
             if (_level == -1 || maximizeXp)
             {
-                await Coroutine.Sleep(5000);
+                await Coroutine.Yield();
                 if (IsRiftPortalOpen)
                 {
                     _prePortalWorldDynamicId = AdvDia.CurrentWorldDynamicId;
@@ -693,10 +688,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             {
                 var inTown = ZetaDia.IsInTown;
                 Core.Logger.Debug("Expecting to find a portal here but didnt find one. InTown={0}", inTown);
-                if (inTown)
-                    State = States.InTown;
-                else
-                    State = States.Failed;
+                State = inTown ? States.InTown : States.Failed;
             }
 
             State = States.OnNewRiftLevel;
@@ -744,7 +736,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             {
                 _possiblyCowLevel = true;
             }
-            if (_RiftType == RiftType.Nephalem && PluginSettings.Current.NephalemRiftFullExplore && AdvDia.RiftQuest.Step == RiftStep.Cleared)
+            if (_riftType == RiftType.Nephalem && PluginSettings.Current.NephalemRiftFullExplore && AdvDia.RiftQuest.Step == RiftStep.Cleared)
             {
                 State = States.SearchingForTownstoneOrExitPortal;
             }
@@ -768,7 +760,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             // Sometimes the rift entry scene will be named 'entrance' and sometimes 'exit', 
             // so we use the marker to identify it instead.
 
-            var entrancePortalPosition = BountyHelpers.ScanForRiftEntryMarkerLocation();            
+            var entrancePortalPosition = BountyHelpers.ScanForRiftEntryMarkerLocation();
             var entranceScene = Core.Scenes.FirstOrDefault(s => s.IsInScene(entrancePortalPosition));
             return entranceScene;
         }
@@ -777,7 +769,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         private async Task<bool> SearchingForExitPortal()
         {
-            if (_RiftType == RiftType.Nephalem && PluginSettings.Current.NephalemRiftFullExplore && AdvDia.RiftQuest.Step == RiftStep.Cleared)
+            if (_riftType == RiftType.Nephalem && PluginSettings.Current.NephalemRiftFullExplore && AdvDia.RiftQuest.Step == RiftStep.Cleared)
             {
                 State = States.SearchingForTownstoneOrExitPortal;
                 return false;
@@ -929,7 +921,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 {
                     _portalScanRange = 100;
                 }
-                if (_RiftType == RiftType.Nephalem && PluginSettings.Current.NephalemRiftFullExplore &&
+                if (_riftType == RiftType.Nephalem && PluginSettings.Current.NephalemRiftFullExplore &&
                     AdvDia.RiftQuest.Step == RiftStep.Cleared)
                 {
                     State = States.SearchingForTownstoneOrExitPortal;
@@ -950,7 +942,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 portal = BountyHelpers.GetPortalNearPosition(_nextLevelPortalLocation);
                 if (portal == null)
                 {
-                    if (_RiftType == RiftType.Nephalem && PluginSettings.Current.NephalemRiftFullExplore &&
+                    if (_riftType == RiftType.Nephalem && PluginSettings.Current.NephalemRiftFullExplore &&
                         AdvDia.RiftQuest.Step == RiftStep.Cleared)
                     {
                         State = States.SearchingForTownstoneOrExitPortal;
@@ -988,7 +980,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
             else
             {
-                if (_RiftType == RiftType.Nephalem && PluginSettings.Current.NephalemRiftFullExplore)
+                if (_riftType == RiftType.Nephalem && PluginSettings.Current.NephalemRiftFullExplore)
                 {
                     State = States.SearchingForTownstoneOrExitPortal;
                 }
@@ -1018,7 +1010,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         {
             if (AdvDia.RiftQuest.Step == RiftStep.Cleared)
             {
-                if (_RiftType == RiftType.Nephalem && PluginSettings.Current.NephalemRiftFullExplore)
+                if (_riftType == RiftType.Nephalem && PluginSettings.Current.NephalemRiftFullExplore)
                 {
                     State = States.SearchingForTownstoneOrExitPortal;
                 }
@@ -1114,7 +1106,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 Core.Logger.Debug("[Rift] Clicking to Continue button.");
                 RiftData.ContinueButton.Click();
                 RiftData.VendorCloseButton.Click();
-                await Coroutine.Sleep(250);
+                await Coroutine.Yield();
                 return false;
             }
 
@@ -1326,7 +1318,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             var exitScene = Core.Scenes.FirstOrDefault(s => s.Name.ToLowerInvariant().Contains(exitName) && !_entranceSceneNames.Contains(s.HashName));
             if (exitScene != null)
             {
-                _currentExitScene = exitScene;                
+                _currentExitScene = exitScene;
                 var exitSceneConnection = exitScene.ExitPositions.FirstOrDefault();
                 ExplorationHelpers.SetExplorationPriority(exitSceneConnection.Value);
                 Core.Logger.Warn($"Found the exit '{exitScene.Name}' ({exitScene.SnoId}) {exitSceneConnection.Value.Distance(Core.Player.Position)} yards away!");
@@ -1397,7 +1389,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                     break;
 
                 case RiftStep.Cleared:
-                    if (_RiftType == RiftType.Nephalem && PluginSettings.Current.NephalemRiftFullExplore && State != States.TownstoneFound)
+                    if (_riftType == RiftType.Nephalem && PluginSettings.Current.NephalemRiftFullExplore && State != States.TownstoneFound)
                     {
                         break;
                     }

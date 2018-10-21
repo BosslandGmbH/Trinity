@@ -3,6 +3,7 @@ using System;
 using Trinity.Framework;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Game.Actors;
+using Trinity.Components.Coroutines;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
@@ -24,12 +25,10 @@ namespace Trinity.Components.Adventurer.Coroutines
                 _usePortalSourceWorldDynamicId = sourceWorldDynamicId;
             }
 
-            if (await _usePortalCoroutine.GetCoroutine())
-            {
-                _usePortalCoroutine = null;
-                return true;
-            }
-            return false;
+            if (!await _usePortalCoroutine.GetCoroutine()) return false;
+
+            _usePortalCoroutine = null;
+            return true;
         }
 
         #region State
@@ -64,7 +63,6 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private int _actorId;
         private int _sourceWorldDynamicId;
-        private readonly TimeSpan _sleepTime = new TimeSpan(0, 0, 1);
 
         private UsePortalCoroutine(int actorId, int sourceWorldDynamicId)
         {
@@ -116,11 +114,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         private async Task<bool> Checking()
         {
             var actor = ActorFinder.FindObject(_actorId);
-            //if (actor != null && actor.Distance > actor.CollisionSphere.Radius + 2)
-            //{
-            //    await NavigationCoroutine.MoveTo(actor.Position, (int)actor.CollisionSphere.Radius + 1);
-            //    return false;
-            //}
+
             if (_sourceWorldDynamicId != AdvDia.CurrentWorldDynamicId)
             {
                 Core.Logger.Debug("[UsePortal] World has changed, assuming done.");
@@ -156,7 +150,8 @@ namespace Trinity.Components.Adventurer.Coroutines
             if (ZetaDia.Globals.IsLoadingWorld)
             {
                 Core.Logger.Debug("[UsePortal] Waiting for the world to load");
-                await Coroutine.Sleep(250);
+                await Coroutine.Sleep(200);
+                await Coroutine.Wait(30000, () => !ZetaDia.Globals.IsLoadingWorld);
                 return false;
             }
 
@@ -187,40 +182,16 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> Interact(DiaObject actor)
         {
-            Core.PlayerMover.MoveTowards(actor.Position);
+            await MoveTo.Execute(actor.Position, actor.Name, actor.InteractDistance);
 
             Core.Logger.Debug($"[UsePortal] Attempting to use portal {((SNOActor)actor.ActorSnoId)} at distance {actor.Distance}");
             StatusText = $"[UsePortal] Attempting to use portal {((SNOActor)actor.ActorSnoId)} at distance {actor.Distance}";
-            bool retVal = false;
-            switch (actor.ActorType)
-            {
-                case ActorType.Gizmo:
-                    switch (actor.ActorInfo.GizmoType)
-                    {
-                        case GizmoType.BossPortal:
-                        case GizmoType.Portal:
-                        case GizmoType.ReturnPortal:
-                            retVal = ZetaDia.Me.UsePower(SNOPower.GizmoOperatePortalWithAnimation, actor.Position);
-                            break;
-
-                        default:
-                            retVal = ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, actor.Position);
-                            break;
-                    }
-                    break;
-
-                case ActorType.Monster:
-                    retVal = ZetaDia.Me.UsePower(SNOPower.Axe_Operate_NPC, actor.Position);
-                    break;
-            }
 
             // Doubly-make sure we interact
-            actor.Interact();
-            actor.Interact();
+            bool retVal = actor.Interact();
 
             _interactAttempts++;
-            //GameEvents.FireWorldTransferStart();
-            await Coroutine.Sleep(_sleepTime);
+            await Coroutine.Sleep(200);
             return retVal;
         }
     }

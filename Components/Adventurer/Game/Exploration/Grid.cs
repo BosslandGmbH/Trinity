@@ -245,7 +245,10 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 for (var y = gridY - gridDistanceMax; y <= gridY + gridDistanceMax; y++)
                 {
                     col++;
-                    if (y < 0 || y > GridMaxY)
+                    if (y < 0 || y >= GridMaxY)
+                        continue;
+
+                    if (x < 0 || x >= GridMaxX)
                         continue;
 
                     if (x == gridX && y == gridY)

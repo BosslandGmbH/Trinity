@@ -66,8 +66,8 @@ namespace Trinity.Components.Adventurer.Coroutines
         private DateTime _castWaitStartTime = DateTime.MinValue;
         private readonly int _markerHash;
 
-        public InteractionCoroutine(int actorId, TimeSpan timeOut, TimeSpan sleepTime, int interactAttempts = 3, 
-            bool ignoreSanityChecks = false, string startAnimation ="", string endAnimation="", int markerHash = 0)
+        public InteractionCoroutine(int actorId, TimeSpan timeOut, TimeSpan sleepTime, int interactAttempts = 3,
+            bool ignoreSanityChecks = false, string startAnimation = "", string endAnimation = "", int markerHash = 0)
         {
             _actorId = actorId;
             _timeOut = timeOut;
@@ -152,19 +152,18 @@ namespace Trinity.Components.Adventurer.Coroutines
                 State = States.Failed;
                 return false;
             }
-            
+
             Core.PlayerMover.MoveTowards(actor.Position);
             if (!Core.Player.IsTakingDamage)
             {
-                await Coroutine.Sleep(500);
+                await Coroutine.Yield(); // Coroutine.Sleep(500);
                 Core.PlayerMover.MoveStop();
             }
 
             // why not eh?
             if (actor.IsFullyValid() && !ActorFinder.IsDeathGate(actor))
             {
-                var gizmo = actor as DiaGizmo;
-                if (gizmo != null && gizmo.IsFullyValid() && gizmo.IsPortal)
+                if (actor is DiaGizmo gizmo && gizmo.IsFullyValid() && gizmo.IsPortal)
                 {
                     _isPortal = true;
                     GameEvents.FireWorldTransferStart();
@@ -173,8 +172,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 actor.Interact();
             }
 
-            var unit = actor as DiaUnit;
-            if (unit != null && unit.IsFullyValid())
+            if (actor is DiaUnit unit && unit.IsFullyValid())
             {
                 _isQuestGiver = unit.IsQuestGiver;
             }
@@ -218,14 +216,14 @@ namespace Trinity.Components.Adventurer.Coroutines
                 {
                     _castWaitStartTime = DateTime.UtcNow;
                     Core.Logger.Debug("Waiting while AnimationState.Casting");
-                    await Coroutine.Sleep(500);
+                    await Coroutine.Yield(); // Coroutine.Sleep(500);
                     return false;
                 }
                 if (ZetaDia.Me.CommonData.AnimationState == AnimationState.Channeling)
                 {
                     _castWaitStartTime = DateTime.UtcNow;
                     Core.Logger.Debug("Waiting while  AnimationState.Channeling");
-                    await Coroutine.Sleep(500);
+                    await Coroutine.Yield(); // Coroutine.Sleep(500);
                     return false;
                 }
             }
@@ -233,14 +231,14 @@ namespace Trinity.Components.Adventurer.Coroutines
             if (ZetaDia.Globals.IsLoadingWorld)
             {
                 Core.Logger.Debug("Waiting for world load");
-                await Coroutine.Sleep(500);
+                await Coroutine.Yield(); // Coroutine.Sleep(500);
                 return false;
             }
 
             if (ZetaDia.Globals.WorldSnoId != _startingWorldId)
             {
                 Core.Logger.Debug("World changed, assuming done!");
-                await Coroutine.Sleep(2500);
+                await Coroutine.Yield(); // Coroutine.Sleep(2500);
                 State = States.Completed;
                 return false;
             }
@@ -275,8 +273,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 }
             }
 
-            var unit = actor as DiaUnit;
-            if (_isQuestGiver && unit != null && !unit.IsQuestGiver)
+            if (_isQuestGiver && actor is DiaUnit unit && !unit.IsQuestGiver)
             {
                 Core.Logger.Debug($"Unit {actor.Name} is no longer a quest giver, assuming done!");
                 State = States.Completed;
@@ -307,7 +304,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             if (_currentInteractAttempt > 1 && actor.Position.Distance(ZetaDia.Me.Position) > 5f)
             {
                 Navigator.PlayerMover.MoveTowards(actor.Position);
-                await Coroutine.Sleep(250 * _currentInteractAttempt);
+                await Coroutine.Yield(); // Coroutine.Sleep(250 * _currentInteractAttempt);
             }
 
             if (_isPortal || actor.IsFullyValid() && GameData.PortalTypes.Contains(actor.CommonData.GizmoType))
@@ -349,7 +346,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
             var interactionResult = await Interact(actor);
 
-            await Coroutine.Sleep(300);
+            await Coroutine.Yield(); // Coroutine.Sleep(300);
 
             if (ActorFinder.IsDeathGate(actor))
             {
@@ -443,22 +440,20 @@ namespace Trinity.Components.Adventurer.Coroutines
             //actor.Interact();
             //}
 
-
             var world = ZetaDia.Globals.WorldId;
-            await Coroutine.Sleep(100);
 
             if (actor == null || !actor.IsFullyValid())
                 return false;
 
             var ret = actor.Interact();
-            await Coroutine.Sleep(_sleepTime);
+            await Coroutine.Yield();
             if (_isPortal)
             {
-                await Coroutine.Sleep(1000);
+                await Coroutine.Yield();
             }
             if (!ZetaDia.Globals.IsLoadingWorld && world == ZetaDia.Globals.WorldId)
             {
-                await Coroutine.Sleep(400);
+                await Coroutine.Yield();
                 if (actor.IsFullyValid())
                 {
                     ret = actor.Interact();

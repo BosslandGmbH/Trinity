@@ -164,7 +164,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
                     break;
                 }
 
-                await Coroutine.Sleep(50);
+                await Coroutine.Yield();
             }
 
             State = attempts > attemptLimit ? States.Failed : States.Completed;

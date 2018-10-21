@@ -268,7 +268,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
                 _waitCoroutine = new WaitCoroutine(5000);
             }
             Core.Logger.Log("[Keywarden] Waiting...!");
-            await Coroutine.Sleep(2500);
+            await Coroutine.Yield();
             State = States.Looting;
             return false;
         }
@@ -288,7 +288,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
             {
                 if (await MoveToAndInteract.Execute(loot, 0, 5))
                     return true;
-                await Coroutine.Sleep(1000);
+                await Coroutine.Yield();
             }
             State = States.Completed;
             return false;

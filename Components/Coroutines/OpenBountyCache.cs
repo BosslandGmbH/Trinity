@@ -26,13 +26,13 @@ namespace Trinity.Components.Coroutines
                         Core.Logger.Log($"Opening Treasure Bag {bagsOpened + 1}, Id={item.AnnId}");
                         InventoryManager.UseItem(item.AnnId);
                         bagsOpened++;
-                        await Coroutine.Sleep(500);
+                        await Coroutine.Yield();
                     }
                 }
                 if (bagsOpened > 0)
                 {
                     Core.Logger.Log($"Waiting for Treasure Bag loot");
-                    await Coroutine.Sleep(2500);
+                    await Coroutine.Yield();
                     TrinityTownRun.IsWantingTownRun = true;
                     return true;
                 }

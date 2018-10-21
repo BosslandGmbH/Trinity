@@ -10443,7 +10443,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
         }
 		
 
-        [Obsolete("Use waypoint factory for levelarea instead")]
+        // [Obsolete("Use waypoint factory for levelarea instead")]
         public static readonly Dictionary<int, int> QuestWaypointNumbers = new Dictionary<int, int>
         {
             { 344497, 13 },

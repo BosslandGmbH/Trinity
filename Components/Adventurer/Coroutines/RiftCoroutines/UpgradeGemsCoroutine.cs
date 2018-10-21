@@ -111,7 +111,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             {
                 State = States.Failed;
                 GameUI.ReviveAtCorpseButton.Click();
-                await Coroutine.Sleep(500);
+                await Coroutine.Wait(500, () => !GameUI.ReviveAtCorpseButton.IsVisible);
             }
         }
 
@@ -202,7 +202,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 Core.Logger.Debug("[UpgradeGems] Clicking to Continue button.");
                 RiftData.ContinueButton.Click();
                 RiftData.VendorCloseButton.Click();
-                await Coroutine.Sleep(250);
+                await Coroutine.Wait(250, () => !RiftData.VendorDialog.IsVisible && !RiftData.ContinueButton.IsVisible && !RiftData.ContinueButton.IsEnabled);
                 return false;
             }
 

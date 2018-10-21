@@ -47,7 +47,7 @@ namespace Trinity.Components.Coroutines.Town
             if (!UIElements.TransmuteItemsDialog.IsVisible)
             {
                 await MoveToAndInteract.Execute(TownInfo.KanaisCube);
-                await Coroutine.Sleep(1000);
+                await Coroutine.Wait(1000, () => UIElements.TransmuteItemsDialog.IsVisible);
             }
 
             if (!UIElements.TransmuteItemsDialog.IsVisible)
@@ -58,7 +58,7 @@ namespace Trinity.Components.Coroutines.Town
 
             Core.Logger.Log("Zip Zap!");
             InventoryManager.TransmuteItems(transmuteGroupAnnIds.ToArray(), recipe);
-            await Coroutine.Sleep(Randomizer.Fudge(500));
+            await Coroutine.Yield();
             UIElement.FromHash(TransmuteButtonHash)?.Click();
             return true;
         }
@@ -67,4 +67,3 @@ namespace Trinity.Components.Coroutines.Town
 
     }
 }
- 

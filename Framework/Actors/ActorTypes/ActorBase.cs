@@ -14,13 +14,13 @@ namespace Trinity.Framework.Actors.ActorTypes
     /// </summary>
     public class ActorBase
     {
-        protected readonly DiaObject _actor;
+        protected readonly DiaObject Actor;
         private readonly ACD _fixedACD;
 
         public ActorBase(ACD acd, ActorType type)
         {
             _fixedACD = acd;
-            _actor = null;
+            Actor = null;
 
             InternalName = CommonData?.Name ?? string.Empty;
             ActorType = type;
@@ -28,34 +28,33 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public ActorBase(DiaObject actor)
         {
-            _actor = actor;
+            Actor = actor;
 
             // TODO: Verify this was never set in Trinity, except for ItemProperties.
-            InternalName = _actor.Name ?? string.Empty;
+            InternalName = Actor.Name ?? string.Empty;
             if (CommonData != null)
             {
-                InternalName = _actor.CommonData?.Name;
+                InternalName = Actor.CommonData?.Name;
             }
 
             // A property that is accessed very often from other properties. In Zeta this one
             // is hold per frame (which is ok there). But here in Trinity we should keep it
             // persistent per object.
-            ActorType = _actor.ActorType;
+            ActorType = Actor.ActorType;
         }
 
         public ActorType ActorType { get; private set; }
-
-
-        public bool IsAcdBased => _actor == null;
-        public bool IsRActorBased => _actor != null;
-        public Vector3 Position => _fixedACD?.Position ?? _actor?.Position ?? Vector3.Zero;
+        
+        public bool IsAcdBased => Actor == null;
+        public bool IsRActorBased => Actor != null;
+        public Vector3 Position => _fixedACD?.Position ?? Actor?.Position ?? Vector3.Zero;
         public int AcdId => CommonData?.ACDId ?? 0;
         public int AnnId => CommonData?.AnnId ?? 0;
-        public int RActorId => _actor.RActorId;
+        public int RActorId => Actor.RActorId;
         public string InternalName { get; internal set; }
         public int ActorSnoId => CommonData?.ActorSnoId ?? 0;
-        public ACD CommonData => _fixedACD ?? _actor.CommonData;
-        public DiaObject RActor => _actor;
+        public ACD CommonData => _fixedACD ?? Actor.CommonData;
+        public DiaObject RActor => Actor;
 
         public SNORecordActor ActorInfo => CommonData?.ActorInfo ?? default(SNORecordActor);
         public SNORecordMonster MonsterInfo => CommonData?.MonsterInfo ?? default(SNORecordMonster);
@@ -63,7 +62,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsValid => (!IsRActorBased || RActor.IsValid) && (!IsAcdBased || IsAcdValid) && (ActorInfo?.IsValid ?? true);
         public bool IsRActorValid => RActor != null && RActor.IsValid && RActor.RActorId != -1 && !IsRActorDisposed;
         public bool IsAcdValid => CommonData != null && CommonData.IsValid && !CommonData.IsDisposed;
-        public bool IsRActorDisposed => _actor.BaseAddress == IntPtr.Zero || AnnId != -1 && IsAcdBased && (!IsAcdValid || AnnId != CommonData.AnnId);
+        public bool IsRActorDisposed => Actor.BaseAddress == IntPtr.Zero || AnnId != -1 && IsAcdBased && (!IsAcdValid || AnnId != CommonData.AnnId);
         public int FastAttributeGroupId => CommonData?.FastAttribGroupId ?? 0;
 
         /// <summary>
