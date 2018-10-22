@@ -18,9 +18,7 @@ namespace Trinity.DbProvider
     public class PlayerMover : IPlayerMover
     {
         private static PlayerMover _instance;
-        private static readonly DateTime LastUsedMoveStop = DateTime.MinValue;
-        private static Coroutine _navigateToCoroutine;
-        private static MoveResult _lastResult;
+        private static readonly DateTime s_lastUsedMoveStop = DateTime.MinValue;
 
         public PlayerMover()
         {
@@ -32,33 +30,8 @@ namespace Trinity.DbProvider
         public static bool IsCompletelyBlocked => IsBlocked;
         private static Vector3 LastDestination { get; set; }
         public static DefaultNavigationProvider NavigationProvider => Navigator.GetNavigationProviderAs<DefaultNavigationProvider>();
-
-        /// <summary>
-        /// Moves to a location by either PathFinding or 'Straight Line Pathing'.
-        /// </summary>
-        public static MoveResult MoveTo(Vector3 destination)
-        {
-            // Relieve pressure on Navigation Server and reduce minor delays where possible.
-            var zDiff = Math.Abs(destination.Z - Core.Player.Position.Z);
-            if (zDiff < 3f && !IsBlocked && !Core.StuckHandler.IsStuck)
-            {
-                if (Core.Player.Position.Distance2D(destination) < 3)
-                    return MoveResult.ReachedDestination;
-
-                var isVeryClose = Core.Player.Position.Distance(destination) <= 8f;
-                var canRayWalk = Core.Grids.CanRayWalk(Core.Player.Position, destination);
-
-                if (isVeryClose && canRayWalk)
-                {
-                    //Core.Logger.Log(LogCategory.Movement, $"Trinity MoveTowards called to {destination}");
-                    _instance.MoveTowards(destination);
-                    return MoveResult.Moved;
-                }
-            }
-            //Core.Logger.Log(LogCategory.Movement, $"Trinity MoveTo called to {destination}");
-            return NavigateTo(destination);
-        }
-
+        
+        /// <inheritdoc />
         /// <summary>
         /// Moves to a location by 'Straight Line Pathing'
         /// </summary>
@@ -111,40 +84,9 @@ namespace Trinity.DbProvider
 
         public DateTime SleepUntilTime = DateTime.MinValue;
 
-        /// <summary>
-        /// Moves to a location with DB's PathFinding
-        /// </summary>
-        public static MoveResult NavigateTo(Vector3 destination, string destinationName = "")
-        {
-            if (_navigateToCoroutine == null || _navigateToCoroutine.IsFinished)
-            {
-                if (!ZetaDia.Me.Movement.IsMoving && LastDestination != destination && ZetaDia.IsInGame)
-                {
-                    Core.Logger.Verbose(LogCategory.Movement, "NavigateTo: Starting Movement Towards {0} ({1})", destination, destinationName);
-                    Instance.MoveTowards(destination);
-                }
-                _navigateToCoroutine = new Coroutine(async () =>
-                {
-                    _lastResult = await Navigator.MoveTo(destination, destinationName);
-                    return _lastResult;
-                });
-            }
-
-            LastDestination = destination;
-            Core.Logger.Verbose(LogCategory.Movement, $"Resume: NavigateTo: {destination} {destinationName}");
-            _navigateToCoroutine?.Resume();
-
-            if (_navigateToCoroutine?.Status == CoroutineStatus.RanToCompletion)
-            {
-                return (MoveResult)_navigateToCoroutine?.Result;
-            }
-
-            return MoveResult.Moved;
-        }
-
         public void MoveStop()
         {
-            if (DateTime.UtcNow.Subtract(LastUsedMoveStop).TotalMilliseconds < 250)
+            if (DateTime.UtcNow.Subtract(s_lastUsedMoveStop).TotalMilliseconds < 250)
                 return;
 
             if (ZetaDia.Globals.IsLoadingWorld)

@@ -439,7 +439,7 @@ namespace Trinity.Routines
 
                     if (Core.Avoidance.Avoider.TryGetSafeSpot(out var safeSpot, 30f, 100f, CurrentTarget.Position))
                     {
-                        PlayerMover.MoveTo(safeSpot);
+                        return await MoveTo.Execute(safeSpot, "Safe Spot");
                     }
                     return true;
                 }

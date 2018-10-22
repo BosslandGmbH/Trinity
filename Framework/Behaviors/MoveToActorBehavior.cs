@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Trinity.Components.Coroutines;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Events;
@@ -48,8 +49,7 @@ namespace Trinity.Framework.Behaviors
         private async Task<bool> Move()
         {
             Core.Logger.Verbose($"Moving to Actor: {Actor} {Actor.Position}");
-            PlayerMover.MoveTo(Actor.Position);
-            return true;
+            return await MoveTo.Execute(Actor.Position, Actor.Name, 3f);
         }
 
         protected override async Task<bool> OnStarted()

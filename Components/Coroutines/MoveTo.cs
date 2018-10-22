@@ -35,10 +35,10 @@ namespace Trinity.Components.Coroutines
             }
 
             await Coroutine.Wait(TimeSpan.MaxValue, () => !(ZetaDia.Me.LoopingAnimationEndTime > 0));
-            
+
             Navigator.PlayerMover.MoveTowards(location);
 
-            while (ZetaDia.IsInGame && location.Distance2D(ZetaDia.Me.Position) >= range && !ZetaDia.Me.IsDead)
+            while (ZetaDia.IsInGame && await Navigator.MoveTo(location, destinationName) != MoveResult.ReachedDestination && location.Distance2D(ZetaDia.Me.Position) >= range && !ZetaDia.Me.IsDead)
             {
                 if (Navigator.StuckHandler.IsStuck)
                 {
@@ -60,13 +60,10 @@ namespace Trinity.Components.Coroutines
                 }
 
                 Core.Logger.Verbose("Moving to " + destinationName);
-                await Coroutine.Wait(1000, () => PlayerMover.MoveTo(location) == MoveResult.ReachedDestination);
+                await Coroutine.Yield();
             }
 
             var distance = location.Distance(ZetaDia.Me.Position);
-            if (distance <= range)
-                Navigator.PlayerMover.MoveStop();
-
             Core.Logger.Verbose("MoveTo Finished. Distance={0}", distance);
             return true;
         }

@@ -2,6 +2,7 @@
 using Buddy.Coroutines;
 using System.Threading.Tasks;
 using Trinity.Components.Combat.Resources;
+using Trinity.Components.Coroutines;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
@@ -68,8 +69,7 @@ namespace Trinity.Components.Combat
                 if (!TrinityCombat.Targeting.IsInRange(target, power))
                 {
                     Core.Logger.Log(LogCategory.Movement, $"Moving to {castInfo}");
-                    PlayerMover.MoveTo(target.Position);
-                    return true;
+                    return await MoveTo.Execute(target.Position, "AttackPosition", power.MinimumRange, () => TrinityCombat.Targeting.IsInRange(target, power));
                 }
             }
             else if (power.TargetPosition != Vector3.Zero)
@@ -84,8 +84,7 @@ namespace Trinity.Components.Combat
                 if (!TrinityCombat.Targeting.IsInRange(power.TargetPosition, power))
                 {
                     Core.Logger.Log(LogCategory.Movement, $"Moving to position for {castInfo}");
-                    PlayerMover.MoveTo(power.TargetPosition);
-                    return true;
+                    return await MoveTo.Execute(power.TargetPosition, "AttackPosition", power.MinimumRange, () => TrinityCombat.Targeting.IsInRange(power.TargetPosition, power));
                 }
             }
 
@@ -171,7 +170,7 @@ namespace Trinity.Components.Combat
         public HashSet<SNOPower> AllowInvalidTargetPowers = new HashSet<SNOPower>
         {
             // these new skills are failing with PowerInvalidTarget, somethign to do with check on mouse highlighted target?
-            SNOPower.P6_Necro_CommandSkeletons, 
+            SNOPower.P6_Necro_CommandSkeletons,
             SNOPower.P6_Necro_CorpseLance,
         };
 
