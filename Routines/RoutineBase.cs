@@ -4,6 +4,7 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Buddy.Coroutines;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
@@ -17,6 +18,8 @@ using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Reference;
 using Trinity.Modules;
 using Trinity.Settings;
+using Zeta.Bot.Coroutines;
+using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -341,7 +344,7 @@ namespace Trinity.Routines
 
             Core.Logger.Log(LogCategory.Avoidance, "Kiting");
             await CastDefensiveSpells();
-            return await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Kiting", 3f, () => Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) < 3f);
+            return await CommonCoroutines.MoveAndStop(Core.Avoidance.Avoider.SafeSpot, 5f, "Kiting") != MoveResult.ReachedDestination;
         }
 
         protected virtual bool IsAvoidanceRequired
@@ -368,13 +371,13 @@ namespace Trinity.Routines
             if (!TrinityCombat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
             {
                 Core.Logger.Log(LogCategory.Avoidance, "Waiting for avoidance to clear (out of combat)");
-                return await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f, () => !IsAvoidanceRequired);
+                return await CommonCoroutines.MoveAndStop(Core.Avoidance.Avoider.SafeSpot, 5f, "Safe Spot") != MoveResult.ReachedDestination;
             }
 
             if (Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) < 5f) return false;
 
             Core.Logger.Log(LogCategory.Avoidance, "Moving away from Critical Avoidance.");
-            if (await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f, () => !IsAvoidanceRequired))
+            if (await CommonCoroutines.MoveAndStop(Core.Avoidance.Avoider.SafeSpot, 5f, "Safe Spot") != MoveResult.ReachedDestination)
                 return true;
 
             await CastDefensiveSpells();
@@ -439,7 +442,7 @@ namespace Trinity.Routines
 
                     if (Core.Avoidance.Avoider.TryGetSafeSpot(out var safeSpot, 30f, 100f, CurrentTarget.Position))
                     {
-                        return await MoveTo.Execute(safeSpot, "Safe Spot");
+                        return await CommonCoroutines.MoveAndStop(safeSpot, 5f, "SafeSpot") != MoveResult.ReachedDestination;
                     }
                     return true;
                 }
@@ -576,8 +579,6 @@ namespace Trinity.Routines
 
         public virtual async Task<bool> HandleStart() => false;
         public virtual bool ShouldReturnStartResult => false;
-
-
         #endregion
 
         /// <summary>

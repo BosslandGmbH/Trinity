@@ -8,6 +8,7 @@ using Trinity.Framework.Events;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Reference;
 using Zeta.Bot;
+using Zeta.Bot.Logic;
 using Zeta.Game;
 using Zeta.Game.Internals;
 
@@ -29,7 +30,7 @@ namespace Trinity.Components.Coroutines.Town
             if (i.IsProtected())
                 return false;
 
-            if (Core.Player.IsInventoryLockedForGreaterRift)
+            if (BrainBehavior.GreaterRiftInProgress)
                 return false;
 
             if (i.IsUnidentified)
@@ -38,7 +39,7 @@ namespace Trinity.Components.Coroutines.Town
             return Combat.TrinityCombat.Loot.ShouldSell(i) && !Combat.TrinityCombat.Loot.ShouldSalvage(i) && !Combat.TrinityCombat.Loot.ShouldStash(i);
         }
 
-        public async static Task<bool> Execute()
+        public static async Task<bool> Execute()
         {
             if (!ZetaDia.IsInTown)
             {
@@ -52,7 +53,7 @@ namespace Trinity.Components.Coroutines.Town
                 await RepairItems.Execute();
 
                 Core.Logger.Verbose("[SellItems] Nothing to sell");
-                return false;
+                return true;
             }
 
             Core.Logger.Verbose("[SellItems] Now to sell {0} items", sellItems.Count);

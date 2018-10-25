@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Buddy.Coroutines;
+using Trinity.Components.Combat;
 using Trinity.Components.Coroutines;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Events;
+using Trinity.Framework.Objects;
+using Zeta.Bot.Coroutines;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 
@@ -25,10 +29,10 @@ namespace Trinity.Framework.Behaviors
 
         public async Task<bool> While(Predicate<TrinityActor> actorSelector, int timeoutMs = 30000)
         {
-            return await Run(async () => await FindActor(actorSelector), Move, timeoutMs);
+            return await Run(async () => FindActor(actorSelector), MoveProducer, timeoutMs);
         }
 
-        private async Task<bool> FindActor(Predicate<TrinityActor> actorSelector)
+        private bool FindActor(Predicate<TrinityActor> actorSelector)
         {
             var actor = Core.Actors.Actors
                 .OrderBy(m => m.Distance)
@@ -46,10 +50,14 @@ namespace Trinity.Framework.Behaviors
             return false;
         }
 
-        private async Task<bool> Move()
+        private async Task<bool> MoveProducer()
         {
             Core.Logger.Verbose($"Moving to Actor: {Actor} {Actor.Position}");
-            return await MoveTo.Execute(Actor.Position, Actor.Name, 3f);
+            while (await CommonCoroutines.MoveAndStop(Actor.Position, 5f, Actor.Name) != MoveResult.ReachedDestination)
+            {
+                await Coroutine.Yield();
+            }
+            return true;
         }
 
         protected override async Task<bool> OnStarted()

@@ -56,7 +56,7 @@ namespace Trinity
         /// Makes sure trinity plugin is enabled.
         /// </summary>
         private void PluginManager_OnPluginsReloaded(object sender, EventArgs e)
-        {            
+        {
             foreach (var plugin in PluginManager.Plugins)
             {
                 if (plugin.Plugin == this && !plugin.Enabled)
@@ -72,6 +72,11 @@ namespace Trinity
             IsInitialized = true;
         }
 
+        private void OnStart(IBot bot)
+        {
+            HookManager.ReplaceTreeHooks();
+        }
+
         public void OnPulse()
         {
             if (ZetaDia.CurrentQuest == null || ZetaDia.CurrentQuest.QuestSnoId == -1)
@@ -82,7 +87,7 @@ namespace Trinity
 
             HookManager.CheckHooks();
             GameUI.SafeClickUIButtons();
-            VisualizerViewModel.Instance.UpdateVisualizer();               
+            VisualizerViewModel.Instance.UpdateVisualizer();
         }
 
         public void OnEnabled()
@@ -92,15 +97,18 @@ namespace Trinity
                 if (IsEnabled || !Application.Current.CheckAccess())
                     return;
 
+
                 Core.Init();
+                BotMain.OnStart += OnStart;
                 BotMain.OnStop += OnStop;
                 TrinitySettings.InitializeSettings();
-                SkillUtils.UpdateActiveSkills();            
+                SkillUtils.UpdateActiveSkills();
+                HookManager.ReplaceTreeHooks();
                 TabUi.InstallTab();
                 SetupDemonBuddy();
                 UILoader.PreLoadWindowContent();
                 ModuleManager.Enable();
-                Core.Logger.Log($"is now ENABLED: {Description} - now in action!");                        
+                Core.Logger.Log($"is now ENABLED: {Description} - now in action!");
                 IsEnabled = true;
             }
         }
@@ -110,7 +118,7 @@ namespace Trinity
         /// in-built default ones and interfere with Trinity operations.
         /// </summary>
         private static void SetupDemonBuddy()
-        {            
+        {
             Navigator.PlayerMover = Core.PlayerMover;
             Navigator.StuckHandler = Core.StuckHandler;
             ItemManager.Current = new BlankItemManager();
@@ -123,6 +131,7 @@ namespace Trinity
         public void OnDisabled()
         {
             IsEnabled = false;
+            BotMain.OnStart -= OnStart;
             BotMain.OnStop -= OnStop;
             TabUi.RemoveTab();
             HookManager.ReplaceTreeHooks();

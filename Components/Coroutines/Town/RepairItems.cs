@@ -23,7 +23,7 @@ namespace Trinity.Components.Coroutines.Town
             }
 
             if (!EquipmentNeedsRepair())
-                return false;
+                return true;
 
             var coinage = ZetaDia.Storage.PlayerDataManager.ActivePlayerData.Coinage;
             var shouldRepairAll = coinage > InventoryManager.GetRepairCost(true);

@@ -55,7 +55,7 @@ namespace Trinity.Components.Coroutines.Town
             if (!itemsToDrop.Any())
             {
                 Core.Logger.Verbose($"[DropItems] Nothing to Drop");
-                return false;
+                return true;
             }
 
             var dropCount = 0;
@@ -67,7 +67,7 @@ namespace Trinity.Components.Coroutines.Town
 
             await Coroutine.Yield();
             Core.Logger.Log($"[DropItems] Dropped {dropCount} Items");
-            return false;
+            return true;
         }
 
         /// <summary>

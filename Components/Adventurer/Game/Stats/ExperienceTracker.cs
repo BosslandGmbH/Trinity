@@ -5,6 +5,7 @@ using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Game.Stats
 {
+    // TODO: Allow for single method "restarting" as in tracker.Restart()
     public class ExperienceTracker : PulsingObject
     {
         public double CurrentExperience;

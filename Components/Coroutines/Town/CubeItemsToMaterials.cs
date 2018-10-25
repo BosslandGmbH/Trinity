@@ -1,11 +1,14 @@
-﻿using System;
+﻿using Buddy.Coroutines;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Buddy.Coroutines;
 using Trinity.Framework;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
+using Trinity.Framework.Reference;
+using Zeta.Bot.Coroutines;
+using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
@@ -28,14 +31,10 @@ namespace Trinity.Components.Coroutines.Town
             if (!LastCanRunResult && DateTime.UtcNow.Subtract(LastCanRunCheck).TotalSeconds < 5)
                 return LastCanRunResult;
 
-            var kule = TownInfo.ZoltunKulle?.GetActor() as DiaUnit;
-            if (kule != null)
+            if (TownInfo.ZoltunKulle?.GetActor() is DiaUnit kule && kule.IsQuestGiver)
             {
-                if (kule.IsQuestGiver)
-                {
-                    Core.Logger.Verbose("[CubeRaresToLegendary] Cube is not unlocked yet");
-                    return false;
-                }
+                Core.Logger.Verbose("[CubeRaresToLegendary] Cube is not unlocked yet");
+                return false;
             }
 
             var settingsTypes = Core.Settings.KanaisCube.GetCraftingMaterialTypes();
@@ -66,6 +65,23 @@ namespace Trinity.Components.Coroutines.Town
             return result;
         }
 
+        public static async Task<bool> EnsureKanaisCube()
+        {
+            while (!GameUI.KanaisCubeWindow.IsVisible || TownInfo.KanaisCube.Distance > TownInfo.KanaisCube.GetActor().InteractDistance)
+            {
+                while (await CommonCoroutines.MoveAndStop(TownInfo.KanaisCube.Position, TownInfo.KanaisCube.GetActor().InteractDistance, "Kadala") != MoveResult.ReachedDestination)
+                {
+                    await Coroutine.Yield();
+                }
+                if (TownInfo.KanaisCube.GetActor().Interact())
+                {
+                    await Coroutine.Wait(1000, () => GameUI.KanaisCubeWindow.IsVisible);
+                }
+                await Coroutine.Yield();
+            }
+            return GameUI.KanaisCubeWindow.IsVisible;
+        }
+
         public static async Task<bool> Execute(List<ItemSelectionType> types = null)
         {
             if (!CanRun())
@@ -73,10 +89,10 @@ namespace Trinity.Components.Coroutines.Town
 
             Core.Logger.Verbose("[CubeItemsToMaterials] Time to Convert some junk into delicious crafting materials.");
 
-            if (!await MoveToAndInteract.Execute(TownInfo.KanaisCube))
+            if (!await EnsureKanaisCube())
             {
                 Core.Logger.Log("[CubeItemsToMaterials] Failed to move to the cube, quite unfortunate.");
-                return true;
+                return false;
             }
 
             // * Never create more of the material you have most of.

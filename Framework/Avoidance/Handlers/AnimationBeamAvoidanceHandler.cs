@@ -12,7 +12,8 @@ namespace Trinity.Framework.Avoidance.Handlers
     {
         public void UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
         {
-            foreach (var actor in avoidance.Actors)
+            var checkActors = avoidance.Actors.ToArray();
+            foreach (var actor in checkActors)
             {
                 try
                 {
@@ -29,6 +30,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                 catch (Exception)
                 {
                     Core.Logger.Debug($"AnimationBeamAvoidanceHandler Exception reading Animation/Rotation for actor: {actor.InternalName}");
+                    avoidance.Actors.Remove(actor);
                 }
             }
         }

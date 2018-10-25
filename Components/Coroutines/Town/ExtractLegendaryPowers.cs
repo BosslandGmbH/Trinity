@@ -1,19 +1,18 @@
-﻿using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
+﻿using Buddy.Coroutines;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Buddy.Coroutines;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
-using Zeta.Common;
+using Zeta.Bot.Logic;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-
 
 namespace Trinity.Components.Coroutines.Town
 {
@@ -21,8 +20,9 @@ namespace Trinity.Components.Coroutines.Town
     {
         public static bool HasUnlockedCube = true;
         private static DateTime _disabledUntil = DateTime.MinValue;
-        private static readonly TimeSpan DisableDuration = TimeSpan.FromMinutes(1);
-
+        private static readonly TimeSpan s_disableDuration = TimeSpan.FromMinutes(1);
+        private static readonly List<int> s_itemsTakenFromStashAnnId = new List<int>();
+        private static readonly HashSet<int> s_blacklistedActorSnoIds = new HashSet<int>();
 
         public static HashSet<RawItemType> DoNotExtractRawItemTypes = new HashSet<RawItemType>
         {
@@ -37,9 +37,6 @@ namespace Trinity.Components.Coroutines.Town
             Legendary.PigSticker.Id,
             Legendary.CorruptedAshbringer.Id
         };
-
-        private static readonly List<int> ItemsTakenFromStashAnnId = new List<int>();
-        private static readonly HashSet<int> BlacklistedActorSnoIds = new HashSet<int>();
 
         public static bool HasCurrencyRequired
             => Core.Inventory.Currency.HasCurrency(TransmuteRecipe.ExtractLegendaryPower);
@@ -60,7 +57,7 @@ namespace Trinity.Components.Coroutines.Town
                 if (kule.IsQuestGiver)
                 {
                     Core.Logger.Verbose("[ExtractLegendaryPowers] Cube is not unlocked yet");
-                    _disabledUntil = DateTime.UtcNow.Add(DisableDuration);
+                    _disabledUntil = DateTime.UtcNow.Add(s_disableDuration);
                     HasUnlockedCube = false;
                     return false;
                 }
@@ -84,7 +81,7 @@ namespace Trinity.Components.Coroutines.Town
             if (!backpackCandidates.Any() && !stashCandidates.Any())
             {
                 Core.Logger.Verbose("[ExtractLegendaryPowers] There are no items that need extraction!");
-                _disabledUntil = DateTime.UtcNow.Add(DisableDuration);
+                _disabledUntil = DateTime.UtcNow.Add(s_disableDuration);
                 return false;
             }
 
@@ -119,7 +116,7 @@ namespace Trinity.Components.Coroutines.Town
                 if (alreadyCubedIds.Contains(item.ActorSnoId))
                     continue;
 
-                if (BlacklistedActorSnoIds.Contains(item.ActorSnoId))
+                if (s_blacklistedActorSnoIds.Contains(item.ActorSnoId))
                     continue;
 
                 if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyTrashed && Combat.TrinityCombat.Loot.ShouldStash(item))
@@ -138,7 +135,7 @@ namespace Trinity.Components.Coroutines.Town
 
         public static async Task<bool> Execute()
         {
-            if (Core.Player.IsInventoryLockedForGreaterRift)
+            if (BrainBehavior.GreaterRiftInProgress)
             {
                 Core.Logger.Verbose("Can't extract powers: inventory locked by greater rift");
                 return false;
@@ -149,11 +146,10 @@ namespace Trinity.Components.Coroutines.Town
             // Make sure we put back anything we removed from stash. Its possible for example that we ran out of materials
             // and the current backpack contents do no longer match the loot rules. Don't want them to be lost.
 
-            if (ItemsTakenFromStashAnnId.Any())
-            {
-                await PutItemsInStash.Execute(ItemsTakenFromStashAnnId);
-                ItemsTakenFromStashAnnId.Clear();
-            }
+            if (!s_itemsTakenFromStashAnnId.Any()) return result;
+
+            await PutItemsInStash.Execute(s_itemsTakenFromStashAnnId);
+            s_itemsTakenFromStashAnnId.Clear();
             return result;
         }
 
@@ -162,53 +158,46 @@ namespace Trinity.Components.Coroutines.Town
             if (!HasCurrencyRequired)
             {
                 Core.Logger.Log("[ExtractLegendaryPowers] Oh no! Out of materials!");
-                return true;
+                return false;
             }
 
             var candidate = GetLegendaryExtractionCandidates(InventorySlot.BackpackItems).FirstOrDefault();
             if (candidate == null)
             {
                 Core.Logger.Log("[ExtractLegendaryPowers] Oh no! Out of materials!");
-                return true;
+                return false;
             }
 
-            if (!await MoveToCube())
+            if (!await CubeItemsToMaterials.EnsureKanaisCube())
             {
                 Core.Logger.Verbose("Unable to move to the cube.");
-                return true;
+                return false;
             }
 
             if (!await ExtractPower(candidate))
             {
                 Core.Logger.Verbose($"Unable to extract power from {candidate}");
-                return true;
+                return false;
             }
 
-            return false;
+            return true;
         }
 
 
         public static async Task<bool> Main()
         {
-            var started = false;
             while (CanRun())
             {
-                if (!started)
-                {
-                    Core.Logger.Log("Extraction mode is set to: {0}", Core.Settings.KanaisCube.ExtractLegendaryPowers);
-                    started = true;
-                }
-
                 if (!HasCurrencyRequired)
                 {
                     Core.Logger.Log("Not enough currency to transmute");
-                    return false;
+                    return true;
                 }
 
                 var backpackCandidate = GetLegendaryExtractionCandidates(InventorySlot.BackpackItems).FirstOrDefault();
                 if (backpackCandidate != null)
                 {
-                    if (!await MoveToCube())
+                    if (!await CubeItemsToMaterials.EnsureKanaisCube())
                     {
                         Core.Logger.Verbose("Unable to move to cube");
                         return false;
@@ -229,14 +218,13 @@ namespace Trinity.Components.Coroutines.Town
                     if (!await TakeItemsFromStash.Execute(stashCandidates))
                         return false;
 
-                    ItemsTakenFromStashAnnId.AddRange(stashCandidates.Select(i => i.AnnId));
+                    s_itemsTakenFromStashAnnId.AddRange(stashCandidates.Select(i => i.AnnId));
                 }
                 else
                 {
                     Core.Logger.Verbose("Finished");
-                    return false;
+                    return true;
                 }
-
                 await Coroutine.Yield();
             }
             return true;
@@ -261,27 +249,13 @@ namespace Trinity.Components.Coroutines.Town
             {
                 Core.Logger.Log($"[ExtractLegendaryPowers] Item Power Extracted! '{itemName}' ({itemSnoId}) Description={affixDescription}");
                 Core.Inventory.InvalidAnnIds.Add(itemDynamicId);
-                ItemsTakenFromStashAnnId.Remove(itemDynamicId);
+                s_itemsTakenFromStashAnnId.Remove(itemDynamicId);
                 return true;
             }
 
             Core.Logger.Log($"[ExtractLegendaryPowers] Failed to Extract Power! '{itemName}' ({itemSnoId}) {itemInternalName} DynId={itemDynamicId}");
-            BlacklistedActorSnoIds.Add(itemSnoId);
+            s_blacklistedActorSnoIds.Add(itemSnoId);
             return false;
-        }
-
-        private static async Task<bool> MoveToCube()
-        {
-            if (GameUI.KanaisCubeWindow.IsVisible)
-                return true;
-
-            if (TownInfo.KanaisCube.Distance < 10f)
-                return true;
-
-            if (TownInfo.KanaisCube.Distance > 350f || TownInfo.KanaisCube.Position == Vector3.Zero)
-                return false;
-
-            return await MoveToAndInteract.Execute(TownInfo.KanaisCube);
         }
     }
 }

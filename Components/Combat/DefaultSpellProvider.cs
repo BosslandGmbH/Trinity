@@ -11,6 +11,7 @@ using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Zeta.Bot;
+using Zeta.Bot.Coroutines;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
@@ -69,7 +70,7 @@ namespace Trinity.Components.Combat
                 if (!TrinityCombat.Targeting.IsInRange(target, power))
                 {
                     Core.Logger.Log(LogCategory.Movement, $"Moving to {castInfo}");
-                    return await MoveTo.Execute(target.Position, "AttackPosition", power.MinimumRange, () => TrinityCombat.Targeting.IsInRange(target, power));
+                    return await CommonCoroutines.MoveAndStop(target.Position, power.MinimumRange, "AttackPosition") == MoveResult.ReachedDestination;
                 }
             }
             else if (power.TargetPosition != Vector3.Zero)
@@ -84,7 +85,7 @@ namespace Trinity.Components.Combat
                 if (!TrinityCombat.Targeting.IsInRange(power.TargetPosition, power))
                 {
                     Core.Logger.Log(LogCategory.Movement, $"Moving to position for {castInfo}");
-                    return await MoveTo.Execute(power.TargetPosition, "AttackPosition", power.MinimumRange, () => TrinityCombat.Targeting.IsInRange(power.TargetPosition, power));
+                    return await CommonCoroutines.MoveAndStop(power.TargetPosition, power.MinimumRange, "AttackPosition") == MoveResult.ReachedDestination;
                 }
             }
 

@@ -4,6 +4,7 @@ using Trinity.Framework;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Coroutines;
+using Zeta.Bot.Coroutines;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
@@ -182,7 +183,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> Interact(DiaObject actor)
         {
-            await MoveTo.Execute(actor.Position, actor.Name, actor.InteractDistance);
+            await CommonCoroutines.MoveAndStop(actor.Position, actor.InteractDistance, actor.Name);
 
             Core.Logger.Debug($"[UsePortal] Attempting to use portal {((SNOActor)actor.ActorSnoId)} at distance {actor.Distance}");
             StatusText = $"[UsePortal] Attempting to use portal {((SNOActor)actor.ActorSnoId)} at distance {actor.Distance}";

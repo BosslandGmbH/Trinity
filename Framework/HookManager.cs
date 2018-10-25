@@ -51,7 +51,7 @@ namespace Trinity.Framework
             TreeHooks.Instance.InsertHook("OutOfGame", 0, new Zeta.TreeSharp.Action(ret =>
             {
                 ModuleManager.OutOfGamePulse();
-                return RunStatus.Failure;                
+                return RunStatus.Failure;
             }));
         }
 
@@ -80,7 +80,7 @@ namespace Trinity.Framework
 
         private static void StoreAndReplaceHook(string hookName, Composite behavior)
         {
-            if (!OriginalHooks.ContainsKey(hookName))
+            if (!OriginalHooks.ContainsKey(hookName) && TreeHooks.Instance.Hooks.ContainsKey(hookName))
                 OriginalHooks.Add(hookName, TreeHooks.Instance.Hooks[hookName][0]);
 
             Core.Logger.Log("Replacing " + hookName + " Hook");

@@ -1,17 +1,16 @@
-﻿using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
+﻿using Buddy.Coroutines;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Buddy.Coroutines;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Events;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-
 
 namespace Trinity.Components.Coroutines.Town
 {
@@ -139,14 +138,10 @@ namespace Trinity.Components.Coroutines.Town
 
                 if (HasMaterialsRequired)
                 {
-                    if (TownInfo.KanaisCube.Distance > 10f || !GameUI.KanaisCubeWindow.IsVisible)
+                    if (!await CubeItemsToMaterials.EnsureKanaisCube())
                     {
-                        if (!await MoveToAndInteract.Execute(TownInfo.KanaisCube))
-                        {
-                            Core.Logger.Log("Failed to move to the cube, quite unfortunate.");
-                            break;
-                        }
-                        continue;
+                        Core.Logger.Log("[CubeRaresToLegendary] Failed to move to the cube, quite unfortunate.");
+                        return false;
                     }
 
                     //Core.Logger.Log("[CubeRaresToLegendary] Ready to go, Lets transmute!");
@@ -158,17 +153,23 @@ namespace Trinity.Components.Coroutines.Town
                     await Transmute.Execute(item, TransmuteRecipe.UpgradeRareItem);
                     var newItem = InventoryManager.Backpack.FirstOrDefault(i => !backpackGuids.Contains(i.ACDId));
                     await Coroutine.Wait(2000, () => (newItem = InventoryManager.Backpack.FirstOrDefault(i => !backpackGuids.Contains(i.ACDId))) != null);
-
+                    await Coroutine.Yield();
                     if (newItem != null)
                     {
+                        Core.Actors.Update();
                         var newLegendaryItem = Legendary.GetItemByACD(newItem);
                         var newTrinityItem = Core.Actors.ItemByAnnId(newItem.AnnId);
-                        ItemEvents.FireItemCubed(newTrinityItem);
+                        if (newTrinityItem != null)
+                        {
+                            ItemEvents.FireItemCubed(newTrinityItem);
 
-                        if (newTrinityItem.IsPrimalAncient)
-                            Core.Logger.Warn($"[CubeRaresToLegendary] Upgraded Rare '{itemName}' ---> '{newLegendaryItem.Name}' ({newItem.ActorSnoId}) PRIMAL!~");
-                        else
-                            Core.Logger.Log($"[CubeRaresToLegendary] Upgraded Rare '{itemName}' ---> '{newLegendaryItem.Name}' ({newItem.ActorSnoId})");
+                            if (newTrinityItem.IsPrimalAncient)
+                                Core.Logger.Warn(
+                                    $"[CubeRaresToLegendary] Upgraded Rare '{itemName}' ---> '{newLegendaryItem.Name}' ({newItem.ActorSnoId}) PRIMAL!~");
+                            else
+                                Core.Logger.Log(
+                                    $"[CubeRaresToLegendary] Upgraded Rare '{itemName}' ---> '{newLegendaryItem.Name}' ({newItem.ActorSnoId})");
+                        }
                     }
                     else
                     {

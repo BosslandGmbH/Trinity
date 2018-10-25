@@ -286,7 +286,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
             }
             foreach (var loot in loots)
             {
-                if (await MoveToAndInteract.Execute(loot, 0, 5))
+                if (await MoveToAndInteract.Execute(loot))
                     return true;
                 await Coroutine.Yield();
             }

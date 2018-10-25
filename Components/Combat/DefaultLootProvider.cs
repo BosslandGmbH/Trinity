@@ -13,7 +13,7 @@ using Zeta.Bot.Settings;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-
+using Zeta.Bot.Logic;
 
 namespace Trinity.Components.Combat
 {
@@ -313,7 +313,7 @@ namespace Trinity.Components.Combat
                 return false;
             }
 
-            if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
+            if (BrainBehavior.GreaterRiftInProgress || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
             {
                 Core.Logger.Debug($"Not stashing due to inventory locked, keep unidentified setting or participating in loot run. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return false;
@@ -593,7 +593,7 @@ namespace Trinity.Components.Combat
                     return false;
                 }
 
-                if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
+                if (BrainBehavior.GreaterRiftInProgress || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
                 {
                     reason = "Rift Locked Inventory";
                     return false;
@@ -754,7 +754,7 @@ namespace Trinity.Components.Combat
                     return true;
                 }
 
-                if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
+                if (BrainBehavior.GreaterRiftInProgress || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
                 {
                     reason = "Rift Locked Inventory";
                     return false;

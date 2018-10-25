@@ -1,21 +1,19 @@
-﻿#region
-
+﻿using Buddy.Coroutines;
 using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Buddy.Coroutines;
 using Trinity.Components.Combat;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
+using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
+using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
-
-#endregion
 
 namespace Trinity.Components.Coroutines.Town
 {
@@ -78,6 +76,27 @@ namespace Trinity.Components.Coroutines.Town
             }
         }
 
+        public static async Task<bool> EnsureKadalaWindow()
+        {
+            while (!UIElements.VendorWindow.IsVisible || TownInfo.Kadala.Distance > TownInfo.Kadala.GetActor().InteractDistance)
+            {
+                var salvageShortcut = ZetaDia.Actors.GetActorsOfType<DiaUnit>().FirstOrDefault(u => u.IsSalvageShortcut);
+                if (salvageShortcut == null) break;
+
+                while (await CommonCoroutines.MoveAndStop(TownInfo.Kadala.Position, TownInfo.Kadala.GetActor().InteractDistance, "Kadala") != MoveResult.ReachedDestination)
+                {
+                    await Coroutine.Yield();
+                }
+                if (TownInfo.Kadala.GetActor().Interact())
+                {
+                    await Coroutine.Wait(1000, () => UIElements.VendorWindow.IsVisible);
+                }
+                await Coroutine.Yield();
+            }
+            return UIElements.VendorWindow.IsVisible;
+        }
+
+
         public static async Task<bool> Execute()
         {
             if (!ZetaDia.IsInTown)
@@ -88,7 +107,7 @@ namespace Trinity.Components.Coroutines.Town
                 while (CanRun() && (!StillSavingShards || IsDumpingShards))
                 {
                     IsDumpingShards = true;
-                    if ((TownInfo.Kadala.Distance > 8f || !UIElements.VendorWindow.IsVisible) && !await MoveToAndInteract.Execute(TownInfo.Kadala))
+                    if (!await EnsureKadalaWindow())
                     {
                         Core.Logger.Log("[Gamble] Failed to move to Kadala, quite unfortunate.");
                         break;
@@ -198,7 +217,7 @@ namespace Trinity.Components.Coroutines.Town
                     return false;
                 }
 
-                if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
+                if (BrainBehavior.GreaterRiftInProgress || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
                 {
                     LogVerbose("No gambling during greater rift due to backpack items being disabled ");
                     return false;
@@ -235,7 +254,7 @@ namespace Trinity.Components.Coroutines.Town
                     LogVerbose("Can't afford desired items!");
                     return false;
                 }
-             
+
             }
             catch (Exception ex)
             {

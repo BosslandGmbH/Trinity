@@ -341,7 +341,6 @@
     <Compile Include="Components\Coroutines\ClearArea.cs" />
     <Compile Include="Components\Coroutines\EmergencyRepair.cs" />
     <Compile Include="Components\Coroutines\EquipBehavior.cs" />
-    <Compile Include="Components\Coroutines\MoveTo.cs" />
     <Compile Include="Components\Coroutines\MoveToAndInteract.cs" />
     <Compile Include="Components\Coroutines\OpenBountyCache.cs" />
     <Compile Include="Framework\Helpers\Extensions\DoubleExtensions.cs" />

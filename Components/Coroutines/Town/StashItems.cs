@@ -10,6 +10,8 @@ using Trinity.Framework.Events;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Reference;
 using Zeta.Bot;
+using Zeta.Bot.Coroutines;
+using Zeta.Bot.Logic;
 using Zeta.Bot.Navigation;
 using Zeta.Bot.Settings;
 using Zeta.Game;
@@ -34,7 +36,7 @@ namespace Trinity.Components.Coroutines.Town
             if (i.IsUnidentified)
                 return true;
 
-            if (Core.Player.IsInventoryLockedForGreaterRift)
+            if (BrainBehavior.GreaterRiftInProgress)
                 return false;
 
             if (Cache.ContainsKey(i.AnnId))
@@ -60,7 +62,7 @@ namespace Trinity.Components.Coroutines.Town
             if (!stashItems.Any())
             {
                 Core.Logger.Verbose($"[StashItems] Nothing to stash");
-                return false;
+                return true;
             }
 
             Core.Logger.Verbose($"[StashItems] Now to stash {stashItems.Count} items");
@@ -68,27 +70,19 @@ namespace Trinity.Components.Coroutines.Town
 
             GameUI.CloseVendorWindow();
 
-            await MoveToStash();
-
-            if (!UIElements.StashWindow.IsVisible)
+            while (!UIElements.StashWindow.IsVisible)
             {
                 var stash = ZetaDia.Actors.GetActorsOfType<GizmoPlayerSharedStash>().FirstOrDefault();
                 if (stash == null)
                     return false;
 
-                if (!await MoveTo.Execute(stash.Position))
+                while (await CommonCoroutines.MoveAndStop(stash.Position, stash.InteractDistance, "Stash") != MoveResult.ReachedDestination)
                 {
-                    Core.Logger.Error($"[SalvageItems] Failed to move to stash interact position ({stash.Name}) to stash items :(");
-                    return false;
-                };
-                Navigator.PlayerMover.MoveTowards(stash.Position);
-                if (!await MoveToAndInteract.Execute(stash, 5f))
-                {
-                    Core.Logger.Error($"[SalvageItems] Failed to move to stash ({stash.Name}) to stash items :(");
-                    return false;
-                };
-                await Coroutine.Yield();
+                    await Coroutine.Yield();
+                }
+
                 stash.Interact();
+                await Coroutine.Yield();
             }
 
             if (UIElements.StashWindow.IsVisible)
@@ -170,27 +164,6 @@ namespace Trinity.Components.Coroutines.Town
                 item.OnCreated();
             }
             Core.Actors.Update();
-        }
-
-        public static async Task<bool> MoveToStash()
-        {
-            var stash = TownInfo.Stash;
-            if (stash == null)
-            {
-                Core.Logger.Error("[StashItems] Unable to find a stash info for this area :(");
-                return false;
-            }
-
-            if (!UIElements.StashWindow.IsVisible)
-            {
-                if (!await MoveToAndInteract.Execute(stash))
-                {
-                    Core.Logger.Error($"[StashItems] Failed to move to stash ({stash.Name}) to salvage items :(");
-                    return false;
-                }
-                await Coroutine.Yield();
-            }
-            return true;
         }
 
         public static async Task<bool> StackRamaladnisGift()

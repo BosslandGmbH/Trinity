@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Components.Combat;
 using Trinity.Framework.Actors.ActorTypes;
+using Zeta.Bot.Coroutines;
+using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
@@ -26,9 +28,10 @@ namespace Trinity.Components.Coroutines.Town
             if (!ZetaDia.IsInGame || !ZetaDia.IsInTown)
                 return true;
 
-            if (TownInfo.Stash.Distance > 20f)
+            while (await CommonCoroutines.MoveAndStop(TownInfo.Stash.InteractPosition,
+                       TownInfo.Stash.GetActor().InteractDistance, "Stash") != MoveResult.ReachedDestination)
             {
-                await MoveTo.Execute(TownInfo.Stash.InteractPosition);
+                await Coroutine.Yield();
             }
 
             var stash = TownInfo.Stash?.GetActor();

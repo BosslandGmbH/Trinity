@@ -16,7 +16,7 @@ using Zeta.Game.Internals.Actors;
 namespace Trinity.Modules
 {
     public class PlayerCache : Module
-    {       
+    {
         public int ActorSnoId { get; set; }
 
         public SummonInfo Summons = new SummonInfo();
@@ -91,20 +91,13 @@ namespace Trinity.Modules
         public float ShieldHitpoints { get; private set; }
         public DateTime LastInCombatTime { get; private set; }
 
-        public bool IsMelee
-            =>
-                Core.Player.ActorClass == ActorClass.Barbarian || Core.Player.ActorClass == ActorClass.Monk ||
-                Core.Player.ActorClass == ActorClass.Crusader;
-
-        public bool IsInventoryLockedForGreaterRift { get; set; }
+        public bool IsMelee => Core.Player.ActorClass == ActorClass.Barbarian || Core.Player.ActorClass == ActorClass.Monk || Core.Player.ActorClass == ActorClass.Crusader;
 
         public List<float> HealthHistory { get; set; } = new List<float>();
 
-        public bool HasBuff(SNOPower power)
-            => Core.Buffs.HasBuff(power);
+        public bool HasBuff(SNOPower power) => Core.Buffs.HasBuff(power);
 
-        public bool HasBuff(SNOPower power, int variantId)
-            => Core.Buffs.HasBuff(power, variantId);
+        public bool HasBuff(SNOPower power, int variantId) => Core.Buffs.HasBuff(power, variantId);
 
         public class SceneInfo
         {
@@ -221,7 +214,7 @@ namespace Trinity.Modules
             IsCasting = _me.LoopingAnimationEndTime > 0;
             IsInteractingWithGizmo = commonData.GetAttribute<bool>(ActorAttributeType.PowerBuff0VisualEffectNone, (int)SNOPower.Axe_Operate_Gizmo);
             CurrentAnimation = commonData.CurrentAnimation;
-            IsInventoryLockedForGreaterRift = ZetaDia.Storage.RiftStarted && ZetaDia.Storage.CurrentRiftType == RiftType.Greater && !ZetaDia.Storage.RiftCompleted;
+
             ShieldHitpoints = commonData.GetAttribute<float>(ActorAttributeType.DamageShieldAmount);
 
             Summons = GetPlayerSummonCounts();
@@ -251,7 +244,7 @@ namespace Trinity.Modules
 
             var averageHealth = HealthHistory.Average();
             IsTakingDamage = averageHealth > CurrentHealth;
-            
+
             // For WD Angry Chicken
             IsHidden = _me.IsHidden;
         }
@@ -332,7 +325,7 @@ namespace Trinity.Modules
         internal void UpdateSlowChangingData()
         {
             var player = ZetaDia.Storage.PlayerDataManager.ActivePlayerData;
-            
+
             BloodShards = player.BloodshardCount;
             MyDynamicID = _me.CommonData.AnnId;
             CurrentSceneSnoId = ZetaDia.Me.CurrentScene.SceneInfo.SNOId;
@@ -450,12 +443,12 @@ namespace Trinity.Modules
                 case ActorClass.DemonHunter:
                     return player.CommonData.GetAttribute<float>(149 | (int)ResourceType.Hatred << 12) + player.CommonData.GetAttribute<float>(ActorAttributeType.ResourceMaxBonusHatred);
                 case ActorClass.Witchdoctor:
-                    return player.CommonData.GetAttribute<float>(149 | (int)ResourceType.Mana << 12) + player.CommonData.GetAttribute<float>(ActorAttributeType.ResourceMaxBonusMana);            
+                    return player.CommonData.GetAttribute<float>(149 | (int)ResourceType.Mana << 12) + player.CommonData.GetAttribute<float>(ActorAttributeType.ResourceMaxBonusMana);
             }
             return -1;
         }
 
-        
+
 
         public ACDItem EquippedHealthPotion
         {
