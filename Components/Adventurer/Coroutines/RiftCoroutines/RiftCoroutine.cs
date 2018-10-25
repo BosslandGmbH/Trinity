@@ -33,7 +33,6 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
     public static class RiftCoroutine
     {
         private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
-        //TODO: Add Expirience Tracking
         private static readonly ExperienceTracker s_experienceTracker = new ExperienceTracker();
 
         public static long CurrentRiftKeyCount
@@ -116,6 +115,8 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 return false;
             }
 
+            if (!s_experienceTracker.IsStarted) s_experienceTracker.Start();
+
             if (!await CommonCoroutines.MoveAndInteract(lrs, () => UIElements.RiftDialog.IsVisible))
                 return false;
 
@@ -174,7 +175,6 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         public static async Task<bool> TurnInQuest()
         {
             if (AdvDia.RiftQuest.Step != RiftStep.Cleared) return true;
-
             if (!await EnsureIsInTown())
                 return false;
 
@@ -187,10 +187,8 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             if (!(Orek.IsValid && await CommonCoroutines.MoveAndInteract(Orek, () => !Orek.IsQuestGiver)))
                 return false;
 
-            if (AdvDia.RiftQuest.State != QuestState.NotStarted)
-                return false;
-
-            return true;
+            if (s_experienceTracker.IsStarted) s_experienceTracker.StopAndReport(nameof(RiftCoroutine));
+            return await Coroutine.Wait(TimeSpan.FromSeconds(30), () => AdvDia.RiftQuest.State == QuestState.NotStarted);
         }
 
         public static async Task<bool> RunRift(RiftType riftType, int maxLevel, int maxEmpowerLevel, bool shouldEmpower, bool runNormalUntilXP)
@@ -213,14 +211,13 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 return false;
 
             s_logger.Error("Rift done what next...");
-            // TODO: Update the tracking information here...
             // TODO: Decide if another rift should be run... If so return false else return true...
             return false;
         }
     }
-    
+
     [Obsolete]
-    // TODO: Delete once cowlevel and expirence tracker is ported.
+    // TODO: Delete once cowlevel is ported.
     public class RiftCoroutines : IDisposable, ICoroutine
     {
         public class RiftOptions
@@ -657,10 +654,6 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             Core.Logger.Debug("[TownRun] AdvDia.RiftQuest.State is {0}", AdvDia.RiftQuest.State);
             Core.Logger.Debug("[TownRun] AdvDia.RiftQuest.Step is {0}", AdvDia.RiftQuest.Step);
 
-            if (BrainBehavior.IsVendoring)
-            {
-                return await TrinityTownRun.Execute();
-            }
             if (!_townRunInitiated)
             {
                 _townRunInitiated = true;

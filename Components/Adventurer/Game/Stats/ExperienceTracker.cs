@@ -1,26 +1,28 @@
 ﻿using System;
+using log4net;
 using Trinity.Framework;
 using Trinity.Components.Adventurer.Game.Events;
+using Zeta.Common;
 using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Game.Stats
 {
-    // TODO: Allow for single method "restarting" as in tracker.Restart()
     public class ExperienceTracker : PulsingObject
     {
-        public double CurrentExperience;
-        public double MinExperience = 0;
-        public double MaxExperience = 0;
-        public double MinExperienceRun = 0;
-        public double MaxExperienceRun = 0;
-        public double TotalExperience = 0;
-        public TimeSpan CurrentTime => DateTime.UtcNow - _startTime;
+        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+
+        private double _currentExperience;
+        private double _minExperience;
+        private double _maxExperience;
+        private double _minExperienceRun;
+        private double _maxExperienceRun;
+        private double _totalExperience;
         private DateTime _startTime;
         private DateTime _tickStartTime;
         private TimeSpan _bestTime = TimeSpan.Zero;
         private TimeSpan _worseTime;
         private long _lastSeen;
-        private int _tick = 0;
+        private int _tick;
         public bool IsStarted { get; private set; }
 
         public void Start()
@@ -28,7 +30,7 @@ namespace Trinity.Components.Adventurer.Game.Stats
             if (_startTime == DateTime.MinValue)
                 _startTime = DateTime.UtcNow;
             _tickStartTime = DateTime.UtcNow;
-            CurrentExperience = 0;
+            _currentExperience = 0;
             _tick++;
             _lastSeen = GetExperience();
             EnablePulse();
@@ -61,37 +63,37 @@ namespace Trinity.Components.Adventurer.Game.Stats
         {
             LastResult = GetResult();
 
-            var TimeOfLastRun = DateTime.UtcNow - _tickStartTime;
-            var TimeOfSession = DateTime.UtcNow - _startTime;
-            var AverageRunTime = new TimeSpan(TimeOfSession.Ticks / _tick);
-            var ThisExpHour = CurrentExperience / TimeOfLastRun.TotalHours;
+            var timeOfLastRun = DateTime.UtcNow - _tickStartTime;
+            var timeOfSession = DateTime.UtcNow - _startTime;
+            var averageRunTime = new TimeSpan(timeOfSession.Ticks / _tick);
+            var thisExpHour = _currentExperience / timeOfLastRun.TotalHours;
 
-            if (_bestTime == TimeSpan.Zero || _bestTime > TimeOfLastRun)
-                _bestTime = TimeOfLastRun;
-            if (_worseTime < TimeOfLastRun)
-                _worseTime = TimeOfLastRun;
-            if (MaxExperienceRun < CurrentExperience)
-                MaxExperienceRun = CurrentExperience;
-            if (MinExperienceRun == 0 || MinExperienceRun > CurrentExperience)
-                MinExperienceRun = CurrentExperience;
-            if (MaxExperience < ThisExpHour)
-                MaxExperience = ThisExpHour;
-            if (MinExperience == 0 || MinExperience > ThisExpHour)
-                MinExperience = ThisExpHour;
+            if (_bestTime == TimeSpan.Zero || _bestTime > timeOfLastRun)
+                _bestTime = timeOfLastRun;
+            if (_worseTime < timeOfLastRun)
+                _worseTime = timeOfLastRun;
+            if (_maxExperienceRun < _currentExperience)
+                _maxExperienceRun = _currentExperience;
+            if (Math.Abs(_minExperienceRun) < double.Epsilon || _minExperienceRun > _currentExperience)
+                _minExperienceRun = _currentExperience;
+            if (_maxExperience < thisExpHour)
+                _maxExperience = thisExpHour;
+            if (Math.Abs(_minExperience) < double.Epsilon || _minExperience > thisExpHour)
+                _minExperience = thisExpHour;
 
-            Core.Logger.Warn("[{0}] Runs count: {1}", reporterName, _tick);
-            Core.Logger.Warn("[{0}] This run time: {1}:{2:D2}:{3:D2}", reporterName, TimeOfLastRun.Hours, TimeOfLastRun.Minutes, TimeOfLastRun.Seconds);
-            Core.Logger.Warn("[{0}] Average run time: {1}:{2:D2}:{3:D2}", reporterName, AverageRunTime.Hours, AverageRunTime.Minutes, AverageRunTime.Seconds);
-            Core.Logger.Warn("[{0}] Best run time: {1}:{2:D2}:{3:D2}", reporterName, _bestTime.Hours, _bestTime.Minutes, _bestTime.Seconds);
-            Core.Logger.Warn("[{0}] Worse run time: {1}:{2:D2}:{3:D2}", reporterName, _worseTime.Hours, _worseTime.Minutes, _worseTime.Seconds);
-            Core.Logger.Warn("[{0}] This run XP Gained: {1:0,0}", reporterName, CurrentExperience);
-            Core.Logger.Warn("[{0}] This run / Hour: {1:0,0}", reporterName, ThisExpHour);
-            Core.Logger.Warn("[{0}] Total XP Gained: {1:0,0}", reporterName, TotalExperience);
-            Core.Logger.Warn("[{0}] Total XP / Hour: {1:0,0}", reporterName, TotalExperience / TimeOfSession.TotalHours);
-            Core.Logger.Warn("[{0}] Best XP / Hour (single run): {1:0,0}", reporterName, MaxExperience);
-            Core.Logger.Warn("[{0}] Worse XP / Hour (single run): {1:0,0}", reporterName, MinExperience);
-            Core.Logger.Warn("[{0}] Best XP / Single run: {1:0,0}", reporterName, MaxExperienceRun);
-            Core.Logger.Warn("[{0}] Worse XP / Single run: {1:0,0}", reporterName, MinExperienceRun);
+            s_logger.Info($"[{reporterName}] Runs count: {_tick}");
+            s_logger.Info($"[{reporterName}] This run time: {timeOfLastRun}");
+            s_logger.Info($"[{reporterName}] Average run time: {averageRunTime}");
+            s_logger.Info($"[{reporterName}] Best run time: {_bestTime}");
+            s_logger.Info($"[{reporterName}] Worse run time: {_worseTime}");
+            s_logger.Info($"[{reporterName}] This run XP Gained: {_currentExperience:0,0}");
+            s_logger.Info($"[{reporterName}] This run / Hour: {thisExpHour:0,0}");
+            s_logger.Info($"[{reporterName}] Total XP Gained: {_totalExperience:0,0}");
+            s_logger.Info($"[{reporterName}] Total XP / Hour: {(_totalExperience / timeOfSession.TotalHours):0,0}");
+            s_logger.Info($"[{reporterName}] Best XP / Hour (single run): {_maxExperience:0,0}");
+            s_logger.Info($"[{reporterName}] Worse XP / Hour (single run): {_minExperience:0,0}");
+            s_logger.Info($"[{reporterName}] Best XP / Single run: {_maxExperienceRun:0,0}");
+            s_logger.Info($"[{reporterName}] Worse XP / Single run: {_minExperienceRun:0,0}");
         }
 
         public static ExperienceTrackerResult GetResult()
@@ -99,7 +101,7 @@ namespace Trinity.Components.Adventurer.Game.Stats
             return new ExperienceTrackerResult
             {
                 TimeTaken = DateTime.UtcNow - Current._tickStartTime,
-                ExperienceGained = Current.CurrentExperience,
+                ExperienceGained = Current._currentExperience,
             };
         }
 
@@ -108,8 +110,8 @@ namespace Trinity.Components.Adventurer.Game.Stats
             var currentLastSeen = GetExperience();
             if (_lastSeen < currentLastSeen)
             {
-                CurrentExperience += (currentLastSeen - _lastSeen);
-                TotalExperience += (currentLastSeen - _lastSeen);
+                _currentExperience += (currentLastSeen - _lastSeen);
+                _totalExperience += (currentLastSeen - _lastSeen);
             }
             _lastSeen = currentLastSeen;
         }
