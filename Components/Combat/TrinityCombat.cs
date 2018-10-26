@@ -96,7 +96,6 @@ namespace Trinity.Components.Combat
 
             if (!Core.Player.IsCasting && (!TargetUtil.AnyMobsInRange(20f) || !Core.Player.IsTakingDamage))
             {
-                await EmergencyRepair.Execute();
                 await AutoEquipSkills.Instance.Execute();
                 await AutoEquipItems.Instance.Execute();
                 return false;
