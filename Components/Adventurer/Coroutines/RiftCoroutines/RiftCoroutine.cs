@@ -188,7 +188,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 return false;
 
             if (s_experienceTracker.IsStarted) s_experienceTracker.StopAndReport(nameof(RiftCoroutine));
-            return await Coroutine.Wait(TimeSpan.FromSeconds(30), () => AdvDia.RiftQuest.State == QuestState.NotStarted);
+            return true;
         }
 
         public static async Task<bool> RunRift(RiftType riftType, int maxLevel, int maxEmpowerLevel, bool shouldEmpower, bool runNormalUntilXP)
@@ -210,7 +210,9 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             if (!await TurnInQuest())
                 return false;
 
-            s_logger.Error("Rift done what next...");
+            s_logger.Info("Rift done, let's force a town run...");
+            BrainBehavior.ForceTownrun(nameof(RiftCoroutine));
+
             // TODO: Decide if another rift should be run... If so return false else return true...
             return false;
         }

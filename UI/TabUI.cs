@@ -87,7 +87,7 @@ namespace Trinity.UI
                     CreateButton("Sort Backpack", SortBackEventHandler),
                     CreateButton("Sort Stash", SortStashEventHandler),
                     CreateButton("Stack Materials", StackCraftingMaterialsInStash),
-                    CreateButton("Stash Backpack", DepositBackpackToStash),                    
+                    CreateButton("Stash Backpack", DepositBackpackToStash),
                 });
 
                 CreateGroup("Cube Backpack", new List<Control>
@@ -297,7 +297,7 @@ namespace Trinity.UI
                 if (!BotMain.IsRunning)
                 {
                     //ActorManager.Start();
-                    TaskDispatcher.Start(ret => Components.Coroutines.Town.StashItems.Execute(), o => o == null || (RunStatus)o != RunStatus.Running);
+                    TaskDispatcher.Start(async ret => !await TrinityTownRun.StashItems(), o => o == null || (RunStatus)o != RunStatus.Running);
                 }
             }
             catch (Exception ex)
@@ -1137,7 +1137,7 @@ namespace Trinity.UI
             {
                 Core.Logger.Log("Starting");
 
-                CoroutineHelper.RunCoroutine(() => CubeRaresToLegendary.Execute());
+                CoroutineHelper.RunCoroutine(() => TrinityTownRun.TransmuteRareToLegendary());
 
                 Core.Logger.Log("Finished");
             }
@@ -1153,9 +1153,7 @@ namespace Trinity.UI
             {
                 var alltypes = Enum.GetValues(typeof(ItemSelectionType)).Cast<ItemSelectionType>().ToList();
 
-                CoroutineHelper.RunCoroutine(
-                    () => CubeRaresToLegendary.Execute(alltypes),
-                    result => !CubeRaresToLegendary.CanRun());
+                CoroutineHelper.RunCoroutine(async () => !await TrinityTownRun.TransmuteRareToLegendary(alltypes));
             }
             catch (Exception ex)
             {
@@ -1167,7 +1165,7 @@ namespace Trinity.UI
         {
             try
             {
-                CoroutineHelper.RunCoroutine(ExtractLegendaryPowers.Execute);
+                CoroutineHelper.RunCoroutine(async () => !await TrinityTownRun.ExtractLegendaryPowers());
             }
             catch (Exception ex)
             {
@@ -1179,7 +1177,7 @@ namespace Trinity.UI
         {
             try
             {
-                CoroutineHelper.RunCoroutine(ExtractLegendaryPowers.ExtractAllBackpack);
+                CoroutineHelper.RunCoroutine(async () => !await TrinityTownRun.ExtractAllBackpack());
             }
             catch (Exception ex)
             {
@@ -1244,7 +1242,7 @@ namespace Trinity.UI
             try
             {
                 Core.Logger.Log("Starting Conversion of Backpack to Magic Dust.");
-                TaskDispatcher.Start(ret => ConvertMaterials.Execute(CurrencyType.ArcaneDust));
+                TaskDispatcher.Start(async ret => !await TrinityTownRun.TransmuteMaterials(CurrencyType.ArcaneDust));
             }
             catch (Exception ex)
             {
@@ -1257,7 +1255,7 @@ namespace Trinity.UI
             try
             {
                 Core.Logger.Log("Starting Conversion of Backpack to Reusable Parts.");
-                TaskDispatcher.Start(ret => ConvertMaterials.Execute(CurrencyType.ReusableParts));
+                TaskDispatcher.Start(async ret => !await TrinityTownRun.TransmuteMaterials(CurrencyType.ReusableParts));
             }
             catch (Exception ex)
             {
@@ -1270,7 +1268,7 @@ namespace Trinity.UI
             try
             {
                 Core.Logger.Log("Starting Conversion of Backpack to Veiled Crystals.");
-                TaskDispatcher.Start(ret => ConvertMaterials.Execute(CurrencyType.VeiledCrystal));
+                TaskDispatcher.Start(async ret => !await TrinityTownRun.TransmuteMaterials(CurrencyType.VeiledCrystal));
             }
             catch (Exception ex)
             {
@@ -1409,7 +1407,7 @@ namespace Trinity.UI
         {
             try
             {
-                TaskDispatcher.Start(ret => Components.Coroutines.Town.StashItems.StackCraftingMaterials());
+                TaskDispatcher.Start(async ret => !await TrinityTownRun.StackCraftingMaterials());
 
                 ItemSort.SortStash();
             }
@@ -1423,7 +1421,7 @@ namespace Trinity.UI
         {
             try
             {
-                TaskDispatcher.Start(ret => Components.Coroutines.Town.StashItems.Execute());
+                TaskDispatcher.Start(async ret => !await TrinityTownRun.StashItems());
 
                 ItemSort.SortStash();
             }

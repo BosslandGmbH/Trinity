@@ -12,10 +12,8 @@ namespace Trinity.ProfileTags
     {
         public override async Task<bool> MainTask()
         {
-            if(!await TrinityTownRun.TakeReturnPortal())
-            {
-                Core.Logger.Log("TakeReturnPortalTag has failed");
-            }        
+            if (!await TrinityTownRun.TakeReturnPortal())
+                return false;
             return true;
         }
 

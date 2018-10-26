@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Components.Coroutines.Town;
 using Trinity.Framework.Objects.Enums;
+using Zeta.Bot.Logic;
 using Zeta.Game;
 
 
@@ -33,7 +34,7 @@ namespace Trinity.Components.Coroutines
                 {
                     Core.Logger.Log($"Waiting for Treasure Bag loot");
                     await Coroutine.Yield();
-                    TrinityTownRun.IsWantingTownRun = true;
+                    BrainBehavior.ForceTownrun(nameof(OpenTreasureBags));
                     return true;
                 }
             }

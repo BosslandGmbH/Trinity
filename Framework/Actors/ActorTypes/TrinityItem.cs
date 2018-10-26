@@ -98,7 +98,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         /// <summary>
         /// If the item was dropped by this player
         /// </summary>
-        public bool IsMyDroppedItem => DropItems.DroppedItemAnnIds.Contains(AnnId);
+        public bool IsMyDroppedItem => TrinityTownRun.DroppedItemAnnIds.Contains(AnnId);
 
         public GlobeTypes GlobeType => ItemProperties.GetGlobeType(this);
         public FollowerType FollowerType => ItemProperties.GetFollowerType(ActorSnoId);

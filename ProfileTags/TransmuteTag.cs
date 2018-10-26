@@ -14,6 +14,7 @@ using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags
 {
+    // TODO: Fix that stuff...
     [XmlElement("Transmute")]
     public class TransmuteTag : BaseProfileBehavior
     {
@@ -84,7 +85,7 @@ namespace Trinity.ProfileTags
                 transmuteGroup.AddRange(stacks);
             }
 
-            if (!await Transmute.Execute(transmuteGroup, Recipe))
+            if (!await TrinityTownRun.TransmuteRecipe(transmuteGroup, Recipe))
             {
                 Core.Logger.Error("[TransmuteTag] Trasmute Failed.");
                 return true;

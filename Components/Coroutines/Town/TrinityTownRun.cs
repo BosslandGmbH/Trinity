@@ -1,147 +1,179 @@
 ﻿using Buddy.Coroutines;
+using log4net;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Trinity.Components.Combat;
 using Trinity.Framework;
-using Trinity.Framework.Helpers;
-using Trinity.Framework.Reference;
-using Trinity.Modules;
-using Zeta.Bot;
+using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Objects;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
-using Zeta.Bot.Navigation;
+using Zeta.Bot.Settings;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
-using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Components.Coroutines.Town
 {
-    public class TrinityTownRun
+    public static partial class TrinityTownRun
     {
+        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static bool _isStartLocationOutOfTown;
+
+        public static bool IsTownRunRequired => (ZetaDia.Me.CanUseTownPortal(out _) || ZetaDia.IsInTown) && (InventoryManager.NumFreeBackpackSlots <= 2 || InventoryManager.Equipped.Any(i => i.DurabilityPercent <= CharacterSettings.Instance.RepairWhenDurabilityBelow));
+
+        // TODO: Make sure that is actually the portal we came from an not an open Rift portal (might cause a lot of empty meters).
+        public static DiaGizmo ReturnPortal => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true).FirstOrDefault(g => g.IsTownPortal);
+
         private static readonly Lazy<PropertyInfo> s_vendorProperty = new Lazy<PropertyInfo>(() => typeof(BrainBehavior).GetProperty("IsVendoring"));
-        public static bool StartedOutOfTown { get; set; }
-        public static bool IsWantingTownRun { get; set; }
-        public static bool IsInTownVendoring { get; set; }
-
-        public static DateTime DontAttemptTownRunUntil = DateTime.MinValue;
-
-        public static async Task<bool> Execute()
+        public static bool IsVendoring
         {
-            if (!ZetaDia.IsInGame)
+            get => BrainBehavior.IsVendoring;
+            set => s_vendorProperty.Value.SetValue(null, value);
+        }
+
+
+        public static bool HasMaterialsRequired => Core.Inventory.Currency.HasCurrency(Zeta.Game.TransmuteRecipe.UpgradeRareItem);
+        public static bool IsRareToLegendaryTransformationPossible(List<ItemSelectionType> types = null)
+        {
+            if (!ZetaDia.IsInGame || !ZetaDia.IsInTown) return false;
+
+            if (TownInfo.ZoltunKulle?.GetActor() is DiaUnit kule)
             {
-                StartedOutOfTown = false;
-                IsWantingTownRun = false;
-                IsInTownVendoring = false;
-                IsVendoring = false;
+                if (kule.IsQuestGiver)
+                {
+                    s_logger.Verbose($"[{nameof(IsRareToLegendaryTransformationPossible)}] Cube is not unlocked yet");
+                    return false;
+                }
+            }
+
+            if (types == null && Core.Settings.KanaisCube.RareUpgradeTypes == ItemSelectionType.Unknown)
+            {
+                s_logger.Verbose($"[{nameof(IsRareToLegendaryTransformationPossible)}] No item types selected in settings - (Config => Items => Kanai's Cube)");
                 return false;
             }
 
-            if (BrainBehavior.GreaterRiftInProgress)
-                return false;
-
-            if (await ClearArea.Execute())
+            if (!HasMaterialsRequired && InventoryManager.NumFreeBackpackSlots < 5)
             {
-                Core.Logger.Debug("Clearing");
+                s_logger.Verbose($"[{nameof(IsRareToLegendaryTransformationPossible)}] Not enough bag space");
                 return false;
             }
 
-            CheckForDBVendoringBug();
-
-            if (DateTime.UtcNow < DontAttemptTownRunUntil)
+            if (Core.Inventory.Currency.DeathsBreath < Core.Settings.KanaisCube.DeathsBreathMinimum)
             {
-                IsVendoring = false;
+                s_logger.Verbose($"[{nameof(IsRareToLegendaryTransformationPossible)}] Not enough deaths breath - Limit is set to {Core.Settings.KanaisCube.DeathsBreathMinimum}, You currently have {Core.Inventory.Currency.DeathsBreath}");
                 return false;
             }
 
-            // Fix for Campaign quest start of ACT1
-            if (ZetaDia.CurrentQuest.QuestSnoId == 87700)
-                return false;
-
-            if (Core.CastStatus.StoneOfRecall.LastResult == CastResult.Casting)
+            if (!GetBackPackRares(types).Any())
             {
-                Core.Logger.Verbose(LogCategory.GlobalHandler, "Casting");
-                return true;
-            }
-
-            if (!ShouldStartTownRun())
-            {
-                IsVendoring = false;
+                s_logger.Verbose($"[{nameof(IsRareToLegendaryTransformationPossible)}] You need some rares in your backpack for this to work!");
                 return false;
             }
 
-            IsWantingTownRun = true;
-
-            Core.Logger.Debug("Town run started");
-
-            if (ZetaDia.Globals.IsLoadingWorld)
+            if (!HasMaterialsRequired)
             {
-                return true;
+                s_logger.Verbose($"[{nameof(IsRareToLegendaryTransformationPossible)}] Unable to find the materials we need, maybe you don't have them!");
+                return false;
             }
 
+            return true;
+        }
+
+        public static async Task<bool> EnsureIsInTown()
+        {
             if (!ZetaDia.IsInTown)
             {
-                if (ZetaDia.Me.IsInCombat && !ClearArea.IsClearing && ZetaDia.Actors.GetActorsOfType<DiaUnit>().Any(u => u?.CommonData != null && u.CommonData.IsValid && u.IsAlive && u.IsHostile && u.Distance < 16f))
-                {
-                    ClearArea.Start();
-                }
+                if (!await CommonCoroutines.UseTownPortal(nameof(TrinityTownRun)))
+                    return false;
+                _isStartLocationOutOfTown = true;
+            }
+            return ZetaDia.IsInTown;
+        }
 
-                await GoToTown();
+        public static async Task<bool> ReturnToStartLocation()
+        {
+            if (_isStartLocationOutOfTown && ZetaDia.IsInTown)
+            {
+                if (!await CommonCoroutines.MoveAndInteract(ReturnPortal, () => ZetaDia.IsInTown))
+                    return false;
+                _isStartLocationOutOfTown = false;
+            }
+            return true;
+        }
 
-                if (!ZetaDia.IsInTown)
-                {
-                    if (Core.CastStatus.StoneOfRecall.LastResult == CastResult.Failed)
-                    {
-                        Core.Logger.Debug("Setting Town Run Cooldown because of cast failure");
-                        DontAttemptTownRunUntil = DateTime.UtcNow.AddSeconds(5);
-                    }
-                    return true;
-                }
+        public static async Task<bool> IdentifyItems()
+        {
+            if (!ZetaDia.IsInTown) return true;
+
+            if (Core.Settings.Items.KeepLegendaryUnid)
+            {
+                s_logger.Debug($"[{nameof(IdentifyItems)}] Town run setting 'Keep Legendary Unidentified' - Skipping ID");
+                return true;
             }
 
-            Core.Logger.Verbose($"Starting Townrun");
+            if (!Core.Inventory.Backpack.Any(i => i.IsUnidentified)) return true;
 
-            IsInTownVendoring = true;
+            var bookActor = TownInfo.BookOfCain;
+            if (bookActor == null)
+            {
+                s_logger.Warn($"[{nameof(IdentifyItems)}] TownInfo.BookOfCain not found Act={ZetaDia.CurrentAct} WorldSnoId={ZetaDia.Globals.WorldSnoId}");
+                return true;
+            }
 
-            await Coroutine.Wait(TimeSpan.FromSeconds(10), () => !ZetaDia.Globals.IsLoadingWorld && ZetaDia.Globals.WorldSnoId > 0 && Core.Actors.Inventory.Any());
-            await Coroutine.Yield();
+            if (!await CommonCoroutines.MoveAndInteract(bookActor.GetActor(), () => CommonCoroutines.IsInteracting))
+                return false;
 
-            Core.Inventory.Backpack.ForEach(i => Core.Logger.Debug($"Backpack Item: {i.Name} ({i.ActorSnoId} / {i.InternalName}) RawItemType={i.RawItemType} TrinityItemType={i.TrinityItemType}"));
+            s_logger.Info($"[{nameof(IdentifyItems)}] Identifying Items");
+            await Coroutine.Wait(TimeSpan.FromSeconds(10), () => !CommonCoroutines.IsInteracting);
+            return false;
+        }
 
-            await Coroutine.Yield();
+        public static async Task<bool> DoTownRun()
+        {
+            if (!ZetaDia.IsInGame) return true;
 
+            if (IsTownRunRequired)
+            {
+                IsVendoring = true;
+            }
+
+            if (!IsVendoring) return true;
+
+            // We're dead, wait till we're alive again...
+            if (ZetaDia.Me.IsDead) return true;
+
+            // Go to town...
+            if (!await EnsureIsInTown()) return false;
+
+            // Wait for Rift turn in before continue...
+            if (TownInfo.Orek?.GetActor() is DiaUnit orek && orek.IsQuestGiver) return true;
+
+            // Run specified actions when all of them return true we're good to continue...
             if (!await Any(
-                IdentifyItems.Execute,
-                ExtractLegendaryPowers.Execute,
-                Gamble.Execute,
-                () => CubeRaresToLegendary.Execute(),
-                () => CubeItemsToMaterials.Execute(),
-                DropItems.Execute,
-                () => StashItems.Execute(true),
-                SellItems.Execute,
-                SalvageItems.Execute,
-                () => StashItems.Execute(),
-                RepairItems.Execute
+                IdentifyItems,
+                ExtractLegendaryPowers,
+                Gamble,
+                TransmuteRareToLegendary,
+                TransmuteMaterials,
+                DropItems,
+                StashItems,
+                SellItems,
+                SalvageItems,
+                StashItems,
+                RepairItems
             ))
                 return false;
 
-            Core.Logger.Log("Finished Town Run woo!");
-            DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(15);
-            IsWantingTownRun = false;
+            // Go back where we came from...
+            if (!await ReturnToStartLocation()) return false;
 
-            if (StartedOutOfTown)
-            {
-                StartedOutOfTown = false;
-                await TakeReturnPortal();
-            }
-
-            IsWantingTownRun = false;
-            IsInTownVendoring = false;
+            s_logger.Info("Town run finished!");
             IsVendoring = false;
-            return false;
+            return true;
         }
 
         public static async Task<bool> Any(params Func<Task<bool>>[] taskProducers)
@@ -155,254 +187,118 @@ namespace Trinity.Components.Coroutines.Town
             return true;
         }
 
-        private static bool ShouldStartTownRun()
-        {
-            if (ZetaDia.IsInTown && BrainBehavior.IsVendoring)
-                return !IsInTownVendoring;
-
-            if (!CanTownRun())
-                return false;
-
-            if (IsWantingTownRun)
-            {
-                Core.Logger.Debug("Is wanting to town run.");
-                return true;
-            }
-
-            // Close Normal rift before doing a town run.
-            if (ZetaDia.IsInTown && !StartedOutOfTown && ZetaDia.Storage.RiftCompleted && ZetaDia.Storage.RiftStarted)
-            {
-                if (TownInfo.Orek?.GetActor() is DiaUnit orek && orek.IsQuestGiver)
-                {
-                    return false;
-                }
-            }
-
-            var validLocation = DefaultLootProvider.FindBackpackLocation(true, false);
-            if (validLocation.X < 0 || validLocation.Y < 0)
-            {
-                Core.Logger.Log("No more space to pickup a 2-slot item, now running town-run routine. (TownRun)");
-                return true;
-            }
-
-            var needRepair = RepairItems.EquipmentNeedsRepair();
-            if (needRepair)
-            {
-                Core.Logger.Debug("Townrun for repair.");
-                return true;
-            }
-
-            return BrainBehavior.IsVendoring;
-        }
-
-        public static bool CanTownRun()
-        {
-            if (!ZetaDia.Me.CanUseTownPortal(out var cantUseTPreason) && !ZetaDia.IsInTown)
-            {
-                Core.Logger.Verbose("Can't townrun because '{0}'", cantUseTPreason);
-                DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(10);
-                return false;
-            }
-
-            if (Core.Player.IsDead)
-                return false;
-
-            if (!RepairItems.EquipmentNeedsRepair())
-            {
-                if (BrainBehavior.GreaterRiftInProgress)
-                {
-                    Core.Logger.Verbose("Can't townrun while in greater rift!");
-                    DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(5);
-                    return false;
-                }
-
-                // Close Greater rift before doing a town run.
-                if (!Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
-                {
-                    return false;
-                }
-            }
-
-            if (ErrorDialog.IsVisible)
-            {
-                Core.Logger.Log("Can't townrun with an error dialog present!");
-                DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(10);
-                return false;
-            }
-
-            if (Core.Player.WorldSnoId == 71150 && ZetaDia.CurrentQuest.QuestSnoId == 87700 && ZetaDia.CurrentQuest.StepId == -1)
-            {
-                Core.Logger.Debug("Can't townrun with the current quest (A1 New Game) !");
-                DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(30);
-                return false;
-            }
-
-            if (GameData.BossLevelAreaIDs.Contains(Core.Player.LevelAreaId))
-            {
-                Core.Logger.Debug("Unable to Town Portal - Boss Area!");
-                DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(10);
-                return false;
-            }
-
-            if (GameData.NeverTownPortalLevelAreaIds.Contains(Core.Player.LevelAreaId))
-            {
-                Core.Logger.Log("Unable to Town Portal in this area!");
-                DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(10);
-                return false;
-            }
-
-            return true;
-        }
-
-        public static bool IsVendoring
-        {
-            get => BrainBehavior.IsVendoring;
-            set => s_vendorProperty.Value.SetValue(null, value);
-        }
-
-        public static async Task<bool> GoToTown()
-        {
-            if (ZetaDia.IsInTown || !ZetaDia.Me.IsFullyValid() || !UIElements.BackgroundScreenPCButtonRecall.IsEnabled)
-            {
-                Core.Logger.Log("Not portaling because its no longer needed or invalid.");
-                return false;
-            }
-
-            Navigator.PlayerMover.MoveStop();
-            await Coroutine.Wait(2000, () => !ZetaDia.Me.Movement.IsMoving);
-
-            Core.Logger.Warn("Starting Town Run");
-            StartedOutOfTown = true;
-
-            if (!ZetaDia.IsInTown && !ZetaDia.Globals.IsLoadingWorld)
-            {
-                ZetaDia.Me.UseTownPortal();
-            }
-
-            await Coroutine.Wait(5000, () => !Core.CastStatus.StoneOfRecall.IsCasting && !ZetaDia.IsInTown);
-
-            return true;
-        }
-
-        private static bool lastTownPortalCheckResult;
-        private static DateTime lastTownPortalCheckTime = DateTime.MinValue;
-
-        public static bool IsTryingToTownPortal()
-        {
-            if (DateTime.UtcNow.Subtract(lastTownPortalCheckTime).TotalMilliseconds < 100)
-                return lastTownPortalCheckResult;
-
-            if (!ZetaDia.Me.CanUseTownPortal() || GameData.NeverTownPortalLevelAreaIds.Contains(ZetaDia.CurrentLevelAreaSnoId))
-            {
-                lastTownPortalCheckTime = DateTime.UtcNow;
-                lastTownPortalCheckResult = false;
-                return false;
-            }
-
-            if (IsWantingTownRun)
-            {
-                lastTownPortalCheckTime = DateTime.UtcNow;
-                lastTownPortalCheckResult = true;
-                return true;
-            }
-
-            if (ClearArea.IsClearing)
-            {
-                lastTownPortalCheckTime = DateTime.UtcNow;
-                lastTownPortalCheckResult = true;
-                return true;
-            }
-
-            if (BrainBehavior.IsVendoring)
-            {
-                lastTownPortalCheckTime = DateTime.UtcNow;
-                lastTownPortalCheckResult = true;
-                return true;
-            }
-
-            if (Core.Player.IsCastingPortal)
-            {
-                lastTownPortalCheckTime = DateTime.UtcNow;
-                lastTownPortalCheckResult = true;
-                return true;
-            }
-
-            lastTownPortalCheckTime = DateTime.UtcNow;
-            lastTownPortalCheckResult = false;
-            return false;
-        }
-
         public static async Task<bool> TakeReturnPortal()
         {
-            if (!ZetaDia.IsInTown)
+            if (!await CommonCoroutines.MoveAndInteract(ReturnPortal, () => ZetaDia.IsInTown))
+                return false;
+            return ZetaDia.IsInTown;
+        }
+
+        public static async Task<bool> EnsureKanaisCube()
+        {
+            if (!await CommonCoroutines.MoveAndInteract(TownInfo.KanaisCube.GetActor(), () => UIElements.TransmuteItemsDialog.IsVisible))
+                return false;
+            return UIElements.TransmuteItemsDialog.IsVisible;
+        }
+
+        /// <summary>
+        /// Move to Kanai's cube and transmute.
+        /// </summary>
+        public static async Task<bool> TransmuteRecipe(TrinityItem item, TransmuteRecipe recipe)
+        {
+            return await TransmuteRecipe(new List<TrinityItem> { item }, recipe);
+        }
+
+        /// <summary>
+        /// Move to Kanai's cube and transmute.
+        /// </summary>
+        public static async Task<bool> TransmuteRecipe(List<TrinityItem> transmuteGroup, TransmuteRecipe recipe)
+        {
+            return await TransmuteRecipe(transmuteGroup.Select(i => i.AnnId).ToList(), recipe);
+        }
+
+        /// <summary>
+        /// Move to Kanai's cube and transmute.
+        /// </summary>
+        public static async Task<bool> TransmuteRecipe(IEnumerable<int> transmuteGroupAnnIds, TransmuteRecipe recipe)
+        {
+            if (!ZetaDia.IsInGame) return true;
+
+            if (!Core.Inventory.Currency.HasCurrency(recipe))
+            {
+                s_logger.Error($"[{nameof(TransmuteRecipe)}] Not enough currency for {recipe}");
+                return true;
+            }
+
+            if (!await EnsureKanaisCube())
                 return false;
 
-            var portalRef = TownInfo.ReturnPortal;
-            var actor = portalRef?.GetActor();
-            if (actor == null || !actor.IsFullyValid())
-            {
-                Core.Logger.Debug("Couldn't find a return portal");
+            InventoryManager.TransmuteItems(transmuteGroupAnnIds.ToArray(), recipe);
+            if (!await Coroutine.Wait(TimeSpan.FromSeconds(2), () => UIElements.AcceptTransmutationButton.IsEnabled))
                 return false;
-            }
 
-            Core.Logger.Log("Found a hearth portal, lets use it.");
-
-            if (!await MoveToAndInteract.Execute(actor, 10))
-            {
-                Core.Logger.Log("Failed to move to return portal :(");
+            if (!UIElements.AcceptTransmutationButton.Click())
                 return false;
-            }
 
-            Core.PlayerMover.MoveStop();
-
-            if (actor.IsFullyValid() && !actor.Interact())
-            {
-                Core.Logger.Debug("Failed to interact with return portal.");
-            }
-
-            await Coroutine.Wait(1000, () => !ZetaDia.IsInTown);
-
-            if (ZetaDia.IsInTown && !ZetaDia.Globals.IsLoadingWorld)
-            {
-                Core.Logger.Log("Trying again to use return portal.");
-                var gizmo = ZetaDia.Actors.GetActorsOfType<DiaGizmo>().FirstOrDefault(g => g.ActorInfo.GizmoType == GizmoType.HearthPortal);
-                if (gizmo != null)
-                {
-                    await CommonCoroutines.MoveAndStop(gizmo.Position, gizmo.InteractDistance, "Portal Position");
-                    gizmo.Interact();
-                }
-            }
-
-            await Coroutine.Wait(5000, () => !ZetaDia.Globals.IsLoadingWorld);
-
+            s_logger.Error($"[{nameof(TransmuteRecipe)}] Zip Zap!");
             return true;
         }
-        
-        #region Remove when DB bug is fixed
 
-        private static DateTime _brainVendoringStarted;
-        private static bool _isVendoring;
+        //private const long TransmuteButtonHash = 0x7BD4F1CE7188C0D7;
 
-        private static void CheckForDBVendoringBug()
+        /// <summary>
+        /// A list of conversion candidates from backpack
+        /// </summary>
+        public static List<TrinityItem> GetBackPackRares(IEnumerable<ItemSelectionType> types = null)
         {
-            // An exception in DB core during town run will cause IsVendoring to never be set to false.
-            var isVendoring = BrainBehavior.IsVendoring;
-            if (isVendoring != _isVendoring)
+            if (types == null)
+                types = Core.Settings.KanaisCube.GetRareUpgradeSettings();
+
+            if (!Core.Inventory.Backpack.Any())
             {
-                if (isVendoring)
-                {
-                    _brainVendoringStarted = DateTime.UtcNow;
-                    _isVendoring = true;
-                    return;
-                }
+                s_logger.Debug($"[{nameof(GetBackPackRares)}] No items were found in backpack!");
             }
 
-            if (!isVendoring || !(DateTime.UtcNow.Subtract(_brainVendoringStarted).TotalSeconds > 200)) return;
+            var rares = Core.Inventory.Backpack.Where(i =>
+            {
+                if (Core.Inventory.InvalidAnnIds.Contains(i.AnnId))
+                    return false;
 
-            _isVendoring = false;
-            IsVendoring = false;
+                if (i.ItemBaseType != ItemBaseType.Armor && i.ItemBaseType != ItemBaseType.Weapon && i.ItemBaseType != ItemBaseType.Jewelry)
+                    return false;
+
+                if (i.ItemQualityLevel < ItemQuality.Rare4 && i.ItemQualityLevel >= ItemQuality.Legendary)
+                    return false;
+
+                return types == null || types.Contains(GetBackPackItemSelectionType(i));
+
+            }).ToList();
+
+            s_logger.Debug($"[{nameof(GetBackPackRares)}] {rares.Count} Valid Rares in Backpack");
+            return rares;
         }
 
-        #endregion Remove when DB bug is fixed
+        // TODO: Figure out why that is here...
+        public static ItemSelectionType GetBackPackItemSelectionType(TrinityItem item)
+        {
+            return Enum.TryParse(item.TrinityItemType.ToString(), out ItemSelectionType result) ? result : ItemSelectionType.Unknown;
+        }
+
+        public static async Task<bool> TransmuteRareToLegendary()
+        {
+            return await TransmuteRareToLegendary(null);
+        }
+
+        /// <summary>
+        /// Convert rares into legendaries with Kanai's cube
+        /// </summary>
+        /// <param name="types">restrict the rares that can be selected by ItemType</param>
+        public static async Task<bool> TransmuteRareToLegendary(List<ItemSelectionType> types)
+        {
+            if (!IsRareToLegendaryTransformationPossible(types)) return true;
+            var item = GetBackPackRares(types).First();
+            if (item == null) return true;
+            return await TransmuteRecipe(item, Zeta.Game.TransmuteRecipe.UpgradeRareItem);
+        }
     }
 }

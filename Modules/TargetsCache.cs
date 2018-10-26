@@ -472,7 +472,7 @@ namespace Trinity.Modules
                 return true;
             }
 
-            if (TrinityTownRun.IsWantingTownRun && cacheObject.Distance > 10f)
+            if (TrinityTownRun.IsVendoring && cacheObject.Distance > 10f)
             {
                 cacheObject.AddCacheInfo("WantToTownRun");
                 return false;

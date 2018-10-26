@@ -64,7 +64,7 @@ namespace Trinity.Framework
 
         private static void ReplaceVendorRunHook()
         {
-            StoreAndReplaceHook("VendorRun", new ActionRunCoroutine(ret => TrinityTownRun.Execute()));
+            StoreAndReplaceHook("VendorRun", new ActionRunCoroutine(async ret => !await TrinityTownRun.DoTownRun()));
         }
 
         private static void ReplaceDeathHook()

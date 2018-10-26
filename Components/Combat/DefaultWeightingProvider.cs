@@ -152,7 +152,7 @@ namespace Trinity.Components.Combat
                 //    }
                 //}
 
-                var usingTownPortal = TrinityTownRun.IsWantingTownRun;
+                var usingTownPortal = TrinityTownRun.IsVendoring;
 
                 // Highest weight found as we progress through, so we can pick the best target at the end (the one with the highest weight)
                 HighestWeightFound = 0;
@@ -970,7 +970,7 @@ namespace Trinity.Components.Combat
                                         }
                                     }
 
-                                    if (DropItems.DroppedItemAnnIds.Contains(cacheObject.AnnId))
+                                    if (TrinityTownRun.DroppedItemAnnIds.Contains(cacheObject.AnnId))
                                     {
                                         cacheObject.WeightInfo += $"Ignoring previously dropped item";
                                     }
