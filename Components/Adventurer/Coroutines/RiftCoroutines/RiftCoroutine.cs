@@ -32,19 +32,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
         private static readonly ExperienceTracker s_experienceTracker = new ExperienceTracker();
 
-        // TODO: Check if that can be a simple getter. I don't think it needs to update actors at all.
-        // TODO: Get rid of the loggin here and log in the caller.
-        public static long CurrentRiftKeyCount
-        {
-            get
-            {
-                ZetaDia.Actors.Update();
-                Core.Update();
-                var keys = AdvDia.StashAndBackpackItems.Where(i => i.RawItemType == RawItemType.TieredRiftKey).Sum(k => k.ItemStackQuantity);
-                Core.Logger.Log("I have {0} rift keys.", keys);
-                return keys;
-            }
-        }
+        public static long CurrentRiftKeyCount => AdvDia.StashAndBackpackItems.Where(i => i.RawItemType == RawItemType.TieredRiftKey).Sum(k => k.ItemStackQuantity);
 
         //ActorId: 364715, Type: Gizmo, Name: x1_OpenWorld_LootRunObelisk_B - 27053, Distance2d: 9.72007, CollisionRadius: 9.874258, MinimapActive: 1, MinimapIconOverride: 327066, MinimapDisableArrow: 0
         //ActorId: 345935, Type: Gizmo, Name: X1_OpenWorld_LootRunPortal - 27292, Distance2d: 9.72007, CollisionRadius: 8.316568, MinimapActive: 1, MinimapIconOverride: -1, MinimapDisableArrow: 0
@@ -98,10 +86,12 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 riftKeys <= PluginSettings.Current.MinimumKeys &&
                 !PluginSettings.Current.GreaterRiftRunNephalem)
             {
-                Core.Logger.Error("You have no Greater Rift Keys. Stopping the bot.");
+                s_logger.Error($"[{nameof(OpenRift)}] You have no Greater Rift Keys. Stopping the bot.");
                 BotMain.Stop();
                 return false;
             }
+
+            s_logger.Debug($"[{nameof(OpenRift)}] I have {riftKeys} rift keys.");
 
             if (!await EnsureIsInTown())
                 return false;

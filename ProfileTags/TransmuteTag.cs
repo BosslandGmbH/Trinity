@@ -71,9 +71,8 @@ namespace Trinity.ProfileTags
                 if (backpackItems == null || !backpackItems.Any())
                 {
                     if (item.Quality != TrinityItemQuality.Invalid)
-                    {
                         backpackItems = Core.Inventory.Backpack.ByQuality(item.Quality);
-                    }
+
                     if (backpackItems == null || !backpackItems.Any())
                     {
                         Core.Logger.Error($"[TransmuteTag] {item} was not found in backpack");
@@ -85,14 +84,11 @@ namespace Trinity.ProfileTags
                 transmuteGroup.AddRange(stacks);
             }
 
-            if (!await TrinityTownRun.TransmuteRecipe(Recipe, transmuteGroup))
-            {
-                Core.Logger.Error("[TransmuteTag] Trasmute Failed.");
-                return true;
-            }
+            if (!await TrinityTownRun.TransmuteRecipe(Recipe, transmuteGroup.ToArray()))
+                return false;
 
+            //Core.Logger.Error("[TransmuteTag] Trasmute Failed.");
             return true;
         }
     }
 }
-
