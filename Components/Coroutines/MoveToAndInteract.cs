@@ -1,10 +1,9 @@
-﻿using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
+﻿using Buddy.Coroutines;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Buddy.Coroutines;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Zeta.Bot.Coroutines;
@@ -12,8 +11,6 @@ using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Zeta.Game.Internals.SNO;
-
 
 namespace Trinity.Components.Coroutines
 {
@@ -32,12 +29,14 @@ namespace Trinity.Components.Coroutines
             if (!obj.IsFullyValid())
                 return false;
 
-            if (interactLimit < 1) interactLimit = 5;
+            if (interactLimit < 1)
+                interactLimit = 5;
 
             if (Core.Player.IsInTown)
                 GameUI.CloseVendorWindow();
 
-            return await CommonCoroutines.MoveAndInteract(obj, () => !IsInteracting && 0 < interactLimit--);
+            return await CommonCoroutines.MoveAndInteract(obj, () => !IsInteracting &&
+                                                                     interactLimit-- > 0);
         }
 
         public static async Task<bool> Execute(IFindable actor, int interactLimit = 5)
@@ -56,24 +55,30 @@ namespace Trinity.Components.Coroutines
             if (position == Vector3.Zero)
                 return false;
 
-            if (interactLimit < 1) interactLimit = 5;
+            if (interactLimit < 1)
+                interactLimit = 5;
 
             if (Core.Player.IsInTown)
                 GameUI.CloseVendorWindow();
 
             DiaObject actor;
-            while ((actor = ZetaDia.Actors.GetActorsOfType<DiaObject>(true).FirstOrDefault(a => a.ActorSnoId == actorId)) == null && await CommonCoroutines.MoveAndStop(position, 40f, "Close to target") != MoveResult.ReachedDestination)
+            while ((actor = ZetaDia.Actors.GetActorsOfType<DiaObject>(true)
+                           .FirstOrDefault(a => a.ActorSnoId == actorId)
+                   ) == null &&
+                   await CommonCoroutines.MoveAndStop(position, 40f, "Close to target") != MoveResult.ReachedDestination)
             {
                 await Coroutine.Yield();
             }
 
-            if (actor != null) return await Execute(actor, interactLimit);
+            if (actor != null)
+                return await Execute(actor, interactLimit);
 
             Core.Logger.Verbose("Interaction Failed: Actor not found with Id={0}", actorId);
             return false;
         }
 
-        private static bool IsInteracting => ZetaDia.Me.LoopingAnimationEndTime > 0 || s_castingAnimationStates.Contains(ZetaDia.Me.CommonData.AnimationState);
+        private static bool IsInteracting => ZetaDia.Me.LoopingAnimationEndTime > 0 ||
+                                             s_castingAnimationStates.Contains(ZetaDia.Me.CommonData.AnimationState);
 
         private static readonly HashSet<AnimationState> s_castingAnimationStates = new HashSet<AnimationState>
         {

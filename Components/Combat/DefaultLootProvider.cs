@@ -313,7 +313,9 @@ namespace Trinity.Components.Combat
                 return false;
             }
 
-            if (BrainBehavior.GreaterRiftInProgress || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
+            if (BrainBehavior.GreaterRiftInProgress ||
+                !Core.Settings.Items.KeepLegendaryUnid &&
+                Core.Player.ParticipatingInTieredLootRun)
             {
                 Core.Logger.Debug($"Not stashing due to inventory locked, keep unidentified setting or participating in loot run. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return false;
@@ -325,7 +327,9 @@ namespace Trinity.Components.Combat
             if (GameData.VanityItems.Any(i => item.InternalName.StartsWith(i)))
                 return true;
 
-            if (GameData.TransmogTable.Contains(item.GameBalanceId) || item.InternalName.StartsWith("Transmog") || item.ActorSnoId == 110952) //Rakanishu's Blade
+            if (GameData.TransmogTable.Contains(item.GameBalanceId) ||
+                item.InternalName.StartsWith("Transmog") ||
+                item.ActorSnoId == 110952) //Rakanishu's Blade
             {
                 var setting = Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.TransmogWhites);
                 Core.Logger.Log($"Transmog found! - Stash Setting={setting} {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
@@ -353,7 +357,8 @@ namespace Trinity.Components.Combat
                 return true;
             }
 
-            if (Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.RottenMushroom) && item.ActorSnoId == (int)SNOActor.A1_BlackMushroom)
+            if (Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.RottenMushroom) &&
+                item.ActorSnoId == (int)SNOActor.A1_BlackMushroom)
             {
                 Core.Logger.Log($"Rotten Mushroom found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return true;
@@ -370,12 +375,17 @@ namespace Trinity.Components.Combat
             TrinityItemBaseType tBaseType = item.TrinityItemBaseType;
 
             // Keep any high gems placed in backpack while levelling, so we can socket items with them.
-            if (item.IsGem && item.GemQuality >= GemQuality.Marquise && ZetaDia.Me.Level < 70)
+            if (item.IsGem &&
+                item.GemQuality >= GemQuality.Marquise &&
+                ZetaDia.Me.Level < 70)
             {
                 return false;
             }
 
-            var isHandledLegendaryType = item.ItemBaseType == ItemBaseType.Armor || item.ItemBaseType == ItemBaseType.Jewelry || item.ItemBaseType == ItemBaseType.Weapon || item.IsPotion;
+            var isHandledLegendaryType = item.ItemBaseType == ItemBaseType.Armor ||
+                                         item.ItemBaseType == ItemBaseType.Jewelry ||
+                                         item.ItemBaseType == ItemBaseType.Weapon ||
+                                         item.IsPotion;
             if (item.ItemQualityLevel >= ItemQuality.Legendary && isHandledLegendaryType)
             {
                 /* Stash items that hasn't had their legendary power extracted if the CubeExtractOption is set, if we have no currency for extracting it we can assume it would have been salvaged instead.
@@ -456,7 +466,11 @@ namespace Trinity.Components.Combat
                 return true;
             }
 
-            if (tItemType == TrinityItemType.Emerald || tItemType == TrinityItemType.Amethyst || tItemType == TrinityItemType.Topaz || tItemType == TrinityItemType.Ruby || tItemType == TrinityItemType.Diamond)
+            if (tItemType == TrinityItemType.Emerald ||
+                tItemType == TrinityItemType.Amethyst ||
+                tItemType == TrinityItemType.Topaz ||
+                tItemType == TrinityItemType.Ruby ||
+                tItemType == TrinityItemType.Diamond)
             {
                 Core.Logger.Log(LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep gems)", item.Name, item.InternalName, tItemType);
                 return true;
@@ -487,7 +501,8 @@ namespace Trinity.Components.Combat
                 }
             }
 
-            if (tItemType == TrinityItemType.CraftingPlan && item.ItemQualityLevel >= ItemQuality.Legendary)
+            if (tItemType == TrinityItemType.CraftingPlan &&
+                item.ItemQualityLevel >= ItemQuality.Legendary)
             {
                 Core.Logger.Log("{0} [{1}] [{2}] = (autokeep legendary plans)", item.Name, item.InternalName, tItemType);
                 return true;
@@ -523,24 +538,36 @@ namespace Trinity.Components.Combat
                 return true;
             }
 
-            if (item.ItemQualityLevel <= ItemQuality.Superior && (isEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem))
+            if (item.ItemQualityLevel <= ItemQuality.Superior &&
+                (isEquipment ||
+                 item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem))
             {
                 Core.Logger.Log("{0} [{1}] [{2}] = (trash whites)", item.Name, item.InternalName, tItemType);
                 return false;
             }
-            if (item.ItemQualityLevel >= ItemQuality.Magic1 && item.ItemQualityLevel <= ItemQuality.Magic3 && (isEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem))
+            if (item.ItemQualityLevel >= ItemQuality.Magic1 &&
+                item.ItemQualityLevel <= ItemQuality.Magic3 &&
+                (isEquipment ||
+                 item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem))
             {
                 Core.Logger.Log("{0} [{1}] [{2}] = (trashing blues)", item.Name, item.InternalName, tItemType);
                 return false;
             }
 
-            if (item.ItemQualityLevel >= ItemQuality.Rare4 && item.ItemQualityLevel <= ItemQuality.Rare6 && (isEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem))
+            if (item.ItemQualityLevel >= ItemQuality.Rare4 &&
+                item.ItemQualityLevel <= ItemQuality.Rare6 &&
+                (isEquipment ||
+                 item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem))
             {
                 Core.Logger.Log("{0} [{1}] [{2}] = (force salvage rare)", item.Name, item.InternalName, tItemType);
                 return false;
             }
 
-            if (item.ItemQualityLevel >= ItemQuality.Legendary && Core.Settings.Items.LegendaryMode == LegendaryMode.ItemList && (item.IsEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem || item.IsPotion))
+            if (item.ItemQualityLevel >= ItemQuality.Legendary &&
+                Core.Settings.Items.LegendaryMode == LegendaryMode.ItemList &&
+                (item.IsEquipment ||
+                 item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem ||
+                 item.IsPotion))
             {
                 var result = ItemListEvaluator.ShouldStashItem(item);
                 Core.Logger.Log("{0} [{1}] [{2}] = {3}", item.Name, item.InternalName, tItemType, "ItemListCheck=" + (result ? "KEEP" : "TRASH"));
@@ -581,19 +608,22 @@ namespace Trinity.Components.Combat
                     return false;
                 }
 
-                if (item.IsAncient && Core.Settings.ItemList.AlwaysStashAncients)
+                if (item.IsAncient &&
+                    Core.Settings.ItemList.AlwaysStashAncients)
                 {
                     reason = "ItemList Stash Ancients";
                     return false;
                 }
 
-                if (item.IsPrimalAncient && Core.Settings.ItemList.AlwaysStashPrimalAncients)
+                if (item.IsPrimalAncient &&
+                    Core.Settings.ItemList.AlwaysStashPrimalAncients)
                 {
                     reason = "ItemList Stash Primal Ancients";
                     return false;
                 }
 
-                if (BrainBehavior.GreaterRiftInProgress || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
+                if (BrainBehavior.GreaterRiftInProgress ||
+                    !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
                 {
                     reason = "Rift Locked Inventory";
                     return false;
@@ -638,7 +668,10 @@ namespace Trinity.Components.Combat
                     }
                 }
 
-                if (!Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.TransmogWhites) && GameData.TransmogTable.Contains(item.GameBalanceId) || item.InternalName.StartsWith("Transmog") || item.ActorSnoId == 110952) //Rakanishu's Blade
+                if (!Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.TransmogWhites) &&
+                    GameData.TransmogTable.Contains(item.GameBalanceId) ||
+                    item.InternalName.StartsWith("Transmog") ||
+                    item.ActorSnoId == 110952) //Rakanishu's Blade
                 {
                     reason = "Transmog Setting";
                     return true;
@@ -697,13 +730,15 @@ namespace Trinity.Components.Combat
                     return false;
                 }
 
-                if (item.IsAncient && Core.Settings.ItemList.AlwaysStashAncients)
+                if (item.IsAncient &&
+                    Core.Settings.ItemList.AlwaysStashAncients)
                 {
                     Core.Logger.Debug($"Not Selling due to ItemList setting - Always stash ancients. (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                     return false;
                 }
 
-                if (item.IsPrimalAncient && Core.Settings.ItemList.AlwaysStashPrimalAncients)
+                if (item.IsPrimalAncient &&
+                    Core.Settings.ItemList.AlwaysStashPrimalAncients)
                 {
                     Core.Logger.Debug($"Not Selling due to ItemList setting - Always stash primal ancients. (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                     return false;
@@ -748,13 +783,16 @@ namespace Trinity.Components.Combat
                     }
                 }
 
-                if (item.IsEquipment && item.RequiredLevel <= 1)
+                if (item.IsEquipment &&
+                    item.RequiredLevel <= 1)
                 {
                     reason = "Unable to salvage level 1 items";
                     return true;
                 }
 
-                if (BrainBehavior.GreaterRiftInProgress || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
+                if (BrainBehavior.GreaterRiftInProgress ||
+                    !Core.Settings.Items.KeepLegendaryUnid &&
+                    Core.Player.ParticipatingInTieredLootRun)
                 {
                     reason = "Rift Locked Inventory";
                     return false;
@@ -766,7 +804,8 @@ namespace Trinity.Components.Combat
                     return false;
                 }
 
-                if (item.IsGem && item.GemQuality >= GemQuality.Marquise && ZetaDia.Me.Level < 70)
+                if (item.IsGem && item.GemQuality >= GemQuality.Marquise &&
+                    ZetaDia.Me.Level < 70)
                 {
                     reason = "auto-keep high level gems";
                     return false;
@@ -873,7 +912,9 @@ namespace Trinity.Components.Combat
             {
                 try
                 {
-                    if (!forceRefresh && _lastBackPackLocation != new Vector2(-2, -2) && _lastBackPackLocation != new Vector2(-1, -1) &&
+                    if (!forceRefresh &&
+                        _lastBackPackLocation != new Vector2(-2, -2) &&
+                        _lastBackPackLocation != new Vector2(-1, -1) &&
                         _lastBackPackCount == Core.Inventory.BackpackItemCount &&
                         _lastProtectedSlotsCount == CharacterSettings.Instance.ProtectedBagSlots.Count)
                     {

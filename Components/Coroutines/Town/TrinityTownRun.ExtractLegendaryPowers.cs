@@ -136,6 +136,7 @@ namespace Trinity.Components.Coroutines.Town
 
             if (!await TakeItemsFromStash(stashCandidates))
                 return false;
+
             s_logger.Info($"[{nameof(FetchExtractionCandidatesFromStash)}] Got Legendaries from Stash");
 
             s_extractionCandidatesTakenFromStash.AddRange(stashCandidates.Select(i => i.AnnId));

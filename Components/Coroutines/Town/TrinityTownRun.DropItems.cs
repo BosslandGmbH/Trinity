@@ -33,16 +33,19 @@ namespace Trinity.Components.Coroutines.Town
 
         public static async Task<bool> DropItems()
         {
-            if (!ZetaDia.IsInTown) return true;
+            if (!ZetaDia.IsInTown)
+                return true;
 
             var itemsToDrop = Core.Inventory.Backpack.Where(ShouldDrop).ToList();
-            if (!itemsToDrop.Any()) return true;
+            if (!itemsToDrop.Any())
+                return true;
 
             var dropCount = 0;
             foreach (var item in itemsToDrop)
             {
                 if (await Drop(item))
                     dropCount++;
+                // No need to wait here... Drop is doing a Yield when successful.
             }
 
             s_logger.Info($"[{nameof(DropItems)}] Dropped {dropCount} Items");

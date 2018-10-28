@@ -55,7 +55,8 @@ namespace Trinity.ProfileTags
 
         public override async Task<bool> StartTask()
         {
-            if (Level == 0) Level = SelectedRiftType == RiftType.Greater ? RiftData.GetGreaterRiftLevel() : -1;
+            if (Level == 0)
+                Level = SelectedRiftType == RiftType.Greater ? RiftData.GetGreaterRiftLevel() : -1;
             return false;
         }
 
