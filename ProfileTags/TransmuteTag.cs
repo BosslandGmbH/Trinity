@@ -85,7 +85,7 @@ namespace Trinity.ProfileTags
                 transmuteGroup.AddRange(stacks);
             }
 
-            if (!await TrinityTownRun.TransmuteRecipe(transmuteGroup, Recipe))
+            if (!await TrinityTownRun.TransmuteRecipe(Recipe, transmuteGroup))
             {
                 Core.Logger.Error("[TransmuteTag] Trasmute Failed.");
                 return true;

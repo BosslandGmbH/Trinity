@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Framework;
@@ -150,7 +151,7 @@ namespace Trinity.Components.Coroutines.Town
             var item = GetSacraficialItems(to).First();
             var recipe = GetRecipeFromCurrency(from);
 
-            if (!await TransmuteRecipe(item, recipe))
+            if (!await TransmuteRecipe(recipe, item))
                 return false;
 
             Core.Logger.Log($"[{nameof(TransmuteMaterials)}] Converted from '{from}' to '{to}'");
@@ -193,8 +194,9 @@ namespace Trinity.Components.Coroutines.Town
                     return CurrencyType.VeiledCrystal;
                 case InventoryItemType.ReusableParts:
                     return CurrencyType.ReusableParts;
+                default:
+                    return (CurrencyType)(-1);
             }
-            return (CurrencyType)(-1);
         }
 
         public static TransmuteRecipe GetRecipeFromCurrency(CurrencyType from)
@@ -207,8 +209,9 @@ namespace Trinity.Components.Coroutines.Town
                     return Zeta.Game.TransmuteRecipe.ConvertCraftingMaterialsFromRare;
                 case CurrencyType.ReusableParts:
                     return Zeta.Game.TransmuteRecipe.ConvertCraftingMaterialsFromNormal;
+                default:
+                    return (TransmuteRecipe)(-1);
             }
-            return (TransmuteRecipe)(-1);
         }
 
         public static TransmuteRecipe GetRecipeToCurrency(CurrencyType to, TrinityItem item)
@@ -230,8 +233,9 @@ namespace Trinity.Components.Coroutines.Town
                     return quality == TrinityItemQuality.Rare
                         ? Zeta.Game.TransmuteRecipe.ConvertCraftingMaterialsFromRare
                         : Zeta.Game.TransmuteRecipe.ConvertCraftingMaterialsFromMagic;
+                default:
+                    return (TransmuteRecipe)(-1);
             }
-            return (TransmuteRecipe)(-1);
         }
 
         public static IEnumerable<CurrencyType> GetOtherCurrency(CurrencyType to)
@@ -263,8 +267,9 @@ namespace Trinity.Components.Coroutines.Town
                     return Core.Inventory.Currency.VeiledCrystals;
                 case CurrencyType.ReusableParts:
                     return Core.Inventory.Currency.ReusableParts;
+                default:
+                    return 0;
             }
-            return 0;
         }
 
         public static List<TrinityItem> GetSacraficialItems(CurrencyType to, bool excludeLegendaryUpgradeRares = false)

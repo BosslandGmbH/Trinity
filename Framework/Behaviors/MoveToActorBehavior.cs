@@ -35,10 +35,18 @@ namespace Trinity.Framework.Behaviors
         private bool FindActor(Predicate<TrinityActor> actorSelector)
         {
             var actor = Core.Actors.Actors
-                .OrderBy(m => m.Distance)
-                .FirstOrDefault(m => m.IsValid && m.Position != Vector3.Zero && actorSelector(m) && !VisitedActorPositions.Contains(m.Position) && m.Distance > 8f);
+                .OrderBy(m => m.Distance) // TODO: This is a TrinityActor... They don't have DistanceSqr...
+                .FirstOrDefault(m => m.IsValid &&
+                                     m.Position != Vector3.Zero &&
+                                     actorSelector(m) &&
+                                     !VisitedActorPositions.Contains(m.Position) &&
+                                     m.Distance > 8f);
 
-            if (actor != null && (IsRunning || (!PlayerMover.IsBlocked && actor.Distance < 500)) && !Navigator.StuckHandler.IsStuck)
+            if (actor != null &&
+                (IsRunning ||
+                 !PlayerMover.IsBlocked &&
+                 actor.Distance < 500) &&
+                !Navigator.StuckHandler.IsStuck)
             {
                 if (VisitedActorPositions.Count > 500)
                     VisitedActorPositions.Clear();

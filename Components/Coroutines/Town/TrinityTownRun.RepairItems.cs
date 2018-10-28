@@ -16,8 +16,11 @@ namespace Trinity.Components.Coroutines.Town
     {
         public static async Task<bool> RepairItems()
         {
-            if (!ZetaDia.IsInTown) return true;
-            if (!EquipmentNeedsRepair()) return true;
+            if (!ZetaDia.IsInTown)
+                return true;
+
+            if (!EquipmentNeedsRepair())
+                return true;
 
             var coinage = ZetaDia.Storage.PlayerDataManager.ActivePlayerData.Coinage;
             var shouldRepairAll = coinage > InventoryManager.GetRepairCost(true);
@@ -42,7 +45,10 @@ namespace Trinity.Components.Coroutines.Town
                     return true;
                 };
 
-                if (!await CommonCoroutines.MoveAndInteract(repairActor.GetActor(), () => GameUI.IsBlackSmithWindowOpen || UIElements.VendorWindow.IsVisible))
+                if (!await CommonCoroutines.MoveAndInteract(
+                        repairActor.GetActor(),
+                        () => GameUI.IsBlackSmithWindowOpen ||
+                              UIElements.VendorWindow.IsVisible))
                     return false;
             }
 
@@ -56,18 +62,18 @@ namespace Trinity.Components.Coroutines.Town
         {
             // TODO: figure out why these repair calls don't work while at a blacksmith window.
             if (shouldRepairAll)
-            {
                 InventoryManager.RepairAllItems();
-            }
             else
-            {
                 InventoryManager.RepairEquippedItems();
-            }
         }
 
         public static bool EquipmentNeedsRepair()
         {
-            var equippedItems = InventoryManager.Equipped.Where(i => i.IsValid && !i.IsDisposed && i.DurabilityCurrent < i.DurabilityMax).ToList();
+            var equippedItems = InventoryManager.Equipped
+                .Where(i => i.IsValid &&
+                            !i.IsDisposed &&
+                            i.DurabilityCurrent < i.DurabilityMax)
+                .ToList();
             if (!equippedItems.Any())
                 return false;
 
@@ -76,7 +82,9 @@ namespace Trinity.Components.Coroutines.Town
                 return false;
 
             var currentHighestDurItem = equippedItems.Max(i => i.DurabilityPercent);
-            if (ZetaDia.IsInTown && currentHighestDurItem < 95 && !Core.Player.ParticipatingInTieredLootRun)
+            if (ZetaDia.IsInTown &&
+                currentHighestDurItem < 95 &&
+                !Core.Player.ParticipatingInTieredLootRun)
             {
                 s_logger.Debug($"[{nameof(EquipmentNeedsRepair)}] Equipment Needs Repair! CurrentMaxDurabillity={currentHighestDurItem} InTownRepairLimit={95}");
                 return true;

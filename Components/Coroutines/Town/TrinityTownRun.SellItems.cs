@@ -28,18 +28,24 @@ namespace Trinity.Components.Coroutines.Town
             if (i.IsUnidentified)
                 return false;
 
-            return Combat.TrinityCombat.Loot.ShouldSell(i) && !Combat.TrinityCombat.Loot.ShouldSalvage(i) && !Combat.TrinityCombat.Loot.ShouldStash(i);
+            return Combat.TrinityCombat.Loot.ShouldSell(i) &&
+                   !Combat.TrinityCombat.Loot.ShouldSalvage(i) &&
+                   !Combat.TrinityCombat.Loot.ShouldStash(i);
         }
 
         public static async Task<bool> SellItems()
         {
-            if (!ZetaDia.IsInTown) return true;
+            if (!ZetaDia.IsInTown)
+                return true;
 
-            var sellItem = Core.Inventory.Backpack.FirstOrDefault(i => ShouldSell(i) && InventoryManager.CanSellItem(i.ToAcdItem()));
+            var sellItem = Core.Inventory.Backpack
+                .FirstOrDefault(i => ShouldSell(i) &&
+                                     InventoryManager.CanSellItem(i.ToAcdItem()));
             if (sellItem == null)
             {
                 if (!await RepairItems())
                     return false;
+
                 GameUI.CloseVendorWindow();
                 return true;
             }

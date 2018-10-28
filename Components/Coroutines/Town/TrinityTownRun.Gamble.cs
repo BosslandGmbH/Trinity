@@ -48,7 +48,10 @@ namespace Trinity.Components.Coroutines.Town
         {
             get
             {
-                if (!ZetaDia.IsInGame || !ZetaDia.IsInTown || ZetaDia.Storage.CurrentWorldType != Act.OpenWorld || BrainBehavior.GreaterRiftInProgress)
+                if (!ZetaDia.IsInGame ||
+                    !ZetaDia.IsInTown ||
+                    ZetaDia.Storage.CurrentWorldType != Act.OpenWorld ||
+                    BrainBehavior.GreaterRiftInProgress)
                     return false;
 
                 if (Core.Settings.Items.GamblingMode == SettingMode.Disabled)
@@ -93,7 +96,8 @@ namespace Trinity.Components.Coroutines.Town
 
         public static async Task<bool> Gamble()
         {
-            if (!IsGamblePossible) return true;
+            if (!IsGamblePossible)
+                return true;
 
             if (!await EnsureKadalaWindow())
                 return false;
@@ -107,9 +111,7 @@ namespace Trinity.Components.Coroutines.Town
         private static async Task<bool> BuyItem()
         {
             if (!_gambleRotation.Any())
-            {
                 _gambleRotation = NewGambleRotation;
-            }
 
             var slot = _gambleRotation[s_rnd.Next(_gambleRotation.Count)];
             var itemId = TownInfo.MysterySlotTypeAndId[slot];
@@ -119,9 +121,9 @@ namespace Trinity.Components.Coroutines.Town
             {
                 s_logger.Warn($"[{nameof(BuyItem)}] Could not find the item requested by rotation in slot {slot}. Going to buy a random item.");
                 item = ZetaDia.Actors.GetActorsOfType<ACDItem>().FirstOrDefault(a => a.InternalName.StartsWith("PH_"));
-            }
-            if (item == null)
                 return true;
+            }
+
             slot = TownInfo.MysterySlotTypeAndId.FirstOrDefault(o => item.ActorSnoId == o.Value).Key;
             InventoryManager.BuyItem(item.AnnId);
             s_logger.Warn($"[{nameof(BuyItem)}] Buying: '{slot}'");

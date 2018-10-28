@@ -227,7 +227,7 @@ namespace Trinity.Components.Coroutines.Town
             if (item == null)
                 return true;
 
-            if (!await TransmuteRecipe(item, Zeta.Game.TransmuteRecipe.ExtractLegendaryPower))
+            if (!await TransmuteRecipe(Zeta.Game.TransmuteRecipe.ExtractLegendaryPower, item))
                 return false;
 
             s_extractionCandidatesTakenFromStash.Remove(item.AnnId);

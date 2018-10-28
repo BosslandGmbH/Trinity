@@ -23,7 +23,11 @@ namespace Trinity.Components.Coroutines.Town
         private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
         private static bool _isStartLocationOutOfTown;
 
-        public static bool IsTownRunRequired => (ZetaDia.Me.CanUseTownPortal(out _) || ZetaDia.IsInTown) && (InventoryManager.NumFreeBackpackSlots <= 2 || InventoryManager.Equipped.Any(i => i.DurabilityPercent <= CharacterSettings.Instance.RepairWhenDurabilityBelow));
+        public static bool IsTownRunRequired => (ZetaDia.IsInTown ||
+                                                 ZetaDia.Me.CanUseTownPortal(out _)) &&
+                                                (InventoryManager.NumFreeBackpackSlots <= 2 ||
+                                                 InventoryManager.Equipped
+                                                     .Any(i => i.DurabilityPercent <= CharacterSettings.Instance.RepairWhenDurabilityBelow));
 
         // TODO: Make sure that is actually the portal we came from an not an open Rift portal (might cause a lot of empty meters).
         public static DiaGizmo ReturnPortal => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true).FirstOrDefault(g => g.IsTownPortal);
@@ -35,11 +39,13 @@ namespace Trinity.Components.Coroutines.Town
             set => s_vendorProperty.Value.SetValue(null, value);
         }
 
-
         public static bool HasMaterialsRequired => Core.Inventory.Currency.HasCurrency(Zeta.Game.TransmuteRecipe.UpgradeRareItem);
+
         public static bool IsRareToLegendaryTransformationPossible(List<ItemSelectionType> types = null)
         {
-            if (!ZetaDia.IsInGame || !ZetaDia.IsInTown) return false;
+            if (!ZetaDia.IsInGame ||
+                !ZetaDia.IsInTown)
+                return false;
 
             if (TownInfo.ZoltunKulle?.GetActor() is DiaUnit kule)
             {
@@ -50,13 +56,15 @@ namespace Trinity.Components.Coroutines.Town
                 }
             }
 
-            if (types == null && Core.Settings.KanaisCube.RareUpgradeTypes == ItemSelectionType.Unknown)
+            if (types == null &&
+                Core.Settings.KanaisCube.RareUpgradeTypes == ItemSelectionType.Unknown)
             {
                 s_logger.Verbose($"[{nameof(IsRareToLegendaryTransformationPossible)}] No item types selected in settings - (Config => Items => Kanai's Cube)");
                 return false;
             }
 
-            if (!HasMaterialsRequired && InventoryManager.NumFreeBackpackSlots < 5)
+            if (!HasMaterialsRequired &&
+                InventoryManager.NumFreeBackpackSlots < 5)
             {
                 s_logger.Verbose($"[{nameof(IsRareToLegendaryTransformationPossible)}] Not enough bag space");
                 return false;
@@ -89,6 +97,7 @@ namespace Trinity.Components.Coroutines.Town
             {
                 if (!await CommonCoroutines.UseTownPortal(nameof(TrinityTownRun)))
                     return false;
+
                 _isStartLocationOutOfTown = true;
             }
             return ZetaDia.IsInTown;
@@ -107,7 +116,8 @@ namespace Trinity.Components.Coroutines.Town
 
         public static async Task<bool> IdentifyItems()
         {
-            if (!ZetaDia.IsInTown) return true;
+            if (!ZetaDia.IsInTown)
+                return true;
 
             if (Core.Settings.Items.KeepLegendaryUnid)
             {
@@ -115,7 +125,8 @@ namespace Trinity.Components.Coroutines.Town
                 return true;
             }
 
-            if (!Core.Inventory.Backpack.Any(i => i.IsUnidentified)) return true;
+            if (!Core.Inventory.Backpack.Any(i => i.IsUnidentified))
+                return true;
 
             var bookActor = TownInfo.BookOfCain;
             if (bookActor == null)
@@ -135,13 +146,12 @@ namespace Trinity.Components.Coroutines.Town
         public static async Task<bool> DoTownRun()
         {
             // We're dead, wait till we're alive again...
-            if (!ZetaDia.IsInGame || ZetaDia.Me.IsDead)
+            if (!ZetaDia.IsInGame ||
+                ZetaDia.Me.IsDead)
                 return true;
 
-            if (IsTownRunRequired)
-            {
+            if (!IsVendoring && IsTownRunRequired)
                 IsVendoring = true;
-            }
 
             if (!IsVendoring)
                 return true;
@@ -171,7 +181,8 @@ namespace Trinity.Components.Coroutines.Town
                 return false;
 
             // Go back where we came from...
-            if (!await ReturnToStartLocation()) return false;
+            if (!await ReturnToStartLocation())
+                return false;
 
             s_logger.Info("Town run finished!");
             IsVendoring = false;
@@ -190,8 +201,11 @@ namespace Trinity.Components.Coroutines.Town
 
         public static async Task<bool> TakeReturnPortal()
         {
-            if (!await CommonCoroutines.MoveAndInteract(ReturnPortal, () => ZetaDia.IsInTown))
+            if (!await CommonCoroutines.MoveAndInteract(
+                    ReturnPortal,
+                    () => ZetaDia.IsInTown))
                 return false;
+
             return ZetaDia.IsInTown;
         }
 
@@ -199,31 +213,25 @@ namespace Trinity.Components.Coroutines.Town
         {
             if (!await CommonCoroutines.MoveAndInteract(TownInfo.KanaisCube.GetActor(), () => UIElements.TransmuteItemsDialog.IsVisible))
                 return false;
+
             return UIElements.TransmuteItemsDialog.IsVisible;
         }
 
         /// <summary>
         /// Move to Kanai's cube and transmute.
         /// </summary>
-        public static async Task<bool> TransmuteRecipe(TrinityItem item, TransmuteRecipe recipe)
+        public static async Task<bool> TransmuteRecipe(TransmuteRecipe recipe, params TrinityItem[] transmuteGroup)
         {
-            return await TransmuteRecipe(new List<TrinityItem> { item }, recipe);
+            return await TransmuteRecipe(recipe, transmuteGroup.Select(i => i.AnnId).ToList());
         }
 
         /// <summary>
         /// Move to Kanai's cube and transmute.
         /// </summary>
-        public static async Task<bool> TransmuteRecipe(List<TrinityItem> transmuteGroup, TransmuteRecipe recipe)
+        public static async Task<bool> TransmuteRecipe(TransmuteRecipe recipe, IEnumerable<int> transmuteGroupAnnIds)
         {
-            return await TransmuteRecipe(transmuteGroup.Select(i => i.AnnId).ToList(), recipe);
-        }
-
-        /// <summary>
-        /// Move to Kanai's cube and transmute.
-        /// </summary>
-        public static async Task<bool> TransmuteRecipe(IEnumerable<int> transmuteGroupAnnIds, TransmuteRecipe recipe)
-        {
-            if (!ZetaDia.IsInGame) return true;
+            if (!ZetaDia.IsInGame)
+                return true;
 
             if (!Core.Inventory.Currency.HasCurrency(recipe))
             {
@@ -260,13 +268,17 @@ namespace Trinity.Components.Coroutines.Town
                 if (Core.Inventory.InvalidAnnIds.Contains(i.AnnId))
                     return false;
 
-                if (i.ItemBaseType != ItemBaseType.Armor && i.ItemBaseType != ItemBaseType.Weapon && i.ItemBaseType != ItemBaseType.Jewelry)
+                if (i.ItemBaseType != ItemBaseType.Armor &&
+                    i.ItemBaseType != ItemBaseType.Weapon &&
+                    i.ItemBaseType != ItemBaseType.Jewelry)
                     return false;
 
-                if (i.ItemQualityLevel < ItemQuality.Rare4 && i.ItemQualityLevel >= ItemQuality.Legendary)
+                if (i.ItemQualityLevel < ItemQuality.Rare4 &&
+                    i.ItemQualityLevel >= ItemQuality.Legendary)
                     return false;
 
-                return types == null || types.Contains(GetBackPackItemSelectionType(i));
+                return types == null ||
+                       types.Contains(GetBackPackItemSelectionType(i));
 
             }).ToList();
 
@@ -277,7 +289,9 @@ namespace Trinity.Components.Coroutines.Town
         // TODO: Figure out why that is here...
         public static ItemSelectionType GetBackPackItemSelectionType(TrinityItem item)
         {
-            return Enum.TryParse(item.TrinityItemType.ToString(), out ItemSelectionType result) ? result : ItemSelectionType.Unknown;
+            return Enum.TryParse(item.TrinityItemType.ToString(), out ItemSelectionType result) ?
+                result :
+                ItemSelectionType.Unknown;
         }
 
         public static async Task<bool> TransmuteRareToLegendary()
@@ -298,7 +312,7 @@ namespace Trinity.Components.Coroutines.Town
             if (item == null)
                 return true;
 
-            return await TransmuteRecipe(item, Zeta.Game.TransmuteRecipe.UpgradeRareItem);
+            return await TransmuteRecipe(Zeta.Game.TransmuteRecipe.UpgradeRareItem, item);
         }
     }
 }

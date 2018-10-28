@@ -20,8 +20,7 @@ namespace Trinity.Components.Coroutines.Town
 
             if (BrainBehavior.GreaterRiftInProgress)
                 return false;
-
-
+            
             if (i.IsProtected())
                 return false;
 
@@ -33,10 +32,10 @@ namespace Trinity.Components.Coroutines.Town
 
             return Combat.TrinityCombat.Loot.ShouldSalvage(i) && !ShouldStash(i);
         }
-
         public static async Task<bool> SalvageItems()
         {
-            if (!ZetaDia.IsInTown) return true;
+            if (!ZetaDia.IsInTown)
+                return true;
 
             var itemsToSalvage = Core.Inventory.Backpack.Where(ShouldSalvage).Select(item => item.ToAcdItem()).ToList();
             Core.Logger.Verbose(LogCategory.ItemEvents, $"[SalvageItems] Starting salvage for {itemsToSalvage.Count} items");
