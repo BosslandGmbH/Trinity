@@ -134,23 +134,25 @@ namespace Trinity.Components.Coroutines.Town
 
         public static async Task<bool> DoTownRun()
         {
-            if (!ZetaDia.IsInGame) return true;
+            // We're dead, wait till we're alive again...
+            if (!ZetaDia.IsInGame || ZetaDia.Me.IsDead)
+                return true;
 
             if (IsTownRunRequired)
             {
                 IsVendoring = true;
             }
 
-            if (!IsVendoring) return true;
-
-            // We're dead, wait till we're alive again...
-            if (ZetaDia.Me.IsDead) return true;
+            if (!IsVendoring)
+                return true;
 
             // Go to town...
-            if (!await EnsureIsInTown()) return false;
+            if (!await EnsureIsInTown())
+                return false;
 
             // Wait for Rift turn in before continue...
-            if (TownInfo.Orek?.GetActor() is DiaUnit orek && orek.IsQuestGiver) return true;
+            if (TownInfo.Orek?.GetActor() is DiaUnit orek && orek.IsQuestGiver)
+                return true;
 
             // Run specified actions when all of them return true we're good to continue...
             if (!await Any(
@@ -182,7 +184,6 @@ namespace Trinity.Components.Coroutines.Town
             {
                 if (!await task())
                     return false;
-                await Coroutine.Yield();
             }
             return true;
         }
@@ -234,17 +235,14 @@ namespace Trinity.Components.Coroutines.Town
                 return false;
 
             InventoryManager.TransmuteItems(transmuteGroupAnnIds.ToArray(), recipe);
-            if (!await Coroutine.Wait(TimeSpan.FromSeconds(2), () => UIElements.AcceptTransmutationButton.IsEnabled))
+
+            if (!UIElements.AcceptTransmutationButton.IsEnabled)
                 return false;
 
-            if (!UIElements.AcceptTransmutationButton.Click())
-                return false;
-
+            UIElements.AcceptTransmutationButton.Click();
             s_logger.Error($"[{nameof(TransmuteRecipe)}] Zip Zap!");
             return true;
         }
-
-        //private const long TransmuteButtonHash = 0x7BD4F1CE7188C0D7;
 
         /// <summary>
         /// A list of conversion candidates from backpack
@@ -255,9 +253,7 @@ namespace Trinity.Components.Coroutines.Town
                 types = Core.Settings.KanaisCube.GetRareUpgradeSettings();
 
             if (!Core.Inventory.Backpack.Any())
-            {
                 s_logger.Debug($"[{nameof(GetBackPackRares)}] No items were found in backpack!");
-            }
 
             var rares = Core.Inventory.Backpack.Where(i =>
             {
@@ -295,9 +291,13 @@ namespace Trinity.Components.Coroutines.Town
         /// <param name="types">restrict the rares that can be selected by ItemType</param>
         public static async Task<bool> TransmuteRareToLegendary(List<ItemSelectionType> types)
         {
-            if (!IsRareToLegendaryTransformationPossible(types)) return true;
+            if (!IsRareToLegendaryTransformationPossible(types))
+                return true;
+
             var item = GetBackPackRares(types).First();
-            if (item == null) return true;
+            if (item == null)
+                return true;
+
             return await TransmuteRecipe(item, Zeta.Game.TransmuteRecipe.UpgradeRareItem);
         }
     }

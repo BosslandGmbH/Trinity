@@ -24,6 +24,7 @@ namespace Trinity.Components.Coroutines.Town
             CurrencyType.ReusableParts
         };
 
+        // TODO: Move logging somewhere else.
         public static bool IsItemsToMaterialTransformationPossible
         {
             get
@@ -71,7 +72,8 @@ namespace Trinity.Components.Coroutines.Town
 
         public static bool IsMaterialTransmutationPossible(CurrencyType from, CurrencyType to, bool excludeLegendaryUpgradeRares = false)
         {
-            if (!ZetaDia.IsInGame || !ZetaDia.IsInTown) return false;
+            if (!ZetaDia.IsInGame || !ZetaDia.IsInTown)
+                return false;
 
             if (!GetSacraficialItems(to, excludeLegendaryUpgradeRares).Any())
             {
@@ -96,10 +98,8 @@ namespace Trinity.Components.Coroutines.Town
 
         public static async Task<bool> TransmuteMaterials(List<ItemSelectionType> types)
         {
-            if (!IsItemsToMaterialTransformationPossible) return true;
-
-            if (!await TrinityTownRun.EnsureKanaisCube())
-                return false;
+            if (!IsItemsToMaterialTransformationPossible)
+                return true;
 
             // * Never create more of the material you have most of.
             // * Always use the material you have most of to create others.
@@ -135,25 +135,28 @@ namespace Trinity.Components.Coroutines.Town
 
         public static async Task<bool> TransmuteMaterials(CurrencyType from, CurrencyType to)
         {
-            if (!ZetaDia.IsInTown) return true;
+            if (!ZetaDia.IsInTown)
+                return true;
+
             if (!CurrencyConversionTypes.Contains(to) || !CurrencyConversionTypes.Contains(from))
             {
                 Core.Logger.Log($"[{nameof(TransmuteMaterials)}] Unable to convert from '{from}' to '{to}'");
                 return true;
             }
 
-            if (!IsMaterialTransmutationPossible(from, to)) return true;
+            if (!IsMaterialTransmutationPossible(from, to))
+                return true;
 
             var item = GetSacraficialItems(to).First();
             var recipe = GetRecipeFromCurrency(from);
 
-            if (!await TrinityTownRun.TransmuteRecipe(item, recipe))
+            if (!await TransmuteRecipe(item, recipe))
                 return false;
 
             Core.Logger.Log($"[{nameof(TransmuteMaterials)}] Converted from '{from}' to '{to}'");
             return false;
         }
-        
+
         public static bool HasCurrency(CurrencyType from)
         {
             var recipe = GetRecipeFromCurrency(from);
@@ -263,7 +266,7 @@ namespace Trinity.Components.Coroutines.Town
             }
             return 0;
         }
-        
+
         public static List<TrinityItem> GetSacraficialItems(CurrencyType to, bool excludeLegendaryUpgradeRares = false)
         {
             List<TrinityItem> sacraficialItems = new List<TrinityItem>();
@@ -300,7 +303,7 @@ namespace Trinity.Components.Coroutines.Town
 
             if (excludeLegendaryUpgradeRares)
             {
-                var upgradeRares = TrinityTownRun.GetBackPackRares();
+                var upgradeRares = GetBackPackRares();
                 sacraficialItems.RemoveAll(i => upgradeRares.Contains(i));
             }
 

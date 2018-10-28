@@ -41,7 +41,10 @@ namespace Trinity.Components.Coroutines.Town
         {
             get
             {
-                if (!ZetaDia.IsInGame || !ZetaDia.IsInTown || ZetaDia.Storage.CurrentWorldType != Act.OpenWorld || BrainBehavior.GreaterRiftInProgress)
+                if (!ZetaDia.IsInGame ||
+                    !ZetaDia.IsInTown ||
+                    ZetaDia.Storage.CurrentWorldType != Act.OpenWorld ||
+                    BrainBehavior.GreaterRiftInProgress)
                     return false;
 
                 if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.None)
@@ -105,10 +108,12 @@ namespace Trinity.Components.Coroutines.Town
                 if (alreadyCubedIds.Contains(item.ActorSnoId))
                     continue;
 
-                if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyTrashed && Combat.TrinityCombat.Loot.ShouldStash(item))
+                if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyTrashed &&
+                    Combat.TrinityCombat.Loot.ShouldStash(item))
                     continue;
 
-                if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyNonAncient && !item.IsAncient)
+                if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyNonAncient &&
+                    !item.IsAncient)
                     continue;
 
                 if (string.IsNullOrEmpty(Legendary.GetItem(item)?.LegendaryAffix))
@@ -122,7 +127,8 @@ namespace Trinity.Components.Coroutines.Town
         public static async Task<bool> FetchExtractionCandidatesFromStash()
         {
             // TODO: Extract from Stash might be broken.
-            if (!Core.Settings.KanaisCube.CubeExtractFromStash) return true;
+            if (!Core.Settings.KanaisCube.CubeExtractFromStash)
+                return true;
 
             var stashCandidates = GetLegendaryExtractionCandidates(InventorySlot.SharedStash).ToList();
             if (!stashCandidates.Any())
@@ -139,8 +145,11 @@ namespace Trinity.Components.Coroutines.Town
 
         public static async Task<bool> PutExtractionCandidatesBackToStash()
         {
-            if (!ZetaDia.IsInGame || !ZetaDia.IsInTown) return true;
-            if (!s_extractionCandidatesTakenFromStash.Any()) return true;
+            if (!ZetaDia.IsInGame || !ZetaDia.IsInTown)
+                return true;
+
+            if (!s_extractionCandidatesTakenFromStash.Any())
+                return true;
 
             if (!await CommonCoroutines.MoveAndInteract(TownInfo.Stash?.GetActor(), () => UIElements.StashWindow.IsVisible))
                 return false;
@@ -159,6 +168,7 @@ namespace Trinity.Components.Coroutines.Town
             if (!item.IsValid || item.IsDisposed)
                 return false;
 
+            // TODO: Is that try/catch really required?
             try
             {
                 s_logger.Debug($"[{nameof(PutExtractionCandidatesBackToStash)}] Adding {item.Name} ({item.ActorSnoId}) to stash. StackSize={item.ItemStackQuantity} AnnId={item.AnnId} InternalName={item.InternalName} Id={item.ActorSnoId} Quality={item.ItemQualityLevel} AncientRank={item.AncientRank}");
@@ -175,13 +185,12 @@ namespace Trinity.Components.Coroutines.Town
 
         public static async Task<bool> ExtractLegendaryPowers()
         {
-            if (!IsLegendaryPowerExtractionPossible) return true;
+            if (!IsLegendaryPowerExtractionPossible)
+                return true;
 
             var backpackCandidate = GetLegendaryExtractionCandidates(InventorySlot.BackpackItems).FirstOrDefault();
             if (backpackCandidate != null)
             {
-                if (!await TrinityTownRun.EnsureKanaisCube()) return false;
-
                 if (!await ExtractPower(backpackCandidate))
                     return false;
 
@@ -209,7 +218,6 @@ namespace Trinity.Components.Coroutines.Town
                 Core.Logger.Log($"[{nameof(ExtractAllBackpack)}] Oh no! Out of materials!");
                 return true;
             }
-
             return await ExtractPower(candidate);
         }
 

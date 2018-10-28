@@ -14,7 +14,6 @@ using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 
-
 namespace Trinity.DbProvider
 {
     public static class DeathHandler
@@ -173,7 +172,7 @@ namespace Trinity.DbProvider
             return true;
         }
 
-        public async static Task<bool> MoveWhileGhosted()
+        public static async Task<bool> MoveWhileGhosted()
         {
             var playerNear = ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).FirstOrDefault(x => x.ACDId != Core.Player.AcdId);
             var safespot = playerNear?.Position ?? Core.Avoidance.GridEnricher.SafeNodeLayer.Positions.OrderBy(d =>

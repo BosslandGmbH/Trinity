@@ -17,7 +17,7 @@ namespace Trinity.Framework
             TreeHooks.Instance.OnHooksCleared += InstanceOnOnHooksCleared;
         }
 
-        private static readonly Dictionary<string, Composite> OriginalHooks = new Dictionary<string, Composite>();
+        private static readonly Dictionary<string, Composite> s_originalHooks = new Dictionary<string, Composite>();
 
         public static void CheckHooks()
         {
@@ -80,8 +80,8 @@ namespace Trinity.Framework
 
         private static void StoreAndReplaceHook(string hookName, Composite behavior)
         {
-            if (!OriginalHooks.ContainsKey(hookName) && TreeHooks.Instance.Hooks.ContainsKey(hookName))
-                OriginalHooks.Add(hookName, TreeHooks.Instance.Hooks[hookName][0]);
+            if (!s_originalHooks.ContainsKey(hookName) && TreeHooks.Instance.Hooks.ContainsKey(hookName))
+                s_originalHooks.Add(hookName, TreeHooks.Instance.Hooks[hookName][0]);
 
             Core.Logger.Log("Replacing " + hookName + " Hook");
             TreeHooks.Instance.ReplaceHook(hookName, behavior);
@@ -89,10 +89,10 @@ namespace Trinity.Framework
 
         private static void ReplaceHookWithOriginal(string hook)
         {
-            if (OriginalHooks.ContainsKey(hook) && TreeHooks.Instance.Hooks.ContainsKey(hook))
+            if (s_originalHooks.ContainsKey(hook) && TreeHooks.Instance.Hooks.ContainsKey(hook))
             {
                 Core.Logger.Log("Replacing " + hook + " Hook with Original");
-                TreeHooks.Instance.ReplaceHook(hook, OriginalHooks[hook]);
+                TreeHooks.Instance.ReplaceHook(hook, s_originalHooks[hook]);
             }
         }
     }

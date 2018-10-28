@@ -49,21 +49,32 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         //ActorId: 364715, Type: Gizmo, Name: x1_OpenWorld_LootRunObelisk_B - 27053, Distance2d: 9.72007, CollisionRadius: 9.874258, MinimapActive: 1, MinimapIconOverride: 327066, MinimapDisableArrow: 0
         //ActorId: 345935, Type: Gizmo, Name: X1_OpenWorld_LootRunPortal - 27292, Distance2d: 9.72007, CollisionRadius: 8.316568, MinimapActive: 1, MinimapIconOverride: -1, MinimapDisableArrow: 0
-        public static DiaGizmo RiftPortal => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true).FirstOrDefault(g => g.IsFullyValid() && g.ActorSnoId == RiftData.RiftEntryPortalSNO || g.ActorSnoId == RiftData.GreaterRiftEntryPortalSNO);
+        public static DiaGizmo RiftPortal => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true)
+            .FirstOrDefault(g => g.IsFullyValid() &&
+                                 g.ActorSnoId == RiftData.RiftEntryPortalSNO ||
+                                 g.ActorSnoId == RiftData.GreaterRiftEntryPortalSNO);
 
-        public static DiaGizmo LootRunSwitch => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true).FirstOrDefault(g => g.IsFullyValid() && g.CommonData.GizmoType == GizmoType.LootRunSwitch);
+        public static DiaGizmo LootRunSwitch => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true)
+            .FirstOrDefault(g => g.IsFullyValid() &&
+                                 g.CommonData.GizmoType == GizmoType.LootRunSwitch);
 
         public static Vector3 EntryLocation => BountyHelpers.ScanForRiftEntryMarkerLocation();
 
         // TODO: Make sure we detect the Exit portal properly. Might lead to portal cycles and stuff like that when wrong!
         public static DiaGizmo ExitPortal => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true)
-            .Where(g => g.IsFullyValid() && g.IsPortal && g.Position.Distance2DSqr(EntryLocation) > 100f && !RiftData.DungeonStoneSNOs.Contains(g.ActorSnoId) && g.CommonData.GizmoType != GizmoType.HearthPortal)
+            .Where(g => g.IsFullyValid() &&
+                        g.IsPortal &&
+                        g.Position.Distance2DSqr(EntryLocation) > 100f &&
+                        !RiftData.DungeonStoneSNOs.Contains(g.ActorSnoId) &&
+                        g.CommonData.GizmoType != GizmoType.HearthPortal)
             .OrderBy(g => g.Position.Distance2DSqr(AdvDia.MyPosition))
             .FirstOrDefault();
 
-        public static DiaUnit Urshi => ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).FirstOrDefault(u => u.ActorSnoId == RiftData.UrshiSNO);
+        public static DiaUnit Urshi => ZetaDia.Actors.GetActorsOfType<DiaUnit>(true)
+            .FirstOrDefault(u => u.ActorSnoId == RiftData.UrshiSNO);
 
-        public static DiaUnit Orek => ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).FirstOrDefault(u => u.ActorSnoId == RiftData.OrekSNO);
+        public static DiaUnit Orek => ZetaDia.Actors.GetActorsOfType<DiaUnit>(true)
+            .FirstOrDefault(u => u.ActorSnoId == RiftData.OrekSNO);
 
         public static bool IsRiftPortalOpen => AdvDia.RiftQuest.State > QuestState.NotStarted;
 
@@ -74,12 +85,19 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             return await Coroutine.Wait(TimeSpan.FromSeconds(2), () => ZetaDia.IsInTown);
         }
 
-        public static async Task<bool> OpenRift(RiftType riftType, int maxLevel, int maxEmpowerLevel, bool shouldEmpower, bool runNormalUntilXP)
+        public static async Task<bool> OpenRift(RiftType riftType,
+                                                int maxLevel,
+                                                int maxEmpowerLevel,
+                                                bool shouldEmpower,
+                                                bool runNormalUntilXP)
         {
-            if (IsRiftPortalOpen) return IsRiftPortalOpen;
+            if (IsRiftPortalOpen)
+                return IsRiftPortalOpen;
 
             var riftKeys = CurrentRiftKeyCount;
-            if (riftType == RiftType.Greater && riftKeys <= PluginSettings.Current.MinimumKeys && !PluginSettings.Current.GreaterRiftRunNephalem)
+            if (riftType == RiftType.Greater &&
+                riftKeys <= PluginSettings.Current.MinimumKeys &&
+                !PluginSettings.Current.GreaterRiftRunNephalem)
             {
                 Core.Logger.Error("You have no Greater Rift Keys. Stopping the bot.");
                 BotMain.Stop();
@@ -92,6 +110,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             if (riftKeys <= PluginSettings.Current.MinimumKeys)
                 riftType = RiftType.Nephalem;
 
+            // TODO: Figure out why there is that check against that magic.
             var maximizeXp = runNormalUntilXP &&
                              riftType == RiftType.Greater &&
                              ZetaDia.Me.RestExperience < 5000000000 &&
@@ -111,11 +130,15 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             var lrs = LootRunSwitch;
             if (lrs == null)
             {
-                await CommonCoroutines.MoveTo(ZetaDia.Actors.GetActorsOfType<DiaGizmo>().Where(g => g.Distance > 10f).OrderByDescending(g => g.Distance).FirstOrDefault());
+                await CommonCoroutines.MoveTo(ZetaDia.Actors.GetActorsOfType<DiaGizmo>()
+                    .Where(g => g.Distance > 10f)
+                    .OrderByDescending(g => g.Distance)
+                    .FirstOrDefault());
                 return false;
             }
 
-            if (!s_experienceTracker.IsStarted) s_experienceTracker.Start();
+            if (!s_experienceTracker.IsStarted)
+                s_experienceTracker.Start();
 
             if (!await CommonCoroutines.MoveAndInteract(lrs, () => UIElements.RiftDialog.IsVisible))
                 return false;
@@ -126,22 +149,30 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         public static async Task<bool> EnsureInRift()
         {
-            if (!ZetaDia.IsInTown) return true;
-            if (!IsRiftPortalOpen) return true;
+            if (!ZetaDia.IsInTown)
+                return true;
+
+            if (!IsRiftPortalOpen)
+                return true;
 
             if (RiftPortal == null)
             {
-                await CommonCoroutines.MoveTo(ZetaDia.Actors.GetActorsOfType<DiaGizmo>().Where(g => g.Distance > 10f).OrderBy(g => g.Distance).FirstOrDefault());
+                await CommonCoroutines.MoveTo(ZetaDia.Actors.GetActorsOfType<DiaGizmo>()
+                    .Where(g => g.Distance > 10f).OrderBy(g => g.Distance).FirstOrDefault());
                 return false;
             }
 
-            await CommonCoroutines.MoveAndInteract(RiftPortal, () => ZetaDia.IsInGame && !ZetaDia.Globals.IsLoadingWorld && !ZetaDia.Globals.IsPlayingCutscene && !ZetaDia.IsInTown);
+            await CommonCoroutines.MoveAndInteract(RiftPortal, () => ZetaDia.IsInGame &&
+                                                                     !ZetaDia.Globals.IsLoadingWorld &&
+                                                                     !ZetaDia.Globals.IsPlayingCutscene &&
+                                                                     !ZetaDia.IsInTown);
             return false;
         }
 
         public static async Task<bool> ClearRift()
         {
-            if (AdvDia.RiftQuest.Step >= RiftStep.UrshiSpawned) return true;
+            if (AdvDia.RiftQuest.Step >= RiftStep.UrshiSpawned)
+                return true;
 
             if (!await EnsureInRift())
                 return false;
@@ -154,13 +185,15 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 return false;
             }
 
-            await CommonCoroutines.MoveAndInteract(ExitPortal, () => ZetaDia.Globals.IsLoadingWorld || ZetaDia.Globals.IsPlayingCutscene);
+            await CommonCoroutines.MoveAndInteract(ExitPortal, () => ZetaDia.Globals.IsLoadingWorld ||
+                                                                     ZetaDia.Globals.IsPlayingCutscene);
             return false;
         }
 
         public static async Task<bool> UpgradeGems()
         {
-            if (AdvDia.RiftQuest.Step != RiftStep.UrshiSpawned) return true;
+            if (AdvDia.RiftQuest.Step != RiftStep.UrshiSpawned)
+                return true;
 
             if (!await EnsureInRift())
                 return false;
@@ -174,29 +207,36 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         public static async Task<bool> TurnInQuest()
         {
-            if (AdvDia.RiftQuest.Step != RiftStep.Cleared) return true;
+            if (AdvDia.RiftQuest.Step != RiftStep.Cleared)
+                return true;
             if (!await EnsureIsInTown())
                 return false;
 
             if (Orek == null)
             {
-                await CommonCoroutines.MoveTo(ZetaDia.Actors.GetActorsOfType<DiaGizmo>().Where(g => g.Distance > 10f).OrderByDescending(g => g.Distance).FirstOrDefault());
+                await CommonCoroutines.MoveTo(ZetaDia.Actors.GetActorsOfType<DiaGizmo>()
+                    .Where(g => g.Distance > 10f)
+                    .OrderByDescending(g => g.Distance)
+                    .FirstOrDefault());
                 return false;
             }
 
             if (!(Orek.IsValid && await CommonCoroutines.MoveAndInteract(Orek, () => !Orek.IsQuestGiver)))
                 return false;
 
-            if (s_experienceTracker.IsStarted) s_experienceTracker.StopAndReport(nameof(RiftCoroutine));
+            if (s_experienceTracker.IsStarted)
+                s_experienceTracker.StopAndReport(nameof(RiftCoroutine));
+
             return true;
         }
 
         public static async Task<bool> RunRift(RiftType riftType, int maxLevel, int maxEmpowerLevel, bool shouldEmpower, bool runNormalUntilXP)
         {
-            if (BrainBehavior.IsVendoring || !ZetaDia.IsInGame || ZetaDia.Globals.IsLoadingWorld || ZetaDia.Globals.IsPlayingCutscene)
-            {
+            if (BrainBehavior.IsVendoring ||
+                !ZetaDia.IsInGame ||
+                ZetaDia.Globals.IsLoadingWorld ||
+                ZetaDia.Globals.IsPlayingCutscene)
                 return false;
-            }
 
             if (!await OpenRift(riftType, maxLevel, maxEmpowerLevel, shouldEmpower, runNormalUntilXP))
                 return false;
