@@ -20,7 +20,7 @@ namespace Trinity.Components.Coroutines.Town
 
             if (BrainBehavior.GreaterRiftInProgress)
                 return false;
-            
+
             if (i.IsProtected())
                 return false;
 
@@ -41,10 +41,7 @@ namespace Trinity.Components.Coroutines.Town
             Core.Logger.Verbose(LogCategory.ItemEvents, $"[SalvageItems] Starting salvage for {itemsToSalvage.Count} items");
             itemsToSalvage.ForEach(i => Core.Logger.Debug(LogCategory.ItemEvents, $"[SalvageItems] Salvaging: {i.Name} ({i.ActorSnoId}) InternalName={i.InternalName} Ann={i.AnnId}"));
 
-            if (!await BrainBehavior.DoSalvage(itemsToSalvage))
-                return false;
-
-            return true;
+            return await BrainBehavior.DoSalvage(itemsToSalvage);
         }
     }
 }

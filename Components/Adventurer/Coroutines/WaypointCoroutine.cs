@@ -13,6 +13,7 @@ using Zeta.Game.Internals.Actors.Gizmos;
 
 namespace Trinity.Components.Adventurer.Coroutines
 {
+    // TODO: Go over that coroutine and simplify it.
     public sealed class WaypointCoroutine : ICoroutine
     {
         private static WaypointCoroutine _waypointCoroutine;

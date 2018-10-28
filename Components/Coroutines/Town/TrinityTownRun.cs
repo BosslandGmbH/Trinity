@@ -45,7 +45,9 @@ namespace Trinity.Components.Coroutines.Town
         {
             if (!ZetaDia.IsInGame ||
                 !ZetaDia.IsInTown)
+            {
                 return false;
+            }
 
             if (TownInfo.ZoltunKulle?.GetActor() is DiaUnit kule)
             {
@@ -82,24 +84,22 @@ namespace Trinity.Components.Coroutines.Town
                 return false;
             }
 
-            if (!HasMaterialsRequired)
-            {
-                s_logger.Verbose($"[{nameof(IsRareToLegendaryTransformationPossible)}] Unable to find the materials we need, maybe you don't have them!");
-                return false;
-            }
+            if (HasMaterialsRequired)
+                return true;
 
-            return true;
+            s_logger.Verbose($"[{nameof(IsRareToLegendaryTransformationPossible)}] Unable to find the materials we need, maybe you don't have them!");
+            return false;
+
         }
 
         public static async Task<bool> EnsureIsInTown()
         {
-            if (!ZetaDia.IsInTown)
-            {
-                if (!await CommonCoroutines.UseTownPortal(nameof(TrinityTownRun)))
-                    return false;
+            if (ZetaDia.IsInTown) return ZetaDia.IsInTown;
 
-                _isStartLocationOutOfTown = true;
-            }
+            if (!await CommonCoroutines.UseTownPortal(nameof(TrinityTownRun)))
+                return false;
+
+            _isStartLocationOutOfTown = true;
             return ZetaDia.IsInTown;
         }
 
@@ -109,8 +109,8 @@ namespace Trinity.Components.Coroutines.Town
             {
                 if (!await CommonCoroutines.MoveAndInteract(ReturnPortal, () => ZetaDia.IsInTown))
                     return false;
-                _isStartLocationOutOfTown = false;
             }
+            _isStartLocationOutOfTown = false;
             return true;
         }
 
@@ -135,8 +135,12 @@ namespace Trinity.Components.Coroutines.Town
                 return true;
             }
 
-            if (!await CommonCoroutines.MoveAndInteract(bookActor.GetActor(), () => CommonCoroutines.IsInteracting))
+            if (!await CommonCoroutines.MoveAndInteract(
+                bookActor.GetActor(),
+                () => CommonCoroutines.IsInteracting))
+            {
                 return false;
+            }
 
             s_logger.Info($"[{nameof(IdentifyItems)}] Identifying Items");
             await Coroutine.Wait(TimeSpan.FromSeconds(10), () => !CommonCoroutines.IsInteracting);
@@ -178,7 +182,9 @@ namespace Trinity.Components.Coroutines.Town
                 StashItems,
                 RepairItems
             ))
+            {
                 return false;
+            }
 
             // Go back where we came from...
             if (!await ReturnToStartLocation())
@@ -202,17 +208,23 @@ namespace Trinity.Components.Coroutines.Town
         public static async Task<bool> TakeReturnPortal()
         {
             if (!await CommonCoroutines.MoveAndInteract(
-                    ReturnPortal,
-                    () => ZetaDia.IsInTown))
+                ReturnPortal,
+                () => ZetaDia.IsInTown))
+            {
                 return false;
+            }
 
             return ZetaDia.IsInTown;
         }
 
         public static async Task<bool> EnsureKanaisCube()
         {
-            if (!await CommonCoroutines.MoveAndInteract(TownInfo.KanaisCube.GetActor(), () => UIElements.TransmuteItemsDialog.IsVisible))
+            if (!await CommonCoroutines.MoveAndInteract(
+                TownInfo.KanaisCube.GetActor(),
+                () => UIElements.TransmuteItemsDialog.IsVisible))
+            {
                 return false;
+            }
 
             return UIElements.TransmuteItemsDialog.IsVisible;
         }
@@ -271,11 +283,15 @@ namespace Trinity.Components.Coroutines.Town
                 if (i.ItemBaseType != ItemBaseType.Armor &&
                     i.ItemBaseType != ItemBaseType.Weapon &&
                     i.ItemBaseType != ItemBaseType.Jewelry)
+                {
                     return false;
+                }
 
                 if (i.ItemQualityLevel < ItemQuality.Rare4 &&
                     i.ItemQualityLevel >= ItemQuality.Legendary)
+                {
                     return false;
+                }
 
                 return types == null ||
                        types.Contains(GetBackPackItemSelectionType(i));

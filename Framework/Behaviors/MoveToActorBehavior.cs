@@ -29,7 +29,10 @@ namespace Trinity.Framework.Behaviors
 
         public async Task<bool> While(Predicate<TrinityActor> actorSelector, int timeoutMs = 30000)
         {
-            return await Run(async () => FindActor(actorSelector), MoveProducer, timeoutMs);
+            return await Run(
+                async () => FindActor(actorSelector),
+                MoveProducer,
+                timeoutMs);
         }
 
         private bool FindActor(Predicate<TrinityActor> actorSelector)
@@ -42,20 +45,21 @@ namespace Trinity.Framework.Behaviors
                                      !VisitedActorPositions.Contains(m.Position) &&
                                      m.Distance > 8f);
 
-            if (actor != null &&
-                (IsRunning ||
-                 !PlayerMover.IsBlocked &&
-                 actor.Distance < 500) &&
-                !Navigator.StuckHandler.IsStuck)
+            if (actor == null ||
+                (!IsRunning &&
+                 (PlayerMover.IsBlocked ||
+                  !(actor.Distance < 500))) ||
+                Navigator.StuckHandler.IsStuck)
             {
-                if (VisitedActorPositions.Count > 500)
-                    VisitedActorPositions.Clear();
-
-                Actor = actor;
-                return true;
+                return false;
             }
 
-            return false;
+            if (VisitedActorPositions.Count > 500)
+                VisitedActorPositions.Clear();
+
+            Actor = actor;
+            return true;
+
         }
 
         private async Task<bool> MoveProducer()

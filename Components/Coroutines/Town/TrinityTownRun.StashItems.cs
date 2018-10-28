@@ -21,9 +21,91 @@ namespace Trinity.Components.Coroutines.Town
 {
     public static partial class TrinityTownRun
     {
-        public static bool StashPagesAvailableToPurchase => 5 - ZetaDia.Me.CommonData.GetAttribute<int>(ActorAttributeType.StashTabsPurchasedWithGold) > 0;
+        internal class InventoryMap : Dictionary<Tuple<int, int>, TrinityItem>
+        {
+            public InventoryMap(Dictionary<Tuple<int, int>, TrinityItem> dictionary) : base(dictionary)
+            {
+            }
+
+            public TrinityItem this[int indexX, int indexY] => this[new Tuple<int, int>(indexX, indexY)];
+        }
+
+        private static readonly HashSet<RawItemType> s_specialCaseNonStackableItems = new HashSet<RawItemType>
+        {
+            RawItemType.CraftingPlan,
+            RawItemType.CraftingPlan_Jeweler,
+            RawItemType.CraftingPlanLegendary_Smith,
+            RawItemType.CraftingPlan_Mystic,
+            RawItemType.CraftingPlan_MysticTransmog,
+            RawItemType.CraftingPlan_Smith,
+        };
+
+        // TODO: Check if that can be cached in another way.
+        private static DateTime _lastTypeMapUpdate = DateTime.MinValue;
+        private static Dictionary<RawItemType, int> _itemTypeMap;
+        private static Dictionary<RawItemType, int> ItemTypeMap
+        {
+            get
+            {
+                if (_itemTypeMap != null &&
+                    DateTime.UtcNow.Subtract(_lastTypeMapUpdate) <= TimeSpan.FromMinutes(1))
+                {
+                    return _itemTypeMap;
+                }
+
+                Core.Logger.Verbose("Creating Stashing ItemTypeMap");
+                var typeMap = new Dictionary<RawItemType, int>();
+                var map = Inventory();
+                foreach (var item in map)
+                {
+                    var type = item.Value.RawItemType;
+                    if (typeMap.ContainsKey(type))
+                        continue;
+
+                    var x = item.Key.Item1;
+                    var y = item.Key.Item2;
+                    var page = y / 10;
+                    typeMap.Add(type, page);
+                    Core.Logger.Verbose($"Type: {type} => Page: {page}");
+                }
+
+                _itemTypeMap = typeMap;
+                _lastTypeMapUpdate = DateTime.UtcNow;
+                return _itemTypeMap;
+            }
+        }
+
+        public static bool StashPagesAvailableToPurchase =>
+            5 - ZetaDia.Me.CommonData.GetAttribute<int>(ActorAttributeType.StashTabsPurchasedWithGold) > 0;
 
         public static int TotalStashPages => ZetaDia.Me.NumSharedStashSlots / 70;
+
+        private static InventoryMap Inventory
+        {
+            get
+            {
+                Core.Actors.Update();
+                var stashItems = Core.Actors.Inventory
+                    .Where(i => i.InventorySlot == InventorySlot.SharedStash)
+                    .ToList();
+                var itemDict = new Dictionary<Tuple<int, int>, TrinityItem>();
+                foreach (var item in stashItems)
+                {
+                    var key = new Tuple<int, int>(item.InventoryColumn, item.InventoryRow);
+                    if (itemDict.ContainsKey(key))
+                    {
+                        var dup = itemDict[key];
+                        Core.Logger.Debug(
+                            $"Duplicate Col/Row [{item.InventoryColumn}, {item.InventoryRow}] found while creating InventoryMap for: {item.Name} ({item.ActorSnoId}) {item.ItemType} IsValid=({item.IsValid}) duplicate is: {dup.Name} ({dup.ActorSnoId}) {dup.ItemType} IsValid=({dup.IsValid})");
+                        itemDict[key] = item.IsValid ? item : dup;
+                    }
+                    else
+                        itemDict[key] = item;
+                }
+
+                return new InventoryMap(itemDict);
+            }
+        }
 
         public static bool ShouldStash(TrinityItem i)
         {
@@ -33,10 +115,7 @@ namespace Trinity.Components.Coroutines.Town
             if (i.IsUnidentified)
                 return true;
 
-            if (i.IsProtected())
-                return false;
-
-            return Combat.TrinityCombat.Loot.ShouldStash(i);
+            return !i.IsProtected() && Combat.TrinityCombat.Loot.ShouldStash(i);
         }
 
         public static async Task<bool> StashItems()
@@ -67,6 +146,7 @@ namespace Trinity.Components.Coroutines.Town
                 InventoryManager.BuySharedStashSlots();
             }
 
+            // TODO: Figure out if those 2 calls are still relevant.
             await StackRamaladnisGift();
             await StackCraftingMaterials();
 
@@ -113,8 +193,12 @@ namespace Trinity.Components.Coroutines.Town
 
         private static void UpdateAfterItemMove(TrinityItem item)
         {
-            if (item.IsValid && item.CommonData.IsValid && !item.CommonData.IsDisposed)
+            if (item.IsValid &&
+                item.CommonData.IsValid &&
+                !item.CommonData.IsDisposed)
+            {
                 item.OnCreated();
+            }
 
             Core.Actors.Update();
         }
@@ -187,7 +271,7 @@ namespace Trinity.Components.Coroutines.Town
                     if (usedIds.Contains(item.AnnId))
                         continue;
 
-                    var map = GetInventoryMap();
+                    var map = Inventory();
                     int col = 0, row = 0;
                     var page = GetIdealStashPage(item);
                     if (page == -1)
@@ -254,38 +338,6 @@ namespace Trinity.Components.Coroutines.Town
             return -1;
         }
 
-        private static DateTime _lastTypeMapUpdate = DateTime.MinValue;
-        private static Dictionary<RawItemType, int> _itemTypeMap;
-
-        private static Dictionary<RawItemType, int> ItemTypeMap
-        {
-            get
-            {
-                if (_itemTypeMap != null &&
-                    DateTime.UtcNow.Subtract(_lastTypeMapUpdate) <= TimeSpan.FromMinutes(1))
-                    return _itemTypeMap;
-
-                Core.Logger.Verbose("Creating Stashing ItemTypeMap");
-                var typeMap = new Dictionary<RawItemType, int>();
-                var map = GetInventoryMap();
-                foreach (var item in map)
-                {
-                    var type = item.Value.RawItemType;
-                    if (typeMap.ContainsKey(type))
-                        continue;
-
-                    var x = item.Key.Item1;
-                    var y = item.Key.Item2;
-                    var page = y / 10;
-                    typeMap.Add(type, page);
-                    Core.Logger.Verbose($"Type: {type} => Page: {page}");
-                }
-                _itemTypeMap = typeMap;
-                _lastTypeMapUpdate = DateTime.UtcNow;
-                return _itemTypeMap;
-            }
-        }
-
         public static int GetBestStashLocation(TrinityItem item, out int col, out int row)
         {
             col = 0;
@@ -324,19 +376,9 @@ namespace Trinity.Components.Coroutines.Town
             return -1;
         }
 
-        private static readonly HashSet<RawItemType> s_specialCaseNonStackableItems = new HashSet<RawItemType>
-        {
-            RawItemType.CraftingPlan,
-            RawItemType.CraftingPlan_Jeweler,
-            RawItemType.CraftingPlanLegendary_Smith,
-            RawItemType.CraftingPlan_Mystic,
-            RawItemType.CraftingPlan_MysticTransmog,
-            RawItemType.CraftingPlan_Smith,
-        };
-
         public static bool CanPutItemInStashPage(TrinityItem item, int stashPageNumber, out int col, out int row)
         {
-            var itemsOnStashPage = GetInventoryMap();
+            var itemsOnStashPage = Inventory();
 
             col = 0;
             row = 0;
@@ -381,7 +423,9 @@ namespace Trinity.Components.Coroutines.Town
             if (item.MaxStackCount <= 0 ||
                 item.IsTradeable ||
                 s_specialCaseNonStackableItems.Contains(item.RawItemType))
+            {
                 return false;
+            }
 
             for (var i = 0; i < 10; i++)
             {
@@ -395,37 +439,16 @@ namespace Trinity.Components.Coroutines.Town
             }
             return false;
         }
-
-        private static InventoryMap GetInventoryMap()
-        {
-            Core.Actors.Update();
-            var stashItems = Core.Actors.Inventory
-                .Where(i => i.InventorySlot == InventorySlot.SharedStash)
-                .ToList();
-            var itemDict = new Dictionary<Tuple<int, int>, TrinityItem>();
-            foreach (var item in stashItems)
-            {
-                var key = new Tuple<int, int>(item.InventoryColumn, item.InventoryRow);
-                if (itemDict.ContainsKey(key))
-                {
-                    var dup = itemDict[key];
-                    Core.Logger.Debug($"Duplicate Col/Row [{item.InventoryColumn}, {item.InventoryRow}] found while creating InventoryMap for: {item.Name} ({item.ActorSnoId}) {item.ItemType} IsValid=({item.IsValid}) duplicate is: {dup.Name} ({dup.ActorSnoId}) {dup.ItemType} IsValid=({dup.IsValid})");
-                    itemDict[key] = item.IsValid ? item : dup;
-                }
-                else
-                    itemDict[key] = item;
-            }
-
-            return new InventoryMap(itemDict);
-        }
-
+        
         private static bool TryGetStackLocation(TrinityItem item, int stashPageNumber, int col, int row, InventoryMap map, ref int placeAtCol, ref int placeAtRow)
         {
             var loc = new Tuple<int, int>(col, row);
 
             if (col == placeAtCol &&
                 row == placeAtRow)
+            {
                 return false;
+            }
 
             var isSquareEmpty = !map.ContainsKey(loc);
             if (isSquareEmpty)
@@ -445,7 +468,9 @@ namespace Trinity.Components.Coroutines.Town
             if (item.ActorSnoId != existingItem.ActorSnoId ||
                 newStackSize > item.MaxStackCount ||
                 item.AnnId == existingItem.AnnId)
+            {
                 return false;
+            }
 
             Core.Logger.Debug($"Can stash item {item.Name} on page {stashPageNumber} at [col={col},row={row}] (stack on existing {existingStackQuantity} + {itemStackQuantity} ({newStackSize}) / {item.MaxStackCount})");
             placeAtCol = col;
@@ -472,8 +497,11 @@ namespace Trinity.Components.Coroutines.Town
 
             var locAbove = new Tuple<int, int>(col, row - 1);
             var isItemAbove = map.ContainsKey(locAbove);
-            if (isItemAbove && map[locAbove].IsTwoSquareItem)
+            if (isItemAbove &&
+                map[locAbove].IsTwoSquareItem)
+            {
                 return false;
+            }
 
             if (!isSquareEmpty)
                 return false;
@@ -482,12 +510,6 @@ namespace Trinity.Components.Coroutines.Town
             placeAtCol = col;
             placeAtRow = row;
             return true;
-        }
-
-        public class InventoryMap : Dictionary<Tuple<int, int>, TrinityItem>
-        {
-            public InventoryMap(Dictionary<Tuple<int, int>, TrinityItem> dictionary) : base(dictionary) { }
-            public TrinityItem this[int indexX, int indexY] => this[new Tuple<int, int>(indexX, indexY)];
         }
 
         private static void HandleFullStash()

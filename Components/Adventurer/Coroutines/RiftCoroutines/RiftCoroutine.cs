@@ -32,7 +32,9 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
         private static readonly ExperienceTracker s_experienceTracker = new ExperienceTracker();
 
-        public static long CurrentRiftKeyCount => AdvDia.StashAndBackpackItems.Where(i => i.RawItemType == RawItemType.TieredRiftKey).Sum(k => k.ItemStackQuantity);
+        public static long CurrentRiftKeyCount => AdvDia.StashAndBackpackItems
+            .Where(i => i.RawItemType == RawItemType.TieredRiftKey)
+            .Sum(k => k.ItemStackQuantity);
 
         //ActorId: 364715, Type: Gizmo, Name: x1_OpenWorld_LootRunObelisk_B - 27053, Distance2d: 9.72007, CollisionRadius: 9.874258, MinimapActive: 1, MinimapIconOverride: 327066, MinimapDisableArrow: 0
         //ActorId: 345935, Type: Gizmo, Name: X1_OpenWorld_LootRunPortal - 27292, Distance2d: 9.72007, CollisionRadius: 8.316568, MinimapActive: 1, MinimapIconOverride: -1, MinimapDisableArrow: 0
@@ -67,8 +69,12 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         public static async Task<bool> EnsureIsInTown()
         {
-            if (!ZetaDia.IsInTown && await WaypointCoroutine.UseWaypoint(WaypointFactory.ActHubs[Act.A1]))
+            if (!ZetaDia.IsInTown &&
+                await WaypointCoroutine.UseWaypoint(WaypointFactory.ActHubs[Act.A1]))
+            {
                 return false;
+            }
+
             return await Coroutine.Wait(TimeSpan.FromSeconds(2), () => ZetaDia.IsInTown);
         }
 
@@ -210,8 +216,11 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 return false;
             }
 
-            if (!(Orek.IsValid && await CommonCoroutines.MoveAndInteract(Orek, () => !Orek.IsQuestGiver)))
+            if (!(Orek.IsValid &&
+                  await CommonCoroutines.MoveAndInteract(Orek, () => !Orek.IsQuestGiver)))
+            {
                 return false;
+            }
 
             if (s_experienceTracker.IsStarted)
                 s_experienceTracker.StopAndReport(nameof(RiftCoroutine));
@@ -225,10 +234,19 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 !ZetaDia.IsInGame ||
                 ZetaDia.Globals.IsLoadingWorld ||
                 ZetaDia.Globals.IsPlayingCutscene)
+            {
                 return false;
+            }
 
-            if (!await OpenRift(riftType, maxLevel, maxEmpowerLevel, shouldEmpower, runNormalUntilXP))
+            if (!await OpenRift(
+                riftType,
+                maxLevel,
+                maxEmpowerLevel,
+                shouldEmpower,
+                runNormalUntilXP))
+            {
                 return false;
+            }
 
             if (!await ClearRift())
                 return false;

@@ -28,7 +28,9 @@ namespace Trinity.Components.Coroutines.Town
         {
             if (!ZetaDia.IsInGame ||
                 !ZetaDia.IsInTown)
+            {
                 return true;
+            }
 
             while (await CommonCoroutines.MoveAndStop(
                        TownInfo.Stash.InteractPosition,
@@ -47,7 +49,9 @@ namespace Trinity.Components.Coroutines.Town
 
             if (!UIElements.StashWindow.IsVisible &&
                 TownInfo.Stash.Distance <= 10f)
+            {
                 await MoveToAndInteract.Execute(TownInfo.Stash);
+            }
 
             if (!UIElements.StashWindow.IsVisible && TownInfo.Stash.Distance <= 10f)
             {
@@ -162,7 +166,9 @@ namespace Trinity.Components.Coroutines.Town
         {
             if (!ZetaDia.IsInGame ||
                 !ZetaDia.IsInTown)
+            {
                 return false;
+            }
 
             if (TownInfo.Stash.Distance > 3f)
             {
