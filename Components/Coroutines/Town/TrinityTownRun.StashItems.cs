@@ -55,7 +55,7 @@ namespace Trinity.Components.Coroutines.Town
 
                 Core.Logger.Verbose("Creating Stashing ItemTypeMap");
                 var typeMap = new Dictionary<RawItemType, int>();
-                var map = Inventory();
+                var map = Inventory;
                 foreach (var item in map)
                 {
                     var type = item.Value.RawItemType;
@@ -271,7 +271,7 @@ namespace Trinity.Components.Coroutines.Town
                     if (usedIds.Contains(item.AnnId))
                         continue;
 
-                    var map = Inventory();
+                    var map = Inventory;
                     int col = 0, row = 0;
                     var page = GetIdealStashPage(item);
                     if (page == -1)
@@ -326,11 +326,15 @@ namespace Trinity.Components.Coroutines.Town
             if (item.IsEquipment &&
                 Core.Settings.Items.UseTypeStashingEquipment &&
                 ItemTypeMap.ContainsKey(item.RawItemType))
+            {
                 return ItemTypeMap[item.RawItemType];
+            }
 
             if (Core.Settings.Items.UseTypeStashingOther &&
                 ItemTypeMap.ContainsKey(item.RawItemType))
+            {
                 return ItemTypeMap[item.RawItemType];
+            }
 
             if (item.ItemBaseType >= ItemBaseType.Misc)
                 return TotalStashPages - 1;
@@ -378,7 +382,7 @@ namespace Trinity.Components.Coroutines.Town
 
         public static bool CanPutItemInStashPage(TrinityItem item, int stashPageNumber, out int col, out int row)
         {
-            var itemsOnStashPage = Inventory();
+            var itemsOnStashPage = Inventory;
 
             col = 0;
             row = 0;
@@ -439,7 +443,7 @@ namespace Trinity.Components.Coroutines.Town
             }
             return false;
         }
-        
+
         private static bool TryGetStackLocation(TrinityItem item, int stashPageNumber, int col, int row, InventoryMap map, ref int placeAtCol, ref int placeAtRow)
         {
             var loc = new Tuple<int, int>(col, row);
