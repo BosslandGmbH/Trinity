@@ -11,14 +11,13 @@ using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 
-
 namespace Trinity.DbProvider
 {
     public class PlayerMover : IPlayerMover
     {
         private static PlayerMover _instance;
         private static readonly DateTime s_lastUsedMoveStop = DateTime.MinValue;
-        
+
         public PlayerMover()
         {
             _instance = this;
@@ -39,13 +38,13 @@ namespace Trinity.DbProvider
                 {
                     case ActorClass.Witchdoctor:
                         return Core.Buffs.HasBuff(SNOPower.Witchdoctor_SpiritWalk);
-
                     case ActorClass.Barbarian:
-                        return Core.Buffs.HasBuff(SNOPower.Barbarian_Sprint) && Runes.Barbarian.Gangway.IsActive;
-
+                        return Core.Buffs.HasBuff(SNOPower.Barbarian_Sprint) &&
+                               Runes.Barbarian.Gangway.IsActive;
                     case ActorClass.Monk:
-                        return Core.Buffs.HasBuff(SNOPower.Monk_TempestRush) || Runes.Monk.InstantKarma.IsActive && Core.Buffs.HasBuff(SNOPower.Monk_Serenity);
-
+                        return Core.Buffs.HasBuff(SNOPower.Monk_TempestRush) ||
+                               Runes.Monk.InstantKarma.IsActive &&
+                               Core.Buffs.HasBuff(SNOPower.Monk_Serenity);
                     case ActorClass.Crusader:
                         return Core.Buffs.HasBuff(SNOPower.X1_Crusader_SteedCharge);
                     default:
@@ -80,7 +79,9 @@ namespace Trinity.DbProvider
                 !ZetaDia.Me.IsValid ||
                 ZetaDia.Me.IsDead ||
                 ZetaDia.Globals.IsLoadingWorld)
+            {
                 return;
+            }
 
             if (IsUIBlockingMovement)
                 return;
@@ -111,7 +112,7 @@ namespace Trinity.DbProvider
             Core.Grids.Avoidance.AdvanceNavigatorPath(power.MinimumRange, RayType.Walk);
             MoveStop();
         }
-        
+
         public void MoveStop()
         {
             if (DateTime.UtcNow.Subtract(s_lastUsedMoveStop).TotalMilliseconds < 250)
