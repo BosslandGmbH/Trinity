@@ -1,11 +1,9 @@
 ﻿using Buddy.Coroutines;
+using log4net;
 using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using log4net;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
@@ -14,13 +12,12 @@ using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Components.Adventurer.Game.Stats;
 using Trinity.Components.Adventurer.Settings;
-using Trinity.Components.Coroutines.Town;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Framework.Reference;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
-using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Common.Helpers;
 using Zeta.Game;
@@ -35,6 +32,8 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
         private static readonly ExperienceTracker s_experienceTracker = new ExperienceTracker();
 
+        // TODO: Check if that can be a simple getter. I don't think it needs to update actors at all.
+        // TODO: Get rid of the loggin here and log in the caller.
         public static long CurrentRiftKeyCount
         {
             get

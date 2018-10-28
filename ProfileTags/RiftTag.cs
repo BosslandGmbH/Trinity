@@ -61,10 +61,11 @@ namespace Trinity.ProfileTags
 
         public override async Task<bool> MainTask()
         {
-            if (!await RiftCoroutine.RunRift(SelectedRiftType, Level, PluginSettings.Current.EmpoweredRiftLevelLimit, IsEmpowered || PluginSettings.Current.UseEmpoweredRifts, IsGetXPShrine || PluginSettings.Current.NormalRiftForXPShrine))
-                return false;
-
-            return true;
+            return await RiftCoroutine.RunRift(SelectedRiftType,
+                Level,
+                PluginSettings.Current.EmpoweredRiftLevelLimit,
+                IsEmpowered || PluginSettings.Current.UseEmpoweredRifts,
+                IsGetXPShrine || PluginSettings.Current.NormalRiftForXPShrine);
         }
 
     }

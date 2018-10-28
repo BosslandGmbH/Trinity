@@ -12,9 +12,9 @@ using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 
-
 namespace Trinity.Modules
 {
+    // TODO: Clean that class up. We might be able to remove it completely.
     public class PlayerCache : Module
     {
         public int ActorSnoId { get; set; }
@@ -91,7 +91,9 @@ namespace Trinity.Modules
         public float ShieldHitpoints { get; private set; }
         public DateTime LastInCombatTime { get; private set; }
 
-        public bool IsMelee => Core.Player.ActorClass == ActorClass.Barbarian || Core.Player.ActorClass == ActorClass.Monk || Core.Player.ActorClass == ActorClass.Crusader;
+        public bool IsMelee => Core.Player.ActorClass == ActorClass.Barbarian ||
+                               Core.Player.ActorClass == ActorClass.Monk ||
+                               Core.Player.ActorClass == ActorClass.Crusader;
 
         public List<float> HealthHistory { get; set; } = new List<float>();
 
@@ -423,11 +425,7 @@ namespace Trinity.Modules
 
         public bool IsChannelling => ChannelAnimations.Contains(CurrentAnimation);
 
-        //private float GetMaxPrimaryResource(DiaActivePlayer player)
-        //{
-        //    return player.MaxPrimaryResource;
-        //}
-
+        // TODO: Figure out if this method is used at all. When not delete if it is used fix the magic numbers.
         private float GetMaxPrimaryResource(DiaActivePlayer player)
         {
             switch (ActorClass)
@@ -448,14 +446,14 @@ namespace Trinity.Modules
             return -1;
         }
 
-
-
         public ACDItem EquippedHealthPotion
         {
             get
             {
+                // TODO: Check if that can really trigger an exception.
                 try
                 {
+                    // TODO: Figure out the magic and replace it with some named constant.
                     var element = UXHelper.GetControl(13566120389425937876);
                     if (element != null && element.IsValid)
                     {
