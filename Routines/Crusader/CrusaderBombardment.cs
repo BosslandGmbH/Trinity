@@ -43,7 +43,14 @@ namespace Trinity.Routines.Crusader
 
         public override bool SetWeight(TrinityActor cacheObject)
         {
-            if (Settings.IgnoreTrash && cacheObject.IsTrashMob && Core.Rift.IsInRift && !cacheObject.IsTreasureGoblin && !cacheObject.IsMinimapActive && !cacheObject.IsBountyObjective && !cacheObject.IsQuestMonster && Core.Rift.IsGreaterRift)
+            if (Settings.IgnoreTrash &&
+                cacheObject.IsTrashMob &&
+                Core.Rift.IsInRift &&
+                !cacheObject.IsTreasureGoblin &&
+                !cacheObject.IsMinimapActive &&
+                !cacheObject.IsBountyObjective &&
+                !cacheObject.IsQuestMonster &&
+                Core.Rift.IsGreaterRift)
             {
                 cacheObject.WeightInfo += $"Routine(IgnoreTrash)";
                 cacheObject.Weight = 0;
