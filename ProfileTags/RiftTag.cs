@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.RiftCoroutines;
 using Trinity.Components.Adventurer.Game.Rift;
@@ -53,21 +55,36 @@ namespace Trinity.ProfileTags
 
         #endregion
 
+        private int _remainingRuns;
+
         public override async Task<bool> StartTask()
         {
             if (Level == 0)
                 Level = SelectedRiftType == RiftType.Greater ? RiftData.GetGreaterRiftLevel() : -1;
+            _remainingRuns = Math.Max(RiftCount, PluginSettings.Current.RiftCount);
+            _remainingRuns = _remainingRuns == 0 ? -1 : _remainingRuns;
             return false;
         }
 
         public override async Task<bool> MainTask()
         {
-            return await RiftCoroutine.RunRift(SelectedRiftType,
+            if (!await RiftCoroutine.RunRift(SelectedRiftType,
                 Level,
                 PluginSettings.Current.EmpoweredRiftLevelLimit,
                 IsEmpowered || PluginSettings.Current.UseEmpoweredRifts,
-                IsGetXPShrine || PluginSettings.Current.NormalRiftForXPShrine);
-        }
+                IsGetXPShrine || PluginSettings.Current.NormalRiftForXPShrine))
+            {
+                return false;
+            }
 
+            // When _remainingRuns has a negative start value we just keep going.
+            if (_remainingRuns < 0)
+                return false;
+
+            // We just completed a rift. Let's decrement remaining runs. 
+            Interlocked.Decrement(ref _remainingRuns);
+            // When remaining runs equals 0 we are done.
+            return _remainingRuns == 0;
+        }
     }
 }

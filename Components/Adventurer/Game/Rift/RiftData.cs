@@ -19,8 +19,17 @@ namespace Trinity.Components.Adventurer.Game.Rift
         public const int UrshiSNO = 398682;
         public const int TownstoneSNO = 135248;
         public const int HolyCowSNO = 209133;
+        
         public const int GreaterRiftKeySNO = 408416;
-        public static HashSet<int> DungeonStoneSNOs = new HashSet<int> { 135248, 178684 };
+        public static readonly HashSet<int> PossibleDungeonStoneSNO = new HashSet<int>
+        {
+            135248,
+            178684
+        };
+        public static readonly HashSet<int> PossibleHolyCowLevelID = new HashSet<int>
+        {
+            276150,
+        };
         public static Vector3 Act1OrekPosition = new Vector3(391, 591, 24);
         public static Vector3 Act1RiftStonePosition = new Vector3(375, 586, 24);
 
@@ -43,9 +52,7 @@ namespace Trinity.Components.Adventurer.Game.Rift
         // TentacleLord (209133) Distance: 25.51409
         //new InteractWithUnitCoroutine(0, 288454, 209133, 0, 5),
 
-        public static List<int> RiftWorldIds => riftWorldIds;
-
-        private static readonly List<int> riftWorldIds = new List<int>
+        public static List<int> RiftWorldIds { get; } = new List<int>
         {
             288454,
             288685,
@@ -62,9 +69,7 @@ namespace Trinity.Components.Adventurer.Game.Rift
         /// <summary>
         /// Contains all the Exit Name Hashes in Rifts
         /// </summary>
-        public static List<int> RiftPortalHashes => riftPortalHashes;
-
-        private static readonly List<int> riftPortalHashes = new List<int>
+        public static List<int> RiftPortalHashes { get; } = new List<int>
         {
             1938876094,
             1938876095,
