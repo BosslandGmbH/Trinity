@@ -110,42 +110,48 @@ namespace Trinity.Components.Coroutines.Town
                 return false;
             }
 
-            if (ZetaDia.Me.Level >= 70 && UIElements.SalvageAllWrapper.IsVisible)
+            if (UIElements.SalvageWindow.IsVisible)
             {
-                var items = Core.Inventory.Backpack.Where(i => Combat.TrinityCombat.Loot.ShouldSalvage(i)).ToList();
-
-                var normals = items.Where(i => NormalQualityLevels.Contains(i.ItemQualityLevel)).ToList();
-                if (normals.Count > 0)
+                if (ZetaDia.Me.Level >= 70 && UIElements.SalvageAllWrapper.IsVisible)
                 {
-                    Core.Logger.Verbose($"[SalvageItems] Bulk Salvaging {normals.Count} Normal");
-                    if (InventoryManager.SalvageItemsOfRarity(SalvageRarity.Normal))
+                    var items = Core.Inventory.Backpack.Where(i => Combat.TrinityCombat.Loot.ShouldSalvage(i)).ToList();
+
+                    var normals = items.Where(i => NormalQualityLevels.Contains(i.ItemQualityLevel)).ToList();
+                    if (normals.Count > 0)
                     {
-                        normals.ForEach(ItemEvents.FireItemSalvaged);
+                        Core.Logger.Verbose($"[SalvageItems] Bulk Salvaging {normals.Count} Normal");
+                        if (InventoryManager.SalvageItemsOfRarity(SalvageRarity.Normal))
+                        {
+                            normals.ForEach(ItemEvents.FireItemSalvaged);
+                        }
+                    }
+
+                    var magic = items.Where(i => MagicQualityLevels.Contains(i.ItemQualityLevel)).ToList();
+                    if (magic.Count > 0)
+                    {
+                        Core.Logger.Verbose($"[SalvageItems] Bulk Salvaging {magic.Count} Magic");
+                        if (InventoryManager.SalvageItemsOfRarity(SalvageRarity.Magic))
+                        {
+                            magic.ForEach(ItemEvents.FireItemSalvaged);
+                        }
+                    }
+
+                    var rares = items.Where(i => RareQualityLevels.Contains(i.ItemQualityLevel)).ToList();
+                    if (rares.Count > 0)
+                    {
+                        Core.Logger.Verbose($"[SalvageItems] Bulk Salvaging {rares.Count} Rare");
+                        if (InventoryManager.SalvageItemsOfRarity(SalvageRarity.Rare))
+                        {
+                            rares.ForEach(ItemEvents.FireItemSalvaged);
+                        }
                     }
                 }
 
-                var magic = items.Where(i => MagicQualityLevels.Contains(i.ItemQualityLevel)).ToList();
-                if (magic.Count > 0)
-                {
-                    Core.Logger.Verbose($"[SalvageItems] Bulk Salvaging {magic.Count} Magic");
-                    if (InventoryManager.SalvageItemsOfRarity(SalvageRarity.Magic))
-                    {
-                        magic.ForEach(ItemEvents.FireItemSalvaged);
-                    }
-                }
 
-                var rares = items.Where(i => RareQualityLevels.Contains(i.ItemQualityLevel)).ToList();
-                if (rares.Count > 0)
-                {
-                    Core.Logger.Verbose($"[SalvageItems] Bulk Salvaging {rares.Count} Rare");
-                    if (InventoryManager.SalvageItemsOfRarity(SalvageRarity.Rare))
-                    {
-                        rares.ForEach(ItemEvents.FireItemSalvaged);
-                    }
-                }
-            }
-            else
-            {
+                await Coroutine.Sleep(380);
+                await Coroutine.Yield();
+
+
                 var timeout = DateTime.UtcNow.Add(TimeSpan.FromSeconds(30));
                 while (DateTime.UtcNow < timeout)
                 {
@@ -180,12 +186,14 @@ namespace Trinity.Components.Coroutines.Town
                     Core.Inventory.InvalidAnnIds.Add(item.AnnId);
                     ItemEvents.FireItemSalvaged(item);
                 }
+
+                await Coroutine.Yield();
+                await RepairItems.Execute();
+                return true;
             }
 
-            await Coroutine.Yield();
-
-            await RepairItems.Execute();
-            return true;
+            Core.Logger.Error($"[SalvageItems] Failed to salvage items");
+            return false;
         }
 
         private static readonly HashSet<ItemQuality> RareQualityLevels = new HashSet<ItemQuality>

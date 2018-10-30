@@ -202,7 +202,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 Core.Logger.Debug("[UpgradeGems] Clicking to Continue button.");
                 RiftData.ContinueButton.Click();
                 RiftData.VendorCloseButton.Click();
-                await Coroutine.Wait(250, () => !RiftData.VendorDialog.IsVisible && !RiftData.ContinueButton.IsVisible && !RiftData.ContinueButton.IsEnabled);
+                await Coroutine.Wait(1000, () => !RiftData.VendorDialog.IsVisible && !RiftData.ContinueButton.IsVisible && !RiftData.ContinueButton.IsEnabled);
                 return false;
             }
 

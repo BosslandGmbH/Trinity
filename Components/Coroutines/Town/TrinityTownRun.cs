@@ -163,8 +163,7 @@ namespace Trinity.Components.Coroutines.Town
 
                 Core.Logger.Log("Finished Town Run woo!");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(15);
-                IsWantingTownRun = false;
-
+                
                 if (StartedOutOfTown)
                 {
                     StartedOutOfTown = false;
