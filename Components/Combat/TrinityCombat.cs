@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Combat.Resources;
 using Trinity.Components.Coroutines;
+using Trinity.Components.Coroutines.Town;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Zeta.Bot;
@@ -56,11 +57,19 @@ namespace Trinity.Components.Combat
         /// </summary>
         public static async Task<bool> MainCombatTask()
         {
-            if (!ZetaDia.IsInGame || ZetaDia.Globals.IsLoadingWorld || !ZetaDia.Me.IsValid)
+            if (!ZetaDia.IsInGame ||
+                ZetaDia.Globals.IsLoadingWorld ||
+                !ZetaDia.Me.IsValid ||
+                ZetaDia.Me.IsDead)
+            {
                 return false;
+            }
 
-            if (Core.IsOutOfGame || Core.Player.IsDead)
+            if (ZetaDia.IsInTown &&
+                TrinityTownRun.IsVendoring)
+            {
                 return false;
+            }
 
             if (!Core.Scenes.CurrentWorldScenes.Any())
                 return false;
@@ -73,6 +82,7 @@ namespace Trinity.Components.Combat
             if (!await UsePotion.DrinkPotion())
                 return true;
 
+            // TODO: Why is OpenTreasureBags called during combat? Move to Townrun.
             await OpenTreasureBags.Execute();
 
             if (!await VacuumItems.Execute())

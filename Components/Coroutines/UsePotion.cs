@@ -30,7 +30,9 @@ namespace Trinity.Components.Coroutines
                 !ZetaDia.Me.IsFullyValid() ||
                 ZetaDia.Me.IsDead ||
                 Combat.TrinityCombat.Routines.Current == null)
+            {
                 return true;
+            }
 
             if (ZetaDia.Me.HitpointsCurrentPct > Combat.TrinityCombat.Routines.Current.PotionHealthPct)
                 return true;
