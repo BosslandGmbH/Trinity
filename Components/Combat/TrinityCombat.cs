@@ -74,7 +74,9 @@ namespace Trinity.Components.Combat
                 return true;
 
             await OpenTreasureBags.Execute();
-            await VacuumItems.Execute();
+
+            if (!await VacuumItems.Execute())
+                return true;
 
             var target = Weighting.WeightActors(Core.Targets);
 
