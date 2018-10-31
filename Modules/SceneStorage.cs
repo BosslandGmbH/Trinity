@@ -67,17 +67,17 @@ namespace Trinity.Modules
 
             if (_currentWorld != currentWorldId)
             {
-                //if (GameData.MenuWorldSnoIds.Contains(ZetaDia.Globals.WorldSnoId))
-                //{
-                //    Core.Logger.Debug("[SceneStorage] Left Game....");
-                //    Reset();
-                //    return;
-                //}
-                //if (ZetaDia.Globals.IsLoadingWorld)
-                //{
-                //    Core.Logger.Debug("[SceneStorage] World loading....");
-                //    return;
-                //}
+                if (!ZetaDia.IsInGame)
+                {
+                    Core.Logger.Debug("[SceneStorage] Left Game....");
+                    Reset();
+                    return;
+                }
+                if (ZetaDia.Globals.IsLoadingWorld)
+                {
+                    Core.Logger.Debug("[SceneStorage] World loading....");
+                    return;
+                }
 
                 Core.Logger.Debug("[SceneStorage] World has changed from {0} to {1}", _currentWorld, currentWorldId);
                 _currentWorld = currentWorldId;
