@@ -70,7 +70,9 @@ namespace Trinity.Components.Combat
             if (Routines.Current.ShouldReturnStartResult)
                 return startHookResult;
 
-            await UsePotion.Execute();
+            if (!await UsePotion.DrinkPotion())
+                return true;
+
             await OpenTreasureBags.Execute();
             await VacuumItems.Execute();
 
