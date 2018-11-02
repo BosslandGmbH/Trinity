@@ -123,12 +123,9 @@ namespace Trinity.Components.Coroutines.Town
             if (!ZetaDia.IsInTown)
                 return CoroutineResult.NoAction;
 
-            var stashItems = Core.Inventory.Backpack.Where(ShouldStash).ToList();
-            if (!stashItems.Any())
-                return CoroutineResult.NoAction;
-
-            Core.Logger.Verbose($"[StashItems] Now to stash {stashItems.Count} items");
-            stashItems.ForEach(i => Core.Logger.Debug($"[StashItems] Stashing: {i.Name} ({i.ActorSnoId}) InternalName={i.InternalName} Ancient={i.IsAncient} Ann={i.AnnId}"));
+            var item = Core.Inventory.Backpack.FirstOrDefault(ShouldStash);
+            if (item == null)
+                return CoroutineResult.Done;
 
             if (!UIElements.StashWindow.IsVisible)
             {
@@ -146,7 +143,7 @@ namespace Trinity.Components.Coroutines.Town
 
             if (Core.Settings.Items.BuyStashTabs && StashPagesAvailableToPurchase)
             {
-                Core.Logger.Error("[StashItems] Attempting to buy stash pages");
+                s_logger.Error($"[{nameof(StashItems)}] Attempting to buy stash pages");
                 InventoryManager.BuySharedStashSlots();
             }
 
@@ -154,30 +151,25 @@ namespace Trinity.Components.Coroutines.Town
             await StackRamaladnisGift();
             await StackCraftingMaterials();
 
-            // Get the first item to stash...
-            var item = Core.Inventory.Backpack.FirstOrDefault(ShouldStash);
-            if (item == null)
-                return CoroutineResult.Done;
-
             try
             {
                 item.OnUpdated(); // make sure wrong col/row/location is not cached after a move.
                 var page = GetBestStashLocation(item, out var col, out var row);
                 if (page == -1)
                 {
-                    Core.Logger.Verbose($"[StashItems] No place to put item, stash is probably full ({item.Name} [{col},{row}] Page={page})");
+                    s_logger.Error($"[{nameof(StashItems)}] No place to put item, stash is probably full ({item.Name} [{col},{row}] Page={page})");
                     HandleFullStash();
                     return CoroutineResult.Failed;
                 }
 
                 if (page != InventoryManager.CurrentStashPage)
                 {
-                    Core.Logger.Verbose($"[StashItems] Changing to stash page: {page}");
+                    s_logger.Debug($"[{nameof(StashItems)}] Changing to stash page: {page}");
                     InventoryManager.SwitchStashPage(page);
                     return CoroutineResult.Running;
                 }
 
-                Core.Logger.Debug($"[StashItems] Stashing: {item.Name} ({item.ActorSnoId}) [{item.InventoryColumn},{item.InventoryRow} {item.InventorySlot}] Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} InternalName={item.InternalName} StashPage={page}");
+                s_logger.Info($"[{nameof(StashItems)}] Stashing: {item.Name} ({item.ActorSnoId}) [{item.InventoryColumn},{item.InventoryRow} {item.InventorySlot}] Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} InternalName={item.InternalName} StashPage={page}");
 
                 ItemEvents.FireItemStashed(item);
                 InventoryManager.MoveItem(
@@ -189,7 +181,7 @@ namespace Trinity.Components.Coroutines.Town
             }
             catch (Exception ex)
             {
-                Core.Logger.Log($"Exception Stashing Item: {ex}");
+                s_logger.Error($"[{nameof(StashItems)}] Exception Stashing Item", ex);
             }
 
             return CoroutineResult.Running;
