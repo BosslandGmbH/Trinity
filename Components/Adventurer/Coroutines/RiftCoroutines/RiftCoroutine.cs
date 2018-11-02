@@ -254,7 +254,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             if (!(Orek.IsValid &&
                   await CommonCoroutines.MoveAndInteract(
                       Orek,
-                      () => !Orek.IsQuestGiver) == CoroutineResult.Running))
+                      () => !Orek.IsQuestGiver) != CoroutineResult.Running))
             {
                 return CoroutineResult.Running;
             }

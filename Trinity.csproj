@@ -225,7 +225,6 @@
     <Compile Include="Components\Adventurer\Coroutines\KeywardenCoroutines\KeywardenDataFactory.cs" />
     <Compile Include="Components\Adventurer\Coroutines\NavigationCoroutine.cs" />
     <Compile Include="Components\Adventurer\Coroutines\RiftCoroutines\RiftCoroutine.cs" />
-    <Compile Include="Components\Adventurer\Coroutines\RiftCoroutines\UpgradeGemsCoroutine.cs" />
     <Compile Include="Components\Adventurer\Coroutines\TownPortalCoroutine.cs" />
     <Compile Include="Components\Adventurer\Coroutines\UsePortalCoroutine.cs" />
     <Compile Include="Components\Adventurer\Coroutines\WaitCoroutine.cs" />
