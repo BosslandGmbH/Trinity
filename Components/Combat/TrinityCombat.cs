@@ -79,8 +79,9 @@ namespace Trinity.Components.Combat
             if (Routines.Current.ShouldReturnStartResult)
                 return startHookResult;
 
-            if (!await UsePotion.DrinkPotion())
-                return true;
+            // We don't really care about the result of DrinkPotion as it will always return
+            // either CoroutineStatus.NoAction or CoroutineStatus.Done.
+            await UsePotion.DrinkPotion();
 
             // TODO: Why is OpenTreasureBags called during combat? Move to Townrun.
             await OpenTreasureBags.Execute();
