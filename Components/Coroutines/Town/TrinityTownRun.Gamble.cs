@@ -39,8 +39,12 @@ namespace Trinity.Components.Coroutines.Town
 
         public static async Task<bool> EnsureKadalaWindow()
         {
-            if (!await CommonCoroutines.MoveAndInteract(TownInfo.Kadala.GetActor(), () => UIElements.VendorWindow.IsVisible))
+            if (await CommonCoroutines.MoveAndInteract(
+                    TownInfo.Kadala.GetActor(),
+                    () => UIElements.VendorWindow.IsVisible) == CoroutineResult.Running)
+            {
                 return false;
+            }
             return UIElements.VendorWindow.IsVisible;
         }
 
@@ -52,7 +56,9 @@ namespace Trinity.Components.Coroutines.Town
                     !ZetaDia.IsInTown ||
                     ZetaDia.Storage.CurrentWorldType != Act.OpenWorld ||
                     BrainBehavior.GreaterRiftInProgress)
+                {
                     return false;
+                }
 
                 if (Core.Settings.Items.GamblingMode == SettingMode.Disabled)
                     return false;
@@ -94,18 +100,18 @@ namespace Trinity.Components.Coroutines.Town
             }
         }
 
-        public static async Task<bool> Gamble()
+        public static async Task<CoroutineResult> Gamble()
         {
             if (!IsGamblePossible)
-                return true;
+                return CoroutineResult.Done;
 
             if (!await EnsureKadalaWindow())
-                return false;
+                return CoroutineResult.Running;
 
             if (!await BuyItem())
-                return false;
+                return CoroutineResult.Running;
 
-            return false;
+            return CoroutineResult.Running;
         }
 
         private static async Task<bool> BuyItem()

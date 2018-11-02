@@ -207,7 +207,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 : ActorFinder.FindObject(_actorId);
             return actor;
         }
-        
+
         private async Task<bool> Interacting()
         {
             if (ZetaDia.Me.IsFullyValid() && (_castWaitStartTime.Subtract(DateTime.UtcNow).TotalSeconds < 10 || _castWaitStartTime == DateTime.MinValue))
@@ -344,7 +344,10 @@ namespace Trinity.Components.Adventurer.Coroutines
 
             Core.Logger.Debug($"Attempting to interact with {((SNOActor)actor.ActorSnoId)} at distance {actor.Distance} #{_currentInteractAttempt}");
 
-            while (!await CommonCoroutines.MoveAndInteract(actor, () => true))
+            // TODO: Fix condition here.
+            while (await CommonCoroutines.MoveAndInteract(
+                       actor,
+                       () => true) == Zeta.Bot.Coroutines.CoroutineResult.Running)
             {
                 await Coroutine.Yield(); // Coroutine.Sleep(300);
             }

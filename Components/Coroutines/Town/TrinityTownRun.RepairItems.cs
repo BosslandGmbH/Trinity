@@ -14,13 +14,13 @@ namespace Trinity.Components.Coroutines.Town
 {
     public static partial class TrinityTownRun
     {
-        public static async Task<bool> RepairItems()
+        public static async Task<CoroutineResult> RepairItems()
         {
             if (!ZetaDia.IsInTown)
-                return true;
+                return CoroutineResult.NoAction;
 
             if (!EquipmentNeedsRepair())
-                return true;
+                return CoroutineResult.NoAction;
 
             var coinage = ZetaDia.Storage.PlayerDataManager.ActivePlayerData.Coinage;
             var shouldRepairAll = coinage > InventoryManager.GetRepairCost(true);
@@ -29,7 +29,7 @@ namespace Trinity.Components.Coroutines.Town
                 if (coinage < InventoryManager.GetRepairCost(false))
                 {
                     s_logger.Error($"[{nameof(RepairItems)}] Can't afford to repair");
-                    return true;
+                    return CoroutineResult.Failed;
                 }
             }
 
@@ -42,20 +42,20 @@ namespace Trinity.Components.Coroutines.Town
                 if (repairActor == null)
                 {
                     s_logger.Error($"[{nameof(RepairItems)}] Failed to find somewhere to repair :(");
-                    return true;
+                    return CoroutineResult.Failed;
                 };
 
-                if (!await CommonCoroutines.MoveAndInteract(
+                if (await CommonCoroutines.MoveAndInteract(
                         repairActor.GetActor(),
                         () => GameUI.IsBlackSmithWindowOpen ||
-                              UIElements.VendorWindow.IsVisible))
-                    return false;
+                              UIElements.VendorWindow.IsVisible) == CoroutineResult.Running)
+                    return CoroutineResult.Running;
             }
 
             await Coroutine.Yield();
             s_logger.Info($"[{nameof(RepairItems)}] Repairing equipment while at this vendor");
             Repair(shouldRepairAll);
-            return true;
+            return CoroutineResult.Done;
         }
 
         private static void Repair(bool shouldRepairAll)

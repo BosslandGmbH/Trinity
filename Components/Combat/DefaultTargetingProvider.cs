@@ -106,7 +106,7 @@ namespace Trinity.Components.Combat
             if (target.IsGizmo && target.ToDiaObject() is DiaGizmo obj)
             {
                 // TODO: Fix the interaction condition here.
-                if (!await CommonCoroutines.MoveAndInteract(obj, () => obj.HasBeenOperated))
+                if (await CommonCoroutines.MoveAndInteract(obj, () => obj.HasBeenOperated) == CoroutineResult.Running)
                     return true;
 
                 Clear();

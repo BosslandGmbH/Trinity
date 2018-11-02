@@ -1,6 +1,4 @@
 ﻿using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -14,24 +12,22 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using Trinity.Components.Coroutines;
 using Trinity.Components.Coroutines.Town;
-using Trinity.Framework.Objects.Enums;
-using Zeta.Bot;
-using Zeta.Common;
-using Zeta.Game;
-using Zeta.Game.Internals.Actors;
-using Zeta.TreeSharp;
-
-using UIElement = Zeta.Game.Internals.UIElement;
-
-// For Debug Watch Panel Namespace.
-
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
+using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Trinity.UI.Visualizer;
+using Zeta.Bot;
+using Zeta.Bot.Coroutines;
+using Zeta.Common;
+using Zeta.Game;
+using Zeta.Game.Internals.Actors;
+using Zeta.TreeSharp;
 using CurrencyType = Zeta.Game.CurrencyType;
-
+using UIElement = Zeta.Game.Internals.UIElement;
 
 namespace Trinity.UI
 {
@@ -39,7 +35,6 @@ namespace Trinity.UI
     {
         private static UniformGrid _tabGrid;
         private static TabItem _tabItem;
-        private static DateTime LastStartedConvert = DateTime.UtcNow;
 
         internal static void InstallTab()
         {
@@ -55,7 +50,7 @@ namespace Trinity.UI
             //           $"CurrenThreadId={Thread.CurrentThread.ManagedThreadId}" +
             //           $"CanAccessMainWindow={Application.Current.MainWindow.CheckAccess()}");
 
-            if (!Application.Current.MainWindow.CheckAccess())
+            if (Application.Current.MainWindow != null && !Application.Current.MainWindow.CheckAccess())
             {
                 Core.Logger.Log("Current Thread {0} '{1}' cannot access MainWindow Dispatcher",
                     Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread.Name);
@@ -63,107 +58,108 @@ namespace Trinity.UI
                 return;
             }
 
-            Application.Current.MainWindow.Dispatcher.Invoke(() =>
-            {
-                var mainWindow = Application.Current.MainWindow;
-
-                _tabGrid = new UniformGrid
+            if (Application.Current.MainWindow != null)
+                Application.Current.MainWindow.Dispatcher.Invoke(() =>
                 {
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    Columns = 4,
-                    MaxHeight = 180,
-                    Margin = new Thickness(0, 0, 16, 0)
-                };
+                    var mainWindow = Application.Current.MainWindow;
 
-                CreateStretchyGroup(string.Empty, new List<Control>
-                {
-                    CreateMajorButton("Configure", ShowMainTrinityUIEventHandler),
-                    CreateMajorButton("Open Visualizer", OpenRadarButtonHandler)
+                    _tabGrid = new UniformGrid
+                    {
+                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        Columns = 4,
+                        MaxHeight = 180,
+                        Margin = new Thickness(0, 0, 16, 0)
+                    };
+
+                    CreateStretchyGroup(string.Empty, new List<Control>
+                    {
+                        CreateMajorButton("Configure", ShowMainTrinityUIEventHandler),
+                        CreateMajorButton("Open Visualizer", OpenRadarButtonHandler)
+                    });
+
+                    CreateGroup("Items", new List<Control>
+                    {
+                        CreateButton("Sort Backpack", SortBackEventHandler),
+                        CreateButton("Sort Stash", SortStashEventHandler),
+                        CreateButton("Stack Materials", StackCraftingMaterialsInStash),
+                        CreateButton("Stash Backpack", DepositBackpackToStash),
+                    });
+
+                    CreateGroup("Cube Backpack", new List<Control>
+                    {
+                        CreateButton("Upgrade Rares", RunUpgradeBackpackRares),
+                        CreateButton("Extract Powers", RunExtractBackpackPowers),
+                        CreateButton("Convert to Magic", btnClick_ConvertToBlue),
+                        CreateButton("Convert to Common", btnClick_ConvertToCommon),
+                        CreateButton("Convert to Rare", btnClick_ConvertToRare),
+
+                        //CreateButton("Find New ActorIds", GetNewActorSNOsEventHandler),
+                        ////CreateButton("Log Invalid Items", LogInvalidHandler),
+                        //CreateButton("> Gizmo Attribtues", StartGizmoTestHandler),
+                        //CreateButton("> Unit Attribtues", StartUnitTestHandler),
+                        //CreateButton("> Player Attribtues", StartPlayerTestHandler),
+                        ////CreateButton("> Log Power Data", LogPowerDataHandler),
+                        ////CreateButton("Dump Item Powers", StartDataTestHandler),
+                        ////CreateButton("> Buff Test", StartBuffTestHandler),
+                        ////CreateButton("> Stop Tests", StopTestHandler),
+                        //CreateButton("> Unit Monitor", StartUnitMonitor),
+                        //CreateButton("> Player Monitor", StartPlayerMonitor),
+                    });
+
+                    CreateGroup("Tools", new List<Control>
+                    {
+                        CreateButton("Dump My Build", DumpBuildEventHandler),
+                        CreateButton("Drop Legendaries", DropLegendariesEventHandler),
+                        //CreateButton("Log Run Time", btnClick_LogRunTime),
+                        CreateButton("Open Log File", OpenLogFileHandler),
+                        CreateButton("Open Settings File", OpenSettingsFileHandler),
+
+                        //CreateButton("Log Town Actor", LogTownActor),
+                        //CreateButton("Test UIElement", TestUIElement),
+                        //CreateButton("Test SNOReader", TestSNOReader),
+                        //CreateButton("Dump Offsets", DumpOffsets),
+                        //CreateButton("Start Internals", StartInternals),
+                        //CreateButton("Stop Internals", StopInternals),
+                        //CreateButton("Clsoe Vendor", CloseVendorWindowTest),
+
+                        //CreateButton("Test", TestUIElement),
+
+                        //CreateButton("Upgrade Rares", RunUpgradeBackpackRares),
+                        //CreateButton("Extract Powers", ExtractBackpackPowers),
+                        CreateButton("ItemList Check", btnClick_TestItemList),
+
+                        //CreateButton("Stash Test", StashItems),
+                        //CreateButton("Test Internals", TestInternals),
+                    });
+
+                    //CreateButton("Scan UIElement", btnClick_ScanUIElement)
+                    //CreateButton("Reload Item Rules", ReloadItemRulesEventHandler);
+                    //CreateButton("Show Cache", ShowCacheWindowEventHandler);
+                    //CreateButton("Open Radar", OpenRadarButtonHandler);
+                    //CreateButton("Start Progression", StartProgressionTestHandler);
+                    //CreateButton("Stop Progression", StopProgressionTestHandler);
+                    //CreateButton("Cache Test", CacheTestCacheEventHandler);
+                    //CreateButton("Special Test", btnClick_SpecialTestHandler);
+                    //CreateButton("1000 Rare => Magic", btnClick_MassConvertRareToMagic);
+                    //CreateButton("Move to Stash", btnClick_MoveToStash);
+                    //CreateButton("Move to Cube", btnClick_MoveToCube);
+                    //CreateButton("Rares => Legendary", btnClick_UpgradeRares);
+                    //CreateButton("Test1", btnClick_Test1);
+                    //CreateButton("Test2", btnClick_HijackTest);
+
+                    _tabItem = new TabItem
+                    {
+                        Header = "Trinity",
+                        Content = _tabGrid
+                    };
+
+                    var tabs = mainWindow.FindName("tabControlMain") as TabControl;
+                    if (tabs == null)
+                        return;
+
+                    tabs.Items.Add(_tabItem);
                 });
-
-                CreateGroup("Items", new List<Control>
-                {
-                    CreateButton("Sort Backpack", SortBackEventHandler),
-                    CreateButton("Sort Stash", SortStashEventHandler),
-                    CreateButton("Stack Materials", StackCraftingMaterialsInStash),
-                    CreateButton("Stash Backpack", DepositBackpackToStash),
-                });
-
-                CreateGroup("Cube Backpack", new List<Control>
-                {
-                    CreateButton("Upgrade Rares", RunUpgradeBackpackRares),
-                    CreateButton("Extract Powers", RunExtractBackpackPowers),
-                    CreateButton("Convert to Magic", btnClick_ConvertToBlue),
-                    CreateButton("Convert to Common", btnClick_ConvertToCommon),
-                    CreateButton("Convert to Rare", btnClick_ConvertToRare),
-
-                    //CreateButton("Find New ActorIds", GetNewActorSNOsEventHandler),
-                    ////CreateButton("Log Invalid Items", LogInvalidHandler),
-                    //CreateButton("> Gizmo Attribtues", StartGizmoTestHandler),
-                    //CreateButton("> Unit Attribtues", StartUnitTestHandler),
-                    //CreateButton("> Player Attribtues", StartPlayerTestHandler),
-                    ////CreateButton("> Log Power Data", LogPowerDataHandler),
-                    ////CreateButton("Dump Item Powers", StartDataTestHandler),
-                    ////CreateButton("> Buff Test", StartBuffTestHandler),
-                    ////CreateButton("> Stop Tests", StopTestHandler),
-                    //CreateButton("> Unit Monitor", StartUnitMonitor),
-                    //CreateButton("> Player Monitor", StartPlayerMonitor),
-                });
-
-                CreateGroup("Tools", new List<Control>
-                        {
-                            CreateButton("Dump My Build", DumpBuildEventHandler),
-                            CreateButton("Drop Legendaries", DropLegendariesEventHandler),
-                            //CreateButton("Log Run Time", btnClick_LogRunTime),
-                            CreateButton("Open Log File", OpenLogFileHandler),
-                            CreateButton("Open Settings File", OpenSettingsFileHandler),
-
-                            //CreateButton("Log Town Actor", LogTownActor),
-                            //CreateButton("Test UIElement", TestUIElement),
-                            //CreateButton("Test SNOReader", TestSNOReader),
-                            //CreateButton("Dump Offsets", DumpOffsets),
-                            //CreateButton("Start Internals", StartInternals),
-                            //CreateButton("Stop Internals", StopInternals),
-                            //CreateButton("Clsoe Vendor", CloseVendorWindowTest),
-
-                            //CreateButton("Test", TestUIElement),
-
-                            //CreateButton("Upgrade Rares", RunUpgradeBackpackRares),
-                            //CreateButton("Extract Powers", ExtractBackpackPowers),
-                            CreateButton("ItemList Check", btnClick_TestItemList),
-
-                            //CreateButton("Stash Test", StashItems),
-                            //CreateButton("Test Internals", TestInternals),
-                        });
-
-                //CreateButton("Scan UIElement", btnClick_ScanUIElement)
-                //CreateButton("Reload Item Rules", ReloadItemRulesEventHandler);
-                //CreateButton("Show Cache", ShowCacheWindowEventHandler);
-                //CreateButton("Open Radar", OpenRadarButtonHandler);
-                //CreateButton("Start Progression", StartProgressionTestHandler);
-                //CreateButton("Stop Progression", StopProgressionTestHandler);
-                //CreateButton("Cache Test", CacheTestCacheEventHandler);
-                //CreateButton("Special Test", btnClick_SpecialTestHandler);
-                //CreateButton("1000 Rare => Magic", btnClick_MassConvertRareToMagic);
-                //CreateButton("Move to Stash", btnClick_MoveToStash);
-                //CreateButton("Move to Cube", btnClick_MoveToCube);
-                //CreateButton("Rares => Legendary", btnClick_UpgradeRares);
-                //CreateButton("Test1", btnClick_Test1);
-                //CreateButton("Test2", btnClick_HijackTest);
-
-                _tabItem = new TabItem
-                {
-                    Header = "Trinity",
-                    Content = _tabGrid
-                };
-
-                var tabs = mainWindow.FindName("tabControlMain") as TabControl;
-                if (tabs == null)
-                    return;
-
-                tabs.Items.Add(_tabItem);
-            });
         }
 
         private static void OpenSettingsFileHandler(object sender, RoutedEventArgs e)
@@ -297,7 +293,9 @@ namespace Trinity.UI
                 if (!BotMain.IsRunning)
                 {
                     //ActorManager.Start();
-                    TaskDispatcher.Start(async ret => !await TrinityTownRun.StashItems(), o => o == null || (RunStatus)o != RunStatus.Running);
+                    TaskDispatcher.Start(
+                        async ret => await TrinityTownRun.StashItems() != CoroutineResult.Running,
+                        o => o == null || (RunStatus)o != RunStatus.Running);
                 }
             }
             catch (Exception ex)
@@ -1153,7 +1151,8 @@ namespace Trinity.UI
             {
                 var alltypes = Enum.GetValues(typeof(ItemSelectionType)).Cast<ItemSelectionType>().ToList();
 
-                CoroutineHelper.RunCoroutine(async () => !await TrinityTownRun.TransmuteRareToLegendary(alltypes));
+                CoroutineHelper.RunCoroutine(async () =>
+                    await TrinityTownRun.TransmuteRareToLegendary(alltypes) != CoroutineResult.Running);
             }
             catch (Exception ex)
             {
@@ -1165,7 +1164,8 @@ namespace Trinity.UI
         {
             try
             {
-                CoroutineHelper.RunCoroutine(async () => !await TrinityTownRun.ExtractLegendaryPowers());
+                CoroutineHelper.RunCoroutine(async () =>
+                    await TrinityTownRun.ExtractLegendaryPowers() != CoroutineResult.Running);
             }
             catch (Exception ex)
             {
@@ -1177,7 +1177,8 @@ namespace Trinity.UI
         {
             try
             {
-                CoroutineHelper.RunCoroutine(async () => !await TrinityTownRun.ExtractAllBackpack());
+                CoroutineHelper.RunCoroutine(async () =>
+                    await TrinityTownRun.ExtractAllBackpack() != CoroutineResult.Running);
             }
             catch (Exception ex)
             {
@@ -1242,7 +1243,8 @@ namespace Trinity.UI
             try
             {
                 Core.Logger.Log("Starting Conversion of Backpack to Magic Dust.");
-                TaskDispatcher.Start(async ret => !await TrinityTownRun.TransmuteMaterials(CurrencyType.ArcaneDust));
+                TaskDispatcher.Start(async ret =>
+                    await TrinityTownRun.TransmuteMaterials(CurrencyType.ArcaneDust) != CoroutineResult.Running);
             }
             catch (Exception ex)
             {
@@ -1255,7 +1257,8 @@ namespace Trinity.UI
             try
             {
                 Core.Logger.Log("Starting Conversion of Backpack to Reusable Parts.");
-                TaskDispatcher.Start(async ret => !await TrinityTownRun.TransmuteMaterials(CurrencyType.ReusableParts));
+                TaskDispatcher.Start(async ret =>
+                    await TrinityTownRun.TransmuteMaterials(CurrencyType.ReusableParts) != CoroutineResult.Running);
             }
             catch (Exception ex)
             {
@@ -1268,7 +1271,8 @@ namespace Trinity.UI
             try
             {
                 Core.Logger.Log("Starting Conversion of Backpack to Veiled Crystals.");
-                TaskDispatcher.Start(async ret => !await TrinityTownRun.TransmuteMaterials(CurrencyType.VeiledCrystal));
+                TaskDispatcher.Start(async ret =>
+                    await TrinityTownRun.TransmuteMaterials(CurrencyType.VeiledCrystal) != CoroutineResult.Running);
             }
             catch (Exception ex)
             {
@@ -1376,10 +1380,16 @@ namespace Trinity.UI
             {
                 using (ZetaDia.Memory.AcquireFrame())
                 {
-                    InventoryManager.Backpack.Where(i => i.ItemQualityLevel == ItemQuality.Legendary).ForEach(i => i.Drop());
+                    InventoryManager.Backpack
+                        .Where(i => i.ItemQualityLevel == ItemQuality.Legendary)
+                        .ForEach(i => i.Drop());
 
-                    if (BotMain.IsRunning && !BotMain.IsPausedForStateExecution)
+                    if (BotMain.IsRunning &&
+                        !BotMain.IsPausedForStateExecution)
+                    {
+                        // TODO: Why should the bot pause here...?
                         BotMain.PauseFor(TimeSpan.FromSeconds(2));
+                    }
                 }
             }
             catch (Exception ex)
@@ -1421,7 +1431,8 @@ namespace Trinity.UI
         {
             try
             {
-                TaskDispatcher.Start(async ret => !await TrinityTownRun.StashItems());
+                TaskDispatcher.Start(async ret =>
+                    await TrinityTownRun.StashItems() != CoroutineResult.Running);
 
                 ItemSort.SortStash();
             }
@@ -1460,10 +1471,13 @@ namespace Trinity.UI
                 () =>
                 {
                     var mainWindow = Application.Current.MainWindow;
-                    var tabs = mainWindow.FindName("tabControlMain") as TabControl;
-                    if (tabs == null)
-                        return;
-                    tabs.Items.Remove(_tabItem);
+                    if (mainWindow != null)
+                    {
+                        var tabs = mainWindow.FindName("tabControlMain") as TabControl;
+                        if (tabs == null)
+                            return;
+                        tabs.Items.Remove(_tabItem);
+                    }
                 }
                 );
         }
@@ -1505,7 +1519,7 @@ namespace Trinity.UI
             var group = new UniformGrid
             {
                 Columns = 1,
-                Background = BackgroundBrush,
+                Background = s_backgroundBrush,
                 Height = 160,
                 Margin = new Thickness(10, 10, 10, 10),
             };
@@ -1522,7 +1536,7 @@ namespace Trinity.UI
             _tabGrid.Children.Add(group);
         }
 
-        private static readonly SolidColorBrush BackgroundBrush = new SolidColorBrush(Color.FromRgb(67, 67, 67));
+        private static readonly SolidColorBrush s_backgroundBrush = new SolidColorBrush(Color.FromRgb(67, 67, 67));
 
         //private static Dictionary<int, AttributeItem> _lastAtts;
         //private static int _lastAnn;
@@ -1532,7 +1546,7 @@ namespace Trinity.UI
         {
             var group = new StackPanel
             {
-                Background = BackgroundBrush,
+                Background = s_backgroundBrush,
                 Height = 170,
                 Margin = new Thickness(7, -13, 0, 0),
                 ClipToBounds = false

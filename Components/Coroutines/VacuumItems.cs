@@ -47,8 +47,12 @@ namespace Trinity.Components.Coroutines
                 $"[{nameof(VacuumItems)}] {currentPickup.Name} ({currentPickup.ActorSnoId}) InternamName={currentPickup.InternalName} GbId={currentPickup.GameBalanceId}";
 
             // Use the coroutine to pick up the item.
-            if (!await CommonCoroutines.MoveAndInteract(currentPickup.ToDiaObject(), () => currentPickup.ActorSnoId == 0))
+            if (await CommonCoroutines.MoveAndInteract(
+                    currentPickup.ToDiaObject(),
+                    () => currentPickup.ActorSnoId == 0) == CoroutineResult.Running)
+            {
                 return false;
+            }
 
             // The item was picked up trigger RecordSpell and log the info collected above.
             SpellHistory.RecordSpell(SNOPower.Axe_Operate_Gizmo);

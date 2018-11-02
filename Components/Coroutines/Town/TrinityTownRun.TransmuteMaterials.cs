@@ -7,6 +7,7 @@ using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Settings;
+using Zeta.Bot.Coroutines;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -92,15 +93,15 @@ namespace Trinity.Components.Coroutines.Town
             return true;
         }
 
-        public static async Task<bool> TransmuteMaterials()
+        public static async Task<CoroutineResult> TransmuteMaterials()
         {
             return await TransmuteMaterials(null);
         }
 
-        public static async Task<bool> TransmuteMaterials(List<ItemSelectionType> types)
+        public static async Task<CoroutineResult> TransmuteMaterials(List<ItemSelectionType> types)
         {
             if (!IsItemsToMaterialTransformationPossible)
-                return true;
+                return CoroutineResult.NoAction;
 
             // * Never create more of the material you have most of.
             // * Always use the material you have most of to create others.
@@ -114,48 +115,49 @@ namespace Trinity.Components.Coroutines.Town
             var allowedTypes = settingsTypes.Select(GetCurrencyType);
             var otherType = orderedTypes.Skip(1).FirstOrDefault(t => allowedTypes.Contains(t));
 
-            if (!await TransmuteMaterials(highestCount, otherType))
-                return false;
+            if (await TransmuteMaterials(highestCount, otherType) == CoroutineResult.Running)
+                return CoroutineResult.Running;
 
             s_logger.Verbose($"[{nameof(TransmuteMaterials)}] CubeItemsToMaterials Finished!");
-            return true;
+            return CoroutineResult.Done;
         }
 
         /// <summary>
         /// Converts crafting materials into other types of crafting materials
         /// </summary>
         /// <param name="to">the type of material you will get more of</param>
-        public static async Task<bool> TransmuteMaterials(CurrencyType to)
+        public static async Task<CoroutineResult> TransmuteMaterials(CurrencyType to)
         {
             foreach (var currency in GetOtherCurrency(to).OrderByDescending(c => Core.Inventory.Currency.GetCurrency(c)))
             {
-                await TransmuteMaterials(currency, to);
+                if (await TransmuteMaterials(currency, to) == CoroutineResult.Running)
+                    return CoroutineResult.Running;
             }
-            return true;
+            return CoroutineResult.Done;
         }
 
-        public static async Task<bool> TransmuteMaterials(CurrencyType from, CurrencyType to)
+        public static async Task<CoroutineResult> TransmuteMaterials(CurrencyType from, CurrencyType to)
         {
             if (!ZetaDia.IsInTown)
-                return true;
+                return CoroutineResult.NoAction;
 
             if (!CurrencyConversionTypes.Contains(to) || !CurrencyConversionTypes.Contains(from))
             {
                 Core.Logger.Log($"[{nameof(TransmuteMaterials)}] Unable to convert from '{from}' to '{to}'");
-                return true;
+                return CoroutineResult.NoAction;
             }
 
             if (!IsMaterialTransmutationPossible(from, to))
-                return true;
+                return CoroutineResult.NoAction;
 
             var item = GetSacraficialItems(to).First();
             var recipe = GetRecipeFromCurrency(from);
 
-            if (!await TransmuteRecipe(recipe, item))
-                return false;
+            if (await TransmuteRecipe(recipe, item) == CoroutineResult.Running)
+                return CoroutineResult.Running;
 
             Core.Logger.Log($"[{nameof(TransmuteMaterials)}] Converted from '{from}' to '{to}'");
-            return false;
+            return CoroutineResult.Done;
         }
 
         public static bool HasCurrency(CurrencyType from)

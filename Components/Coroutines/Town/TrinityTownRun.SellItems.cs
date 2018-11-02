@@ -33,21 +33,21 @@ namespace Trinity.Components.Coroutines.Town
                    !Combat.TrinityCombat.Loot.ShouldStash(i);
         }
 
-        public static async Task<bool> SellItems()
+        public static async Task<CoroutineResult> SellItems()
         {
             if (!ZetaDia.IsInTown)
-                return true;
+                return CoroutineResult.NoAction;
 
             var sellItem = Core.Inventory.Backpack
                 .FirstOrDefault(i => ShouldSell(i) &&
                                      InventoryManager.CanSellItem(i.ToAcdItem()));
             if (sellItem == null)
             {
-                if (!await RepairItems())
-                    return false;
+                if (await RepairItems() == CoroutineResult.Running)
+                    return CoroutineResult.Running;
 
                 GameUI.CloseVendorWindow();
-                return true;
+                return CoroutineResult.Done;
             }
 
             if (!UIElements.VendorWindow.IsVisible)
@@ -56,24 +56,28 @@ namespace Trinity.Components.Coroutines.Town
                 if (merchant == null)
                 {
                     s_logger.Error($"[{nameof(SellItems)}] Unable to find merchant info for this area :(");
-                    return true;
+                    return CoroutineResult.Failed;
                 }
 
-                if (!await CommonCoroutines.MoveAndInteract(merchant.GetActor(), () => UIElements.VendorWindow.IsVisible))
-                    return false;
+                if (await CommonCoroutines.MoveAndInteract(
+                        merchant.GetActor(),
+                        () => UIElements.VendorWindow.IsVisible) == CoroutineResult.Running)
+                {
+                    return CoroutineResult.Running;
+                }
             }
 
             if (!sellItem.IsValid || sellItem.IsUnidentified)
             {
                 s_logger.Debug($"[{nameof(SellItems)}] Invalid Items Detected: IsValid={sellItem.IsValid} IsUnidentified={sellItem.IsUnidentified}");
-                return false;
+                return CoroutineResult.Failed;
             }
 
             s_logger.Debug($"[{nameof(SellItems)}] Selling: {sellItem.Name} ({sellItem.ActorSnoId}) Quality={sellItem.ItemQualityLevel} IsAncient={sellItem.IsAncient} Name={sellItem.InternalName}");
             ItemEvents.FireItemSold(sellItem);
             InventoryManager.SellItem(sellItem.ToAcdItem());
             Core.Inventory.InvalidAnnIds.Add(sellItem.AnnId);
-            return false;
+            return CoroutineResult.Running;
         }
     }
 }

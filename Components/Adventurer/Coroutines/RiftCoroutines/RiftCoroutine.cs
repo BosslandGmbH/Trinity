@@ -28,6 +28,8 @@ using GizmoType = Zeta.Game.Internals.SNO.GizmoType;
 
 namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 {
+    using CoroutineResult = Zeta.Bot.Coroutines.CoroutineResult;
+
     public static class RiftCoroutine
     {
         private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
@@ -84,18 +86,19 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             if (HolyCow != null)
                 Debugger.Break();
 
-            return await CommonCoroutines.MoveAndInteract(HolyCow, () => false);
+            return await CommonCoroutines.MoveAndInteract(
+                HolyCow,
+                () => false) == CoroutineResult.Running;
         }
 
-        public static async Task<bool> EnsureIsInTown()
+        public static async Task<CoroutineResult> EnsureIsInTown()
         {
             if (!ZetaDia.IsInTown &&
                 await WaypointCoroutine.UseWaypoint(WaypointFactory.ActHubs[Act.A1]))
             {
-                return false;
+                return CoroutineResult.Running;
             }
-
-            return await Coroutine.Wait(TimeSpan.FromSeconds(2), () => ZetaDia.IsInTown);
+            return await Coroutine.Wait(TimeSpan.FromSeconds(2), () => ZetaDia.IsInTown) ? CoroutineResult.Done : CoroutineResult.Running;
         }
 
         public static async Task<bool> OpenRift(RiftType riftType,
@@ -119,7 +122,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
             s_logger.Debug($"[{nameof(OpenRift)}] I have {riftKeys} rift keys.");
 
-            if (!await EnsureIsInTown())
+            if (await EnsureIsInTown() == CoroutineResult.Running)
                 return false;
 
             if (riftKeys <= PluginSettings.Current.MinimumKeys)
@@ -155,33 +158,40 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             if (!s_experienceTracker.IsStarted)
                 s_experienceTracker.Start();
 
-            if (!await CommonCoroutines.MoveAndInteract(lrs, () => UIElements.RiftDialog.IsVisible))
+            if (await CommonCoroutines.MoveAndInteract(
+                    lrs,
+                    () => UIElements.RiftDialog.IsVisible) == CoroutineResult.Running)
+            {
                 return false;
+            }
 
             ZetaDia.Me.OpenRift(level, isEmpowered);
             return await Coroutine.Wait(2000, () => IsRiftPortalOpen);
         }
 
-        public static async Task<bool> EnsureInRift()
+        public static async Task<CoroutineResult> EnsureInRift()
         {
             if (!ZetaDia.IsInTown)
-                return true;
+                return CoroutineResult.NoAction;
 
             if (!IsRiftPortalOpen)
-                return true;
+                return CoroutineResult.NoAction;
 
-            if (RiftPortal == null)
-            {
-                await CommonCoroutines.MoveTo(ZetaDia.Actors.GetActorsOfType<DiaGizmo>()
-                    .Where(g => g.Distance > 10f).OrderBy(g => g.Distance).FirstOrDefault());
-                return false;
-            }
+            if (RiftPortal != null)
+                return await CommonCoroutines.MoveAndInteract(
+                    RiftPortal,
+                    () => ZetaDia.IsInGame &&
+                          !ZetaDia.Globals.IsLoadingWorld &&
+                          !ZetaDia.Globals.IsPlayingCutscene &&
+                          !ZetaDia.IsInTown);
 
-            await CommonCoroutines.MoveAndInteract(RiftPortal, () => ZetaDia.IsInGame &&
-                                                                     !ZetaDia.Globals.IsLoadingWorld &&
-                                                                     !ZetaDia.Globals.IsPlayingCutscene &&
-                                                                     !ZetaDia.IsInTown);
-            return false;
+            // TODO: Make sure we move somewhere we expect the portal to show up.
+            await CommonCoroutines.MoveTo(ZetaDia.Actors.GetActorsOfType<DiaGizmo>()
+                .Where(g => g.Distance > 10f)
+                .OrderBy(g => g.Distance)
+                .FirstOrDefault());
+            return CoroutineResult.Running;
+
         }
 
         public static async Task<bool> ClearRift()
@@ -189,7 +199,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             if (AdvDia.RiftQuest.Step >= RiftStep.UrshiSpawned)
                 return true;
 
-            if (!await EnsureInRift())
+            if (await EnsureInRift() == CoroutineResult.Running)
                 return false;
 
             // TODO: Handle Cow level
@@ -205,27 +215,32 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             return false;
         }
 
-        public static async Task<bool> UpgradeGems()
+        public static async Task<CoroutineResult> UpgradeGems()
         {
             if (AdvDia.RiftQuest.Step != RiftStep.UrshiSpawned)
-                return true;
+                return CoroutineResult.NoAction;
 
-            if (!await EnsureInRift())
-                return false;
+            CoroutineResult previousResult;
+            if ((previousResult = await EnsureInRift()) == CoroutineResult.Running)
+                return CoroutineResult.Running;
+
+            if (previousResult == CoroutineResult.Failed)
+                return CoroutineResult.Failed;
 
             var gemToUpgrade = PluginSettings.Current.Gems.GetUpgradeTarget();
             if (gemToUpgrade == null)
-                return true;
+                return CoroutineResult.NoAction;
 
             return await CommonCoroutines.AttemptUpgradeGem(gemToUpgrade);
         }
 
-        public static async Task<bool> TurnInQuest()
+        public static async Task<CoroutineResult> TurnInQuest()
         {
             if (AdvDia.RiftQuest.Step != RiftStep.Cleared)
-                return true;
-            if (!await EnsureIsInTown())
-                return false;
+                return CoroutineResult.NoAction;
+
+            if (await EnsureIsInTown() == CoroutineResult.Running)
+                return CoroutineResult.Running;
 
             if (Orek == null)
             {
@@ -233,19 +248,21 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                     .Where(g => g.Distance > 10f)
                     .OrderByDescending(g => g.Distance)
                     .FirstOrDefault());
-                return false;
+                return CoroutineResult.Running;
             }
 
             if (!(Orek.IsValid &&
-                  await CommonCoroutines.MoveAndInteract(Orek, () => !Orek.IsQuestGiver)))
+                  await CommonCoroutines.MoveAndInteract(
+                      Orek,
+                      () => !Orek.IsQuestGiver) == CoroutineResult.Running))
             {
-                return false;
+                return CoroutineResult.Running;
             }
 
             if (s_experienceTracker.IsStarted)
                 s_experienceTracker.StopAndReport(nameof(RiftCoroutine));
 
-            return true;
+            return CoroutineResult.Done;
         }
 
         public static async Task<bool> RunRift(RiftType riftType,
@@ -254,10 +271,21 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                                                bool shouldEmpower,
                                                bool runNormalUntilXP)
         {
-            if (BrainBehavior.IsVendoring ||
-                !ZetaDia.IsInGame ||
+            if (!ZetaDia.IsInGame ||
                 ZetaDia.Globals.IsLoadingWorld ||
                 ZetaDia.Globals.IsPlayingCutscene)
+            {
+                return false;
+            }
+
+            CoroutineResult previousResult;
+            if ((previousResult = await TurnInQuest()) == CoroutineResult.Running)
+            {
+                return false;
+            }
+
+            if (BrainBehavior.IsVendoring &&
+                previousResult != CoroutineResult.NoAction)
             {
                 return false;
             }
@@ -279,10 +307,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             if (!await ClearRift())
                 return false;
 
-            if (!await UpgradeGems())
-                return false;
-
-            if (!await TurnInQuest())
+            if (await UpgradeGems() == CoroutineResult.Running)
                 return false;
 
             s_logger.Info("Rift done, let's force a town run...");

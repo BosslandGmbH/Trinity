@@ -146,14 +146,21 @@ namespace Trinity.Components.Coroutines.Town
 
         public static async Task<bool> PutExtractionCandidatesBackToStash()
         {
-            if (!ZetaDia.IsInGame || !ZetaDia.IsInTown)
+            if (!ZetaDia.IsInGame ||
+                !ZetaDia.IsInTown)
+            {
                 return true;
+            }
 
             if (!s_extractionCandidatesTakenFromStash.Any())
                 return true;
 
-            if (!await CommonCoroutines.MoveAndInteract(TownInfo.Stash?.GetActor(), () => UIElements.StashWindow.IsVisible))
+            if (await CommonCoroutines.MoveAndInteract(
+                    TownInfo.Stash?.GetActor(),
+                    () => UIElements.StashWindow.IsVisible) == CoroutineResult.Running)
+            {
                 return false;
+            }
 
             // Find the first item from the list.
             var item = InventoryManager.Backpack.FirstOrDefault(i => s_extractionCandidatesTakenFromStash.Contains(i.AnnId));
@@ -184,54 +191,53 @@ namespace Trinity.Components.Coroutines.Town
             return false;
         }
 
-        public static async Task<bool> ExtractLegendaryPowers()
+        public static async Task<CoroutineResult> ExtractLegendaryPowers()
         {
             if (!IsLegendaryPowerExtractionPossible)
-                return true;
+                return CoroutineResult.NoAction;
 
             var backpackCandidate = GetLegendaryExtractionCandidates(InventorySlot.BackpackItems).FirstOrDefault();
             if (backpackCandidate != null)
             {
-                if (!await ExtractPower(backpackCandidate))
-                    return false;
+                if (await ExtractPower(backpackCandidate) == CoroutineResult.Running)
+                    return CoroutineResult.Running;
 
-                // Signal that we are not done...
-                return false;
+                return CoroutineResult.Running;
             }
 
             if (!await FetchExtractionCandidatesFromStash())
-                return false;
+                return CoroutineResult.Running;
 
             // Make sure we put back anything we removed from stash. Its possible for example that we ran out of materials
             // and the current backpack contents do no longer match the loot rules. Don't want them to be lost.
             if (!await PutExtractionCandidatesBackToStash())
-                return false;
+                return CoroutineResult.Running;
 
             s_logger.Info($"[{nameof(ExtractLegendaryPowers)}] Finished");
-            return true;
+            return CoroutineResult.Done;
         }
 
-        public static async Task<bool> ExtractAllBackpack()
+        public static async Task<CoroutineResult> ExtractAllBackpack()
         {
             var candidate = GetLegendaryExtractionCandidates(InventorySlot.BackpackItems).FirstOrDefault();
             if (candidate == null)
             {
                 Core.Logger.Log($"[{nameof(ExtractAllBackpack)}] Oh no! Out of materials!");
-                return true;
+                return CoroutineResult.NoAction;
             }
             return await ExtractPower(candidate);
         }
 
-        private static async Task<bool> ExtractPower(TrinityItem item)
+        private static async Task<CoroutineResult> ExtractPower(TrinityItem item)
         {
             if (item == null)
-                return true;
+                return CoroutineResult.NoAction;
 
-            if (!await TransmuteRecipe(Zeta.Game.TransmuteRecipe.ExtractLegendaryPower, item))
-                return false;
+            if (await TransmuteRecipe(Zeta.Game.TransmuteRecipe.ExtractLegendaryPower, item) == CoroutineResult.Running)
+                return CoroutineResult.Running;
 
             s_extractionCandidatesTakenFromStash.Remove(item.AnnId);
-            return true;
+            return CoroutineResult.Done;
         }
     }
 }

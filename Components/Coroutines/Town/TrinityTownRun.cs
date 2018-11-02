@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
@@ -30,7 +31,7 @@ namespace Trinity.Components.Coroutines.Town
                                                      .Any(i => i.DurabilityPercent <= CharacterSettings.Instance.RepairWhenDurabilityBelow));
 
         // TODO: Make sure that is actually the portal we came from an not an open Rift portal (might cause a lot of empty meters).
-        public static DiaGizmo ReturnPortal => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true).FirstOrDefault(g => g.IsTownPortal);
+        public static DiaGizmo ReturnPortal => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true).FirstOrDefault(g => g.IsFullyValid() && g.IsTownPortal);
 
         private static readonly Lazy<PropertyInfo> s_vendorProperty = new Lazy<PropertyInfo>(() => typeof(BrainBehavior).GetProperty("IsVendoring"));
         public static bool IsVendoring
@@ -92,107 +93,134 @@ namespace Trinity.Components.Coroutines.Town
 
         }
 
-        public static async Task<bool> EnsureIsInTown()
+        public static async Task<CoroutineResult> EnsureIsInTown()
         {
-            if (ZetaDia.IsInTown) return ZetaDia.IsInTown;
+            if (ZetaDia.IsInTown)
+                return CoroutineResult.NoAction;
 
-            if (!await CommonCoroutines.UseTownPortal(nameof(TrinityTownRun)))
-                return false;
+            CoroutineResult previousResult;
+            if ((previousResult = await CommonCoroutines.UseTownPortal(nameof(TrinityTownRun))) == CoroutineResult.Running)
+                return CoroutineResult.Running;
 
-            _isStartLocationOutOfTown = true;
-            return ZetaDia.IsInTown;
+            if (previousResult == CoroutineResult.Done)
+                _isStartLocationOutOfTown = true;
+
+            return previousResult;
         }
 
-        public static async Task<bool> ReturnToStartLocation()
+        public static async Task<CoroutineResult> ReturnToStartLocation()
         {
-            if (_isStartLocationOutOfTown && ZetaDia.IsInTown)
+            if (_isStartLocationOutOfTown &&
+                ZetaDia.IsInTown)
             {
-                if (!await CommonCoroutines.MoveAndInteract(ReturnPortal, () => ZetaDia.IsInTown))
-                    return false;
+                CoroutineResult previousResult;
+                if ((previousResult = await CommonCoroutines.MoveAndInteract(
+                        ReturnPortal,
+                        () => ZetaDia.IsInTown)) == CoroutineResult.Running)
+                {
+                    return CoroutineResult.Running;
+                }
+
+                if (previousResult == CoroutineResult.Failed)
+                    return CoroutineResult.Failed;
             }
             _isStartLocationOutOfTown = false;
-            return true;
+            return CoroutineResult.Done;
         }
 
-        public static async Task<bool> IdentifyItems()
+        public static async Task<CoroutineResult> IdentifyItems()
         {
             if (!ZetaDia.IsInTown)
-                return true;
+                return CoroutineResult.NoAction;
 
             if (Core.Settings.Items.KeepLegendaryUnid)
             {
                 s_logger.Debug($"[{nameof(IdentifyItems)}] Town run setting 'Keep Legendary Unidentified' - Skipping ID");
-                return true;
+                return CoroutineResult.NoAction;
             }
 
             if (!Core.Inventory.Backpack.Any(i => i.IsUnidentified))
-                return true;
+                return CoroutineResult.Done;
 
             var bookActor = TownInfo.BookOfCain;
             if (bookActor == null)
             {
                 s_logger.Warn($"[{nameof(IdentifyItems)}] TownInfo.BookOfCain not found Act={ZetaDia.CurrentAct} WorldSnoId={ZetaDia.Globals.WorldSnoId}");
-                return true;
+                return CoroutineResult.Failed;
             }
 
-            if (!await CommonCoroutines.MoveAndInteract(
+            if (await CommonCoroutines.MoveAndInteract(
                 bookActor.GetActor(),
-                () => CommonCoroutines.IsInteracting))
+                () => CommonCoroutines.IsInteracting) == CoroutineResult.Running)
             {
-                return false;
+                return CoroutineResult.Running;
             }
 
             s_logger.Info($"[{nameof(IdentifyItems)}] Identifying Items");
             await Coroutine.Wait(TimeSpan.FromSeconds(10), () => !CommonCoroutines.IsInteracting);
-            return false;
+            return CoroutineResult.Running;
         }
 
-        public static async Task<bool> DoTownRun()
+        public static async Task<CoroutineResult> DoTownRun()
         {
             // We're dead, wait till we're alive again...
             if (!ZetaDia.IsInGame ||
                 ZetaDia.Me.IsDead)
-                return true;
+            {
+                return CoroutineResult.NoAction;
+            }
 
             if (!IsVendoring && IsTownRunRequired)
                 IsVendoring = true;
 
             if (!IsVendoring)
-                return true;
+                return CoroutineResult.NoAction;
 
+            CoroutineResult previousResult;
             // Go to town...
-            if (!await EnsureIsInTown())
-                return false;
+            if ((previousResult = await EnsureIsInTown()) == CoroutineResult.Running)
+                return CoroutineResult.Running;
+
+            if (previousResult == CoroutineResult.Failed)
+                return CoroutineResult.Failed;
 
             // Wait for Rift turn in before continue...
-            if (TownInfo.Orek?.GetActor() is DiaUnit orek && orek.IsQuestGiver)
-                return true;
-
-            // Run specified actions when all of them return true we're good to continue...
-            if (!await Any(
-                IdentifyItems,
-                ExtractLegendaryPowers,
-                Gamble,
-                TransmuteRareToLegendary,
-                TransmuteMaterials,
-                DropItems,
-                StashItems,
-                SellItems,
-                SalvageItems,
-                StashItems,
-                RepairItems
-            ))
+            if (TownInfo.Orek?.GetActor() is DiaUnit orek &&
+                orek.IsQuestGiver)
             {
-                return false;
+                return CoroutineResult.NoAction;
             }
 
+            // Run specified actions in sequence...
+            if ((previousResult = await CommonCoroutines.Sequence(
+                    IdentifyItems,
+                    ExtractLegendaryPowers,
+                    Gamble,
+                    TransmuteRareToLegendary,
+                    TransmuteMaterials,
+                    DropItems,
+                    StashItems,
+                    SellItems,
+                    SalvageItems,
+                    StashItems,
+                    RepairItems)) == CoroutineResult.Running)
+            {
+                return CoroutineResult.Running;
+            }
+
+            if (previousResult == CoroutineResult.Failed)
+                return CoroutineResult.Failed;
+
             // Go back where we came from...
-            if (!await ReturnToStartLocation())
-                return false;
+            if ((previousResult = await ReturnToStartLocation()) == CoroutineResult.Running)
+                return CoroutineResult.Running;
+
+            if (previousResult == CoroutineResult.Failed)
+                return CoroutineResult.Failed;
 
             s_logger.Info("Town run finished!");
             IsVendoring = false;
-            return true;
+            return CoroutineResult.Done;
         }
 
         public static async Task<bool> Any(params Func<Task<bool>>[] taskProducers)
@@ -207,9 +235,9 @@ namespace Trinity.Components.Coroutines.Town
 
         public static async Task<bool> TakeReturnPortal()
         {
-            if (!await CommonCoroutines.MoveAndInteract(
-                ReturnPortal,
-                () => ZetaDia.IsInTown))
+            if (await CommonCoroutines.MoveAndInteract(
+                    ReturnPortal,
+                    () => ZetaDia.IsInTown) == CoroutineResult.Running)
             {
                 return false;
             }
@@ -219,9 +247,9 @@ namespace Trinity.Components.Coroutines.Town
 
         public static async Task<bool> EnsureKanaisCube()
         {
-            if (!await CommonCoroutines.MoveAndInteract(
-                TownInfo.KanaisCube.GetActor(),
-                () => UIElements.TransmuteItemsDialog.IsVisible))
+            if (await CommonCoroutines.MoveAndInteract(
+                    TownInfo.KanaisCube.GetActor(),
+                    () => UIElements.TransmuteItemsDialog.IsVisible) == CoroutineResult.Running)
             {
                 return false;
             }
@@ -232,7 +260,7 @@ namespace Trinity.Components.Coroutines.Town
         /// <summary>
         /// Move to Kanai's cube and transmute.
         /// </summary>
-        public static async Task<bool> TransmuteRecipe(TransmuteRecipe recipe, params TrinityItem[] transmuteGroup)
+        public static async Task<CoroutineResult> TransmuteRecipe(TransmuteRecipe recipe, params TrinityItem[] transmuteGroup)
         {
             return await TransmuteRecipe(recipe, transmuteGroup.Select(i => i.AnnId).ToList());
         }
@@ -240,28 +268,28 @@ namespace Trinity.Components.Coroutines.Town
         /// <summary>
         /// Move to Kanai's cube and transmute.
         /// </summary>
-        public static async Task<bool> TransmuteRecipe(TransmuteRecipe recipe, IEnumerable<int> transmuteGroupAnnIds)
+        public static async Task<CoroutineResult> TransmuteRecipe(TransmuteRecipe recipe, IEnumerable<int> transmuteGroupAnnIds)
         {
             if (!ZetaDia.IsInGame)
-                return true;
+                return CoroutineResult.NoAction;
 
             if (!Core.Inventory.Currency.HasCurrency(recipe))
             {
                 s_logger.Error($"[{nameof(TransmuteRecipe)}] Not enough currency for {recipe}");
-                return true;
+                return CoroutineResult.NoAction;
             }
 
             if (!await EnsureKanaisCube())
-                return false;
+                return CoroutineResult.Running;
 
             InventoryManager.TransmuteItems(transmuteGroupAnnIds.ToArray(), recipe);
 
             if (!UIElements.AcceptTransmutationButton.IsEnabled)
-                return false;
+                return CoroutineResult.Running;
 
             UIElements.AcceptTransmutationButton.Click();
             s_logger.Error($"[{nameof(TransmuteRecipe)}] Zip Zap!");
-            return true;
+            return CoroutineResult.Done;
         }
 
         /// <summary>
@@ -310,7 +338,7 @@ namespace Trinity.Components.Coroutines.Town
                 ItemSelectionType.Unknown;
         }
 
-        public static async Task<bool> TransmuteRareToLegendary()
+        public static async Task<CoroutineResult> TransmuteRareToLegendary()
         {
             return await TransmuteRareToLegendary(null);
         }
@@ -319,14 +347,14 @@ namespace Trinity.Components.Coroutines.Town
         /// Convert rares into legendaries with Kanai's cube
         /// </summary>
         /// <param name="types">restrict the rares that can be selected by ItemType</param>
-        public static async Task<bool> TransmuteRareToLegendary(List<ItemSelectionType> types)
+        public static async Task<CoroutineResult> TransmuteRareToLegendary(List<ItemSelectionType> types)
         {
             if (!IsRareToLegendaryTransformationPossible(types))
-                return true;
+                return CoroutineResult.NoAction;
 
             var item = GetBackPackRares(types).First();
             if (item == null)
-                return true;
+                return CoroutineResult.NoAction;
 
             return await TransmuteRecipe(Zeta.Game.TransmuteRecipe.UpgradeRareItem, item);
         }

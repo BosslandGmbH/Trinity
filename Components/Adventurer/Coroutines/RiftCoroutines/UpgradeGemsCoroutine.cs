@@ -19,6 +19,8 @@ using RiftStep = Trinity.Components.Adventurer.Game.Rift.RiftStep;
 
 namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 {
+    using CoroutineResult = Zeta.Bot.Coroutines.CoroutineResult;
+
     public sealed class UpgradeGemsCoroutine : ICoroutine
     {
         public UpgradeGemsCoroutine()
@@ -221,11 +223,17 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
 
             Core.Logger.Debug("[UpgradeGems] Gem upgrades left before the attempt: {0}", ZetaDia.Me.JewelUpgradesLeft);
-            if (!await CommonCoroutines.AttemptUpgradeGem(gemToUpgrade))
+            CoroutineResult previousResult;
+            if ((previousResult = await CommonCoroutines.AttemptUpgradeGem(gemToUpgrade)) == CoroutineResult.Running)
             {
-                Core.Logger.Debug("[UpgradeGems] Gem upgrades left after the attempt: {0}", ZetaDia.Me.JewelUpgradesLeft);
                 return false;
             }
+
+            if (previousResult == CoroutineResult.Failed)
+                return false;
+
+            Core.Logger.Debug("[UpgradeGems] Gem upgrades left after the attempt: {0}", ZetaDia.Me.JewelUpgradesLeft);
+
             var gemUpgradesLeft = ZetaDia.Me.JewelUpgradesLeft;
             if (_gemUpgradesLeft != gemUpgradesLeft)
             {

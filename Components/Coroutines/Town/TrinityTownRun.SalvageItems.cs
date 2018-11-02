@@ -5,6 +5,7 @@ using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Zeta.Bot;
+using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
 using Zeta.Game;
 
@@ -32,10 +33,10 @@ namespace Trinity.Components.Coroutines.Town
 
             return Combat.TrinityCombat.Loot.ShouldSalvage(i) && !ShouldStash(i);
         }
-        public static async Task<bool> SalvageItems()
+        public static async Task<CoroutineResult> SalvageItems()
         {
             if (!ZetaDia.IsInTown)
-                return true;
+                return CoroutineResult.NoAction;
 
             var itemsToSalvage = Core.Inventory.Backpack.Where(ShouldSalvage).Select(item => item.ToAcdItem()).ToList();
             Core.Logger.Verbose(LogCategory.ItemEvents, $"[SalvageItems] Starting salvage for {itemsToSalvage.Count} items");

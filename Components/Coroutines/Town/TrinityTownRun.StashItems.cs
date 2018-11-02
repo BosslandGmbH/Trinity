@@ -118,14 +118,14 @@ namespace Trinity.Components.Coroutines.Town
             return !i.IsProtected() && Combat.TrinityCombat.Loot.ShouldStash(i);
         }
 
-        public static async Task<bool> StashItems()
+        public static async Task<CoroutineResult> StashItems()
         {
             if (!ZetaDia.IsInTown)
-                return true;
+                return CoroutineResult.NoAction;
 
             var stashItems = Core.Inventory.Backpack.Where(ShouldStash).ToList();
             if (!stashItems.Any())
-                return true;
+                return CoroutineResult.NoAction;
 
             Core.Logger.Verbose($"[StashItems] Now to stash {stashItems.Count} items");
             stashItems.ForEach(i => Core.Logger.Debug($"[StashItems] Stashing: {i.Name} ({i.ActorSnoId}) InternalName={i.InternalName} Ancient={i.IsAncient} Ann={i.AnnId}"));
@@ -134,10 +134,14 @@ namespace Trinity.Components.Coroutines.Town
             {
                 var stash = ZetaDia.Actors.GetActorsOfType<GizmoPlayerSharedStash>().FirstOrDefault();
                 if (stash == null)
-                    return false;
+                    return CoroutineResult.Failed;
 
-                if (!await CommonCoroutines.MoveAndInteract(stash, () => UIElements.StashWindow.IsVisible))
-                    return false;
+                if (await CommonCoroutines.MoveAndInteract(
+                        stash,
+                        () => UIElements.StashWindow.IsVisible) == CoroutineResult.Running)
+                {
+                    return CoroutineResult.Running;
+                }
             }
 
             if (Core.Settings.Items.BuyStashTabs && StashPagesAvailableToPurchase)
@@ -153,7 +157,7 @@ namespace Trinity.Components.Coroutines.Town
             // Get the first item to stash...
             var item = Core.Inventory.Backpack.FirstOrDefault(ShouldStash);
             if (item == null)
-                return true;
+                return CoroutineResult.Done;
 
             try
             {
@@ -163,14 +167,14 @@ namespace Trinity.Components.Coroutines.Town
                 {
                     Core.Logger.Verbose($"[StashItems] No place to put item, stash is probably full ({item.Name} [{col},{row}] Page={page})");
                     HandleFullStash();
-                    return true;
+                    return CoroutineResult.Failed;
                 }
 
                 if (page != InventoryManager.CurrentStashPage)
                 {
                     Core.Logger.Verbose($"[StashItems] Changing to stash page: {page}");
                     InventoryManager.SwitchStashPage(page);
-                    return false;
+                    return CoroutineResult.Running;
                 }
 
                 Core.Logger.Debug($"[StashItems] Stashing: {item.Name} ({item.ActorSnoId}) [{item.InventoryColumn},{item.InventoryRow} {item.InventorySlot}] Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} InternalName={item.InternalName} StashPage={page}");
@@ -188,7 +192,7 @@ namespace Trinity.Components.Coroutines.Town
                 Core.Logger.Log($"Exception Stashing Item: {ex}");
             }
 
-            return false;
+            return CoroutineResult.Running;
         }
 
         private static void UpdateAfterItemMove(TrinityItem item)
