@@ -74,7 +74,7 @@ namespace Trinity
 
         private void OnStart(IBot bot)
         {
-            HookManager.ReplaceTreeHooks();
+            HookManager.CheckHooks();
         }
 
         public void OnPulse()
@@ -103,7 +103,7 @@ namespace Trinity
                 BotMain.OnStop += OnStop;
                 TrinitySettings.InitializeSettings();
                 SkillUtils.UpdateActiveSkills();
-                HookManager.ReplaceTreeHooks();
+                HookManager.CheckHooks();
                 TabUi.InstallTab();
                 SetupDemonBuddy();
                 UILoader.PreLoadWindowContent();
@@ -134,7 +134,7 @@ namespace Trinity
             BotMain.OnStart -= OnStart;
             BotMain.OnStop -= OnStop;
             TabUi.RemoveTab();
-            HookManager.ReplaceTreeHooks();
+            HookManager.CheckHooks();
             Navigator.PlayerMover = new DefaultPlayerMover();
             Navigator.StuckHandler = new DefaultStuckHandler();
             CombatTargeting.Instance.Provider = new DefaultCombatTargetingProvider();

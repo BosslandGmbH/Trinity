@@ -30,7 +30,7 @@ namespace Trinity.Framework
             }
         }
 
-        internal static void ReplaceTreeHooks()
+        private static void ReplaceTreeHooks()
         {
             if (TrinityPlugin.IsEnabled)
             {
@@ -67,7 +67,7 @@ namespace Trinity.Framework
         private static void ReplaceVendorRunHook()
         {
             StoreAndReplaceHook("VendorRun", new ActionRunCoroutine(async ret =>
-                await TrinityTownRun.DoTownRun() == CoroutineResult.NoAction));
+                await TrinityTownRun.DoTownRun() == CoroutineResult.Running));
         }
 
         private static void ReplaceDeathHook()
@@ -76,10 +76,10 @@ namespace Trinity.Framework
                 DeathHandler.Execute()));
         }
 
-        internal static void InstanceOnOnHooksCleared(object sender, EventArgs eventArgs)
+        private static void InstanceOnOnHooksCleared(object sender, EventArgs eventArgs)
         {
             _hooksAttached = false;
-            ReplaceTreeHooks();
+            CheckHooks();
         }
 
         private static void StoreAndReplaceHook(string hookName, Composite behavior)
