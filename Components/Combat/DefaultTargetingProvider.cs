@@ -106,8 +106,12 @@ namespace Trinity.Components.Combat
             if (target.IsGizmo && target.ToDiaObject() is DiaGizmo obj)
             {
                 // TODO: Fix the interaction condition here.
-                if (await CommonCoroutines.MoveAndInteract(obj, () => obj.HasBeenOperated) == CoroutineResult.Running)
+                if (await CommonCoroutines.MoveAndInteract(
+                        obj,
+                        () => obj.HasBeenOperated) == CoroutineResult.Running)
+                {
                     return true;
+                }
 
                 Clear();
                 return false;
@@ -144,7 +148,8 @@ namespace Trinity.Components.Combat
 
             switch (target.Type)
             {
-                case TrinityObjectType.Door when target.ActorSnoId == 454346 && target.Targeting.TargetedTimes > 3:
+                case TrinityObjectType.Door when target.ActorSnoId == 454346 &&
+                                                 target.Targeting.TargetedTimes > 3:
                     // Special case 'p43_AD_Catacombs_Door_A' no way to tell it's locked, blacklist quickly to explore
                     GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(15), $"Probably locked door p43_AD_Catacombs_Door_A at {target.Position}");
                     return true;
@@ -152,7 +157,14 @@ namespace Trinity.Components.Combat
                     return false;
             }
 
-            if (LastPower != null && LastPower.SNOPower == SNOPower.Axe_Operate_Gizmo && target.IsGizmo && target.IsLastTarget && target.Targeting.TargetedTimes > 25 && target.IsItem && target is TrinityItem item && item.IsLowQuality)
+            if (LastPower != null &&
+                LastPower.SNOPower == SNOPower.Axe_Operate_Gizmo &&
+                target.IsGizmo &&
+                target.IsLastTarget &&
+                target.Targeting.TargetedTimes > 25 &&
+                target.IsItem &&
+                target is TrinityItem item &&
+                item.IsLowQuality)
             {
                 // There's a weird stuck where bot is unable to interact with an item, possibly move/interact range related.
                 GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(120), $"Failed too many times to pickup low quality item. {target.Name} Distance={target.Distance}");
@@ -174,19 +186,28 @@ namespace Trinity.Components.Combat
 
             if (duration > TimeSpan.FromSeconds(10) && times > 5)
             {
-                GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(5), $"Micro-Blacklist for reposition / anti-flipflop (Times={times} Duration={duration})");
+                GenericBlacklist.Blacklist(
+                    target,
+                    TimeSpan.FromSeconds(5),
+                    $"Micro-Blacklist for reposition / anti-flipflop (Times={times} Duration={duration})");
                 return true;
             }
 
             if (target.IsCorruptGrowth && duration > TimeSpan.FromSeconds(10) && Core.Player.MovementSpeed <= 2)
             {
-                GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(3), $"Micro-Blacklist for corrupt growth reposition (Times={times} Duration={duration})");
+                GenericBlacklist.Blacklist(
+                    target,
+                    TimeSpan.FromSeconds(3),
+                    $"Micro-Blacklist for corrupt growth reposition (Times={times} Duration={duration})");
                 return true;
             }
 
             if (duration > TimeSpan.FromSeconds(30) && !target.IsElite)
             {
-                GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(60), $"Targetted for too long ({duration})");
+                GenericBlacklist.Blacklist(
+                    target,
+                    TimeSpan.FromSeconds(60),
+                    $"Targetted for too long ({duration})");
                 return true;
             }
 
@@ -197,11 +218,14 @@ namespace Trinity.Components.Combat
                 return false;
             }
 
-            GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(60), $"Targetted too many times ({times})");
+            GenericBlacklist.Blacklist(
+                target,
+                TimeSpan.FromSeconds(60),
+                $"Targetted too many times ({times})");
             return true;
 
         }
-        
+
         public bool IsInRange(TrinityActor target, TrinityPower power)
         {
             if (target == null || target.IsSafeSpot)

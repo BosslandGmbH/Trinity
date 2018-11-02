@@ -89,7 +89,9 @@ namespace Trinity.DbProvider
             var power = TrinityCombat.Routines.Current.GetMovementPower(destination);
             if (power == null ||
                 power.SNOPower == SNOPower.None)
+            {
                 power = new TrinityPower(SNOPower.Walk, 3f, destination);
+            }
 
             // We'll use the target position from the power, but make sure it's something reasonable.
             var isTooFarAway = power.TargetPosition.Distance(Core.Player.Position) > 80f;
