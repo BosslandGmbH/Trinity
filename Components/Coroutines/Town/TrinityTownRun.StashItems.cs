@@ -141,7 +141,8 @@ namespace Trinity.Components.Coroutines.Town
                 }
             }
 
-            if (Core.Settings.Items.BuyStashTabs && StashPagesAvailableToPurchase)
+            if (Core.Settings.Items.BuyStashTabs &&
+                StashPagesAvailableToPurchase)
             {
                 s_logger.Error($"[{nameof(StashItems)}] Attempting to buy stash pages");
                 InventoryManager.BuySharedStashSlots();
