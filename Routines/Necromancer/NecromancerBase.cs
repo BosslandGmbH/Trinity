@@ -4,6 +4,7 @@ using System.Linq;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Zeta.Common;
@@ -122,7 +123,7 @@ namespace Trinity.Routines.Necromancer
         protected virtual TrinityPower CorpseLance(TrinityActor target)
             => new TrinityPower(Skills.Necromancer.CorpseLance, 60f, target.AcdId);
 
-    
+
         #endregion
 
         #region Helpers / Conditions
@@ -260,7 +261,7 @@ namespace Trinity.Routines.Necromancer
             if (!Skills.Necromancer.Revive.CanCast())
                 return false;
 
-            position = TargetUtil.GetBestCorpsePoint(80f,20f);
+            position = TargetUtil.GetBestCorpsePoint(80f, 20f);
             return position != Vector3.Zero;
         }
 
@@ -276,7 +277,7 @@ namespace Trinity.Routines.Necromancer
 
             // Grasps of Essense gloves increase damage 75-100 % 5x stacks max
 
-            position = TargetUtil.GetBestCorpsePoint(80f,15f);
+            position = TargetUtil.GetBestCorpsePoint(80f, 15f);
             return position != Vector3.Zero;
         }
 
@@ -417,12 +418,12 @@ namespace Trinity.Routines.Necromancer
                 var lastCast = SpellHistory.GetLastUseHistoryItem(SNOPower.P6_Necro_CommandSkeletons);
                 if (lastCast == null)
                     return true;
-               
+
                 LastSkeletonCommandTargetAcdId = lastCast.TargetAcdId;
                 return target.AcdId != lastCast.TargetAcdId;
             }
             return false;
-        }        
+        }
 
         protected bool TryCursePower(out TrinityPower power)
         {
@@ -472,7 +473,7 @@ namespace Trinity.Routines.Necromancer
             // todo: investigate why cant find the power on monsters.         
 
             // anti-spam workaround
-            if (Skills.Necromancer.Decrepify.TimeSinceUse < 4000) 
+            if (Skills.Necromancer.Decrepify.TimeSinceUse < 4000)
                 return false;
 
             target = TargetUtil.BestTargetWithoutDebuff(60f, SNOPower.P6_Necro_Decrepify);
@@ -616,24 +617,32 @@ namespace Trinity.Routines.Necromancer
                 return false;
 
             var path = Core.DBNavProvider.CurrentPath;
-            if (path != null && path.Contains(destination) && Skills.Necromancer.BloodRush.CanCast())
+            if (path == null ||
+                !path.Contains(destination) ||
+                !Skills.Necromancer.BloodRush.CanCast())
             {
-                var projectedPosition = IsBlocked
-                    ? Core.Grids.Avoidance.GetPathCastPosition(50f, true)
-                    : Core.Grids.Avoidance.GetPathWalkPosition(50f, true);
-
-                if (projectedPosition != Vector3.Zero)
-                {
-                    var distance = projectedPosition.Distance(Player.Position);
-                    var inFacingDirection = Core.Grids.Avoidance.IsInPlayerFacingDirection(projectedPosition, 90);
-                    if ((distance > 15f || IsBlocked && distance > 5f) && inFacingDirection)
-                    {
-                        trinityPower = BloodRush(projectedPosition);
-                        return true;
-                    }
-                }
+                return false;
             }
-            return false;
+
+            var projectedPosition = IsBlocked
+                ? TrinityGrid.Instance.GetPathCastPosition(50f, true)
+                : TrinityGrid.Instance.GetPathWalkPosition(50f, true);
+
+            if (projectedPosition == Vector3.Zero)
+                return false;
+
+            var distance = projectedPosition.Distance(Player.Position);
+            var inFacingDirection = TrinityGrid.Instance.IsInPlayerFacingDirection(projectedPosition, 90);
+            if (!(distance > 15f) &&
+                (!IsBlocked ||
+                 !(distance > 5f)) ||
+                !inFacingDirection)
+            {
+                return false;
+            }
+
+            trinityPower = BloodRush(projectedPosition);
+            return true;
         }
 
         protected bool UnitHasAnyCurse(TrinityActor actor) => NecromancerCurses.Any(actor.HasDebuff);

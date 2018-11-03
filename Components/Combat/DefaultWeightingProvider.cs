@@ -17,6 +17,7 @@ using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 using Trinity.Components.Adventurer.Game.Events;
+using Trinity.Framework.Grid;
 
 namespace Trinity.Components.Combat
 {
@@ -199,7 +200,7 @@ namespace Trinity.Components.Combat
 
                 if (target != null)
                 {
-                    var isBlockedByDoor = Core.Grids.Avoidance.IsIntersectedByFlags(Core.Player.Position, target.Position, AvoidanceFlags.ClosedDoor);
+                    var isBlockedByDoor = TrinityGrid.Instance.IsIntersectedByFlags(Core.Player.Position, target.Position, AvoidanceFlags.ClosedDoor);
                     if (isBlockedByDoor)
                     {
                         Core.Logger.Debug($"Kamakazi Blocked by Closed Door on '{target.InternalName} ({target.ActorSnoId})' Distance={target.Distance}");
@@ -378,7 +379,7 @@ namespace Trinity.Components.Combat
 
                         var stoneFortLevellAreaId = 93173;
                         var behindClosedDoor =
-                            Core.Grids.Avoidance.IsIntersectedByFlags(Core.Player.Position,
+                            TrinityGrid.Instance.IsIntersectedByFlags(Core.Player.Position,
                                 cacheObject.Position, AvoidanceFlags.ClosedDoor) && Core.Player.LevelAreaId != stoneFortLevellAreaId;
 
                         if (behindClosedDoor && cacheObject.GizmoType != GizmoType.Door)
@@ -2286,7 +2287,7 @@ namespace Trinity.Components.Combat
                 if (!cacheObject.IsWalkable && cacheObject.IsInLineOfSight && cacheObject.Distance > 40f && !cacheObject.IsMinimapActive && !cacheObject.IsBoss && !cacheObject.IsTreasureGoblin)
                     return -MaxWeight;
 
-                if (Core.Grids.Avoidance.IsIntersectedByFlags(Core.Player.Position, cacheObject.Position, AvoidanceFlags.ClosedDoor, AvoidanceFlags.ProjectileBlocking))
+                if (TrinityGrid.Instance.IsIntersectedByFlags(Core.Player.Position, cacheObject.Position, AvoidanceFlags.ClosedDoor, AvoidanceFlags.ProjectileBlocking))
                     return -MaxWeight;
             }
 

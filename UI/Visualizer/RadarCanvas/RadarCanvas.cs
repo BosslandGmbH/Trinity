@@ -106,7 +106,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                     Core.Logger.Log($"Clicked World Position = {startWorldPosition}, Distance={startWorldPosition.Distance(ZetaDia.Me.Position)}, IsExplored: {isExplored}");
 
 
-                    var result = Core.Grids.Avoidance.CanRayWalk(startWorldPosition, Player.Actor.Position);
+                    var result = TrinityGrid.Instance.CanRayWalk(startWorldPosition, Player.Actor.Position);
                     CurrentRayWalk = new Tuple<Vector3, Vector3, bool>(startWorldPosition, Player.Actor.Position, result);
 
                     //var isConnectedScene = Core.Scenes.CurrentScene.IsConnected(startWorldPosition);
@@ -868,7 +868,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                     dc.DrawLine(RadarResources.CurrentPathPen1, from.ToCanvasPoint(), to.ToCanvasPoint());
                 }
 
-                var losPathPosition = Core.Grids.Avoidance.GetPathCastPosition(50f);
+                var losPathPosition = TrinityGrid.Instance.GetPathCastPosition(50f);
                 if (losPathPosition != Vector3.Zero)
                 {
                     var losPathPoint = losPathPosition.ToCanvasPoint();

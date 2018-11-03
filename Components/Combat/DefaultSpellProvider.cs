@@ -7,6 +7,7 @@ using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
@@ -254,7 +255,7 @@ namespace Trinity.Components.Combat
         {
             if (GameData.ResetNavigationPowers.Contains(power))
             {
-                Core.Grids.Avoidance.AdvanceNavigatorPath(40f, RayType.Walk);
+                TrinityGrid.Instance.AdvanceNavigatorPath(40f, RayType.Walk);
             }
         }
     }

@@ -115,9 +115,14 @@ namespace Trinity.Framework.Avoidance
         {
             get
             {
-                if (!(TargetZDif < 8) || Settings.Entries == null || !Settings.Entries.Any(a => a.IsEnabled)) return false;
+                if (!(TargetZDif < 8) ||
+                    Settings.Entries == null ||
+                    !Settings.Entries.Any(a => a.IsEnabled))
+                {
+                    return false;
+                }
 
-                var standingInCritical = Core.Grids.Avoidance.IsStandingInFlags(AvoidanceFlags.CriticalAvoidance);
+                var standingInCritical = TrinityGrid.Instance.IsStandingInFlags(AvoidanceFlags.CriticalAvoidance);
                 if (standingInCritical)
                 {
                     Core.Logger.Debug(LogCategory.Avoidance, "IsStandingInFlags... CriticalAvoidance");
@@ -125,12 +130,17 @@ namespace Trinity.Framework.Avoidance
                     return true;
                 }
 
-                if (TrinityCombat.Targeting.CurrentTarget != null && Core.Grids.Avoidance.IsIntersectedByFlags(ZetaDia.Me.Position, TrinityCombat.Targeting.CurrentTarget.Position, AvoidanceFlags.CriticalAvoidance))
+                if (TrinityCombat.Targeting.CurrentTarget != null &&
+                    TrinityGrid.Instance.IsIntersectedByFlags(
+                        ZetaDia.Me.Position,
+                        TrinityCombat.Targeting.CurrentTarget.Position,
+                        AvoidanceFlags.CriticalAvoidance))
                 {
                     TargetUtil.ClearCurrentTarget("Current Target Intersects Critical Avoidance.");
                 }
 
-                if (!Core.Grids.Avoidance.IsPathingOverFlags(AvoidanceFlags.CriticalAvoidance)) return false;
+                if (!TrinityGrid.Instance.IsPathingOverFlags(AvoidanceFlags.CriticalAvoidance))
+                    return false;
 
                 Core.Logger.Debug(LogCategory.Avoidance, "IsPathingOverFlags... CriticalAvoidance");
                 Navigator.Clear();
@@ -215,8 +225,11 @@ namespace Trinity.Framework.Avoidance
             if (!TrinityCombat.IsInCombat)
                 return false;
 
-            if (TrinityCombat.Targeting.CurrentTarget != null && TrinityCombat.Targeting.CurrentTarget.IsTreasureGoblin)
+            if (TrinityCombat.Targeting.CurrentTarget != null &&
+                TrinityCombat.Targeting.CurrentTarget.IsTreasureGoblin)
+            {
                 return false;
+            }
 
             if (TrinityCombat.Routines.Current.ShouldIgnoreKiting())
             {
@@ -224,7 +237,8 @@ namespace Trinity.Framework.Avoidance
                 return false;
             }
 
-            if (TrinityCombat.Targeting.CurrentTarget?.Distance < 10f && GizmoProximityTypes.Contains(TrinityCombat.Targeting.CurrentTarget.Type))
+            if (TrinityCombat.Targeting.CurrentTarget?.Distance < 10f &&
+                GizmoProximityTypes.Contains(TrinityCombat.Targeting.CurrentTarget.Type))
             {
                 Core.Logger.Debug(LogCategory.Avoidance, "Not Kiting because gizmo nearby");
                 return false;
@@ -237,16 +251,22 @@ namespace Trinity.Framework.Avoidance
             }
 
             var currentTarget = TrinityCombat.Targeting.CurrentTarget;
-            var isCloseLargeMonster = currentTarget?.Distance < 12f && (currentTarget.MonsterSize != MonsterSize.Big || currentTarget.MonsterSize != MonsterSize.Boss);
+            var isCloseLargeMonster = currentTarget?.Distance < 12f &&
+                                      (currentTarget.MonsterSize != MonsterSize.Big ||
+                                       currentTarget.MonsterSize != MonsterSize.Boss);
 
-            if (PlayerMover.IsBlocked && !isCloseLargeMonster && Core.BlockedCheck.BlockedTime.TotalMilliseconds > 8000 && !Core.Avoidance.InCriticalAvoidance(ZetaDia.Me.Position))
+            if (PlayerMover.IsBlocked &&
+                !isCloseLargeMonster &&
+                Core.BlockedCheck.BlockedTime.TotalMilliseconds > 8000 &&
+                !Core.Avoidance.InCriticalAvoidance(ZetaDia.Me.Position))
             {
                 Core.Logger.Log(LogCategory.Avoidance, "Not kiting because blocked");
                 return false;
             }
 
             var playerHealthPct = Core.Player.CurrentHealthPct * 100;
-            if (playerHealthPct > 50 && TrinityCombat.Targeting.CurrentTarget != null)
+            if (playerHealthPct > 50 &&
+                TrinityCombat.Targeting.CurrentTarget != null)
             {
                 // Restrict kiting when the current target is on the edge of line of sight
                 // This should help with flip-flopping around corners and doorways.
@@ -266,11 +286,22 @@ namespace Trinity.Framework.Avoidance
             }
 
             var isAtKiteHealth = playerHealthPct <= TrinityCombat.Routines.Current.KiteHealthPct;
-            if (!isAtKiteHealth || !(TargetZDif < 4) || TrinityCombat.Routines.Current.KiteMode == KiteMode.Never) return false;
+            if (!isAtKiteHealth ||
+                !(TargetZDif < 4) ||
+                TrinityCombat.Routines.Current.KiteMode == KiteMode.Never)
+            {
+                return false;
+            }
 
-            var canSeeTarget = TrinityCombat.Targeting.CurrentTarget != null && (TrinityCombat.Targeting.CurrentTarget != null || Core.Avoidance.Grid.CanRayCast(ZetaDia.Me.Position, TrinityCombat.Targeting.CurrentTarget.Position));
+            var canSeeTarget = TrinityCombat.Targeting.CurrentTarget != null &&
+                               (TrinityCombat.Targeting.CurrentTarget != null ||
+                                Core.Avoidance.Grid.CanRayCast(ZetaDia.Me.Position, TrinityCombat.Targeting.CurrentTarget.Position));
 
-            if (!canSeeTarget || !Core.Grids.Avoidance.IsStandingInFlags(AvoidanceFlags.KiteFrom)) return false;
+            if (!canSeeTarget ||
+                !TrinityGrid.Instance.IsStandingInFlags(AvoidanceFlags.KiteFrom))
+            {
+                return false;
+            }
 
             if (DateTime.UtcNow.Subtract(LastKiteTime).TotalMilliseconds > TrinityCombat.Routines.Current.KiteStutterDelay)
             {

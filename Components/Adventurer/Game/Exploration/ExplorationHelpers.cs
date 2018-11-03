@@ -3,6 +3,7 @@ using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using Trinity.Framework.Grid;
 using Trinity.UI.Visualizer;
 using Zeta.Common;
 using Zeta.Game;
@@ -86,9 +87,13 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 for (var i = 3; i <= 4; i++)
                 {
                     var closestUnvisitedNodes = ExplorationGrid.Instance.GetNeighbors(nearestNode, i)
-                        .Where(n => !n.IsIgnored && !n.IsVisited && !n.IsBlacklisted && n.HasEnoughNavigableCells &&
-                                    n.DynamicWorldId == worldId && levelAreaIds.Contains(n.LevelAreaId) &&
-                                    Core.Grids.CanRayWalk(myPosition, n.NavigableCenter))
+                        .Where(n => !n.IsIgnored &&
+                                    !n.IsVisited &&
+                                    !n.IsBlacklisted &&
+                                    n.HasEnoughNavigableCells &&
+                                    n.DynamicWorldId == worldId &&
+                                    levelAreaIds.Contains(n.LevelAreaId) &&
+                                    TrinityGrid.Instance.CanRayWalk(myPosition, n.NavigableCenter))
                         .OrderByDescending(n => n.Priority)
                         .ThenBy(n => n.Distance)
                         .ThenByDescending(PriorityDistanceFormula);
@@ -105,8 +110,12 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 for (var i = 3; i <= 6; i++)
                 {
                     var closestUnvisitedNode = ExplorationGrid.Instance.GetNeighbors(nearestNode, i)
-                        .Where(n => !n.IsIgnored && !n.IsVisited && !n.IsBlacklisted && n.HasEnoughNavigableCells &&
-                        n.DynamicWorldId == worldId && levelAreaIds.Contains(n.LevelAreaId))
+                        .Where(n => !n.IsIgnored &&
+                                    !n.IsVisited &&
+                                    !n.IsBlacklisted &&
+                                    n.HasEnoughNavigableCells &&
+                                    n.DynamicWorldId == worldId &&
+                                    levelAreaIds.Contains(n.LevelAreaId))
                         .OrderByDescending(PriorityDistanceFormula)
                         .FirstOrDefault();
 
@@ -133,7 +142,8 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     return node;
                 }
 
-                if (ExplorationGrid.Instance.NearestNode != null && !levelAreaIds.Contains(ZetaDia.CurrentLevelAreaSnoId))
+                if (ExplorationGrid.Instance.NearestNode != null &&
+                    !levelAreaIds.Contains(ZetaDia.CurrentLevelAreaSnoId))
                 {
                     Core.Logger.Debug("[ExplorationLogic] Adventurer is trying to find nodes that are not in this LevelArea. DefinedIds='{0}' CurrentId='{0}'. Marking current area's nodes as valid.", string.Join(", ", levelAreaIds), ZetaDia.CurrentLevelAreaSnoId);
                     levelAreaIds.Add(ZetaDia.CurrentLevelAreaSnoId);
@@ -175,7 +185,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             var sceneConnectionDirectionMultiplier = IsInSceneConnectionDirection(n.NavigableCenter, 30) ? 1.25 : 1;
             var nodeInPrioritySceneMultiplier = n.Priority ? 2.25 : 0;
             var baseDistanceFactor = 50 / n.NavigableCenter.Distance(AdvDia.MyPosition) * 10;
-            var canRayWalk = Core.Grids.CanRayWalk(AdvDia.MyPosition, n.NavigableCenter) ? 1.75 : 1;
+            var canRayWalk = TrinityGrid.Instance.CanRayWalk(AdvDia.MyPosition, n.NavigableCenter) ? 1.75 : 1;
 
             var edgeMultiplier = 1d;
             var visitedMultiplier = 1d;
@@ -194,7 +204,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 if (n.Scene.ExitPositions.Count <= 1 && !isInExitScene)
                     return 0;
 
-                if (!Core.Grids.CanRayWalk(Core.Player.Position, n.NavigableCenter))
+                if (!TrinityGrid.Instance.CanRayWalk(Core.Player.Position, n.NavigableCenter))
                     return 0;
 
                 // Lower weight for scenes near the edge of an open style map.

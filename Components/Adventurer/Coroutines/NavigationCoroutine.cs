@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
+using Trinity.Framework.Grid;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Common.Helpers;
@@ -406,7 +407,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                     case MoveResult.PathGenerationFailed:
                         Core.Logger.Debug("[Navigation] Path generation failed.");
                         Core.PlayerMover.MoveTowards(Destination);
-                        if (distanceToDestination < 100 && Core.Grids.CanRayWalk(AdvDia.MyPosition, Destination))
+                        if (distanceToDestination < 100 && TrinityGrid.Instance.CanRayWalk(AdvDia.MyPosition, Destination))
                         {
                             
                             _mover = Mover.StraightLine;
@@ -650,7 +651,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
                 if (FailCount > 5)
                 {
-                    var canWalkTo = Core.Grids.CanRayWalk(AdvDia.MyPosition, Destination);
+                    var canWalkTo = TrinityGrid.Instance.CanRayWalk(AdvDia.MyPosition, Destination);
                     var canStandAt = AdvDia.MainGridProvider.CanStandAt(Destination);
                     var portalNearby = ZetaDia.Actors.GetActorsOfType<GizmoPortal>().Any(g => g.Position.Distance(Destination) < 30f);
                     if (distance < 25f && !portalNearby && (!canStandAt && !canWalkTo))

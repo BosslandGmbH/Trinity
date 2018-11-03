@@ -1,8 +1,9 @@
+using log4net;
 using System;
-using Trinity.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Components.Adventurer.Game.Exploration.Algorithms;
+using Trinity.Framework;
 using Zeta.Common;
 using Zeta.Game;
 
@@ -10,9 +11,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 {
     public abstract class Grid<T> : IGrid<T> where T : INode
     {
-        public delegate void GridUpdatedEventHandler(object sender, SceneData newNodes);
-
-        //public event GridUpdatedEventHandler Updated;
+        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
 
         public SplitArray<T> InnerGrid;
 
@@ -42,16 +41,16 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             LastUpdated = DateTime.MinValue;
             var worldId = ZetaDia.Globals.WorldId;
 
-            Core.Logger.Debug("[{0}] Creating grid [{1},{1}] ZetaWorldId={2} AdvDiaWorldId={3}", GetType().Name, GridBounds, worldId, AdvDia.CurrentWorldDynamicId);
+            s_logger.Debug($"[{nameof(CreateGrid)}] Creating grid [{GridBounds},{GridBounds}] ZetaWorldId={worldId} AdvDiaWorldId={AdvDia.CurrentWorldDynamicId}");
 
             InnerGrid = new SplitArray<T>(GridBounds, GridBounds);
             WorldDynamicId = AdvDia.CurrentWorldDynamicId;
 
             var currentScenes = Core.Scenes.CurrentWorldScenes;
-            if (currentScenes.Any() && currentScenes.First().DynamicWorldId == worldId)
+            if (currentScenes.Any(c => c.DynamicWorldId == worldId))
             {
-                Core.Logger.Debug("[{0}] Importing Current World Data from SceneStorage", GetType().Name);
-                Update(Core.Scenes.CreateSceneData(currentScenes, currentScenes.First().DynamicWorldId));
+                s_logger.Debug($"[{nameof(CreateGrid)}] Importing Current World Data from SceneStorage.");
+                Update(Core.Scenes.CreateSceneData(currentScenes, worldId));
             }
 
             GridStore.Grids.Add(new WeakReference<IGrid>(this));
@@ -59,14 +58,14 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public void Update(ISceneData newSceneData)
         {
-            Core.Logger.Debug($"Update called for {this.GetType().Name}");
+            s_logger.Debug($"[{nameof(Update)}] called.");
 
             var data = newSceneData as SceneData;
-            if (data?.WorldDynamicId == AdvDia.CurrentWorldDynamicId)
-            {
-                LastUpdated = DateTime.UtcNow;
-                OnUpdated(data);
-            }
+            if (data?.WorldDynamicId != AdvDia.CurrentWorldDynamicId)
+                return;
+
+            LastUpdated = DateTime.UtcNow;
+            OnUpdated(data);
         }
 
 

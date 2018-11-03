@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Trinity.UI;
@@ -49,31 +50,43 @@ namespace Trinity750.Routines.DemonHunter
         };
 
         #endregion
-
-
+        
         public override KiteMode KiteMode => KiteMode.Never;
 
         public override Func<bool> ShouldIgnoreAvoidance => () => true;
 
         public TrinityPower GetOffensivePower()
         {
-
             TrinityActor target = CurrentTarget;
-            Vector3 position = Vector3.Zero;
 
-            if (CurrentTarget != null && (!CurrentTarget.IsBoss || (CurrentTarget.IsElite && CurrentTarget.EliteType == EliteTypes.Minion)))
+            if (CurrentTarget != null &&
+                (!CurrentTarget.IsBoss ||
+                 CurrentTarget.IsElite &&
+                 CurrentTarget.EliteType == EliteTypes.Minion))
+            {
                 target = TargetUtil.BestRangedAoeUnit(50) ?? CurrentTarget;
+            }
 
             if (!Core.Buffs.HasBuff(445266) && Player.PrimaryResource > 36)
                 return new TrinityPower(Skills.DemonHunter.Impale);
 
-            position = MathEx.CalculatePointFrom(target.Position, ZetaDia.Me.Position, 15);
-            if ((target.Distance > 15 || ((Legendary.ElusiveRing.IsEquipped || Legendary.ElusiveRing.IsEquippedInCube) && Skills.DemonHunter.Vault.TimeSinceUse > 6000)) && Core.Grids.CanRayWalk(Player.Position, position))
+            var position = MathEx.CalculatePointFrom(target.Position, ZetaDia.Me.Position, 15);
+            if ((target.Distance > 15 ||
+                 (Legendary.ElusiveRing.IsEquipped ||
+                  Legendary.ElusiveRing.IsEquippedInCube) &&
+                 Skills.DemonHunter.Vault.TimeSinceUse > 6000) &&
+                TrinityGrid.Instance.CanRayWalk(Player.Position, position))
+            {
                 return Vault(position);
-
+            }
 
             if (Skills.DemonHunter.Impale.CanCast())
-                return new TrinityPower(Skills.DemonHunter.Impale, Player.CurrentHealthPct < 0.45 ? 30f : 15f, target.AcdId);
+            {
+                return new TrinityPower(
+                    Skills.DemonHunter.Impale,
+                    Player.CurrentHealthPct < 0.45 ? 30f : 15f,
+                    target.AcdId);
+            }
 
             return null;
         }

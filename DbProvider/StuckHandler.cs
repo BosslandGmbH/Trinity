@@ -9,6 +9,7 @@ using Trinity.Components.Adventurer;
 using Trinity.Components.Adventurer.Coroutines;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
+using Trinity.Framework.Grid;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Bot.Profile;
@@ -182,7 +183,10 @@ namespace Trinity.DbProvider
                 return false;
             }
 
-            var isWaiting = TrinityCombat.Targeting.CurrentTarget != null && TrinityCombat.Targeting.CurrentPower?.SNOPower == SNOPower.Walk && Core.Player.MovementSpeed < 4 && Core.Grids.CanRayWalk(ZetaDia.Me.Position, TrinityCombat.Targeting.CurrentTarget.Position);
+            var isWaiting = TrinityCombat.Targeting.CurrentTarget != null &&
+                            TrinityCombat.Targeting.CurrentPower?.SNOPower == SNOPower.Walk &&
+                            Core.Player.MovementSpeed < 4 &&
+                            TrinityGrid.Instance.CanRayWalk(ZetaDia.Me.Position, TrinityCombat.Targeting.CurrentTarget.Position);
             if (isWaiting)
             {
                 Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Waiting (Routine Walk)");

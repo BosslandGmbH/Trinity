@@ -444,7 +444,6 @@
     <Compile Include="Framework\Helpers\FullyObservableCollection.cs" />
     <Compile Include="Framework\Helpers\GameBalanceTable.cs" />
     <Compile Include="Framework\Helpers\GenericBlacklist.cs" />
-    <Compile Include="Framework\Grid\GridHelper.cs" />
     <Compile Include="Framework\Helpers\HashGenerator.cs" />
     <Compile Include="Framework\Helpers\InterfaceLoader.cs" />
     <Compile Include="Framework\Helpers\JsonSerializer.cs" />

@@ -4,6 +4,7 @@ using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
@@ -304,19 +305,22 @@ namespace Trinity.Components.Combat
             if (!requiresRayWalk && currentTarget.Targeting.TotalTargetedTime < TimeSpan.FromSeconds(5) && currentTarget.IsInLineOfSight)
                 return true;
 
-            return Core.Grids.Avoidance.CanRayWalk(currentTarget, 5f);
+            return TrinityGrid.Instance.CanRayWalk(currentTarget, 5f);
         }
 
         public bool IsInLineOfSight(Vector3 position)
         {
             var longTargetTime = CurrentTarget?.Targeting.TotalTargetedTime < TimeSpan.FromSeconds(10);
 
-            if (longTargetTime || Core.BlockedCheck.IsBlocked || Core.StuckHandler.IsStuck || Core.ProfileSettings.Options.CurrentSceneOptions.AlwaysRayWalk)
+            if (longTargetTime ||
+                Core.BlockedCheck.IsBlocked ||
+                Core.StuckHandler.IsStuck ||
+                Core.ProfileSettings.Options.CurrentSceneOptions.AlwaysRayWalk)
             {
-                return Core.Grids.Avoidance.CanRayWalk(Core.Player.Position, position, 5f);
+                return TrinityGrid.Instance.CanRayWalk(Core.Player.Position, position, 5f);
             }
 
-            return Core.Grids.Avoidance.CanRayCast(Core.Player.Position, position);
+            return TrinityGrid.Instance.CanRayCast(Core.Player.Position, position);
         }
 
         void ITargetingProvider.Clear()

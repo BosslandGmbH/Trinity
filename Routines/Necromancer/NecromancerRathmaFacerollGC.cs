@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
@@ -451,16 +452,13 @@ namespace Trinity.Routines.Necromancer
         private bool ShouldMove(out TrinityActor target)
         {
             // TrinityActor shrineTarget;
-            TrinityActor progressGlobeTarget;
-            TrinityActor healthGlobeTarget;
-            TrinityActor closestTarget;
 
             target = FindBestTarget();
 
             if (!IsValidTarget(target))
                 return false;
 
-            closestTarget = FindClosestTarget();
+            var closestTarget = FindClosestTarget();
 
             if (!IsValidTarget(closestTarget))
                 closestTarget = target;
@@ -471,21 +469,32 @@ namespace Trinity.Routines.Necromancer
             if (Core.Avoidance.InAvoidance(Player.Position))
                 return false;
 
-            progressGlobeTarget = FindProgressOrPowerGlobe();
+            var progressGlobeTarget = FindProgressOrPowerGlobe();
             if (progressGlobeTarget != null)
             {
-                if (progressGlobeTarget.Position.Distance(closestTarget.Position) >= closestTarget.Distance && closestTarget.Distance >= 10f && !progressGlobeTarget.IsAvoidanceOnPath && Core.Grids.CanRayWalk(Player.Position, progressGlobeTarget.Position))
+                if (progressGlobeTarget.Position.Distance(closestTarget.Position) >= closestTarget.Distance &&
+                    closestTarget.Distance >= 10f &&
+                    !progressGlobeTarget.IsAvoidanceOnPath &&
+                    TrinityGrid.Instance.CanRayWalk(Player.Position, progressGlobeTarget.Position))
                 {
                     target = progressGlobeTarget;
                     return true;
                 }
             }
-            healthGlobeTarget = FindHealthGlobe();
+            var healthGlobeTarget = FindHealthGlobe();
             if (healthGlobeTarget != null)
             {
-                if (((Legendary.ReapersWraps.IsEquipped || Legendary.ReapersWraps.IsEquippedInCube) && Player.PrimaryResourcePct < GetGlobesPct) || (Player.CurrentHealthPct <= Settings.EmergencyHealthPct && CollectForHealth))
+                if ((Legendary.ReapersWraps.IsEquipped ||
+                     Legendary.ReapersWraps.IsEquippedInCube) &&
+                    Player.PrimaryResourcePct < GetGlobesPct ||
+                    Player.CurrentHealthPct <= Settings.EmergencyHealthPct &&
+                    CollectForHealth)
                 {
-                    if (healthGlobeTarget.Position.Distance(closestTarget.Position) >= closestTarget.Distance && closestTarget.Distance >= 10f && healthGlobeTarget.Position.Distance(target.Position) <= CombatRange && !healthGlobeTarget.IsAvoidanceOnPath && Core.Grids.CanRayWalk(Player.Position, healthGlobeTarget.Position))
+                    if (healthGlobeTarget.Position.Distance(closestTarget.Position) >= closestTarget.Distance &&
+                        closestTarget.Distance >= 10f &&
+                        healthGlobeTarget.Position.Distance(target.Position) <= CombatRange &&
+                        !healthGlobeTarget.IsAvoidanceOnPath &&
+                        TrinityGrid.Instance.CanRayWalk(Player.Position, healthGlobeTarget.Position))
                     {
                         target = healthGlobeTarget;
                         return true;
@@ -493,43 +502,63 @@ namespace Trinity.Routines.Necromancer
                 }
             }
 
-            if (Core.Rift.IsNephalemRift && Core.Rift.IsGaurdianSpawned && IgnoreRange)
+            if (Core.Rift.IsNephalemRift &&
+                Core.Rift.IsGaurdianSpawned && IgnoreRange)
+            {
                 return false;
+            }
 
             if (target.IsAvoidanceOnPath)
                 return false;
 
-            if (IsValidTarget(closestTarget) && closestTarget.Position.Distance(Player.Position) <= MaximumRange)
+            if (IsValidTarget(closestTarget) &&
+                closestTarget.Position.Distance(Player.Position) <= MaximumRange)
+            {
                 return false;
+            }
 
-            if (((Core.Rift.IsNephalemRift && !Core.Rift.RiftComplete) || !Core.Rift.IsNephalemRift) && !target.IsAvoidanceOnPath && Core.Grids.CanRayWalk(Player.Position, target.Position))
-                return true;
-
-            return false;
+            return (Core.Rift.IsNephalemRift &&
+                    !Core.Rift.RiftComplete ||
+                    !Core.Rift.IsNephalemRift) &&
+                   !target.IsAvoidanceOnPath &&
+                   TrinityGrid.Instance.CanRayWalk(Player.Position, target.Position);
         }
 
         private bool ShouldNoCombatMove(out TrinityActor target)
         {
             target = FindHealthGlobe();
-            if ((((Legendary.ReapersWraps.IsEquipped || Legendary.ReapersWraps.IsEquippedInCube) && Player.PrimaryResourcePct < GetGlobesPct) ||
-                (Player.CurrentHealthPct < EmergencyHealthPct && CollectForHealth)) &&
-                !IsInCombat && target != null && Core.Grids.CanRayWalk(Player.Position, target.Position) && !target.IsAvoidanceOnPath)
-                return true;
-            return false;
+            return ((Legendary.ReapersWraps.IsEquipped ||
+                     Legendary.ReapersWraps.IsEquippedInCube) &&
+                    Player.PrimaryResourcePct < GetGlobesPct ||
+                    Player.CurrentHealthPct < EmergencyHealthPct && CollectForHealth) &&
+                   !IsInCombat &&
+                   target != null &&
+                   TrinityGrid.Instance.CanRayWalk(Player.Position, target.Position) &&
+                   !target.IsAvoidanceOnPath;
         }
 
         private bool ShouldStopMovement()
         {
-            TrinityActor target;
+            if (Core.Rift.IsNephalemRift &&
+                Core.Rift.IsGaurdianSpawned &&
+                IgnoreRange)
+            {
+                return false;
+            }
 
-            if (Core.Rift.IsNephalemRift && Core.Rift.IsGaurdianSpawned && IgnoreRange)
+            if (Core.Settings.Weighting.GoblinPriority == TargetPriority.Kamikaze &&
+                CurrentTarget != null &&
+                CurrentTarget.IsTreasureGoblin)
+            {
                 return false;
+            }
 
-            if (Core.Settings.Weighting.GoblinPriority == TargetPriority.Kamikaze && CurrentTarget != null && CurrentTarget.IsTreasureGoblin)
+            if (CurrentTarget != null &&
+                CurrentTarget?.Type == TrinityObjectType.ProgressionGlobe)
+            {
                 return false;
-            
-            if (CurrentTarget != null && CurrentTarget?.Type == TrinityObjectType.ProgressionGlobe)
-                return false;
+            }
+
             /*
             if (CurrentTarget != null && CurrentTarget?.Type == TrinityObjectType.PowerGlobe)
                 return false;
@@ -540,22 +569,22 @@ namespace Trinity.Routines.Necromancer
             if (Core.Avoidance.InAvoidance(Player.Position))
                 return false;
 
-            if (!IsInCombat && ClusterSize > 1)
+            if (!IsInCombat &&
+                ClusterSize > 1)
+            {
                 return false;
+            }
 
-            target = FindClosestTarget();
-            if (IsValidTarget(target) && target.Distance < MinimumRange)
-                return true;
-                
-            return false;
+            var target = FindClosestTarget();
+            return IsValidTarget(target) &&
+                   target.Distance < MinimumRange;
         }
 
         private bool TryMovementPower(out TrinityPower power)
         {
-            TrinityActor target;
             power = null;
 
-            if (ShouldMove(out target))
+            if (ShouldMove(out var target))
                 power = Walk(target);
             return power != null;
         }

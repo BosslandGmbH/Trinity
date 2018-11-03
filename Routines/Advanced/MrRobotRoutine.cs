@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 using System.Windows.Controls;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
@@ -213,7 +214,7 @@ namespace Trinity.Routines.Advanced
 
         public TrinityPower GetMovementPower(Vector3 destination)
         {
-            if (Core.Grids.CanRayCast(destination))
+            if (TrinityGrid.Instance.CanRayCast(destination))
             {
                 foreach (var skill in MovementSkills.Where(s => s.CanCast()))
                 {

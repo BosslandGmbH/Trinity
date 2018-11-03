@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
@@ -111,7 +112,7 @@ namespace Trinity.Routines.Wizard
             // Jump away from monsters but within cast range
             if (Avoider.TryGetSafeSpot(out position, 15f, 50f, Player.Position, 
                 n => n.AvoidanceFlags.HasFlag(AvoidanceFlags.Monster) 
-                && Core.Grids.CanRayCast(n.NavigableCenter, CurrentTarget.Position)))
+                && TrinityGrid.Instance.CanRayCast(n.NavigableCenter, CurrentTarget.Position)))
             {
                 Core.Logger.Log(LogCategory.Routine,"Teleport to Safespot (ShouldTeleport)");
                 return true;

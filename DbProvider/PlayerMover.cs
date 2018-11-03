@@ -3,6 +3,7 @@ using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Reference;
 using Zeta.Bot.Navigation;
@@ -111,7 +112,7 @@ namespace Trinity.DbProvider
 
             Core.Logger.Log(LogCategory.Movement, $"Cast {power.SNOPower} at {power.TargetPosition} from={startPosition}");
             _sleepUntilTime = DateTime.UtcNow + TimeSpan.FromMilliseconds(300);
-            Core.Grids.Avoidance.AdvanceNavigatorPath(power.MinimumRange, RayType.Walk);
+            TrinityGrid.Instance.AdvanceNavigatorPath(power.MinimumRange, RayType.Walk);
             MoveStop();
         }
 

@@ -12,6 +12,7 @@ using Zeta.Common;
 using Trinity.Framework.Reference;
 using System.Linq;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Grid;
 
 namespace Trinity.Routines.Wizard
 {
@@ -63,16 +64,43 @@ namespace Trinity.Routines.Wizard
         public TrinityPower GetOffensivePower()
         {
             var position = Vector3.Zero;
-            var target = default(TrinityActor);
+            TrinityActor target;
 
             if (IsArchonActive)
-                target = TargetUtil.SafeList(true).FirstOrDefault(a => a.IsBoss && !a.IsShadowClone && a.Distance < 125f) ??
-                    TargetUtil.SafeList(true).Where(a => a.IsElite && a.EliteType != EliteTypes.Minion && !a.IsIllusion && a.Distance < 125f).OrderBy(a => a.NearbyUnitsWithinDistance(6f)).FirstOrDefault() ??
-                    TargetUtil.SafeList(true).Where(a => a.IsTrashMob && a.IsInLineOfSight && !a.IsSummoner && !a.IsSummoned && a.Distance < 50f).OrderByDescending(a => a.NearbyUnitsWithinDistance(6f)).FirstOrDefault() ?? CurrentTarget;
+            {
+                target = TargetUtil.SafeList(true)
+                             .FirstOrDefault(a => a.IsBoss && !a.IsShadowClone && a.Distance < 125f) ??
+                         TargetUtil.SafeList(true)
+                             .Where(a => a.IsElite &&
+                                         a.EliteType != EliteTypes.Minion &&
+                                         !a.IsIllusion &&
+                                         a.Distance < 125f)
+                             .OrderBy(a => a.NearbyUnitsWithinDistance(6f))
+                             .FirstOrDefault() ??
+                         TargetUtil.SafeList(true)
+                             .Where(a => a.IsTrashMob &&
+                                         a.IsInLineOfSight &&
+                                         !a.IsSummoner &&
+                                         !a.IsSummoned &&
+                                         a.Distance < 50f)
+                             .OrderByDescending(a => a.NearbyUnitsWithinDistance(6f))
+                             .FirstOrDefault() ??
+                         CurrentTarget;
+            }
             else
-                target = TargetUtil.SafeList(true).FirstOrDefault(a => a.IsBoss && !a.IsShadowClone && a.Distance < 125f) ??
-                    TargetUtil.SafeList(true).Where(a => a.IsMonster && a.Distance < 50f && a.IsInLineOfSight).OrderBy(a => a.Distance).FirstOrDefault(a => Core.Grids.CanRayWalk(Player.Position, a.Position)) ?? CurrentTarget;
-
+            {
+                target = TargetUtil.SafeList(true)
+                             .FirstOrDefault(a => a.IsBoss &&
+                                                  !a.IsShadowClone &&
+                                                  a.Distance < 125f) ??
+                         TargetUtil.SafeList(true)
+                             .Where(a => a.IsMonster &&
+                                         a.Distance < 50f &&
+                                         a.IsInLineOfSight)
+                             .OrderBy(a => a.Distance)
+                             .FirstOrDefault(a => TrinityGrid.Instance.CanRayWalk(Player.Position, a.Position)) ??
+                         CurrentTarget;
+            }
 
             if (target == null)
                 return null;
@@ -80,71 +108,94 @@ namespace Trinity.Routines.Wizard
             if (position != Vector3.Zero)
                 return Teleport(position);
 
-
-            if (Skills.Wizard.ArchonTeleport.CanCast() || Skills.Wizard.Teleport.CanCast())
+            Skill teleport = Skills.Wizard.Teleport;
+            if (Skills.Wizard.ArchonTeleport.CanCast() ||
+                Skills.Wizard.Teleport.CanCast())
             {
-                var teleport = IsArchonActive ? Skills.Wizard.ArchonTeleport : Skills.Wizard.Teleport;
-                var needTeleport = (!Core.Buffs.HasInvulnerableShrine && Core.Avoidance.InAvoidance(Player.Position)) ||
-                    (!Core.Buffs.HasInvulnerableShrine && Player.CurrentHealthPct < 1 && teleport.TimeSinceUse > 1500) ||
-                    (TargetUtil.AnyElitesInRange(15) && teleport.TimeSinceUse > 2000) ||
-                    (TargetUtil.AnyBossesInRange(30)) ||
-                    (TargetUtil.NumMobsInRange(15) > 3) ||
-                    (teleport.TimeSinceUse > 3000);
+                teleport = IsArchonActive ? Skills.Wizard.ArchonTeleport : Skills.Wizard.Teleport;
+                var needTeleport = !Core.Buffs.HasInvulnerableShrine &&
+                                   Core.Avoidance.InAvoidance(Player.Position) ||
+                                   !Core.Buffs.HasInvulnerableShrine &&
+                                   Player.CurrentHealthPct < 1 &&
+                                   teleport.TimeSinceUse > 1500 ||
+                                   TargetUtil.AnyElitesInRange(15) &&
+                                   teleport.TimeSinceUse > 2000 ||
+                                   TargetUtil.AnyBossesInRange(30) ||
+                                   TargetUtil.NumMobsInRange() > 3 ||
+                                   teleport.TimeSinceUse > 3000;
 
                 if (needTeleport)
                 {
                     if (position == Vector3.Zero)
-                        Core.Avoidance.Avoider.TryGetSafeSpot(out position, 30, 45, default(Vector3));
+                        Core.Avoidance.Avoider.TryGetSafeSpot(out position, 30, 45);
 
-                    if (position != Vector3.Zero)
-                        return Teleport(position);
+                    return Teleport(position);
                 }
             }
 
             if (IsArchonActive)
                 return ArchonDisintegrationWave(target);
 
-            if (!IsArchonActive)
+            if (Skills.Wizard.Archon.CanCast() &&
+                TalRashaStacks >= 3 &&
+                Player.Summons.HydraCount >= 2)
             {
+                return Archon();
+            }
 
-                if (Skills.Wizard.Archon.CanCast() && TalRashaStacks >= 3 && Player.Summons.HydraCount >= 2)
-                    return Archon();
+            var hydra = Skills.Wizard.Hydra;
+            var rayOfFrost = Skills.Wizard.RayOfFrost;
 
-                var archon = Skills.Wizard.Archon;
-                var hydra = Skills.Wizard.Hydra;
-                var teleport = Skills.Wizard.Teleport;
-                var rayOfFrost = Skills.Wizard.RayOfFrost;
+            var elite = TargetUtil.SafeList(true)
+                .Where(a => a.IsElite &&
+                            a.IsInLineOfSight &&
+                            a.EliteType != EliteTypes.Minion &&
+                            !a.IsIllusion &&
+                            a.Distance < 50f)
+                .OrderByDescending(a => a.Distance)
+                .FirstOrDefault();
 
-                var elite = TargetUtil.SafeList(true).Where(a => a.IsElite && a.IsInLineOfSight && a.EliteType != EliteTypes.Minion && !a.IsIllusion && a.Distance < 50f).OrderByDescending(a => a.Distance).FirstOrDefault();
-                if (Skills.Wizard.Archon.CanCast() && TalRashaStacks < 3)
+            if (Skills.Wizard.Archon.CanCast() &&
+                TalRashaStacks < 3)
+            {
+                if (Player.Summons.HydraCount < 2 ||
+                    hydra.TimeSinceUse > 6000)
                 {
-                    if (Player.Summons.HydraCount < 2 || hydra.TimeSinceUse > 6000)
-                        return Hydra(elite?.Position ?? target.Position);
-
-                    if (rayOfFrost.TimeSinceUse > 6000)
-                        return RayOfFrost(target);
-
-                    if (teleport.TimeSinceUse > 6000 && Core.Avoidance.Avoider.TryGetSafeSpot(out position, 20, 50))
-                        return Teleport(position);
+                    return Hydra(elite?.Position ?? target.Position);
                 }
 
-
-                if (Skills.Wizard.Hydra.CanCast() && Player.Summons.HydraCount < 2 && IsInCombat)
-                    return new TrinityPower(Skills.Wizard.Hydra, 50, elite == null ? target : elite);
-
-                if (Skills.Wizard.RayOfFrost.CanCast() && Player.PrimaryResource > 15)
+                if (rayOfFrost.TimeSinceUse > 6000)
                     return RayOfFrost(target);
+
+                if (teleport.TimeSinceUse > 6000 &&
+                    Core.Avoidance.Avoider.TryGetSafeSpot(out position, 20, 50))
+                {
+                    return Teleport(position);
+                }
+            }
+
+            if (Skills.Wizard.Hydra.CanCast() &&
+                Player.Summons.HydraCount < 2 &&
+                IsInCombat)
+            {
+                return new TrinityPower(Skills.Wizard.Hydra, 50, elite ?? target);
+            }
+
+            if (Skills.Wizard.RayOfFrost.CanCast() &&
+                Player.PrimaryResource > 15)
+            {
+                return RayOfFrost(target);
             }
 
             return Walk(Player.Position);
         }
-		
+
         public TrinityPower GetDefensivePower()
         {
             return null;
         }
 
-        public TrinityPower GetBuffPower() 
+        public TrinityPower GetBuffPower()
         {
             if (!IsArchonActive)
             {
@@ -161,7 +212,7 @@ namespace Trinity.Routines.Wizard
             {
                 if (!IsArchonSlowTimeActive && Skills.Wizard.ArchonSlowTime.CanCast())
                     return ArchonSlowTime();
-                
+
                 if (Core.Player.IsMoving && Skills.Wizard.ArchonBlast.CanCast())
                     return ArchonBlast();
 

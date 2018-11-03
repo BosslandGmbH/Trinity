@@ -7,6 +7,7 @@ using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
@@ -158,12 +159,10 @@ namespace Trinity.Routines.Wizard
             #region Shorteners
             var targetSelector = TargetUtil.BestEliteInRange(50f) ?? TargetUtil.GetBestClusterUnit(0f, 50f);
             var target = targetSelector ?? CurrentTarget;
-            TrinityPower power;
             Vector3 position = Vector3.Zero;
             #endregion
-
-
-            if (TrySpecialPower(out power))
+            
+            if (TrySpecialPower(out var power))
                 return power;
 
             if (TrySecondaryPower(out power))
@@ -181,23 +180,42 @@ namespace Trinity.Routines.Wizard
                     if (position == Vector3.Zero)
                         Core.Avoidance.Avoider.TryGetSafeSpot(out position, 15, 50, Player.Position);
                 }
-                if (Core.Avoidance.InAvoidance(ZetaDia.Me.Position) && CanTeleportTo(position))
+
+                if (Core.Avoidance.InAvoidance(ZetaDia.Me.Position) &&
+                    CanTeleportTo(position))
+                {
                     Core.Avoidance.Avoider.TryGetSafeSpot(out position, 15, 50, Player.Position);
-                if (position != Vector3.Zero && !Core.Grids.Avoidance.IsIntersectedByFlags(ZetaDia.Me.Position, position, AvoidanceFlags.Combat, AvoidanceFlags.CriticalAvoidance))
+                }
+
+                if (position != Vector3.Zero &&
+                    !TrinityGrid.Instance.IsIntersectedByFlags(
+                        ZetaDia.Me.Position,
+                        position,
+                        AvoidanceFlags.Combat,
+                        AvoidanceFlags.CriticalAvoidance))
+                {
                     return Teleport(position);
+                }
             }
 
             if (Core.Buffs.HasInvulnerableShrine)
             {
-                if (target != null && Core.Grids.CanRayCast(position) && CanTeleportTo(position) && Skills.Wizard.Teleport.TimeSinceUse > 1200)
+                if (target != null &&
+                    TrinityGrid.Instance.CanRayCast(position) &&
+                    CanTeleportTo(position) &&
+                    Skills.Wizard.Teleport.TimeSinceUse > 1200)
                 {
                     if (TargetUtil.UnitsBetweenLocations(ZetaDia.Me.Position, CurrentTarget.Position).Count > 3 && CurrentTarget.Distance < 50)
                         return Teleport(position);
                 }
             }
 
-            if (CanTeleportTo(CurrentTarget.Position) && TargetUtil.UnitsBetweenLocations(ZetaDia.Me.Position, CurrentTarget.Position).Count > 3)
+            if (CanTeleportTo(CurrentTarget.Position) &&
+                TargetUtil.UnitsBetweenLocations(ZetaDia.Me.Position, CurrentTarget.Position).Count > 3)
+            {
                 return Teleport(CurrentTarget.Position);
+            }
+
             return Walk(CurrentTarget.Position);
         }
         #endregion

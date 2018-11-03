@@ -3,6 +3,7 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Trinity.Components.Adventurer;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors.ActorTypes;
@@ -20,13 +21,6 @@ namespace Trinity.Framework.Grid
 {
     public sealed class TrinityGrid : Grid<AvoidanceNode>
     {
-        static TrinityGrid()
-        {
-            Flags = Enum.GetValues(typeof(AvoidanceFlags)).Cast<AvoidanceFlags>().ToList();
-        }
-
-        private static List<AvoidanceFlags> Flags { get; set; }
-
         private const int Bounds = 2500;
 
         public override float BoxSize => 2.5f;
@@ -39,18 +33,13 @@ namespace Trinity.Framework.Grid
 
         public static TrinityGrid GetWorldGrid()
         {
-            if (_currentGrid == null)
-            {
-                _currentGrid = new TrinityGrid();
-            }
-            else if (_currentGrid == null || ZetaDia.Globals.WorldId != _currentGrid.WorldDynamicId)
+            if (_currentGrid == null ||
+                AdvDia.CurrentWorldDynamicId != _currentGrid.WorldDynamicId)
             {
                 _currentGrid = new TrinityGrid();
             }
             return _currentGrid;
         }
-
-        public static TrinityGrid GetUnsafeGrid() => _currentGrid;
 
         public bool IsValidGridWorldPosition(Vector3 position)
         {
@@ -58,6 +47,11 @@ namespace Trinity.Framework.Grid
         }
 
         public bool IsPopulated { get; set; }
+
+        public bool CanRayCast(Vector3 to)
+        {
+            return CanRayCast(ZetaDia.Me.Position, to);
+        }
 
         public override bool CanRayCast(Vector3 @from, Vector3 to)
         {
@@ -96,7 +90,7 @@ namespace Trinity.Framework.Grid
             return CanRayWalk(Core.Player.Position, targetActor.Position, radiusDegrees);
         }
 
-        public bool CanRayWalk(Vector3 from, Vector3 to,  float radiusDegrees)
+        public bool CanRayWalk(Vector3 from, Vector3 to, float radiusDegrees)
         {
             var radiusRadians = MathEx.ToRadians(radiusDegrees);
             var angleTo = (float)MathUtil.FindDirectionRadian(from, to);

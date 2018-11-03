@@ -68,7 +68,6 @@ namespace Trinity.Modules
         public Vector3 MonsterCentroid { get; set; }
         public Vector3 AvoidanceCentroid { get; set; }
         public AvoidanceNode HighestNode { get; set; }
-        public TrinityGrid Grid => Core.Grids.Avoidance;
         public AvoidanceSettings Settings => Core.Avoidance.Settings;
 
         protected override int UpdateIntervalMs => 1000;
@@ -76,15 +75,14 @@ namespace Trinity.Modules
 
         public void UpdateGrid()
         {
-            var grid = Core.Grids.Avoidance;
-
-            grid.IsUpdatingNodes = true;
+            TrinityGrid.Instance.IsUpdatingNodes = true;
 
             using (new PerformanceLogger("UpdateGrid"))
             {
                 HighestNodeWeight = 0;
 
-                if (grid.NearestNode == null || grid.NearestNode.DynamicWorldId != ZetaDia.Globals.WorldId)
+                if (TrinityGrid.Instance.NearestNode == null ||
+                    TrinityGrid.Instance.NearestNode.DynamicWorldId != ZetaDia.Globals.WorldId)
                 {
                     Core.Scenes.Reset();
                     Core.Scenes.Update();
@@ -100,9 +98,16 @@ namespace Trinity.Modules
                 var activeAvoidanceSnoIds = new HashSet<int>();
                 var kiteFromNodes = new AvoidanceLayer();
 
-                var nodePool = grid.GetNodesInRadius(Core.Player.Position, node => node.IsWalkable, MaxDistance).Select(n => n.Reset()).ToList();
+                var nodePool = TrinityGrid.Instance
+                    .GetNodesInRadius(Core.Player.Position, node => node.IsWalkable, MaxDistance)
+                    .Select(n => n.Reset()).ToList();
+
                 //var allNodes = Grid.GetNodesInRadius(Core.Player.Position, node => node != null, MaxDistance).ToList();
-                var nearestNodes = grid.GetNodesInRadius(Core.Player.Position, node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk), Settings.AvoiderLocalRadius).ToList();
+                var nearestNodes = TrinityGrid.Instance
+                    .GetNodesInRadius(Core.Player.Position, node => node != null &&
+                                                                    node.NodeFlags.HasFlag(NodeFlags.AllowWalk), Settings.AvoiderLocalRadius)
+                    .ToList();
+
                 var weightSettings = Settings.WeightingOptions;
 
                 try
@@ -153,7 +158,7 @@ namespace Trinity.Modules
 
                             if (avoidance.IsAllowed)
                             {
-                                handler.UpdateNodes(grid, avoidance);
+                                handler.UpdateNodes(TrinityGrid.Instance, avoidance);
 
                                 avoidance.Actors.ForEach(a =>
                                 {
@@ -249,7 +254,7 @@ namespace Trinity.Modules
                 ActiveAvoidanceSnoIds = activeAvoidanceSnoIds;
             }
 
-            grid.IsUpdatingNodes = true;
+            TrinityGrid.Instance.IsUpdatingNodes = true;
         }
 
         private void UpdateGizmoFlags(TrinityActor actor)
@@ -259,7 +264,7 @@ namespace Trinity.Modules
                 return;
 
             var importantGizmo = _importantGizmoTypes.Contains(actor.GizmoType);
-            foreach (var node in Grid.GetNodesInRadius(actor.Position, actor.Radius * GizmoWeightRadiusFactor))
+            foreach (var node in TrinityGrid.Instance.GetNodesInRadius(actor.Position, actor.Radius * GizmoWeightRadiusFactor))
             {
                 node.AddNodeFlags(AvoidanceFlags.Gizmo);
 
@@ -280,7 +285,7 @@ namespace Trinity.Modules
             if (actor.Type != TrinityObjectType.Door)
                 return;
 
-            foreach (var node in Grid.GetNodesInRadius(actor.Position, actor.CollisionRadius))
+            foreach (var node in TrinityGrid.Instance.GetNodesInRadius(actor.Position, actor.CollisionRadius))
             {
                 // Mark area around closed doors so that monsters behind them can be ignored.
                 if ((!actor.IsUsed || actor.IsLockedDoor) && !actor.IsExcludedId)
@@ -299,7 +304,7 @@ namespace Trinity.Modules
             if (actor.ActorType != ActorType.Monster)
                 return;
 
-            foreach (var node in Grid.GetNodesInRadius(actor.Position, actor.CollisionRadius * MonsterWeightRadiusFactor))
+            foreach (var node in TrinityGrid.Instance.GetNodesInRadius(actor.Position, actor.CollisionRadius * MonsterWeightRadiusFactor))
             {
                 node.Weight += 2;
 
@@ -342,7 +347,7 @@ namespace Trinity.Modules
             if (!isKiting)
                 return;
 
-            foreach (var node in Grid.GetNodesInRadius(actor.Position, actor.CollisionRadius + kiteDistance))
+            foreach (var node in TrinityGrid.Instance.GetNodesInRadius(actor.Position, actor.CollisionRadius + kiteDistance))
             {
                 if (!node.IsWalkable)
                     continue;
@@ -358,7 +363,7 @@ namespace Trinity.Modules
             if (actor.Type != TrinityObjectType.HealthGlobe)
                 return;
 
-            foreach (var node in Grid.GetNodesInRadius(actor.Position, actor.Radius * GlobeWeightRadiusFactor))
+            foreach (var node in TrinityGrid.Instance.GetNodesInRadius(actor.Position, actor.Radius * GlobeWeightRadiusFactor))
             {
                 if (Settings.WeightingOptions.HasFlag(WeightingOptions.Globes))
                     node.Weight -= 6;
@@ -376,8 +381,8 @@ namespace Trinity.Modules
             {
                 var startPoint = MathEx.GetPointAt(actor.Position, 15f, MathEx.WrapAngle((float)(actor.Rotation - Math.PI / 2)));
                 var endPoint = MathEx.GetPointAt(actor.Position, 15f, MathEx.WrapAngle((float)(actor.Rotation + Math.PI / 2)));
-                var nodes = Grid.GetRayLineAsNodes(startPoint, endPoint);
-                Grid.FlagNodes(nodes, AvoidanceFlags.ProjectileBlocking);
+                var nodes = TrinityGrid.Instance.GetRayLineAsNodes(startPoint, endPoint);
+                TrinityGrid.Instance.FlagNodes(nodes, AvoidanceFlags.ProjectileBlocking);
             }
         }
 
@@ -388,11 +393,11 @@ namespace Trinity.Modules
                 if (cachedPos.WorldId != Core.Player.WorldSnoId)
                     continue;
 
-                var nearestNode = Grid.GetNearestNode(cachedPos.Position);
+                var nearestNode = TrinityGrid.Instance.GetNearestNode(cachedPos.Position);
                 if (nearestNode == null)
                     continue;
 
-                var weightChange = Grid.IsInKiteDirection(cachedPos.Position, 90) ? -1 : 0;
+                var weightChange = TrinityGrid.Instance.IsInKiteDirection(cachedPos.Position, 90) ? -1 : 0;
                 var shouldChangeWeight = Settings.WeightingOptions.HasFlag(WeightingOptions.Globes);
 
                 foreach (var node in nearestNode.AdjacentNodes)

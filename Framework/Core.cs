@@ -51,7 +51,6 @@ namespace Trinity.Framework
         public static SessionLogger SessionLogger { get; } = new SessionLogger();
         public static ItemLogger ItemLogger { get; } = new ItemLogger();
         public static QuestCache Quests { get; } = new QuestCache();
-        public static GridHelper Grids { get; } = new GridHelper();
         public static PlayerMover PlayerMover { get; } = new PlayerMover();
         public static StuckHandler StuckHandler { get; } = new StuckHandler();
         public static BlockedCheck BlockedCheck { get; } = new BlockedCheck();

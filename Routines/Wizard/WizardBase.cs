@@ -7,6 +7,7 @@ using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Zeta.Common;
@@ -922,13 +923,13 @@ namespace Trinity.Routines.Wizard
                 // having past a point and clearing the path appears to be delayed and/or not working)
 
                 var projectedPosition = IsBlocked
-                    ? Core.Grids.Avoidance.GetPathCastPosition(50f, true)
-                    : Core.Grids.Avoidance.GetPathWalkPosition(50f, true);
+                    ? TrinityGrid.Instance.GetPathCastPosition(50f, true)
+                    : TrinityGrid.Instance.GetPathWalkPosition(50f, true);
 
                 if (projectedPosition != Vector3.Zero)
                 {
                     var distance = projectedPosition.Distance(Player.Position);
-                    var inFacingDirection = Core.Grids.Avoidance.IsInPlayerFacingDirection(projectedPosition, 90);
+                    var inFacingDirection = TrinityGrid.Instance.IsInPlayerFacingDirection(projectedPosition, 90);
                     if ((distance > 15f || IsBlocked && distance > 5f) && inFacingDirection)
                     {
                         trinityPower = Teleport(projectedPosition);

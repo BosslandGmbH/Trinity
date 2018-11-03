@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Exploration;
+using Trinity.Framework.Grid;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
@@ -266,7 +267,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             return false;
         }
 
-        public bool CanRayWalkDestination => Core.Grids.CanRayWalk(AdvDia.MyPosition, _currentDestination.NavigableCenter);
+        public bool CanRayWalkDestination => TrinityGrid.Instance.CanRayWalk(AdvDia.MyPosition, _currentDestination.NavigableCenter);
 
         private bool Completed()
         {
