@@ -3228,8 +3228,7 @@ namespace Trinity.Framework.Reference
             if (anim == SNOAnim.Invalid)
                 return string.Empty;
 
-            string result;
-            AnimatioNamesById.TryGetValue((int)anim, out result);
+            AnimatioNamesById.TryGetValue((int)anim, out var result);
 
             return result ?? string.Empty;
         }

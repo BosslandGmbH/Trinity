@@ -130,10 +130,9 @@ namespace Trinity.Routines.Necromancer
 
         protected bool TryPrimaryPower(out TrinityPower power)
         {
-            TrinityActor target;
             power = null;
 
-            if (ShouldBoneSpikes(out target))
+            if (ShouldBoneSpikes(out var target))
                 power = BoneSpikes(target);
 
             else if (ShouldGrimScythe(out target))
@@ -179,17 +178,15 @@ namespace Trinity.Routines.Necromancer
 
         protected bool TrySecondaryPower(out TrinityPower power)
         {
-            TrinityActor target;
-            Vector3 position;
             power = null;
 
             if (ShouldDeathNova())
                 power = DeathNova();
 
-            else if (ShouldSkeletalMage(out position))
+            else if (ShouldSkeletalMage(out var position))
                 power = SkeletalMage(position);
 
-            else if (ShouldBoneSpear(out target))
+            else if (ShouldBoneSpear(out var target))
                 power = BoneSpear(target);
 
             return power != null;
@@ -235,14 +232,12 @@ namespace Trinity.Routines.Necromancer
 
         protected bool TryCorpsePower(out TrinityPower power)
         {
-            TrinityActor target;
-            Vector3 position;
             power = null;
 
-            if (ShouldCorpseExplosion(out position))
+            if (ShouldCorpseExplosion(out var position))
                 power = CorpseExplosion(position);
 
-            else if (ShouldCorpseLance(out target))
+            else if (ShouldCorpseLance(out var target))
                 power = CorpseLance(target);
 
             else if (ShouldDevour())
@@ -502,20 +497,18 @@ namespace Trinity.Routines.Necromancer
 
         protected bool TryBloodPower(out TrinityPower power)
         {
-            TrinityActor target;
-            Vector3 position;
             power = null;
 
             if (ShouldBoneArmor())
                 power = BoneArmor();
 
-            else if (ShouldBloodRush(out position))
+            else if (ShouldBloodRush(out var position))
                 power = BloodRush(position);
 
             else if (ShouldSimulacrum(out position))
                 power = Simulacrum(position);
 
-            else if (ShouldBoneSpirit(out target))
+            else if (ShouldBoneSpirit(out var target))
                 power = BoneSpirit(target);
 
             return power != null;

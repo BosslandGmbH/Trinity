@@ -131,10 +131,6 @@
       <HintPath>$(SolutionDir)\Libs\Microsoft.Scripting.Metadata.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Udis86Net">
-      <HintPath>$(SolutionDir)\Libs\Udis86Net.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' OR '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <Reference Include="Demonbuddy">

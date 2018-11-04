@@ -56,20 +56,17 @@ namespace Trinity.Routines.Wizard
         #endregion
         public TrinityPower GetOffensivePower()
         {
-            TrinityPower power;
-            TrinityActor target;
-
             if (IsArchonActive)
             {
                 if (!IsArchonSlowTimeActive)
                     return ArchonSlowTime();
 
-                if (ShouldArchonDisintegrationWave(out target))
+                if (ShouldArchonDisintegrationWave(out var target))
                     return ArchonDisintegrationWave(target);
             }
             else
             {
-                if (TrySpecialPower(out power))
+                if (TrySpecialPower(out var power))
                     return power;
 
                 if (TrySecondaryPower(out power))
@@ -186,8 +183,7 @@ namespace Trinity.Routines.Wizard
         {
             if (AllowedToUse(Settings.Teleport, Skills.Wizard.Teleport))
             {
-                TrinityPower trinityPower;
-                if (TryPredictiveTeleport(destination, out trinityPower))
+                if (TryPredictiveTeleport(destination, out var trinityPower))
                     return trinityPower;
             }
 

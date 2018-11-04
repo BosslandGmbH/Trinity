@@ -174,8 +174,7 @@ namespace Trinity.Framework
         {
             foreach (var utilReference in Instances.ToList())
             {
-                Module util;
-                if (utilReference.TryGetTarget(out util))
+                if (utilReference.TryGetTarget(out var util))
                 {
                     yield return util;
                 }

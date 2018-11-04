@@ -171,8 +171,7 @@ namespace Trinity.Components.Combat
                         ignoredByAffixElites.Add(unit);
                     }
 
-                    string reason;
-                    if (!ShouldIgnoreElite(unit, out reason))
+                    if (!ShouldIgnoreElite(unit, out _))
                         elites.Add(unit);
                 }
 
@@ -190,8 +189,7 @@ namespace Trinity.Components.Combat
                 //    CombatBase.IsQuestingMode, isHealthEmergency, hiPriorityHealthGlobes, hiPriorityShrine);
 
 
-                TrinityActor target = null;
-                target = objects.OfType<TrinityItem>().Cast<TrinityItem>().FirstOrDefault(u => u.IsCosmeticItem && u.Distance <= 200f);
+                TrinityActor target = objects.OfType<TrinityItem>().FirstOrDefault(u => u.IsCosmeticItem && u.Distance <= 200f);
 
                 if (target == null && Core.Settings.Weighting.GoblinPriority == TargetPriority.Kamikaze)
                 {
@@ -1752,8 +1750,7 @@ namespace Trinity.Components.Combat
 
         private bool ShouldIgnoreElite(TrinityActor unit)
         {
-            string reason;
-            return ShouldIgnoreElite(unit, out reason);
+            return ShouldIgnoreElite(unit, out _);
         }
 
         private bool ShouldIgnoreElite(TrinityActor unit, out string reason)

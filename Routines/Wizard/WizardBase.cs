@@ -373,24 +373,26 @@ namespace Trinity.Routines.Wizard
             var bubblePositions = new List<Vector3>(bubbles.Select(b => b.TargetPosition));
             var isDefensiveRune = Runes.Wizard.PointOfNoReturn.IsActive || Runes.Wizard.StretchTime.IsActive || Runes.Wizard.Exhaustion.IsActive;
 
-            Func<Vector3, bool> isBubbleAtPosition = pos => bubblePositions.Any(b => b.Distance(pos) <= 14f && pos.Distance(myPosition) < SlowTimeRange);
+            bool IsBubbleAtPosition(Vector3 pos) => bubblePositions
+                .Any(b => b.Distance(pos) <= 14f &&
+                          pos.Distance(myPosition) < SlowTimeRange);
 
             // On Self            
-            if (TargetUtil.ClusterExists(15f, 60f, 8) && isDefensiveRune && !isBubbleAtPosition(myPosition))
+            if (TargetUtil.ClusterExists(15f, 60f, 8) && isDefensiveRune && !IsBubbleAtPosition(myPosition))
             {
                 position = MathEx.GetPointAt(myPosition, 10f, Player.Rotation);
                 return true;
             }
 
             // On Elites
-            if (CurrentTarget.IsElite && CurrentTarget.Distance < SlowTimeRange && !isBubbleAtPosition(CurrentTarget.Position))
+            if (CurrentTarget.IsElite && CurrentTarget.Distance < SlowTimeRange && !IsBubbleAtPosition(CurrentTarget.Position))
             {
                 position = CurrentTarget.Position;
                 return true;
             }
 
             // On Clusters            
-            if (TargetUtil.ClusterExists(50f, 5) && clusterPosition.Distance(myPosition) < SlowTimeRange && !isBubbleAtPosition(clusterPosition))
+            if (TargetUtil.ClusterExists(50f, 5) && clusterPosition.Distance(myPosition) < SlowTimeRange && !IsBubbleAtPosition(clusterPosition))
             {
                 position = clusterPosition;
                 return true;
@@ -400,20 +402,20 @@ namespace Trinity.Routines.Wizard
             if (Sets.DelseresMagnumOpus.IsEquipped)
             {
                 var isLargeCluster = Core.Clusters.LargeCluster.Exists && Core.Clusters.LargeCluster.Position.Distance(myPosition) < SlowTimeRange;
-                if (isLargeCluster && !isBubbleAtPosition(Core.Clusters.LargeCluster.Position))
+                if (isLargeCluster && !IsBubbleAtPosition(Core.Clusters.LargeCluster.Position))
                 {
                     position = Core.Clusters.LargeCluster.Position;
                     return true;
                 }
 
                 var isAnyCluster = Core.Clusters.BestCluster.Exists && Core.Clusters.BestCluster.Position.Distance(myPosition) < SlowTimeRange;
-                if (isAnyCluster && !isBubbleAtPosition(Core.Clusters.BestCluster.Position))
+                if (isAnyCluster && !IsBubbleAtPosition(Core.Clusters.BestCluster.Position))
                 {
                     position = Core.Clusters.BestCluster.Position;
                     return true;
                 }
 
-                if (!isBubbleAtPosition(myPosition))
+                if (!IsBubbleAtPosition(myPosition))
                 {
                     position = MathEx.GetPointAt(myPosition, 10f, Player.Rotation);
                     return true;
@@ -739,10 +741,9 @@ namespace Trinity.Routines.Wizard
 
         protected bool TryPrimaryPower(out TrinityPower power)
         {
-            TrinityActor target;
             power = null;
 
-            if (ShouldElectrocute(out target))
+            if (ShouldElectrocute(out var target))
                 power = Electrocute(target);
 
             else if (ShouldShockPulse(out target))
@@ -759,10 +760,9 @@ namespace Trinity.Routines.Wizard
 
         protected bool TrySecondaryPower(out TrinityPower power)
         {
-            TrinityActor target;
             power = null;
 
-            if (ShouldArcaneOrb(out target))
+            if (ShouldArcaneOrb(out var target))
                 power = ArcaneOrb(target);
 
             else if (ShouldRayOfFrost(out target))
@@ -779,16 +779,14 @@ namespace Trinity.Routines.Wizard
 
         protected bool TrySpecialPower(out TrinityPower power)
         {
-            TrinityActor target;
-            Vector3 position;
             power = null;
 
-            if (ShouldTeleport(out position))
+            if (ShouldTeleport(out var position))
                 power = Teleport(position);
 
             else if (ShouldArchon())
                 power = Archon();
-            
+
             else if (ShouldDiamondSkin())
                 power = DiamondSkin();
 
@@ -804,7 +802,7 @@ namespace Trinity.Routines.Wizard
             else if (ShouldHydra(out position))
                 power = Hydra(position);
 
-            else if (ShouldBlizzard(out target))
+            else if (ShouldBlizzard(out var target))
                 power = Blizzard(target);
 
             else if (ShouldMeteor(out target))
@@ -870,8 +868,7 @@ namespace Trinity.Routines.Wizard
 
         public TrinityPower DefaultBuffPower()
         {
-            TrinityPower power;
-            return TryBuffPower(out power) ? power : null;
+            return TryBuffPower(out var power) ? power : null;
         }
 
         public TrinityPower DefaultDestructiblePower()
