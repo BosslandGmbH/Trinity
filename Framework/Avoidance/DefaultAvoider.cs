@@ -287,7 +287,7 @@ namespace Trinity.Framework.Avoidance
 
             var isAtKiteHealth = playerHealthPct <= TrinityCombat.Routines.Current.KiteHealthPct;
             if (!isAtKiteHealth ||
-                !(TargetZDif < 4) ||
+                TargetZDif >= 4 ||
                 TrinityCombat.Routines.Current.KiteMode == KiteMode.Never)
             {
                 return false;
