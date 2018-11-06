@@ -55,7 +55,8 @@ namespace Trinity.Framework.Avoidance
 
         public TimeSpan TimeSinceLastAvoid => DateTime.UtcNow.Subtract(LastAvoidTime);
         public TimeSpan TimeSinceLastKite => DateTime.UtcNow.Subtract(LastKiteTime);
-        public bool IsKiteOnCooldown => TrinityCombat.Routines.Current.KiteDistance > 0 && Core.Avoidance.Avoider.TimeSinceLastKite.TotalMilliseconds < TrinityCombat.Routines.Current.KiteStutterDuration;
+        public bool IsKiteOnCooldown => TrinityCombat.Routines.Current.KiteDistance > 0 &&
+                                        Core.Avoidance.Avoider.TimeSinceLastKite.TotalMilliseconds < TrinityCombat.Routines.Current.KiteStutterDuration;
 
         private readonly PerFrameCachedValue<bool> _shouldKite = new PerFrameCachedValue<bool>(GetShouldKite);
         private readonly PerFrameCachedValue<bool> _shouldAvoid = new PerFrameCachedValue<bool>(GetShouldAvoid);
@@ -70,22 +71,34 @@ namespace Trinity.Framework.Avoidance
         {
             get
             {
-                if (Settings.Entries == null || !Settings.Entries.Any(a => a.IsEnabled))
+                if (Settings.Entries == null ||
+                    !Settings.Entries.Any(a => a.IsEnabled))
+                {
                     return false;
+                }
 
-                if (Core.Avoidance.GridEnricher.ActiveAvoidanceSnoIds == null || !Core.Avoidance.GridEnricher.ActiveAvoidanceSnoIds.Any())
+                if (Core.Avoidance.GridEnricher.ActiveAvoidanceSnoIds == null ||
+                    !Core.Avoidance.GridEnricher.ActiveAvoidanceSnoIds.Any())
+                {
                     return false;
+                }
 
-                if (Core.Avoidance.Grid.IsStandingInFlags(AvoidanceFlags.NoAvoid) && PlayerMover.IsBlocked)
+                if (Core.Avoidance.Grid.IsStandingInFlags(AvoidanceFlags.NoAvoid) &&
+                    PlayerMover.IsBlocked)
+                {
                     return false;
+                }
 
-                if (PlayerMover.IsBlocked && Core.BlockedCheck.BlockedTime.TotalMilliseconds > 8000)
+                if (PlayerMover.IsBlocked &&
+                    Core.BlockedCheck.BlockedTime.TotalMilliseconds > 8000)
                 {
                     Core.Logger.Debug(LogCategory.Avoidance, "Not Avoiding because blocked");
                     return false;
                 }
 
-                if (TrinityCombat.Targeting.CurrentTarget != null && TrinityCombat.Targeting.CurrentTarget.Distance < 10f && GizmoProximityTypes.Contains(TrinityCombat.Targeting.CurrentTarget.Type))
+                if (TrinityCombat.Targeting.CurrentTarget != null &&
+                    TrinityCombat.Targeting.CurrentTarget.Distance < 10f &&
+                    GizmoProximityTypes.Contains(TrinityCombat.Targeting.CurrentTarget.Type))
                 {
                     Core.Logger.Debug(LogCategory.Avoidance, "Not Avoiding because gizmo nearby");
                     return false;
@@ -94,7 +107,10 @@ namespace Trinity.Framework.Avoidance
                 if (Core.Avoidance.GridEnricher.HighestNodeWeight < 2 ||
                     !(Core.Avoidance.NearbyStats.HighestWeight >= Settings.MinimumHighestNodeWeightTrigger) ||
                     !(Core.Avoidance.NearbyStats.WeightPctTotal >= Settings.MinimumNearbyWeightPctTotalTrigger) ||
-                    !(Core.Avoidance.NearbyStats.WeightPctAvg >= Settings.AvoiderNearbyPctAvgTrigger)) return false;
+                    !(Core.Avoidance.NearbyStats.WeightPctAvg >= Settings.AvoiderNearbyPctAvgTrigger))
+                {
+                    return false;
+                }
 
                 Core.Logger.Debug(LogCategory.Avoidance, "Avoidance Local PctAvg: {0:0.00} / {1:0.00} PctTotal={2:0.00} / {3:0.00} Highest={4} / {5} ({6} Nodes, AbsHighest={7})",
                     Core.Avoidance.NearbyStats.WeightPctAvg,
@@ -155,8 +171,11 @@ namespace Trinity.Framework.Avoidance
         {
             get
             {
-                if (!Core.Avoidance.Grid.IsLocationInFlags(_safeSpot, AvoidanceFlags.Avoidance) && _safeSpot.Distance(ZetaDia.Me.Position) < 12f)
+                if (!Core.Avoidance.Grid.IsLocationInFlags(_safeSpot, AvoidanceFlags.Avoidance) &&
+                    _safeSpot.Distance(ZetaDia.Me.Position) < 12f)
+                {
                     return _safeSpot;
+                }
 
                 TryGetSafeSpot(out _safeSpot);
                 return _safeSpot;
@@ -169,14 +188,17 @@ namespace Trinity.Framework.Avoidance
 
             if (origin == default(Vector3))
             {
-                nodes = Core.Avoidance.GridEnricher.SafeNodesByDistance.Where(p => p.Distance >= minDistance && p.Distance <= maxDistance);
+                nodes = Core.Avoidance.GridEnricher.SafeNodesByDistance
+                    .Where(p => p.Distance >= minDistance &&
+                                p.Distance <= maxDistance);
             }
             else
             {
                 nodes = Core.Avoidance.GridEnricher.SafeNodesByDistance.Where(p =>
                 {
                     var distance = p.NavigableCenter.Distance(origin);
-                    return distance >= minDistance && distance <= maxDistance;
+                    return distance >= minDistance &&
+                           distance <= maxDistance;
                 });
             }
 
@@ -195,8 +217,11 @@ namespace Trinity.Framework.Avoidance
             if (Core.Buffs.HasInvulnerableShrine)
                 return false;
 
-            if (TrinityCombat.Targeting.CurrentTarget != null && TrinityCombat.Targeting.CurrentTarget.IsTreasureGoblin)
+            if (TrinityCombat.Targeting.CurrentTarget != null &&
+                TrinityCombat.Targeting.CurrentTarget.IsTreasureGoblin)
+            {
                 return false;
+            }
 
             if (Core.Player.IsInTown)
                 return false;
