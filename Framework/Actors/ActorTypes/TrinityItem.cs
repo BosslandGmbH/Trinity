@@ -1,21 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Trinity.Components.Coroutines.Town;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Actors.Properties;
 using Trinity.Framework.Events;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Zeta.Bot;
 using Zeta.Bot.Settings;
-using Zeta.Game.Internals.Actors;
-using Zeta.Game;
-using Trinity.Framework.Objects.Memory;
-using Trinity.Framework.Helpers;
-using Trinity.Components.Coroutines.Town;
 using Zeta.Common;
+using Zeta.Game;
+using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Framework.Actors.ActorTypes
@@ -32,8 +31,16 @@ namespace Trinity.Framework.Actors.ActorTypes
             Attributes = new AttributesWrapper(seed);
         }
 
-        public bool IsCosmeticItem => RawItemType == RawItemType.CosmeticPet || RawItemType == RawItemType.CosmeticPennant || RawItemType == RawItemType.CosmeticPortraitFrame || RawItemType == RawItemType.CosmeticWings;
-        public bool IsLowQuality => TrinityItemQuality == TrinityItemQuality.Common || TrinityItemQuality == TrinityItemQuality.Inferior || TrinityItemQuality == TrinityItemQuality.Magic || TrinityItemQuality == TrinityItemQuality.Rare; 
+        public bool IsCosmeticItem => RawItemType == RawItemType.CosmeticPet ||
+                                      RawItemType == RawItemType.CosmeticPennant ||
+                                      RawItemType == RawItemType.CosmeticPortraitFrame ||
+                                      RawItemType == RawItemType.CosmeticWings;
+
+        public bool IsLowQuality => TrinityItemQuality == TrinityItemQuality.Common ||
+                                    TrinityItemQuality == TrinityItemQuality.Inferior ||
+                                    TrinityItemQuality == TrinityItemQuality.Magic ||
+                                    TrinityItemQuality == TrinityItemQuality.Rare;
+
         public new AttributesWrapper Attributes { get; private set; }
         public bool IsFirstUpdate { get; set; } = true;
 
@@ -41,7 +48,9 @@ namespace Trinity.Framework.Actors.ActorTypes
         public InventorySlot InventorySlot { get; internal set; }
         public int InventoryColumn { get; internal set; }
         public int InventoryRow { get; internal set; }
-        public bool IsGroundItem => IsItem && InventorySlot == InventorySlot.None && Position != Vector3.Zero;
+        public bool IsGroundItem => IsItem &&
+                                    InventorySlot == InventorySlot.None &&
+                                    Position != Vector3.Zero;
 
         public InventorySlot LastInventorySlot { get; set; }
         public int LastInventoryColumn { get; set; }
@@ -56,28 +65,41 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsVendorBought => Attributes?.IsVendorBought ?? false;
         public bool IsAccountBound => (Attributes?.ItemBoundToACDId ?? 0) > 0;
 
-        public SnoGameBalanceItem? Gbi =>
-            GameBalanceHelper.GetRecord<SnoGameBalanceItem>(SnoGameBalanceType.Items, GameBalanceId);
+        // TODO: This is still accessed to often...
+        private PerFrameCachedValue<ACDItem.ItemRecord?> _gbiCache;
+        public ACDItem.ItemRecord? Gbi => (_gbiCache ?? (
+                                               _gbiCache = new PerFrameCachedValue<ACDItem.ItemRecord?>(
+                                                   () => SNORecordGameBalance.GetGameBalanceRecord<ACDItem.ItemRecord>(
+                                                       GameBalanceId,
+                                                       GameBalanceType.Items))
+                                               )
+                                           ).Value;
 
-        // TODO: Trinity had this set to Gbi.ItemLevel but was commented our - why?
-        public int ItemLevel => RequiredLevel;
+
         public int MaxStackCount => Gbi?.StackSize ?? 0;
         public GemType GemType => Gbi?.GemType ?? 0;
-        public RawItemType RawItemType => (RawItemType)(Gbi?.ItemTypesGameBalanceId ?? 0);
+        public RawItemType RawItemType => (RawItemType)(Gbi?.ItemTypeGBId ?? 0);
         public GemQuality GemQuality => Attributes?.GemQuality ?? GemQuality.Normal;
         public ItemQuality ItemQualityLevel => Attributes?.ItemQualityLevel ?? ItemQuality.Invalid;
         public ItemType ItemType => TypeConversions.GetItemType(RawItemType);
         public ItemBaseType ItemBaseType => TypeConversions.GetItemBaseType(ItemType);
         public TrinityItemType TrinityItemType => TypeConversions.GetTrinityItemType(RawItemType, GemType);
         public TrinityItemBaseType TrinityItemBaseType => TypeConversions.GetTrinityItemBaseType(TrinityItemType);
-        public bool IsGem => RawItemType == RawItemType.Gem || RawItemType == RawItemType.UpgradeableJewel;
-        public bool IsCraftingReagent => RawItemType == RawItemType.CraftingReagent || RawItemType == RawItemType.CraftingReagent_Bound;
+        public bool IsGem => RawItemType == RawItemType.Gem ||
+                             RawItemType == RawItemType.UpgradeableJewel;
+
+        public bool IsCraftingReagent => RawItemType == RawItemType.CraftingReagent ||
+                                         RawItemType == RawItemType.CraftingReagent_Bound;
+
         public bool IsGold => RawItemType == RawItemType.Gold;
         public bool IsEquipment => TypeConversions.GetIsEquipment(TrinityItemBaseType);
         public bool IsClassItem => TypeConversions.GetIsClassItem(ItemType);
         public bool IsOffHand => TypeConversions.GetIsOffhand(ItemType);
         public bool IsPotion => RawItemType == RawItemType.HealthPotion;
-        public bool IsSalvageable => IsEquipment && !IsVendorBought && RequiredLevel > 1 || IsPotion;
+        public bool IsSalvageable => IsEquipment &&
+                                     !IsVendorBought && RequiredLevel > 1 ||
+                                     IsPotion;
+
         public bool IsLegendaryGem => RawItemType == RawItemType.UpgradeableJewel;
         public bool IsMiscItem => ItemBaseType == ItemBaseType.Misc;
         public bool IsTwoSquareItem => TypeConversions.GetIsTwoSlot(ItemBaseType, ItemType);
@@ -88,12 +110,14 @@ namespace Trinity.Framework.Actors.ActorTypes
         /// <summary>
         /// If item is assigned - only visible to this player (bounty bag items)
         /// </summary>
-        public bool IsItemAssigned => !IsAccountBound && (Attributes?.ItemAssignedHero ?? 0) == ZetaDia.Service.Hero.HeroId;
+        public bool IsItemAssigned => !IsAccountBound &&
+                                      (Attributes?.ItemAssignedHero ?? 0) == ZetaDia.Service.Hero.HeroId;
 
         /// <summary>
         /// If the item can be picked up automatically by walking close by (globes)
         /// </summary>
-        public bool IsPickupNoClick => GameData.NoPickupClickItemTypes.Contains(TrinityItemType) || GameData.NoPickupClickTypes.Contains(Type);
+        public bool IsPickupNoClick => GameData.NoPickupClickItemTypes.Contains(TrinityItemType) ||
+                                       GameData.NoPickupClickTypes.Contains(Type);
 
         /// <summary>
         /// If the item was dropped by this player
@@ -122,8 +146,11 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public override void OnUpdated()
         {
-            if (InventorySlot == InventorySlot.SharedStash && !Core.Player.IsInTown)
+            if (InventorySlot == InventorySlot.SharedStash &&
+                !Core.Player.IsInTown)
+            {
                 return;
+            }
 
             Attributes.Update(CommonData);
             ItemProperties.Update(this);
@@ -154,7 +181,7 @@ namespace Trinity.Framework.Actors.ActorTypes
 
             if (IsPrimalAncient)
                 Core.Logger.Warn($"Primal {Name} dropped. (SnoId={ActorSnoId} Ann={AnnId} AcdId={AcdId} GbId={GameBalanceId}) InternalName={InternalName} Quality={ItemQualityLevel} Ancient={IsAncient} Primal={IsPrimalAncient} RawType={RawItemType}");
-            else 
+            else
                 Core.Logger.Log($"{Name} dropped. (SnoId={ActorSnoId} Ann={AnnId} AcdId={AcdId} GbId={GameBalanceId}) InternalName={InternalName} Quality={ItemQualityLevel} Ancient={IsAncient} Primal={IsPrimalAncient} RawType={RawItemType}");
 
             ItemEvents.FireItemDropped(this);

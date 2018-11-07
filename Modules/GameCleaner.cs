@@ -1,7 +1,6 @@
 ﻿using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Framework;
 using Trinity.Framework.Objects;
-using Trinity.Framework.Objects.Memory;
 using Zeta.Game;
 
 namespace Trinity.Modules
@@ -22,7 +21,6 @@ namespace Trinity.Modules
         {
             ZetaDia.Actors.Clear();
             ZetaDia.Actors.Update();
-            GameBalanceHelper.Cache.Clear();
             Core.Actors.Clear();
             Core.Hotbar.Clear();
             Core.Inventory.Clear();

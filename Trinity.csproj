@@ -476,7 +476,6 @@
     <Compile Include="Framework\Objects\Enums\RawItemType.cs" />
     <Compile Include="Framework\Objects\Enums\RawMonsterType.cs" />
     <Compile Include="Framework\Objects\Enums\RawQualityType.cs" />
-    <Compile Include="Framework\Objects\Enums\SnoGameBalanceType.cs" />
     <Compile Include="Framework\Objects\Enums\SnoMarker.cs" />
     <Compile Include="Framework\Objects\Enums\SnoStringListType.cs" />
     <Compile Include="Framework\Objects\Enums\SnoType.cs" />
@@ -490,9 +489,7 @@
     <Compile Include="Framework\Objects\ItemStatRange.cs" />
     <Compile Include="Framework\Objects\IUnique.cs" />
     <Compile Include="Framework\Objects\Memory\Container.cs" />
-    <Compile Include="Framework\Objects\Memory\GameBalanceHelper.cs" />
     <Compile Include="Framework\Objects\Memory\MemoryWrapper.cs" />
-    <Compile Include="Framework\Objects\Memory\ItemRecord.cs" />
     <Compile Include="Framework\Objects\Memory\Marker.cs" />
     <Compile Include="Framework\Objects\Memory\StringListHelper.cs" />
     <Compile Include="Framework\Objects\Memory\SnoDictionary.cs" />
