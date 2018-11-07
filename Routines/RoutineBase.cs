@@ -576,9 +576,6 @@ namespace Trinity.Routines
             power = kamaKaziPower;
             return true;
         }
-
-        public virtual async Task<bool> HandleStart() => false;
-        public virtual bool ShouldReturnStartResult => false;
         #endregion
 
         /// <summary>

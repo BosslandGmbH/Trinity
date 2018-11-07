@@ -74,11 +74,6 @@ namespace Trinity.Components.Combat
             if (!Core.Scenes.CurrentWorldScenes.Any())
                 return false;
 
-            // Allow a 'false' return in routine (to continue with profile) and skip default behavior.
-            var startHookResult = await Routines.Current.HandleStart();
-            if (Routines.Current.ShouldReturnStartResult)
-                return startHookResult;
-
             // We don't really care about the result of DrinkPotion as it will always return
             // either CoroutineStatus.NoAction or CoroutineStatus.Done.
             await UsePotion.DrinkPotion();
