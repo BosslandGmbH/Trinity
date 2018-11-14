@@ -1,9 +1,8 @@
 ﻿using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Zeta.Game;
@@ -36,7 +35,7 @@ namespace Trinity.Settings.ItemList
         public static int GetMinBaseDamage(ACDItem item)
         {
             var min = Math.Min(item.Stats.MinDamageElemental, item.Stats.MaxDamageElemental);
-            return (min != 0) ? (int)min : (int)item.GetAttribute<float>(ActorAttributeType.DamageWeaponMinPhysical);
+            return (Math.Abs(min) > double.Epsilon) ? (int)min : (int)item.GetAttribute<float>(ActorAttributeType.DamageWeaponMinPhysical);
         }
 
 
@@ -232,7 +231,7 @@ namespace Trinity.Settings.ItemList
                     var skillDamageIncrease = item.GetSkillDamageIncrease(skill.SNOPower);
                     if (skillDamageIncrease > 0)
                     {
-                        Core.Logger.Log(string.Format("SkillDamage +{0}% {1}", skillDamageIncrease, skill.Name));
+                        Core.Logger.Log($"SkillDamage +{skillDamageIncrease}% {skill.Name}");
                         return (int)skillDamageIncrease;
                     }
                 }
@@ -276,14 +275,12 @@ namespace Trinity.Settings.ItemList
         /// </summary>
         public static ItemStatRange GetItemStatRange(Item item, ItemProperty prop, int variant = 0)
         {
-            ItemStatRange statRange;
-
             var result = new ItemStatRange();
 
             if (prop == ItemProperty.Ancient)
                 return new ItemStatRange { Max = 1, Min = 0 };
 
-            if (ItemPropertyLimitsByItemType.TryGetValue(new KeyValuePair<TrinityItemType, ItemProperty>(item.TrinityItemType, prop), out statRange))
+            if (ItemPropertyLimitsByItemType.TryGetValue(new KeyValuePair<TrinityItemType, ItemProperty>(item.TrinityItemType, prop), out var statRange))
                 result = statRange;
 
             if (SpecialItemsPropertyCases.TryGetValue(new Tuple<Item, ItemProperty, int>(item, prop, variant), out statRange))
@@ -297,22 +294,20 @@ namespace Trinity.Settings.ItemList
 
         public static ItemStatRange GetItemStatRange(TrinityItemType itemType, ItemProperty prop)
         {
-            ItemStatRange statRange;
-
             var result = new ItemStatRange();
 
             if (prop == ItemProperty.Ancient)
                 return new ItemStatRange { Max = 1, Min = 0 };
 
-            if (ItemPropertyLimitsByItemType.TryGetValue(new KeyValuePair<TrinityItemType, ItemProperty>(itemType, prop), out statRange))
+            if (ItemPropertyLimitsByItemType.TryGetValue(new KeyValuePair<TrinityItemType, ItemProperty>(itemType, prop), out var statRange))
                 result = statRange;
 
             foreach (var pair in SpecialItemsPropertyCases.Where(i => i.Key.Item1.TrinityItemType == itemType && i.Key.Item2 == prop))
             {
                 var range = pair.Value;
-                if (result.Min == 0 || range.Min < result.Min)
+                if (Math.Abs(result.Min) < double.Epsilon || range.Min < result.Min)
                     result.Min = range.Min;
-                if (result.AncientMin == 0 || range.AncientMin < result.AncientMin)
+                if (Math.Abs(result.AncientMin) < double.Epsilon || range.AncientMin < result.AncientMin)
                     result.AncientMin = range.AncientMin;
                 if (range.Max > result.Max)
                     result.Max = range.Max;
@@ -450,15 +445,14 @@ namespace Trinity.Settings.ItemList
             return result;
         }
 
-        public static float GetPassivePowerValue(TrinityItem item)
+        public static float GetPassivePowerValue(ACDItem item)
         {
-            ItemPowerDescripter desc;
-            if (!ItemPassivePowers.TryGetValue(item.ActorSnoId, out desc))
+            if (!ItemPassivePowers.TryGetValue(item.ActorSnoId, out var desc))
             {
                 return -1;
             }
-            var val = item.Attributes.GetAttribute<float>(ActorAttributeType.ItemPowerPassive);
-            if (val != 0)
+            var val = item.GetAttribute<float>(ActorAttributeType.ItemPowerPassive);
+            if (Math.Abs(val) > double.Epsilon)
             {                
                 return desc.IsPercent ? val * 100 : val;
             }

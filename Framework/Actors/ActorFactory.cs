@@ -15,15 +15,11 @@ namespace Trinity.Framework.Actors
 
             if (seed.ActorType == ActorType.Player)
                 return new TrinityPlayer(seed);
-            else if (seed.ActorType == ActorType.Item)
-                return new TrinityItem(seed);
+
+            if (seed.ActorType == ActorType.Item)
+                return new TrinityItem(seed.CommonData);
 
             return new TrinityActor(seed);
-        }
-
-        internal static TrinityItem CreateItem(ACD acd)
-        {
-            return new TrinityItem(acd);
         }
     }
 }

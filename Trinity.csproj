@@ -288,6 +288,9 @@
     <Compile Include="Components\Adventurer\UI\MainUI.cs" />
     <Compile Include="Components\Coroutines\Town\TrinityTownRun.ExtractLegendaryPowers.cs" />
     <Compile Include="Components\QuestTools\BaseContainerProfileBehavior.cs" />
+    <Compile Include="Framework\Actors\Attributes\ACDItemExtensions.cs" />
+    <Compile Include="Framework\Actors\Attributes\AttributeKey.cs" />
+    <Compile Include="Framework\Actors\Attributes\DescriptorHelper.cs" />
     <Compile Include="Framework\Objects\Enums\RequirementType.cs" />
     <Compile Include="Modules\ProfilePulsator.cs" />
     <Compile Include="Components\QuestTools\BaseProfileBehavior.cs" />
@@ -368,7 +371,6 @@
     <Compile Include="DbProvider\StuckHandler.cs" />
     <Compile Include="DbProvider\TrinityCombatProvider.cs" />
     <Compile Include="DbProvider\TrinityRoutine.cs" />
-    <Compile Include="Framework\Actors\ActorExtensions.cs" />
     <Compile Include="Framework\Actors\ActorCache.cs" />
     <Compile Include="Framework\Actors\ActorFactory.cs" />
     <Compile Include="Framework\Actors\ActorTypes\ActorBase.cs" />
@@ -377,7 +379,6 @@
     <Compile Include="Framework\Actors\ActorTypes\TrinityPlayer.cs" />
     <Compile Include="Framework\Actors\Properties\CommonProperties.cs" />
     <Compile Include="Framework\Actors\Properties\GizmoProperties.cs" />
-    <Compile Include="Framework\Actors\Properties\ItemProperties.cs" />
     <Compile Include="Framework\Actors\Properties\PlayerProperties.cs" />
     <Compile Include="Framework\Actors\Properties\UnitProperties.cs" />
     <Compile Include="Framework\Avoidance\AvoidanceDefinitions.cs" />

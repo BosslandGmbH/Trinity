@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Settings;
@@ -216,9 +217,9 @@ namespace Trinity.Components.Coroutines.Town
             }
         }
 
-        public static TransmuteRecipe GetRecipeToCurrency(CurrencyType to, TrinityItem item)
+        public static TransmuteRecipe GetRecipeToCurrency(CurrencyType to, ACDItem item)
         {
-            var quality = item.TrinityItemQuality;
+            var quality = item.GetTrinityItemQuality();
             switch (to)
             {
                 case CurrencyType.ArcaneDust:
@@ -274,9 +275,9 @@ namespace Trinity.Components.Coroutines.Town
             }
         }
 
-        public static List<TrinityItem> GetSacraficialItems(CurrencyType to, bool excludeLegendaryUpgradeRares = false)
+        public static List<ACDItem> GetSacraficialItems(CurrencyType to, bool excludeLegendaryUpgradeRares = false)
         {
-            List<TrinityItem> sacraficialItems = new List<TrinityItem>();
+            List<ACDItem> sacraficialItems = new List<ACDItem>();
 
             switch (to)
             {
@@ -318,7 +319,7 @@ namespace Trinity.Components.Coroutines.Town
             return sacraficialItems;
         }
 
-        public static List<TrinityItem> GetBackpackItemsOfQuality(List<ItemQuality> qualities)
+        public static List<ACDItem> GetBackpackItemsOfQuality(List<ItemQuality> qualities)
         {
             return Core.Inventory.Backpack.Where(i =>
             {

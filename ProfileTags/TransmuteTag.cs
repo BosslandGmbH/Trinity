@@ -13,6 +13,7 @@ using Trinity.Settings;
 using Zeta.Bot.Coroutines;
 using Zeta.Common;
 using Zeta.Game;
+using Zeta.Game.Internals.Actors;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags
@@ -68,7 +69,7 @@ namespace Trinity.ProfileTags
                 return true;
             }
 
-            var transmuteGroup = new List<TrinityItem>();
+            var transmuteGroup = new List<ACDItem>();
             foreach (var item in Items)
             {
                 var backpackItems = Core.Inventory.Backpack.ByActorSno(item.Id);

@@ -25,7 +25,7 @@ namespace Trinity.Framework.Events
         public static TrinityChangeDetector<HashSet<int>> EquippedItems { get; } = new TrinityChangeDetector<HashSet<int>>(()
             => Core.Inventory.EquippedIds, SlowUpdateInterval);
 
-        public static TrinityChangeDetector<IEnumerable<TrinityItem>> BackpackItems { get; } = new TrinityChangeDetector<IEnumerable<TrinityItem>>(()
+        public static TrinityChangeDetector<IEnumerable<ACDItem>> BackpackItems { get; } = new TrinityChangeDetector<IEnumerable<ACDItem>>(()
             => Core.Inventory.Backpack, SlowUpdateInterval);
 
         public static TrinityChangeDetector<HashSet<SNOPower>> Skills { get; } = new TrinityChangeDetector<HashSet<SNOPower>>(()

@@ -54,33 +54,6 @@ namespace Trinity.Framework.Helpers
             }
         }
 
-        public static TrinityItemQuality GetTrinityItemQuality(ItemQuality quality)
-        {
-            switch (quality)
-            {
-                case ItemQuality.Inferior:
-                    return TrinityItemQuality.Inferior;
-
-                case ItemQuality.Normal:
-                case ItemQuality.Superior:
-                    return TrinityItemQuality.Common;
-
-                case ItemQuality.Magic1:
-                case ItemQuality.Magic2:
-                case ItemQuality.Magic3:
-                    return TrinityItemQuality.Magic;
-
-                case ItemQuality.Rare4:
-                case ItemQuality.Rare5:
-                case ItemQuality.Rare6:
-                    return TrinityItemQuality.Rare;
-
-                case ItemQuality.Legendary:
-                    return TrinityItemQuality.Legendary;
-            }
-            return TrinityItemQuality.None;
-        }
-
         //internal static ItemType GItemTypeToItemType(TrinityItemType itemType)
         //{
         //    switch (itemType)
@@ -1283,9 +1256,9 @@ namespace Trinity.Framework.Helpers
             return true;
         }
 
-        public static bool IsWeapon(TrinityItem item) => WeaponTypes.Contains(item.ItemType);
+        public static bool IsWeapon(ACDItem item) => WeaponTypes.Contains(item.ItemType);
 
-        public static bool IsArmor(TrinityItem item) => ArmorTypes.Contains(item.ItemType);
+        public static bool IsArmor(ACDItem item) => ArmorTypes.Contains(item.ItemType);
 
         internal static HashSet<ItemType> OffHandTypes = new HashSet<ItemType>
         {

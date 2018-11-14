@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
@@ -68,7 +69,7 @@ namespace Trinity.Components.Coroutines.Town
                 var backpackCandidates = GetLegendaryExtractionCandidates(InventorySlot.BackpackItems);
                 var stashCandidates = Core.Settings.KanaisCube.CubeExtractFromStash
                     ? GetLegendaryExtractionCandidates(InventorySlot.SharedStash).DistinctBy(i => i.ActorSnoId).ToList()
-                    : new List<TrinityItem>();
+                    : new List<ACDItem>();
 
                 if (!backpackCandidates.Any() && !stashCandidates.Any())
                 {
@@ -80,7 +81,7 @@ namespace Trinity.Components.Coroutines.Town
             }
         }
 
-        private static IEnumerable<TrinityItem> GetLegendaryExtractionCandidates(InventorySlot slot)
+        private static IEnumerable<ACDItem> GetLegendaryExtractionCandidates(InventorySlot slot)
         {
             var alreadyCubedIds = new HashSet<int>(ZetaDia.Storage.PlayerDataManager.ActivePlayerData.KanaisPowersExtractedActorSnoIds);
             var usedIds = new HashSet<int>();
@@ -90,16 +91,16 @@ namespace Trinity.Components.Coroutines.Town
                 if (!item.IsValid)
                     continue;
 
-                if (item.TrinityItemType == TrinityItemType.HealthPotion)
+                if (item.GetTrinityItemType() == TrinityItemType.HealthPotion)
                     continue;
 
-                if (item.FollowerType != FollowerType.None)
+                if (item.FollowerSpecialType != FollowerType.None)
                     continue;
 
                 if (usedIds.Contains(item.ActorSnoId))
                     continue;
 
-                if (DoNotExtractRawItemTypes.Contains(item.RawItemType))
+                if (DoNotExtractRawItemTypes.Contains(item.GetRawItemType()))
                     continue;
 
                 if (DoNotExtractItemIds.Contains(item.ActorSnoId))
@@ -113,7 +114,7 @@ namespace Trinity.Components.Coroutines.Town
                     continue;
 
                 if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyNonAncient &&
-                    !item.IsAncient)
+                    !item.Stats.IsAncient)
                     continue;
 
                 if (string.IsNullOrEmpty(Legendary.GetItem(item)?.LegendaryAffix))
@@ -228,7 +229,7 @@ namespace Trinity.Components.Coroutines.Town
             return await ExtractPower(candidate);
         }
 
-        private static async Task<CoroutineResult> ExtractPower(TrinityItem item)
+        private static async Task<CoroutineResult> ExtractPower(ACDItem item)
         {
             if (item == null)
                 return CoroutineResult.NoAction;

@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Zeta.Bot.Coroutines;
@@ -260,7 +261,7 @@ namespace Trinity.Components.Coroutines.Town
         /// <summary>
         /// Move to Kanai's cube and transmute.
         /// </summary>
-        public static async Task<CoroutineResult> TransmuteRecipe(TransmuteRecipe recipe, params TrinityItem[] transmuteGroup)
+        public static async Task<CoroutineResult> TransmuteRecipe(TransmuteRecipe recipe, params ACDItem[] transmuteGroup)
         {
             return await TransmuteRecipe(recipe, transmuteGroup.Select(i => i.AnnId).ToList());
         }
@@ -295,7 +296,7 @@ namespace Trinity.Components.Coroutines.Town
         /// <summary>
         /// A list of conversion candidates from backpack
         /// </summary>
-        public static List<TrinityItem> GetBackPackRares(IEnumerable<ItemSelectionType> types = null)
+        public static List<ACDItem> GetBackPackRares(IEnumerable<ItemSelectionType> types = null)
         {
             if (types == null)
                 types = Core.Settings.KanaisCube.GetRareUpgradeSettings();
@@ -331,9 +332,9 @@ namespace Trinity.Components.Coroutines.Town
         }
 
         // TODO: Figure out why that is here...
-        public static ItemSelectionType GetBackPackItemSelectionType(TrinityItem item)
+        public static ItemSelectionType GetBackPackItemSelectionType(ACDItem item)
         {
-            return Enum.TryParse(item.TrinityItemType.ToString(), out ItemSelectionType result) ?
+            return Enum.TryParse(item.GetTrinityItemType().ToString(), out ItemSelectionType result) ?
                 result :
                 ItemSelectionType.Unknown;
         }

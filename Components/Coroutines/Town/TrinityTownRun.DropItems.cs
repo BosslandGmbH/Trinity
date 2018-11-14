@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Trinity.Framework;
-using System.Threading.Tasks;
-using Buddy.Coroutines;
+﻿using Buddy.Coroutines;
 using GreyMagic;
-using Trinity.Framework.Actors.ActorTypes;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Trinity.Framework;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Events;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Game;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Components.Coroutines.Town
 {
@@ -16,7 +17,7 @@ namespace Trinity.Components.Coroutines.Town
     {
         public static HashSet<int> DroppedItemAnnIds = new HashSet<int>();
 
-        public static bool ShouldDrop(TrinityItem i)
+        public static bool ShouldDrop(ACDItem i)
         {
             if (i.IsProtected())
                 return false;
@@ -56,7 +57,7 @@ namespace Trinity.Components.Coroutines.Town
         /// <summary>
         /// Drop item in town and record it so we can avoid picking it up again.
         /// </summary>
-        public static async Task<CoroutineResult> Drop(TrinityItem item)
+        public static async Task<CoroutineResult> Drop(ACDItem item)
         {
             if (!ZetaDia.IsInGame || !ZetaDia.IsInTown || item.IsAccountBound)
                 return CoroutineResult.NoAction;

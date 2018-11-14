@@ -48,7 +48,7 @@ namespace Trinity.Framework.Objects
             ItemType = acdItem.ItemType;
         }
 
-        public TrinityItem GetEquippedItem() => Core.Inventory.Equipped.FirstOrDefault(u => u.ActorSnoId == Id);
+        public ACDItem GetEquippedItem() => Core.Inventory.Equipped.FirstOrDefault(u => u.ActorSnoId == Id);
 
         /// <summary>
         /// If this item is currently equipped

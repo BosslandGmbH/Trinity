@@ -10,6 +10,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using log4net;
+using Trinity.Components.Adventurer.Coroutines.RiftCoroutines;
 using Trinity.Components.Coroutines;
 using Trinity.Components.Coroutines.Town;
 using Trinity.Framework;
@@ -33,6 +35,7 @@ namespace Trinity.UI
 {
     internal class TabUi
     {
+        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
         private static UniformGrid _tabGrid;
         private static TabItem _tabItem;
 
@@ -131,7 +134,13 @@ namespace Trinity.UI
 
                         //CreateButton("Stash Test", StashItems),
                         //CreateButton("Test Internals", TestInternals),
-                    });
+
+                        CreateButton("TriggerTest", (o, s) =>
+                        {
+                            var keys = RiftCoroutine.CurrentRiftKeyCount;
+                            s_logger.Info($"Have {keys} Rift Keys.");
+                        })
+                });
 
                     //CreateButton("Scan UIElement", btnClick_ScanUIElement)
                     //CreateButton("Reload Item Rules", ReloadItemRulesEventHandler);
@@ -147,6 +156,8 @@ namespace Trinity.UI
                     //CreateButton("Rares => Legendary", btnClick_UpgradeRares);
                     //CreateButton("Test1", btnClick_Test1);
                     //CreateButton("Test2", btnClick_HijackTest);
+
+
 
                     _tabItem = new TabItem
                     {

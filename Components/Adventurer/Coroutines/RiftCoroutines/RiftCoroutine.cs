@@ -5,22 +5,19 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Actors;
-using Trinity.Components.Adventurer.Game.Combat;
-using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Components.Adventurer.Game.Stats;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Framework;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
 using Zeta.Common;
-using Zeta.Common.Helpers;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
@@ -35,9 +32,10 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
         private static readonly ExperienceTracker s_experienceTracker = new ExperienceTracker();
 
-        public static long CurrentRiftKeyCount => AdvDia.StashAndBackpackItems
-            .Where(i => i.RawItemType == RawItemType.TieredRiftKey)
+        public static long CurrentRiftKeyCount => Core.Actors.Inventory
+            .Where(i => i.GetRawItemType() == RawItemType.TieredRiftKey)
             .Sum(k => k.ItemStackQuantity);
+
         //ActorId: 364715, Type: Gizmo, Name: x1_OpenWorld_LootRunObelisk_B - 27053, Distance2d: 9.72007, CollisionRadius: 9.874258, MinimapActive: 1, MinimapIconOverride: 327066, MinimapDisableArrow: 0
         //ActorId: 345935, Type: Gizmo, Name: X1_OpenWorld_LootRunPortal - 27292, Distance2d: 9.72007, CollisionRadius: 8.316568, MinimapActive: 1, MinimapIconOverride: -1, MinimapDisableArrow: 0
         public static DiaGizmo RiftPortal => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true)

@@ -3,7 +3,9 @@ using Trinity.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Settings;
 using Zeta.Bot;
@@ -14,22 +16,24 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Modules
 {
-    public class InventoryCache : Module, IEnumerable<TrinityItem>
+    public class InventoryCache : Module, IEnumerable<ACDItem>
     {
+        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+
         public InventoryCache()
         {
             GameEvents.OnGameJoined += (sender, args) => Update();
             GameEvents.OnWorldChanged += (sender, args) => Update();
 
             AllItems.Source = () => Core.Actors.Inventory.Where(i => !InvalidAnnIds.Contains(i.AnnId));
-            Stash.Source = () => Core.Inventory.AllItems.Where(i => i.InventorySlot == InventorySlot.SharedStash);
-            Backpack.Source = () => Core.Inventory.AllItems.Where(i => i.InventorySlot == InventorySlot.BackpackItems);
+            Stash.Source = () => AllItems.Where(i => i.InventorySlot == InventorySlot.SharedStash);
+            Backpack.Source = () => AllItems.Where(i => i.InventorySlot == InventorySlot.BackpackItems);
         }
 
         public HashSet<int> KanaisCubeIds { get; private set; } = new HashSet<int>();
         public HashSet<int> PlayerEquippedIds { get; private set; } = new HashSet<int>();
         public HashSet<int> EquippedIds { get; private set; } = new HashSet<int>();
-        public List<TrinityItem> Equipped { get; private set; } = new List<TrinityItem>();
+        public List<ACDItem> Equipped { get; private set; } = new List<ACDItem>();
         public HashSet<int> InvalidAnnIds { get; private set; } = new HashSet<int>();
         public InventoryCurrency Currency { get; } = new InventoryCurrency();
         public InventorySlice AllItems { get; } = new InventorySlice();
@@ -38,29 +42,31 @@ namespace Trinity.Modules
         public int BackpackItemCount { get; private set; }
         protected override void OnPulse() => Update();
         IEnumerator IEnumerable.GetEnumerator() => AllItems.GetEnumerator();
-        public IEnumerator<TrinityItem> GetEnumerator() => AllItems.GetEnumerator();
+        public IEnumerator<ACDItem> GetEnumerator() => AllItems.GetEnumerator();
 
         public void Update()
         {
-            return;
-
-            /*
             if (!ZetaDia.IsInGame || ZetaDia.Storage.PlayerDataManager.ActivePlayerData == null)
                 return;
 
             var kanaisCubeIds = new HashSet<int>(ZetaDia.Storage.PlayerDataManager.ActivePlayerData.KanaisPowersAssignedActorSnoIds);
-            var equipped = new List<TrinityItem>();
+            var equipped = new List<ACDItem>();
             var equippedIds = new HashSet<int>();
             var playerEquippedIds = new HashSet<int>();
             var backpackItemCount = 0;
+            var stashItemCount = 0;
 
-            foreach (var item in Core.Actors.Inventory)
+            foreach (var item in AllItems)
             {
                 if (!item.IsValid)
                     continue;
 
                 switch (item.InventorySlot)
                 {
+                    case InventorySlot.SharedStash:
+                        stashItemCount++;
+                        break;
+
                     case InventorySlot.BackpackItems:
                         backpackItemCount++;
                         break;
@@ -93,7 +99,7 @@ namespace Trinity.Modules
             Equipped = equipped;
             EquippedIds = equippedIds;
             PlayerEquippedIds = playerEquippedIds;
-            BackpackItemCount = backpackItemCount;*/
+            BackpackItemCount = backpackItemCount;
         }
 
         public void Clear()
@@ -104,7 +110,7 @@ namespace Trinity.Modules
         /// <summary>
         /// Get a subset of items up to the desired quantity.
         /// </summary>
-        public IEnumerable<TrinityItem> GetStacksUpToQuantity(List<TrinityItem> materialsStacks, int maxStackQuantity)
+        public IEnumerable<ACDItem> GetStacksUpToQuantity(List<ACDItem> materialsStacks, int maxStackQuantity)
         {
             if (materialsStacks == null || !materialsStacks.Any() || materialsStacks.Count == 1)
             {
@@ -130,14 +136,36 @@ namespace Trinity.Modules
             return toBeAdded.ToList();
         }
 
-        public class InventorySlice : IEnumerable<TrinityItem>
+        public class InventorySlice : IEnumerable<ACDItem>
         {
-            public Func<IEnumerable<TrinityItem>> Source { get; set; }
-            public List<TrinityItem> ByItemType(ItemType type) => Source().Where(i => i.ItemType == type).ToList();
-            public List<TrinityItem> ByActorSno(int actorSno) => Source().Where(i => i.ActorSnoId == actorSno).ToList();
-            public List<TrinityItem> ByQuality(TrinityItemQuality quality) => Source().Where(i => i.TrinityItemQuality == quality).ToList();
-            public void Update() => Source().ForEach(i => i.OnUpdated());
-            public IEnumerator<TrinityItem> GetEnumerator() => Source().GetEnumerator();
+            public Func<IEnumerable<ACDItem>> Source { get; set; }
+            public List<ACDItem> ByItemType(ItemType type) => Source().Where(i => i.ItemType == type).ToList();
+            public List<ACDItem> ByActorSno(int actorSno) => Source().Where(i => i.ActorSnoId == actorSno).ToList();
+            public List<ACDItem> ByQuality(TrinityItemQuality quality) => Source().Where(i =>
+            {
+                switch (quality)
+                {
+                    case TrinityItemQuality.Invalid:
+                        return false;
+                    case TrinityItemQuality.None:
+                        return false;
+                    case TrinityItemQuality.Inferior:
+                        return i.ItemQualityLevel == ItemQuality.Inferior;
+                    case TrinityItemQuality.Common:
+                        return i.ItemQualityLevel >= ItemQuality.Normal && i.ItemQualityLevel <= ItemQuality.Superior;
+                    case TrinityItemQuality.Magic:
+                        return i.ItemQualityLevel >= ItemQuality.Magic1 && i.ItemQualityLevel <= ItemQuality.Magic3;
+                    case TrinityItemQuality.Rare:
+                        return i.ItemQualityLevel >= ItemQuality.Rare4 && i.ItemQualityLevel <= ItemQuality.Rare6;
+                    case TrinityItemQuality.Legendary:
+                        return i.ItemQualityLevel == ItemQuality.Legendary;
+                    case TrinityItemQuality.Set:
+                        return i.IsSetItem();
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(quality), quality, null);
+                }
+            }).ToList();
+            public IEnumerator<ACDItem> GetEnumerator() => Source().GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => Source().GetEnumerator();
         }
 

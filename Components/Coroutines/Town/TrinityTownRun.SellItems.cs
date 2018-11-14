@@ -1,23 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Trinity.Framework;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using Buddy.Coroutines;
-using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Events;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Reference;
-using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
 using Zeta.Game;
 using Zeta.Game.Internals;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Components.Coroutines.Town
 {
     public static partial class TrinityTownRun
     {
-        public static bool ShouldSell(TrinityItem i)
+        public static bool ShouldSell(ACDItem i)
         {
             if (i.IsProtected())
                 return false;
@@ -40,7 +37,7 @@ namespace Trinity.Components.Coroutines.Town
 
             var sellItem = Core.Inventory.Backpack
                 .FirstOrDefault(i => ShouldSell(i) &&
-                                     InventoryManager.CanSellItem(i.ToAcdItem()));
+                                     InventoryManager.CanSellItem(i));
             if (sellItem == null)
             {
                 if (await RepairItems() == CoroutineResult.Running)
@@ -73,9 +70,9 @@ namespace Trinity.Components.Coroutines.Town
                 return CoroutineResult.Failed;
             }
 
-            s_logger.Debug($"[{nameof(SellItems)}] Selling: {sellItem.Name} ({sellItem.ActorSnoId}) Quality={sellItem.ItemQualityLevel} IsAncient={sellItem.IsAncient} Name={sellItem.InternalName}");
+            s_logger.Debug($"[{nameof(SellItems)}] Selling: {sellItem.Name} ({sellItem.ActorSnoId}) Quality={sellItem.ItemQualityLevel} IsAncient={sellItem.Stats.IsAncient} Name={sellItem.InternalName}");
             ItemEvents.FireItemSold(sellItem);
-            InventoryManager.SellItem(sellItem.ToAcdItem());
+            InventoryManager.SellItem(sellItem);
             Core.Inventory.InvalidAnnIds.Add(sellItem.AnnId);
             return CoroutineResult.Running;
         }

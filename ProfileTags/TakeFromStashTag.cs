@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Coroutines.Town;
 using Trinity.Components.QuestTools;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.ProfileTags.EmbedTags;
 using Trinity.Settings;
 using Zeta.XmlEngine;
@@ -41,7 +42,7 @@ namespace Trinity.ProfileTags
                     {
                         if (item.Quality != TrinityItemQuality.Invalid && item.Quality != TrinityItemQuality.None)
                         {
-                            stashItem = Core.Inventory.Stash.FirstOrDefault(i => i.TrinityItemQuality == item.Quality);
+                            stashItem = Core.Inventory.Stash.FirstOrDefault(i => i.GetTrinityItemQuality() == item.Quality);
                         }
                         if (stashItem == null)
                         {

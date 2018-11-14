@@ -1,5 +1,6 @@
 ﻿using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Settings;
 
 namespace Trinity.Components.Combat.Resources
@@ -8,8 +9,7 @@ namespace Trinity.Components.Combat.Resources
     {
         public static bool ShouldIgnoreGlobe(TrinityItem actor)
         {
-            string reason;
-            return ShouldIgnoreGlobe(actor, out reason);
+            return ShouldIgnoreGlobe(actor, out _);
         }
 
         public static bool ShouldIgnoreGlobe(TrinityItem actor, out string reason)
@@ -22,31 +22,29 @@ namespace Trinity.Components.Combat.Resources
             switch (Core.Settings.Weighting.GlobeWeighting)
             {
                 case SettingMode.Disabled:
-                    reason = $"Ignore(Globes=Disabled)";
+                    reason = "Ignore(Globes=Disabled)";
                     return true;
 
                 case SettingMode.None:
-                    reason = $"Keep(Globes=None)";
+                    reason = "Keep(Globes=None)";
                     return false;
 
                 case SettingMode.Enabled:
-                    reason = $"Keep(Globes=Enabled)";
+                    reason = "Keep(Globes=Enabled)";
                     return false;
             }
 
-            if (!Core.Settings.Weighting.GlobeTypes.HasFlag(actor.GlobeType))
-            {
-                reason = $"Ignore({actor.GlobeType}=Disabled)";
-                return true;
-            }
+            var item = actor.ToAcdItem();
+            if (Core.Settings.Weighting.GlobeTypes.HasFlag(item.GetGlobeType()))
+                return false;
 
-            return false;
+            reason = $"Ignore({item.GetGlobeType()}=Disabled)";
+            return true;
         }
 
         public static bool ShouldIgnoreSpecialTarget(TrinityActor actor)
         {
-            string reason;
-            return ShouldIgnoreSpecialTarget(actor, out reason);
+            return ShouldIgnoreSpecialTarget(actor, out _);
         }
 
         public static bool ShouldIgnoreSpecialTarget(TrinityActor actor, out string reason)
@@ -67,8 +65,7 @@ namespace Trinity.Components.Combat.Resources
 
         public static bool ShouldIgnoreTrash(TrinityActor unit)
         {
-            string reason;
-            return ShouldIgnoreTrash(unit, out reason);
+            return ShouldIgnoreTrash(unit, out _);
         }
 
         public static bool ShouldIgnoreTrash(TrinityActor unit, out string reason)

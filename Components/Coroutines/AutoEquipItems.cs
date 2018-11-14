@@ -39,14 +39,26 @@ namespace Trinity.Components.Coroutines
             if (!Core.Settings.Items.AutoEquipItems)
                 return false;
 
-            if (!Core.Player.IsValid || Core.Player.IsInCombat || !ZetaDia.IsInGame || ZetaDia.Globals.IsLoadingWorld)
+            if (!Core.Player.IsValid ||
+                Core.Player.IsInCombat ||
+                !ZetaDia.IsInGame ||
+                ZetaDia.Globals.IsLoadingWorld)
+            {
                 return false;
+            }
 
             if (DateTime.UtcNow.Subtract(_lastEquipCheckTime).TotalSeconds < 5)
                 return false;
 
-            if (!ZetaDia.Me.IsValid || !ZetaDia.Me.CommonData.IsValid || ZetaDia.Me.CommonData.IsDisposed || ZetaDia.Me.Level == 0 || ZetaDia.Me.Level >= 70 && Core.Settings.Items.AutoEquipAutoDisable)
+            if (!ZetaDia.Me.IsValid ||
+                !ZetaDia.Me.CommonData.IsValid ||
+                ZetaDia.Me.CommonData.IsDisposed ||
+                ZetaDia.Me.Level == 0 ||
+                ZetaDia.Me.Level >= 70 &&
+                Core.Settings.Items.AutoEquipAutoDisable)
+            {
                 return false;
+            }
 
             if (_lastFreeBackpackSlots == Core.Player.FreeBackpackSlots)
                 return false;
@@ -70,8 +82,7 @@ namespace Trinity.Components.Coroutines
 
             foreach (var slot in _slots)
             {
-                CachedACDItem currentlyEquipped;
-                if (!_equippedItems.TryGetValue(slot, out currentlyEquipped))
+                if (!_equippedItems.TryGetValue(slot, out var currentlyEquipped))
                     _equippedItems.Add(slot, null);
 
                 var backpackItems = GetBackpackItemsForSlot(slot);
@@ -144,20 +155,24 @@ namespace Trinity.Components.Coroutines
         {
             Navigator.PlayerMover.MoveStop();
             await Coroutine.Sleep(500);
-            var newLegendary = InventoryManager.Backpack.FirstOrDefault(i => i.ItemQualityLevel >= ItemQuality.Legendary && i.Unidentified > 0 && i.IsValid && !i.IsDisposed);
-            if (newLegendary != null)
+            var newLegendary = InventoryManager.Backpack
+                .FirstOrDefault(i => i.ItemQualityLevel >= ItemQuality.Legendary &&
+                                     i.Unidentified > 0 &&
+                                     i.IsValid &&
+                                     !i.IsDisposed);
+
+            if (newLegendary == null)
+                return false;
+
+            Core.Logger.Log("Identifying Legendary");
+            var dynamicId = newLegendary.AnnId;
+            InventoryManager.IdentifyItem(dynamicId);
+            await Coroutine.Sleep(750);
+            while (ZetaDia.Me.LoopingAnimationEndTime > 0)
             {
-                Core.Logger.Log("Identifying Legendary");
-                var dynamicId = newLegendary.AnnId;
-                InventoryManager.IdentifyItem(dynamicId);
                 await Coroutine.Sleep(750);
-                while (ZetaDia.Me.LoopingAnimationEndTime > 0)
-                {
-                    await Coroutine.Sleep(750);
-                }
-                return true;
             }
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -169,10 +184,14 @@ namespace Trinity.Components.Coroutines
             if (gem == null)
                 return false;
 
-            var socketableWeapon = InventoryManager.Equipped.FirstOrDefault(i => i.InventorySlot == InventorySlot.LeftHand && i.NumSockets > 0 && i.NumSocketsFilled < i.NumSockets);
+            var socketableWeapon = InventoryManager.Equipped
+                .FirstOrDefault(i => i.InventorySlot == InventorySlot.LeftHand &&
+                                     i.NumSockets > 0 &&
+                                     i.NumSocketsFilled < i.NumSockets);
+
             if (socketableWeapon != null)
             {
-                Core.Logger.Log("Socketing {0} ({1}) into equipped weapon {2}", gem.InternalName, gem.GemQuality, socketableWeapon.Name);
+                Core.Logger.Log("Socketing {0} ({1}) into equipped weapon {2}", gem.InternalName, gem.Stats.GemQuality, socketableWeapon.Name);
                 socketableWeapon.Socket(gem);
                 return true;
             }
@@ -180,11 +199,13 @@ namespace Trinity.Components.Coroutines
             var socketableBackpackWeapon = BackpackEquipment
                 .OrderByDescending(i => i.AcdItem.Sockets)
                 .ThenByDescending(i => i.WeaponDamagePerSecond)
-                .FirstOrDefault(i => i.InventorySlot == InventorySlot.LeftHand && i.AcdItem.NumSockets > 0 && i.AcdItem.NumSockets < i.AcdItem.NumSocketsFilled);
+                .FirstOrDefault(i => i.InventorySlot == InventorySlot.LeftHand &&
+                                     i.AcdItem.NumSockets > 0 &&
+                                     i.AcdItem.NumSockets < i.AcdItem.NumSocketsFilled);
 
             if (socketableBackpackWeapon != null)
             {
-                Core.Logger.Log("Socketing {0} ({1}) into backpack weapon {2}", gem.InternalName, gem.GemQuality, socketableBackpackWeapon.RealName);
+                Core.Logger.Log("Socketing {0} ({1}) into backpack weapon {2}", gem.InternalName, gem.Stats.GemQuality, socketableBackpackWeapon.RealName);
                 socketableBackpackWeapon.AcdItem.Socket(gem);
                 return true;
             }
@@ -207,10 +228,15 @@ namespace Trinity.Components.Coroutines
             if (gem == null)
                 return false;
 
-            var socketableArmor = InventoryManager.Equipped.FirstOrDefault(i => (i.ItemBaseType == ItemBaseType.Armor || i.ItemBaseType == ItemBaseType.Jewelry) && i.NumSockets > 0 && i.NumSocketsFilled < i.NumSockets);
+            var socketableArmor = InventoryManager.Equipped
+                .FirstOrDefault(i => (i.ItemBaseType == ItemBaseType.Armor ||
+                                      i.ItemBaseType == ItemBaseType.Jewelry) &&
+                                     i.NumSockets > 0 &&
+                                     i.NumSocketsFilled < i.NumSockets);
+
             if (socketableArmor != null)
             {
-                Core.Logger.Log("Socketing {0} ({1}) into equipped armor {2}", gem.InternalName, gem.GemQuality, socketableArmor.Name);
+                Core.Logger.Log("Socketing {0} ({1}) into equipped armor {2}", gem.InternalName, gem.Stats.GemQuality, socketableArmor.Name);
                 socketableArmor.Socket(gem);
                 return true;
             }
@@ -218,11 +244,14 @@ namespace Trinity.Components.Coroutines
             var socketableBackpackArmor = BackpackEquipment
                 .OrderByDescending(i => i.AcdItem.Sockets)
                 .ThenByDescending(i => i.HighestPrimary)
-                .FirstOrDefault(i => (i.BaseType == ItemBaseType.Armor || i.BaseType == ItemBaseType.Jewelry) && i.AcdItem.NumSockets > 0 && i.AcdItem.NumSockets < i.AcdItem.NumSocketsFilled);
+                .FirstOrDefault(i => (i.BaseType == ItemBaseType.Armor ||
+                                      i.BaseType == ItemBaseType.Jewelry) &&
+                                     i.AcdItem.NumSockets > 0 &&
+                                     i.AcdItem.NumSockets < i.AcdItem.NumSocketsFilled);
 
             if (socketableBackpackArmor != null)
             {
-                Core.Logger.Log("Socketing {0} ({1}) into backpack armor {2}", gem.InternalName, gem.GemQuality, socketableBackpackArmor.RealName);
+                Core.Logger.Log("Socketing {0} ({1}) into backpack armor {2}", gem.InternalName, gem.Stats.GemQuality, socketableBackpackArmor.RealName);
                 socketableBackpackArmor.AcdItem.Socket(gem);
                 return true;
             }
@@ -262,7 +291,9 @@ namespace Trinity.Components.Coroutines
 
         private ACDItem GetGemForAttributeType(PlayerAttributeType attributeType)
         {
-            var gems = InventoryManager.Backpack.Where(i => i.IsGem).OrderByDescending(i => i.GemQuality);
+            var gems = InventoryManager.Backpack
+                .Where(i => i.IsGem)
+                .OrderByDescending(i => i.Stats.GemQuality);
 
             switch (attributeType)
             {
@@ -296,16 +327,21 @@ namespace Trinity.Components.Coroutines
                     return BackpackEquipment.Where(i => i.ItemType == ItemType.Gloves);
 
                 case InventorySlot.Head:
-                    return BackpackEquipment.Where(i => i.ItemType == ItemType.Helm || i.ItemType == ItemType.WizardHat || i.ItemType == ItemType.SpiritStone || i.ItemType == ItemType.VoodooMask);
+                    return BackpackEquipment.Where(i => i.ItemType == ItemType.Helm ||
+                                                        i.ItemType == ItemType.WizardHat ||
+                                                        i.ItemType == ItemType.SpiritStone ||
+                                                        i.ItemType == ItemType.VoodooMask);
 
                 case InventorySlot.Shoulders:
                     return BackpackEquipment.Where(i => i.ItemType == ItemType.Shoulder);
 
                 case InventorySlot.Torso:
-                    return BackpackEquipment.Where(i => i.ItemType == ItemType.Chest || i.ItemType == ItemType.Cloak);
+                    return BackpackEquipment.Where(i => i.ItemType == ItemType.Chest ||
+                                                        i.ItemType == ItemType.Cloak);
 
                 case InventorySlot.Waist:
-                    return BackpackEquipment.Where(i => i.ItemType == ItemType.Belt || i.ItemType == ItemType.MightyBelt);
+                    return BackpackEquipment.Where(i => i.ItemType == ItemType.Belt ||
+                                                        i.ItemType == ItemType.MightyBelt);
 
                 case InventorySlot.Bracers:
                     return BackpackEquipment.Where(i => i.ItemType == ItemType.Bracer);
@@ -324,13 +360,15 @@ namespace Trinity.Components.Coroutines
                     if (Core.Settings.Items.AutoEquipIgnoreWeapons)
                         return null;
 
-                    return BackpackEquipment.Where(i => i.TrinityItemBaseType == TrinityItemBaseType.Offhand || i.TrinityItemType == TrinityItemType.CrusaderShield);
+                    return BackpackEquipment.Where(i => i.TrinityItemBaseType == TrinityItemBaseType.Offhand ||
+                                                        i.TrinityItemType == TrinityItemType.CrusaderShield);
 
                 case InventorySlot.LeftHand:
                     if (Core.Settings.Items.AutoEquipIgnoreWeapons)
                         return null;
 
-                    return BackpackEquipment.Where(i => i.BaseType == ItemBaseType.Weapon && (i.OneHanded || i.TwoHanded));
+                    return BackpackEquipment.Where(i => i.BaseType == ItemBaseType.Weapon && (i.OneHanded ||
+                                                                                              i.TwoHanded));
             }
 
             return null;
@@ -342,9 +380,13 @@ namespace Trinity.Components.Coroutines
         {
             get
             {
-                return _backpackEquipment ?? (_backpackEquipment = InventoryManager.Backpack
-                  .Select(CachedACDItem.GetTrinityItem)
-                  .Where(i => i.AcdItem.IsValid && i.IsEquipment && i.IsUsableByClass(Core.Player.ActorClass) && !i.IsUnidentified));
+                return _backpackEquipment ??
+                       (_backpackEquipment = InventoryManager.Backpack
+                           .Select(CachedACDItem.GetTrinityItem)
+                           .Where(i => i.AcdItem.IsValid &&
+                                       i.IsEquipment &&
+                                       i.IsUsableByClass(Core.Player.ActorClass) &&
+                                       !i.IsUnidentified));
             }
         }
 
@@ -370,7 +412,9 @@ namespace Trinity.Components.Coroutines
 
         private bool IsUpgrade(CachedACDItem item, CachedACDItem currentlyEquipped, CachedACDItem bestUpgradeSoFar)
         {
-            return IsUpgrade(currentlyEquipped, item) && (bestUpgradeSoFar == null || IsUpgrade(bestUpgradeSoFar, item));
+            return IsUpgrade(currentlyEquipped, item)&&
+                   (bestUpgradeSoFar == null ||
+                    IsUpgrade(bestUpgradeSoFar, item));
         }
 
         private bool IsUpgrade(CachedACDItem oldItem, CachedACDItem newItem)
@@ -384,8 +428,11 @@ namespace Trinity.Components.Coroutines
                 if (newItem.IsOffHand)
                 {
                     var equippedMainhand = _equippedItems[InventorySlot.LeftHand];
-                    if (equippedMainhand != null && equippedMainhand.TwoHanded)
+                    if (equippedMainhand != null &&
+                        equippedMainhand.TwoHanded)
+                    {
                         return false;
+                    }
                 }
                 return true;
             };
@@ -394,7 +441,8 @@ namespace Trinity.Components.Coroutines
             var oldItemWeight = GetWeight(oldItem);
 
             // Replacing a mainhand + offhand with a 2hander
-            if (newItem.TwoHanded && !oldItem.TwoHanded)
+            if (newItem.TwoHanded &&
+                !oldItem.TwoHanded)
             {
                 var equippedOffhand = _equippedItems[InventorySlot.RightHand];
                 var offHandWeight = GetWeight(equippedOffhand);
@@ -407,7 +455,8 @@ namespace Trinity.Components.Coroutines
             }
 
             // Replacing a 2hander with mainhand + offhand
-            if (!newItem.TwoHanded && oldItem.TwoHanded)
+            if (!newItem.TwoHanded &&
+                oldItem.TwoHanded)
             {
                 var bestOffhand = _upgrades[InventorySlot.RightHand];
                 var offHandWeight = GetWeight(bestOffhand);
@@ -449,8 +498,11 @@ namespace Trinity.Components.Coroutines
                 }
             }
 
-            if (item.Quality >= ItemQuality.Legendary && IsModifiedByGemOfEase(item.AcdItem))
+            if (item.Quality >= ItemQuality.Legendary &&
+                IsModifiedByGemOfEase(item.AcdItem))
+            {
                 return weight + 50000;
+            }
 
             if (ZetaDia.Me.Level < item.AcdItem.RequiredLevel)
                 return 0;
@@ -463,7 +515,9 @@ namespace Trinity.Components.Coroutines
             // Note: RequiredLevel property still shows unmodified level req.
             var hasBeenCubedToRemoveLevelRequirement = acdItem.RemoveLevelReq == 1;
             var hasGemOfEaseSocketed = acdItem.ItemLevelRequirementOverride == 1;
-            return hasBeenCubedToRemoveLevelRequirement || hasGemOfEaseSocketed;
+
+            return hasBeenCubedToRemoveLevelRequirement ||
+                   hasGemOfEaseSocketed;
         }
 
         private double GetOffhandWeight(CachedACDItem item)
@@ -479,7 +533,8 @@ namespace Trinity.Components.Coroutines
 
         private double GetWeaponWeight(CachedACDItem item)
         {
-            var classMultiplier = item.IsClassItem && Core.Player.ActorClass == ActorClass.DemonHunter ? 2 : 1;
+            var classMultiplier = item.IsClassItem &&
+                                  Core.Player.ActorClass == ActorClass.DemonHunter ? 2 : 1;
 
             return item.WeaponDamagePerSecond * classMultiplier + GetAttributeWeight(item) / 5;
         }
@@ -528,7 +583,7 @@ namespace Trinity.Components.Coroutines
         public int Level { get; set; }
         public ItemQuality Quality { get; set; }
         public int GoldAmount { get; set; }
-        public int BalanceID { get; set; }
+        public int BalanceId { get; set; }
         public int DynamicId { get; set; }
         public int ActorSnoId { get; set; }
         public bool OneHanded { get; set; }
@@ -656,7 +711,7 @@ namespace Trinity.Components.Coroutines
             SpiritRegen = stats.SpiritRegen;
             MaxSpirit = stats.MaxSpirit;
             HealthPerSpiritSpent = stats.HealthPerSpiritSpent;
-            MaxArcanePower = stats.MaxArcanePower;
+            MaxArcanePower = stats.MaxArcanum;
             DamageReductionPhysicalPercent = stats.DamageReductionPhysicalPercent;
             ArmorTotal = stats.ArmorTotal;
             Armor = stats.Armor;
@@ -685,7 +740,8 @@ namespace Trinity.Components.Coroutines
                 return -1;
             if (InventoryColumn < item.InventoryColumn)
                 return -1;
-            if (InventoryColumn == item.InventoryColumn && InventoryRow == item.InventoryRow)
+            if (InventoryColumn == item.InventoryColumn &&
+                InventoryRow == item.InventoryRow)
                 return 0;
             return 1;
         }
@@ -705,7 +761,7 @@ namespace Trinity.Components.Coroutines
                     Level = item.Level,
                     Quality = item.GetItemQuality(),
                     GoldAmount = item.Gold,
-                    BalanceID = item.GameBalanceId,
+                    BalanceId = item.GameBalanceId,
                     DynamicId = item.AnnId,
                     ActorSnoId = item.ActorSnoId,
                     OneHanded = item.IsOneHand,
@@ -725,7 +781,13 @@ namespace Trinity.Components.Coroutines
                     InventorySlot = item.InventorySlot,
                 };
                 
-                TrinityItemBaseType trinityItemBaseType = TypeConversions.GetTrinityItemBaseType(TypeConversions.DetermineItemType(item.InternalName, item.ItemType, item.FollowerSpecialType));
+                TrinityItemBaseType trinityItemBaseType = TypeConversions
+                    .GetTrinityItemBaseType(
+                        TypeConversions.DetermineItemType(
+                            item.InternalName,
+                            item.ItemType,
+                            item.FollowerSpecialType));
+
                 cItem.TrinityItemBaseType = trinityItemBaseType;
                 cItem.IsEquipment = GetIsEquipment(trinityItemBaseType);
                 cItem.IsSalvageable = GetIsSalvageable(cItem);
@@ -873,8 +935,7 @@ namespace Trinity.Components.Coroutines
 
         public override bool Equals(object obj)
         {
-            var other = obj as CachedACDItem;
-            return other != null && other.DynamicId == DynamicId;
+            return obj is CachedACDItem other && other.DynamicId == DynamicId;
         }
 
         protected bool Equals(CachedACDItem other)

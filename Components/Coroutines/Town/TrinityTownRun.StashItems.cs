@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Events;
 using Trinity.Framework.Objects.Enums;
 using Zeta.Bot;
@@ -21,13 +22,13 @@ namespace Trinity.Components.Coroutines.Town
 {
     public static partial class TrinityTownRun
     {
-        internal class InventoryMap : Dictionary<Tuple<int, int>, TrinityItem>
+        internal class InventoryMap : Dictionary<Tuple<int, int>, ACDItem>
         {
-            public InventoryMap(Dictionary<Tuple<int, int>, TrinityItem> dictionary) : base(dictionary)
+            public InventoryMap(Dictionary<Tuple<int, int>, ACDItem> dictionary) : base(dictionary)
             {
             }
 
-            public TrinityItem this[int indexX, int indexY] => this[new Tuple<int, int>(indexX, indexY)];
+            public ACDItem this[int indexX, int indexY] => this[new Tuple<int, int>(indexX, indexY)];
         }
 
         private static readonly HashSet<RawItemType> s_specialCaseNonStackableItems = new HashSet<RawItemType>
@@ -58,7 +59,7 @@ namespace Trinity.Components.Coroutines.Town
                 var map = Inventory;
                 foreach (var item in map)
                 {
-                    var type = item.Value.RawItemType;
+                    var type = item.Value.GetRawItemType();
                     if (typeMap.ContainsKey(type))
                         continue;
 
@@ -88,7 +89,7 @@ namespace Trinity.Components.Coroutines.Town
                 var stashItems = Core.Actors.Inventory
                     .Where(i => i.InventorySlot == InventorySlot.SharedStash)
                     .ToList();
-                var itemDict = new Dictionary<Tuple<int, int>, TrinityItem>();
+                var itemDict = new Dictionary<Tuple<int, int>, ACDItem>();
                 foreach (var item in stashItems)
                 {
                     var key = new Tuple<int, int>(item.InventoryColumn, item.InventoryRow);
@@ -107,7 +108,7 @@ namespace Trinity.Components.Coroutines.Town
             }
         }
 
-        public static bool ShouldStash(TrinityItem i)
+        public static bool ShouldStash(ACDItem i)
         {
             if (BrainBehavior.GreaterRiftInProgress)
                 return false;
@@ -154,7 +155,6 @@ namespace Trinity.Components.Coroutines.Town
 
             try
             {
-                item.OnUpdated(); // make sure wrong col/row/location is not cached after a move.
                 var page = GetBestStashLocation(item, out var col, out var row);
                 if (page == -1)
                 {
@@ -170,7 +170,7 @@ namespace Trinity.Components.Coroutines.Town
                     return CoroutineResult.Running;
                 }
 
-                s_logger.Info($"[{nameof(StashItems)}] Stashing: {item.Name} ({item.ActorSnoId}) [{item.InventoryColumn},{item.InventoryRow} {item.InventorySlot}] Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} InternalName={item.InternalName} StashPage={page}");
+                s_logger.Info($"[{nameof(StashItems)}] Stashing: {item.Name} ({item.ActorSnoId}) [{item.InventoryColumn},{item.InventoryRow} {item.InventorySlot}] Quality={item.ItemQualityLevel} IsAncient={item.Stats.IsAncient} InternalName={item.InternalName} StashPage={page}");
 
                 ItemEvents.FireItemStashed(item);
                 InventoryManager.MoveItem(
@@ -187,22 +187,10 @@ namespace Trinity.Components.Coroutines.Town
 
             return CoroutineResult.Running;
         }
-
-        private static void UpdateAfterItemMove(TrinityItem item)
-        {
-            if (item.IsValid &&
-                item.CommonData.IsValid &&
-                !item.CommonData.IsDisposed)
-            {
-                item.OnCreated();
-            }
-
-            Core.Actors.Update();
-        }
-
+        
         public static async Task<bool> StackRamaladnisGift()
         {
-            var items = Core.Inventory.Stash.Where(i => i.RawItemType == RawItemType.GeneralUtility && !i.IsTradeable).ToList();
+            var items = Core.Inventory.Stash.Where(i => i.GetRawItemType() == RawItemType.GeneralUtility && !i.GetIsTradeable()).ToList();
             if (!items.Any())
                 return false;
 
@@ -219,7 +207,7 @@ namespace Trinity.Components.Coroutines.Town
             return true;
         }
 
-        public static int GetStashPage(TrinityItem item)
+        public static int GetStashPage(ACDItem item)
         {
             if (item.InventorySlot != InventorySlot.SharedStash)
                 return -1;
@@ -227,12 +215,12 @@ namespace Trinity.Components.Coroutines.Town
             return (int)Math.Floor(item.InventoryRow / 10d);
         }
 
-        public static TrinityItem GetItemAtLocation(int col, int row)
+        public static ACDItem GetItemAtLocation(int col, int row)
         {
             return Core.Inventory.Stash.FirstOrDefault(i => i.InventoryRow == row && i.InventoryColumn == col);
         }
 
-        public static TrinityItem GetNextStashItem(int currentCol, int currentRow, int actorSnoId = -1)
+        public static ACDItem GetNextStashItem(int currentCol, int currentRow, int actorSnoId = -1)
         {
             if (actorSnoId > 0)
             {
@@ -254,7 +242,7 @@ namespace Trinity.Components.Coroutines.Town
             foreach (var itemGroup in Core.Inventory.Stash
                 .Where(i => i.MaxStackCount > 0 &&
                             i.ItemStackQuantity < i.MaxStackCount &&
-                            !i.IsTradeable)
+                            !i.GetIsTradeable())
                 .GroupBy(i => i.Name))
             {
                 if (itemGroup.Count() <= 1)
@@ -308,7 +296,7 @@ namespace Trinity.Components.Coroutines.Town
             return true;
         }
 
-        public static IEnumerable<TrinityItem> GetItemsOnStashPage(int page)
+        public static IEnumerable<ACDItem> GetItemsOnStashPage(int page)
         {
             return Core.Inventory.Stash
                 .Where(i => i.InventoryRow >= page * 10 &&
@@ -318,19 +306,19 @@ namespace Trinity.Components.Coroutines.Town
         /// <summary>
         /// Get the stash page where items should ideally be placed, ignoring if it can actually be placed there.
         /// </summary>
-        public static int GetIdealStashPage(TrinityItem item)
+        public static int GetIdealStashPage(ACDItem item)
         {
-            if (item.IsEquipment &&
+            if (item.GetIsEquipment() &&
                 Core.Settings.Items.UseTypeStashingEquipment &&
-                ItemTypeMap.ContainsKey(item.RawItemType))
+                ItemTypeMap.ContainsKey(item.GetRawItemType()))
             {
-                return ItemTypeMap[item.RawItemType];
+                return ItemTypeMap[item.GetRawItemType()];
             }
 
             if (Core.Settings.Items.UseTypeStashingOther &&
-                ItemTypeMap.ContainsKey(item.RawItemType))
+                ItemTypeMap.ContainsKey(item.GetRawItemType()))
             {
-                return ItemTypeMap[item.RawItemType];
+                return ItemTypeMap[item.GetRawItemType()];
             }
 
             if (item.ItemBaseType >= ItemBaseType.Misc)
@@ -339,7 +327,7 @@ namespace Trinity.Components.Coroutines.Town
             return -1;
         }
 
-        public static int GetBestStashLocation(TrinityItem item, out int col, out int row)
+        public static int GetBestStashLocation(ACDItem item, out int col, out int row)
         {
             col = 0;
             row = 0;
@@ -377,7 +365,7 @@ namespace Trinity.Components.Coroutines.Town
             return -1;
         }
 
-        public static bool CanPutItemInStashPage(TrinityItem item, int stashPageNumber, out int col, out int row)
+        public static bool CanPutItemInStashPage(ACDItem item, int stashPageNumber, out int col, out int row)
         {
             var itemsOnStashPage = Inventory;
 
@@ -401,7 +389,7 @@ namespace Trinity.Components.Coroutines.Town
                    CanPlaceOnPage(item, stashPageNumber, ref col, ref row, itemsOnStashPage);
         }
 
-        private static bool CanPlaceOnPage(TrinityItem item, int stashPageNumber, ref int col, ref int row, InventoryMap itemsOnStashPage)
+        private static bool CanPlaceOnPage(ACDItem item, int stashPageNumber, ref int col, ref int row, InventoryMap itemsOnStashPage)
         {
             for (var i = 0; i < 10; i++)
             {
@@ -416,14 +404,14 @@ namespace Trinity.Components.Coroutines.Town
             return false;
         }
 
-        private static bool CanStackOnPage(TrinityItem item, int stashPageNumber, ref int col, ref int row, InventoryMap itemsOnStashPage)
+        private static bool CanStackOnPage(ACDItem item, int stashPageNumber, ref int col, ref int row, InventoryMap itemsOnStashPage)
         {
             if (item.IsUnidentified)
                 return false;
 
             if (item.MaxStackCount <= 0 ||
-                item.IsTradeable ||
-                s_specialCaseNonStackableItems.Contains(item.RawItemType))
+                item.GetIsTradeable() ||
+                s_specialCaseNonStackableItems.Contains(item.GetRawItemType()))
             {
                 return false;
             }
@@ -441,7 +429,7 @@ namespace Trinity.Components.Coroutines.Town
             return false;
         }
 
-        private static bool TryGetStackLocation(TrinityItem item, int stashPageNumber, int col, int row, InventoryMap map, ref int placeAtCol, ref int placeAtRow)
+        private static bool TryGetStackLocation(ACDItem item, int stashPageNumber, int col, int row, InventoryMap map, ref int placeAtCol, ref int placeAtRow)
         {
             var loc = new Tuple<int, int>(col, row);
 
@@ -480,7 +468,7 @@ namespace Trinity.Components.Coroutines.Town
 
         }
 
-        private static bool TryGetStashingLocation(TrinityItem item, int stashPageNumber, int col, int row, InventoryMap map, ref int placeAtCol, ref int placeAtRow)
+        private static bool TryGetStashingLocation(ACDItem item, int stashPageNumber, int col, int row, InventoryMap map, ref int placeAtCol, ref int placeAtRow)
         {
             var loc = new Tuple<int, int>(col, row);
             var isSquareEmpty = !map.ContainsKey(loc);

@@ -25,7 +25,7 @@ namespace Trinity.Framework.Actors.ActorTypes
 {
     public class TrinityActor : ActorBase, ITargetable
     {
-        public TrinityActor(DiaObject actor) : base(actor)
+        public TrinityActor(DiaObject fixedActor) : base(fixedActor)
         {
             Attributes = new AttributesWrapper(CommonData);
             ObjectHash = HashGenerator.GenerateObjectHash(Position, ActorSnoId, InternalName);
@@ -64,7 +64,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsSafeSpot { get; set; }
         public string WeightInfo { get; set; }
 
-        public virtual AttributesWrapper Attributes { get; private set; }
+        internal virtual AttributesWrapper Attributes { get; private set; }
 
         public bool IsAllowedClientEffect => GameData.AllowedClientEffects.Contains(ActorSnoId);
 
@@ -80,7 +80,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public float AxialRadius => ActorInfo?.AxialCylinder.Ax1 ?? 0.0f;
 
         public bool IsObstacle => GameData.NavigationObstacleIds.Contains(ActorSnoId) || GameData.PathFindingObstacles.ContainsKey(ActorSnoId);
-        public int WorldDynamicId => Actor.WorldId; // TODO: Why doesn't this one work anymore? => _actor.WorldDynamicId
+        public int WorldDynamicId => Actor?.WorldId ?? 0; // TODO: Why doesn't this one work anymore? => _actor.WorldDynamicId
         public float Radius => Actor?.InteractDistance ?? 0.0f;
         public TrinityObjectType Type => CommonProperties.GetObjectType(ActorType, ActorSnoId, GizmoType, InternalName);
         public float CollisionRadius => GameData.CustomObjectRadius.ContainsKey(ActorSnoId) ? GameData.CustomObjectRadius[ActorSnoId] : Math.Max(1f, AxialRadius * 0.60f);
@@ -88,7 +88,7 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         // TODO: Make it possible to have some "invalid" GameBalanceTypes.
         public GameBalanceType GameBalanceType => CommonData?.GameBalanceType ?? GameBalanceType.ItemTypes;
-        public bool IsMe => Actor.IsMe;
+        public bool IsMe => Actor?.IsMe ?? false;
         public bool IsUnit => Type == TrinityObjectType.Unit || ActorType == ActorType.Monster || ActorType == ActorType.Player;
         public bool IsItem => Type == TrinityObjectType.Item || ActorType == ActorType.Item;
         public bool IsPlayer => Type == TrinityObjectType.Player || ActorType == ActorType.Player;
@@ -132,7 +132,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public float HitPointsPct => HitPoints > 0f ? HitPoints / HitPointsMax : 0f;
         public float HitPoints => Attributes?.Hitpoints ?? 0f;
 
-        
+
         public bool IsSummoner => SummonerId > 0;
         public int SummonerId => Attributes?.SummonerId ?? 0;
         public bool IsSummoned => SummonedByAnnId > 0 && EffectOwnerAnnId > 0;
@@ -174,7 +174,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         {
             get
             {
-                if (Actor.Movement != null && Actor.Movement.IsValid)
+                if (Actor?.Movement != null && Actor.Movement.IsValid)
                     return Actor.Movement;
 
                 return null;
@@ -310,15 +310,9 @@ namespace Trinity.Framework.Actors.ActorTypes
             }
         }
 
-        public DiaObject ToDiaObject() => RActor.IsValid ? RActor.BaseAddress.UnsafeCreate<DiaObject>() : null;
+        public DiaObject ToDiaObject() => Actor?.IsValid ?? false ? Actor.BaseAddress.UnsafeCreate<DiaObject>() : null;
 
-        public DiaObject ToDiaUnit() => RActor.IsValid ? RActor.BaseAddress.UnsafeCreate<DiaUnit>() : null;
-
-        public virtual ItemQuality GetItemQualityLevel()
-        {
-            return ItemQuality.Invalid;
-        }
-
+        public DiaObject ToDiaUnit() => Actor?.IsValid ?? false ? Actor.BaseAddress.UnsafeCreate<DiaUnit>() : null;
     }
 
 }

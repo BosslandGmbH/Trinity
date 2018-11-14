@@ -162,7 +162,7 @@ namespace Trinity.Components.Coroutines.Town
             return true;
         }
 
-        public static async Task<bool> TakeItemsFromStash(List<TrinityItem> stashCandidates)
+        public static async Task<bool> TakeItemsFromStash(List<ACDItem> stashCandidates)
         {
             if (!ZetaDia.IsInGame ||
                 !ZetaDia.IsInTown)
@@ -199,8 +199,8 @@ namespace Trinity.Components.Coroutines.Town
                         continue;
                     }
 
-                    Core.Logger.Verbose($"[TakeItemsFromStash] QuickWithdrawing: {item.InternalName} Id={item.ActorSnoId} AnnId={item.AnnId} Name={item.Name} Quality={item.ItemQualityLevel} IsAncient={item.IsAncient}");
-                    InventoryManager.QuickWithdraw(item.ToAcdItem());
+                    Core.Logger.Verbose($"[TakeItemsFromStash] QuickWithdrawing: {item.InternalName} Id={item.ActorSnoId} AnnId={item.AnnId} Name={item.Name} Quality={item.ItemQualityLevel} IsAncient={item.Stats.IsAncient}");
+                    InventoryManager.QuickWithdraw(item);
                 }
                 catch (Exception ex)
                 {

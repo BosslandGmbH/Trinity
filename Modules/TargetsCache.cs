@@ -1,6 +1,4 @@
 ﻿using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +6,10 @@ using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.Components.Coroutines;
 using Trinity.Components.Coroutines.Town;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Actors.Attributes;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Reference;
@@ -17,7 +18,6 @@ using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 
-
 namespace Trinity.Modules
 {
     /// <summary>
@@ -25,9 +25,6 @@ namespace Trinity.Modules
     /// </summary>
     public class TargetsCache : Module, IEnumerable<TrinityActor>
     {
-
-
-
         public ulong LastUpdatedTick;
         public List<TrinityActor> Entries = new List<TrinityActor>();
         public List<TrinityActor> Ignored = new List<TrinityActor>();
@@ -225,11 +222,10 @@ namespace Trinity.Modules
                 cacheObject.AddCacheInfo("BlacklistedByProfile");
 
                 if (!GameData.IsCursedChestOrShrine.Contains(cacheObject.ActorSnoId))
-                    return false;               
+                    return false;
             }
 
-            var item = cacheObject as TrinityItem;
-            if (item != null && item.IsCosmeticItem)
+            if (cacheObject is TrinityItem item && item.ToAcdItem().GetIsCosmeticItem())
                 return true;
 
             if (cacheObject.IsUnit && cacheObject.Attributes == null)
@@ -317,8 +313,8 @@ namespace Trinity.Modules
 
                 case TrinityObjectType.ProgressionGlobe:
                 case TrinityObjectType.BuffedRegion:
-                        return true;
-                           
+                    return true;
+
                 case TrinityObjectType.Door:
                     if (cacheObject.RadiusDistance < 15f)
                         return true;
@@ -341,7 +337,7 @@ namespace Trinity.Modules
             }
 
             if (cacheObject.Distance < 4) return true;
-            if (cacheObject.GetItemQualityLevel() >= ItemQuality.Legendary) return true;
+            if (cacheObject is TrinityItem i && i.ToAcdItem().ItemQualityLevel >= ItemQuality.Legendary) return true;
             if (GameData.LineOfSightWhitelist.Contains(cacheObject.ActorSnoId)) return true;
 
             return false;
@@ -409,7 +405,7 @@ namespace Trinity.Modules
                 cacheObject.AddCacheInfo("GoldPickupDisabled");
                 return false;
             }
-            if (cacheObject.GoldAmount < Core.Settings.Items.MinGoldStack)
+            if (cacheObject.ToAcdItem().GetGoldAmount() < Core.Settings.Items.MinGoldStack)
             {
                 cacheObject.AddCacheInfo("NotEnoughGold");
                 return false;
@@ -419,31 +415,34 @@ namespace Trinity.Modules
 
         private bool ShouldCacheItem(TrinityItem cacheObject)
         {
-            if (!cacheObject.IsPickupNoClick && TrinityCombat.Loot.IsBackpackFull)
+            var acdItem = cacheObject.ToAcdItem();
+            if (acdItem.GetIsPickupNoClick() && TrinityCombat.Loot.IsBackpackFull)
             {
                 cacheObject.AddCacheInfo("BackpackFull");
                 return false;
             }
 
-            if (cacheObject.IsMyDroppedItem)
+            if (acdItem.GetIsMyDroppedItem())
             {
                 cacheObject.AddCacheInfo("DroppedItem");
                 return false;
             }
 
-            if (cacheObject.IsUntargetable)
+            if (acdItem.GetIsUntargetable())
             {
                 cacheObject.AddCacheInfo("Untargetable");
                 return false;
             }
 
-            if (!cacheObject.IsCosmeticItem && cacheObject.ItemQualityLevel <= ItemQuality.Rare4 && cacheObject.Distance > 60f)
+            if (!acdItem.GetIsCosmeticItem() &&
+                acdItem.ItemQualityLevel <= ItemQuality.Rare4 &&
+                cacheObject.Distance > 60f)
             {
                 cacheObject.AddCacheInfo($"OutOfRange Limit={CharacterSettings.Instance.LootRadius}");
                 return false;
             }
 
-            if (!TrinityCombat.Loot.ShouldPickup(cacheObject))
+            if (!TrinityCombat.Loot.ShouldPickup(acdItem))
             {
                 cacheObject.AddCacheInfo("LootProvider.ShouldPickup");
                 return false;
@@ -491,7 +490,7 @@ namespace Trinity.Modules
                 return false;
             }
 
-            if (cacheObject.IsDestroyable && !cacheObject.HasBeenWalkable && cacheObject.Distance > 5f && cacheObject.GizmoType != GizmoType.BreakableChest )
+            if (cacheObject.IsDestroyable && !cacheObject.HasBeenWalkable && cacheObject.Distance > 5f && cacheObject.GizmoType != GizmoType.BreakableChest)
             {
                 cacheObject.AddCacheInfo("CantReachDestructible");
                 return false;

@@ -1,8 +1,8 @@
 using System.Linq;
-using Trinity.Framework;
 using System.Runtime.Serialization;
-using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework;
 using Zeta.Game;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Components.Adventurer.Settings
 {
@@ -43,11 +43,11 @@ namespace Trinity.Components.Adventurer.Settings
         {
         }
 
-        public AdventurerGem(TrinityItem gem, int riftLevel)
+        public AdventurerGem(ACDItem gem, int riftLevel)
         {
             Guid = gem.AnnId;
             SNO = gem.ActorSnoId;
-            Rank = gem.Attributes.JewelRank;
+            Rank = gem.Stats.JewelRank;
             Name = gem.Name;
             CurrentRiftLevel = riftLevel;
 

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
@@ -203,47 +204,6 @@ namespace Trinity.Framework.Helpers
                 Core.Logger.Debug(LogCategory.CacheManagement, "Exception on {0} accessing {1} attribute: {2}", actorACD.Name, type, ex);
             }
             return default(T);
-        }
-
-        /// <summary>
-        /// Gets the trinity item quality.
-        /// </summary>
-        /// <param name="item">The item.</param>
-        /// <returns>TrinityItemQuality.</returns>
-        public static TrinityItemQuality GetTrinityItemQuality(this ACDItem item)
-        {
-            if (item == null)
-                return TrinityItemQuality.None;
-            if (!item.IsValid)
-                return TrinityItemQuality.None;
-
-            var itemQuality = item.GetItemQuality();
-
-            switch (itemQuality)
-            {
-                case ItemQuality.Invalid:
-                    return TrinityItemQuality.None;
-
-                case ItemQuality.Inferior:
-                case ItemQuality.Normal:
-                case ItemQuality.Superior:
-                    return TrinityItemQuality.Common;
-
-                case ItemQuality.Magic1:
-                case ItemQuality.Magic2:
-                case ItemQuality.Magic3:
-                    return TrinityItemQuality.Magic;
-
-                case ItemQuality.Rare4:
-                case ItemQuality.Rare5:
-                case ItemQuality.Rare6:
-                    return TrinityItemQuality.Rare;
-
-                case ItemQuality.Legendary:
-                case ItemQuality.Special:
-                default:
-                    return TrinityItemQuality.Legendary;
-            }
         }
 
         /// <summary>
@@ -459,11 +419,6 @@ namespace Trinity.Framework.Helpers
                 newText.Append(text[i]);
             }
             return newText.ToString();
-        }
-
-        public static TrinityItemType GetTrinityItemType(this ACDItem item)
-        {
-            return TypeConversions.DetermineItemType(item.InternalName, item.ItemType);
         }
 
         public static ItemSelectionType GetItemSelectionType(this ACDItem item)

@@ -466,9 +466,8 @@ namespace Trinity.Framework.Helpers
 
             foreach (var acdItem in backpackItems)
             {
-                Core.Logger.Log($"{acdItem.Name} ActorSnoId={acdItem.ActorSnoId} GameBalanceId={acdItem.GameBalanceId} ACDId={acdItem.AcdId} AnnId={acdItem.AnnId}");
+                Core.Logger.Log($"{acdItem.Name} ActorSnoId={acdItem.ActorSnoId} GameBalanceId={acdItem.GameBalanceId} ACDId={acdItem.ACDId} AnnId={acdItem.AnnId}");
                 Core.Logger.Verbose(acdItem.ToString());
-                Core.Logger.Verbose(acdItem.Attributes.ToString());
 
                 if (ItemListEvaluator.ShouldStashItem(acdItem, true))
                     toBeStashed++;
@@ -506,12 +505,11 @@ namespace Trinity.Framework.Helpers
             {
                 try
                 {
-                    sbTopList.AppendFormat("\nName={0} InternalName={1} ActorSnoId={2} DynamicID={3} InventorySlot={4}",
-                        item.Name, item.InternalName, item.ActorSnoId, item.AnnId, item.InventorySlot);
+                    sbTopList.Append($"\nName={item.Name} InternalName={item.InternalName} ActorSnoId={item.ActorSnoId} DynamicID={item.AnnId} InventorySlot={item.InventorySlot:G}");
                 }
                 catch (Exception)
                 {
-                    sbTopList.AppendFormat("Exception reading data from ACDItem ACDId={0}", item.ACDId);
+                    sbTopList.Append($"Exception reading data from ACDItem ACDId={item.ACDId}");
                 }
             }
             Core.Logger.Log(sbTopList.ToString());

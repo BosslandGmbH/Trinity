@@ -1100,7 +1100,7 @@ namespace Trinity.Components.Coroutines
                 IsGem = item.ItemBaseType == ItemBaseType.Gem;
                 IsPotion = item.IsPotion;
                 ItemQualityLevel = item.ItemQualityLevel;
-                GemQuality = item.GemQuality;
+                GemQuality = item.Stats.GemQuality;
                 TieredLootRunKeyLevel = item.TieredLootRunKeyLevel;
                 ItemStackQuantity = item.ItemStackQuantity;
                 IsSetItem = item.IsSetItem();

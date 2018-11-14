@@ -15802,7 +15802,7 @@ namespace Trinity.Framework.Reference
             return new Item();
         }
 
-        public static Item GetItem(TrinityItem TrinityItem)
+        public static Item GetItem(ACDItem TrinityItem)
         {
             Item item;
 
@@ -15866,7 +15866,7 @@ namespace Trinity.Framework.Reference
         /// <summary>
         /// Gets equipped legendaries
         /// </summary>
-        public static List<TrinityItem> EquippedTrinityItems
+        public static List<ACDItem> EquippedTrinityItems
         {
             get { return Core.Inventory.Equipped.Where(i => ItemIds.Contains(i.ActorSnoId)).ToList(); }
         }

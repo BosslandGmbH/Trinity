@@ -27,7 +27,7 @@ namespace Trinity.Components.Adventurer
         public static int BattleNetHeroId => Core.Player.HeroId;
         public static List<MinimapMarker> CurrentWorldMarkers  => ZetaDia.Minimap.Markers.CurrentWorldMarkers.Where(m => m.IsValid && m.NameHash != -1).ToList();
         public static RiftQuest RiftQuest => new RiftQuest();
-        public static IEnumerable<TrinityItem> StashAndBackpackItems => Core.Inventory;
+        public static IEnumerable<ACDItem> StashAndBackpackItems => Core.Inventory;
         public static SNOAnim MyCurrentAnimation => Core.Player.CurrentAnimation;
         public static string BattleNetBattleTagName => Core.Player.BattleTag;
         public static bool IsInArchonForm => ZetaDia.Me.GetAllBuffs().Any(b => b.SNOId == (int)SNOPower.Wizard_Archon); 

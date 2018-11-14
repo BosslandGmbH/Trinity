@@ -1,11 +1,12 @@
 ﻿using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Framework.Events
 {
     public class ItemEvents
     {
-        public delegate void ItemEvent(TrinityItem item);
+        public delegate void ItemEvent(ACDItem item);
 
         /// <summary>
         /// When an item has been salvaged.
@@ -52,55 +53,55 @@ namespace Trinity.Framework.Events
         /// </summary>
         public static event ItemEvent OnItemGambled;
 
-        public static void FireItemStashed(TrinityItem item)
+        public static void FireItemStashed(ACDItem item)
         {
             Core.Logger.Log(LogCategory.ItemEvents, $"ItemStashed {item.Name}");
             OnItemStashed?.Invoke(item);
         }
 
-        public static void FireItemSalvaged(TrinityItem item)
+        public static void FireItemSalvaged(ACDItem item)
         {
             Core.Logger.Log(LogCategory.ItemEvents, $"ItemSalvaged {item.Name}");
             OnItemSalvaged?.Invoke(item);
         }
 
-        public static void FireItemDropped(TrinityItem item)
+        public static void FireItemDropped(ACDItem item)
         {
             Core.Logger.Log(LogCategory.ItemEvents, $"ItemDropped {item.Name}");
             OnItemDropped?.Invoke(item);
         }
 
-        public static void FireItemPickedUp(TrinityItem item)
+        public static void FireItemPickedUp(ACDItem item)
         {
             Core.Logger.Log(LogCategory.ItemEvents, $"ItemPickedUp {item.Name}");
             OnItemPickedUp?.Invoke(item);
         }
 
-        public static void FireItemSold(TrinityItem item)
+        public static void FireItemSold(ACDItem item)
         {
             Core.Logger.Log(LogCategory.ItemEvents, $"ItemSold {item.Name}");
             OnItemSold?.Invoke(item);
         }
 
-        public static void FireItemIdentified(TrinityItem item)
+        public static void FireItemIdentified(ACDItem item)
         {
             Core.Logger.Log(LogCategory.ItemEvents, $"ItemIdentified {item.Name}");
             OnItemIdentified?.Invoke(item);
         }
 
-        public static void FireItemMoved(TrinityItem item)
+        public static void FireItemMoved(ACDItem item)
         {
             Core.Logger.Log(LogCategory.ItemEvents, $"ItemMoved {item.Name}");
             OnItemMoved?.Invoke(item);
         }
 
-        public static void FireItemCubed(TrinityItem item)
+        public static void FireItemCubed(ACDItem item)
         {
             Core.Logger.Log(LogCategory.ItemEvents, $"ItemCubed {item.Name}");
             OnItemCubed?.Invoke(item);
         }
 
-        public static void FireItemGambled(TrinityItem item)
+        public static void FireItemGambled(ACDItem item)
         {
             Core.Logger.Log(LogCategory.ItemEvents, $"ItemGambled {item.Name}");
             OnItemGambled?.Invoke(item);

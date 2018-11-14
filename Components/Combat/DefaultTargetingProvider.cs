@@ -178,7 +178,7 @@ namespace Trinity.Components.Combat
                 target.Targeting.TargetedTimes > 25 &&
                 target.IsItem &&
                 target is TrinityItem item &&
-                item.IsLowQuality)
+                item.ToAcdItem().IsLowQuality)
             {
                 // There's a weird stuck where bot is unable to interact with an item, possibly move/interact range related.
                 GenericBlacklist.Blacklist(
