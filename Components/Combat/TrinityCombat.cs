@@ -8,6 +8,8 @@ using Trinity.Components.Coroutines.Town;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Zeta.Bot;
+using Zeta.Bot.Coroutines;
+using Zeta.Bot.Logic;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;
 
@@ -52,69 +54,65 @@ namespace Trinity.Components.Combat
         /// </summary>
         public static ILootProvider Loot { get; set; } = DefaultProviders.Loot;
 
-        /// <summary>
-        /// Combat Hook entry-point, manages when lower-level hooks can run and executes trinity features.
-        /// </summary>
-        public static async Task<bool> MainCombatTask()
+        public static async Task<CoroutineResult> RunCombat()
         {
             if (!ZetaDia.IsInGame ||
                 ZetaDia.Globals.IsLoadingWorld ||
-                !ZetaDia.Me.IsValid ||
+                ZetaDia.Globals.IsPlayingCutscene ||
+                !ZetaDia.Me.IsFullyValid() ||
                 ZetaDia.Me.IsDead)
             {
-                return false;
+                return CoroutineResult.NoAction;
             }
 
             if (ZetaDia.IsInTown &&
-                TrinityTownRun.IsVendoring)
+                BrainBehavior.IsVendoring)
             {
-                return false;
+                return CoroutineResult.NoAction;
             }
 
-            if (!Core.Scenes.CurrentWorldScenes.Any())
-                return false;
+            if (Core.Scenes.CurrentWorldSceneIds.Count == 0)
+                return CoroutineResult.NoAction;
 
-            // We don't really care about the result of DrinkPotion as it will always return
-            // either CoroutineStatus.NoAction or CoroutineStatus.Done.
             await UsePotion.DrinkPotion();
 
             // TODO: Why is OpenTreasureBags called during combat? Move to Townrun.
             await OpenTreasureBags.Execute();
 
             if (!await VacuumItems.Execute())
-                return true;
+                return CoroutineResult.Running;
 
             var target = Weighting.WeightActors(Core.Targets);
 
             if (await CastBuffs())
-                return true;
+                return CoroutineResult.Running;
 
             if (await Routines.Current.HandleBeforeCombat())
-                return true;
+                return CoroutineResult.Running;
 
             // When combat is disabled, we're still allowing trinity to handle non-unit targets.
             if (!IsCombatAllowed && IsUnitOrInvalid(target))
-                return false;
+                return CoroutineResult.NoAction;
 
             if (await Targeting.HandleTarget(target))
-                return true;
+                return CoroutineResult.Running;
 
             // We're not in combat at this point.
 
             if (await Routines.Current.HandleOutsideCombat())
-                return true;
+                return CoroutineResult.Running;
 
             if (!Core.Player.IsCasting && (!TargetUtil.AnyMobsInRange(20f) || !Core.Player.IsTakingDamage))
             {
                 await AutoEquipSkills.Instance.Execute();
                 await AutoEquipItems.Instance.Execute();
-                return false;
+                return CoroutineResult.NoAction;
             }
 
             // Allow Profile to Run.
-            return false;
+            return CoroutineResult.NoAction;
         }
-
+        
         private static bool IsUnitOrInvalid(TrinityActor target)
         {
             if (target == null || target.IsUnit) return true;

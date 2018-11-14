@@ -60,8 +60,8 @@ namespace Trinity.Framework
 
         private static void ReplaceCombatHook()
         {
-            StoreAndReplaceHook("Combat", new ActionRunCoroutine(ret =>
-                TrinityCombat.MainCombatTask()));
+            StoreAndReplaceHook("Combat", new ActionRunCoroutine(async ret =>
+                await TrinityCombat.RunCombat() == CoroutineResult.Running));
         }
 
         private static void ReplaceVendorRunHook()
