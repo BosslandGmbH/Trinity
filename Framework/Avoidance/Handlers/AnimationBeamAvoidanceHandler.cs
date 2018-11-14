@@ -12,13 +12,13 @@ namespace Trinity.Framework.Avoidance.Handlers
     {
         public void UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
         {
-            var checkActors = avoidance.Actors.ToArray();
+            var checkActors = avoidance.Actors.Where(a => a != null && a.IsValid).ToArray();
             foreach (var actor in checkActors)
             {
                 try
                 {
                     var part = avoidance.Definition.GetPart(actor.Animation);
-                    if (actor.Animation != part.Animation)
+                    if (actor.Animation != part?.Animation)
                         continue;
 
                     var radius = Math.Max(part.Radius, actor.Radius) * avoidance.Settings.DistanceMultiplier;
