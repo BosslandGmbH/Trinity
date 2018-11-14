@@ -3,6 +3,7 @@ using Trinity.Framework;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Components.Coroutines.Town;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Objects.Enums;
 using Zeta.Bot.Logic;
 using Zeta.Game;
@@ -22,7 +23,7 @@ namespace Trinity.Components.Coroutines
             {
                 foreach (var item in Core.Inventory.Backpack.ToList())
                 {
-                    if (item.RawItemType == RawItemType.TreasureBag)
+                    if (item.GetRawItemType() == RawItemType.TreasureBag)
                     {
                         Core.Logger.Log($"Opening Treasure Bag {bagsOpened + 1}, Id={item.AnnId}");
                         InventoryManager.UseItem(item.AnnId);
