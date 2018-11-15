@@ -31,7 +31,7 @@ using FlowDirection = System.Windows.FlowDirection;
 using LineSegment = System.Windows.Media.LineSegment;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using RectangularRegion = Trinity.Components.Adventurer.Game.Exploration.SceneMapping.RectangularRegion;
-
+using Zeta.Game.Internals;
 
 namespace Trinity.UI.Visualizer.RadarCanvas
 {
@@ -164,7 +164,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         private RadarHitTestUtility.HitContainer FindElementUnderClick(object sender, MouseEventArgs e)
         {
-            var position = e.GetPosition((UIElement)sender);
+            var position = e.GetPosition((System.Windows.UIElement)sender);
             return HitTester.GetHit(position);
         }
 
@@ -806,7 +806,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 var pen = marker.MarkerType == WorldMarkerType.Objective ? RadarResources.EliteLightPen : RadarResources.MarkerPen;
                 var markerPoint = marker.Position.ToCanvasPoint();
                 dc.DrawLine(pen, CenterActor.Point, markerPoint);
-                DrawLabel(dc, CanvasData, marker.Name, markerPoint, OrangeBrush, 45, 12, 3);
+                DrawLabel(dc, CanvasData, marker.NameHash.ToString(), markerPoint, OrangeBrush, 45, 12, 3);
             }
         }
 

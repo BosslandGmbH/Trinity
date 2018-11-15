@@ -82,7 +82,6 @@ namespace Trinity.Components.QuestTools
                 if (marker != null)
                 {
                     MarkerHash = marker.NameHash;
-                    MarkerName = marker.Name;
                     MarkerType = marker.MarkerType;
                 }
                 else
@@ -97,7 +96,6 @@ namespace Trinity.Components.QuestTools
             {
                 if (marker == null) return;
                 MarkerHash = marker.NameHash;
-                MarkerName = marker.Name;
                 MarkerType = marker.MarkerType;
 
                 var actor = Core.Actors.Where(a => !a.IsMe && !a.IsExcludedId && a.Position.Distance(marker.Position) <= 3f).OrderBy(a => a.IsGizmo).ThenBy(a => a.Distance).FirstOrDefault();
@@ -167,7 +165,7 @@ namespace Trinity.Components.QuestTools
             {
                 s.UpdateForMarker(marker);
                 var actorMsg = s.ActorId != 0 ? $"Actor={s.ActorName} ({s.ActorId}) " : string.Empty;
-                sb.AppendLine($"     <!-- {marker.Name} {marker.NameHash} {marker.MarkerType} Distance={marker.Distance} TextureId={marker.TextureId} WorldSnoId={marker.WorldSnoId} {actorMsg}-->");
+                sb.AppendLine($"     <!-- {marker.NameHash} {marker.MarkerType} Distance={marker.Distance} TextureId={marker.TextureId} WorldSnoId={marker.WorldSnoId} {actorMsg}-->");
                 sb.AppendLine(GenerateTag<T>(s));
                 sb.AppendLine(Environment.NewLine);
             }
@@ -295,11 +293,10 @@ namespace Trinity.Components.QuestTools
         public static string GenerateWorldInfoComment()
         {
             var sceneSnoId = ZetaDia.CurrentLevelAreaSnoId;
-            var sceneName = Core.World.CurrentLevelAreaName;
             var sceneSnoName = ZetaDia.SNO.LookupSNOName(SNOGroup.LevelArea, sceneSnoId);
             var worldSnoId = ZetaDia.Globals.WorldSnoId;
             var world = ZetaDia.SNO[SNOGroup.Worlds].GetRecord<SNORecordWorld>(worldSnoId);
-            return $"<!-- World: {world.Name} ({worldSnoId}) Scene: {sceneSnoName} {sceneName} ({sceneSnoId}) Generated={world.IsGenerated} -->";
+            return $"<!-- World: {world.Name} ({worldSnoId}) Scene: {sceneSnoName} ({sceneSnoId}) Generated={world.IsGenerated} -->";
         }
 
         private static HashSet<string> IgnoreXmlAttributeNames { get; } = new HashSet<string>

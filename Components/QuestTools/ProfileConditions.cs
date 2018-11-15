@@ -123,12 +123,6 @@ namespace Trinity.Components.QuestTools
             return Enum.TryParse(worldMarkerType, true, out t) && Core.Markers.Any(m => m.MarkerType == t);
         }
 
-        public static bool MarkerNameExists(string markerName)
-        {
-            return !string.IsNullOrEmpty(markerName) && Core.Markers.Any(m => m.Name == markerName);
-        }
-
-
         public static bool MarkerExistsNearMe(int hashId, float range)
         {
             return Core.Markers.Any(m => m.NameHash == hashId && m.Distance <= range);

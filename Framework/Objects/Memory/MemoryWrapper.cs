@@ -17,8 +17,6 @@ namespace Trinity.Framework.Objects.Memory
     {
         public IntPtr BaseAddress { get; private set; }
 
-        public NativeSerializeData BaseSeralizationInfo { get; private set; }
-
         public IntPtr BaseSerializationAddress { get; private set; }
 
         public virtual bool IsValid => BaseAddress != IntPtr.Zero;
@@ -64,17 +62,6 @@ namespace Trinity.Framework.Objects.Memory
                 Core.Logger.Log($"Memory ReadObject Exception. {ex.ToLogString(Environment.StackTrace)}");
             }
             return default(T);
-        }
-
-        protected T ReadSerializedObject<T>(int offset, NativeSerializeData data) where T : MemoryWrapper, new()
-        {
-            if (!IsValid)
-                return default(T);
-
-            var item = Create<T>(BaseAddress + offset);
-            item.SetSerializationInfo(BaseAddress, data);
-            item.ParentAddress = BaseAddress;
-            return item;
         }
 
         protected T ReadAbsoluteObject<T>(IntPtr address) where T : MemoryWrapper, new()
@@ -271,29 +258,6 @@ namespace Trinity.Framework.Objects.Memory
             }
         }
 
-        protected string ReadSerializedString(int offset, int serializeDataOffset)
-        {
-            var serializeData = ReadObject<NativeSerializeData>(serializeDataOffset);
-            return ReadSerializedString(offset, serializeData);
-        }
-
-        protected string ReadSerializedString(int offset, NativeSerializeData serializeData)
-        {
-            if (!IsValid)
-            {
-                return string.Empty;
-            }
-            try
-            {
-                return Encoding.UTF8.GetString(ZetaDia.Memory.ReadBytes(BaseSerializationAddress + serializeData.Offset, serializeData.Length)).Trim('\0');
-            }
-            catch (Exception ex)
-            {
-                Core.Logger.Log($"Memory ReadString Exception. {ex.ToLogString(Environment.StackTrace)}");
-            }
-            return string.Empty;
-        }
-
         protected string ReadStringPointer(int offset)
         {
             if (!IsValid)
@@ -359,63 +323,6 @@ namespace Trinity.Framework.Objects.Memory
         //    return ReadObjects<T>(data.FirstEntry, count, size).ToList();
         //}
 
-        protected List<T> ReadSerializedObjects<T>(int offset, int serializeDataOffset, IntPtr serializeBase = default(IntPtr)) where T : MemoryWrapper, new()
-        {
-            var data = ReadObject<NativeSerializeData>(serializeDataOffset);
-            return ReadSerializedObjects<T>(offset, data);
-        }
-
-        protected List<T> ReadSerializedObjects<T>(int offset, NativeSerializeData serializeData, IntPtr serializeBase = default(IntPtr)) where T : MemoryWrapper, new()
-        {
-            if (!IsValid)
-            {
-                return null;
-            }
-            try
-            {
-                var type = typeof(T);
-                if (type == typeof(MemoryWrapper) || type.IsSubclassOf(typeof(MemoryWrapper)))
-                {
-                    var size = TypeUtil<T>.SizeOf;
-                    if (size == 0)
-                    {
-                        Core.Logger.Error($"ReadSerializedObjects was unable to get a size for {type.Name}");
-                    }
-
-                    if (serializeBase == IntPtr.Zero)
-                    {
-                        if (BaseSerializationAddress != IntPtr.Zero)
-                        {
-                            serializeBase = BaseSerializationAddress;
-                        }
-                        else if (ParentAddress != IntPtr.Zero)
-                        {
-                            serializeBase = ParentAddress;
-                        }
-                        else
-                        {
-                            serializeBase = BaseAddress;
-                        }
-                    }
-
-                    var count = serializeData.Length / size;
-                    var container = new List<T>();
-                    for (int i = 0; i < count; i++)
-                    {
-                        var item = Create<T>(serializeBase + serializeData.Offset + i * size);
-                        item.SetSerializationInfo(serializeBase, serializeData);
-                        container.Add(item);
-                    }
-                    return container;
-                }
-            }
-            catch (Exception ex)
-            {
-                Core.Logger.Log($"Memory ReadSerializedObjects Exception. {ex.ToLogString(Environment.StackTrace)}");
-            }
-            return default(List<T>);
-        }
-
         protected T Read<T>(IntPtr address) where T : struct
         {
             if (address == IntPtr.Zero || (int)address < 10000)
@@ -453,12 +360,6 @@ namespace Trinity.Framework.Objects.Memory
 
             var ptr = ReadOffset<IntPtr>(offset);
             return ReadAbsoluteObject<T>(ptr);
-        }
-
-        public void SetSerializationInfo(IntPtr address, NativeSerializeData info)
-        {
-            BaseSerializationAddress = address;
-            BaseSeralizationInfo = info;
         }
 
         public static T Create<T>(IntPtr ptr) where T : MemoryWrapper, new()

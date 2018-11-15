@@ -10,7 +10,7 @@ using Trinity.Components.Adventurer.Util;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Modules;
 using Zeta.Common;
-
+using Zeta.Game.Internals;
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
@@ -94,15 +94,6 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _allowSafeZerg = zergAllowSafe;
             Id = Guid.NewGuid();
 
-        }
-
-        public MoveToMapMarkerCoroutine(int questId, int worldId, string name, bool zergAllowSafe = true)
-        {
-            _questId = questId;
-            _worldId = worldId;
-            _markerName = name;
-            _allowSafeZerg = zergAllowSafe;
-            Id = Guid.NewGuid();
         }
 
         public Guid Id { get; }
@@ -259,7 +250,6 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private BountyData _bountyData;
         private readonly bool _allowSafeZerg;
         private readonly WorldMarkerType _markerType;
-        private readonly string _markerName;
 
         private void ScanForObjective()
         {
@@ -286,10 +276,6 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     {
                         marker = BountyHelpers.ScanForMarker(_markerHash, _markerType, _objectiveScanRange);
                     }
-                }
-                else if (!string.IsNullOrEmpty(_markerName))
-                {
-                    marker = BountyHelpers.ScanForMarker(_markerName, _objectiveScanRange);
                 }
                 else if (_markerType != default(WorldMarkerType))
                 {

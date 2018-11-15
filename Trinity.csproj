@@ -484,15 +484,12 @@
     <Compile Include="Framework\Objects\Enums\TargetCategory.cs" />
     <Compile Include="Framework\Objects\Enums\TeamType.cs" />
     <Compile Include="Framework\Objects\Enums\UpdateSpeed.cs" />
-    <Compile Include="Framework\Objects\Enums\WorldMarkerType.cs" />
     <Compile Include="Framework\Objects\IFindable.cs" />
     <Compile Include="Framework\Objects\Item.cs" />
     <Compile Include="Framework\Objects\ItemStatRange.cs" />
     <Compile Include="Framework\Objects\IUnique.cs" />
     <Compile Include="Framework\Objects\Memory\Container.cs" />
     <Compile Include="Framework\Objects\Memory\MemoryWrapper.cs" />
-    <Compile Include="Framework\Objects\Memory\Marker.cs" />
-    <Compile Include="Framework\Objects\Memory\StringListHelper.cs" />
     <Compile Include="Framework\Objects\Memory\SnoDictionary.cs" />
     <Compile Include="Framework\Objects\Memory\SnoManager.cs" />
     <Compile Include="Framework\Objects\Memory\Symbols.cs" />
@@ -588,7 +585,6 @@
     <Compile Include="Modules\WindowTitle.cs" />
     <Compile Include="Modules\StatusBar.cs" />
     <Compile Include="Modules\TargetsCache.cs" />
-    <Compile Include="Modules\WorldCache.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Framework\Reference\GameData.cs" />

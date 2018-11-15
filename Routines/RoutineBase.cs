@@ -23,6 +23,7 @@ using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
+using Zeta.Game.Internals;
 
 namespace Trinity.Routines
 {

@@ -41,7 +41,6 @@ namespace Trinity.Framework
         public static GameStopper GameStopper { get; } = new GameStopper();
         public static IMarkerProvider Markers { get; } = new MarkersCache();
         public static MinimapCache Minimap { get; } = new MinimapCache();
-        public static WorldCache World { get; } = new WorldCache();
         public static Clusters Clusters { get; } = new Clusters();
         public static RiftProgression Rift { get; } = new RiftProgression();
         public static NavigatorUpdater NavUpdater { get; } = new NavigatorUpdater();

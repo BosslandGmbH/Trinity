@@ -100,12 +100,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return marker?.Position ?? Vector3.Zero;
         }
 
-        public static Vector3 ScanForMarkerLocation(string name, int searchRadius)
-        {
-            var marker = Core.Markers.FirstOrDefault(m => m.Name.ToLowerInvariant().Contains(name.ToLowerInvariant()) && m.Position.Distance(AdvDia.MyPosition) <= searchRadius && !EntryPortals.IsEntryPortal(AdvDia.CurrentWorldDynamicId, m.NameHash));
-            return marker?.Position ?? Vector3.Zero;
-        }
-
         public static TrinityMarker ScanForMarker(Vector3 markerPosition, int searchRadius = 5)
         {
             return Core.Markers.Where(m => m.Position.Distance2D(markerPosition) <= searchRadius).OrderBy(m => m.MarkerType == WorldMarkerType.Objective).FirstOrDefault();
@@ -124,11 +118,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
         public static TrinityMarker ScanForMarker(WorldMarkerType type, int searchRadius)
         {
             return Core.Markers.FirstOrDefault(m => m.MarkerType == type && m.Position.Distance(AdvDia.MyPosition) <= searchRadius && !EntryPortals.IsEntryPortal(AdvDia.CurrentWorldDynamicId, m.NameHash));
-        }
-
-        public static TrinityMarker ScanForMarker(string name, int searchRadius)
-        {
-            return Core.Markers.FirstOrDefault(m => m.Name.ToLowerInvariant().Contains(name.ToLowerInvariant()) && m.Position.Distance(AdvDia.MyPosition) <= searchRadius && !EntryPortals.IsEntryPortal(AdvDia.CurrentWorldDynamicId, m.NameHash));
         }
 
         public static Vector3 TryFindObjectivePosition(IList<ObjectiveActor> objectives, int searchRadius, out ObjectiveActor foundObjective)
