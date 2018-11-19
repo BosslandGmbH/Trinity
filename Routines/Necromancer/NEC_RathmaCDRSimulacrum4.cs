@@ -74,7 +74,6 @@ namespace Trinity.Routines.Necromancer
         private bool hasBoss = false;
         private float bossDistance = 0;
         public bool inMovementPower = false;
-        private int MinBuffStackForBoneArmor = 6;
 
         private TrinityPower MySkeletalMage(TrinityActor target)
             => new TrinityPower(Skills.Necromancer.SkeletalMage, 60f, target.AcdId);
@@ -848,12 +847,11 @@ namespace Trinity.Routines.Necromancer
             return true;
         }
 
-        static double lastDevourTickInMove = 0;
+        static double _lastDevourTickInMove = 0;
         public TrinityPower GetMovementPower(Vector3 destination)
         {
             TrinityPower power = null;
-            TrinityActor target = null;
-            Vector3 position = Vector3.Zero;
+            Vector3 position;
             bool cannotOffensive = false;
 
             if (Player.IsInTown)
@@ -922,7 +920,8 @@ namespace Trinity.Routines.Necromancer
                         Core.Logger.Warn($"在buffpower中使用双分");
                     return Simulacrum(position);
                 }
-                
+
+                TrinityActor target = null;
                 if (ShouldCommandSkeletons(out target))
                     return CommandSkeletons(target);
 
@@ -946,9 +945,9 @@ namespace Trinity.Routines.Necromancer
                 }
             }
 
-            if (Skills.Necromancer.LandOfTheDead.TimeSinceUse > 10000 && MyGetTickCount() - lastDevourTickInMove > 2000)
+            if (Skills.Necromancer.LandOfTheDead.TimeSinceUse > 10000 && MyGetTickCount() - _lastDevourTickInMove > 2000)
             {
-                lastDevourTickInMove = MyGetTickCount();
+                _lastDevourTickInMove = MyGetTickCount();
                 
                 if (ShouldDevour())
                 {
@@ -1155,7 +1154,7 @@ namespace Trinity.Routines.Necromancer
 
         private bool __avoider_skillonly(AvoidanceNode n)
         {
-            return !Core.Avoidance.InAvoidance(n.NavigableCenter) && Core.Grids.CanRayWalk(Player.Position, n.NavigableCenter);
+            return !Core.Avoidance.InAvoidance(n.NavigableCenter) && TrinityGrid.Instance.CanRayWalk(Player.Position, n.NavigableCenter);
         }
 
         private int __avoider_dist = 0;
@@ -1163,8 +1162,8 @@ namespace Trinity.Routines.Necromancer
 
         private bool __avoider_generic(AvoidanceNode n)
         {
-            return !Core.Avoidance.InAvoidance(n.NavigableCenter) && 
-                Core.Grids.CanRayWalk(Player.Position, n.NavigableCenter) &&
+            return !Core.Avoidance.InAvoidance(n.NavigableCenter) &&
+                TrinityGrid.Instance.CanRayWalk(Player.Position, n.NavigableCenter) &&
                 TargetUtil.NumMobsInRangeOfPosition(n.NavigableCenter, __avoider_dist) < __avoider_num;
         }
 
@@ -1175,8 +1174,8 @@ namespace Trinity.Routines.Necromancer
 			Func<AvoidanceNode, bool> myf = new Func<AvoidanceNode, bool>(__avoider);
 
             Vector3 projectedPosition = IsBlocked
-                    ? Core.Grids.Avoidance.GetPathCastPosition(50f, true)
-                    : Core.Grids.Avoidance.GetPathWalkPosition(50f, true);
+                    ? TrinityGrid.Instance.GetPathCastPosition(50f, true)
+                    : TrinityGrid.Instance.GetPathWalkPosition(50f, true);
 
 			Core.Avoidance.Avoider.TryGetSafeSpot(out safePot, 40f, 50f, Player.Position, myf);
             if (safePot == Vector3.Zero)
@@ -1213,8 +1212,8 @@ namespace Trinity.Routines.Necromancer
             Func<AvoidanceNode, bool> myf_skill = new Func<AvoidanceNode, bool>(__avoider_skillonly);
 
             Vector3 projectedPosition = IsBlocked
-                    ? Core.Grids.Avoidance.GetPathCastPosition(40f, true)
-                    : Core.Grids.Avoidance.GetPathWalkPosition(40f, true);
+                    ? TrinityGrid.Instance.GetPathCastPosition(40f, true)
+                    : TrinityGrid.Instance.GetPathWalkPosition(40f, true);
 
             // __avoider_dist = 40;
             // for (int i = 1; i <= 3; i++)
@@ -1285,7 +1284,7 @@ namespace Trinity.Routines.Necromancer
             return true;
         }
 
-        private int worldId = 0;
+        private int _worldId = 0;
         private bool needCheckMonster = false;
         private bool hasDanger = false;
 
@@ -1297,11 +1296,11 @@ namespace Trinity.Routines.Necromancer
             if (hasDanger && IsDebugAvoid)
                 Core.Logger.Warn($"检测到爷，以安全方式推进");
             
-            if (worldId != Core.Player.WorldSnoId)
+            if (_worldId != Core.Player.WorldSnoId)
             {
                 needCheckMonster = true;
                 hasDanger = false;
-                worldId = Core.Player.WorldSnoId;
+                _worldId = Core.Player.WorldSnoId;
             }
 
             if (!needCheckMonster)
@@ -1718,7 +1717,7 @@ namespace Trinity.Routines.Necromancer
             else if (distance < GoOcculusByFootDistance)
             {
                 Vector3 closePos = MathEx.CalculatePointFrom(occulusPos, Player.Position, 10f);
-                if (Core.Grids.CanRayWalk(Player.Position, closePos))
+                if (TrinityGrid.Instance.CanRayWalk(Player.Position, closePos))
                 {
                     if (IsDebugMove)
                         Core.Logger.Warn($"向神目步行移动，距离我{distance}");
@@ -1747,7 +1746,6 @@ namespace Trinity.Routines.Necromancer
         private bool ShouldMoveInCombat(out TrinityPower power)
         {
             power = null;
-            TrinityActor target = null;
             bool canRecoverResource = Legendary.ReapersWraps.IsEquipped || Legendary.ReapersWraps.IsEquippedInCube;
             bool needUseHealthGlobe = (canRecoverResource && Player.PrimaryResourcePct < ResourcePctForFindHealthGlobe) || Player.CurrentHealthPct < HealthPctForFindHealthGlobe || Core.Avoidance.InAvoidance(Player.Position);
 
@@ -1817,8 +1815,7 @@ namespace Trinity.Routines.Necromancer
 
             if (_MobsIn50 > 0)
                 return ShouldMoveInCombat(out power);
-            
-            TrinityActor target = null;
+
             bool canRecoverResource = Legendary.ReapersWraps.IsEquipped || Legendary.ReapersWraps.IsEquippedInCube;
             bool needUseHealthGlobe = (canRecoverResource && Player.PrimaryResourcePct < ResourcePctForFindHealthGlobe) || Player.CurrentHealthPct < HealthPctForFindHealthGlobe || Core.Avoidance.InAvoidance(Player.Position);
 
@@ -2008,8 +2005,6 @@ namespace Trinity.Routines.Necromancer
 
         private bool IsInOcculus()
         {
-            Vector3 p;
-
             Vector3 occulusPos = _ClosestOcculusIn58;
             if (occulusPos == Vector3.Zero)
                 return false;
@@ -2079,8 +2074,8 @@ namespace Trinity.Routines.Necromancer
 			TrinityActor actor = (from u in TargetUtil.SafeList(true)
                 where
                     u.ActorSnoId == 322194 &&
-                    Core.Grids.CanRayCast(pos, u.Position) &&
-                    (!canRayWalk || (canRayWalk && Core.Grids.CanRayWalk(pos, u.Position))) &&
+                    TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
+                    (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
                 select u).FirstOrDefault();
 
@@ -2101,9 +2096,9 @@ namespace Trinity.Routines.Necromancer
                     u.Type != TrinityObjectType.Shrine &&
                     u.Type != TrinityObjectType.ProgressionGlobe &&
                     u.Type != TrinityObjectType.HealthGlobe &&
-                    u.ActorSnoId != 454066 && 
-                    Core.Grids.CanRayCast(pos, u.Position) &&
-                    (!canRayWalk || (canRayWalk && Core.Grids.CanRayWalk(pos, u.Position))) &&
+                    u.ActorSnoId != 454066 &&
+                    TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
+                    (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
                 orderby
 					u.Position.Distance(pos),
@@ -2120,9 +2115,9 @@ namespace Trinity.Routines.Necromancer
                     u.Type != TrinityObjectType.Shrine &&
                     u.Type != TrinityObjectType.ProgressionGlobe &&
                     u.Type != TrinityObjectType.HealthGlobe &&
-                    u.ActorSnoId != 454066 && 
-                    Core.Grids.CanRayCast(pos, u.Position) &&
-                    (!canRayWalk || (canRayWalk && Core.Grids.CanRayWalk(pos, u.Position))) &&
+                    u.ActorSnoId != 454066 &&
+                    TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
+                    (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
                 orderby
 					u.NearbyUnitsWithinDistance(15f) descending,
@@ -2139,9 +2134,9 @@ namespace Trinity.Routines.Necromancer
                     u.Type != TrinityObjectType.Shrine &&
                     u.Type != TrinityObjectType.ProgressionGlobe &&
                     u.Type != TrinityObjectType.HealthGlobe &&
-                    u.ActorSnoId != 454066 && 
-                    Core.Grids.CanRayCast(pos, u.Position) &&
-                    (!canRayWalk || (canRayWalk && Core.Grids.CanRayWalk(pos, u.Position))) &&
+                    u.ActorSnoId != 454066 &&
+                      TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
+                    (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
                 orderby
 					u.Position.Distance(pos),
@@ -2158,9 +2153,9 @@ namespace Trinity.Routines.Necromancer
                     u.Type != TrinityObjectType.Shrine &&
                     u.Type != TrinityObjectType.ProgressionGlobe &&
                     u.Type != TrinityObjectType.HealthGlobe &&
-                    u.ActorSnoId != 454066 && 
-                    Core.Grids.CanRayCast(pos, u.Position) &&
-                    (!canRayWalk || (canRayWalk && Core.Grids.CanRayWalk(pos, u.Position))) &&
+                    u.ActorSnoId != 454066 &&
+                      TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
+                    (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
                 orderby
 					u.NearbyUnitsWithinDistance(15f) descending,
@@ -2177,8 +2172,8 @@ namespace Trinity.Routines.Necromancer
                     u.Type != TrinityObjectType.ProgressionGlobe &&
                     u.Type != TrinityObjectType.HealthGlobe &&
                     u.ActorSnoId != 454066 &&
-                    Core.Grids.CanRayCast(pos, u.Position) &&
-                    (!canRayWalk || (canRayWalk && Core.Grids.CanRayWalk(pos, u.Position))) &&
+                      TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
+                    (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
                 orderby
 					u.Position.Distance(pos),
@@ -2195,8 +2190,8 @@ namespace Trinity.Routines.Necromancer
                     u.Type != TrinityObjectType.ProgressionGlobe &&
                     u.Type != TrinityObjectType.HealthGlobe &&
                     u.ActorSnoId != 454066 &&
-                    Core.Grids.CanRayCast(pos, u.Position) &&
-                    (!canRayWalk || (canRayWalk && Core.Grids.CanRayWalk(pos, u.Position))) &&
+                      TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
+                    (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
                 orderby
 					u.NearbyUnitsWithinDistance(15f) descending,
@@ -2246,8 +2241,8 @@ namespace Trinity.Routines.Necromancer
                     u.Type != TrinityObjectType.ProgressionGlobe &&
                     u.Type != TrinityObjectType.HealthGlobe &&
                     u.ActorSnoId != 454066 &&
-                    Core.Grids.CanRayCast(pos, u.Position) &&
-                    (!canRayWalk || (canRayWalk && Core.Grids.CanRayWalk(pos, u.Position))) &&
+                      TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
+                    (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
                 orderby
 					u.Position.Distance(pos),
@@ -2282,8 +2277,8 @@ namespace Trinity.Routines.Necromancer
                     u.Type != TrinityObjectType.ProgressionGlobe &&
                     u.Type != TrinityObjectType.HealthGlobe &&
                     u.ActorSnoId != 454066 &&
-                    Core.Grids.CanRayCast(pos, u.Position) &&
-                    (!canRayWalk || (canRayWalk && Core.Grids.CanRayWalk(pos, u.Position))) &&
+                      TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
+                    (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
                 orderby
                     u.NearbyUnitsWithinDistance(10f) descending,
@@ -2298,7 +2293,7 @@ namespace Trinity.Routines.Necromancer
                 where u.IsUnit &&
 					((u.IsElite || u.ActorSnoId == 360636) && u.EliteType != EliteTypes.Minion) && u.IsValid && u.Weight > 0 &&
                     !u.IsSafeSpot && u != exclude && 
-                    (!canRayWalk || (canRayWalk && Core.Grids.CanRayWalk(pos, u.Position))) &&
+                    (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
                 select u).Any();
         }
@@ -2309,7 +2304,7 @@ namespace Trinity.Routines.Necromancer
                 where u.IsUnit &&
 					u.IsValid && u.Weight > 0 &&
                     !u.IsSafeSpot && u != exclude &&
-                    (!canRayWalk || (canRayWalk && Core.Grids.CanRayWalk(Player.Position, u.Position))) &&
+                    (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(Player.Position, u.Position))) &&
 					u.RadiusDistance <= range
                 select u).Any();
         }
@@ -2330,7 +2325,7 @@ namespace Trinity.Routines.Necromancer
                 where u.IsUnit && u.IsValid &&
                     u.Weight > 0 &&
                     u.Position.Distance(position) <= range &&
-                    Core.Grids.CanRayCast(position, u.Position) &&
+                      TrinityGrid.Instance.CanRayCast(position, u.Position) &&
                     !debuffs.All(u.HasDebuff)
                 orderby
                 u.NearbyUnitsWithinDistance(20f) descending,
@@ -2347,7 +2342,6 @@ namespace Trinity.Routines.Necromancer
 
         private bool AnyTargetWithDebuff(float range, SNOPower debuff)
         {
-            TrinityActor target;
             var units = (from u in ObjectCache
                             where u.IsUnit && u.IsValid &&
                                 u.Weight > 0 &&
@@ -2444,7 +2438,7 @@ namespace Trinity.Routines.Necromancer
             return (from u in TargetUtil.SafeList(false)
                 where
                     u.Type == TrinityObjectType.Shrine &&                    
-                    (!canReach || (canReach && Core.Grids.CanRayWalk(Player.Position, u.Position))) &&
+                    (!canReach || (canReach && TrinityGrid.Instance.CanRayWalk(Player.Position, u.Position))) &&
 					u.Distance <= range
                 select u).FirstOrDefault();
         }
@@ -2454,7 +2448,7 @@ namespace Trinity.Routines.Necromancer
 			return (from u in TargetUtil.SafeList(true)
                 where
                     u.Type == TrinityObjectType.Destructible &&                    
-                    (!canReach || (canReach && Core.Grids.CanRayWalk(pos, u.Position))) &&
+                    (!canReach || (canReach && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
                 orderby
 					u.Position.Distance(pos)
@@ -2477,7 +2471,7 @@ namespace Trinity.Routines.Necromancer
                 where 
                     u?.Type == TrinityObjectType.HealthGlobe && u.Distance < range &&
                     TargetUtil.NumMobsInRangeOfPosition(u.Position, maxDistanceFromMob) > 0 &&
-                    Core.Grids.CanRayWalk(Player.Position, MathEx.CalculatePointFrom(u.Position, Player.Position, 8f)) &&
+                    TrinityGrid.Instance.CanRayWalk(Player.Position, MathEx.CalculatePointFrom(u.Position, Player.Position, 8f)) &&
                     (!combating || (combating && TargetUtil.NumMobsInRangeOfPosition(u.Position, minDistanceFromMob) <= ClusterSize)) &&
                     (!shouldAvoid || (shouldAvoid && !Core.Avoidance.InAvoidance(u.Position))) &&
                     (!BloodRushAvoidElite || (BloodRushAvoidElite && !AnyElitesInRangeOfPosition(u.Position, 25f)))
@@ -2491,7 +2485,7 @@ namespace Trinity.Routines.Necromancer
             return (from u in TargetUtil.SafeList()
                 where 
                     u?.Type == TrinityObjectType.HealthGlobe && u.Position.Distance(pos) < range &&
-                    Core.Grids.CanRayWalk(Player.Position, MathEx.CalculatePointFrom(u.Position, Player.Position, 8f)) &&
+                    TrinityGrid.Instance.CanRayWalk(Player.Position, MathEx.CalculatePointFrom(u.Position, Player.Position, 8f)) &&
                     (!shouldAvoid || (shouldAvoid && !Core.Avoidance.InAvoidance(u.Position))) &&
                     (!BloodRushAvoidElite || (BloodRushAvoidElite && !AnyElitesInRangeOfPosition(u.Position, 25f)))
                 orderby
@@ -2508,7 +2502,7 @@ namespace Trinity.Routines.Necromancer
                     u?.Type == TrinityObjectType.HealthGlobe && 
                     u.Position.Distance(fromPos) < maxRange && u.Position.Distance(fromPos) > minRange &&
                     TargetUtil.NumMobsInRangeOfPosition(u.Position, maxDistanceFromMob) > 0 &&
-                    Core.Grids.CanRayWalk(Player.Position, u.Position) &&
+                    TrinityGrid.Instance.CanRayWalk(Player.Position, u.Position) &&
                     (!combating || (combating && TargetUtil.NumMobsInRangeOfPosition(u.Position, minDistanceFromMob) <= ClusterSize)) &&
                     (!shouldAvoid || !Core.Avoidance.InAvoidance(u.Position)) &&
                     (!shouldAvoidCritical || !Core.Avoidance.InCriticalAvoidance(u.Position))
@@ -2563,7 +2557,7 @@ namespace Trinity.Routines.Necromancer
             {
                 isOverrideActive = ZetaDia.Me.SkillOverrideActive;
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
             }
 			
@@ -2638,12 +2632,7 @@ namespace Trinity.Routines.Necromancer
             int slotOfLOTD = 0;
 			int runeIndexOfLOTD = 0;
 			bool hasLOTD = false; //GetSkillInfo(SNOPower.P6_Necro_LandOfTheDead, out slotOfLOTD, out runeIndexOfLOTD);      
-
-            // 骨甲
-            int slotOfBoneArmor = 0;
-            int runeIndexOfBoneArmor = 0;
-            bool hasBoneArmor = false; 
-
+            
             // 衰老
             int slotOfDecrepify = 0;
             int runeIndexOfDecrepify = 0;
@@ -2854,7 +2843,6 @@ namespace Trinity.Routines.Necromancer
 
         protected override bool ShouldBoneArmor()
         {
-            TrinityActor target;
             if (!Skills.Necromancer.BoneArmor.CanCast())
                 return false;
 
@@ -3428,37 +3416,6 @@ namespace Trinity.Routines.Necromancer
 
             target = _BestClusterIn60;
             return IsValidTarget(target);
-        }
-
-        protected bool TryBloodrushMovement(Vector3 destination, out TrinityPower trinityPower)
-        {
-            trinityPower = null;
-
-            if (!Skills.Necromancer.BloodRush.CanCast())
-                return false;
-
-            if (Player.CurrentHealthPct < 0.5)
-                return false;
-
-            var path = Core.DBNavProvider.CurrentPath;
-            if (path != null && path.Contains(destination))
-            {
-                var projectedPosition = IsBlocked
-                    ? Core.Grids.Avoidance.GetPathCastPosition(50f, true)
-                    : Core.Grids.Avoidance.GetPathWalkPosition(50f, true);
-
-                if (projectedPosition != Vector3.Zero)
-                {
-                    var distance = projectedPosition.Distance(Player.Position);
-                    var inFacingDirection = Core.Grids.Avoidance.IsInPlayerFacingDirection(projectedPosition, 90);
-                    if ((distance > 15f || IsBlocked && distance > 5f) && inFacingDirection)
-                    {
-                        trinityPower = BloodRush(projectedPosition);
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
 
         #endregion
