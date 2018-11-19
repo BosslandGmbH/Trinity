@@ -52,6 +52,8 @@ namespace Trinity.Components.Combat
             var tit = item.GetTrinityItemType();
             var tiq = item.GetTrinityItemQuality();
             var tib = item.GetTrinityItemBaseType();
+            var gbi = item.GameBalanceId;
+            var iql = item.ItemQualityLevel;
 
             if (rit == RawItemType.CosmeticPet)
             {
@@ -111,7 +113,7 @@ namespace Trinity.Components.Combat
             if (item.Stats.IsPrimalAncient && Core.Settings.ItemList.AlwaysStashPrimalAncients)
                 return true;
 
-            if (item.GetTrinityItemType() == TrinityItemType.ConsumableAddSockets)
+            if (tit == TrinityItemType.ConsumableAddSockets)
                 return true;
 
             if (rit == RawItemType.Book && Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.Lore))
@@ -120,30 +122,30 @@ namespace Trinity.Components.Combat
             if (rit == RawItemType.Junk && Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.CultistPage))
                 return true;
 
-            if (item.GameBalanceId == GameData.ItemGameBalanceIds.DeathsBreath)
+            if (gbi == GameData.ItemGameBalanceIds.DeathsBreath)
                 return Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.DeathsBreath);
 
             if (item.ActorSnoId == (int)SNOActor.A1_BlackMushroom)
                 return Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.RottenMushroom);
 
-            if (item.GameBalanceId == GameData.ItemGameBalanceIds.ArcaneDust)
+            if (gbi == GameData.ItemGameBalanceIds.ArcaneDust)
                 return true; //Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.ArcaneDust);
 
-            if (item.GameBalanceId == GameData.ItemGameBalanceIds.VeiledCrystal)
+            if (gbi == GameData.ItemGameBalanceIds.VeiledCrystal)
                 return true; // Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.VeiledCrystals);
 
-            if (item.GameBalanceId == GameData.ItemGameBalanceIds.ReusableParts)
+            if (gbi == GameData.ItemGameBalanceIds.ReusableParts)
                 return true; //Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.ReusableParts);
 
-            if (item.GameBalanceId == GameData.ItemGameBalanceIds.ForgottenSoul)
+            if (gbi == GameData.ItemGameBalanceIds.ForgottenSoul)
                 return true;
 
             if (GameData.HerdingMatsSnoIds.Contains(item.ActorSnoId))
                 return Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.StaffOfHeardingParts);
 
-            if (GameData.TransmogTable.Contains(item.GameBalanceId) || item.InternalName.StartsWith("Transmog") || item.ActorSnoId == 110952) //Rakanishu's Blade
+            if (GameData.TransmogTable.Contains(gbi) || item.InternalName.StartsWith("Transmog") || item.ActorSnoId == 110952) //Rakanishu's Blade
             {
-                Core.Logger.Log($"Transmog found! - Picking it up for its visual goodness {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"Transmog found! - Picking it up for its visual goodness {item.InternalName} Sno={item.ActorSnoId} GbId={gbi}");
                 return true;
             }
 
@@ -180,7 +182,7 @@ namespace Trinity.Components.Combat
             }
 
             if (tit == TrinityItemType.CraftingPlan &&
-                item.ItemQualityLevel >= ItemQuality.Legendary &&
+                iql >= ItemQuality.Legendary &&
                 Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.CraftingPlans))
             {
                 return true;
@@ -192,7 +194,7 @@ namespace Trinity.Components.Combat
             if (item.ItemType == ItemType.LegendaryGem)
                 return true;
 
-            if (item.ItemQualityLevel >= ItemQuality.Legendary)
+            if (iql >= ItemQuality.Legendary)
                 return true;
 
             switch (tib)

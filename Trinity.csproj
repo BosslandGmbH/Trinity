@@ -552,6 +552,7 @@
     <Compile Include="Routines\Necromancer\NecromancerDefault.cs" />
     <Compile Include="Routines\Necromancer\NecromancerBase.cs" />
     <Compile Include="Routines\Necromancer\NecromancerRathmaFacerollGC.cs" />
+    <Compile Include="Routines\Necromancer\NEC_RathmaCDRSimulacrum4.cs" />
     <Compile Include="Routines\Wizard\WizardChannelMeteor.cs" />
     <Compile Include="Routines\Wizard\WizardManaldCoE.cs" />
     <Compile Include="Routines\Wizard\WizardParalysisArchonBlizzard.cs" />
