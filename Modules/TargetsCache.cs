@@ -225,7 +225,7 @@ namespace Trinity.Modules
                     return false;
             }
 
-            if (cacheObject is TrinityItem item && item.ToAcdItem().GetIsCosmeticItem())
+            if (cacheObject is TrinityItem item && (item.ToAcdItem()?.GetIsCosmeticItem() ?? false))
                 return true;
 
             if (cacheObject.IsUnit && cacheObject.Attributes == null)
@@ -416,6 +416,9 @@ namespace Trinity.Modules
         private bool ShouldCacheItem(TrinityItem cacheObject)
         {
             var acdItem = cacheObject.ToAcdItem();
+            if (acdItem == null)
+                return false;
+
             if (acdItem.GetIsPickupNoClick() && TrinityCombat.Loot.IsBackpackFull)
             {
                 cacheObject.AddCacheInfo("BackpackFull");

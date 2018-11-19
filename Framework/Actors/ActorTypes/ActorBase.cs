@@ -47,7 +47,7 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public bool IsAcdBased => _fixedActor == null;
         public bool IsRActorBased => _fixedActor != null;
-        public Vector3 Position => _fixedACD?.Position ?? _fixedActor?.Position ?? Vector3.Zero;
+        public Vector3 Position => _fixedActor?.Position ?? _fixedACD?.Position ?? Vector3.Zero;
         public int AcdId => CommonData?.ACDId ?? 0;
         public int AnnId => CommonData?.AnnId ?? 0;
         public int RActorId => _fixedActor?.RActorId ?? 0;
