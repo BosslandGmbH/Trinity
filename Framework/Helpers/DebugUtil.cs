@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using Trinity.Components.Coroutines;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Reference;
@@ -233,7 +234,7 @@ namespace Trinity.Framework.Helpers
 
                 Action<ACDItem, TrinityLogLevel> logACDItem = (i, l) =>
                 {
-                    Core.Logger.Log($"Item: {i.ItemType}: {i.Name} ({i.ActorSnoId}) is Equipped");
+                    Core.Logger.Log($"Item: {i.GetItemType()}: {i.Name} ({i.ActorSnoId}) is Equipped");
                 };
 
                 if (ZetaDia.Me == null || !ZetaDia.Me.IsValid)

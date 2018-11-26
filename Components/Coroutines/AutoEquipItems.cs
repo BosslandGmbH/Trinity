@@ -1,6 +1,7 @@
 using System;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
+using Trinity.Framework.Actors.Attributes;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -767,7 +768,7 @@ namespace Trinity.Components.Coroutines
                     OneHanded = item.IsOneHand,
                     TwoHanded = item.IsTwoHand,
                     DyeType = item.DyeType,
-                    ItemType = item.ItemType,
+                    ItemType = item.GetItemType(),
                     BaseType = item.ItemBaseType,
                     FollowerType = item.FollowerSpecialType,
                     IsUnidentified = item.IsUnidentified,
@@ -776,7 +777,7 @@ namespace Trinity.Components.Coroutines
                     InventoryColumn = item.InventoryColumn,
                     ItemLink = item.ItemLink,
                     GameBalanceId = item.GameBalanceId,
-                    TrinityItemType =  TypeConversions.DetermineItemType(item.InternalName, item.ItemType, item.FollowerSpecialType),
+                    TrinityItemType =  TypeConversions.DetermineItemType(item.InternalName, item.GetItemType(), item.FollowerSpecialType),
                     IsAncient = item.GetAttribute<int>(ActorAttributeType.AncientRank) > 0,
                     InventorySlot = item.InventorySlot,
                 };
@@ -785,7 +786,7 @@ namespace Trinity.Components.Coroutines
                     .GetTrinityItemBaseType(
                         TypeConversions.DetermineItemType(
                             item.InternalName,
-                            item.ItemType,
+                            item.GetItemType(),
                             item.FollowerSpecialType));
 
                 cItem.TrinityItemBaseType = trinityItemBaseType;

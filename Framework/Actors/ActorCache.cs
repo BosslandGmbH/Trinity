@@ -115,9 +115,6 @@ namespace Trinity.Framework.Actors
                 else
                 {
                     actor = ActorFactory.CreateActor(zetaActor);
-                    if (actor == null)
-                        continue;
-
                     actor.OnCreated();
                 }
 

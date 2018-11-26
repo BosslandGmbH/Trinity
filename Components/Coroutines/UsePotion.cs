@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Combat.Resources;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Helpers;
 using Zeta.Bot.Coroutines;
 using Zeta.Common;
@@ -17,8 +18,8 @@ namespace Trinity.Components.Coroutines
 
         public static ACDItem ActivePotion =>
             InventoryManager.Backpack
-                .FirstOrDefault(i => i.ItemType == ItemType.Potion && i.IsEquipped) ??
-            InventoryManager.BaseHealthPotion;
+                .FirstOrDefault(i => i.GetItemType() == ItemType.Potion &&
+                                     i.IsEquipped) ?? InventoryManager.BaseHealthPotion;
 
         public static async Task<CoroutineResult> DrinkPotion()
         {

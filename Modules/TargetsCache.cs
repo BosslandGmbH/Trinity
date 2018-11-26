@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Reference;
 using Zeta.Bot.Settings;
+using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
@@ -25,6 +27,8 @@ namespace Trinity.Modules
     /// </summary>
     public class TargetsCache : Module, IEnumerable<TrinityActor>
     {
+        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+
         public ulong LastUpdatedTick;
         public List<TrinityActor> Entries = new List<TrinityActor>();
         public List<TrinityActor> Ignored = new List<TrinityActor>();
@@ -40,14 +44,23 @@ namespace Trinity.Modules
         {
             using (new PerformanceLogger("ActorCache.Update"))
             {
-                if (!ZetaDia.IsInGame || ZetaDia.Service.Hero == null || !ZetaDia.Service.Hero.IsValid)
+                if (!ZetaDia.IsInGame ||
+                    ZetaDia.Service.Hero == null ||
+                    !ZetaDia.Service.Hero.IsValid)
+                {
                     return;
+                }
 
-                if (ZetaDia.Me == null || !ZetaDia.Me.IsValid)
+                if (ZetaDia.Me == null ||
+                    !ZetaDia.Me.IsValid)
+                {
                     return;
+                }
 
                 var lastUpdatedTick = ZetaDia.Memory.Executor.FrameCount;
-                if (LastUpdatedTick == lastUpdatedTick) return;
+                if (LastUpdatedTick == lastUpdatedTick)
+                    return;
+
                 LastUpdatedTick = lastUpdatedTick;
 
                 var included = new List<TrinityActor>();
@@ -72,24 +85,11 @@ namespace Trinity.Modules
                     }
                     catch (Exception ex)
                     {
-                        Core.Logger.Error($"Exception updating object cache {actor.Name} {actor.ActorSnoId} {ex}");
+                        s_logger.Error($"[{nameof(Update)}] Error during actor update {actor.Name} {actor.ActorSnoId}", ex);
                         Clear();
                         return;
                     }
                 }
-
-                //if (Core.Settings.Advanced.LogCategories.HasFlag(LogCategory.CacheManagement))
-                //{
-                //    foreach (var o in included)
-                //    {
-                //        Core.Logger.Debug($"[Cache][{o.CacheTime:N4}] Added {o}");
-                //    }
-
-                //    foreach (var o in ignored)
-                //    {
-                //        Core.Logger.Debug($"[Cache][{o.CacheTime:N4}] Ignored {o.InternalName} RActorGuid={o.RActorId} ActorSnoId={o.ActorSnoId} Type={o.ActorType} CacheInfo={o.CacheInfo}");
-                //    }                   
-                //}
 
                 ByType = included.ToLookup(k => k.Type);
                 ByMonsterQuality = included.ToLookup(k => k.MonsterQuality);
@@ -99,37 +99,43 @@ namespace Trinity.Modules
             }
         }
 
-
-
         private bool ShouldTargetActor(TrinityActor cacheObject)
         {
             if (cacheObject == null)
             {
-                Core.Logger.Error("NullObject");
+                s_logger.Debug($"[{nameof(ShouldTargetActor)}] IGNORE: NullObject");
                 return false;
             }
 
-            if (!ShouldCacheCommon(cacheObject))
-                return false;
-
-            switch (cacheObject.ActorType)
+            if (cacheObject.AcdId == -1)
             {
-                case ActorType.ClientEffect:
-                    if (cacheObject.IsAllowedClientEffect)
-                        return true;
-
-                    cacheObject.AddCacheInfo("IgnoreClientEffect");
-                    return false;
-
-                default:
-                    if (cacheObject.AcdId == -1)
-                    {
-                        cacheObject.AddCacheInfo("InvalidCommonData");
-                        return false;
-                    }
-                    break;
+                s_logger.Verbose($"[{nameof(ShouldTargetActor)}] IGNORE: InvalidCommonData");
+                return false;
             }
 
+            if (!ShouldIncludeCommon(cacheObject))
+                return false;
+
+            if (cacheObject.ActorType == ActorType.ClientEffect)
+            {
+                var result = cacheObject.IsAllowedClientEffect;
+                s_logger.Verbose($"[{nameof(ShouldTargetActor)}] {(result ? "TARGET" : "IGNORE")}: ClientEffect");
+                return result;
+            }
+
+            if (cacheObject is TrinityItem item)
+            {
+                var realItem = item.ToAcdItem();
+                if (realItem.GetIsGold())
+                {
+                    return ShouldIncludeGold(realItem);
+                }
+                return ShouldIncludeItem(realItem);
+            }
+
+            if (cacheObject.ToDiaObject() is DiaGizmo)
+                return ShouldIncludeGizmo(cacheObject);
+            
             switch (cacheObject.Type)
             {
                 case TrinityObjectType.Player:
@@ -139,19 +145,14 @@ namespace Trinity.Modules
                 case TrinityObjectType.BuffedRegion:
                 case TrinityObjectType.Gate:
                 case TrinityObjectType.BloodShard:
+                    s_logger.Debug($"[{nameof(ShouldTargetActor)}] TARGET: Player, PowerGlobe, HealthGlobe, ProgressionGlobe, BuffedRegion, Gate, BloodShard");
                     return true;
 
                 case TrinityObjectType.Unit:
-                    return ShouldCacheUnit(cacheObject);
-
-                case TrinityObjectType.Item:
-                    return ShouldCacheItem(cacheObject as TrinityItem);
-
-                case TrinityObjectType.Gold:
-                    return ShouldIncludeGold(cacheObject as TrinityItem);
+                    return ShouldIncludeUnit(cacheObject);
 
                 case TrinityObjectType.Avoidance:
-                    cacheObject.AddCacheInfo("Avoidance");
+                    s_logger.Verbose($"[{nameof(ShouldTargetActor)}] IGNORE: Avoidance");
                     return false;
 
                 case TrinityObjectType.Destructible:
@@ -163,10 +164,12 @@ namespace Trinity.Modules
                 case TrinityObjectType.HealthWell:
                 case TrinityObjectType.CursedChest:
                 case TrinityObjectType.CursedShrine:
-                    return ShouldCacheGizmo(cacheObject);
+                    s_logger.Debug($"[{nameof(ShouldTargetActor)}] SPECIAL: ShouldIncludeGizmo - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
+                    return ShouldIncludeGizmo(cacheObject);
 
                 default:
-                    cacheObject.AddCacheInfo($"Unhandled TrinityObjectType");
+                    var objectType = cacheObject.ToDiaObject()?.GetType().FullName;
+                    s_logger.Debug($"[{nameof(ShouldTargetActor)}] IGNORE: Unhandled TrinityObjectType - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}, ObjectType: \"{objectType}\"");
                     return false;
             }
         }
@@ -197,40 +200,44 @@ namespace Trinity.Modules
             return false;
         }
 
-        private static bool ShouldCacheCommon(TrinityActor cacheObject)
+        private static bool ShouldIncludeCommon(TrinityActor cacheObject)
         {
             if (cacheObject.IsExcludedId && !(ClearArea.IsClearing && cacheObject.IsHostile))
             {
-                cacheObject.AddCacheInfo("ExcludedId");
+                s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: ExcludedId - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                 return false;
             }
 
             if (cacheObject.IsExcludedType)
             {
-                cacheObject.AddCacheInfo("ExcludedType");
+                s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: ExcludedType - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                 return false;
             }
 
             if (!cacheObject.IsValid)
             {
-                cacheObject.AddCacheInfo("Invalid");
+                s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: Invalid - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                 return false;
             }
 
             if (cacheObject.IsProfileBlacklisted)
             {
-                cacheObject.AddCacheInfo("BlacklistedByProfile");
-
                 if (!GameData.IsCursedChestOrShrine.Contains(cacheObject.ActorSnoId))
+                {
+                    s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: BlacklistedByProfile - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                     return false;
+                }
             }
 
-            if (cacheObject is TrinityItem item && (item.ToAcdItem()?.GetIsCosmeticItem() ?? false))
+            if (cacheObject is TrinityItem item && item.ToAcdItem().GetIsCosmeticItem())
+            {
+                s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] INCLUDE: Cosmetic - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                 return true;
+            }
 
             if (cacheObject.IsUnit && cacheObject.Attributes == null)
             {
-                cacheObject.AddCacheInfo("UnitNoAttributes");
+                s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: Unit No Attributes - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                 return false;
             }
 
@@ -240,20 +247,22 @@ namespace Trinity.Modules
                 if (IsCorpulent(cacheObject))
                     return true;
 
-                cacheObject.AddCacheInfo("Untargetable");
+                s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: Untargetable - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                 return false;
             }
 
             var isQuestGiverOutsideTown = cacheObject.IsQuestGiver && !Core.Player.IsInTown;
-            if (cacheObject.IsNpc && !isQuestGiverOutsideTown && !cacheObject.IsBoss)
+            if (cacheObject.IsNpc &&
+                !isQuestGiverOutsideTown &&
+                !cacheObject.IsBoss)
             {
-                cacheObject.AddCacheInfo("Npc");
+                s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: NPC - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                 return false;
             }
 
             if (cacheObject.IsDead)
             {
-                cacheObject.AddCacheInfo("Dead");
+                s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: IsDead - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                 return false;
             }
 
@@ -261,36 +270,34 @@ namespace Trinity.Modules
             {
                 if (cacheObject.IsGizmo && cacheObject.IsUsed)
                 {
-                    cacheObject.AddCacheInfo("UsedGizmoObstacle");
+                    s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: Used Gizmo - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                     return false;
                 }
 
                 if (cacheObject.IsMonster && !GameData.CorruptGrowthIds.Contains(cacheObject.ActorSnoId))
                 {
-                    cacheObject.AddCacheInfo("MonsterObstacle");
+                    s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: Monster Obstacle - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                     return false;
                 }
             }
 
             if (cacheObject.IsBlacklisted)
             {
-                cacheObject.AddCacheInfo("Blacklisted " + cacheObject.ObjectHash);
+                s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: Blacklisted - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                 return false;
             }
 
             if (cacheObject.ZDiff > ZDiffLimit(cacheObject))
             {
-                cacheObject.AddCacheInfo("ZDiff");
+                s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: ZDiffLimit - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                 return false;
             }
 
-            if (!cacheObject.HasBeenInLoS)
+            if (!cacheObject.IsInLineOfSight &&
+                !ShouldIgnoreLoS(cacheObject))
             {
-                if (!ShouldIgnoreLoS(cacheObject))
-                {
-                    cacheObject.AddCacheInfo("HasntBeenInLoS");
-                    return false;
-                }
+                s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: No Line of Sight - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
+                return false;
             }
 
             return true;
@@ -301,14 +308,21 @@ namespace Trinity.Modules
             if (cacheObject.IsMinimapActive)
                 return true;
 
-            if (cacheObject.IsNpc && cacheObject.IsQuestGiver)
+            if (cacheObject.IsNpc &&
+                cacheObject.IsQuestGiver)
+            {
                 return true;
+            }
 
             switch (cacheObject.Type)
             {
                 case TrinityObjectType.Shrine:
-                    if (cacheObject.RadiusDistance < 40f || cacheObject.IsWalkable)
+                    if (cacheObject.RadiusDistance < 40f ||
+                        cacheObject.IsWalkable)
+                    {
                         return true;
+                    }
+
                     break;
 
                 case TrinityObjectType.ProgressionGlobe:
@@ -318,32 +332,53 @@ namespace Trinity.Modules
                 case TrinityObjectType.Door:
                     if (cacheObject.RadiusDistance < 15f)
                         return true;
+
                     break;
 
                 case TrinityObjectType.Barricade:
                 case TrinityObjectType.Destructible:
-                    if (Core.BlockedCheck.MoveSpeed < 5f && cacheObject.Distance < 10f)
+                    if (Core.BlockedCheck.MoveSpeed < 5f &&
+                        cacheObject.Distance < 10f)
+                    {
                         return true;
+                    }
+
                     break;
 
                 case TrinityObjectType.Unit:
-                    if (TrinityCombat.CombatMode == CombatMode.KillAll && cacheObject.IsWalkable)
+                    if (TrinityCombat.CombatMode == CombatMode.KillAll &&
+                        cacheObject.IsWalkable)
+                    {
                         return true;
-                    if (cacheObject.IsElite && cacheObject.Distance < 40f || cacheObject.IsWalkable)
+                    }
+
+                    if (cacheObject.IsElite &&
+                        cacheObject.Distance < 40f ||
+                        cacheObject.IsWalkable)
+                    {
                         return true;
+                    }
+
                     if (cacheObject.IsTreasureGoblin)
                         return true;
+
                     break;
             }
 
-            if (cacheObject.Distance < 4) return true;
-            if (cacheObject is TrinityItem i && i.ToAcdItem().ItemQualityLevel >= ItemQuality.Legendary) return true;
-            if (GameData.LineOfSightWhitelist.Contains(cacheObject.ActorSnoId)) return true;
+            if (cacheObject.Distance < 4)
+                return true;
+
+            if (cacheObject is TrinityItem i &&
+                i.ToAcdItem().ItemQualityLevel >= ItemQuality.Legendary)
+                return true;
+
+            if (GameData.LineOfSightWhitelist.Contains(cacheObject.ActorSnoId))
+                return true;
 
             return false;
         }
 
-        private bool ShouldCacheUnit(TrinityActor cacheObject)
+        private bool ShouldIncludeUnit(TrinityActor cacheObject)
         {
             //// Uncomment to ignore juggernauts
             //if (cacheObject.CommonData.AffixIds.Contains(-464468964))
@@ -398,106 +433,122 @@ namespace Trinity.Modules
             return true;
         }
 
-        private bool ShouldIncludeGold(TrinityItem cacheObject)
+        private bool ShouldIncludeGold(ACDItem item)
         {
+            if (item == null)
+            {
+                s_logger.Verbose($"[{nameof(ShouldIncludeGold)}] IGNORE: NullItem");
+                return false;
+            }
+
             if (!Core.Settings.Items.PickupGold)
             {
-                cacheObject.AddCacheInfo("GoldPickupDisabled");
+                s_logger.Verbose($"[{nameof(ShouldIncludeGold)}] IGNORE: GoldPickupDisabled - Item: \"{item?.Name}\", InternalName: \"{item?.InternalName}\", Sno: 0x{item?.ActorSnoId:x8}, GBId: 0x{item?.GameBalanceId:x8}, RawItemType: {item.GetRawItemType()}");
                 return false;
             }
-            if (cacheObject.ToAcdItem().GetGoldAmount() < Core.Settings.Items.MinGoldStack)
+
+            if (item.GetGoldAmount() < Core.Settings.Items.MinGoldStack)
             {
-                cacheObject.AddCacheInfo("NotEnoughGold");
+                s_logger.Verbose($"[{nameof(ShouldIncludeGold)}] IGNORE: MinGoldStack - Item: \"{item?.Name}\", InternalName: \"{item?.InternalName}\", Sno: 0x{item?.ActorSnoId:x8}, GBId: 0x{item?.GameBalanceId:x8}, RawItemType: {item.GetRawItemType()}");
                 return false;
             }
+
             return true;
         }
 
-        private bool ShouldCacheItem(TrinityItem cacheObject)
+        private bool ShouldIncludeItem(ACDItem item)
         {
-            var acdItem = cacheObject.ToAcdItem();
-            if (acdItem == null)
-                return false;
-
-            if (acdItem.GetIsPickupNoClick() && TrinityCombat.Loot.IsBackpackFull)
+            if (item == null)
             {
-                cacheObject.AddCacheInfo("BackpackFull");
+                s_logger.Verbose($"[{nameof(ShouldIncludeItem)}] IGNORE: NullItem");
                 return false;
             }
 
-            if (acdItem.GetIsMyDroppedItem())
+            if (item.GetIsPickupNoClick() && TrinityCombat.Loot.IsBackpackFull)
             {
-                cacheObject.AddCacheInfo("DroppedItem");
+                s_logger.Verbose($"[{nameof(ShouldIncludeItem)}] IGNORE: Backpack is Full - Item: \"{item?.Name}\", InternalName: \"{item?.InternalName}\", Sno: 0x{item?.ActorSnoId:x8}, GBId: 0x{item?.GameBalanceId:x8}, RawItemType: {item.GetRawItemType()}");
                 return false;
             }
 
-            if (acdItem.GetIsUntargetable())
+            if (item.GetIsMyDroppedItem())
             {
-                cacheObject.AddCacheInfo("Untargetable");
+                s_logger.Verbose($"[{nameof(ShouldIncludeItem)}] IGNORE: Dropped Item - Item: \"{item?.Name}\", InternalName: \"{item?.InternalName}\", Sno: 0x{item?.ActorSnoId:x8}, GBId: 0x{item?.GameBalanceId:x8}, RawItemType: {item.GetRawItemType()}");
                 return false;
             }
 
-            if (!acdItem.GetIsCosmeticItem() &&
-                acdItem.ItemQualityLevel <= ItemQuality.Rare4 &&
-                cacheObject.Distance > 60f)
+            if (item.GetIsUntargetable())
             {
-                cacheObject.AddCacheInfo($"OutOfRange Limit={CharacterSettings.Instance.LootRadius}");
+                s_logger.Verbose($"[{nameof(ShouldIncludeItem)}] IGNORE: Untargetable - Item: \"{item?.Name}\", InternalName: \"{item?.InternalName}\", Sno: 0x{item?.ActorSnoId:x8}, GBId: 0x{item?.GameBalanceId:x8}, RawItemType: {item.GetRawItemType()}");
                 return false;
             }
 
-            if (!TrinityCombat.Loot.ShouldPickup(acdItem))
+            if (!item.GetIsCosmeticItem() &&
+                item.ItemQualityLevel <= ItemQuality.Rare4 &&
+                item.Distance > CharacterSettings.Instance.LootRadius)
             {
-                cacheObject.AddCacheInfo("LootProvider.ShouldPickup");
+                s_logger.Verbose($"[{nameof(ShouldIncludeItem)}] IGNORE: OutOfRange {CharacterSettings.Instance.LootRadius} - Item: \"{item?.Name}\", InternalName: \"{item?.InternalName}\", Sno: 0x{item?.ActorSnoId:x8}, GBId: 0x{item?.GameBalanceId:x8}, RawItemType: {item.GetRawItemType()}");
+                return false;
+            }
+
+            if (!TrinityCombat.Loot.ShouldPickup(item))
+            {
+                s_logger.Verbose($"[{nameof(ShouldIncludeItem)}] IGNORE: LootProvider.ShouldPickup - Item: \"{item?.Name}\", InternalName: \"{item?.InternalName}\", Sno: 0x{item?.ActorSnoId:x8}, GBId: 0x{item?.GameBalanceId:x8}, RawItemType: {item.GetRawItemType()}");
                 return false;
             }
 
             return true;
         }
 
-        private bool ShouldCacheGizmo(TrinityActor cacheObject)
+        private bool ShouldIncludeGizmo(TrinityActor cacheObject)
         {
             if (cacheObject.IsUsed)
             {
-                cacheObject.AddCacheInfo("UsedGizmo");
+                s_logger.Debug($"[{nameof(ShouldIncludeGizmo)}] IGNORE: Used Gizmo - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                 return false;
             }
 
             if (cacheObject.IsInteractWhitelisted)
             {
-                cacheObject.AddCacheInfo("Interact Whitelist");
+                s_logger.Debug($"[{nameof(ShouldIncludeGizmo)}] INTERACT: Interact Whitelist - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                 return true;
             }
 
             if (GameData.ForceDestructibles.Contains(cacheObject.ActorSnoId))
             {
-                cacheObject.AddCacheInfo("ForceDestructibles");
+                s_logger.Debug($"[{nameof(ShouldIncludeGizmo)}] INTERACT: Force Destructibles - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                 return true;
             }
 
             if (TrinityTownRun.IsVendoring && cacheObject.Distance > 10f)
             {
-                cacheObject.AddCacheInfo("WantToTownRun");
+                s_logger.Debug($"[{nameof(ShouldIncludeGizmo)}] IGNORE: Want to Town Run - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                 return false;
             }
 
+            //TODO: Why are we ignoreing doors????
             if (GameData.DoorsToAlwaysIgnore.Contains(cacheObject.ActorSnoId))
             {
-                cacheObject.AddCacheInfo("AlwaysIgnoreDoor");
+                s_logger.Debug($"[{nameof(ShouldIncludeGizmo)}] IGNORE: Always Ignore Door - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                 return false;
             }
 
             if (GameData.SceneSpecificDoorsIgnore.ContainsKey(Core.Player.CurrentSceneSnoId) &&
                 GameData.SceneSpecificDoorsIgnore[Core.Player.CurrentSceneSnoId] == cacheObject.ActorSnoId)
             {
-                cacheObject.AddCacheInfo("SceneSpecificIgnoreDoor");
+                s_logger.Debug($"[{nameof(ShouldIncludeGizmo)}] IGNORE: Scene Specific Ignore Door - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                 return false;
             }
 
-            if (cacheObject.IsDestroyable && !cacheObject.HasBeenWalkable && cacheObject.Distance > 5f && cacheObject.GizmoType != GizmoType.BreakableChest)
+            if (cacheObject.IsDestroyable &&
+                !cacheObject.HasBeenWalkable &&
+                cacheObject.Distance > 5f &&
+                cacheObject.GizmoType != GizmoType.BreakableChest)
             {
-                cacheObject.AddCacheInfo("CantReachDestructible");
+                s_logger.Debug($"[{nameof(ShouldIncludeGizmo)}] IGNORE: Cant Reach Destructible - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                 return false;
             }
+
+            s_logger.Debug($"[{nameof(ShouldIncludeGizmo)}] INTERACT: Default - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
             return true;
         }
 
@@ -550,7 +601,14 @@ namespace Trinity.Modules
             Ignored.Clear();
         }
 
-        public IEnumerator<TrinityActor> GetEnumerator() => Entries.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<TrinityActor> GetEnumerator()
+        {
+            return Entries.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

@@ -7,10 +7,6 @@ namespace Trinity.Framework.Actors.ActorTypes
 {
     public class TrinityItem : TrinityActor
     {
-        public TrinityItem(DiaObject seed) : base(seed)
-        {
-        }
-
         public TrinityItem(ACD seed) : base(seed, ActorType.Item)
         {
         }

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.Serialization;
-using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Framework.Objects
 {
+    //TODO: Remove that class...
     [DataContract(Namespace = "")]
     public class Item : IUnique, IEquatable<Item>
     {
@@ -45,10 +46,13 @@ namespace Trinity.Framework.Objects
         {
             Id = acdItem.ActorSnoId;
             Name = acdItem.Name;
-            ItemType = acdItem.ItemType;
+            ItemType = acdItem.GetItemType();
         }
 
-        public ACDItem GetEquippedItem() => Core.Inventory.Equipped.FirstOrDefault(u => u.ActorSnoId == Id);
+        public ACDItem GetEquippedItem()
+        {
+            return Core.Inventory.Equipped.FirstOrDefault(u => u.ActorSnoId == Id);
+        }
 
         /// <summary>
         /// If this item is currently equipped
@@ -74,7 +78,7 @@ namespace Trinity.Framework.Objects
         {
             get
             {
-                var set = Sets.ToList().FirstOrDefault(s => s.ItemIds.Contains(Id));
+                Set set = Sets.ToList().FirstOrDefault(s => s.ItemIds.Contains(Id));
                 return set ?? new Set();
             }
         }
@@ -86,16 +90,15 @@ namespace Trinity.Framework.Objects
         {
             get
             {
-                if (!IsEquipped) return false;
+                if (!IsEquipped)
+                    return false;
 
                 // Item Creates Buff
-                SNOPower power;
-                if (GameData.PowerByItem.TryGetValue(this, out power))
+                if (GameData.PowerByItem.TryGetValue(this, out SNOPower power))
                     return Core.Player.HasBuff(power);
 
                 // Item Spawns Minions
-                string internalNameToken;
-                if (GameData.MinionInternalNameTokenByItem.TryGetValue(this, out internalNameToken))
+                if (GameData.MinionInternalNameTokenByItem.TryGetValue(this, out string internalNameToken))
                     return ZetaDia.Actors.GetActorsOfType<DiaUnit>().Any(u => u.PetType > 0 && u.Name.Contains(internalNameToken));
 
                 return false;

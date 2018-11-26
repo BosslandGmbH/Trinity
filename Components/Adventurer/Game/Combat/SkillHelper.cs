@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Trinity.Framework.Actors.Attributes;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
@@ -13,12 +14,12 @@ namespace Trinity.Components.Adventurer.Game.Combat
         {
             get
             {
-                var lhItem = InventoryManager.Equipped.FirstOrDefault(i => i.InventorySlot == InventorySlot.LeftHand);
+                ACDItem lhItem = InventoryManager.Equipped.FirstOrDefault(i => i.InventorySlot == InventorySlot.LeftHand);
 
                 if (lhItem == null)
                     return SNOPower.None;
 
-                switch (lhItem.ItemType)
+                switch (lhItem.GetItemType())
                 {
                     default:
                         return SNOPower.Weapon_Melee_Instant;

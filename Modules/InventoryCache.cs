@@ -1,10 +1,10 @@
-﻿using System;
-using Trinity.Framework;
+﻿using log4net;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using log4net;
-using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Settings;
@@ -40,9 +40,20 @@ namespace Trinity.Modules
         public InventorySlice Stash { get; } = new InventorySlice();
         public InventorySlice Backpack { get; } = new InventorySlice();
         public int BackpackItemCount { get; private set; }
-        protected override void OnPulse() => Update();
-        IEnumerator IEnumerable.GetEnumerator() => AllItems.GetEnumerator();
-        public IEnumerator<ACDItem> GetEnumerator() => AllItems.GetEnumerator();
+        protected override void OnPulse()
+        {
+            Update();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return AllItems.GetEnumerator();
+        }
+
+        public IEnumerator<ACDItem> GetEnumerator()
+        {
+            return AllItems.GetEnumerator();
+        }
 
         public void Update()
         {
@@ -139,34 +150,53 @@ namespace Trinity.Modules
         public class InventorySlice : IEnumerable<ACDItem>
         {
             public Func<IEnumerable<ACDItem>> Source { get; set; }
-            public List<ACDItem> ByItemType(ItemType type) => Source().Where(i => i.ItemType == type).ToList();
-            public List<ACDItem> ByActorSno(int actorSno) => Source().Where(i => i.ActorSnoId == actorSno).ToList();
-            public List<ACDItem> ByQuality(TrinityItemQuality quality) => Source().Where(i =>
+            public List<ACDItem> ByItemType(ItemType type)
             {
-                switch (quality)
-                {
-                    case TrinityItemQuality.Invalid:
-                        return false;
-                    case TrinityItemQuality.None:
-                        return false;
-                    case TrinityItemQuality.Inferior:
-                        return i.ItemQualityLevel == ItemQuality.Inferior;
-                    case TrinityItemQuality.Common:
-                        return i.ItemQualityLevel >= ItemQuality.Normal && i.ItemQualityLevel <= ItemQuality.Superior;
-                    case TrinityItemQuality.Magic:
-                        return i.ItemQualityLevel >= ItemQuality.Magic1 && i.ItemQualityLevel <= ItemQuality.Magic3;
-                    case TrinityItemQuality.Rare:
-                        return i.ItemQualityLevel >= ItemQuality.Rare4 && i.ItemQualityLevel <= ItemQuality.Rare6;
-                    case TrinityItemQuality.Legendary:
-                        return i.ItemQualityLevel == ItemQuality.Legendary;
-                    case TrinityItemQuality.Set:
-                        return i.IsSetItem();
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(quality), quality, null);
-                }
-            }).ToList();
-            public IEnumerator<ACDItem> GetEnumerator() => Source().GetEnumerator();
-            IEnumerator IEnumerable.GetEnumerator() => Source().GetEnumerator();
+                return Source().Where(i => i.GetItemType() == type).ToList();
+            }
+
+            public List<ACDItem> ByActorSno(int actorSno)
+            {
+                return Source().Where(i => i.ActorSnoId == actorSno).ToList();
+            }
+
+            public List<ACDItem> ByQuality(TrinityItemQuality quality)
+            {
+                return Source().Where(i =>
+{
+    switch (quality)
+    {
+        case TrinityItemQuality.Invalid:
+            return false;
+        case TrinityItemQuality.None:
+            return false;
+        case TrinityItemQuality.Inferior:
+            return i.ItemQualityLevel == ItemQuality.Inferior;
+        case TrinityItemQuality.Common:
+            return i.ItemQualityLevel >= ItemQuality.Normal && i.ItemQualityLevel <= ItemQuality.Superior;
+        case TrinityItemQuality.Magic:
+            return i.ItemQualityLevel >= ItemQuality.Magic1 && i.ItemQualityLevel <= ItemQuality.Magic3;
+        case TrinityItemQuality.Rare:
+            return i.ItemQualityLevel >= ItemQuality.Rare4 && i.ItemQualityLevel <= ItemQuality.Rare6;
+        case TrinityItemQuality.Legendary:
+            return i.ItemQualityLevel == ItemQuality.Legendary;
+        case TrinityItemQuality.Set:
+            return i.IsSetItem();
+        default:
+            throw new ArgumentOutOfRangeException(nameof(quality), quality, null);
+    }
+}).ToList();
+            }
+
+            public IEnumerator<ACDItem> GetEnumerator()
+            {
+                return Source().GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return Source().GetEnumerator();
+            }
         }
 
         public class InventoryCurrency
@@ -197,7 +227,9 @@ namespace Trinity.Modules
             }
 
             public bool HasCurrency(IDictionary<CurrencyType, int> recipe)
-                => recipe.All(requirement => PlayerData.GetCurrencyAmount(requirement.Key) >= requirement.Value);
+            {
+                return recipe.All(requirement => PlayerData.GetCurrencyAmount(requirement.Key) >= requirement.Value);
+            }
 
             /// <summary>
             /// Extracts a legendary power; requires legendary item.
@@ -272,7 +304,11 @@ namespace Trinity.Modules
                 {CurrencyType.DeathsBreath, 1}
             };
 
-            public long GetCurrency(CurrencyType type) => PlayerData.GetCurrencyAmount(type);
+            public long GetCurrency(CurrencyType type)
+            {
+                return PlayerData.GetCurrencyAmount(type);
+            }
+
             public long OrganDiablo => PlayerData.GetCurrencyAmount(CurrencyType.DemonOrganDiablo);
             public long OrganLeoric => PlayerData.GetCurrencyAmount(CurrencyType.DemonOrganSkeletonKing);
             public long OrganGhom => PlayerData.GetCurrencyAmount(CurrencyType.DemonOrganGhom);

@@ -91,7 +91,8 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         public static async Task<CoroutineResult> EnsureIsInTown()
         {
-            if (!ZetaDia.IsInTown &&
+            if ((!ZetaDia.IsInTown ||
+                 ZetaDia.Storage.CurrentWorldType != Act.A1) &&
                 await WaypointCoroutine.UseWaypoint(WaypointFactory.ActHubs[Act.A1]))
             {
                 return CoroutineResult.Running;
@@ -278,9 +279,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
             CoroutineResult previousResult;
             if ((previousResult = await TurnInQuest()) == CoroutineResult.Running)
-            {
                 return false;
-            }
 
             if (BrainBehavior.IsVendoring &&
                 previousResult != CoroutineResult.NoAction)

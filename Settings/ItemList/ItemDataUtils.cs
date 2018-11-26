@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
@@ -15,20 +16,31 @@ namespace Trinity.Settings.ItemList
     /// </summary>
     public class ItemDataUtils
     {
-
         public static StatType GetMainStatType(ACDItem item)
         {
-            if (item.Stats.Strength > 0) return StatType.Strength;
-            if (item.Stats.Intelligence > 0) return StatType.Intelligence;
-            if (item.Stats.Dexterity > 0) return StatType.Dexterity;
+            if (item.Stats.Strength > 0)
+                return StatType.Strength;
+
+            if (item.Stats.Intelligence > 0)
+                return StatType.Intelligence;
+
+            if (item.Stats.Dexterity > 0)
+                return StatType.Dexterity;
+
             return StatType.Unknown;
         }
 
         public static int GetMainStatValue(ACDItem item)
         {
-            if (item.Stats.Strength > 0) return (int)item.Stats.Strength;
-            if (item.Stats.Intelligence > 0) return (int)item.Stats.Intelligence;
-            if (item.Stats.Dexterity > 0) return (int)item.Stats.Dexterity;
+            if (item.Stats.Strength > 0)
+                return (int)item.Stats.Strength;
+
+            if (item.Stats.Intelligence > 0)
+                return (int)item.Stats.Intelligence;
+
+            if (item.Stats.Dexterity > 0)
+                return (int)item.Stats.Dexterity;
+
             return 0;
         }
 
@@ -37,8 +49,7 @@ namespace Trinity.Settings.ItemList
             var min = Math.Min(item.Stats.MinDamageElemental, item.Stats.MaxDamageElemental);
             return (Math.Abs(min) > double.Epsilon) ? (int)min : (int)item.GetAttribute<float>(ActorAttributeType.DamageWeaponMinPhysical);
         }
-
-
+        
         public static float GetMaxDamageProperty(ACDItem item)
         {
             var arcaneDmg = item.GetAttribute<float>(ActorAttributeType.DamageWeaponMaxArcane);
@@ -69,7 +80,6 @@ namespace Trinity.Settings.ItemList
             var basePhysicalDmg = item.GetAttribute<float>(ActorAttributeType.DamageWeaponMaxPhysical);
             return totalPhysicalDmg - basePhysicalDmg;
         }
-
 
         internal static double GetAttackSpeed(ACDItem acdItem)
         {
@@ -103,27 +113,27 @@ namespace Trinity.Settings.ItemList
                     var cold = GetElementalDamage(item, Element.Cold);
                     if (cold > 0)
                         return cold;
-
+            
                     var lightning = GetElementalDamage(item, Element.Lightning);
                     if (lightning > 0)
                         return lightning;
-
+                    
                     var arcane = GetElementalDamage(item, Element.Arcane);
                     if (arcane > 0)
                         return arcane;
-
+                    
                     var poison = GetElementalDamage(item, Element.Poison);
                     if (poison > 0)
                         return poison;
-
+                    
                     var holy = GetElementalDamage(item, Element.Holy);
                     if (holy > 0)
                         return holy;
-
+                    
                     var physical = GetElementalDamage(item, Element.Physical);
                     if (physical > 0)
                         return physical;
-
+                    
                     break;
             }
             return 0;
@@ -198,7 +208,7 @@ namespace Trinity.Settings.ItemList
 
             var statType = GetMainStatType(item);
             var actorClasses = new List<ActorClass>();
-            var itemType = TypeConversions.DetermineItemType(item.InternalName, item.ItemType);
+            var itemType = TypeConversions.DetermineItemType(item.InternalName, item.GetItemType());
 
             switch (statType)
             {
@@ -286,8 +296,11 @@ namespace Trinity.Settings.ItemList
             if (SpecialItemsPropertyCases.TryGetValue(new Tuple<Item, ItemProperty, int>(item, prop, variant), out statRange))
                 result = statRange;
 
-            if (prop == ItemProperty.PassivePower && ItemPassivePowers.ContainsKey(item.Id))
+            if (prop == ItemProperty.PassivePower &&
+                ItemPassivePowers.ContainsKey(item.Id))
+            {
                 result = ItemPassivePowers[item.Id].Range;
+            }
 
             return result;
         }
@@ -305,20 +318,32 @@ namespace Trinity.Settings.ItemList
             foreach (var pair in SpecialItemsPropertyCases.Where(i => i.Key.Item1.TrinityItemType == itemType && i.Key.Item2 == prop))
             {
                 var range = pair.Value;
-                if (Math.Abs(result.Min) < double.Epsilon || range.Min < result.Min)
+                if (Math.Abs(result.Min) < double.Epsilon ||
+                    range.Min < result.Min)
+                {
                     result.Min = range.Min;
-                if (Math.Abs(result.AncientMin) < double.Epsilon || range.AncientMin < result.AncientMin)
+                }
+
+                if (Math.Abs(result.AncientMin) < double.Epsilon ||
+                    range.AncientMin < result.AncientMin)
+                {
                     result.AncientMin = range.AncientMin;
+                }
+
                 if (range.Max > result.Max)
+                {
                     result.Max = range.Max;
+                }
+
                 if (range.AncientMax > result.AncientMax)
+                {
                     result.AncientMax = range.AncientMax;
+                }
             }
 
             return result;
         }
-
-
+        
         /// <summary>
         /// Determine if an item can have a given property
         /// </summary>
@@ -328,23 +353,21 @@ namespace Trinity.Settings.ItemList
         /// <returns></returns>
         public static bool IsValidPropertyForItem(Item item, ItemProperty prop, int variant = 0)
         {
-            ItemStatRange statRange;
-
             if (prop == ItemProperty.Ancient)
                 return true;
-
+         
             if (prop == ItemProperty.Attribute)
                 return true;
-
-            if (ItemPropertyLimitsByItemType.TryGetValue(new KeyValuePair<TrinityItemType, ItemProperty>(item.TrinityItemType, prop), out statRange))
+            
+            if (ItemPropertyLimitsByItemType.TryGetValue(new KeyValuePair<TrinityItemType, ItemProperty>(item.TrinityItemType, prop), out var statRange))
                 return true;
-
+            
             if (SpecialItemsPropertyCases.ContainsKey(new Tuple<Item, ItemProperty, int>(item, prop, variant)))
                 return true;
-
+            
             if (prop == ItemProperty.PassivePower && ItemPassivePowers.ContainsKey(item.Id))
                 return true;
-
+            
             return false;
         }
 
@@ -360,14 +383,10 @@ namespace Trinity.Settings.ItemList
             props = props.Concat(specialProps).Distinct().ToList();
 
             if (ItemPassivePowers.ContainsKey(item.Id))
-            {
                 props.Add(ItemProperty.PassivePower);
-            }
 
             if (item.TrinityItemType != TrinityItemType.HealthPotion)
-            {
                 props.Add(ItemProperty.Ancient);
-            }
 
             props.Add(ItemProperty.Attribute);
 
@@ -448,14 +467,12 @@ namespace Trinity.Settings.ItemList
         public static float GetPassivePowerValue(ACDItem item)
         {
             if (!ItemPassivePowers.TryGetValue(item.ActorSnoId, out var desc))
-            {
                 return -1;
-            }
+
             var val = item.GetAttribute<float>(ActorAttributeType.ItemPowerPassive);
             if (Math.Abs(val) > double.Epsilon)
-            {                
                 return desc.IsPercent ? val * 100 : val;
-            }
+            
             var acdItem = ZetaDia.Actors.GetACDByAnnId(item.AnnId);
             var value = acdItem.GetAttribute<float>(desc.Attribute);
             Core.Logger.Verbose(">> PassivePower Attribute found with attribute id on AcdItem");
@@ -1555,8 +1572,8 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Crusader), Skills.Crusader.FallingSword},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Crusader), Skills.Crusader.HeavensFury},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Crusader), Skills.Crusader.Condemn},
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Crusader), Skills.Crusader.Bombardment},			
-			
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Crusader), Skills.Crusader.Bombardment},
+
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Necromancer), Skills.Necromancer.CorpseLance},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Necromancer), Skills.Necromancer.Revive},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Necromancer), Skills.Necromancer.BoneSpirit},
@@ -1612,7 +1629,7 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Crusader), Skills.Crusader.HeavensFury},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Crusader), Skills.Crusader.Bombardment},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Crusader), Skills.Crusader.Condemn},
-			
+
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Necromancer), Skills.Necromancer.CorpseLance},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Necromancer), Skills.Necromancer.Revive},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Necromancer), Skills.Necromancer.BoneSpirit},
@@ -1804,7 +1821,7 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.SweepAttack},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.Punish},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.BlessedHammer},
-			
+
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Phylactery, ActorClass.Necromancer), Skills.Necromancer.CorpseLance},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Phylactery, ActorClass.Necromancer), Skills.Necromancer.SkeletalMage},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Phylactery, ActorClass.Necromancer), Skills.Necromancer.Revive},

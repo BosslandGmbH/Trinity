@@ -17,7 +17,6 @@ namespace Trinity.Framework.Actors.ActorTypes
         {
             _fixedACD = acd;
             _fixedActor = null;
-
             InternalName = CommonData?.Name ?? string.Empty;
             ActorType = type;
         }
@@ -47,12 +46,12 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public bool IsAcdBased => _fixedActor == null;
         public bool IsRActorBased => _fixedActor != null;
-        public Vector3 Position => _fixedActor?.Position ?? _fixedACD?.Position ?? Vector3.Zero;
-        public int AcdId => CommonData?.ACDId ?? 0;
-        public int AnnId => CommonData?.AnnId ?? 0;
-        public int RActorId => _fixedActor?.RActorId ?? 0;
+        public Vector3 Position => _fixedACD?.Position ?? _fixedActor?.Position ?? Vector3.Zero;
+        public int AcdId => CommonData?.ACDId ?? -1;
+        public int AnnId => CommonData?.AnnId ?? -1;
+        public int RActorId => _fixedActor?.RActorId ?? -1;
         public string InternalName { get; internal set; }
-        public int ActorSnoId => CommonData?.ActorSnoId ?? 0;
+        public int ActorSnoId => CommonData?.ActorSnoId ?? -1;
 
         public SNORecordActor ActorInfo => CommonData?.ActorInfo ?? default(SNORecordActor);
         public SNORecordMonster MonsterInfo => CommonData?.MonsterInfo ?? default(SNORecordMonster);

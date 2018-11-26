@@ -44,11 +44,13 @@ namespace Trinity.Components.Coroutines
 
             // Collect information about the item to pickup.
             var logLine =
-                $"[{nameof(VacuumItems)}] {currentPickup.Name} ({currentPickup.ActorSnoId}) InternamName={currentPickup.InternalName} GbId={currentPickup.GameBalanceId}";
+                $"[{nameof(VacuumItems)}] {currentPickup.Name} ({currentPickup.ActorSnoId}) InternalName: {currentPickup.InternalName} GbId: {currentPickup.GameBalanceId}";
 
+            var tmp = currentPickup.ToAcdItem().AsRActor;
+            
             // Use the coroutine to pick up the item.
             if (await CommonCoroutines.MoveAndInteract(
-                    currentPickup.ToDiaObject(),
+                    tmp,
                     () => currentPickup.ActorSnoId == 0) == CoroutineResult.Running)
             {
                 return false;

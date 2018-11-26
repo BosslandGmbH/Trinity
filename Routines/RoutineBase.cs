@@ -1,20 +1,18 @@
 using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Buddy.Coroutines;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
-using Trinity.Components.Coroutines;
 using Trinity.DbProvider;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Avoidance;
 using Trinity.Framework.Behaviors;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Reference;
 using Trinity.Modules;
 using Trinity.Settings;
@@ -22,8 +20,8 @@ using Zeta.Bot.Coroutines;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
-using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Routines
 {
@@ -62,10 +60,14 @@ namespace Trinity.Routines
             => Core.Avoidance.Avoider;
 
         protected static TrinityPower Walk(TrinityActor target)
-            => new TrinityPower(SNOPower.Walk, Math.Max(7f, target.AxialRadius), target.Position);
+        {
+            return new TrinityPower(SNOPower.Walk, Math.Max(7f, target.AxialRadius), target.Position);
+        }
 
         protected static TrinityPower Walk(Vector3 destination, float range = 0f)
-            => new TrinityPower(SNOPower.Walk, range, destination);
+        {
+            return new TrinityPower(SNOPower.Walk, range, destination);
+        }
 
         public bool IsEliteNearby
             => WeightedUnits.Any(u => u.IsElite || u.IsTreasureGoblin);
@@ -212,8 +214,11 @@ namespace Trinity.Routines
             if (settings.UseMode == UseTime.Selective)
                 return false;
 
-            if (settings.UseMode == UseTime.OutOfCombat && IsInCombat)
+            if (settings.UseMode == UseTime.OutOfCombat &&
+                IsInCombat)
+            {
                 return false;
+            }
 
             return settings.UseMode != UseTime.InCombat || IsInCombat;
         }
@@ -232,48 +237,86 @@ namespace Trinity.Routines
             if (SpellHistory.TimeSinceUse(skill.SNOPower).TotalMilliseconds < settings.RecastDelayMs)
                 return true;
 
-            if (settings.ClusterSize > 0 && !TargetUtil.ClusterExists(15f, settings.ClusterSize))
+            if (settings.ClusterSize > 0 &&
+                !TargetUtil.ClusterExists(15f, settings.ClusterSize))
+            {
                 return true;
+            }
 
-            if (settings.WaitForConvention == ConventionMode.GreaterRift && !Core.Rift.IsGreaterRift)
+            if (settings.WaitForConvention == ConventionMode.GreaterRift &&
+                !Core.Rift.IsGreaterRift)
+            {
                 return true;
+            }
 
-            if (settings.WaitForConvention != ConventionMode.Never && settings.ConventionCondition != null && !settings.ConventionCondition())
+            if (settings.WaitForConvention != ConventionMode.Never &&
+                settings.ConventionCondition != null &&
+                !settings.ConventionCondition())
+            {
                 return true;
+            }
 
             return false;
         }
 
         protected bool IsReasonToUse(SkillSettings settings, Skill skill)
         {
-            var routine = Core.Routines.CurrentRoutine;
+            IRoutine routine = Core.Routines.CurrentRoutine;
 
-            if (settings.Reasons.HasFlag(UseReasons.Elites) && TargetUtil.AnyElitesInRange(40f))
+            if (settings.Reasons.HasFlag(UseReasons.Elites) &&
+                TargetUtil.AnyElitesInRange(40f))
+            {
                 return true;
+            }
 
-            if (settings.Reasons.HasFlag(UseReasons.Trash) && TargetUtil.ClusterExists(routine.TrashRange, routine.TrashRange, routine.ClusterSize))
+            if (settings.Reasons.HasFlag(UseReasons.Trash) &&
+                TargetUtil.ClusterExists(routine.TrashRange, routine.TrashRange, routine.ClusterSize))
+            {
                 return true;
+            }
 
-            if (settings.Reasons.HasFlag(UseReasons.Surrounded) && TargetUtil.NumMobsInRange(25f) >= Math.Max(ClusterSize, 5))
+            if (settings.Reasons.HasFlag(UseReasons.Surrounded) &&
+                TargetUtil.NumMobsInRange(25f) >= Math.Max(ClusterSize, 5))
+            {
                 return true;
+            }
 
-            if (settings.Reasons.HasFlag(UseReasons.Avoiding) && IsCurrentlyAvoiding)
+            if (settings.Reasons.HasFlag(UseReasons.Avoiding) &&
+                IsCurrentlyAvoiding)
+            {
                 return true;
+            }
 
-            if (settings.Reasons.HasFlag(UseReasons.Blocked) && PlayerMover.IsBlocked)
+            if (settings.Reasons.HasFlag(UseReasons.Blocked) &&
+                PlayerMover.IsBlocked)
+            {
                 return true;
+            }
 
-            if (settings.Reasons.HasFlag(UseReasons.DumpResource) && Player.PrimaryResourcePct < 0.8f)
+            if (settings.Reasons.HasFlag(UseReasons.DumpResource) &&
+                Player.PrimaryResourcePct < 0.8f)
+            {
                 return true;
+            }
 
-            if (settings.Reasons.HasFlag(UseReasons.Goblins) && WeightedUnits.Any(u => u.IsTreasureGoblin))
+            if (settings.Reasons.HasFlag(UseReasons.Goblins) &&
+                WeightedUnits.Any(u => u.IsTreasureGoblin))
+            {
                 return true;
+            }
 
-            if (settings.Reasons.HasFlag(UseReasons.HealthEmergency) && Player.CurrentHealthPct < TrinityCombat.Routines.Current.EmergencyHealthPct)
+            if (settings.Reasons.HasFlag(UseReasons.HealthEmergency) &&
+                Player.CurrentHealthPct < TrinityCombat.Routines.Current.EmergencyHealthPct)
+            {
                 return true;
+            }
 
-            if (settings.Reasons.HasFlag(UseReasons.Buff) && settings.BuffCondition != null && settings.BuffCondition())
+            if (settings.Reasons.HasFlag(UseReasons.Buff) &&
+                settings.BuffCondition != null &&
+                settings.BuffCondition())
+            {
                 return true;
+            }
 
             return false;
         }
@@ -300,11 +343,11 @@ namespace Trinity.Routines
         {
             get
             {
-                var lhItem = Core.Inventory.Equipped.FirstOrDefault(i => i.InventorySlot == InventorySlot.LeftHand);
+                ACDItem lhItem = Core.Inventory.Equipped.FirstOrDefault(i => i.InventorySlot == InventorySlot.LeftHand);
                 if (lhItem == null)
                     return SNOPower.None;
 
-                switch (lhItem.ItemType)
+                switch (lhItem.GetItemType())
                 {
                     case ItemType.Wand:
                         return SNOPower.Weapon_Ranged_Wand;
@@ -336,12 +379,21 @@ namespace Trinity.Routines
 
         #region Hardcore
 
-        public virtual bool SetWeight(TrinityActor cacheObject) => false;
+        public virtual bool SetWeight(TrinityActor cacheObject)
+        {
+            return false;
+        }
 
         public virtual async Task<bool> HandleKiting()
         {
-            if (!Core.Avoidance.Avoider.ShouldKite) return false;
-            if (!Core.Avoidance.Avoider.TryGetSafeSpot(out var safespot) || safespot.Distance(ZetaDia.Me.Position) < 5f) return false;
+            if (!Core.Avoidance.Avoider.ShouldKite)
+                return false;
+
+            if (!Core.Avoidance.Avoider.TryGetSafeSpot(out Vector3 safespot) ||
+                safespot.Distance(ZetaDia.Me.Position) < 5f)
+            {
+                return false;
+            }
 
             Core.Logger.Log(LogCategory.Avoidance, "Kiting");
             await CastDefensiveSpells();
@@ -352,12 +404,16 @@ namespace Trinity.Routines
         {
             get
             {
-                if (!Core.Avoidance.Avoider.ShouldAvoid) return false;
+                if (!Core.Avoidance.Avoider.ShouldAvoid)
+                    return false;
 
                 var isCloseToSafeSpot = Core.Player.Position.Distance(Core.Avoidance.Avoider.SafeSpot) < 5f;
                 if (Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) > 5f && (Core.Player.Actor.IsInAvoidance || (CurrentTarget != null && ((CurrentTarget.IsInAvoidance && !isCloseToSafeSpot)
                     || CurrentTarget.Distance > CurrentPower?.MinimumRange
-                    || !CurrentTarget.IsAvoidanceOnPath)))) return true;
+                    || !CurrentTarget.IsAvoidanceOnPath))))
+                {
+                    return true;
+                }
 
                 Core.Logger.Log(LogCategory.Avoidance, "Not avoiding due to being safe and target is within range");
                 return false;
@@ -366,20 +422,34 @@ namespace Trinity.Routines
 
         public virtual async Task<bool> HandleAvoiding()
         {
-            if (Core.Player.Actor == null || !IsAvoidanceRequired) return false;
+            if (Core.Player.Actor == null ||
+                !IsAvoidanceRequired)
+            {
+                return false;
+            }
 
-            var safe = (!Core.Player.IsTakingDamage || Core.Player.CurrentHealthPct > 0.5f) && Core.Player.Actor != null && !Core.Player.Actor.IsInCriticalAvoidance;
-            if (!TrinityCombat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
+            var safe = (!Core.Player.IsTakingDamage ||
+                         Core.Player.CurrentHealthPct > 0.5f) &&
+                        Core.Player.Actor != null &&
+                        !Core.Player.Actor.IsInCriticalAvoidance;
+
+            if (!TrinityCombat.IsInCombat &&
+                Core.Player.Actor.IsAvoidanceOnPath && safe)
             {
                 Core.Logger.Log(LogCategory.Avoidance, "Waiting for avoidance to clear (out of combat)");
                 return await CommonCoroutines.MoveAndStop(Core.Avoidance.Avoider.SafeSpot, 5f, "Safe Spot") != MoveResult.ReachedDestination;
             }
 
-            if (Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) < 5f) return false;
+            if (Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) < 5f)
+            {
+                return false;
+            }
 
             Core.Logger.Log(LogCategory.Avoidance, "Moving away from Critical Avoidance.");
             if (await CommonCoroutines.MoveAndStop(Core.Avoidance.Avoider.SafeSpot, 5f, "Safe Spot") != MoveResult.ReachedDestination)
+            {
                 return true;
+            }
 
             await CastDefensiveSpells();
             return true;
@@ -387,8 +457,9 @@ namespace Trinity.Routines
 
         public static async Task<bool> CastDefensiveSpells()
         {
-            var power = TrinityCombat.Routines.Current.GetDefensivePower();
-            if (power != null && power.SNOPower != SpellHistory.LastPowerUsed)
+            TrinityPower power = TrinityCombat.Routines.Current.GetDefensivePower();
+            if (power != null &&
+                power.SNOPower != SpellHistory.LastPowerUsed)
             {
                 return await TrinityCombat.Spells.CastTrinityPower(power, "Defensive");
             }
@@ -398,10 +469,14 @@ namespace Trinity.Routines
         public virtual async Task<bool> HandleTarget(TrinityActor target)
         {
             if (await WaitForRiftBossSpawn())
+            {
                 return true;
+            }
 
             if (WaitForInteractionChannelling())
+            {
                 return true;
+            }
 
             if (CurrentPower == null)
             {
@@ -412,8 +487,15 @@ namespace Trinity.Routines
                 return false;
             }
 
-            if (CurrentPower.SNOPower == SNOPower.None) return true;
-            if (await TrinityCombat.Spells.CastTrinityPower(CurrentPower)) return true;
+            if (CurrentPower.SNOPower == SNOPower.None)
+            {
+                return true;
+            }
+
+            if (await TrinityCombat.Spells.CastTrinityPower(CurrentPower))
+            {
+                return true;
+            }
 
             if (DateTime.UtcNow.Subtract(SpellHistory.LastSpellUseTime).TotalSeconds > 5)
             {
@@ -435,13 +517,14 @@ namespace Trinity.Routines
 
         public async Task<bool> WaitForRiftBossSpawn()
         {
-            if (Core.Rift.IsInRift && CurrentTarget.IsBoss)
+            if (Core.Rift.IsInRift &&
+                CurrentTarget.IsBoss)
             {
                 if (CurrentTarget.IsSpawningBoss)
                 {
                     Core.Logger.Verbose(LogCategory.Targetting, "Waiting while rift boss spawn");
 
-                    if (Core.Avoidance.Avoider.TryGetSafeSpot(out var safeSpot, 30f, 100f, CurrentTarget.Position))
+                    if (Core.Avoidance.Avoider.TryGetSafeSpot(out Vector3 safeSpot, 30f, 100f, CurrentTarget.Position))
                     {
                         return await CommonCoroutines.MoveAndStop(safeSpot, 5f, "SafeSpot") != MoveResult.ReachedDestination;
                     }
@@ -453,7 +536,10 @@ namespace Trinity.Routines
 
         public bool WaitForInteractionChannelling()
         {
-            if (Core.Player.IsCasting && !Core.Player.IsTakingDamage && CurrentTarget != null && CurrentTarget.IsGizmo)
+            if (Core.Player.IsCasting &&
+                !Core.Player.IsTakingDamage &&
+                CurrentTarget != null &&
+                CurrentTarget.IsGizmo)
             {
                 Core.Logger.Verbose(LogCategory.Targetting, "Waiting while channelling spell");
                 return true;
@@ -463,10 +549,14 @@ namespace Trinity.Routines
 
         public virtual async Task<bool> HandleOutsideCombat()
         {
-            if (!Core.Player.IsCasting && (!TargetUtil.AnyMobsInRange(20f) || !Core.Player.IsTakingDamage))
+            if (!Core.Player.IsCasting &&
+                (!TargetUtil.AnyMobsInRange(20f) ||
+                 !Core.Player.IsTakingDamage))
             {
                 if (await Behaviors.MoveToMarker.While(m => m.MarkerType == WorldMarkerType.LegendaryItem || m.MarkerType == WorldMarkerType.SetItem))
+                {
                     return true;
+                }
             }
             return false;
         }
@@ -474,39 +564,51 @@ namespace Trinity.Routines
         public virtual async Task<bool> HandleBeforeCombat()
         {
             /* If standing on/nearby a portal, then assume it is intended to get in there. */
-            if (!Core.Player.IsInRift && BountyHelpers.GetPortalNearPosition(ZetaDia.Me.Position) != null)
+            if (!Core.Player.IsInRift &&
+                BountyHelpers.GetPortalNearPosition(ZetaDia.Me.Position) != null)
             {
                 Core.Logger.Debug("MainCombatTask Waiting for portal interaction");
                 return false;
             }
 
             // Wait after elite death until progression globe appears as a valid target or x time has passed.
-            if (Core.Rift.IsInRift && await Behaviors.WaitAfterUnitDeath.While(
-                u => u.IsElite && u.Distance < 150
-                && Core.Targets.Entries.Any(a => a.IsElite && a.EliteType != EliteTypes.Minion && a.RadiusDistance < 60)
-                && !Core.Targets.Any(p => p.Type == TrinityObjectType.ProgressionGlobe && p.Distance < 150),
+            if (Core.Rift.IsInRift &&
+                await Behaviors.WaitAfterUnitDeath.While(u => u.IsElite &&
+                                                              u.Distance < 150 &&
+                                                              Core.Targets.Entries.Any(a => a.IsElite &&
+                                                                                            a.EliteType != EliteTypes.Minion &&
+                                                                                            a.RadiusDistance < 60) &&
+                                                              !Core.Targets.Any(p => p.Type == TrinityObjectType.ProgressionGlobe &&
+                                                                                     p.Distance < 150),
                 "Wait for Progression Globe", 1000))
+            {
                 return true;
+            }
 
             // Priority movement for progression globes. ** Temporary solution!
             if (TrinityCombat.Targeting.CurrentTarget != null)
             {
-                if (await Behaviors.MoveToActor.While(
-                    a => a.Type == TrinityObjectType.ProgressionGlobe && !TrinityCombat.Weighting.ShouldIgnore(a) && !a.IsAvoidanceOnPath))
+                if (await Behaviors.MoveToActor.While(a => a.Type == TrinityObjectType.ProgressionGlobe &&
+                                                           !TrinityCombat.Weighting.ShouldIgnore(a) && !a.IsAvoidanceOnPath))
+                {
                     return true;
+                }
             }
 
             // Priority interaction for doors. increases door opening reliability for some edge cases ** Temporary solution!
-            if (ZetaDia.Storage.RiftStarted && await Behaviors.MoveToInteract.While(
-                a => a.Type == TrinityObjectType.Door && !a.IsUsed && a.Distance < a.CollisionRadius))
+            if (ZetaDia.Storage.RiftStarted &&
+                await Behaviors.MoveToInteract.While(a => a.Type == TrinityObjectType.Door &&
+                                                          !a.IsUsed && a.Distance < a.CollisionRadius))
+            {
                 return true;
+            }
 
             return false;
         }
 
         public virtual TrinityPower GetPowerForTarget(TrinityActor target)
         {
-            var routine = TrinityCombat.Routines.Current;
+            IRoutine routine = TrinityCombat.Routines.Current;
             if (target == null)
                 return null;
 
@@ -545,17 +647,20 @@ namespace Trinity.Routines
                 return InteractPower(target, 100, 250);
             }
 
-            if (!TrinityCombat.IsInCombat) return null;
+            if (!TrinityCombat.IsInCombat)
+                return null;
 
-            var routinePower = routine.GetOffensivePower();
+            TrinityPower routinePower = routine.GetOffensivePower();
 
-            return TryKamakaziPower(target, routinePower, out var kamakaziPower) ? kamakaziPower : routinePower;
+            return TryKamakaziPower(target, routinePower, out TrinityPower kamakaziPower) ? kamakaziPower : routinePower;
 
         }
 
         public TrinityPower InteractPower(TrinityActor actor, int waitBefore, int waitAfter, float addedRange = 0)
-            => new TrinityPower(actor.IsUnit ? SNOPower.Axe_Operate_NPC : SNOPower.Axe_Operate_Gizmo,
-                actor.AxialRadius + addedRange, actor.Position, actor.AcdId, waitBefore, waitAfter);
+        {
+            return new TrinityPower(actor.IsUnit ? SNOPower.Axe_Operate_NPC : SNOPower.Axe_Operate_Gizmo,
+                           actor.AxialRadius + addedRange, actor.Position, actor.AcdId, waitBefore, waitAfter);
+        }
 
         public bool TryKamakaziPower(TrinityActor target, TrinityPower routinePower, out TrinityPower power)
         {
@@ -563,11 +668,15 @@ namespace Trinity.Routines
             // But for goblin kamakazi we need a special exception to force it to always target the goblin.
 
             power = null;
-            if (!target.IsTreasureGoblin || Core.Settings.Weighting.GoblinPriority != TargetPriority.Kamikaze) return false;
+            if (!target.IsTreasureGoblin ||
+                Core.Settings.Weighting.GoblinPriority != TargetPriority.Kamikaze)
+            {
+                return false;
+            }
 
             Core.Logger.Log(LogCategory.Targetting, $"Forcing Kamakazi Target on {target}, routineProvided={routinePower}");
 
-            var kamaKaziPower = DefaultPower;
+            TrinityPower kamaKaziPower = DefaultPower;
             if (routinePower != null)
             {
                 routinePower.SetTarget(target);
@@ -595,7 +704,7 @@ namespace Trinity.Routines
             if (Player.HasBuff(SNOPower.Pages_Buff_Infinite_Casting))
                 return false;
 
-            var theElement = element == Element.Unknown ? skill.Element : element;
+            Element theElement = element == Element.Unknown ? skill.Element : element;
             var timeTo = TimeToElementStart(theElement);
             var timeSince = TimeFromElementStart(theElement);
             var totalDuration = GetConventionRotation().Count * 4000;
@@ -606,7 +715,8 @@ namespace Trinity.Routines
             if (timeSince < finish)
                 return false;
 
-            if ((timeTo - start) > GetRealCooldown(skill) && GetRealCooldown(skill) < totalDuration)
+            if ((timeTo - start) > GetRealCooldown(skill) &&
+                GetRealCooldown(skill) < totalDuration)
             {
                 return false;
             }
@@ -641,7 +751,10 @@ namespace Trinity.Routines
                     return skill.Cooldown.TotalMilliseconds;
             }
             if (Player.HasBuff(SNOPower.ItemPassive_Unique_Ring_919_x1))
+            {
                 baseCd = baseCd - 9000;
+            }
+
             return baseCd * reduc;
         }
 
@@ -652,16 +765,17 @@ namespace Trinity.Routines
         /// <returns></returns>
         public static double TimeToElementStart(Element element)
         {
-            var cd = Core.Cooldowns.GetBuffCooldown(SNOPower.P2_ItemPassive_Unique_Ring_038, 8);
+            Cooldowns.CooldownData cd = Core.Cooldowns.GetBuffCooldown(SNOPower.P2_ItemPassive_Unique_Ring_038, 8);
             if (cd == null)
                 return 0;
 
-            var rotation = GetConventionRotation();
+            List<Element> rotation = GetConventionRotation();
             var totalDuration = rotation.Count * 4000;
             var timeToFirst = cd.Remaining.TotalMilliseconds;
 
             var index = rotation.IndexOf(element);
-            if (index < 0) return 0;
+            if (index < 0)
+                return 0;
 
             return ((timeToFirst + index * 4000) % totalDuration);
         }
@@ -722,39 +836,37 @@ namespace Trinity.Routines
         {
             power = null;
 
-            if (!IsInCombat || IsCurrentlyKiting || IsCurrentlyAvoiding) return false;
-            if (!TargetUtil.BestBuffPosition(maxDistance, Player.Position, true, out var buffedLocation)) return false;
+            if (!IsInCombat ||
+                IsCurrentlyKiting ||
+                IsCurrentlyAvoiding)
+            {
+                return false;
+            }
+
+            if (!TargetUtil.BestBuffPosition(maxDistance, Player.Position, true, out Vector3 buffedLocation))
+                return false;
 
             var distance = buffedLocation.Distance(Player.Position);
 
             Core.Logger.Verbose(LogCategory.Routine, $"Buffed location found Dist={distance}");
 
             if (buffedLocation.Distance(Player.Position) < arriveDistance)
-            {
                 Core.Logger.Log(LogCategory.Routine, $"Standing in Buffed Position {buffedLocation} Dist={distance}");
-            }
             else if (!Core.Avoidance.Grid.CanRayWalk(Player.Position, buffedLocation))
-            {
                 Core.Logger.Log(LogCategory.Routine, $"Unable to straight-line path to Buffed Position {buffedLocation} Dist={distance}");
-            }
             else if (!Core.Avoidance.Grid.CanRayWalk(TrinityCombat.Targeting.CurrentTarget.Position, buffedLocation))
-            {
                 Core.Logger.Log(LogCategory.Routine, $"Can't see target from buffed position {buffedLocation} Dist={distance}");
-            }
             else if (Core.Avoidance.Avoider.IsKiteOnCooldown)
-            {
                 Core.Logger.Log(LogCategory.Routine, $"Not moving to buffed location while on kite cooldown");
-            }
             else if (IsKitingEnabled && TargetUtil.AnyMobsInRangeOfPosition(buffedLocation, TrinityCombat.Routines.Current.KiteDistance))
-            {
                 Core.Logger.Verbose(LogCategory.Routine, $"Moving to buffed spot would trigger kiting away from it.");
-            }
             else
             {
                 Core.Logger.Verbose(LogCategory.Routine, $"Moving to Buffed Position {buffedLocation} Dist={distance}");
                 power = new TrinityPower(SNOPower.Walk, maxDistance, buffedLocation);
                 return true;
             }
+
             return false;
         }
 
@@ -775,11 +887,4 @@ namespace Trinity.Routines
             }
         }
     }
-
-
-
-
 }
-
-
-

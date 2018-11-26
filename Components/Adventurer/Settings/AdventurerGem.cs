@@ -1,6 +1,8 @@
 using System.Linq;
 using System.Runtime.Serialization;
+using log4net;
 using Trinity.Framework;
+using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
@@ -9,6 +11,8 @@ namespace Trinity.Components.Adventurer.Settings
     [DataContract]
     public class AdventurerGem
     {
+        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+
         public int Guid { get; set; }
 
         [DataMember]
@@ -54,7 +58,7 @@ namespace Trinity.Components.Adventurer.Settings
             Settings = PluginSettings.Current.Gems.GemSettings.FirstOrDefault(g => g.Sno == gem.ActorSnoId);
             if (Settings == null)
             {
-                Core.Logger.Error($"Gems Settings Entry not found for {gem.Name} ({gem.ActorSnoId}), if its a new gem, it needs to be added to Trinity's Gems.cs reference");
+                s_logger.Error($"[{nameof(AdventurerGem)}] Gems Settings Entry not found for {gem.Name} ({gem.ActorSnoId}), if its a new gem, it needs to be added to Trinity's Gems.cs reference");
                 return;
             }
 

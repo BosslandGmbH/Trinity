@@ -15,7 +15,7 @@ using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.TreeSharp;
-
+using Trinity.Framework.Actors.Attributes;
 
 namespace Trinity.Components.Coroutines
 {
@@ -626,10 +626,14 @@ namespace Trinity.Components.Coroutines
             switch (inventorySlot)
             {
                 case InventorySlot.BackpackItems:
-                    items = InventoryManager.Backpack.Where(i => i.IsValid && i.ActorSnoId == item.ActorSnoId && i.ItemType == item.ItemType).ToList();
+                    items = InventoryManager.Backpack.Where(i => i.IsValid &&
+                                                                 i.ActorSnoId == item.ActorSnoId &&
+                                                                 i.GetItemType() == item.GetItemType()).ToList();
                     break;
                 case InventorySlot.SharedStash:
-                    items = InventoryManager.StashItems.Where(i => i.IsValid && i.ActorSnoId == item.ActorSnoId && i.ItemType == item.ItemType).ToList();
+                    items = InventoryManager.StashItems.Where(i => i.IsValid &&
+                                                                   i.ActorSnoId == item.ActorSnoId &&
+                                                                   i.GetItemType() == item.GetItemType()).ToList();
                     break;
                 default:
                     return 0;
@@ -1087,7 +1091,7 @@ namespace Trinity.Components.Coroutines
                 IsTwoHand = item.IsTwoHand;
                 IsOneHand = item.IsOneHand;
                 InternalName = item.InternalName;
-                ItemType = item.ItemType;
+                ItemType = item.GetItemType();
                 ItemBaseType = item.ItemBaseType;
                 IsShield = TypeConversions.ShieldTypes.Contains(ItemType);
                 IsOffHand = TypeConversions.OffHandTypes.Contains(ItemType);
@@ -1095,7 +1099,7 @@ namespace Trinity.Components.Coroutines
                 IsJewelry = TypeConversions.JewleryTypes.Contains(ItemType);
                 IsWeapon = TypeConversions.WeaponTypes.Contains(ItemType);
                 IsEquipment = TypeConversions.EquipmentTypes.Contains(item.ItemBaseType);
-                IsTwoSquareItem = TypeConversions.GetIsTwoSlot(item.ItemBaseType, item.ItemType); /*Adding itemType exception into consideration -Seq*/
+                IsTwoSquareItem = TypeConversions.GetIsTwoSlot(item.ItemBaseType, item.GetItemType()); /*Adding itemType exception into consideration -Seq*/
                 IsMisc = TypeConversions.MiscTypes.Contains(ItemType);
                 IsGem = item.ItemBaseType == ItemBaseType.Gem;
                 IsPotion = item.IsPotion;

@@ -17,16 +17,7 @@ namespace Trinity.Framework.Actors
                 return new TrinityPlayer(seed);
 
             if (seed.ActorType == ActorType.Item)
-            {
-                if (seed.CommonData != null)
-                {
-                    return new TrinityItem(seed);
-                }
-                else
-                {
-                    return null;
-                }
-            }
+                return new TrinityItem(seed.CommonData);
 
             return new TrinityActor(seed);
         }

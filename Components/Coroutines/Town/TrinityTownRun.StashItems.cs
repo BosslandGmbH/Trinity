@@ -97,7 +97,7 @@ namespace Trinity.Components.Coroutines.Town
                     {
                         var dup = itemDict[key];
                         Core.Logger.Debug(
-                            $"Duplicate Col/Row [{item.InventoryColumn}, {item.InventoryRow}] found while creating InventoryMap for: {item.Name} ({item.ActorSnoId}) {item.ItemType} IsValid=({item.IsValid}) duplicate is: {dup.Name} ({dup.ActorSnoId}) {dup.ItemType} IsValid=({dup.IsValid})");
+                            $"Duplicate Col/Row [{item.InventoryColumn}, {item.InventoryRow}] found while creating InventoryMap for: {item.Name} ({item.ActorSnoId}) {item.GetItemType()} IsValid=({item.IsValid}) duplicate is: {dup.Name} ({dup.ActorSnoId}) {dup.GetItemType()} IsValid=({dup.IsValid})");
                         itemDict[key] = item.IsValid ? item : dup;
                     }
                     else
