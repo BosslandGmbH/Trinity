@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Game.Actors;
-using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Components.Adventurer.Game.Stats;
 using Trinity.Components.Adventurer.Settings;
@@ -47,13 +46,17 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             .FirstOrDefault(g => g.IsFullyValid() &&
                                  g.CommonData.GizmoType == GizmoType.LootRunSwitch);
 
-        public static Vector3 EntryLocation => BountyHelpers.ScanForRiftEntryMarkerLocation();
+        public static SNOWorld PreviousWorld { get; set; } = SNOWorld.Invalid;
+        public static SNOLevelArea PreviousLevel { get; set; } = SNOLevelArea.Invalid;
 
         // TODO: Make sure we detect the Exit portal properly. Might lead to portal cycles and stuff like that when wrong!
         public static DiaGizmo ExitPortal => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true)
             .Where(g => g.IsFullyValid() &&
                         g.IsPortal &&
-                        g.Position.Distance2DSqr(EntryLocation) > 400f &&
+                        g.CommonData.PortalDestination?.WorldSNO != PreviousWorld &&
+                        g.CommonData.PortalDestination?.WorldSNO != SNOWorld.X1_Tristram_Adventure_Mode_Hub &&
+                        g.CommonData.PortalDestination?.DestLevelAreaSNO != PreviousLevel &&
+                        g.CommonData.PortalDestination?.DestLevelAreaSNO != SNOLevelArea.A1_Tristram_Adventure_Mode_Hub &&
                         !RiftData.PossibleDungeonStoneSNO.Contains(g.ActorSnoId) &&
                         g.CommonData.GizmoType != GizmoType.HearthPortal)
             .OrderBy(g => g.Position.Distance2DSqr(AdvDia.MyPosition))
@@ -91,8 +94,8 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         public static async Task<CoroutineResult> EnsureIsInTown()
         {
-            if ((!ZetaDia.IsInTown ||
-                 ZetaDia.Storage.CurrentWorldType != Act.A1) &&
+            if (!(ZetaDia.IsInTown &&
+                  (SNOWorld)ZetaDia.Globals.WorldSnoId == SNOWorld.X1_Tristram_Adventure_Mode_Hub) &&
                 await WaypointCoroutine.UseWaypoint(WaypointFactory.ActHubs[Act.A1]))
             {
                 return CoroutineResult.Running;
@@ -165,7 +168,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
 
             ZetaDia.Me.OpenRift(level, isEmpowered);
-            return await Coroutine.Wait(2000, () => IsRiftPortalOpen);
+            return await Coroutine.Wait(TimeSpan.FromSeconds(2), () => IsRiftPortalOpen);
         }
 
         public static async Task<CoroutineResult> EnsureInRift()
@@ -202,15 +205,24 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 return false;
 
             // TODO: Handle Cow level
-            // TODO: Fix Portal detection
-            if (ExitPortal == null || ExitPortal.ZDiff > 5f)
+            if (ExitPortal == null)
             {
                 await ExplorationCoroutine.Explore(new HashSet<int> { AdvDia.CurrentLevelAreaId });
                 return false;
             }
 
-            await CommonCoroutines.MoveAndInteract(ExitPortal, () => ZetaDia.Globals.IsLoadingWorld ||
-                                                                     ZetaDia.Globals.IsPlayingCutscene);
+            var tmpWorld = (SNOWorld)ZetaDia.Globals.WorldSnoId;
+            var tmpLevelArea = (SNOLevelArea)ZetaDia.CurrentLevelAreaSnoId;
+            if (await CommonCoroutines.MoveAndInteract(
+                    ExitPortal,
+                    () => ZetaDia.Globals.IsLoadingWorld ||
+                          ZetaDia.Globals.IsPlayingCutscene) ==
+                CoroutineResult.Done)
+            {
+                PreviousWorld = tmpWorld;
+                PreviousLevel = tmpLevelArea;
+            }
+
             return false;
         }
 

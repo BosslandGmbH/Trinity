@@ -126,16 +126,14 @@ namespace Trinity.Modules
             if (cacheObject is TrinityItem item)
             {
                 var realItem = item.ToAcdItem();
-                if (realItem.GetIsGold())
-                {
-                    return ShouldIncludeGold(realItem);
-                }
-                return ShouldIncludeItem(realItem);
+                return realItem.GetIsGold() ?
+                    ShouldIncludeGold(realItem) :
+                    ShouldIncludeItem(realItem);
             }
 
             if (cacheObject.ToDiaObject() is DiaGizmo)
                 return ShouldIncludeGizmo(cacheObject);
-            
+
             switch (cacheObject.Type)
             {
                 case TrinityObjectType.Player:
