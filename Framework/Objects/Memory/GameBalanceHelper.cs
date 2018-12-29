@@ -22,7 +22,7 @@ namespace Trinity.Framework.Objects.Memory
 
         public static T GetRecord<T>(SnoGameBalanceType gbType, int gbId) where T : struct
         {
-            if ((int)gbType != -1)
+            if ((int)gbType != -1 && gbId != 0)
             {
                 if (Cache.ContainsKey(gbId))
                     return (T)Cache[gbId];

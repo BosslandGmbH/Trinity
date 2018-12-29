@@ -17,6 +17,8 @@ namespace Trinity.Framework.Avoidance.Handlers
                 }
 
                 var part = avoidance.Definition.GetPart(actor.ActorSnoId);
+                if (part == null) continue;
+
                 var radius = Math.Max(part.Radius, actor.Radius);
                 var finalRadius = radius * avoidance.Settings.DistanceMultiplier;
                 var nodes = grid.GetNodesInRadius(actor.Position, finalRadius);
@@ -25,7 +27,8 @@ namespace Trinity.Framework.Avoidance.Handlers
                 {
                     //Core.Logger.Log(LogCategory.Avoidance, $"<CircularAvoidanceHandler> marking {nodes.Count} nodes critical for actor {actor}, def={avoidance.Definition.Name}");
                     Core.DBGridProvider.AddCellWeightingObstacle(actor.ActorSnoId, finalRadius);
-                    grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance | AvoidanceFlags.CriticalAvoidance, avoidance, 50);
+                    grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance | AvoidanceFlags.CriticalAvoidance,
+                        avoidance, 50);
                 }
                 else
                 {

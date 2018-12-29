@@ -114,7 +114,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         private async Task<bool> NotStarted()
         {
-            await Coroutine.Sleep(1000);
+            await Coroutine.Yield();
             if (!BountyHelpers.IsActTurninInProgress(_act))
             {
                 State = States.AlreadyDone;
@@ -201,7 +201,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
         {
             Core.Logger.Log("[ActBounties] Successfully completed {0} bounties", _act);
             _isDone = true;
-            await Coroutine.Sleep(4000);
+            await Coroutine.Yield();
             return true;
         }
 
@@ -209,7 +209,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
         {
             Core.Logger.Log("[ActBounties] Failed to completed {0} bounties", _act);
             _isDone = true;
-            await Coroutine.Sleep(1000);
+            await Coroutine.Yield();
             return true;
         }
 

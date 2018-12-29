@@ -39,7 +39,7 @@ namespace Trinity.ProfileTags
                 return false;
 
             Done();
-            await Coroutine.Sleep(1000);
+            await Coroutine.Yield();
             return true;
         }
 
@@ -88,7 +88,7 @@ namespace Trinity.ProfileTags
                 BotMain.Stop(reason: "Unsupported bounty found!");
 
             Done();
-            await Coroutine.Sleep(1000);
+            await Coroutine.Yield();
             return true;
         }
 

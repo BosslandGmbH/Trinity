@@ -81,18 +81,18 @@ namespace Trinity.Modules
                     }
                 }
 
-                if (Core.Settings.Advanced.LogCategories.HasFlag(LogCategory.CacheManagement))
-                {
-                    foreach (var o in included)
-                    {
-                        Core.Logger.Debug($"[Cache][{o.CacheTime:N4}] Added {o}");
-                    }
+                //if (Core.Settings.Advanced.LogCategories.HasFlag(LogCategory.CacheManagement))
+                //{
+                //    foreach (var o in included)
+                //    {
+                //        Core.Logger.Debug($"[Cache][{o.CacheTime:N4}] Added {o}");
+                //    }
 
-                    foreach (var o in ignored)
-                    {
-                        Core.Logger.Debug($"[Cache][{o.CacheTime:N4}] Ignored {o.InternalName} RActorGuid={o.RActorId} ActorSnoId={o.ActorSnoId} Type={o.ActorType} CacheInfo={o.CacheInfo}");
-                    }                   
-                }
+                //    foreach (var o in ignored)
+                //    {
+                //        Core.Logger.Debug($"[Cache][{o.CacheTime:N4}] Ignored {o.InternalName} RActorGuid={o.RActorId} ActorSnoId={o.ActorSnoId} Type={o.ActorType} CacheInfo={o.CacheInfo}");
+                //    }                   
+                //}
 
                 ByType = included.ToLookup(k => k.Type);
                 ByMonsterQuality = included.ToLookup(k => k.MonsterQuality);
@@ -341,7 +341,7 @@ namespace Trinity.Modules
             }
 
             if (cacheObject.Distance < 4) return true;
-            if (cacheObject.ItemQualityLevel >= ItemQuality.Legendary) return true;
+            if (cacheObject.GetItemQualityLevel() >= ItemQuality.Legendary) return true;
             if (GameData.LineOfSightWhitelist.Contains(cacheObject.ActorSnoId)) return true;
 
             return false;

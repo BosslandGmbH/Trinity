@@ -101,7 +101,7 @@ namespace Trinity.Components.Coroutines.Town
                 }
             }
 
-            await Coroutine.Sleep(1000);
+            await Coroutine.Yield();
             return true;
         }
     }

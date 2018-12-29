@@ -132,7 +132,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 if (_explorationDataMaxWaitUntil != DateTime.MinValue && DateTime.UtcNow > _explorationDataMaxWaitUntil)
                 {
-                    Core.Logger.Debug($"[Exploration] Timeout waiting for exploration data");
+                    Core.Logger.Debug("[Exploration] Timeout waiting for exploration data");
                     State = States.Completed;
                     return false;
                 }
@@ -144,8 +144,8 @@ namespace Trinity.Components.Adventurer.Coroutines
                         _explorationDataMaxWaitUntil = DateTime.UtcNow + TimeSpan.FromSeconds(15);
                     }
                     Core.Scenes.Update();
-                    await Coroutine.Sleep(1000);
-                    Core.Logger.Debug($"[Exploration] Patiently waiting for exploration data");
+                    await Coroutine.Yield();
+                    Core.Logger.Debug("[Exploration] Patiently waiting for exploration data");
                     return false;
                 }
 
@@ -291,7 +291,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         public void DisablePulse()
         {
-           
+
         }
 
         #endregion

@@ -60,7 +60,7 @@ namespace Trinity.Framework.Behaviors
         private async Task<bool> WaitAction()
         {
             Core.Logger.Verbose(LogCategory.Behavior, $"Waiting after unit death: {LastDiedUnit?.Name}, because {WaitReason}, TimeSinceDeath={TimeSinceDeath:g} RemainingWaitTime={RemainingWaitTime:g}");
-            await Coroutine.Sleep(250);
+            await Coroutine.Sleep(100);
             return true;
         }
 

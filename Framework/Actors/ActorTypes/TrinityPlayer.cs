@@ -5,15 +5,19 @@ using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Actors.Properties;
 using Zeta.Game;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Framework.Actors.ActorTypes
 {
     public sealed class TrinityPlayer : TrinityActor, IPartyMember
     {
-        public override AttributesWrapper Attributes { get; set; }
-        public int HeroId { get; set; }
-        public string HeroName { get; set; }
-        public ActorClass ActorClass { get; set; }
+        public TrinityPlayer(DiaObject seed) : base(seed)
+        {
+        }
+
+        public int HeroId => ZetaDia.Service.Hero.HeroId;
+        public string HeroName => ZetaDia.Service.Hero.Name;
+        public ActorClass ActorClass => PlayerProperties.GetActorClass(ActorSnoId);
         public int MemberId => MemoryHelper.GameBalanceNormalHash(Name);
 
         #region IPartyMember
@@ -34,22 +38,20 @@ namespace Trinity.Framework.Actors.ActorTypes
         public override void OnCreated()
         {
             //Attributes = new PlayerAttributes(FastAttributeGroupId);
-            Attributes = new AttributesWrapper(CommonData);
-            base.Attributes = Attributes;
             UpdateProperties();
         }
 
         public override void OnUpdated()
         {
             Attributes.Update(CommonData);
-            UpdateProperties();
+            CommonProperties.Populate(this);
+            UnitProperties.Populate(this);
         }
 
         private void UpdateProperties()
         {
-            CommonProperties.Populate(this);
-            UnitProperties.Populate(this);
-            PlayerProperties.Populate(this);
+            CommonProperties.Update(this);
+            UnitProperties.Update(this);
         }
 
         public override string ToString() => $"{GetType().Name}: AcdId={AcdId}, {ActorClass} {(IsMe ? "ActivePlayer" : String.Empty)}";

@@ -51,7 +51,5 @@ namespace Trinity.Components.Combat.Resources
         {
             return Core.Actors.Actors.OfType<TrinityPlayer>().FirstOrDefault(p => Math.Abs(p.HitPointsMax - member.HitpointsMaxTotal) < 5);
         }
-
-        public static IPartyMember EmptyMember { get; } = new TrinityPlayer();
     }
 }

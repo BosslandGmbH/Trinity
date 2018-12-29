@@ -36,12 +36,15 @@ namespace Trinity.DbProvider
         /// <summary>
         /// Moves to a location by either PathFinding or 'Straight Line Pathing'.
         /// </summary>
-        public static void MoveTo(Vector3 destination)
+        public static MoveResult MoveTo(Vector3 destination)
         {
             // Relieve pressure on Navigation Server and reduce minor delays where possible.
             var zDiff = Math.Abs(destination.Z - Core.Player.Position.Z);
             if (zDiff < 3f && !IsBlocked && !Core.StuckHandler.IsStuck)
             {
+                if (Core.Player.Position.Distance2D(destination) < 3)
+                    return MoveResult.ReachedDestination;
+
                 var isVeryClose = Core.Player.Position.Distance(destination) <= 8f;
                 var canRayWalk = Core.Grids.CanRayWalk(Core.Player.Position, destination);
 
@@ -49,11 +52,11 @@ namespace Trinity.DbProvider
                 {
                     //Core.Logger.Log(LogCategory.Movement, $"Trinity MoveTowards called to {destination}");
                     _instance.MoveTowards(destination);
-                    return;
+                    return MoveResult.Moved;
                 }
             }
             //Core.Logger.Log(LogCategory.Movement, $"Trinity MoveTo called to {destination}");
-            NavigateTo(destination);
+            return NavigateTo(destination);
         }
 
         /// <summary>

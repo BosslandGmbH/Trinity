@@ -251,9 +251,7 @@ namespace Trinity.Modules
 
             var averageHealth = HealthHistory.Average();
             IsTakingDamage = averageHealth > CurrentHealth;
-            if (IsTakingDamage)
-                Core.Logger.Verbose(LogCategory.Avoidance, "Taking Damage 5TickAvg={0} Current={1}", averageHealth, CurrentHealth);
-
+            
             // For WD Angry Chicken
             IsHidden = _me.IsHidden;
         }

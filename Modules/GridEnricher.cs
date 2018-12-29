@@ -71,7 +71,7 @@ namespace Trinity.Modules
         public TrinityGrid Grid => Core.Grids.Avoidance;
         public AvoidanceSettings Settings => Core.Avoidance.Settings;
 
-        protected override int UpdateIntervalMs => 200;
+        protected override int UpdateIntervalMs => 1000;
         protected override void OnPulse() => UpdateGrid();
 
         public void UpdateGrid()
@@ -88,7 +88,7 @@ namespace Trinity.Modules
                 {
                     Core.Scenes.Reset();
                     Core.Scenes.Update();
-                    Core.Logger.Debug(LogCategory.Avoidance, $"No Player Nearest Node or WorldId Mismatch");
+                    Core.Logger.Debug(LogCategory.Avoidance, "No Player Nearest Node or WorldId Mismatch");
                     return;
                 }
 

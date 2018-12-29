@@ -108,7 +108,6 @@ namespace Trinity.Components.Coroutines.Town
                         BrainBehavior.ForceTownrun();
                     }
 
-                    await Coroutine.Sleep(100);
                     await Coroutine.Yield();
                 }
             }

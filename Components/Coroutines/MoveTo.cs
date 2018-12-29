@@ -34,11 +34,8 @@ namespace Trinity.Components.Coroutines
                 GameUI.CloseVendorWindow();
             }
 
-            while (ZetaDia.Me.LoopingAnimationEndTime > 0)
-            {
-                await Coroutine.Sleep(50);
-            }
-
+            await Coroutine.Wait(TimeSpan.MaxValue, () => !(ZetaDia.Me.LoopingAnimationEndTime > 0));
+            
             Navigator.PlayerMover.MoveTowards(location);
 
             while (ZetaDia.IsInGame && location.Distance2D(ZetaDia.Me.Position) >= range && !ZetaDia.Me.IsDead)
@@ -63,8 +60,7 @@ namespace Trinity.Components.Coroutines
                 }
 
                 Core.Logger.Verbose("Moving to " + destinationName);
-                PlayerMover.MoveTo(location);
-                await Coroutine.Yield();
+                await Coroutine.Wait(1000, () => PlayerMover.MoveTo(location) == MoveResult.ReachedDestination);
             }
 
             var distance = location.Distance(ZetaDia.Me.Position);

@@ -268,7 +268,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 State = States.Failed;
                 return false;
             }
-            if (startGate.Distance > startGate.CollisionSphere.Radius)
+            if (startGate.Distance > startGate.InteractDistance)
             {
                 Core.Logger.Debug("Gate is too far away to interact");
                 State = States.MovingToGate;

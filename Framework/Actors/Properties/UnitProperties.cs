@@ -16,73 +16,7 @@ namespace Trinity.Framework.Actors.Properties
     {
         public static void Populate(TrinityActor actor)
         {
-            if (!IsValidUnit(actor))
-                return;
-
-            var attributes = actor.Attributes;
-            var commonData = actor.CommonData;
-            var rActor = actor.RActor;
-
-            var monsterInfo = actor.MonsterInfo;
-            if (monsterInfo != null)
-            {
-                actor.MonsterSize = monsterInfo.MonsterSize;
-                actor.MonsterRace = monsterInfo.MonsterRace;
-                actor.MonsterType = monsterInfo.MonsterType;
-            }
-
-            var monsterAffixes = GetMonsterAffixes(commonData.Affixes.ToList()).Flags;
-            actor.MonsterAffixes = monsterAffixes;
-
-            var monsterQuality = commonData.MonsterQualityLevel;
-            actor.MonsterQuality = monsterQuality;
-            actor.IsBoss = monsterQuality == MonsterQuality.Boss;
-            actor.RiftValuePct = Core.Rift.GetRiftValue(actor);
-            actor.IsTreasureGoblin = actor.MonsterRace == MonsterRace.TreasureGoblin;
-            actor.IsIllusion = monsterAffixes.HasFlag(MonsterAffixes.Illusionist) && attributes.IsIllusion;
-            actor.IsRare = monsterQuality == MonsterQuality.Rare;
-            actor.IsChampion = monsterQuality == MonsterQuality.Champion;
-            actor.IsUnique = monsterQuality == MonsterQuality.Unique;
-            actor.IsMinion = monsterQuality == MonsterQuality.Minion;
-            actor.IsElite = actor.IsMinion || actor.IsRare || actor.IsChampion || actor.IsUnique || actor.IsBoss;
-            actor.IsTrashMob = actor.IsUnit && !(actor.IsElite || actor.IsBoss || actor.IsTreasureGoblin || actor.IsMinion);
-            actor.IsCorruptGrowth = GameData.CorruptGrowthIds.Contains(actor.ActorSnoId);
-
-            if (actor.IsBoss)
-            {
-                actor.IsUsingBossbar = attributes.IsUsingBossbar;
-            }
-
-            UpdateDeath(actor);
-            UpdateStatus(actor, attributes);
-
-            actor.EliteType = GetEliteType(actor);
-            actor.PetType = attributes.PetType;
-
-            UpdateTeam(actor, attributes);
-
-            var summonedByAnnId = attributes.SummonedByAnnId;
-            var effectOwnerAnnId = attributes.EffectOwnerAnnId;
-            actor.SummonedByAnnId = summonedByAnnId;
-            actor.EffectOwnerAnnId = effectOwnerAnnId;
-            actor.IsSummoned = summonedByAnnId > 0 || effectOwnerAnnId > 0;
-
-            if (Core.Player.IsInBossEncounter)
-            {
-                actor.IsShadowClone = attributes.IsShadowClone;
-            }
-
-            if (actor.IsSummoned)
-            {
-                actor.IsSummonedByPlayer = summonedByAnnId == Core.Player.MyDynamicID || effectOwnerAnnId == Core.Player.MyDynamicID;
-            }
-            else
-            {
-                actor.SummonerId = attributes.SummonerId;
-                actor.IsSummoner = actor.SummonerId > 0;
-            }
-
-            UpdateMovement(actor, rActor);
+            Update(actor);
         }
 
         public static void Update(TrinityActor actor)
@@ -90,11 +24,7 @@ namespace Trinity.Framework.Actors.Properties
             if (!IsValidUnit(actor))
                 return;
 
-            var attributes = actor.Attributes;
             UpdateDeath(actor);
-            UpdateMovement(actor, actor.RActor);
-            UpdateTeam(actor, attributes);
-            UpdateStatus(actor, attributes);
         }
 
         private static bool IsValidUnit(TrinityActor actor)
@@ -108,24 +38,9 @@ namespace Trinity.Framework.Actors.Properties
             return true;
         }
 
-        private static void UpdateStatus(TrinityActor actor, AttributesWrapper attributes)
+        public static int GetTeamId(ACD acd)
         {
-            actor.HitPoints = attributes.Hitpoints;
-            actor.HitPointsMax = attributes.HitpointsMaxTotal;
-            actor.HitPointsPct = actor.HitPoints / actor.HitPointsMax;
-            actor.HasDotDps = attributes.HasDotDps;
-            actor.IsReflectingDamage = actor.MonsterAffixes.HasFlag(MonsterAffixes.ReflectsDamage) && attributes.IsReflecting;
-            actor.NpcIsOperable = attributes.NPCIsOperatable;
-            actor.IsUntargetable = attributes.IsUntargetable && !GameData.IgnoreUntargettableAttribute.Contains(actor.ActorSnoId);
-            actor.IsInvulnerable = attributes.IsInvulnerable;
-            actor.MarkerType = attributes.MarkerType;
-            actor.NpcHasInteractOptions = attributes.NpcHasInteractOptions;
-            actor.IsQuestGiver = (actor.MarkerType == MarkerType.Exclamation || actor.MarkerType == MarkerType.ExclamationBlue);
-            actor.HasBuffVisualEffect = attributes.HasBuffVisualEffect;
-        }
-
-        private static int GetTeamId(ACD acd)
-        {
+            if (acd == null) return -1;
             var overrideId = acd.TeamOverride;
             return overrideId == -1 ? acd.TeamId : overrideId;
         }
@@ -139,34 +54,9 @@ namespace Trinity.Framework.Actors.Properties
                 && ((uint)(a1 - 2) > 7 || (uint)(a2 - 15) > 7);
         }
 
-        private static bool IsHostile(ACD acd, ACD againstActor)
+        public static bool IsHostile(ACD acd, ACD againstActor)
         {
             return IsHostile(GetTeamId(acd), GetTeamId(againstActor));
-        }
-
-        private static void UpdateTeam(TrinityActor actor, AttributesWrapper attributes)
-        {
-            actor.TeamId = GetTeamId(actor.CommonData);
-            actor.Team = (TeamType)actor.TeamId;
-            actor.IsFriendly = !IsHostile(actor.CommonData, ZetaDia.Me.CommonData);
-            actor.IsHostile = IsHostile(actor.CommonData, ZetaDia.Me.CommonData) || actor.Attributes.LastDamageAnnId == Core.Player.MyDynamicID;
-            actor.IsSameTeam = actor.IsFriendly || actor.TeamId == Core.Player.TeamId || GameData.AllyMonsterTypes.Contains(actor.MonsterType);
-            actor.IsHidden = attributes.IsHidden || attributes.IsBurrowed;
-            actor.IsSpawningBoss = actor.IsBoss && actor.IsUntargetable;
-            actor.IsNpc = attributes.IsNPC;
-        }
-
-        private static void UpdateMovement(TrinityActor actor, DiaObject rActor)
-        {
-            var movement = rActor.Movement;
-            if (movement != null && movement.IsValid)
-            {
-                actor.Rotation = movement.Rotation;
-                actor.RotationDegrees = MathEx.ToDegrees(actor.Rotation);
-                actor.DirectionVector = movement.DirectionVector;
-                actor.IsMoving = movement.IsMoving;
-                actor.MovementSpeed = movement.SpeedXY;
-            }
         }
 
         private static void UpdateDeath(TrinityActor actor)

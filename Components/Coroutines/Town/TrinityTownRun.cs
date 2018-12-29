@@ -102,11 +102,11 @@ namespace Trinity.Components.Coroutines.Town
 
                 while (DateTime.UtcNow.Subtract(ChangeEvents.WorldId.LastChanged).TotalMilliseconds < 2000 || ZetaDia.Globals.IsLoadingWorld || ZetaDia.Globals.WorldSnoId <= 0)
                 {
-                    await Coroutine.Sleep(2000);
+                    await Coroutine.Yield();
                 }
 
                 await Coroutine.Wait(8000, () => Core.Actors.Inventory.Any());
-                await Coroutine.Sleep(1000);
+                await Coroutine.Yield();
 
                 Core.Logger.Debug("Started Town Run Loop");
 
@@ -143,7 +143,7 @@ namespace Trinity.Components.Coroutines.Town
 
                     if (await Any(
                         DropItems.Execute,
-                        /*() => StashItems.Execute(true),*/
+                        () => StashItems.Execute(true),
                         SellItems.Execute,
                         SalvageItems.Execute))
                         continue;
@@ -205,8 +205,7 @@ namespace Trinity.Components.Coroutines.Town
             // Close Normal rift before doing a town run.
             if (ZetaDia.IsInTown && !StartedOutOfTown && ZetaDia.Storage.RiftCompleted && ZetaDia.Storage.RiftStarted)
             {
-                var orek = TownInfo.Orek?.GetActor() as DiaUnit;
-                if (orek != null && orek.IsQuestGiver)
+                if (TownInfo.Orek?.GetActor() is DiaUnit orek && orek.IsQuestGiver)
                 {
                     return false;
                 }
@@ -231,8 +230,7 @@ namespace Trinity.Components.Coroutines.Town
 
         public static bool CanTownRun()
         {
-            string cantUseTPreason;
-            if (!ZetaDia.Me.CanUseTownPortal(out cantUseTPreason) && !ZetaDia.IsInTown)
+            if (!ZetaDia.Me.CanUseTownPortal(out var cantUseTPreason) && !ZetaDia.IsInTown)
             {
                 Core.Logger.Verbose("Can't townrun because '{0}'", cantUseTPreason);
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(10);
@@ -316,7 +314,6 @@ namespace Trinity.Components.Coroutines.Town
                 ZetaDia.Me.UseTownPortal();
             }
 
-            await Coroutine.Sleep(500);
             await Coroutine.Wait(5000, () => !Core.CastStatus.StoneOfRecall.IsCasting && !ZetaDia.IsInTown);
 
             return true;
@@ -385,7 +382,7 @@ namespace Trinity.Components.Coroutines.Town
 
             Core.Logger.Log("Found a hearth portal, lets use it.");
 
-            if (!await MoveToAndInteract.Execute(actor, 2f, 10))
+            if (!await MoveToAndInteract.Execute(actor, actor.InteractDistance, 10))
             {
                 Core.Logger.Log("Failed to move to return portal :(");
                 return false;
@@ -398,7 +395,7 @@ namespace Trinity.Components.Coroutines.Town
                 Core.Logger.Debug("Failed to interact with return portal.");
             }
 
-            await Coroutine.Sleep(1000);
+            await Coroutine.Wait(1000, () => !ZetaDia.IsInTown);
 
             if (ZetaDia.IsInTown && !ZetaDia.Globals.IsLoadingWorld)
             {
@@ -406,9 +403,7 @@ namespace Trinity.Components.Coroutines.Town
                 var gizmo = ZetaDia.Actors.GetActorsOfType<DiaGizmo>().FirstOrDefault(g => g.ActorInfo.GizmoType == GizmoType.HearthPortal);
                 if (gizmo != null)
                 {
-                    await CommonCoroutines.MoveAndStop(gizmo.Position, 2f, "Portal Position");
-                    await Coroutine.Sleep(1000);
-                    gizmo.Interact();
+                    await CommonCoroutines.MoveAndStop(gizmo.Position, gizmo.InteractDistance, "Portal Position");
                     gizmo.Interact();
                 }
             }

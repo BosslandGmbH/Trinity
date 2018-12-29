@@ -43,7 +43,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         private int _waypointNumber;
 
-        [Obsolete("Use WaypointLevelAreaId Instead")]
         public int WaypointNumber
         {
             get

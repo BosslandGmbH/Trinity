@@ -33,7 +33,7 @@ namespace Trinity.Components.Coroutines
                 return false;
 
             if (interactLimit < 1) interactLimit = 5;
-            if (range < 0) range = obj.CollisionSphere.Radius;
+            if (range < 0) range = obj.InteractDistance;
 
             if (Core.Player.IsInTown)
                 GameUI.CloseVendorWindow();
@@ -50,15 +50,14 @@ namespace Trinity.Components.Coroutines
             }
 
             var distance = obj.Position.Distance(ZetaDia.Me.Position);
-            if (distance <= range || distance - obj.CollisionSphere.Radius <= range)
+            if (distance <= range || distance - obj.InteractDistance <= range)
             {
-                for (int i = 1; i <= interactLimit; i++)
+                for (var i = 1; i <= interactLimit; i++)
                 {
                     Core.Logger.Verbose("Interacting with {0} ({1}) Attempt={2}", obj.Name, obj.ActorSnoId, i);
                     if (obj.Interact() && i > 1)
                         break;
 
-                    await Coroutine.Sleep(500);
                     await Coroutine.Yield();
                 }
             }
@@ -66,11 +65,11 @@ namespace Trinity.Components.Coroutines
             // Better to be redundant than failing to interact.
 
             Navigator.PlayerMover.MoveTowards(obj.Position);
-            await Coroutine.Sleep(500);
+            await Coroutine.Yield();
             obj.Interact();
 
             Navigator.PlayerMover.MoveStop();
-            await Coroutine.Sleep(1000);
+            await Coroutine.Yield();
             await Interact(obj);
             return true;
         }
@@ -145,11 +144,11 @@ namespace Trinity.Components.Coroutines
 
             // Do the interaction
             var startingWorldId = ZetaDia.Globals.WorldSnoId;
-            if (distance <= Math.Max(actor.CollisionSphere.Radius, 10f))
+            if (distance <= Math.Max(actor.InteractDistance, 10f))
             {
                 Navigator.PlayerMover.MoveStop();
 
-                for (int i = 1; i <= interactLimit; i++)
+                for (var i = 1; i <= interactLimit; i++)
                 {
                     if (ZetaDia.Globals.WorldSnoId != startingWorldId)
                         return true;
@@ -158,45 +157,37 @@ namespace Trinity.Components.Coroutines
                     if (actor.Interact() && i > 1)
                         break;
 
-                    await Coroutine.Sleep(100);
                     await Coroutine.Yield();
 
-                    if (IsInteracting())
+                    if (IsInteracting)
                         break;
                 }
             }
 
-            await Coroutine.Sleep(100);
             await Coroutine.Yield();
 
             // Better to be redundant than failing to interact.
 
-            if (!IsInteracting())
+            if (!IsInteracting)
             {
                 Navigator.PlayerMover.MoveTowards(actor.Position);
-                await Coroutine.Sleep(100);
+                await Coroutine.Yield();
                 actor.Interact();
             }
 
-            if (!IsInteracting())
+            if (!IsInteracting)
             {
                 Navigator.PlayerMover.MoveStop();
-                await Coroutine.Sleep(100);
+                await Coroutine.Yield();
                 await Interact(actor);
             }
 
             return true;
         }
 
-        private static bool IsInteracting()
-        {
-            if (ZetaDia.Me.LoopingAnimationEndTime > 0 || _castingAnimationStates.Contains(ZetaDia.Me.CommonData.AnimationState))
-                return true;
+        private static bool IsInteracting => ZetaDia.Me.LoopingAnimationEndTime > 0 || CastingAnimationStates.Contains(ZetaDia.Me.CommonData.AnimationState);
 
-            return false;
-        }
-
-        private static readonly HashSet<AnimationState> _castingAnimationStates = new HashSet<AnimationState>
+        private static readonly HashSet<AnimationState> CastingAnimationStates = new HashSet<AnimationState>
         {
             AnimationState.Channeling,
             AnimationState.Casting,
@@ -207,32 +198,9 @@ namespace Trinity.Components.Coroutines
             if (!actor.IsFullyValid())
                 return false;
 
-            bool retVal = false;
-            switch (actor.ActorType)
-            {
-                case ActorType.Gizmo:
-                    switch (actor.ActorInfo.GizmoType)
-                    {
-                        case GizmoType.BossPortal:
-                        case GizmoType.Portal:
-                        case GizmoType.ReturnPortal:
-                            retVal = ZetaDia.Me.UsePower(SNOPower.GizmoOperatePortalWithAnimation, actor.Position);
-                            break;
-
-                        default:
-                            retVal = ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, actor.Position);
-                            break;
-                    }
-                    break;
-
-                case ActorType.Monster:
-                    retVal = ZetaDia.Me.UsePower(SNOPower.Axe_Operate_NPC, actor.Position);
-                    break;
-            }
-
             // Doubly-make sure we interact
-            actor.Interact();
-            await Coroutine.Sleep(100);
+            var retVal = actor.Interact();
+            await Coroutine.Yield();
             return retVal;
         }
     }

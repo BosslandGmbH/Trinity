@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
+using Trinity.Components.Coroutines;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance;
@@ -19,7 +20,6 @@ using Trinity.Settings;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-
 
 namespace Trinity.Routines
 {
@@ -63,22 +63,22 @@ namespace Trinity.Routines
         protected static TrinityPower Walk(Vector3 destination, float range = 0f)
             => new TrinityPower(SNOPower.Walk, range, destination);
 
-        public bool IsEliteNearby 
+        public bool IsEliteNearby
             => WeightedUnits.Any(u => u.IsElite || u.IsTreasureGoblin);
 
         public bool IsEliteClose
             => WeightedUnits.Any(u => (u.IsElite || u.IsTreasureGoblin) && u.Distance < 25f);
 
-        public IEnumerable<TrinityActor> LocalElites 
+        public IEnumerable<TrinityActor> LocalElites
             => WeightedUnits.Where(u => (u.IsElite || u.IsTreasureGoblin) && u.Distance <= 100f);
 
-        public Vector3 EliteCentroid 
+        public Vector3 EliteCentroid
             => TargetUtil.GetCentroid(LocalElites.Select(u => u.Position));
 
-        public bool IsClusteredElites 
+        public bool IsClusteredElites
             => LocalElites.All(u => u.Position.Distance(EliteCentroid) < 25f);
 
-        public bool IsPartyGroupedTogether 
+        public bool IsPartyGroupedTogether
             => Party.Members.Count() <= 1 || Party.Members.Count(p => p.Distance <= 30f) == PartyMembersNearby;
 
         public int PartyMembersNearby
@@ -175,16 +175,13 @@ namespace Trinity.Routines
         public static int EndlessWalkOffensiveStacks
             => Core.Buffs.GetBuffStacks(447541, 1);
 
-        public static int EndlessWalkDefensiveStacks
-            => Core.Buffs.GetBuffStacks(447541, 2);
-
         public static bool HasInfiniteCasting
             => Core.Buffs.HasCastingShrine;
 
         public static bool HasIngeomBuff
             => Player.HasBuff(SNOPower.ItemPassive_Unique_Ring_919_x1);
 
-        public static bool HasInstantCooldowns 
+        public static bool HasInstantCooldowns
             => HasInfiniteCasting || HasIngeomBuff;
 
 
@@ -214,10 +211,7 @@ namespace Trinity.Routines
             if (settings.UseMode == UseTime.OutOfCombat && IsInCombat)
                 return false;
 
-            if (settings.UseMode == UseTime.InCombat && !IsInCombat)
-                return false;
-
-            return true;
+            return settings.UseMode != UseTime.InCombat || IsInCombat;
         }
 
         protected bool IsRestricted(SkillSettings settings, Skill skill)
@@ -233,7 +227,7 @@ namespace Trinity.Routines
 
             if (SpellHistory.TimeSinceUse(skill.SNOPower).TotalMilliseconds < settings.RecastDelayMs)
                 return true;
-  
+
             if (settings.ClusterSize > 0 && !TargetUtil.ClusterExists(15f, settings.ClusterSize))
                 return true;
 
@@ -275,8 +269,8 @@ namespace Trinity.Routines
                 return true;
 
             if (settings.Reasons.HasFlag(UseReasons.Buff) && settings.BuffCondition != null && settings.BuffCondition())
-                return true;             
-         
+                return true;
+
             return false;
         }
 
@@ -342,74 +336,48 @@ namespace Trinity.Routines
 
         public virtual async Task<bool> HandleKiting()
         {
-            if (Core.Avoidance.Avoider.ShouldKite)
+            if (!Core.Avoidance.Avoider.ShouldKite) return false;
+            if (!Core.Avoidance.Avoider.TryGetSafeSpot(out var safespot) || safespot.Distance(ZetaDia.Me.Position) < 5f) return false;
+
+            Core.Logger.Log(LogCategory.Avoidance, "Kiting");
+            await CastDefensiveSpells();
+            return await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Kiting", 3f, () => Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) < 3f);
+        }
+
+        protected virtual bool IsAvoidanceRequired
+        {
+            get
             {
-                Vector3 safespot;
-                if (Core.Avoidance.Avoider.TryGetSafeSpot(out safespot) && safespot.Distance(ZetaDia.Me.Position) > 3f)
-                {
-                    Core.Logger.Log(LogCategory.Avoidance, $"Kiting");
-                    await CastDefensiveSpells();
-                    PlayerMover.MoveTo(safespot);
-                    return true;
-                }
+                if (!Core.Avoidance.Avoider.ShouldAvoid) return false;
+
+                var isCloseToSafeSpot = Core.Player.Position.Distance(Core.Avoidance.Avoider.SafeSpot) < 5f;
+                if (Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) > 5f && (Core.Player.Actor.IsInAvoidance || (CurrentTarget != null && ((CurrentTarget.IsInAvoidance && !isCloseToSafeSpot)
+                    || CurrentTarget.Distance > CurrentPower?.MinimumRange
+                    || !CurrentTarget.IsAvoidanceOnPath)))) return true;
+
+                Core.Logger.Log(LogCategory.Avoidance, "Not avoiding due to being safe and target is within range");
+                return false;
             }
-            return false;
         }
 
         public virtual async Task<bool> HandleAvoiding()
         {
-            if (Core.Avoidance.Avoider.ShouldAvoid)
+            if (Core.Player.Actor == null || !IsAvoidanceRequired) return false;
+
+            var safe = (!Core.Player.IsTakingDamage || Core.Player.CurrentHealthPct > 0.5f) && Core.Player.Actor != null && !Core.Player.Actor.IsInCriticalAvoidance;
+            if (!TrinityCombat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
             {
-                var isCloseToSafeSpot = Core.Player.Position.Distance(Core.Avoidance.Avoider.SafeSpot) < 3f;
-                if (CurrentTarget != null && (!CurrentTarget.IsInAvoidance || isCloseToSafeSpot))
-                {
-                    var canReachTarget = CurrentTarget.Distance < CurrentPower?.MinimumRange;
-                    if (canReachTarget && CurrentTarget.IsAvoidanceOnPath && !Core.Player.Actor.IsInAvoidance)
-                    {
-                        Core.Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and target is within range");
-                        return false;
-                    }
-                }
-
-                var safe = (!Core.Player.IsTakingDamage || Core.Player.CurrentHealthPct > 0.5f) && Core.Player.Actor != null && !Core.Player.Actor.IsInCriticalAvoidance;
-
-                //if (newTarget?.Position == LastTarget?.Position && newTarget.IsAvoidanceOnPath && safe)
-                //{
-                //    Core.Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and waiting for avoidance before handling target {newTarget.Name}");
-                //    Core.PlayerMover.MoveTowards(Core.Player.Position);
-                //    return true;
-                //}
-
-                if (!TrinityCombat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
-                {
-                    Core.Logger.Log(LogCategory.Avoidance, $"Waiting for avoidance to clear (out of combat)");
-
-                    await CastMovementSpells(Core.Avoidance.Avoider.SafeSpot);
-                    return true;
-                }
-
-                if (Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) > 5f)
-                {
-                    Core.Logger.Log(LogCategory.Avoidance, $"Moving away from Critical Avoidance.");
-
-                    if (await CastMovementSpells(Core.Avoidance.Avoider.SafeSpot))
-                        return true;
-
-                    await CastDefensiveSpells();
-                    return true;
-                }
+                Core.Logger.Log(LogCategory.Avoidance, "Waiting for avoidance to clear (out of combat)");
+                return await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f, () => !IsAvoidanceRequired);
             }
-            return false;
-        }
 
-        public static async Task<bool> CastMovementSpells(Vector3 destination)
-        {
-            var power = TrinityCombat.Routines.Current.GetMovementPower(destination);
-            if (power != null && power.SNOPower != SpellHistory.LastPowerUsed)
-            {
-                return await TrinityCombat.Spells.CastTrinityPower(power, "Movement");
-            }
-            PlayerMover.MoveTo(Core.Avoidance.Avoider.SafeSpot);
+            if (Core.Avoidance.Avoider.SafeSpot.Distance(Player.Position) < 5f) return false;
+
+            Core.Logger.Log(LogCategory.Avoidance, "Moving away from Critical Avoidance.");
+            if (await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f, () => !IsAvoidanceRequired))
+                return true;
+
+            await CastDefensiveSpells();
             return true;
         }
 
@@ -440,26 +408,22 @@ namespace Trinity.Routines
                 return false;
             }
 
-            if (CurrentPower.SNOPower != SNOPower.None)
-            {
-                if (!await TrinityCombat.Spells.CastTrinityPower(CurrentPower))
-                {
-                    if (DateTime.UtcNow.Subtract(SpellHistory.LastSpellUseTime).TotalSeconds > 5)
-                    {
-                        Core.Logger.Verbose(LogCategory.Targetting, $"Routine power cast failure timeout. Clearing Target: {target?.Name} and Power: {CurrentPower}");
-                        TrinityCombat.Targeting.Clear();
-                        return false;
-                    }
+            if (CurrentPower.SNOPower == SNOPower.None) return true;
+            if (await TrinityCombat.Spells.CastTrinityPower(CurrentPower)) return true;
 
-                    if (CurrentPower.SNOPower != SNOPower.Walk &&
-                        CurrentPower.TargetPosition.Distance(Core.Player.Position) >
-                        TrinityCombat.Targeting.MaxTargetDistance)
-                    {
-                        Core.Logger.Verbose(LogCategory.Targetting,
-                            $"Player is too far away from Target: {target?.Distance} and Power: {CurrentPower}");
-                        return false;
-                    }
-                }
+            if (DateTime.UtcNow.Subtract(SpellHistory.LastSpellUseTime).TotalSeconds > 5)
+            {
+                Core.Logger.Verbose(LogCategory.Targetting, $"Routine power cast failure timeout. Clearing Target: {target?.Name} and Power: {CurrentPower}");
+                TrinityCombat.Targeting.Clear();
+                return false;
+            }
+
+            if (CurrentPower.SNOPower != SNOPower.Walk &&
+                CurrentPower.TargetPosition.Distance(Core.Player.Position) >
+                TrinityCombat.Targeting.MaxTargetDistance)
+            {
+                Core.Logger.Verbose(LogCategory.Targetting, $"Player is too far away from Target: {target?.Distance} and Power: {CurrentPower}");
+                return false;
             }
 
             return true;
@@ -473,8 +437,7 @@ namespace Trinity.Routines
                 {
                     Core.Logger.Verbose(LogCategory.Targetting, "Waiting while rift boss spawn");
 
-                    Vector3 safeSpot;
-                    if (Core.Avoidance.Avoider.TryGetSafeSpot(out safeSpot, 30f, 100f, CurrentTarget.Position))
+                    if (Core.Avoidance.Avoider.TryGetSafeSpot(out var safeSpot, 30f, 100f, CurrentTarget.Position))
                     {
                         PlayerMover.MoveTo(safeSpot);
                     }
@@ -578,18 +541,12 @@ namespace Trinity.Routines
                 return InteractPower(target, 100, 250);
             }
 
-            if (TrinityCombat.IsInCombat)
-            {
-                var routinePower = routine.GetOffensivePower();
+            if (!TrinityCombat.IsInCombat) return null;
 
-                TrinityPower kamakaziPower;
-                if (TryKamakaziPower(target, routinePower, out kamakaziPower))
-                    return kamakaziPower;
+            var routinePower = routine.GetOffensivePower();
 
-                return routinePower;
-            }
+            return TryKamakaziPower(target, routinePower, out var kamakaziPower) ? kamakaziPower : routinePower;
 
-            return null;
         }
 
         public TrinityPower InteractPower(TrinityActor actor, int waitBefore, int waitAfter, float addedRange = 0)
@@ -602,27 +559,25 @@ namespace Trinity.Routines
             // But for goblin kamakazi we need a special exception to force it to always target the goblin.
 
             power = null;
-            if (target.IsTreasureGoblin && Core.Settings.Weighting.GoblinPriority == TargetPriority.Kamikaze)
+            if (!target.IsTreasureGoblin || Core.Settings.Weighting.GoblinPriority != TargetPriority.Kamikaze) return false;
+
+            Core.Logger.Log(LogCategory.Targetting, $"Forcing Kamakazi Target on {target}, routineProvided={routinePower}");
+
+            var kamaKaziPower = DefaultPower;
+            if (routinePower != null)
             {
-                Core.Logger.Log(LogCategory.Targetting, $"Forcing Kamakazi Target on {target}, routineProvided={routinePower}");
-
-                var kamaKaziPower = RoutineBase.DefaultPower;
-                if (routinePower != null)
-                {
-                    routinePower.SetTarget(target);
-                    kamaKaziPower = routinePower;
-                }
-
-                power = kamaKaziPower;
-                return true;
+                routinePower.SetTarget(target);
+                kamaKaziPower = routinePower;
             }
-            return false;
+
+            power = kamaKaziPower;
+            return true;
         }
 
         public virtual async Task<bool> HandleStart() => false;
         public virtual bool ShouldReturnStartResult => false;
 
-        
+
         #endregion
 
         /// <summary>
@@ -664,7 +619,7 @@ namespace Trinity.Routines
         {
             // todo refactor this, there is no need to hardcode these values
 
-            double baseCd = 0;
+            double baseCd;
             double reduc = 1 - ZetaDia.Me.CommonData.GetAttribute<float>(ActorAttributeType.PowerCooldownReductionPercentAll);
             switch (skill.Name)
             {
@@ -768,48 +723,39 @@ namespace Trinity.Routines
         {
             power = null;
 
-            if (IsInCombat && !IsCurrentlyKiting && !IsCurrentlyAvoiding)
+            if (!IsInCombat || IsCurrentlyKiting || IsCurrentlyAvoiding) return false;
+            if (!TargetUtil.BestBuffPosition(maxDistance, Player.Position, true, out var buffedLocation)) return false;
+
+            var distance = buffedLocation.Distance(Player.Position);
+
+            Core.Logger.Verbose(LogCategory.Routine, $"Buffed location found Dist={distance}");
+
+            if (buffedLocation.Distance(Player.Position) < arriveDistance)
             {
-                Vector3 buffedLocation;
-                if (TargetUtil.BestBuffPosition(maxDistance, Player.Position, true, out buffedLocation))
-                {
-                    //var lastPower = SpellHistory.LastPower;
-                    var distance = buffedLocation.Distance(Player.Position);
-
-                    Core.Logger.Verbose(LogCategory.Routine, $"Buffed location found Dist={distance}");
-
-                    if (buffedLocation.Distance(Player.Position) < arriveDistance)
-                    {
-                        Core.Logger.Log(LogCategory.Routine, $"Standing in Buffed Position {buffedLocation} Dist={distance}");
-                    }
-                    else if (!Core.Avoidance.Grid.CanRayWalk(Player.Position, buffedLocation))
-                    {
-                        Core.Logger.Log(LogCategory.Routine, $"Unable to straight-line path to Buffed Position {buffedLocation} Dist={distance}");
-                    }
-                    else if (!Core.Avoidance.Grid.CanRayWalk(TrinityCombat.Targeting.CurrentTarget.Position, buffedLocation))
-                    {
-                        Core.Logger.Log(LogCategory.Routine, $"Can't see target from buffed position {buffedLocation} Dist={distance}");
-                    }
-                    else if (Core.Avoidance.Avoider.IsKiteOnCooldown)
-                    {
-                        Core.Logger.Log(LogCategory.Routine, $"Not moving to buffed location while on kite cooldown");
-                    }
-                    //else if (checkPowerRange && lastPower != null && buffedLocation.Distance(Combat.Targeting.CurrentTarget.Position) > lastPower.MinimumRange + Combat.Targeting.CurrentTarget.CollisionRadius + Player.Radius)
-                    //{
-                    //    Core.Logger.Verbose(LogCategory.Routine, $"Buffed spot outside attack range for power {lastPower.SNOPower} Range={lastPower.MinimumRange} TimeSinceUse={lastPower.TimeSinceUseMs} Dist={distance}");
-                    //}
-                    else if (IsKitingEnabled && TargetUtil.AnyMobsInRangeOfPosition(buffedLocation, TrinityCombat.Routines.Current.KiteDistance))
-                    {
-                        Core.Logger.Verbose(LogCategory.Routine, $"Moving to buffed spot would trigger kiting away from it.");
-                    }
-                    else
-                    {
-                        Core.Logger.Verbose(LogCategory.Routine, $"Moving to Buffed Position {buffedLocation} Dist={distance}");
-                        power = new TrinityPower(SNOPower.Walk, maxDistance, buffedLocation);
-                        return true;                           
-                    } 
-                }
-            }            
+                Core.Logger.Log(LogCategory.Routine, $"Standing in Buffed Position {buffedLocation} Dist={distance}");
+            }
+            else if (!Core.Avoidance.Grid.CanRayWalk(Player.Position, buffedLocation))
+            {
+                Core.Logger.Log(LogCategory.Routine, $"Unable to straight-line path to Buffed Position {buffedLocation} Dist={distance}");
+            }
+            else if (!Core.Avoidance.Grid.CanRayWalk(TrinityCombat.Targeting.CurrentTarget.Position, buffedLocation))
+            {
+                Core.Logger.Log(LogCategory.Routine, $"Can't see target from buffed position {buffedLocation} Dist={distance}");
+            }
+            else if (Core.Avoidance.Avoider.IsKiteOnCooldown)
+            {
+                Core.Logger.Log(LogCategory.Routine, $"Not moving to buffed location while on kite cooldown");
+            }
+            else if (IsKitingEnabled && TargetUtil.AnyMobsInRangeOfPosition(buffedLocation, TrinityCombat.Routines.Current.KiteDistance))
+            {
+                Core.Logger.Verbose(LogCategory.Routine, $"Moving to buffed spot would trigger kiting away from it.");
+            }
+            else
+            {
+                Core.Logger.Verbose(LogCategory.Routine, $"Moving to Buffed Position {buffedLocation} Dist={distance}");
+                power = new TrinityPower(SNOPower.Walk, maxDistance, buffedLocation);
+                return true;
+            }
             return false;
         }
 
