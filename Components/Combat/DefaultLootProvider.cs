@@ -689,7 +689,7 @@ namespace Trinity.Components.Combat
                 return true;
             }
 
-            if (item.ItemQualityLevel <= ItemQuality.Superior &&
+            if (item.ItemQualityLevel >= ItemQuality.Normal && item.ItemQualityLevel <= ItemQuality.Superior &&
                 (isEquipment ||
                  trinityBaseType == TrinityItemBaseType.FollowerItem))
             {
@@ -789,6 +789,7 @@ namespace Trinity.Components.Combat
                 if (!item.GetIsSalvageable())
                 {
                     reason = "Not Salvagable";
+                    item.GetIsSalvageable();
                     return false;
                 }
 
