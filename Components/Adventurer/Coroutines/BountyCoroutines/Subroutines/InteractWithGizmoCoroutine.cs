@@ -7,15 +7,16 @@ using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
 using Trinity.Components.Coroutines;
 using Zeta.Common;
+using Zeta.Game;
 
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
     public class InteractWithGizmoCoroutine : IBountySubroutine
     {
-        private readonly int _questId;
-        private readonly int _worldId;
-        private readonly int _actorId;
+        private readonly SNOQuest _questId;
+        private readonly SNOWorld _worldId;
+        private readonly SNOActor _actorId;
         private readonly int _marker;
         private readonly int _interactAttemps;
         private readonly int _secondsToSleepAfterInteraction;
@@ -55,9 +56,9 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         #endregion State
 
-        public bool IsDone => _isDone || AdvDia.CurrentWorldId != _worldId && _worldId != -1;
+        public bool IsDone => _isDone || AdvDia.CurrentWorldId != _worldId && _worldId != SNOWorld.Invalid;
 
-        public InteractWithGizmoCoroutine(int questId, int worldId, int actorId, int marker, int interactAttemps = 1, int secondsToSleepAfterInteraction = 1, int secondsToTimeout = 10, bool useAll = false)
+        public InteractWithGizmoCoroutine(SNOQuest questId, SNOWorld worldId, SNOActor actorId, int marker, int interactAttemps = 1, int secondsToSleepAfterInteraction = 1, int secondsToTimeout = 10, bool useAll = false)
         {
             _questId = questId;
             _worldId = worldId;
@@ -131,7 +132,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             if (_objectiveLocation != Vector3.Zero)
             {
                 // Special case for cursed chest events.
-                if (_objectiveLocation.Distance(AdvDia.MyPosition) < 16f && _actorId == 365097 && ActorFinder.FindGizmo(364559) != null)
+                if (_objectiveLocation.Distance(AdvDia.MyPosition) < 16f && _actorId == SNOActor.x1_Global_Chest_CursedChest_B && ActorFinder.FindGizmo(SNOActor.x1_Global_Chest_CursedChest) != null)
                 {
                     Core.Logger.Log("Target gizmo has transformed into invulnerable event gizmo. Ending.");
                     State = States.Failed;

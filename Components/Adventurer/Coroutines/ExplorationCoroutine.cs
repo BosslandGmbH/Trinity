@@ -16,9 +16,9 @@ namespace Trinity.Components.Adventurer.Coroutines
     public sealed class ExplorationCoroutine : ISubroutine
     {
         private static ExplorationCoroutine _explorationCoroutine;
-        private static HashSet<int> _exploreLevelAreaIds;
+        private static HashSet<SNOLevelArea> _exploreLevelAreaIds;
 
-        public static async Task<bool> Explore(HashSet<int> levelAreaIds, List<string> ignoreScenes = null, Func<bool> breakCondition = null, bool allowReExplore = true, bool useIgnoreRegions = true)
+        public static async Task<bool> Explore(HashSet<SNOLevelArea> levelAreaIds, List<string> ignoreScenes = null, Func<bool> breakCondition = null, bool allowReExplore = true, bool useIgnoreRegions = true)
         {
             if (_explorationCoroutine == null || (_exploreLevelAreaIds != null && levelAreaIds != null && !_exploreLevelAreaIds.SetEquals(levelAreaIds)))
             {
@@ -33,7 +33,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             return false;
         }
 
-        private readonly HashSet<int> _levelAreaIds;
+        private readonly HashSet<SNOLevelArea> _levelAreaIds;
 
         private enum States
         {
@@ -59,7 +59,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             }
         }
 
-        public ExplorationCoroutine(HashSet<int> levelAreaIds, List<string> ignoreScenes = null, Func<bool> breakCondition = null, bool allowReExplore = true, bool useIgnoreRegions = true)
+        public ExplorationCoroutine(HashSet<SNOLevelArea> levelAreaIds, List<string> ignoreScenes = null, Func<bool> breakCondition = null, bool allowReExplore = true, bool useIgnoreRegions = true)
         {
             _levelAreaIds = levelAreaIds;
             _ignoreScenes = ignoreScenes;

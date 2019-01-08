@@ -66,7 +66,7 @@ namespace Trinity.Framework.Actors.Properties
             }
         }
 
-        public static TrinityObjectType GetObjectType(ActorType actorType, int actorSno, GizmoType gizmoType, string internalName)
+        public static TrinityObjectType GetObjectType(ActorType actorType, SNOActor actorSno, GizmoType gizmoType, string internalName)
         {
             if (GameData.ObjectTypeOverrides.ContainsKey(actorSno))
                 return GameData.ObjectTypeOverrides[actorSno];
@@ -171,7 +171,7 @@ namespace Trinity.Framework.Actors.Properties
 
         public static SpecialTypes GetSpecialType(TrinityActor cacheObject)
         {
-            if (cacheObject.ActorSnoId == 4860) //SNOActor.PlayerHeadstone
+            if (cacheObject.ActorSnoId == SNOActor.PlayerHeadstone)
                 return SpecialTypes.PlayerTombstone;
 
             return SpecialTypes.None;

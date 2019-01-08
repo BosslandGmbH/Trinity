@@ -3,6 +3,7 @@ using System.Media;
 using Trinity.Framework.Objects;
 using Trinity.Settings;
 using Zeta.Bot;
+using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Modules
@@ -14,15 +15,15 @@ namespace Trinity.Modules
     {
         protected override int UpdateIntervalMs => 1000;
 
-        public const int RiftStoneSNO = 364715;
-        public const int RiftEntryPortalSNO = 345935;
-        public const int GreaterRiftEntryPortalSNO = 396751;
-        public const int OrekSNO = 363744;
-        public const int UrshiSNO = 398682;
-        public const int TownstoneSNO = 135248;
-        public const int HolyCowSNO = 209133;
-        public const int GreaterRiftKeySNO = 408416;
-        public const int DeathGateSNO = 328830;
+        public const SNOActor RiftStoneSNO = SNOActor.x1_OpenWorld_LootRunObelisk_B;
+        public const SNOActor RiftEntryPortalSNO = SNOActor.X1_OpenWorld_LootRunPortal;
+        public const SNOActor GreaterRiftEntryPortalSNO = SNOActor.X1_OpenWorld_Tiered_Rifts_Portal;
+        public const SNOActor OrekSNO = SNOActor.X1_LR_Nephalem;
+        public const SNOActor UrshiSNO = SNOActor.P1_LR_TieredRift_Nephalem;
+        public const SNOActor TownstoneSNO = SNOActor.Dungeon_Stone_Portal;
+        public const SNOActor HolyCowSNO = SNOActor.TentacleLord;
+        public const SNOActor GreaterRiftKeySNO = SNOActor.TieredLootrunKey_0;
+        public const SNOActor DeathGateSNO = SNOActor.x1_Fortress_Portal_Switch;
 
         protected override void OnPulse()
         {

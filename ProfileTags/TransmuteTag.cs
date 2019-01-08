@@ -7,6 +7,7 @@ using Trinity.Components.Coroutines.Town;
 using Trinity.Components.QuestTools;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Reference;
 using Trinity.ProfileTags.EmbedTags;
 using Trinity.Settings;
@@ -72,20 +73,24 @@ namespace Trinity.ProfileTags
             var transmuteGroup = new List<ACDItem>();
             foreach (var item in Items)
             {
-                var backpackItems = Core.Inventory.Backpack.ByActorSno(item.Id);
-                if (backpackItems == null || !backpackItems.Any())
+                var backpackItems = InventoryManager.Backpack.ByActorSno(item.Id);
+                var acdItems = backpackItems as ACDItem[] ?? backpackItems.ToArray();
+                if (acdItems.Length == 0)
                 {
                     if (item.Quality != TrinityItemQuality.Invalid)
-                        backpackItems = Core.Inventory.Backpack.ByQuality(item.Quality);
+                    {
+                        backpackItems = InventoryManager.Backpack.ByQuality(item.Quality);
+                        acdItems = backpackItems as ACDItem[] ?? backpackItems.ToArray();
+                    }
 
-                    if (backpackItems == null || !backpackItems.Any())
+                    if (acdItems.Length == 0)
                     {
                         s_logger.Error($"[{nameof(MainTask)}] {item} was not found in backpack");
                         return true;
                     }
                 }
-
-                var stacks = Core.Inventory.GetStacksUpToQuantity(backpackItems, item.Quantity);
+                
+                var stacks = acdItems.GetStacksUpToQuantity(item.Quantity);
                 transmuteGroup.AddRange(stacks);
             }
 

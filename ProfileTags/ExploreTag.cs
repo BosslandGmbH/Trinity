@@ -35,7 +35,7 @@ namespace Trinity.ProfileTags
 
         [XmlAttribute("actorId")]
         [Description("Legacy support for stopping exploration when actorId id found nearby. You should use 'stopCondition'.")]
-        public int ActorId { get; set; }
+        public SNOActor ActorId { get; set; }
 
         [XmlAttribute("markerHash")]
         [XmlAttribute("exitNameHash")]
@@ -61,7 +61,7 @@ namespace Trinity.ProfileTags
             }
 
             var ignoreSceneNames = IgnoreScenes?.Select(s => s.Name).ToList();
-            var levelAreaIds = new HashSet<int> {ZetaDia.CurrentLevelAreaSnoId};
+            var levelAreaIds = new HashSet<SNOLevelArea> {ZetaDia.CurrentLevelAreaSnoId};
 
             _exploreTask = new ExplorationCoroutine(levelAreaIds, ignoreSceneNames, null, false, UseSceneRegions);
             return false;

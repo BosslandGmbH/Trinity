@@ -15,11 +15,11 @@ namespace Trinity.Components.Adventurer
 {
     public static class AdvDia
     {
-        public static int CurrentWorldId => Core.Player.WorldSnoId;
+        public static SNOWorld CurrentWorldId => Core.Player.WorldSnoId;
         public static MainGridProvider MainGridProvider => (MainGridProvider)Zeta.Bot.Navigation.Navigator.SearchGridProvider;        
         public static DefaultNavigationProvider Navigator => Zeta.Bot.Navigation.Navigator.NavigationProvider as DefaultNavigationProvider;
-        public static int CurrentWorldDynamicId => Core.Player.WorldDynamicId;
-        public static int CurrentLevelAreaId => Core.Player.LevelAreaId;
+        public static SNOWorld CurrentWorldDynamicId => Core.Player.WorldDynamicId;
+        public static SNOLevelArea CurrentLevelAreaId => Core.Player.LevelAreaId;
         public static Vector3 MyPosition => Core.Player.Position;
         public static float MyZDiff(Vector3 toPosition) => Math.Abs(toPosition.Z - MyPosition.Z);   
         public static WorldScene CurrentWorldScene => Core.Scenes.CurrentScene;

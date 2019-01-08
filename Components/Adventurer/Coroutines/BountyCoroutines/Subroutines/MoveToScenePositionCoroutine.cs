@@ -16,8 +16,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
     public class MoveToScenePositionCoroutine : IBountySubroutine
     {
-        private readonly int _questId;
-        private readonly int _worldId;
+        private readonly SNOQuest _questId;
+        private readonly SNOWorld _worldId;
         private readonly string _sceneName;
         private string _tempSceneName;
         private readonly Vector3 _position;
@@ -58,7 +58,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public bool IsDone => _isDone || _worldId != 0 && AdvDia.CurrentWorldId != _worldId;
 
-        public MoveToScenePositionCoroutine(int questId, int worldId, string sceneName, Vector3 position, bool straightLinePath = false)
+        public MoveToScenePositionCoroutine(SNOQuest questId, SNOWorld worldId, string sceneName, Vector3 position, bool straightLinePath = false)
         {
             _questId = questId;
             _worldId = worldId;
@@ -69,7 +69,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         }
 
-        public MoveToScenePositionCoroutine(int sceneSnoId, Vector3 position, bool straightLinePath = false)
+        public MoveToScenePositionCoroutine(SNOScene sceneSnoId, Vector3 position, bool straightLinePath = false)
         {
             _sceneSnoId = sceneSnoId;
             _position = position;
@@ -177,7 +177,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             var bountyData = BountyData;
 
             var levelAreaIds = bountyData?.LevelAreaIds != null && bountyData.LevelAreaIds.Any()
-                ? bountyData.LevelAreaIds : new HashSet<int> { ZetaDia.CurrentLevelAreaSnoId };
+                ? bountyData.LevelAreaIds : new HashSet<SNOLevelArea> { ZetaDia.CurrentLevelAreaSnoId };
 
             if (!await ExplorationCoroutine.Explore(levelAreaIds))
                 return false;
@@ -228,7 +228,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private long _lastScanTime;
         private BountyData _bountyData;
-        private readonly int _sceneSnoId;
+        private readonly SNOScene _sceneSnoId;
         private readonly bool _straightLinePath;
 
         private void ScanForObjective()

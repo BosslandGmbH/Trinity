@@ -65,7 +65,7 @@ namespace Trinity.Components.Coroutines.Town
 
                 if (InventoryManager.NumFreeBackpackSlots < 5)
                 {
-                    s_logger.Warn($"[{nameof(IsGamblePossible)}] Not enought Backpack space, can't gamble!");
+                    s_logger.Debug($"[{nameof(IsGamblePossible)}] Not enought Backpack space, can't gamble!");
                     return false;
                 }
 
@@ -80,19 +80,19 @@ namespace Trinity.Components.Coroutines.Town
 
                 if (StillSavingShards)
                 {
-                    s_logger.Info($"[{nameof(IsGamblePossible)}] Saving up some shards for later...");
+                    s_logger.Debug($"[{nameof(IsGamblePossible)}] Saving up some shards for later...");
                     return false;
                 }
 
                 if (BelowMinimumShards)
                 {
-                    s_logger.Info($"[{nameof(IsGamblePossible)}] Let's wait till we have more shards...");
+                    s_logger.Debug($"[{nameof(IsGamblePossible)}] Let's wait till we have more shards...");
                     return false;
                 }
 
                 if (!CanAffordMostExpensiveItem)
                 {
-                    s_logger.Info($"[{nameof(IsGamblePossible)}] Can't afford desired items...");
+                    s_logger.Debug($"[{nameof(IsGamblePossible)}] Can't afford desired items...");
                     return false;
                 }
 
@@ -132,7 +132,7 @@ namespace Trinity.Components.Coroutines.Town
 
             slot = TownInfo.MysterySlotTypeAndId.FirstOrDefault(o => item.ActorSnoId == o.Value).Key;
             InventoryManager.BuyItem(item.AnnId);
-            s_logger.Warn($"[{nameof(BuyItem)}] Buying: '{slot}'");
+            s_logger.Info($"[{nameof(BuyItem)}] Buying: '{slot}'");
             _gambleRotation.Remove(slot);
             return true;
         }

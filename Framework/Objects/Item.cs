@@ -12,8 +12,10 @@ namespace Trinity.Framework.Objects
     [DataContract(Namespace = "")]
     public class Item : IUnique, IEquatable<Item>
     {
+        int IUnique.Id => (int)Id;
+
         [DataMember]
-        public int Id { get; set; }
+        public SNOActor Id { get; set; }
 
         public string Name { get; set; }
 
@@ -35,7 +37,7 @@ namespace Trinity.Framework.Objects
         {
         }
 
-        public Item(int actorId, string name = "", ItemType itemType = ItemType.Unknown)
+        public Item(SNOActor actorId, string name = "", ItemType itemType = ItemType.Unknown)
         {
             Id = actorId;
             Name = name;

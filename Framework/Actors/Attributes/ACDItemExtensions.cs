@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Trinity.Components.Coroutines.Town;
 using Trinity.Framework.Actors.Properties;
@@ -197,6 +198,70 @@ namespace Trinity.Framework.Actors.Attributes
                     return GlobeTypes.Health;
             }
             return GlobeTypes.None;
+        }
+
+        public static IEnumerable<ACDItem> ByItemType(this IEnumerable<ACDItem> source, ItemType type)
+        {
+            return source.Where(i => i.GetItemType() == type);
+        }
+
+        public static IEnumerable<ACDItem> ByActorSno(this IEnumerable<ACDItem> source, SNOActor actorSno)
+        {
+            return source.Where(i => i.ActorSnoId == actorSno);
+        }
+
+        public static IEnumerable<ACDItem> ByQuality(this IEnumerable<ACDItem> source, TrinityItemQuality quality)
+        {
+            return source.Where(i =>
+            {
+                switch (quality)
+                {
+                    case TrinityItemQuality.Invalid:
+                        return false;
+                    case TrinityItemQuality.None:
+                        return false;
+                    case TrinityItemQuality.Inferior:
+                        return i.ItemQualityLevel == ItemQuality.Inferior;
+                    case TrinityItemQuality.Common:
+                        return i.ItemQualityLevel >= ItemQuality.Normal && i.ItemQualityLevel <= ItemQuality.Superior;
+                    case TrinityItemQuality.Magic:
+                        return i.ItemQualityLevel >= ItemQuality.Magic1 && i.ItemQualityLevel <= ItemQuality.Magic3;
+                    case TrinityItemQuality.Rare:
+                        return i.ItemQualityLevel >= ItemQuality.Rare4 && i.ItemQualityLevel <= ItemQuality.Rare6;
+                    case TrinityItemQuality.Legendary:
+                        return i.ItemQualityLevel == ItemQuality.Legendary;
+                    case TrinityItemQuality.Set:
+                        return i.IsSetItem();
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(quality), quality, null);
+                }
+            });
+        }
+
+        public static IEnumerable<ACDItem> GetStacksUpToQuantity(this IEnumerable<ACDItem> materialsStacks, int maxStackQuantity)
+        {
+            if (materialsStacks == null || !materialsStacks.Any() || materialsStacks.Count() == 1)
+            {
+                return materialsStacks;
+            }
+            long dbQuantity = 0, overlimit = 0;
+            var first = materialsStacks.First();
+            if (first.ItemStackQuantity == 0 && maxStackQuantity == 1 && materialsStacks.All(i => !i.IsCraftingReagent))
+            {
+                return materialsStacks.Take(maxStackQuantity);
+            }
+            var toBeAdded = materialsStacks.TakeWhile(db =>
+            {
+                var thisStackQuantity = db.ItemStackQuantity;
+                if (dbQuantity + thisStackQuantity < maxStackQuantity)
+                {
+                    dbQuantity += thisStackQuantity;
+                    return true;
+                }
+                overlimit++;
+                return overlimit == 1;
+            });
+            return toBeAdded.ToList();
         }
     }
 }

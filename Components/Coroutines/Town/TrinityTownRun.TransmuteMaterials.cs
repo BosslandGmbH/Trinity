@@ -80,13 +80,13 @@ namespace Trinity.Components.Coroutines.Town
 
             if (!GetSacraficialItems(to, excludeLegendaryUpgradeRares).Any())
             {
-                s_logger.Warn($"[{nameof(IsMaterialTransmutationPossible)}] You don't have enough valid weapon/armor/jewellery in backpack to convert '{from} ({GetCurrency(from)})' to '{to}'.");
+                s_logger.Debug($"[{nameof(IsMaterialTransmutationPossible)}] You don't have enough valid weapon/armor/jewellery in backpack to convert '{from} ({GetCurrency(from)})' to '{to}'.");
                 return false;
             }
 
             if (!HasCurrency(from))
             {
-                s_logger.Warn($"[{nameof(IsMaterialTransmutationPossible)}] You don't have enough backpack materials to convert '{from} ({GetCurrency(from)})' to '{to}', Deaths={Core.Inventory.Currency.DeathsBreath}");
+                s_logger.Debug($"[{nameof(IsMaterialTransmutationPossible)}] You don't have enough backpack materials to convert '{from} ({GetCurrency(from)})' to '{to}', Deaths={Core.Inventory.Currency.DeathsBreath}");
                 return false;
             }
 
@@ -321,7 +321,7 @@ namespace Trinity.Components.Coroutines.Town
 
         public static List<ACDItem> GetBackpackItemsOfQuality(List<ItemQuality> qualities)
         {
-            return Core.Inventory.Backpack.Where(i =>
+            return InventoryManager.Backpack.Where(i =>
             {
                 if (!i.IsValid)
                     return false;

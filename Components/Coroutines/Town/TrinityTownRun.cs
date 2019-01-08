@@ -12,6 +12,7 @@ using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
+using Zeta.Bot.Navigation;
 using Zeta.Bot.Settings;
 using Zeta.Common;
 using Zeta.Game;
@@ -140,14 +141,28 @@ namespace Trinity.Components.Coroutines.Town
                 return CoroutineResult.NoAction;
             }
 
-            if (!Core.Inventory.Backpack.Any(i => i.IsUnidentified))
+            if (!InventoryManager.Backpack.Any(i => i.IsUnidentified))
+            {
+                s_logger.Debug($"[{nameof(IdentifyItems)}] No unidentified items in Backpack.");
                 return CoroutineResult.Done;
+            }
 
             var bookActor = TownInfo.BookOfCain;
             if (bookActor == null)
             {
-                s_logger.Warn($"[{nameof(IdentifyItems)}] TownInfo.BookOfCain not found Act={ZetaDia.CurrentAct} WorldSnoId={ZetaDia.Globals.WorldSnoId}");
+                s_logger.Warn($"[{nameof(IdentifyItems)}] TownInfo.BookOfCain not found Act={ZetaDia.CurrentAct} WorldSnoId={(SNOWorld)ZetaDia.Globals.WorldSnoId}");
                 return CoroutineResult.Failed;
+            }
+
+            var actualBook = bookActor.GetActor();
+
+            switch (actualBook)
+            {
+                case null when await CommonCoroutines.MoveTo(bookActor.Position) != MoveResult.ReachedDestination:
+                    return CoroutineResult.Running;
+                case null:
+                    s_logger.Warn($"[{nameof(IdentifyItems)}] TownInfo.BookOfCain.GetActor() not found Act={ZetaDia.CurrentAct} WorldSnoId={(SNOWorld)ZetaDia.Globals.WorldSnoId}");
+                    return CoroutineResult.Failed;
             }
 
             if (await CommonCoroutines.MoveAndInteract(
@@ -301,10 +316,10 @@ namespace Trinity.Components.Coroutines.Town
             if (types == null)
                 types = Core.Settings.KanaisCube.GetRareUpgradeSettings();
 
-            if (!Core.Inventory.Backpack.Any())
+            if (!InventoryManager.Backpack.Any())
                 s_logger.Debug($"[{nameof(GetBackPackRares)}] No items were found in backpack!");
 
-            var rares = Core.Inventory.Backpack.Where(i =>
+            var rares = InventoryManager.Backpack.Where(i =>
             {
                 if (Core.Inventory.InvalidAnnIds.Contains(i.AnnId))
                     return false;

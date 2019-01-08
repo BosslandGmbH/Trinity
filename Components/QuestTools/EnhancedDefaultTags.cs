@@ -4,6 +4,7 @@ using Zeta.Bot.Profile;
 using Zeta.Bot.Profile.Common;
 using Zeta.Bot.Profile.Composites;
 using Zeta.Common;
+using Zeta.Game;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 using Action = Zeta.TreeSharp.Action;
@@ -37,7 +38,7 @@ namespace Trinity.Components.QuestTools
     {
         public EnhancedLeaveGameTag()
         {
-            QuestId = QuestId <= 0 ? 1 : QuestId;
+            QuestId = (int)QuestId <= 0 ? (SNOQuest)1 : QuestId;
         }
 
         private bool _isDone;
@@ -67,7 +68,7 @@ namespace Trinity.Components.QuestTools
     {
         public EnhancedLoadProfileTag()
         {
-            QuestId = QuestId <= 0 ? 1 : QuestId;
+            QuestId = (int)QuestId <= 0 ? (SNOQuest)1 : QuestId;
         }
 
         private bool _isDone;
@@ -147,7 +148,7 @@ namespace Trinity.Components.QuestTools
     {
         public EnhancedWaitTimerTag()
         {
-            QuestId = QuestId <= 0 ? 1 : QuestId;
+            QuestId = (int)QuestId <= 0 ? (SNOQuest)1 : QuestId;
         }
 
         private bool _isDone;
@@ -177,7 +178,7 @@ namespace Trinity.Components.QuestTools
     {
         public EnhancedUseObjectTag()
         {
-            QuestId = QuestId <= 0 ? 1 : QuestId;
+            QuestId = (int)QuestId <= 0 ? (SNOQuest)1 : QuestId;
         }
 
         private bool _isDone;
@@ -207,7 +208,7 @@ namespace Trinity.Components.QuestTools
     {
         public EnhancedUsePowerTag()
         {
-            QuestId = QuestId <= 0 ? 1 : QuestId;
+            QuestId = (int)QuestId <= 0 ? (SNOQuest)1 : QuestId;
         }
 
         private bool _isDone;
@@ -237,7 +238,7 @@ namespace Trinity.Components.QuestTools
     {
         public EnhancedToggleTargetingTag()
         {
-            QuestId = QuestId <= 0 ? 1 : QuestId;
+            QuestId = (int)QuestId <= 0 ? (SNOQuest)1 : QuestId;
         }
 
         private bool _isDone;

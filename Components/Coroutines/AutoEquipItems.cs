@@ -586,7 +586,7 @@ namespace Trinity.Components.Coroutines
         public int GoldAmount { get; set; }
         public int BalanceId { get; set; }
         public int DynamicId { get; set; }
-        public int ActorSnoId { get; set; }
+        public SNOActor ActorSnoId { get; set; }
         public bool OneHanded { get; set; }
         public bool TwoHanded { get; set; }
         public DyeType DyeType { get; set; }
@@ -948,7 +948,7 @@ namespace Trinity.Components.Coroutines
         {
             unchecked
             {
-                return (DynamicId * 397) ^ ActorSnoId;
+                return (DynamicId * 397) ^ (int)ActorSnoId;
             }
         }
     }

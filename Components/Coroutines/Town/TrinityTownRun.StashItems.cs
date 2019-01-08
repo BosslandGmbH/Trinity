@@ -124,7 +124,7 @@ namespace Trinity.Components.Coroutines.Town
             if (!ZetaDia.IsInTown)
                 return CoroutineResult.NoAction;
 
-            var item = Core.Inventory.Backpack.FirstOrDefault(ShouldStash);
+            var item = InventoryManager.Backpack.FirstOrDefault(ShouldStash);
             if (item == null)
                 return CoroutineResult.Done;
 
@@ -220,7 +220,7 @@ namespace Trinity.Components.Coroutines.Town
             return Core.Inventory.Stash.FirstOrDefault(i => i.InventoryRow == row && i.InventoryColumn == col);
         }
 
-        public static ACDItem GetNextStashItem(int currentCol, int currentRow, int actorSnoId = -1)
+        public static ACDItem GetNextStashItem(int currentCol, int currentRow, SNOActor actorSnoId = (SNOActor)(-1))
         {
             if (actorSnoId > 0)
             {

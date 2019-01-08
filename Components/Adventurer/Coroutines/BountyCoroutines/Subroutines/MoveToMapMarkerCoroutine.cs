@@ -10,14 +10,15 @@ using Trinity.Components.Adventurer.Util;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Modules;
 using Zeta.Common;
+using Zeta.Game;
 using Zeta.Game.Internals;
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
     public class MoveToMapMarkerCoroutine : IBountySubroutine
     {
-        private readonly int _questId;
-        private readonly int _worldId;
+        private readonly SNOQuest _questId;
+        private readonly SNOWorld _worldId;
         private readonly int _markerHash;
 
         private bool _isDone;
@@ -55,7 +56,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public bool IsDone => _isDone || AdvDia.CurrentWorldId != _worldId;
 
-        public MoveToMapMarkerCoroutine(int questId, int worldId, int markerHash, WorldMarkerType type, bool zergAllowSafe = true)
+        public MoveToMapMarkerCoroutine(SNOQuest questId, SNOWorld worldId, int markerHash, WorldMarkerType type, bool zergAllowSafe = true)
         {
             _questId = questId;
             _worldId = worldId;
@@ -66,7 +67,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         }
 
-        public MoveToMapMarkerCoroutine(int questId, int worldId, int markerHash, int doesNothing, bool zergAllowSafe = true)
+        public MoveToMapMarkerCoroutine(SNOQuest questId, SNOWorld worldId, int markerHash, int doesNothing, bool zergAllowSafe = true)
         {
             _questId = questId;
             _worldId = worldId;
@@ -76,7 +77,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         }
 
-        public MoveToMapMarkerCoroutine(int questId, int worldId, int markerHash, bool zergAllowSafe = true)
+        public MoveToMapMarkerCoroutine(SNOQuest questId, SNOWorld worldId, int markerHash, bool zergAllowSafe = true)
         {
             _questId = questId;
             _worldId = worldId;
@@ -86,7 +87,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         }
 
-        public MoveToMapMarkerCoroutine(int questId, int worldId, WorldMarkerType type, bool zergAllowSafe = true)
+        public MoveToMapMarkerCoroutine(SNOQuest questId, SNOWorld worldId, WorldMarkerType type, bool zergAllowSafe = true)
         {
             _questId = questId;
             _worldId = worldId;

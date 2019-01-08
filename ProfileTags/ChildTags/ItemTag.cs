@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Trinity.Settings;
+using Zeta.Game;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags.EmbedTags
@@ -10,7 +11,7 @@ namespace Trinity.ProfileTags.EmbedTags
         [XmlAttribute("actorId")]
         [XmlAttribute("id")]
         [DefaultValue(0)]
-        public int Id { get; set; }
+        public SNOActor Id { get; set; }
 
         [XmlAttribute("name")]
         public string Name { get; set; }

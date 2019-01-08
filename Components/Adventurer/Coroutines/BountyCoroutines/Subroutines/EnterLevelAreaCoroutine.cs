@@ -23,13 +23,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
     public class EnterLevelAreaCoroutine : IBountySubroutine
     {
-        private readonly int _questId;
-        private readonly int _sourceWorldId;
-        private int _destinationWorldId;
+        private readonly SNOQuest _questId;
+        private readonly SNOWorld _sourceWorldId;
+        private SNOWorld _destinationWorldId;
         private readonly int _portalMarker;
-        private int _portalActorId;
-        private int _discoveredPortalActorId;
-        private int _prePortalWorldDynamicId;
+        private SNOActor _portalActorId;
+        private SNOActor _discoveredPortalActorId;
+        private SNOWorld _prePortalWorldDynamicId;
         private bool _isDone;
         private States _state;
         private int _objectiveScanRange = 5000;
@@ -81,11 +81,11 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             }
         }
 
-        public int SourceWorldId => _sourceWorldId;
+        public SNOWorld SourceWorldId => _sourceWorldId;
 
-        public int DestinationWorldId => _destinationWorldId;
+        public SNOWorld DestinationWorldId => _destinationWorldId;
 
-        public EnterLevelAreaCoroutine(int questId, int sourceWorldId, int destinationWorldId, int portalMarker, IEnumerable<int> portalActorIds, bool prioritizeExitScene = false)
+        public EnterLevelAreaCoroutine(SNOQuest questId, SNOWorld sourceWorldId, SNOWorld destinationWorldId, int portalMarker, IEnumerable<SNOActor> portalActorIds, bool prioritizeExitScene = false)
         {
             _questId = questId;
             _sourceWorldId = sourceWorldId;
@@ -96,7 +96,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             Id = Guid.NewGuid();
         }
 
-        public EnterLevelAreaCoroutine(int questId, int sourceWorldId, int destinationWorldId, int portalMarker, int portalActorId, TimeSpan timeout)
+        public EnterLevelAreaCoroutine(SNOQuest questId, SNOWorld sourceWorldId, SNOWorld destinationWorldId, int portalMarker, SNOActor portalActorId, TimeSpan timeout)
         {
             _questId = questId;
             _sourceWorldId = sourceWorldId;
@@ -107,7 +107,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             Id = Guid.NewGuid();
         }
 
-        public EnterLevelAreaCoroutine(int questId, int sourceWorldId, int destinationWorldId, int portalMarker, int portalActorId, bool prioritizeExitScene = false)
+        public EnterLevelAreaCoroutine(SNOQuest questId, SNOWorld sourceWorldId, SNOWorld destinationWorldId, int portalMarker, SNOActor portalActorId, bool prioritizeExitScene = false)
         {
             _questId = questId;
             _sourceWorldId = sourceWorldId;
@@ -119,7 +119,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         }
 
 
-        public EnterLevelAreaCoroutine(int questId, int sourceWorldId, IList<BountyHelpers.ObjectiveActor> objectives)
+        public EnterLevelAreaCoroutine(SNOQuest questId, SNOWorld sourceWorldId, IList<BountyHelpers.ObjectiveActor> objectives)
         {
             _questId = questId;
             _sourceWorldId = sourceWorldId;
@@ -425,7 +425,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private WorldScene _nearestScene;
         private Vector3 _deathGateLocation;
         private DateTime _nearestSceneCooldown = DateTime.MinValue;
-        private readonly IEnumerable<int> _portalActorIds;
+        private readonly IEnumerable<SNOActor> _portalActorIds;
         private readonly TimeSpan _timeoutDuration;
         private DateTime _timeoutStartTime = DateTime.MinValue;
         private DateTime _timeoutEndTime = DateTime.MaxValue;
@@ -486,7 +486,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     }
                 }
                 // Belial
-                if (_objectiveLocation == Vector3.Zero && _portalActorId == 159574)
+                if (_objectiveLocation == Vector3.Zero && _portalActorId == SNOActor.Boss_Portal_Belial)
                 {
                     _objectiveLocation = BountyHelpers.ScanForActorLocation(_portalActorId, _objectiveScanRange);
                 }

@@ -9,6 +9,7 @@ using Trinity.Components.QuestTools;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.ProfileTags.EmbedTags;
 using Trinity.Settings;
+using Zeta.Game;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags
@@ -52,7 +53,7 @@ namespace Trinity.ProfileTags
                     }
                 }
 
-                if (!await TrinityTownRun.TakeItemsFromStash(new List<int> { item.Id }, Math.Max(1, item.Quantity)))
+                if (!await TrinityTownRun.TakeItemsFromStash(new List<SNOActor> { item.Id }, Math.Max(1, item.Quantity)))
                 {
                     Core.Logger.Error("[TakeFromStash] TakeItemsFromStash coroutine failed.");
                     return true;

@@ -1,4 +1,5 @@
 ﻿using Zeta.Common;
+using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Game.Exploration
 {
@@ -11,8 +12,8 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         Vector2 BottomLeft { get; }
         Vector2 TopRight { get; }
         Vector2 BottomRight { get; }
-        int DynamicWorldId { get; }
-        int LevelAreaId { get; }
+        SNOWorld DynamicWorldId { get; }
+        SNOLevelArea LevelAreaId { get; }
         NodeFlags NodeFlags { get; set; }
         GridPoint GridPoint { get; set; }
     }

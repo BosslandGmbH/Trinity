@@ -14,46 +14,46 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public static float ExplorationNodeBoxTolerance => OpenWorldIds.Contains(AdvDia.CurrentWorldId) ? 0.2f : 0.1f;
 
-        public static HashSet<int> OpenWorldIds = new HashSet<int>
+        public static HashSet<SNOWorld> OpenWorldIds = new HashSet<SNOWorld>
                                                 {
-                                                    71150,
-                                                    70885,
-                                                    95804,
-                                                    338944,
-                                                    267412
+                                                    SNOWorld.trOUT_Town,
+                                                    SNOWorld.caOUT_Town,
+                                                    SNOWorld.A3_Battlefields_02,
+                                                    SNOWorld.x1_westm_Graveyard_DeathOrb,
+                                                    SNOWorld.x1_Bog_01
                                                 };
 
-        public static HashSet<int> FortressLevelAreaIds = new HashSet<int>
+        public static HashSet<SNOLevelArea> FortressLevelAreaIds = new HashSet<SNOLevelArea>
                                                 {
-                                                    370512,
-                                                    366169,
-                                                    360494,
-                                                    349787,
-                                                    340533,
-                                                    276361,
-                                                    271271,
-                                                    271234,
-                                                    333758,
+                                                    SNOLevelArea.x1_fortress_level_01_Master,
+                                                    SNOLevelArea.x1_fortress_level_02_Master,
+                                                    SNOLevelArea.x1_fortress_level_02_Intro,
+                                                    SNOLevelArea.X1_fortress_malthael_entrance,
+                                                    SNOLevelArea.x1_fortress_level_01_B,
+                                                    SNOLevelArea.x1_Fortress_MalthaelArena,
+                                                    SNOLevelArea.x1_fortress_level_02,
+                                                    SNOLevelArea.x1_fortress_level_01,
+                                                    SNOLevelArea.X1_LR_Tileset_Fortress,
                                                 };
 
-        public static HashSet<int> FortressWorldIds = new HashSet<int>
+        public static HashSet<SNOWorld> FortressWorldIds = new HashSet<SNOWorld>
                                                 {
-                                                    271233,
-                                                    271235,
+                                                    SNOWorld.x1_fortress_level_01,
+                                                    SNOWorld.x1_fortress_level_02,
                                                 };
 
         public static readonly HashSet<string> IgnoreScenes = new HashSet<string>
-                                                              {
+        {
             "caOut_Oasis_Sub240_Water_Money"
         };
 
-        public static readonly Dictionary<Act, int> ActHubWorldIds = new Dictionary<Act, int>
+        public static readonly Dictionary<Act, SNOWorld> ActHubWorldIds = new Dictionary<Act, SNOWorld>
                                                                      {
-                                                                         {Act.A1, 332336},
-                                                                         {Act.A2, 161472},
-                                                                         {Act.A3, 172909},
-                                                                         {Act.A4, 172909},
-                                                                         {Act.A5, 304235},
+                                                                         {Act.A1, SNOWorld.X1_Tristram_Adventure_Mode_Hub},
+                                                                         {Act.A2, SNOWorld.caOUT_RefugeeCamp},
+                                                                         {Act.A3, SNOWorld.a3dun_hub_keep},
+                                                                         {Act.A4, SNOWorld.a3dun_hub_keep},
+                                                                         {Act.A5, SNOWorld.X1_Westmarch_Hub},
                                                                      };
 
         public const int GreedPortalSNO = 393030;

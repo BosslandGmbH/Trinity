@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
+using Zeta.Game;
 
 namespace Trinity.Settings.ItemList
 {
     public static class ItemListPresets
     {
-        private static HashSet<int> _patch24NewOnlyItems;
-        public static HashSet<int> Patch24NewOnlyItems
+        private static HashSet<SNOActor> _patch24NewOnlyItems;
+        public static HashSet<SNOActor> Patch24NewOnlyItems
         {
-            get { return _patch24NewOnlyItems ?? (_patch24NewOnlyItems = new HashSet<int>(_patch24ItemsNewOnlySource.DistinctBy(i => i.Id).Select(i => i.Id))); }
+            get { return _patch24NewOnlyItems ?? (_patch24NewOnlyItems = new HashSet<SNOActor>(_patch24ItemsNewOnlySource.DistinctBy(i => i.Id).Select(i => i.Id))); }
         }
 
         private static readonly List<Item> _patch24ItemsNewOnlySource = new List<Item>()
@@ -91,10 +92,10 @@ namespace Trinity.Settings.ItemList
             Legendary.LitanyOfTheUndaunted,             
         };
 
-        private static HashSet<int> _patch24items;
-        public static HashSet<int> Patch24Items
+        private static HashSet<SNOActor> _patch24items;
+        public static HashSet<SNOActor> Patch24Items
         {
-            get { return _patch24items ?? (_patch24items = new HashSet<int>(_patch24ItemsSource.DistinctBy(i => i.Id).Select(i => i.Id))); }
+            get { return _patch24items ?? (_patch24items = new HashSet<SNOActor>(_patch24ItemsSource.DistinctBy(i => i.Id).Select(i => i.Id))); }
         }
 
         private static readonly List<Item> _patch24ItemsSource = new List<Item>()

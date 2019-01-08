@@ -16,7 +16,6 @@ using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;
 
-
 namespace Trinity.Modules
 {
     public class GridEnricher : Module
@@ -26,7 +25,7 @@ namespace Trinity.Modules
         public const float GizmoWeightRadiusFactor = 1f;
         public const int MaxDistance = 70;
 
-        public HashSet<int> ActiveAvoidanceSnoIds = new HashSet<int>();
+        public HashSet<SNOActor> ActiveAvoidanceSnoIds = new HashSet<SNOActor>();
 
         private readonly HashSet<GizmoType> _flaggedGizmoTypes = new HashSet<GizmoType>
         {
@@ -95,7 +94,7 @@ namespace Trinity.Modules
                 var avoidanceNodes = new AvoidanceLayer();
                 var monsterNodes = new AvoidanceLayer();
                 var obstacleNodes = new AvoidanceLayer();
-                var activeAvoidanceSnoIds = new HashSet<int>();
+                var activeAvoidanceSnoIds = new HashSet<SNOActor>();
                 var kiteFromNodes = new AvoidanceLayer();
 
                 var nodePool = TrinityGrid.Instance
@@ -377,7 +376,7 @@ namespace Trinity.Modules
             if (actor.GizmoType != GizmoType.Gate)
                 return;
 
-            if (actor.ActorSnoId == 3048) // a2dun_Zolt_Sand_Wall
+            if (actor.ActorSnoId == SNOActor.a2dun_Zolt_Sand_Wall) // a2dun_Zolt_Sand_Wall
             {
                 var startPoint = MathEx.GetPointAt(actor.Position, 15f, MathEx.WrapAngle((float)(actor.Rotation - Math.PI / 2)));
                 var endPoint = MathEx.GetPointAt(actor.Position, 15f, MathEx.WrapAngle((float)(actor.Rotation + Math.PI / 2)));

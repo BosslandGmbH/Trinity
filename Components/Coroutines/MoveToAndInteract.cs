@@ -50,7 +50,7 @@ namespace Trinity.Components.Coroutines
         /// <param name="actorId">id of actor to interact with</param>
         /// <param name="position">position from which to interact</param>
         /// <param name="interactLimit">maximum number of times to interact</param>
-        public static async Task<bool> Execute(Vector3 position, int actorId, int interactLimit = 5)
+        public static async Task<bool> Execute(Vector3 position, SNOActor actorId, int interactLimit = 5)
         {
             if (position == Vector3.Zero)
                 return false;
@@ -63,7 +63,7 @@ namespace Trinity.Components.Coroutines
 
             DiaObject actor;
             while ((actor = ZetaDia.Actors.GetActorsOfType<DiaObject>(true)
-                           .FirstOrDefault(a => a.ActorSnoId == actorId)
+                           .FirstOrDefault(a => (SNOActor)a.ActorSnoId == actorId)
                    ) == null &&
                    await CommonCoroutines.MoveAndStop(position, 40f, "Close to target") != MoveResult.ReachedDestination)
             {

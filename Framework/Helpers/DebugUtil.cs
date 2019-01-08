@@ -101,7 +101,7 @@ namespace Trinity.Framework.Helpers
         private static DateTime _lastCacheClear = DateTime.MinValue;
         private static Dictionary<int, CachedBuff> _lastBuffs = new Dictionary<int, CachedBuff>();
         private static Dictionary<string, DateTime> _seenAnimationCache = new Dictionary<string, DateTime>();
-        private static Dictionary<int, DateTime> _seenUnknownCache = new Dictionary<int, DateTime>();
+        private static Dictionary<SNOActor, DateTime> _seenUnknownCache = new Dictionary<SNOActor, DateTime>();
 
         public static void LogAnimation(TrinityActor cacheObject)
         {
@@ -407,7 +407,7 @@ namespace Trinity.Framework.Helpers
         internal static void DumpItemSNOReference()
         {
             string[] names = Enum.GetNames(typeof(SNOActor));
-            int[] values = (int[])Enum.GetValues(typeof(SNOActor));
+            SNOActor[] values = (SNOActor[])Enum.GetValues(typeof(SNOActor));
             var toLog = new List<string>();
             for (int i = 0; i < names.Length; i++)
             {
@@ -461,7 +461,7 @@ namespace Trinity.Framework.Helpers
         {
             Core.Logger.Log("Starting ItemList Backpack Test");
 
-            var backpackItems = Core.Inventory.Backpack;
+            var backpackItems = InventoryManager.Backpack as ACDItem[] ?? InventoryManager.Backpack.ToArray();
             var total = backpackItems.Count();
             var toBeStashed = 0;
 

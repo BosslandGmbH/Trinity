@@ -1,8 +1,5 @@
 ﻿using System.Linq;
-using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Actors.Attributes;
 using Zeta.Game;
-using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Framework.Actors.Properties
 {
@@ -22,32 +19,32 @@ namespace Trinity.Framework.Actors.Properties
             return player?.HeroId ?? -1;
         }
 
-        public static ActorClass GetActorClass(int actorSnoId)
+        public static ActorClass GetActorClass(SNOActor actorSnoId)
         {
             switch (actorSnoId)
             {
-                case (int)SNOActor.Wizard_Female:
-                case (int)SNOActor.Wizard_Male:
+                case SNOActor.Wizard_Female:
+                case SNOActor.Wizard_Male:
                     return ActorClass.Wizard;
 
-                case (int)SNOActor.Barbarian_Female:
-                case (int)SNOActor.Barbarian_Male:
+                case SNOActor.Barbarian_Female:
+                case SNOActor.Barbarian_Male:
                     return ActorClass.Barbarian;
 
-                case (int)SNOActor.Demonhunter_Female:
-                case (int)SNOActor.Demonhunter_Male:
+                case SNOActor.Demonhunter_Female:
+                case SNOActor.Demonhunter_Male:
                     return ActorClass.DemonHunter;
 
-                case (int)SNOActor.X1_Crusader_Female:
-                case (int)SNOActor.X1_Crusader_Male:
+                case SNOActor.X1_Crusader_Female:
+                case SNOActor.X1_Crusader_Male:
                     return ActorClass.Crusader;
 
-                case (int)SNOActor.WitchDoctor_Female:
-                case (int)SNOActor.WitchDoctor_Male:
+                case SNOActor.WitchDoctor_Female:
+                case SNOActor.WitchDoctor_Male:
                     return ActorClass.Witchdoctor;
 
-                case (int)SNOActor.Monk_Female:
-                case (int)SNOActor.Monk_Male:
+                case SNOActor.Monk_Female:
+                case SNOActor.Monk_Male:
                     return ActorClass.Monk;
             }
             return ActorClass.Invalid;

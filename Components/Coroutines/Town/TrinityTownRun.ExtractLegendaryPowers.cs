@@ -30,7 +30,7 @@ namespace Trinity.Components.Coroutines.Town
             RawItemType.TemplarSpecial,
         };
 
-        public static HashSet<int> DoNotExtractItemIds = new HashSet<int>()
+        public static HashSet<SNOActor> DoNotExtractItemIds = new HashSet<SNOActor>()
         {
             Legendary.PigSticker.Id,
             Legendary.CorruptedAshbringer.Id
@@ -55,14 +55,14 @@ namespace Trinity.Components.Coroutines.Town
                 {
                     if (kule.IsQuestGiver)
                     {
-                        s_logger.Info($"[{nameof(IsLegendaryPowerExtractionPossible)}] Cube is not unlocked yet");
+                        s_logger.Debug($"[{nameof(IsLegendaryPowerExtractionPossible)}] Cube is not unlocked yet");
                         return false;
                     }
                 }
 
                 if (!HasCurrencyRequired)
                 {
-                    s_logger.Info($"[{nameof(IsLegendaryPowerExtractionPossible)}] Unable to find the required materials!");
+                    s_logger.Debug($"[{nameof(IsLegendaryPowerExtractionPossible)}] Unable to find the required materials!");
                     return false;
                 }
 
@@ -73,7 +73,7 @@ namespace Trinity.Components.Coroutines.Town
 
                 if (!backpackCandidates.Any() && !stashCandidates.Any())
                 {
-                    s_logger.Info($"[{nameof(IsLegendaryPowerExtractionPossible)}] There are no items that need extraction!");
+                    s_logger.Debug($"[{nameof(IsLegendaryPowerExtractionPossible)}] There are no items that need extraction!");
                     return false;
                 }
 
@@ -83,10 +83,10 @@ namespace Trinity.Components.Coroutines.Town
 
         private static IEnumerable<ACDItem> GetLegendaryExtractionCandidates(InventorySlot slot)
         {
-            var alreadyCubedIds = new HashSet<int>(ZetaDia.Storage.PlayerDataManager.ActivePlayerData.KanaisPowersExtractedActorSnoIds);
-            var usedIds = new HashSet<int>();
+            var alreadyCubedIds = new HashSet<SNOActor>(ZetaDia.Storage.PlayerDataManager.ActivePlayerData.KanaisPowersExtractedActorSnoIds);
+            var usedIds = new HashSet<SNOActor>();
 
-            foreach (var item in Core.Inventory.Where(i => i.InventorySlot == slot))
+            foreach (var item in InventoryManager.AllItems.Where(i => i.InventorySlot == slot))
             {
                 if (!item.IsValid)
                     continue;
@@ -111,11 +111,15 @@ namespace Trinity.Components.Coroutines.Town
 
                 if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyTrashed &&
                     Combat.TrinityCombat.Loot.ShouldStash(item))
+                {
                     continue;
+                }
 
                 if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyNonAncient &&
                     !item.Stats.IsAncient)
+                {
                     continue;
+                }
 
                 if (string.IsNullOrEmpty(Legendary.GetItem(item)?.LegendaryAffix))
                     continue;

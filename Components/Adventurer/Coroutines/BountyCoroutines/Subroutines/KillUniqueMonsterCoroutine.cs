@@ -16,9 +16,9 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
     public class KillUniqueMonsterCoroutine : IBountySubroutine
     {
-        private readonly int _questId;
-        private readonly int _worldId;
-        private readonly int _actorId;
+        private readonly SNOQuest _questId;
+        private readonly SNOWorld _worldId;
+        private readonly SNOActor _actorId;
         private readonly int _marker;
         private bool _isDone;
         private States _state;
@@ -61,7 +61,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public bool IsDone => _isDone || AdvDia.CurrentWorldId != _worldId || !BountyData.QuestData.IsObjectiveActive(QuestStepObjectiveType.KillMonster);
 
-        public KillUniqueMonsterCoroutine(int questId, int worldId, int actorId, int marker)
+        public KillUniqueMonsterCoroutine(SNOQuest questId, SNOWorld worldId, SNOActor actorId, int marker)
         {
             _questId = questId;
             _worldId = worldId;

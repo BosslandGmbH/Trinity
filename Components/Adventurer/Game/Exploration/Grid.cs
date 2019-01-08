@@ -332,6 +332,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public abstract void Reset();
 
-        public int WorldDynamicId { get; set; }
+        public SNOWorld WorldDynamicId { get; set; }
     }
 }

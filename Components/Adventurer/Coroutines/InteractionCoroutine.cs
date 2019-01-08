@@ -49,7 +49,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         #endregion State
 
-        private readonly int _actorId;
+        private readonly SNOActor _actorId;
         private readonly TimeSpan _timeOut;
         private readonly TimeSpan _sleepTime;
         private readonly int _interactAttempts;
@@ -59,7 +59,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         private bool _isPortal;
         private bool _isNephalemStone;
         private bool _isOrek;
-        private int _startingWorldId;
+        private SNOWorld _startingWorldId;
         private readonly bool _ignoreSanityChecks;
         private readonly string _endAnimation;
         private readonly string _startAnimation;
@@ -67,7 +67,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         private DateTime _castWaitStartTime = DateTime.MinValue;
         private readonly int _markerHash;
 
-        public InteractionCoroutine(int actorId, TimeSpan timeOut, TimeSpan sleepTime, int interactAttempts = 3,
+        public InteractionCoroutine(SNOActor actorId, TimeSpan timeOut, TimeSpan sleepTime, int interactAttempts = 3,
             bool ignoreSanityChecks = false, string startAnimation = "", string endAnimation = "", int markerHash = 0)
         {
             _actorId = actorId;
@@ -177,11 +177,11 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 _isQuestGiver = unit.IsQuestGiver;
             }
-            if (actor.ActorSnoId == 364715)
+            if (actor.ActorSnoId == SNOActor.x1_OpenWorld_LootRunObelisk_B)
             {
                 _isNephalemStone = true;
             }
-            if (actor.ActorSnoId == 363744)
+            if (actor.ActorSnoId == SNOActor.X1_LR_Nephalem)
             {
                 _isOrek = true;
             }

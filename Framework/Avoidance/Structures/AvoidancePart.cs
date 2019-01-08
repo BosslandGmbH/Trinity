@@ -16,7 +16,7 @@ namespace Trinity.Framework.Avoidance.Structures
         /// <summary>
         /// Id of the actor
         /// </summary>
-        public int ActorSnoId;
+        public SNOActor ActorSnoId;
 
         /// <summary>
         /// Role of this component

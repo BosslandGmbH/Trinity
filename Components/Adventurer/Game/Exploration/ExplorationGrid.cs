@@ -14,7 +14,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
     {
         private const int GRID_BOUNDS = 500;
 
-        private static readonly ConcurrentDictionary<int, List<Vector3>> KnownPositions = new ConcurrentDictionary<int, List<Vector3>>();
+        private static readonly ConcurrentDictionary<SNOWorld, List<Vector3>> KnownPositions = new ConcurrentDictionary<SNOWorld, List<Vector3>>();
 
         private static Lazy<ExplorationGrid> _currentGrid;
         private static Lazy<ExplorationGrid> _lastGrid;
@@ -24,7 +24,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             BotMain.OnStart += (ibot) => Clear();
         }
 
-        public static ExplorationGrid GetWorldGrid(int worldDynamicId)
+        public static ExplorationGrid GetWorldGrid(SNOWorld worldDynamicId)
         {
             var worldId = ZetaDia.Globals.WorldId;
             if (_lastGrid?.Value?.WorldDynamicId == worldId)

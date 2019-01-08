@@ -66,7 +66,7 @@ namespace Trinity.Modules
                 var included = new List<TrinityActor>();
                 var ignored = new List<TrinityActor>();
 
-                foreach (var actor in Core.Actors.OfType<TrinityActor>())
+                foreach (TrinityActor actor in Core.Actors.OfType<TrinityActor>())
                 {
                     try
                     {
@@ -153,6 +153,14 @@ namespace Trinity.Modules
                     s_logger.Verbose($"[{nameof(ShouldTargetActor)}] IGNORE: Avoidance");
                     return false;
 
+                case TrinityObjectType.Environment:
+                    s_logger.Verbose($"[{nameof(ShouldTargetActor)}] IGNORE: Environment");
+                    return false;
+
+                case TrinityObjectType.Banner:
+                    s_logger.Verbose($"[{nameof(ShouldTargetActor)}] IGNORE: Banner");
+                    return false;
+
                 case TrinityObjectType.Destructible:
                 case TrinityObjectType.Door:
                 case TrinityObjectType.Barricade:
@@ -162,12 +170,11 @@ namespace Trinity.Modules
                 case TrinityObjectType.HealthWell:
                 case TrinityObjectType.CursedChest:
                 case TrinityObjectType.CursedShrine:
-                    s_logger.Debug($"[{nameof(ShouldTargetActor)}] SPECIAL: ShouldIncludeGizmo - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
                     return ShouldIncludeGizmo(cacheObject);
 
                 default:
                     var objectType = cacheObject.ToDiaObject()?.GetType().FullName;
-                    s_logger.Debug($"[{nameof(ShouldTargetActor)}] IGNORE: Unhandled TrinityObjectType - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}, ObjectType: \"{objectType}\"");
+                    s_logger.Debug($"[{nameof(ShouldTargetActor)}] IGNORE: Unhandled TrinityObjectType - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}, ObjectType: \"{objectType}\", TrinityObjectType: \"{cacheObject.Type}\"");
                     return false;
             }
         }
@@ -378,56 +385,63 @@ namespace Trinity.Modules
 
         private bool ShouldIncludeUnit(TrinityActor cacheObject)
         {
-            //// Uncomment to ignore juggernauts
+            //TODO: Uncomment to ignore juggernauts
             //if (cacheObject.CommonData.AffixIds.Contains(-464468964))
             //    return false;
-
-            if (cacheObject.IsSameTeam && !cacheObject.IsQuestGiver)
-            {
-                cacheObject.AddCacheInfo("SameTeam");
-                return false;
-            }
-
-            if (cacheObject.IsNoDamage && !cacheObject.IsQuestGiver)
-            {
-                cacheObject.AddCacheInfo("UnitNoDamage");
-                return false;
-            }
-
-            if (cacheObject.IsFriendly && !cacheObject.IsQuestGiver)
-            {
-                cacheObject.AddCacheInfo("Friendly");
-                return false;
-            }
-
+            
             if (cacheObject.MonsterRace == MonsterRace.Unknown)
             {
-                cacheObject.AddCacheInfo("InvalidRace");
+                s_logger.Debug($"[{nameof(ShouldIncludeUnit)}] IGNORE: MonsterRace == Unknown");
                 return false;
             }
 
-            if (cacheObject.IsInvulnerable && !cacheObject.IsQuestGiver && !cacheObject.IsElite)
+            if (!cacheObject.IsQuestGiver)
             {
-                // Include corpulents even when they are invulnerable otherwise it messes up the avoidance.
-                if (IsCorpulent(cacheObject))
-                    return true;
+                if (cacheObject.IsSameTeam)
+                {
+                    s_logger.Verbose($"[{nameof(ShouldIncludeUnit)}] IGNORE: IsSameTeam");
+                    return false;
+                }
 
-                cacheObject.AddCacheInfo("Invulnerable");
-                return false;
+                if (cacheObject.IsNoDamage)
+                {
+                    s_logger.Debug($"[{nameof(ShouldIncludeUnit)}] IGNORE: IsNoDamage");
+                    return false;
+                }
+
+                if (cacheObject.IsFriendly)
+                {
+                    s_logger.Debug($"[{nameof(ShouldIncludeUnit)}] IGNORE: IsFriendly");
+                    return false;
+                }
+
+                if (cacheObject.IsInvulnerable && !cacheObject.IsElite)
+                {
+                    // Include corpulents even when they are invulnerable otherwise it messes up the avoidance.
+                    if (IsCorpulent(cacheObject))
+                    {
+                        s_logger.Debug($"[{nameof(ShouldIncludeUnit)}] INCLUDE: IsCorpulent");
+                        return true;
+                    }
+                    
+                    s_logger.Verbose($"[{nameof(ShouldIncludeUnit)}] IGNORE: IsInvulnerable");
+                    return false;
+                }
             }
 
             if (cacheObject.IsSummonedByPlayer)
             {
-                cacheObject.AddCacheInfo("SummonedByPlayer");
+                s_logger.Verbose($"[{nameof(ShouldIncludeUnit)}] IGNORE: SummonedByPlayer");
                 return false;
             }
 
             if (cacheObject.IsDead)
             {
-                cacheObject.AddCacheInfo("Dead");
+                s_logger.Verbose($"[{nameof(ShouldIncludeUnit)}] IGNORE: IsDead");
                 return false;
             }
 
+            s_logger.Verbose($"[{nameof(ShouldIncludeUnit)}] INCLUDE: Default");
             return true;
         }
 
@@ -546,7 +560,7 @@ namespace Trinity.Modules
                 return false;
             }
 
-            s_logger.Debug($"[{nameof(ShouldIncludeGizmo)}] INTERACT: Default - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
+            s_logger.Verbose($"[{nameof(ShouldIncludeGizmo)}] INTERACT: Default - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: 0x{cacheObject?.ActorSnoId:x8}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
             return true;
         }
 

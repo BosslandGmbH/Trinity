@@ -25,7 +25,7 @@ namespace Trinity.Modules
         public Vector3 Position { get; set; }
         public int NameHash { get; set; }
         public WorldMarkerType MarkerType { get; set; }
-        public int WorldSnoId { get; set; }
+        public SNOWorld WorldSnoId { get; set; }
         public int Id { get; set; }
 
         public override string ToString() => $"{NameHash} at {Position} Distance {Distance} Type={MarkerType} TextureId={TextureId}";

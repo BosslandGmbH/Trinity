@@ -5,6 +5,7 @@ using Trinity.Framework;
 using Zeta.Bot;
 using Zeta.Bot.Profile.Composites;
 using Zeta.Common;
+using Zeta.Game;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
@@ -15,7 +16,7 @@ namespace Trinity.Components.QuestTools
         protected BaseContainerProfileBehavior()
         {
             LoadDefaults();
-            QuestId = QuestId <= 0 ? 1 : QuestId;
+            QuestId = (int)QuestId <= 0 ? (SNOQuest)1 : QuestId;
             TagClassName = GetType().Name;
         }
 

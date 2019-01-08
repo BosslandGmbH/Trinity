@@ -80,7 +80,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public float AxialRadius => ActorInfo?.AxialCylinder.Ax1 ?? 0.0f;
 
         public bool IsObstacle => GameData.NavigationObstacleIds.Contains(ActorSnoId) || GameData.PathFindingObstacles.ContainsKey(ActorSnoId);
-        public int WorldDynamicId => Actor?.WorldId ?? 0; // TODO: Why doesn't this one work anymore? => _actor.WorldDynamicId
+        public SNOWorld WorldDynamicId => Actor?.WorldId ?? (SNOWorld)0; // TODO: Why doesn't this one work anymore? => _actor.WorldDynamicId
         public float Radius => Actor?.InteractDistance ?? 0.0f;
         public TrinityObjectType Type => CommonProperties.GetObjectType(ActorType, ActorSnoId, GizmoType, InternalName);
         public float CollisionRadius => GameData.CustomObjectRadius.ContainsKey(ActorSnoId) ? GameData.CustomObjectRadius[ActorSnoId] : Math.Max(1f, AxialRadius * 0.60f);

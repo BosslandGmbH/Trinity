@@ -58,7 +58,7 @@ namespace Trinity.ProfileTags
         [XmlAttribute("sceneSnoId")]
         [Description("Scene id for relative movement")]
         [DefaultValue(0)]
-        public int SceneSnoId { get; set; }
+        public SNOScene SceneSnoId { get; set; }
 
         [XmlAttribute("sceneName")]
         [Description("Scene name for relative movement")]
@@ -105,7 +105,7 @@ namespace Trinity.ProfileTags
             return false;
         }
 
-        public bool TrySetRelativeDestination(Vector3 relPos, int sceneId, string sceneName)
+        public bool TrySetRelativeDestination(Vector3 relPos, SNOScene sceneId, string sceneName)
         {
             if (relPos == Vector3.Zero)
                 return false;

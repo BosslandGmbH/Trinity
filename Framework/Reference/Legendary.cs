@@ -3,6 +3,7 @@ using System.Linq;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
+using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Framework.Reference
@@ -21,7 +22,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HellcatWaistguard = new Item
         {
-            Id = 193668,
+            Id = SNOActor.Belt_norm_unique_05,
             Name = "Hellcat Waistguard",
             Quality = ItemQuality.Legendary,
             Slug = "hellcat-waistguard",
@@ -44,7 +45,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TalismanOfAkkhan = new Item
         {
-            Id = 455735,
+            Id = SNOActor.P43_AkkhanSet_Amulet_01,
             Name = "Talisman of Akkhan",
             Quality = ItemQuality.Legendary,
             Slug = "talisman-of-akkhan",
@@ -69,7 +70,7 @@ namespace Trinity.Framework.Reference
 
         public static Item ReapersWraps = new Item
         {
-            Id = 298118,
+            Id = SNOActor.x1_Bracers_norm_unique_13,
             Name = "Reaper's Wraps",
             Quality = ItemQuality.Legendary,
             Slug = "reapers-wraps",
@@ -89,7 +90,7 @@ namespace Trinity.Framework.Reference
 
         public static Item PiroMarella = new Item
         {
-            Id = 299411,
+            Id = SNOActor.x1_CruShield_norm_unique_01,
             Name = "Piro Marella",
             Quality = ItemQuality.Legendary,
             Slug = "piro-marella",
@@ -116,7 +117,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RibaldEtchings = new Item
         {
-            Id = 366971,
+            Id = SNOActor.x1_FollowerItem_Scoundrel_Legendary_02,
             Name = "Ribald Etchings",
             Quality = ItemQuality.Legendary,
             Slug = "ribald-etchings",
@@ -139,7 +140,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SkeletonKey = new Item
         {
-            Id = 366970,
+            Id = SNOActor.x1_FollowerItem_Scoundrel_Legendary_01,
             Name = "Skeleton Key",
             Quality = ItemQuality.Legendary,
             Slug = "skeleton-key",
@@ -163,7 +164,7 @@ namespace Trinity.Framework.Reference
         public static Item HandOfTheProphet = new Item
         {
             //[TrinityPlugin 2.13.59] Hand Of The Prophet ActorSnoId=366980 GameBalanceId=-450681607
-            Id = -450681607,
+            Id = (SNOActor)(-450681607),
             GameBalanceId = true,
             Name = "Hand of the Prophet",
             Quality = ItemQuality.Legendary,
@@ -187,7 +188,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SlipkasLetterOpener = new Item
         {
-            Id = 978821514, // ActorSnoId = 366971 // Same as RibaldEtchings
+            Id = (SNOActor)978821514, // ActorSnoId = SNOActor.366971 // Same as RibaldEtchings
             GameBalanceId = true,
             Name = "Slipka's Letter Opener",
             Quality = ItemQuality.Legendary,
@@ -212,7 +213,7 @@ namespace Trinity.Framework.Reference
         public static Item VadimsSurge = new Item
         {
             //[TrinityPlugin 2.13.59] Vadim's Surge ActorSnoId=366980 GameBalanceId=-450681606
-            Id = -450681606,
+            Id = (SNOActor)(-450681606),
             GameBalanceId = true,
             Name = "Vadim's Surge",
             Quality = ItemQuality.Legendary,
@@ -236,7 +237,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SmokingThurible = new Item
         {
-            Id = 366979,
+            Id = SNOActor.x1_FollowerItem_Enchantress_Legendary_01,
             Name = "Smoking Thurible",
             Quality = ItemQuality.Legendary,
             Slug = "smoking-thurible",
@@ -259,7 +260,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RelicOfAkarat = new Item
         {
-            Id = -765770608, // ActorSnoId = 366969 // Same as HillenbrandsTrainingSword
+            Id = (SNOActor)(-765770608), // ActorSnoId = SNOActor.366969 // Same as HillenbrandsTrainingSword
             GameBalanceId = true,
             Name = "Relic of Akarat",
             Quality = ItemQuality.Legendary,
@@ -283,7 +284,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item EnchantingFavor = new Item
         {
-            Id = 366968,
+            Id = SNOActor.x1_FollowerItem_Templar_Legendary_01,
             Name = "Enchanting Favor",
             Quality = ItemQuality.Legendary,
             Slug = "enchanting-favor",
@@ -306,7 +307,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HillenbrandsTrainingSword = new Item
         {
-            Id = 366969,
+            Id = SNOActor.x1_FollowerItem_Templar_Legendary_02,
             Name = "Hillenbrand's Training Sword",
             Quality = ItemQuality.Legendary,
             Slug = "hillenbrands-training-sword",
@@ -329,7 +330,7 @@ namespace Trinity.Framework.Reference
         ///// </summary>
         //public static Item DeadlyRebirth = new Item
         //{
-        //    Id = 193433,
+        //    Id = SNOActor.ceremonialDagger_norm_unique_02,
         //    Name = "Deadly Rebirth",
         //    Quality = ItemQuality.Legendary,
         //    Slug = "deadly-rebirth-1WLDQt",
@@ -356,7 +357,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheHoradricHamburger = new Item
         {
-            Id = 200476,
+            Id = SNOActor.offHand_norm_base_01,
             Name = "The Horadric Hamburger",
             Quality = ItemQuality.Legendary,
             Slug = "the-horadric-hamburger-2HDjXe",
@@ -379,7 +380,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Spectrum = new Item
         {
-            Id = 200558,
+            Id = SNOActor.Sword_norm_unique_09,
             Name = "Spectrum",
             Quality = ItemQuality.Legendary,
             Slug = "spectrum-Fa7AX",
@@ -409,7 +410,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BottomlessPotionOfChaos = new Item
         {
-            Id = 451311, //ActorSnoId=451311 GameBalanceId=-2018707766 
+            Id = SNOActor.healthPotion_Legendary_10_x1, //ActorSnoId=healthPotion_Legendary_10_x1 GameBalanceId=-2018707766 
             Name = "Bottomless Potion of Chaos",
             Quality = ItemQuality.Legendary,
             Slug = "bottomless-potion-of-chaos",
@@ -432,7 +433,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BottomlessPotionOfFear = new Item
         {
-            Id = 428805,
+            Id = SNOActor.healthPotion_Legendary_08_x1,
             Name = "Bottomless Potion of Fear",
             Quality = ItemQuality.Legendary,
             Slug = "bottomless-potion-of-fear",
@@ -453,9 +454,9 @@ namespace Trinity.Framework.Reference
         /// <summary>
         /// Bottomless Potion of Kulle-Aid Drinking Kulle-Aid allows you to burst through walls summoned by Waller elites for 5 seconds.
         /// </summary>
-        public static Item BottomlessPotionOfKulleaid = new Item
+        public static Item BottomlessPotionOfKulleaId = new Item
         {
-            Id = 344093,
+            Id = SNOActor.healthPotion_Legendary_06_x1,
             Name = "Bottomless Potion of Kulle-Aid",
             Quality = ItemQuality.Legendary,
             Slug = "bottomless-potion-of-kulleaid",
@@ -478,7 +479,7 @@ namespace Trinity.Framework.Reference
         ///// </summary>
         //public static Item HealthPotion = new Item
         //{
-        //    Id = 0,
+        //    Id = SNOActor.0,
         //    Name = "Health Potion",
         //    Quality = ItemQuality.Normal,
         //    Slug = "health-potion",
@@ -501,7 +502,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BottomlessPotionOfMutilation = new Item
         {
-            Id = 342824,
+            Id = SNOActor.healthPotion_Legendary_05_x1,
             Name = "Bottomless Potion of Mutilation",
             Quality = ItemQuality.Legendary,
             Slug = "bottomless-potion-of-mutilation",
@@ -524,7 +525,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BottomlessPotionOfAmplification = new Item
         {
-            Id = 434627,
+            Id = SNOActor.healthPotion_Legendary_09_x1,
             Name = "Bottomless Potion of Amplification",
             Quality = ItemQuality.Legendary,
             Slug = "bottomless-potion-of-amplification",
@@ -547,7 +548,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BottomlessPotionOfRegeneration = new Item
         {
-            Id = 341343,
+            Id = SNOActor.healthPotion_Legendary_03_x1,
             Name = "Bottomless Potion of Regeneration",
             Quality = ItemQuality.Legendary,
             Slug = "bottomless-potion-of-regeneration",
@@ -570,7 +571,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BottomlessPotionOfRejuvenation = new Item
         {
-            Id = 433027,
+            Id = SNOActor.healthPotion_Legendary_07_p2,
             Name = "Bottomless Potion of Rejuvenation",
             Quality = ItemQuality.Legendary,
             Slug = "bottomless-potion-of-rejuvenation",
@@ -593,7 +594,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BottomlessPotionOfTheLeech = new Item
         {
-            Id = 342823,
+            Id = SNOActor.healthPotion_Legendary_04_x1,
             Name = "Bottomless Potion of the Leech",
             Quality = ItemQuality.Legendary,
             Slug = "bottomless-potion-of-the-leech",
@@ -616,7 +617,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BottomlessPotionOfTheDiamond = new Item
         {
-            Id = 341342,
+            Id = SNOActor.healthPotion_Legendary_02_x1,
             Name = "Bottomless Potion of the Diamond",
             Quality = ItemQuality.Legendary,
             Slug = "bottomless-potion-of-the-diamond",
@@ -639,7 +640,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BottomlessPotionOfTheTower = new Item
         {
-            Id = 341333,
+            Id = SNOActor.healthPotion_Legendary_01_x1,
             Name = "Bottomless Potion of the Tower",
             Quality = ItemQuality.Legendary,
             Slug = "bottomless-potion-of-the-tower",
@@ -673,7 +674,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HomingPads = new Item
         {
-            Id = 198573,
+            Id = SNOActor.shoulderPads_norm_unique_01,
             Name = "Homing Pads",
             Quality = ItemQuality.Legendary,
             Slug = "homing-pads",
@@ -696,7 +697,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PauldronsOfTheSkeletonKing = new Item
         {
-            Id = 298164,
+            Id = SNOActor.x1_shoulderPads_norm_unique_11,
             Name = "Pauldrons of the Skeleton King",
             Quality = ItemQuality.Legendary,
             Slug = "pauldrons-of-the-skeleton-king",
@@ -719,7 +720,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RazethsVolition = new Item
         {
-            Id = 467610,
+            Id = SNOActor.p6_shoulderPads_norm_unique_22,
             Name = "Razeth's Volition",
             Quality = ItemQuality.Legendary,
             Slug = "razeths-volition",
@@ -742,7 +743,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DeathWatchMantle = new Item
         {
-            Id = 200310,
+            Id = SNOActor.shoulderPads_norm_unique_02,
             Name = "Death Watch Mantle",
             Quality = ItemQuality.Legendary,
             Slug = "death-watch-mantle",
@@ -765,7 +766,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CorpsewhisperPauldrons = new Item
         {
-            Id = 467609,
+            Id = SNOActor.p6_shoulderPads_norm_unique_21,
             Name = "Corpsewhisper Pauldrons",
             Quality = ItemQuality.Legendary,
             Slug = "corpsewhisper-pauldrons",
@@ -788,7 +789,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FuryOfTheAncients = new Item
         {
-            Id = 426817,
+            Id = SNOActor.p2_shoulderPads_norm_unique_02,
             Name = "Fury of the Ancients",
             Quality = ItemQuality.Legendary,
             Slug = "fury-of-the-ancients",
@@ -811,7 +812,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LefebvresSoliloquy = new Item
         {
-            Id = 298158,
+            Id = SNOActor.x1_shoulderPads_norm_unique_08,
             Name = "Lefebvre's Soliloquy",
             Quality = ItemQuality.Legendary,
             Slug = "lefebvres-soliloquy",
@@ -834,7 +835,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MantleOfChanneling = new Item
         {
-            Id = 429681,
+            Id = SNOActor.p2_shoulderPads_norm_unique_03,
             Name = "Mantle of Channeling",
             Quality = ItemQuality.Legendary,
             Slug = "mantle-of-channeling",
@@ -857,7 +858,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SpauldersOfZakara = new Item
         {
-            Id = 298163,
+            Id = SNOActor.x1_shoulderPads_norm_unique_09,
             Name = "Spaulders of Zakara",
             Quality = ItemQuality.Legendary,
             Slug = "spaulders-of-zakara",
@@ -880,7 +881,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item VileWard = new Item
         {
-            Id = 201325,
+            Id = SNOActor.shoulderPads_norm_unique_03,
             Name = "Vile Ward",
             Quality = ItemQuality.Legendary,
             Slug = "vile-ward",
@@ -903,7 +904,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ArachyrsMantle = new Item
         {
-            Id = 440420,
+            Id = SNOActor.p3_shoulderPads_WD_norm_set_04,
             Name = "Arachyr's Mantle",
             Quality = ItemQuality.Legendary,
             Slug = "arachyrs-mantle",
@@ -926,7 +927,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BurdenOfTheInvoker = new Item
         {
-            Id = 335029,
+            Id = SNOActor.x1_shoulderPads_norm_set_12,
             Name = "Burden of the Invoker",
             Quality = ItemQuality.Legendary,
             Slug = "burden-of-the-invoker",
@@ -949,7 +950,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DashingPauldronsOfDespair = new Item
         {
-            Id = 414922,
+            Id = SNOActor.p2_shoulderPads_norm_set_02,
             Name = "Dashing Pauldrons of Despair",
             Quality = ItemQuality.Legendary,
             Slug = "dashing-pauldrons-of-despair",
@@ -972,7 +973,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FirebirdsPinions = new Item
         {
-            Id = 358792,
+            Id = SNOActor.x1_shoulderPads_norm_set_06,
             Name = "Firebird's Pinions",
             Quality = ItemQuality.Legendary,
             Slug = "firebirds-pinions",
@@ -995,7 +996,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HelltoothMantle = new Item
         {
-            Id = 340525,
+            Id = SNOActor.x1_shoulderPads_norm_set_16,
             Name = "Helltooth Mantle",
             Quality = ItemQuality.Legendary,
             Slug = "helltooth-mantle",
@@ -1018,7 +1019,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item InariussMartyrdom = new Item
         {
-            Id = 467607,
+            Id = SNOActor.p6_shoulderPads_norm_set_19,
             Name = "Inarius's Martyrdom",
             Quality = ItemQuality.Legendary,
             Slug = "inariuss-martyrdom",
@@ -1041,7 +1042,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item JadeHarvestersJoy = new Item
         {
-            Id = 338042,
+            Id = SNOActor.x1_shoulderPads_norm_set_09,
             Name = "Jade Harvester's Joy",
             Quality = ItemQuality.Legendary,
             Slug = "jade-harvesters-joy",
@@ -1064,7 +1065,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MantleOfTheUpsidedownSinners = new Item
         {
-            Id = 338036,
+            Id = SNOActor.x1_shoulderPads_norm_set_08,
             Name = "Mantle of the Upside-Down Sinners",
             Quality = ItemQuality.Legendary,
             Slug = "mantle-of-the-upsidedown-sinners",
@@ -1087,7 +1088,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MaraudersSpines = new Item
         {
-            Id = 336996,
+            Id = SNOActor.x1_shoulderPads_norm_set_07,
             Name = "Marauder's Spines",
             Quality = ItemQuality.Legendary,
             Slug = "marauders-spines",
@@ -1110,7 +1111,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MountainOfTheLight = new Item
         {
-            Id = 414925,
+            Id = SNOActor.p2_shoulderPads_norm_set_06,
             Name = "Mountain of the Light",
             Quality = ItemQuality.Legendary,
             Slug = "mountain-of-the-light",
@@ -1133,7 +1134,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PauldronsOfAkkhan = new Item
         {
-            Id = 358801,
+            Id = SNOActor.x1_shoulderPads_norm_set_10,
             Name = "Pauldrons of Akkhan",
             Quality = ItemQuality.Legendary,
             Slug = "pauldrons-of-akkhan",
@@ -1156,7 +1157,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PauldronsOfTheWastes = new Item
         {
-            Id = 414921,
+            Id = SNOActor.p2_shoulderPads_norm_set_01,
             Name = "Pauldrons of the Wastes",
             Quality = ItemQuality.Legendary,
             Slug = "pauldrons-of-the-wastes",
@@ -1179,7 +1180,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PestilenceDefense = new Item
         {
-            Id = 467608,
+            Id = SNOActor.p6_shoulderPads_norm_set_20,
             Name = "Pestilence Defense",
             Quality = ItemQuality.Legendary,
             Slug = "pestilence-defense",
@@ -1202,7 +1203,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RaekorsBurden = new Item
         {
-            Id = 336989,
+            Id = SNOActor.x1_shoulderPads_norm_set_05,
             Name = "Raekor's Burden",
             Quality = ItemQuality.Legendary,
             Slug = "raekors-burden",
@@ -1225,7 +1226,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RathmasSpikes = new Item
         {
-            Id = 460923,
+            Id = SNOActor.p6_shoulderPads_norm_set_17,
             Name = "Rathma's Spikes",
             Quality = ItemQuality.Legendary,
             Slug = "rathmas-spikes",
@@ -1248,7 +1249,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RolandsMantle = new Item
         {
-            Id = 404699,
+            Id = SNOActor.p1_shoulderPads_norm_set_01,
             Name = "Roland's Mantle",
             Quality = ItemQuality.Legendary,
             Slug = "rolands-mantle",
@@ -1271,7 +1272,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SpiresOfTheEarth = new Item
         {
-            Id = 340526,
+            Id = SNOActor.x1_shoulderPads_norm_set_15,
             Name = "Spires of the Earth",
             Quality = ItemQuality.Legendary,
             Slug = "spires-of-the-earth",
@@ -1294,7 +1295,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SunwukosBalance = new Item
         {
-            Id = 336175,
+            Id = SNOActor.x1_shoulderPads_norm_set_11,
             Name = "Sunwuko's Balance",
             Quality = ItemQuality.Legendary,
             Slug = "sunwukos-balance",
@@ -1317,7 +1318,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheShadowsBurden = new Item
         {
-            Id = 444527,
+            Id = SNOActor.p4_shoulderPads_norm_set_14,
             Name = "The Shadow's Burden",
             Quality = ItemQuality.Legendary,
             Slug = "the-shadows-burden",
@@ -1340,7 +1341,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TragoulsHeart = new Item
         {
-            Id = 467606,
+            Id = SNOActor.p6_shoulderPads_norm_set_18,
             Name = "Trag'Oul's Heart",
             Quality = ItemQuality.Legendary,
             Slug = "tragouls-heart",
@@ -1363,7 +1364,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item UlianasStrength = new Item
         {
-            Id = 414923,
+            Id = SNOActor.p2_shoulderPads_norm_set_03,
             Name = "Uliana's Strength",
             Quality = ItemQuality.Legendary,
             Slug = "ulianas-strength",
@@ -1386,7 +1387,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item UnsanctifiedShoulders = new Item
         {
-            Id = 414760,
+            Id = SNOActor.p2_shoulderPads_norm_set_05,
             Name = "Unsanctified Shoulders",
             Quality = ItemQuality.Legendary,
             Slug = "unsanctified-shoulders",
@@ -1409,7 +1410,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item VyrsProudPauldrons = new Item
         {
-            Id = 439186,
+            Id = SNOActor.p3_shoulderPads_norm_set_01,
             Name = "Vyr's Proud Pauldrons",
             Quality = ItemQuality.Legendary,
             Slug = "vyrs-proud-pauldrons",
@@ -1432,7 +1433,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FuneraryPick = new Item
         {
-            Id = 467370,
+            Id = SNOActor.p6_scythe_norm_unique_01,
             Name = "Funerary Pick",
             Quality = ItemQuality.Legendary,
             Slug = "funerary-pick",
@@ -1455,7 +1456,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TragoulsCorrodedFang = new Item
         {
-            Id = 467394,
+            Id = SNOActor.p6_scythe_norm_unique_02,
             Name = "Trag'Oul's Corroded Fang",
             Quality = ItemQuality.Legendary,
             Slug = "tragouls-corroded-fang",
@@ -1478,7 +1479,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ScytheOfTheCycle = new Item
         {
-            Id = 467579,
+            Id = SNOActor.p6_scythe_norm_unique_03,
             Name = "Scythe of the Cycle",
             Quality = ItemQuality.Legendary,
             Slug = "scythe-of-the-cycle",
@@ -1501,7 +1502,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item JessethSkullscythe = new Item
         {
-            Id = 467580, 
+            Id = SNOActor.p6_scythe_norm_unique_04, 
             Name = "Jesseth Skullscythe",
             Quality = ItemQuality.Legendary,
             Slug = "jesseth-skullscythe",
@@ -1524,7 +1525,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FletchersPride = new Item
         {
-            Id = 197629,
+            Id = SNOActor.Quiver_norm_unique_06,
             Name = "Fletcher's Pride",
             Quality = ItemQuality.Legendary,
             Slug = "fletchers-pride",
@@ -1547,7 +1548,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SinSeekers = new Item
         {
-            Id = 197625,
+            Id = SNOActor.Quiver_norm_unique_02,
             Name = "Sin Seekers",
             Quality = ItemQuality.Legendary,
             Slug = "sin-seekers",
@@ -1570,7 +1571,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HolyPointShot = new Item
         {
-            Id = 197627,
+            Id = SNOActor.Quiver_norm_unique_04,
             Name = "Holy Point Shot",
             Quality = ItemQuality.Legendary,
             Slug = "holy-point-shot",
@@ -1593,7 +1594,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SpinesOfSeethingHatred = new Item
         {
-            Id = 197628,
+            Id = SNOActor.Quiver_norm_unique_05,
             Name = "Spines of Seething Hatred",
             Quality = ItemQuality.Legendary,
             Slug = "spines-of-seething-hatred",
@@ -1616,7 +1617,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BombardiersRucksack = new Item
         {
-            Id = 298171,
+            Id = SNOActor.x1_Quiver_norm_unique_09,
             Name = "Bombardier's Rucksack",
             Quality = ItemQuality.Legendary,
             Slug = "bombardiers-rucksack",
@@ -1639,7 +1640,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item EmimeisDuffel = new Item
         {
-            Id = 298172,
+            Id = SNOActor.x1_Quiver_norm_unique_10,
             Name = "Emimei's Duffel",
             Quality = ItemQuality.Legendary,
             Slug = "emimeis-duffel",
@@ -1662,7 +1663,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheNinthCirriSatchel = new Item
         {
-            Id = 298170,
+            Id = SNOActor.x1_Quiver_norm_unique_08,
             Name = "The Ninth Cirri Satchel",
             Quality = ItemQuality.Legendary,
             Slug = "the-ninth-cirri-satchel",
@@ -1685,7 +1686,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item AugustinesPanacea = new Item
         {
-            Id = 197624,
+            Id = SNOActor.Quiver_norm_unique_01,
             Name = "Augustine's Panacea",
             Quality = ItemQuality.Legendary,
             Slug = "augustines-panacea",
@@ -1708,7 +1709,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DeadMansLegacy = new Item
         {
-            Id = 197630,
+            Id = SNOActor.Quiver_norm_unique_07,
             Name = "Dead Man's Legacy",
             Quality = ItemQuality.Legendary,
             Slug = "dead-mans-legacy",
@@ -1731,7 +1732,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MonsterHunter = new Item
         {
-            Id = 115140,
+            Id = SNOActor.Sword_norm_unique_01,
             Name = "Monster Hunter",
             Quality = ItemQuality.Legendary,
             Slug = "monster-hunter",
@@ -1754,7 +1755,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Wildwood = new Item
         {
-            Id = 270978,
+            Id = SNOActor.Sword_norm_unique_11,
             Name = "Wildwood",
             Quality = ItemQuality.Legendary,
             Slug = "wildwood",
@@ -1777,7 +1778,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Doombringer = new Item
         {
-            Id = 185397,
+            Id = SNOActor.Sword_norm_unique_07,
             Name = "Doombringer",
             Quality = ItemQuality.Legendary,
             Slug = "doombringer",
@@ -1800,7 +1801,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheAncientBonesaberOfZumakalis = new Item
         {
-            Id = 194481,
+            Id = SNOActor.Sword_norm_unique_08,
             Name = "The Ancient Bonesaber of Zumakalis",
             Quality = ItemQuality.Legendary,
             Slug = "the-ancient-bonesaber-of-zumakalis",
@@ -1823,7 +1824,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Exarian = new Item
         {
-            Id = 271617,
+            Id = SNOActor.x1_Sword_norm_unique_13,
             Name = "Exarian",
             Quality = ItemQuality.Legendary,
             Slug = "exarian",
@@ -1846,7 +1847,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Fulminator = new Item
         {
-            Id = 271631,
+            Id = SNOActor.x1_Sword_norm_unique_15,
             Name = "Fulminator",
             Quality = ItemQuality.Legendary,
             Slug = "fulminator",
@@ -1869,7 +1870,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GiftOfSilaria = new Item
         {
-            Id = 271630,
+            Id = SNOActor.x1_Sword_norm_unique_14,
             Name = "Gift of Silaria",
             Quality = ItemQuality.Legendary,
             Slug = "gift-of-silaria",
@@ -1892,7 +1893,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Rimeheart = new Item
         {
-            Id = 271636,
+            Id = SNOActor.x1_Sword_norm_unique_20,
             Name = "Rimeheart",
             Quality = ItemQuality.Legendary,
             Slug = "rimeheart",
@@ -1915,7 +1916,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ThunderfuryBlessedBladeOfTheWindseeker = new Item
         {
-            Id = 229716,
+            Id = SNOActor.x1_Sword_norm_unique_12,
             Name = "Thunderfury, Blessed Blade of the Windseeker",
             Quality = ItemQuality.Legendary,
             Slug = "thunderfury-blessed-blade-of-the-windseeker",
@@ -1938,7 +1939,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Sever = new Item
         {
-            Id = 115141,
+            Id = SNOActor.Sword_norm_unique_02,
             Name = "Sever",
             Quality = ItemQuality.Legendary,
             Slug = "sever",
@@ -1961,7 +1962,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Skycutter = new Item
         {
-            Id = 182347,
+            Id = SNOActor.Sword_norm_unique_04,
             Name = "Skycutter",
             Quality = ItemQuality.Legendary,
             Slug = "skycutter",
@@ -1984,7 +1985,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Azurewrath = new Item
         {
-            Id = 192511,
+            Id = SNOActor.Sword_norm_unique_06,
             Name = "Azurewrath",
             Quality = ItemQuality.Legendary,
             Slug = "azurewrath",
@@ -2007,7 +2008,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DevilTongue = new Item
         {
-            Id = 189552,
+            Id = SNOActor.Sword_norm_unique_05,
             Name = "Devil Tongue",
             Quality = ItemQuality.Legendary,
             Slug = "devil-tongue",
@@ -2030,7 +2031,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Deathwish = new Item
         {
-            Id = 331908,
+            Id = SNOActor.x1_Sword_norm_unique_23,
             Name = "Deathwish",
             Quality = ItemQuality.Legendary,
             Slug = "deathwish",
@@ -2053,7 +2054,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Ingeom = new Item
         {
-            Id = 410946,
+            Id = SNOActor.p2_Sword_norm_unique_01,
             Name = "In-geom",
             Quality = ItemQuality.Legendary,
             Slug = "ingeom",
@@ -2076,7 +2077,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ShardOfHate = new Item
         {
-            Id = 376463,
+            Id = SNOActor.x1_Sword_norm_promo_02,
             Name = "Shard of Hate",
             Quality = ItemQuality.Legendary,
             Slug = "shard-of-hate",
@@ -2099,7 +2100,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SwordOfIllWill = new Item
         {
-            Id = 328591,
+            Id = SNOActor.x1_mightyWeapon_1H_norm_unique_07,
             Name = "Sword of Ill Will",
             Quality = ItemQuality.Legendary,
             Slug = "sword-of-ill-will",
@@ -2122,7 +2123,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheTwistedSword = new Item
         {
-            Id = 271634,
+            Id = SNOActor.x1_Sword_norm_unique_18,
             Name = "The Twisted Sword",
             Quality = ItemQuality.Legendary,
             Slug = "the-twisted-sword",
@@ -2145,7 +2146,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LittleRogue = new Item
         {
-            Id = 313291,
+            Id = SNOActor.x1_Sword_norm_set_03,
             Name = "Little Rogue",
             Quality = ItemQuality.Legendary,
             Slug = "little-rogue",
@@ -2168,7 +2169,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheSlanderer = new Item
         {
-            Id = 313290,
+            Id = SNOActor.x1_Sword_norm_set_02,
             Name = "The Slanderer",
             Quality = ItemQuality.Legendary,
             Slug = "the-slanderer",
@@ -2191,7 +2192,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LostTime = new Item
         {
-            Id = 467582,
+            Id = SNOActor.p6_talisman_norm_unique_01,
             Name = "Lost Time",
             Quality = ItemQuality.Legendary,
             Slug = "lost-time",
@@ -2214,7 +2215,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item IronRose = new Item
         {
-            Id = 467581,
+            Id = SNOActor.p6_talisman_norm_unique_04,
             Name = "Iron Rose",
             Quality = ItemQuality.Legendary,
             Slug = "iron-rose",
@@ -2237,7 +2238,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LegersDisdain = new Item
         {
-            Id = 462250,
+            Id = SNOActor.p6_talisman_norm_unique_03,
             Name = "Leger's Disdain",
             Quality = ItemQuality.Legendary,
             Slug = "legers-disdain",
@@ -2260,7 +2261,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BoneRinger = new Item
         {
-            Id = 462249,
+            Id = SNOActor.p6_talisman_norm_unique_02,
             Name = "Bone Ringer",
             Quality = ItemQuality.Legendary,
             Slug = "bone-ringer",
@@ -2283,7 +2284,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ReilenasShadowhook = new Item
         {
-            Id = 467600,
+            Id = SNOActor.p6_twoHandedscythe_norm_unique_03,
             Name = "Reilena's Shadowhook",
             Quality = ItemQuality.Legendary,
             Slug = "reilenas-shadowhook",
@@ -2306,7 +2307,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MaltoriusPetrifiedSpike = new Item
         {
-            Id = 467598,
+            Id = SNOActor.p6_twoHandedscythe_norm_unique_01,
             Name = "Maltorius' Petrified Spike",
             Quality = ItemQuality.Legendary,
             Slug = "maltorius-petrified-spike",
@@ -2329,7 +2330,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BloodtideBlade = new Item
         {
-            Id = 467599,
+            Id = SNOActor.p6_twoHandedscythe_norm_unique_02,
             Name = "Bloodtide Blade",
             Quality = ItemQuality.Legendary,
             Slug = "bloodtide-blade",
@@ -2352,7 +2353,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item NayrsBlackDeath = new Item
         {
-            Id = 467594,
+            Id = SNOActor.p6_twoHandedscythe_norm_unique_04,
             Name = "Nayr's Black Death",
             Quality = ItemQuality.Legendary,
             Slug = "nayrs-black-death",
@@ -2378,7 +2379,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CrownOfThePrimus = new Item
         {
-            Id = 349951,
+            Id = SNOActor.x1_wizardHat_norm_unique_09,
             Name = "Crown of the Primus",
             Quality = ItemQuality.Legendary,
             Slug = "crown-of-the-primus",
@@ -2401,7 +2402,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheSwami = new Item
         {
-            Id = 218681,
+            Id = SNOActor.wizardHat_norm_unique_03,
             Name = "The Swami",
             Quality = ItemQuality.Legendary,
             Slug = "the-swami",
@@ -2424,7 +2425,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DarkMagesShade = new Item
         {
-            Id = 224908,
+            Id = SNOActor.wizardHat_norm_unique_05,
             Name = "Dark Mage's Shade",
             Quality = ItemQuality.Legendary,
             Slug = "dark-mages-shade",
@@ -2447,7 +2448,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ArchmagesVicalyke = new Item
         {
-            Id = 299471,
+            Id = SNOActor.x1_wizardHat_norm_unique_06,
             Name = "Archmage's Vicalyke",
             Quality = ItemQuality.Legendary,
             Slug = "archmages-vicalyke",
@@ -2470,7 +2471,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheMagistrate = new Item
         {
-            Id = 325579,
+            Id = SNOActor.x1_wizardHat_norm_unique_08,
             Name = "The Magistrate",
             Quality = ItemQuality.Legendary,
             Slug = "the-magistrate",
@@ -2493,7 +2494,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item VelvetCamaral = new Item
         {
-            Id = 299472,
+            Id = SNOActor.x1_wizardHat_norm_unique_07,
             Name = "Velvet Camaral",
             Quality = ItemQuality.Legendary,
             Slug = "velvet-camaral",
@@ -2516,7 +2517,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item StormCrow = new Item
         {
-            Id = 220694,
+            Id = SNOActor.wizardHat_norm_unique_04,
             Name = "Storm Crow",
             Quality = ItemQuality.Legendary,
             Slug = "storm-crow",
@@ -2539,7 +2540,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SeeNoEvil = new Item
         {
-            Id = 222171,
+            Id = SNOActor.spiritStone_norm_unique_13,
             Name = "See No Evil",
             Quality = ItemQuality.Legendary,
             Slug = "see-no-evil",
@@ -2562,7 +2563,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GyanaNaKashu = new Item
         {
-            Id = 222169,
+            Id = SNOActor.spiritStone_norm_unique_05,
             Name = "Gyana Na Kashu",
             Quality = ItemQuality.Legendary,
             Slug = "gyana-na-kashu",
@@ -2585,7 +2586,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ErlangShen = new Item
         {
-            Id = 222173,
+            Id = SNOActor.spiritStone_norm_unique_07,
             Name = "Erlang Shen",
             Quality = ItemQuality.Legendary,
             Slug = "erlang-shen",
@@ -2608,7 +2609,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheMindsEye = new Item
         {
-            Id = 222172,
+            Id = SNOActor.spiritStone_norm_unique_06,
             Name = "The Mind's Eye",
             Quality = ItemQuality.Legendary,
             Slug = "the-minds-eye",
@@ -2631,7 +2632,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item EyeOfPeshkov = new Item
         {
-            Id = 299464,
+            Id = SNOActor.x1_spiritStone_norm_unique_16,
             Name = "Eye of Peshkov",
             Quality = ItemQuality.Legendary,
             Slug = "eye-of-peshkov",
@@ -2654,7 +2655,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item KekegisUnbreakableSpirit = new Item
         {
-            Id = 299461,
+            Id = SNOActor.x1_spiritStone_norm_unique_15,
             Name = "Kekegi's Unbreakable Spirit",
             Quality = ItemQuality.Legendary,
             Slug = "kekegis-unbreakable-spirit",
@@ -2677,7 +2678,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheLawsOfSeph = new Item
         {
-            Id = 299454,
+            Id = SNOActor.x1_spiritStone_norm_unique_14,
             Name = "The Laws of Seph",
             Quality = ItemQuality.Legendary,
             Slug = "the-laws-of-seph",
@@ -2700,7 +2701,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BezoarStone = new Item
         {
-            Id = 222306,
+            Id = SNOActor.spiritStone_norm_unique_11,
             Name = "Bezoar Stone",
             Quality = ItemQuality.Legendary,
             Slug = "bezoar-stone",
@@ -2723,7 +2724,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheEyeOfTheStorm = new Item
         {
-            Id = 222170,
+            Id = SNOActor.spiritStone_norm_unique_02,
             Name = "The Eye of the Storm",
             Quality = ItemQuality.Legendary,
             Slug = "the-eye-of-the-storm",
@@ -2746,7 +2747,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Madstone = new Item
         {
-            Id = 221572,
+            Id = SNOActor.spiritStone_norm_unique_03,
             Name = "Madstone",
             Quality = ItemQuality.Legendary,
             Slug = "madstone",
@@ -2769,7 +2770,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TzoKrinsGaze = new Item
         {
-            Id = 222305,
+            Id = SNOActor.spiritStone_norm_unique_12,
             Name = "Tzo Krin's Gaze",
             Quality = ItemQuality.Legendary,
             Slug = "tzo-krins-gaze",
@@ -2792,7 +2793,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item InnasRadiance = new Item
         {
-            Id = 222307,
+            Id = SNOActor.spiritStone_norm_unique_08,
             Name = "Inna's Radiance",
             Quality = ItemQuality.Legendary,
             Slug = "innas-radiance",
@@ -2815,7 +2816,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SplitTusk = new Item
         {
-            Id = 221167,
+            Id = SNOActor.voodooMask_norm_unique_03,
             Name = "Split Tusk",
             Quality = ItemQuality.Legendary,
             Slug = "split-tusk",
@@ -2838,7 +2839,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Quetzalcoatl = new Item
         {
-            Id = 204136,
+            Id = SNOActor.voodooMask_norm_base_05,
             Name = "Quetzalcoatl",
             Quality = ItemQuality.Legendary,
             Slug = "quetzalcoatl",
@@ -2861,7 +2862,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Carnevil = new Item
         {
-            Id = 299442,
+            Id = SNOActor.x1_voodooMask_norm_unique_07,
             Name = "Carnevil",
             Quality = ItemQuality.Legendary,
             Slug = "carnevil",
@@ -2884,7 +2885,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MaskOfJeram = new Item
         {
-            Id = 299443,
+            Id = SNOActor.x1_voodooMask_norm_unique_08,
             Name = "Mask of Jeram",
             Quality = ItemQuality.Legendary,
             Slug = "mask-of-jeram",
@@ -2907,7 +2908,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheGrinReaper = new Item
         {
-            Id = 221166,
+            Id = SNOActor.voodooMask_norm_unique_01,
             Name = "The Grin Reaper",
             Quality = ItemQuality.Legendary,
             Slug = "the-grin-reaper",
@@ -2930,7 +2931,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TiklandianVisage = new Item
         {
-            Id = 221382,
+            Id = SNOActor.voodooMask_norm_unique_06,
             Name = "Tiklandian Visage",
             Quality = ItemQuality.Legendary,
             Slug = "tiklandian-visage",
@@ -2953,7 +2954,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item VisageOfGiyua = new Item
         {
-            Id = 221168,
+            Id = SNOActor.voodooMask_norm_unique_05,
             Name = "Visage of Giyua",
             Quality = ItemQuality.Legendary,
             Slug = "visage-of-giyua",
@@ -2976,7 +2977,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ZunimassasVision = new Item
         {
-            Id = 221202,
+            Id = SNOActor.voodooMask_norm_unique_04,
             Name = "Zunimassa's Vision",
             Quality = ItemQuality.Legendary,
             Slug = "zunimassas-vision",
@@ -2999,7 +3000,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CloakOfDeception = new Item
         {
-            Id = 332208,
+            Id = SNOActor.x1_Cloak_norm_unique_02,
             Name = "Cloak of Deception",
             Quality = ItemQuality.Legendary,
             Slug = "cloak-of-deception",
@@ -3022,7 +3023,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BeckonSail = new Item
         {
-            Id = 223150,
+            Id = SNOActor.Cloak_norm_unique_02,
             Name = "Beckon Sail",
             Quality = ItemQuality.Legendary,
             Slug = "beckon-sail",
@@ -3045,7 +3046,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Blackfeather = new Item
         {
-            Id = 332206,
+            Id = SNOActor.x1_Cloak_norm_unique_01,
             Name = "Blackfeather",
             Quality = ItemQuality.Legendary,
             Slug = "blackfeather",
@@ -3068,7 +3069,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CapeOfTheDarkNight = new Item
         {
-            Id = 223149,
+            Id = SNOActor.Cloak_norm_unique_01,
             Name = "Cape of the Dark Night",
             Quality = ItemQuality.Legendary,
             Slug = "cape-of-the-dark-night",
@@ -3091,7 +3092,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheCloakOfTheGarwulf = new Item
         {
-            Id = 223151,
+            Id = SNOActor.Cloak_norm_unique_03,
             Name = "The Cloak of the Garwulf",
             Quality = ItemQuality.Legendary,
             Slug = "the-cloak-of-the-garwulf",
@@ -3114,7 +3115,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item NatalyasEmbrace = new Item
         {
-            Id = 208934,
+            Id = SNOActor.Cloak_norm_set_03,
             Name = "Natalya's Embrace",
             Quality = ItemQuality.Legendary,
             Slug = "natalyas-embrace",
@@ -3137,7 +3138,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CageOfTheHellborn = new Item
         {
-            Id = 408871,
+            Id = SNOActor.p2_chestArmor_norm_set_05,
             Name = "Cage of the Hellborn",
             Quality = ItemQuality.Legendary,
             Slug = "cage-of-the-hellborn",
@@ -3160,7 +3161,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LeoricsCrown = new Item
         {
-            Id = 196024,
+            Id = SNOActor.Helm_norm_unique_01,
             Name = "Leoric's Crown",
             Quality = ItemQuality.Legendary,
             Slug = "leorics-crown",
@@ -3183,7 +3184,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PridesFall = new Item
         {
-            Id = 298147,
+            Id = SNOActor.x1_Helm_norm_unique_15,
             Name = "Pride's Fall",
             Quality = ItemQuality.Legendary,
             Slug = "prides-fall",
@@ -3206,7 +3207,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BrokenCrown = new Item
         {
-            Id = 220630,
+            Id = SNOActor.Helm_norm_unique_02,
             Name = "Broken Crown",
             Quality = ItemQuality.Legendary,
             Slug = "broken-crown",
@@ -3229,7 +3230,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BlindFaith = new Item
         {
-            Id = 197037,
+            Id = SNOActor.Helm_norm_unique_07,
             Name = "Blind Faith",
             Quality = ItemQuality.Legendary,
             Slug = "blind-faith",
@@ -3252,7 +3253,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DeathseersCowl = new Item
         {
-            Id = 298146,
+            Id = SNOActor.x1_Helm_norm_unique_14,
             Name = "Deathseer's Cowl",
             Quality = ItemQuality.Legendary,
             Slug = "deathseers-cowl",
@@ -3275,7 +3276,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item VisageOfGunes = new Item
         {
-            Id = 429266,
+            Id = SNOActor.p2_Helm_norm_unique_03,
             Name = "Visage of Gunes",
             Quality = ItemQuality.Legendary,
             Slug = "visage-of-gunes",
@@ -3298,7 +3299,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item WarhelmOfKassar = new Item
         {
-            Id = 426784,
+            Id = SNOActor.p2_Helm_norm_unique_02,
             Name = "Warhelm of Kassar",
             Quality = ItemQuality.Legendary,
             Slug = "warhelm-of-kassar",
@@ -3321,7 +3322,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MaskOfScarletDeath = new Item
         {
-            Id = 467604,
+            Id = SNOActor.p6_Helm_norm_unique_21,
             Name = "Mask of Scarlet Death",
             Quality = ItemQuality.Legendary,
             Slug = "mask-of-scarlet-death",
@@ -3344,7 +3345,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SkullOfResonance = new Item
         {
-            Id = 220549,
+            Id = SNOActor.Helm_norm_unique_04,
             Name = "Skull of Resonance",
             Quality = ItemQuality.Legendary,
             Slug = "skull-of-resonance",
@@ -3367,7 +3368,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item AndarielsVisage = new Item
         {
-            Id = 198014,
+            Id = SNOActor.Helm_norm_unique_03,
             Name = "Andariel's Visage",
             Quality = ItemQuality.Legendary,
             Slug = "andariels-visage",
@@ -3390,7 +3391,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FatesVow = new Item
         {
-            Id = 467605,
+            Id = SNOActor.p6_Helm_norm_unique_22,
             Name = "Fate's Vow",
             Quality = ItemQuality.Legendary,
             Slug = "fates-vow",
@@ -3413,7 +3414,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MempoOfTwilight = new Item
         {
-            Id = 223577,
+            Id = SNOActor.Helm_norm_unique_12,
             Name = "Mempo of Twilight",
             Quality = ItemQuality.Legendary,
             Slug = "mempo-of-twilight",
@@ -3436,7 +3437,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ImmortalKingsTriumph = new Item
         {
-            Id = 210265,
+            Id = SNOActor.Helm_norm_unique_08,
             Name = "Immortal King's Triumph",
             Quality = ItemQuality.Legendary,
             Slug = "immortal-kings-triumph",
@@ -3459,7 +3460,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item NatalyasSight = new Item
         {
-            Id = 210851,
+            Id = SNOActor.Helm_norm_unique_09,
             Name = "Natalya's Sight",
             Quality = ItemQuality.Legendary,
             Slug = "natalyas-sight",
@@ -3482,7 +3483,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TalRashasGuiseOfWisdom = new Item
         {
-            Id = 211531,
+            Id = SNOActor.Helm_norm_unique_10,
             Name = "Tal Rasha's Guise of Wisdom",
             Quality = ItemQuality.Legendary,
             Slug = "tal-rashas-guise-of-wisdom",
@@ -3505,7 +3506,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item AccursedVisage = new Item
         {
-            Id = 414753,
+            Id = SNOActor.p2_Helm_norm_set_05,
             Name = "Accursed Visage",
             Quality = ItemQuality.Legendary,
             Slug = "accursed-visage",
@@ -3528,7 +3529,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ArachyrsVisage = new Item
         {
-            Id = 441178,
+            Id = SNOActor.p3_Helm_WD_norm_set_04,
             Name = "Arachyr's Visage",
             Quality = ItemQuality.Legendary,
             Slug = "arachyrs-visage",
@@ -3551,7 +3552,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CrownOfTheInvoker = new Item
         {
-            Id = 335028,
+            Id = SNOActor.x1_Helm_norm_set_12,
             Name = "Crown of the Invoker",
             Quality = ItemQuality.Legendary,
             Slug = "crown-of-the-invoker",
@@ -3574,7 +3575,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CrownOfTheLight = new Item
         {
-            Id = 414930,
+            Id = SNOActor.p2_Helm_norm_set_06,
             Name = "Crown of the Light",
             Quality = ItemQuality.Legendary,
             Slug = "crown-of-the-light",
@@ -3597,7 +3598,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item EyesOfTheEarth = new Item
         {
-            Id = 340528,
+            Id = SNOActor.x1_Helm_norm_set_15,
             Name = "Eyes of the Earth",
             Quality = ItemQuality.Legendary,
             Slug = "eyes-of-the-earth",
@@ -3620,7 +3621,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FirebirdsPlume = new Item
         {
-            Id = 358791,
+            Id = SNOActor.x1_Helm_norm_set_06,
             Name = "Firebird's Plume",
             Quality = ItemQuality.Legendary,
             Slug = "firebirds-plume",
@@ -3643,7 +3644,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HelltoothMask = new Item
         {
-            Id = 369016,
+            Id = SNOActor.x1_Helm_norm_set_16,
             Name = "Helltooth Mask",
             Quality = ItemQuality.Legendary,
             Slug = "helltooth-mask",
@@ -3666,7 +3667,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HelmOfAkkhan = new Item
         {
-            Id = 358799,
+            Id = SNOActor.x1_Helm_norm_set_10,
             Name = "Helm of Akkhan",
             Quality = ItemQuality.Legendary,
             Slug = "helm-of-akkhan",
@@ -3689,7 +3690,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HelmOfTheWastes = new Item
         {
-            Id = 414926,
+            Id = SNOActor.p2_Helm_norm_set_01,
             Name = "Helm of the Wastes",
             Quality = ItemQuality.Legendary,
             Slug = "helm-of-the-wastes",
@@ -3712,7 +3713,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item InariussUnderstanding = new Item
         {
-            Id = 467602,
+            Id = SNOActor.p6_Helm_norm_set_19,
             Name = "Inarius's Understanding",
             Quality = ItemQuality.Legendary,
             Slug = "inariuss-understanding",
@@ -3735,7 +3736,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item JadeHarvestersWisdom = new Item
         {
-            Id = 338040,
+            Id = SNOActor.x1_Helm_norm_set_09,
             Name = "Jade Harvester's Wisdom",
             Quality = ItemQuality.Legendary,
             Slug = "jade-harvesters-wisdom",
@@ -3758,7 +3759,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MaraudersVisage = new Item
         {
-            Id = 336994,
+            Id = SNOActor.x1_Helm_norm_set_07,
             Name = "Marauder's Visage",
             Quality = ItemQuality.Legendary,
             Slug = "marauders-visage",
@@ -3781,7 +3782,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MaskOfTheSearingSky = new Item
         {
-            Id = 338034,
+            Id = SNOActor.x1_Helm_norm_set_08,
             Name = "Mask of the Searing Sky",
             Quality = ItemQuality.Legendary,
             Slug = "mask-of-the-searing-sky",
@@ -3804,7 +3805,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PestilenceMask = new Item
         {
-            Id = 467603,
+            Id = SNOActor.p6_Helm_norm_set_20,
             Name = "Pestilence Mask",
             Quality = ItemQuality.Legendary,
             Slug = "pestilence-mask",
@@ -3827,7 +3828,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RaekorsWill = new Item
         {
-            Id = 336988,
+            Id = SNOActor.x1_Helm_norm_set_05,
             Name = "Raekor's Will",
             Quality = ItemQuality.Legendary,
             Slug = "raekors-will",
@@ -3850,7 +3851,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RathmasSkullHelm = new Item
         {
-            Id = 460892,
+            Id = SNOActor.p6_Helm_norm_set_17,
             Name = "Rathma's Skull Helm",
             Quality = ItemQuality.Legendary,
             Slug = "rathmas-skull-helm",
@@ -3873,7 +3874,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RolandsVisage = new Item
         {
-            Id = 404700,
+            Id = SNOActor.p1_Helm_norm_set_01,
             Name = "Roland's Visage",
             Quality = ItemQuality.Legendary,
             Slug = "rolands-visage",
@@ -3896,7 +3897,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ShroudedMask = new Item
         {
-            Id = 414927,
+            Id = SNOActor.p2_Helm_norm_set_02,
             Name = "Shrouded Mask",
             Quality = ItemQuality.Legendary,
             Slug = "shrouded-mask",
@@ -3919,7 +3920,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SunwukosCrown = new Item
         {
-            Id = 336173,
+            Id = SNOActor.x1_Helm_norm_set_11,
             Name = "Sunwuko's Crown",
             Quality = ItemQuality.Legendary,
             Slug = "sunwukos-crown",
@@ -3942,7 +3943,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheShadowsMask = new Item
         {
-            Id = 443602,
+            Id = SNOActor.p4_Helm_norm_set_14,
             Name = "The Shadow's Mask",
             Quality = ItemQuality.Legendary,
             Slug = "the-shadows-mask",
@@ -3965,7 +3966,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TragoulsGuise = new Item
         {
-            Id = 467601,
+            Id = SNOActor.p6_Helm_norm_set_18,
             Name = "Trag'Oul's Guise",
             Quality = ItemQuality.Legendary,
             Slug = "tragouls-guise",
@@ -3988,7 +3989,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item UlianasSpirit = new Item
         {
-            Id = 414928,
+            Id = SNOActor.p2_Helm_norm_set_03,
             Name = "Uliana's Spirit",
             Quality = ItemQuality.Legendary,
             Slug = "ulianas-spirit",
@@ -4011,7 +4012,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item VyrsSightlessSkull = new Item
         {
-            Id = 439183,
+            Id = SNOActor.p3_Helm_norm_set_01,
             Name = "Vyr's Sightless Skull",
             Quality = ItemQuality.Legendary,
             Slug = "vyrs-sightless-skull",
@@ -4034,7 +4035,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HeartOfIron = new Item
         {
-            Id = 205607,
+            Id = SNOActor.chestArmor_norm_unique_074,
             Name = "Heart of Iron",
             Quality = ItemQuality.Legendary,
             Slug = "heart-of-iron",
@@ -4057,7 +4058,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item AquilaCuirass = new Item
         {
-            Id = 197203,
+            Id = SNOActor.chestArmor_norm_unique_047,
             Name = "Aquila Cuirass",
             Quality = ItemQuality.Legendary,
             Slug = "aquila-cuirass",
@@ -4080,7 +4081,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Chaingmail = new Item
         {
-            Id = 197204,
+            Id = SNOActor.chestArmor_norm_unique_048,
             Name = "Chaingmail",
             Quality = ItemQuality.Legendary,
             Slug = "chaingmail",
@@ -4103,7 +4104,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Cindercoat = new Item
         {
-            Id = 222455,
+            Id = SNOActor.chestArmor_norm_unique_049,
             Name = "Cindercoat",
             Quality = ItemQuality.Legendary,
             Slug = "cindercoat",
@@ -4126,7 +4127,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ShiMizusHaori = new Item
         {
-            Id = 332200,
+            Id = SNOActor.x1_chestArmor_norm_unique_01,
             Name = "Shi Mizu's Haori",
             Quality = ItemQuality.Legendary,
             Slug = "shi-mizus-haori",
@@ -4149,7 +4150,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Goldskin = new Item
         {
-            Id = 205616,
+            Id = SNOActor.chestArmor_norm_unique_089,
             Name = "Goldskin",
             Quality = ItemQuality.Legendary,
             Slug = "goldskin",
@@ -4172,7 +4173,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TyraelsMight = new Item
         {
-            Id = 205608,
+            Id = SNOActor.chestArmor_norm_unique_075,
             Name = "Tyrael's Might",
             Quality = ItemQuality.Legendary,
             Slug = "tyraels-might",
@@ -4195,7 +4196,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BlackthornesSurcoat = new Item
         {
-            Id = 222456,
+            Id = SNOActor.chestArmor_norm_unique_050,
             Name = "Blackthorne's Surcoat",
             Quality = ItemQuality.Legendary,
             Slug = "blackthornes-surcoat",
@@ -4218,7 +4219,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ImmortalKingsEternalReign = new Item
         {
-            Id = 205613,
+            Id = SNOActor.chestArmor_norm_unique_086,
             Name = "Immortal King's Eternal Reign",
             Quality = ItemQuality.Legendary,
             Slug = "immortal-kings-eternal-reign",
@@ -4241,7 +4242,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item InnasVastExpanse = new Item
         {
-            Id = 205614,
+            Id = SNOActor.chestArmor_norm_unique_087,
             Name = "Inna's Vast Expanse",
             Quality = ItemQuality.Legendary,
             Slug = "innas-vast-expanse",
@@ -4264,7 +4265,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TalRashasRelentlessPursuit = new Item
         {
-            Id = 211626,
+            Id = SNOActor.chestArmor_norm_set_01,
             Name = "Tal Rasha's Relentless Pursuit",
             Quality = ItemQuality.Legendary,
             Slug = "tal-rashas-relentless-pursuit",
@@ -4287,7 +4288,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ZunimassasMarrow = new Item
         {
-            Id = 205615,
+            Id = SNOActor.chestArmor_norm_unique_088,
             Name = "Zunimassa's Marrow",
             Quality = ItemQuality.Legendary,
             Slug = "zunimassas-marrow",
@@ -4310,7 +4311,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BloodsongMail = new Item
         {
-            Id = 467568,
+            Id = SNOActor.p6_chestArmor_norm_unique_21,
             Name = "Bloodsong Mail",
             Quality = ItemQuality.Legendary,
             Slug = "bloodsong-mail",
@@ -4333,7 +4334,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ArmorOfTheKindRegent = new Item
         {
-            Id = 332202,
+            Id = SNOActor.x1_chestArmor_norm_unique_02,
             Name = "Armor of the Kind Regent",
             Quality = ItemQuality.Legendary,
             Slug = "armor-of-the-kind-regent",
@@ -4356,7 +4357,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RequiemCereplate = new Item
         {
-            Id = 467569,
+            Id = SNOActor.p6_chestArmor_norm_unique_22,
             Name = "Requiem Cereplate",
             Quality = ItemQuality.Legendary,
             Slug = "requiem-cereplate",
@@ -4379,7 +4380,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ArachyrsCarapace = new Item
         {
-            Id = 441191,
+            Id = SNOActor.p3_chestArmor_norm_set_04,
             Name = "Arachyr's Carapace",
             Quality = ItemQuality.Legendary,
             Slug = "arachyrs-carapace",
@@ -4402,7 +4403,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BreastplateOfAkkhan = new Item
         {
-            Id = 358796,
+            Id = SNOActor.x1_chestArmor_norm_set_10,
             Name = "Breastplate of Akkhan",
             Quality = ItemQuality.Legendary,
             Slug = "breastplate-of-akkhan",
@@ -4425,7 +4426,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CuirassOfTheWastes = new Item
         {
-            Id = 408860,
+            Id = SNOActor.p2_chestArmor_norm_set_01,
             Name = "Cuirass of the Wastes",
             Quality = ItemQuality.Legendary,
             Slug = "cuirass-of-the-wastes",
@@ -4448,7 +4449,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FirebirdsBreast = new Item
         {
-            Id = 358788,
+            Id = SNOActor.x1_chestArmor_norm_set_06,
             Name = "Firebird's Breast",
             Quality = ItemQuality.Legendary,
             Slug = "firebirds-breast",
@@ -4471,7 +4472,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HarnessOfTruth = new Item
         {
-            Id = 408868,
+            Id = SNOActor.p2_chestArmor_norm_set_02,
             Name = "Harness of Truth",
             Quality = ItemQuality.Legendary,
             Slug = "harness-of-truth",
@@ -4494,7 +4495,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HeartOfTheCrashingWave = new Item
         {
-            Id = 338032,
+            Id = SNOActor.x1_chestArmor_norm_set_08,
             Name = "Heart of the Crashing Wave",
             Quality = ItemQuality.Legendary,
             Slug = "heart-of-the-crashing-wave",
@@ -4517,7 +4518,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HeartOfTheLight = new Item
         {
-            Id = 408872,
+            Id = SNOActor.p2_chestArmor_norm_set_06,
             Name = "Heart of the Light",
             Quality = ItemQuality.Legendary,
             Slug = "heart-of-the-light",
@@ -4540,7 +4541,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HelltoothTunic = new Item
         {
-            Id = 363088,
+            Id = SNOActor.x1_chestArmor_norm_set_16,
             Name = "Helltooth Tunic",
             Quality = ItemQuality.Legendary,
             Slug = "helltooth-tunic",
@@ -4563,7 +4564,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item InariussConviction = new Item
         {
-            Id = 467567,
+            Id = SNOActor.p6_chestArmor_norm_set_19,
             Name = "Inarius's Conviction",
             Quality = ItemQuality.Legendary,
             Slug = "inariuss-conviction",
@@ -4586,7 +4587,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item JadeHarvestersPeace = new Item
         {
-            Id = 338038,
+            Id = SNOActor.x1_chestArmor_norm_set_09,
             Name = "Jade Harvester's Peace",
             Quality = ItemQuality.Legendary,
             Slug = "jade-harvesters-peace",
@@ -4609,7 +4610,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MaraudersCarapace = new Item
         {
-            Id = 363803,
+            Id = SNOActor.x1_chestArmor_norm_set_07,
             Name = "Marauder's Carapace",
             Quality = ItemQuality.Legendary,
             Slug = "marauders-carapace",
@@ -4632,7 +4633,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PestilenceRobe = new Item
         {
-            Id = 467351,
+            Id = SNOActor.p6_chestArmor_norm_set_20,
             Name = "Pestilence Robe",
             Quality = ItemQuality.Legendary,
             Slug = "pestilence-robe",
@@ -4655,7 +4656,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RaekorsHeart = new Item
         {
-            Id = 336984,
+            Id = SNOActor.x1_chestArmor_norm_set_05,
             Name = "Raekor's Heart",
             Quality = ItemQuality.Legendary,
             Slug = "raekors-heart",
@@ -4678,7 +4679,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RathmasRibcagePlate = new Item
         {
-            Id = 460919,
+            Id = SNOActor.p6_chestArmor_norm_set_17,
             Name = "Rathma's Ribcage Plate",
             Quality = ItemQuality.Legendary,
             Slug = "rathmas-ribcage-plate",
@@ -4701,7 +4702,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RolandsBearing = new Item
         {
-            Id = 404095,
+            Id = SNOActor.p1_chestArmor_norm_set_01,
             Name = "Roland's Bearing",
             Quality = ItemQuality.Legendary,
             Slug = "rolands-bearing",
@@ -4724,7 +4725,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SpiritOfTheEarth = new Item
         {
-            Id = 442474,
+            Id = SNOActor.p4_chestArmor_norm_set_15,
             Name = "Spirit of the Earth",
             Quality = ItemQuality.Legendary,
             Slug = "spirit-of-the-earth",
@@ -4747,7 +4748,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SunwukosSoul = new Item
         {
-            Id = 429167,
+            Id = SNOActor.p2_chestArmor_norm_set_11,
             Name = "Sunwuko's Soul",
             Quality = ItemQuality.Legendary,
             Slug = "sunwukos-soul",
@@ -4770,7 +4771,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheShadowsBane = new Item
         {
-            Id = 332359,
+            Id = SNOActor.x1_chestArmor_norm_set_14,
             Name = "The Shadow's Bane",
             Quality = ItemQuality.Legendary,
             Slug = "the-shadows-bane",
@@ -4793,7 +4794,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TragoulsScales = new Item
         {
-            Id = 467566,
+            Id = SNOActor.p6_chestArmor_norm_set_18,
             Name = "Trag'Oul's Scales",
             Quality = ItemQuality.Legendary,
             Slug = "tragouls-scales",
@@ -4816,7 +4817,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item UlianasHeart = new Item
         {
-            Id = 408869,
+            Id = SNOActor.p2_chestArmor_norm_set_03,
             Name = "Uliana's Heart",
             Quality = ItemQuality.Legendary,
             Slug = "ulianas-heart",
@@ -4839,7 +4840,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item VyrsAstonishingAura = new Item
         {
-            Id = 332357,
+            Id = SNOActor.x1_chestArmor_norm_set_13,
             Name = "Vyr's Astonishing Aura",
             Quality = ItemQuality.Legendary,
             Slug = "vyrs-astonishing-aura",
@@ -4862,7 +4863,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item AshnagarrsBloodBracer = new Item
         {
-            Id = 193686,
+            Id = SNOActor.Bracers_norm_unique_04,
             Name = "Ashnagarr's Blood Bracer",
             Quality = ItemQuality.Legendary,
             Slug = "ashnagarrs-blood-bracer",
@@ -4885,7 +4886,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CesarsMemento = new Item
         {
-            Id = 449038,
+            Id = SNOActor.p4_Bracers_norm_unique_07,
             Name = "Cesar's Memento",
             Quality = ItemQuality.Legendary,
             Slug = "cesars-memento",
@@ -4908,7 +4909,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GungdoGear = new Item
         {
-            Id = 193688,
+            Id = SNOActor.Bracers_norm_unique_06,
             Name = "Gungdo Gear",
             Quality = ItemQuality.Legendary,
             Slug = "gungdo-gear",
@@ -4931,7 +4932,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BracersOfDestruction = new Item
         {
-            Id = 440429,
+            Id = SNOActor.p3_Bracers_norm_unique_03,
             Name = "Bracers of Destruction",
             Quality = ItemQuality.Legendary,
             Slug = "bracers-of-destruction",
@@ -4954,7 +4955,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BracersOfTheFirstMen = new Item
         {
-            Id = 440430,
+            Id = SNOActor.p3_Bracers_norm_unique_04,
             Name = "Bracers of the First Men",
             Quality = ItemQuality.Legendary,
             Slug = "bracers-of-the-first-men",
@@ -4977,7 +4978,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GabrielsVambraces = new Item
         {
-            Id = 436469,
+            Id = SNOActor.x1_Bracers_norm_unique_21,
             Name = "Gabriel's Vambraces",
             Quality = ItemQuality.Legendary,
             Slug = "gabriels-vambraces",
@@ -5000,7 +5001,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PintosPride = new Item
         {
-            Id = 447294,
+            Id = SNOActor.p4_Bracers_norm_unique_05,
             Name = "Pinto's Pride",
             Quality = ItemQuality.Legendary,
             Slug = "pintos-pride",
@@ -5023,7 +5024,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SanguinaryVambraces = new Item
         {
-            Id = 298120,
+            Id = SNOActor.x1_Bracers_norm_unique_15,
             Name = "Sanguinary Vambraces",
             Quality = ItemQuality.Legendary,
             Slug = "sanguinary-vambraces",
@@ -5046,7 +5047,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item WrapsOfClarity = new Item
         {
-            Id = 440428,
+            Id = SNOActor.p3_Bracers_norm_unique_02,
             Name = "Wraps of Clarity",
             Quality = ItemQuality.Legendary,
             Slug = "wraps-of-clarity",
@@ -5069,7 +5070,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BindingsOfTheLesserGods = new Item
         {
-            Id = 440427,
+            Id = SNOActor.p3_Bracers_norm_unique_01,
             Name = "Bindings of the Lesser Gods",
             Quality = ItemQuality.Legendary,
             Slug = "bindings-of-the-lesser-gods",
@@ -5092,7 +5093,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item AkkhansManacles = new Item
         {
-            Id = 446057,
+            Id = SNOActor.p4_Bracers_norm_unique_03,
             Name = "Akkhan's Manacles",
             Quality = ItemQuality.Legendary,
             Slug = "akkhans-manacles",
@@ -5115,7 +5116,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item JeramsBracers = new Item
         {
-            Id = 440431,
+            Id = SNOActor.p3_Bracers_norm_unique_05,
             Name = "Jeram's Bracers",
             Quality = ItemQuality.Legendary,
             Slug = "jerams-bracers",
@@ -5138,7 +5139,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BracerOfFury = new Item
         {
-            Id = 446161,
+            Id = SNOActor.p4_Bracers_norm_unique_04,
             Name = "Bracer of Fury",
             Quality = ItemQuality.Legendary,
             Slug = "bracer-of-fury",
@@ -5161,7 +5162,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item VambracesOfSescheron = new Item
         {
-            Id = 447838,
+            Id = SNOActor.p4_Bracers_norm_unique_06,
             Name = "Vambraces of Sescheron",
             Quality = ItemQuality.Legendary,
             Slug = "vambraces-of-sescheron",
@@ -5184,7 +5185,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item AncientParthanDefenders = new Item
         {
-            Id = 298116,
+            Id = SNOActor.x1_Bracers_norm_unique_12,
             Name = "Ancient Parthan Defenders",
             Quality = ItemQuality.Legendary,
             Slug = "ancient-parthan-defenders",
@@ -5207,7 +5208,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CusterianWristguards = new Item
         {
-            Id = 298122,
+            Id = SNOActor.x1_Bracers_norm_unique_17,
             Name = "Custerian Wristguards",
             Quality = ItemQuality.Legendary,
             Slug = "custerian-wristguards",
@@ -5230,7 +5231,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item NemesisBracers = new Item
         {
-            Id = 298121,
+            Id = SNOActor.x1_Bracers_norm_unique_16,
             Name = "Nemesis Bracers",
             Quality = ItemQuality.Legendary,
             Slug = "nemesis-bracers",
@@ -5253,7 +5254,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item WarzechianArmguards = new Item
         {
-            Id = 298115,
+            Id = SNOActor.x1_Bracers_norm_unique_11,
             Name = "Warzechian Armguards",
             Quality = ItemQuality.Legendary,
             Slug = "warzechian-armguards",
@@ -5276,7 +5277,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PromiseOfGlory = new Item
         {
-            Id = 193684,
+            Id = SNOActor.Bracers_norm_unique_02,
             Name = "Promise of Glory",
             Quality = ItemQuality.Legendary,
             Slug = "promise-of-glory",
@@ -5299,7 +5300,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LacuniProwlers = new Item
         {
-            Id = 193687,
+            Id = SNOActor.Bracers_norm_unique_05,
             Name = "Lacuni Prowlers",
             Quality = ItemQuality.Legendary,
             Slug = "lacuni-prowlers",
@@ -5322,7 +5323,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item StrongarmBracers = new Item
         {
-            Id = 193692,
+            Id = SNOActor.Bracers_norm_unique_07,
             Name = "Strongarm Bracers",
             Quality = ItemQuality.Legendary,
             Slug = "strongarm-bracers",
@@ -5345,7 +5346,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CoilsOfTheFirstSpider = new Item
         {
-            Id = 440432,
+            Id = SNOActor.p3_Bracers_norm_unique_06,
             Name = "Coils of the First Spider",
             Quality = ItemQuality.Legendary,
             Slug = "coils-of-the-first-spider",
@@ -5368,7 +5369,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DrakonsLesson = new Item
         {
-            Id = 432833,
+            Id = SNOActor.x1_Bracers_norm_unique_20,
             Name = "Drakon's Lesson",
             Quality = ItemQuality.Legendary,
             Slug = "drakons-lesson",
@@ -5391,7 +5392,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LakumbasOrnament = new Item
         {
-            Id = 445265,
+            Id = SNOActor.p4_Bracers_norm_unique_02,
             Name = "Lakumba's Ornament",
             Quality = ItemQuality.Legendary,
             Slug = "lakumbas-ornament",
@@ -5414,7 +5415,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RanslorsFolly = new Item
         {
-            Id = 298123,
+            Id = SNOActor.x1_Bracers_norm_unique_18,
             Name = "Ranslor's Folly",
             Quality = ItemQuality.Legendary,
             Slug = "ranslors-folly",
@@ -5437,7 +5438,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SkularsSalvation = new Item
         {
-            Id = 444928,
+            Id = SNOActor.p4_Bracers_norm_unique_01,
             Name = "Skular's Salvation",
             Quality = ItemQuality.Legendary,
             Slug = "skulars-salvation",
@@ -5460,7 +5461,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SpiritGuards = new Item
         {
-            Id = 430290,
+            Id = SNOActor.x1_Bracers_norm_unique_19,
             Name = "Spirit Guards",
             Quality = ItemQuality.Legendary,
             Slug = "spirit-guards",
@@ -5483,7 +5484,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TragoulCoils = new Item
         {
-            Id = 298119,
+            Id = SNOActor.x1_Bracers_norm_unique_14,
             Name = "Trag'Oul Coils",
             Quality = ItemQuality.Legendary,
             Slug = "tragoul-coils",
@@ -5506,7 +5507,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item KrelmsBuffBracers = new Item
         {
-            Id = 336185,
+            Id = SNOActor.x1_Bracers_norm_set_02,
             Name = "Krelm's Buff Bracers",
             Quality = ItemQuality.Legendary,
             Slug = "krelms-buff-bracers",
@@ -5529,7 +5530,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ShacklesOfTheInvoker = new Item
         {
-            Id = 335030,
+            Id = SNOActor.x1_Bracers_norm_set_12,
             Name = "Shackles of the Invoker",
             Quality = ItemQuality.Legendary,
             Slug = "shackles-of-the-invoker",
@@ -5552,7 +5553,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GlovesOfWorship = new Item
         {
-            Id = 332344,
+            Id = SNOActor.x1_Gloves_norm_unique_03,
             Name = "Gloves of Worship",
             Quality = ItemQuality.Legendary,
             Slug = "gloves-of-worship",
@@ -5575,7 +5576,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GraspsOfEssence = new Item
         {
-            Id = 467573,
+            Id = SNOActor.p6_Gloves_norm_unique_22,
             Name = "Grasps of Essence",
             Quality = ItemQuality.Legendary,
             Slug = "grasps-of-essence",
@@ -5598,7 +5599,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item StoneGauntlets = new Item
         {
-            Id = 205640,
+            Id = SNOActor.Gloves_norm_unique_076,
             Name = "Stone Gauntlets",
             Quality = ItemQuality.Legendary,
             Slug = "stone-gauntlets",
@@ -5621,7 +5622,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Magefist = new Item
         {
-            Id = 197206,
+            Id = SNOActor.Gloves_norm_unique_044,
             Name = "Magefist",
             Quality = ItemQuality.Legendary,
             Slug = "magefist",
@@ -5644,7 +5645,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item StArchewsGage = new Item
         {
-            Id = 332172,
+            Id = SNOActor.x1_Gloves_norm_unique_01,
             Name = "St. Archew's Gage",
             Quality = ItemQuality.Legendary,
             Slug = "st-archews-gage",
@@ -5667,7 +5668,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MoribundGauntlets = new Item
         {
-            Id = 467572,
+            Id = SNOActor.p6_Gloves_norm_unique_21,
             Name = "Moribund Gauntlets",
             Quality = ItemQuality.Legendary,
             Slug = "moribund-gauntlets",
@@ -5690,7 +5691,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GladiatorGauntlets = new Item
         {
-            Id = 205635,
+            Id = SNOActor.Gloves_norm_unique_090,
             Name = "Gladiator Gauntlets",
             Quality = ItemQuality.Legendary,
             Slug = "gladiator-gauntlets",
@@ -5713,7 +5714,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Frostburn = new Item
         {
-            Id = 197205,
+            Id = SNOActor.Gloves_norm_unique_043,
             Name = "Frostburn",
             Quality = ItemQuality.Legendary,
             Slug = "frostburn",
@@ -5736,7 +5737,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TaskerAndTheo = new Item
         {
-            Id = 205642,
+            Id = SNOActor.Gloves_norm_unique_078,
             Name = "Tasker and Theo",
             Quality = ItemQuality.Legendary,
             Slug = "tasker-and-theo",
@@ -5759,7 +5760,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ImmortalKingsIrons = new Item
         {
-            Id = 205631,
+            Id = SNOActor.Gloves_norm_unique_086,
             Name = "Immortal King's Irons",
             Quality = ItemQuality.Legendary,
             Slug = "immortal-kings-irons",
@@ -5782,7 +5783,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item InnasHold = new Item
         {
-            Id = 415197,
+            Id = SNOActor.Gloves_norm_unique_087_B,
             Name = "Inna's Hold",
             Quality = ItemQuality.Legendary,
             Slug = "innas-hold",
@@ -5805,7 +5806,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item NatalyasTouch = new Item
         {
-            Id = 415190,
+            Id = SNOActor.Gloves_norm_unique_044_B,
             Name = "Natalya's Touch",
             Quality = ItemQuality.Legendary,
             Slug = "natalyas-touch",
@@ -5828,7 +5829,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TalRashasGrasp = new Item
         {
-            Id = 415051,
+            Id = SNOActor.Gloves_norm_set_01,
             Name = "Tal Rasha's Grasp",
             Quality = ItemQuality.Legendary,
             Slug = "tal-rashas-grasp",
@@ -5851,7 +5852,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ZunimassasFingerWraps = new Item
         {
-            Id = 205633,
+            Id = SNOActor.Gloves_norm_unique_088,
             Name = "Zunimassa's Finger Wraps",
             Quality = ItemQuality.Legendary,
             Slug = "zunimassas-finger-wraps",
@@ -5874,7 +5875,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ArachyrsClaws = new Item
         {
-            Id = 441196,
+            Id = SNOActor.p3_Gloves_norm_set_04,
             Name = "Arachyr's Claws",
             Quality = ItemQuality.Legendary,
             Slug = "arachyrs-claws",
@@ -5897,7 +5898,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FiendishGrips = new Item
         {
-            Id = 408876,
+            Id = SNOActor.p2_Gloves_norm_set_05,
             Name = "Fiendish Grips",
             Quality = ItemQuality.Legendary,
             Slug = "fiendish-grips",
@@ -5920,7 +5921,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FierceGauntlets = new Item
         {
-            Id = 408873,
+            Id = SNOActor.p2_Gloves_norm_set_02,
             Name = "Fierce Gauntlets",
             Quality = ItemQuality.Legendary,
             Slug = "fierce-gauntlets",
@@ -5943,7 +5944,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FirebirdsTalons = new Item
         {
-            Id = 358789,
+            Id = SNOActor.x1_Gloves_norm_set_06,
             Name = "Firebird's Talons",
             Quality = ItemQuality.Legendary,
             Slug = "firebirds-talons",
@@ -5966,7 +5967,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FistsOfThunder = new Item
         {
-            Id = 338033,
+            Id = SNOActor.x1_Gloves_norm_set_08,
             Name = "Fists of Thunder",
             Quality = ItemQuality.Legendary,
             Slug = "fists-of-thunder",
@@ -5989,7 +5990,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GauntletOfTheWastes = new Item
         {
-            Id = 408861,
+            Id = SNOActor.p2_Gloves_norm_set_01,
             Name = "Gauntlet of the Wastes",
             Quality = ItemQuality.Legendary,
             Slug = "gauntlet-of-the-wastes",
@@ -6012,7 +6013,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GauntletsOfAkkhan = new Item
         {
-            Id = 358798,
+            Id = SNOActor.x1_Gloves_norm_set_10,
             Name = "Gauntlets of Akkhan",
             Quality = ItemQuality.Legendary,
             Slug = "gauntlets-of-akkhan",
@@ -6035,7 +6036,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HelltoothGauntlets = new Item
         {
-            Id = 363094,
+            Id = SNOActor.x1_Gloves_norm_set_16,
             Name = "Helltooth Gauntlets",
             Quality = ItemQuality.Legendary,
             Slug = "helltooth-gauntlets",
@@ -6058,7 +6059,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item InariussWill = new Item
         {
-            Id = 467571,
+            Id = SNOActor.p6_Gloves_norm_set_19,
             Name = "Inarius's Will",
             Quality = ItemQuality.Legendary,
             Slug = "inariuss-will",
@@ -6081,7 +6082,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item JadeHarvestersMercy = new Item
         {
-            Id = 338039,
+            Id = SNOActor.x1_Gloves_norm_set_09,
             Name = "Jade Harvester's Mercy",
             Quality = ItemQuality.Legendary,
             Slug = "jade-harvesters-mercy",
@@ -6104,7 +6105,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MaraudersGloves = new Item
         {
-            Id = 336992,
+            Id = SNOActor.x1_Gloves_norm_set_07,
             Name = "Marauder's Gloves",
             Quality = ItemQuality.Legendary,
             Slug = "marauders-gloves",
@@ -6127,7 +6128,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PestilenceGloves = new Item
         {
-            Id = 467352,
+            Id = SNOActor.p6_Gloves_norm_set_20,
             Name = "Pestilence Gloves",
             Quality = ItemQuality.Legendary,
             Slug = "pestilence-gloves",
@@ -6150,7 +6151,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PrideOfTheInvoker = new Item
         {
-            Id = 335027,
+            Id = SNOActor.x1_Gloves_norm_set_12,
             Name = "Pride of the Invoker",
             Quality = ItemQuality.Legendary,
             Slug = "pride-of-the-invoker",
@@ -6173,7 +6174,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PullOfTheEarth = new Item
         {
-            Id = 340523,
+            Id = SNOActor.x1_Gloves_norm_set_15,
             Name = "Pull of the Earth",
             Quality = ItemQuality.Legendary,
             Slug = "pull-of-the-earth",
@@ -6196,7 +6197,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RaekorsWraps = new Item
         {
-            Id = 336985,
+            Id = SNOActor.x1_Gloves_norm_set_05,
             Name = "Raekor's Wraps",
             Quality = ItemQuality.Legendary,
             Slug = "raekors-wraps",
@@ -6219,7 +6220,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RathmasMacabreVambraces = new Item
         {
-            Id = 460920,
+            Id = SNOActor.p6_Gloves_norm_set_17,
             Name = "Rathma's Macabre Vambraces",
             Quality = ItemQuality.Legendary,
             Slug = "rathmas-macabre-vambraces",
@@ -6242,7 +6243,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RolandsGrasp = new Item
         {
-            Id = 404096,
+            Id = SNOActor.p1_Gloves_norm_set_01,
             Name = "Roland's Grasp",
             Quality = ItemQuality.Legendary,
             Slug = "rolands-grasp",
@@ -6265,7 +6266,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SunwukosPaws = new Item
         {
-            Id = 336172,
+            Id = SNOActor.x1_Gloves_norm_set_11,
             Name = "Sunwuko's Paws",
             Quality = ItemQuality.Legendary,
             Slug = "sunwukos-paws",
@@ -6288,7 +6289,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheShadowsGrasp = new Item
         {
-            Id = 332362,
+            Id = SNOActor.x1_Gloves_norm_set_14,
             Name = "The Shadow's Grasp",
             Quality = ItemQuality.Legendary,
             Slug = "the-shadows-grasp",
@@ -6311,7 +6312,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TragoulsClaws = new Item
         {
-            Id = 467570,
+            Id = SNOActor.p6_Gloves_norm_set_18,
             Name = "Trag'Oul's Claws",
             Quality = ItemQuality.Legendary,
             Slug = "tragouls-claws",
@@ -6334,7 +6335,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item UlianasFury = new Item
         {
-            Id = 408874,
+            Id = SNOActor.p2_Gloves_norm_set_03,
             Name = "Uliana's Fury",
             Quality = ItemQuality.Legendary,
             Slug = "ulianas-fury",
@@ -6357,7 +6358,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item VyrsGraspingGauntlets = new Item
         {
-            Id = 346210,
+            Id = SNOActor.x1_Gloves_norm_set_13,
             Name = "Vyr's Grasping Gauntlets",
             Quality = ItemQuality.Legendary,
             Slug = "vyrs-grasping-gauntlets",
@@ -6380,7 +6381,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item WillOfTheLight = new Item
         {
-            Id = 408877,
+            Id = SNOActor.p2_Gloves_norm_set_06,
             Name = "Will of the Light",
             Quality = ItemQuality.Legendary,
             Slug = "will-of-the-light",
@@ -6403,7 +6404,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GirdleOfGiants = new Item
         {
-            Id = 212232,
+            Id = SNOActor.BarbBelt_norm_unique_04,
             Name = "Girdle of Giants",
             Quality = ItemQuality.Legendary,
             Slug = "girdle-of-giants",
@@ -6426,7 +6427,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheUndisputedChampion = new Item
         {
-            Id = 193676,
+            Id = SNOActor.BarbBelt_norm_unique_06,
             Name = "The Undisputed Champion",
             Quality = ItemQuality.Legendary,
             Slug = "the-undisputed-champion",
@@ -6449,7 +6450,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PrideOfCassius = new Item
         {
-            Id = 193673,
+            Id = SNOActor.BarbBelt_norm_unique_02,
             Name = "Pride of Cassius",
             Quality = ItemQuality.Legendary,
             Slug = "pride-of-cassius",
@@ -6472,7 +6473,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ChilaniksChain = new Item
         {
-            Id = 298133,
+            Id = SNOActor.x1_BarbBelt_norm_unique_10,
             Name = "Chilanik's Chain",
             Quality = ItemQuality.Legendary,
             Slug = "chilaniks-chain",
@@ -6495,7 +6496,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Lamentation = new Item
         {
-            Id = 212234,
+            Id = SNOActor.BarbBelt_norm_unique_05,
             Name = "Lamentation",
             Quality = ItemQuality.Legendary,
             Slug = "lamentation",
@@ -6518,7 +6519,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ImmortalKingsTribalBinding = new Item
         {
-            Id = 212235,
+            Id = SNOActor.BarbBelt_norm_unique_09,
             Name = "Immortal King's Tribal Binding",
             Quality = ItemQuality.Legendary,
             Slug = "immortal-kings-tribal-binding",
@@ -6541,7 +6542,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DreadIron = new Item
         {
-            Id = 193672,
+            Id = SNOActor.BarbBelt_norm_unique_01,
             Name = "Dread Iron",
             Quality = ItemQuality.Legendary,
             Slug = "dread-iron",
@@ -6564,7 +6565,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MoonlightWard = new Item
         {
-            Id = 197813,
+            Id = SNOActor.Amulet_norm_unique_03,
             Name = "Moonlight Ward",
             Quality = ItemQuality.Legendary,
             Slug = "moonlight-ward",
@@ -6587,7 +6588,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SquirtsNecklace = new Item
         {
-            Id = 197819,
+            Id = SNOActor.Amulet_norm_unique_08,
             Name = "Squirt's Necklace",
             Quality = ItemQuality.Legendary,
             Slug = "squirts-necklace",
@@ -6610,7 +6611,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GoldenGorgetOfLeoric = new Item
         {
-            Id = 298052,
+            Id = SNOActor.x1_Amulet_norm_unique_21,
             Name = "Golden Gorget of Leoric",
             Quality = ItemQuality.Legendary,
             Slug = "golden-gorget-of-leoric",
@@ -6633,7 +6634,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item OverwhelmingDesire = new Item
         {
-            Id = 298053,
+            Id = SNOActor.x1_Amulet_norm_unique_22,
             Name = "Overwhelming Desire",
             Quality = ItemQuality.Legendary,
             Slug = "overwhelming-desire",
@@ -6656,7 +6657,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item WisdomOfKalan = new Item
         {
-            Id = 476718,
+            Id = SNOActor.P6_Amulet_norm_unique_03,
             Name = "Wisdom of Kalan",
             Quality = ItemQuality.Legendary,
             Slug = "wisdom-of-kalan",
@@ -6679,7 +6680,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item EyeOfEtlich = new Item
         {
-            Id = 197823,
+            Id = SNOActor.Amulet_norm_unique_12,
             Name = "Eye of Etlich",
             Quality = ItemQuality.Legendary,
             Slug = "eye-of-etlich",
@@ -6702,7 +6703,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RondalsLocket = new Item
         {
-            Id = 197818,
+            Id = SNOActor.Amulet_norm_unique_07,
             Name = "Rondal's Locket",
             Quality = ItemQuality.Legendary,
             Slug = "rondals-locket",
@@ -6725,7 +6726,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TalismanOfAranoch = new Item
         {
-            Id = 197821,
+            Id = SNOActor.Amulet_norm_unique_10,
             Name = "Talisman of Aranoch",
             Quality = ItemQuality.Legendary,
             Slug = "talisman-of-aranoch",
@@ -6748,7 +6749,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item AncestorsGrace = new Item
         {
-            Id = 298049,
+            Id = SNOActor.x1_Amulet_norm_unique_18,
             Name = "Ancestors' Grace",
             Quality = ItemQuality.Legendary,
             Slug = "ancestors-grace",
@@ -6771,7 +6772,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CountessJuliasCameo = new Item
         {
-            Id = 298050,
+            Id = SNOActor.x1_Amulet_norm_unique_19,
             Name = "Countess Julia's Cameo",
             Quality = ItemQuality.Legendary,
             Slug = "countess-julias-cameo",
@@ -6794,7 +6795,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DovuEnergyTrap = new Item
         {
-            Id = 298054,
+            Id = SNOActor.x1_Amulet_norm_unique_23,
             Name = "Dovu Energy Trap",
             Quality = ItemQuality.Legendary,
             Slug = "dovu-energy-trap",
@@ -6817,7 +6818,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HauntOfVaxo = new Item
         {
-            Id = 297806,
+            Id = SNOActor.x1_Amulet_norm_unique_17,
             Name = "Haunt of Vaxo",
             Quality = ItemQuality.Legendary,
             Slug = "haunt-of-vaxo",
@@ -6840,7 +6841,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RakoffsGlassOfLife = new Item
         {
-            Id = 298055,
+            Id = SNOActor.x1_Amulet_norm_unique_24,
             Name = "Rakoff's Glass of Life",
             Quality = ItemQuality.Legendary,
             Slug = "rakoffs-glass-of-life",
@@ -6863,7 +6864,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheEssOfJohan = new Item
         {
-            Id = 298051,
+            Id = SNOActor.x1_Amulet_norm_unique_20,
             Name = "The Ess of Johan",
             Quality = ItemQuality.Legendary,
             Slug = "the-ess-of-johan",
@@ -6886,7 +6887,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HolyBeacon = new Item
         {
-            Id = 197822,
+            Id = SNOActor.Amulet_norm_unique_11,
             Name = "Holy Beacon",
             Quality = ItemQuality.Legendary,
             Slug = "holy-beacon",
@@ -6909,7 +6910,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item KymbosGold = new Item
         {
-            Id = 197812,
+            Id = SNOActor.Amulet_norm_unique_02,
             Name = "Kymbo's Gold",
             Quality = ItemQuality.Legendary,
             Slug = "kymbos-gold",
@@ -6932,7 +6933,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheFlavorOfTime = new Item
         {
-            Id = 193659,
+            Id = SNOActor.Amulet_norm_unique_01,
             Name = "The Flavor of Time",
             Quality = ItemQuality.Legendary,
             Slug = "the-flavor-of-time",
@@ -6955,7 +6956,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MarasKaleidoscope = new Item
         {
-            Id = 197824,
+            Id = SNOActor.Amulet_norm_unique_13,
             Name = "Mara's Kaleidoscope",
             Quality = ItemQuality.Legendary,
             Slug = "maras-kaleidoscope",
@@ -6978,7 +6979,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Ouroboros = new Item
         {
-            Id = 197815,
+            Id = SNOActor.Amulet_norm_unique_05,
             Name = "Ouroboros",
             Quality = ItemQuality.Legendary,
             Slug = "ouroboros",
@@ -7001,7 +7002,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheStarOfAzkaranth = new Item
         {
-            Id = 197817,
+            Id = SNOActor.Amulet_norm_unique_06,
             Name = "The Star of Azkaranth",
             Quality = ItemQuality.Legendary,
             Slug = "the-star-of-azkaranth",
@@ -7024,7 +7025,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item XephirianAmulet = new Item
         {
-            Id = 197814,
+            Id = SNOActor.Amulet_norm_unique_04,
             Name = "Xephirian Amulet",
             Quality = ItemQuality.Legendary,
             Slug = "xephirian-amulet",
@@ -7047,7 +7048,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BlackthornesDuncraigCross = new Item
         {
-            Id = 224189,
+            Id = SNOActor.Amulet_norm_unique_16,
             Name = "Blackthorne's Duncraig Cross",
             Quality = ItemQuality.Legendary,
             Slug = "blackthornes-duncraig-cross",
@@ -7070,7 +7071,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TalRashasAllegiance = new Item
         {
-            Id = 222486,
+            Id = SNOActor.Amulet_norm_unique_14,
             Name = "Tal Rasha's Allegiance",
             Quality = ItemQuality.Legendary,
             Slug = "tal-rashas-allegiance",
@@ -7093,7 +7094,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheTravelersPledge = new Item
         {
-            Id = 222490,
+            Id = SNOActor.Amulet_norm_unique_15,
             Name = "The Traveler's Pledge",
             Quality = ItemQuality.Legendary,
             Slug = "the-travelers-pledge",
@@ -7116,7 +7117,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HalcyonsAscent = new Item
         {
-            Id = 298056,
+            Id = SNOActor.x1_Amulet_norm_unique_25,
             Name = "Halcyon's Ascent",
             Quality = ItemQuality.Legendary,
             Slug = "halcyons-ascent",
@@ -7139,7 +7140,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheJohnstone = new Item
         {
-            Id = 476716,
+            Id = SNOActor.P6_Amulet_norm_unique_01,
             Name = "The Johnstone",
             Quality = ItemQuality.Legendary,
             Slug = "the-johnstone",
@@ -7162,7 +7163,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HauntedVisions = new Item
         {
-            Id = 476717,
+            Id = SNOActor.P6_Amulet_norm_unique_02,
             Name = "Haunted Visions",
             Quality = ItemQuality.Legendary,
             Slug = "haunted-visions",
@@ -7185,7 +7186,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SunwukosShines = new Item
         {
-            Id = 336174,
+            Id = SNOActor.x1_Amulet_norm_set_11,
             Name = "Sunwuko's Shines",
             Quality = ItemQuality.Legendary,
             Slug = "sunwukos-shines",
@@ -7208,7 +7209,7 @@ namespace Trinity.Framework.Reference
         ///// </summary>
         //public static Item TalismanOfAkkhan = new Item
         //{
-        //    Id = 455735,
+        //    Id = SNOActor.P43_AkkhanSet_Amulet_01,
         //    Name = "Talisman of Akkhan",
         //    Quality = ItemQuality.Legendary,
         //    Slug = "talisman-of-akkhan",
@@ -7231,7 +7232,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LutSocks = new Item
         {
-            Id = 205622,
+            Id = SNOActor.Boots_norm_unique_077,
             Name = "Lut Socks",
             Quality = ItemQuality.Legendary,
             Slug = "lut-socks",
@@ -7254,7 +7255,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RiveraDancers = new Item
         {
-            Id = 197224,
+            Id = SNOActor.Boots_norm_unique_045,
             Name = "Rivera Dancers",
             Quality = ItemQuality.Legendary,
             Slug = "rivera-dancers",
@@ -7277,7 +7278,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheCrudestBoots = new Item
         {
-            Id = 205620,
+            Id = SNOActor.Boots_norm_unique_075,
             Name = "The Crudest Boots",
             Quality = ItemQuality.Legendary,
             Slug = "the-crudest-boots",
@@ -7300,7 +7301,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BootsOfDisregard = new Item
         {
-            Id = 322905,
+            Id = SNOActor.x1_Boots_norm_unique_02,
             Name = "Boots of Disregard",
             Quality = ItemQuality.Legendary,
             Slug = "boots-of-disregard",
@@ -7323,7 +7324,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item IllusoryBoots = new Item
         {
-            Id = 332342,
+            Id = SNOActor.x1_Boots_norm_unique_03,
             Name = "Illusory Boots",
             Quality = ItemQuality.Legendary,
             Slug = "illusory-boots",
@@ -7346,7 +7347,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item IrontoeMudsputters = new Item
         {
-            Id = 339125,
+            Id = SNOActor.x1_Boots_norm_unique_04,
             Name = "Irontoe Mudsputters",
             Quality = ItemQuality.Legendary,
             Slug = "irontoe-mudsputters",
@@ -7369,7 +7370,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BrynersJourney = new Item
         {
-            Id = 467565,
+            Id = SNOActor.p6_Boots_norm_unique_22,
             Name = "Bryner's Journey",
             Quality = ItemQuality.Legendary,
             Slug = "bryners-journey",
@@ -7392,7 +7393,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FireWalkers = new Item
         {
-            Id = 205624,
+            Id = SNOActor.Boots_norm_unique_085,
             Name = "Fire Walkers",
             Quality = ItemQuality.Legendary,
             Slug = "fire-walkers",
@@ -7415,7 +7416,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SteuartsGreaves = new Item
         {
-            Id = 467564,
+            Id = SNOActor.p6_Boots_norm_unique_21,
             Name = "Steuart's Greaves",
             Quality = ItemQuality.Legendary,
             Slug = "steuarts-greaves",
@@ -7438,7 +7439,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item IceClimbers = new Item
         {
-            Id = 222464,
+            Id = SNOActor.Boots_norm_unique_051,
             Name = "Ice Climbers",
             Quality = ItemQuality.Legendary,
             Slug = "ice-climbers",
@@ -7461,7 +7462,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item NilfursBoast = new Item
         {
-            Id = 415050,
+            Id = SNOActor.Boots_norm_set_01,
             Name = "Nilfur's Boast",
             Quality = ItemQuality.Legendary,
             Slug = "nilfurs-boast",
@@ -7484,7 +7485,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BlackthornesSpurs = new Item
         {
-            Id = 222463,
+            Id = SNOActor.Boots_norm_unique_050,
             Name = "Blackthorne's Spurs",
             Quality = ItemQuality.Legendary,
             Slug = "blackthornes-spurs",
@@ -7507,7 +7508,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ImmortalKingsStride = new Item
         {
-            Id = 205625,
+            Id = SNOActor.Boots_norm_unique_086,
             Name = "Immortal King's Stride",
             Quality = ItemQuality.Legendary,
             Slug = "immortal-kings-stride",
@@ -7530,7 +7531,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item InnasSandals = new Item
         {
-            Id = 415264,
+            Id = SNOActor.Boots_norm_unique_087_B,
             Name = "Inna's Sandals",
             Quality = ItemQuality.Legendary,
             Slug = "innas-sandals",
@@ -7553,7 +7554,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item NatalyasBloodyFootprints = new Item
         {
-            Id = 197223,
+            Id = SNOActor.Boots_norm_unique_044,
             Name = "Natalya's Bloody Footprints",
             Quality = ItemQuality.Legendary,
             Slug = "natalyas-bloody-footprints",
@@ -7576,7 +7577,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ZunimassasTrail = new Item
         {
-            Id = 205627,
+            Id = SNOActor.Boots_norm_unique_088,
             Name = "Zunimassa's Trail",
             Quality = ItemQuality.Legendary,
             Slug = "zunimassas-trail",
@@ -7599,7 +7600,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ArachyrsStride = new Item
         {
-            Id = 441195,
+            Id = SNOActor.p3_Boots_norm_set_04,
             Name = "Arachyr's Stride",
             Quality = ItemQuality.Legendary,
             Slug = "arachyrs-stride",
@@ -7622,7 +7623,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item EightdemonBoots = new Item
         {
-            Id = 338031,
+            Id = SNOActor.x1_Boots_norm_set_08,
             Name = "Eight-Demon Boots",
             Quality = ItemQuality.Legendary,
             Slug = "eightdemon-boots",
@@ -7645,7 +7646,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FirebirdsTarsi = new Item
         {
-            Id = 358793,
+            Id = SNOActor.x1_Boots_norm_set_06,
             Name = "Firebird's Tarsi",
             Quality = ItemQuality.Legendary,
             Slug = "firebirds-tarsi",
@@ -7668,7 +7669,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FoundationOfTheEarth = new Item
         {
-            Id = 366888,
+            Id = SNOActor.x1_Boots_norm_set_15,
             Name = "Foundation of the Earth",
             Quality = ItemQuality.Legendary,
             Slug = "foundation-of-the-earth",
@@ -7691,7 +7692,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FoundationOfTheLight = new Item
         {
-            Id = 408867,
+            Id = SNOActor.p2_Boots_norm_set_06,
             Name = "Foundation of the Light",
             Quality = ItemQuality.Legendary,
             Slug = "foundation-of-the-light",
@@ -7714,7 +7715,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HellWalkers = new Item
         {
-            Id = 408866,
+            Id = SNOActor.p2_Boots_norm_set_05,
             Name = "Hell Walkers",
             Quality = ItemQuality.Legendary,
             Slug = "hell-walkers",
@@ -7737,7 +7738,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HelltoothGreaves = new Item
         {
-            Id = 340524,
+            Id = SNOActor.x1_Boots_norm_set_16,
             Name = "Helltooth Greaves",
             Quality = ItemQuality.Legendary,
             Slug = "helltooth-greaves",
@@ -7760,7 +7761,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item InariussPerseverance = new Item
         {
-            Id = 467563,
+            Id = SNOActor.p6_Boots_norm_set_19,
             Name = "Inarius's Perseverance",
             Quality = ItemQuality.Legendary,
             Slug = "inariuss-perseverance",
@@ -7783,7 +7784,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item JadeHarvestersSwiftness = new Item
         {
-            Id = 338037,
+            Id = SNOActor.x1_Boots_norm_set_09,
             Name = "Jade Harvester's Swiftness",
             Quality = ItemQuality.Legendary,
             Slug = "jade-harvesters-swiftness",
@@ -7806,7 +7807,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MaraudersTreads = new Item
         {
-            Id = 336995,
+            Id = SNOActor.x1_Boots_norm_set_07,
             Name = "Marauder's Treads",
             Quality = ItemQuality.Legendary,
             Slug = "marauders-treads",
@@ -7829,7 +7830,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PestilenceBattleBoots = new Item
         {
-            Id = 467350,
+            Id = SNOActor.p6_boots_norm_set_20,
             Name = "Pestilence Battle Boots",
             Quality = ItemQuality.Legendary,
             Slug = "pestilence-battle-boots",
@@ -7852,7 +7853,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RaekorsStriders = new Item
         {
-            Id = 336987,
+            Id = SNOActor.x1_Boots_norm_set_05,
             Name = "Raekor's Striders",
             Quality = ItemQuality.Legendary,
             Slug = "raekors-striders",
@@ -7875,7 +7876,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RathmasOssifiedSabatons = new Item
         {
-            Id = 460917,
+            Id = SNOActor.p6_Boots_norm_set_17,
             Name = "Rathma's Ossified Sabatons",
             Quality = ItemQuality.Legendary,
             Slug = "rathmas-ossified-sabatons",
@@ -7898,7 +7899,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RolandsStride = new Item
         {
-            Id = 404094,
+            Id = SNOActor.p1_Boots_norm_set_01,
             Name = "Roland's Stride",
             Quality = ItemQuality.Legendary,
             Slug = "rolands-stride",
@@ -7921,7 +7922,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SabatonOfTheWastes = new Item
         {
-            Id = 408859,
+            Id = SNOActor.p2_Boots_norm_set_01,
             Name = "Sabaton of the Wastes",
             Quality = ItemQuality.Legendary,
             Slug = "sabaton-of-the-wastes",
@@ -7944,7 +7945,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SabatonsOfAkkhan = new Item
         {
-            Id = 358795,
+            Id = SNOActor.x1_Boots_norm_set_10,
             Name = "Sabatons of Akkhan",
             Quality = ItemQuality.Legendary,
             Slug = "sabatons-of-akkhan",
@@ -7967,7 +7968,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item StridersOfDestiny = new Item
         {
-            Id = 408863,
+            Id = SNOActor.p2_Boots_norm_set_02,
             Name = "Striders of Destiny",
             Quality = ItemQuality.Legendary,
             Slug = "striders-of-destiny",
@@ -7990,7 +7991,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheShadowsHeels = new Item
         {
-            Id = 332364,
+            Id = SNOActor.x1_Boots_norm_set_14,
             Name = "The Shadow's Heels",
             Quality = ItemQuality.Legendary,
             Slug = "the-shadows-heels",
@@ -8013,7 +8014,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TragoulsStalwartGreaves = new Item
         {
-            Id = 467562,
+            Id = SNOActor.p6_Boots_norm_set_18,
             Name = "Trag'Oul's Stalwart Greaves",
             Quality = ItemQuality.Legendary,
             Slug = "tragouls-stalwart-greaves",
@@ -8036,7 +8037,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item UlianasDestiny = new Item
         {
-            Id = 408864,
+            Id = SNOActor.p2_Boots_norm_set_03,
             Name = "Uliana's Destiny",
             Quality = ItemQuality.Legendary,
             Slug = "ulianas-destiny",
@@ -8059,7 +8060,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item VyrsSwaggeringStance = new Item
         {
-            Id = 332363,
+            Id = SNOActor.x1_Boots_norm_set_13,
             Name = "Vyr's Swaggering Stance",
             Quality = ItemQuality.Legendary,
             Slug = "vyrs-swaggering-stance",
@@ -8082,7 +8083,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ZealOfTheInvoker = new Item
         {
-            Id = 442731,
+            Id = SNOActor.p4_Boots_norm_set_12,
             Name = "Zeal of the Invoker",
             Quality = ItemQuality.Legendary,
             Slug = "zeal-of-the-invoker",
@@ -8105,7 +8106,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PoxFaulds = new Item
         {
-            Id = 197220,
+            Id = SNOActor.pants_norm_unique_048,
             Name = "Pox Faulds",
             Quality = ItemQuality.Legendary,
             Slug = "pox-faulds",
@@ -8128,7 +8129,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DeathsBargain = new Item
         {
-            Id = 332205,
+            Id = SNOActor.x1_pants_norm_unique_02,
             Name = "Death's Bargain",
             Quality = ItemQuality.Legendary,
             Slug = "deaths-bargain",
@@ -8151,7 +8152,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GolemskinBreeches = new Item
         {
-            Id = 467576,
+            Id = SNOActor.p6_Pants_norm_unique_21,
             Name = "Golemskin Breeches",
             Quality = ItemQuality.Legendary,
             Slug = "golemskin-breeches",
@@ -8174,7 +8175,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HammerJammers = new Item
         {
-            Id = 209059,
+            Id = SNOActor.pants_norm_unique_077,
             Name = "Hammer Jammers",
             Quality = ItemQuality.Legendary,
             Slug = "hammer-jammers",
@@ -8197,7 +8198,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HexingPantsOfMrYan = new Item
         {
-            Id = 332204,
+            Id = SNOActor.x1_pants_norm_unique_01,
             Name = "Hexing Pants of Mr. Yan",
             Quality = ItemQuality.Legendary,
             Slug = "hexing-pants-of-mr-yan",
@@ -8220,7 +8221,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DefilerCuisses = new Item
         {
-            Id = 467577,
+            Id = SNOActor.p6_Pants_norm_unique_22,
             Name = "Defiler Cuisses",
             Quality = ItemQuality.Legendary,
             Slug = "defiler-cuisses",
@@ -8243,7 +8244,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SwampLandWaders = new Item
         {
-            Id = 209057,
+            Id = SNOActor.pants_norm_unique_075,
             Name = "Swamp Land Waders",
             Quality = ItemQuality.Legendary,
             Slug = "swamp-land-waders",
@@ -8266,7 +8267,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DepthDiggers = new Item
         {
-            Id = 197216,
+            Id = SNOActor.pants_norm_unique_044,
             Name = "Depth Diggers",
             Quality = ItemQuality.Legendary,
             Slug = "depth-diggers",
@@ -8289,7 +8290,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BlackthornesJoustingMail = new Item
         {
-            Id = 222477,
+            Id = SNOActor.pants_norm_unique_050,
             Name = "Blackthorne's Jousting Mail",
             Quality = ItemQuality.Legendary,
             Slug = "blackthornes-jousting-mail",
@@ -8312,7 +8313,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ImmortalKingsStature = new Item
         {
-            Id = 205645,
+            Id = SNOActor.pants_norm_unique_086,
             Name = "Immortal King's Stature",
             Quality = ItemQuality.Legendary,
             Slug = "immortal-kings-stature",
@@ -8335,7 +8336,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item InnasTemperance = new Item
         {
-            Id = 205646,
+            Id = SNOActor.pants_norm_unique_087,
             Name = "Inna's Temperance",
             Quality = ItemQuality.Legendary,
             Slug = "innas-temperance",
@@ -8358,7 +8359,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item NatalyasLeggings = new Item
         {
-            Id = 415282,
+            Id = SNOActor.pants_norm_unique_044_B,
             Name = "Natalya's Leggings",
             Quality = ItemQuality.Legendary,
             Slug = "natalyas-leggings",
@@ -8381,7 +8382,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TalRashasStride = new Item
         {
-            Id = 415049,
+            Id = SNOActor.pants_norm_set_01,
             Name = "Tal Rasha's Stride",
             Quality = ItemQuality.Legendary,
             Slug = "tal-rashas-stride",
@@ -8404,7 +8405,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ZunimassasCloth = new Item
         {
-            Id = 205647,
+            Id = SNOActor.pants_norm_unique_088,
             Name = "Zunimassa's Cloth",
             Quality = ItemQuality.Legendary,
             Slug = "zunimassas-cloth",
@@ -8427,7 +8428,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ArachyrsLegs = new Item
         {
-            Id = 441194,
+            Id = SNOActor.p3_pants_norm_set_04,
             Name = "Arachyr's Legs",
             Quality = ItemQuality.Legendary,
             Slug = "arachyrs-legs",
@@ -8450,7 +8451,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CuissesOfAkkhan = new Item
         {
-            Id = 358800,
+            Id = SNOActor.x1_pants_norm_set_10,
             Name = "Cuisses of Akkhan",
             Quality = ItemQuality.Legendary,
             Slug = "cuisses-of-akkhan",
@@ -8473,7 +8474,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FirebirdsDown = new Item
         {
-            Id = 358790,
+            Id = SNOActor.x1_pants_norm_set_06,
             Name = "Firebird's Down",
             Quality = ItemQuality.Legendary,
             Slug = "firebirds-down",
@@ -8496,7 +8497,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HelltoothLegGuards = new Item
         {
-            Id = 340522,
+            Id = SNOActor.x1_pants_norm_set_16,
             Name = "Helltooth Leg Guards",
             Quality = ItemQuality.Legendary,
             Slug = "helltooth-leg-guards",
@@ -8519,7 +8520,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item InariussReticence = new Item
         {
-            Id = 467575,
+            Id = SNOActor.p6_Pants_norm_set_19,
             Name = "Inarius's Reticence",
             Quality = ItemQuality.Legendary,
             Slug = "inariuss-reticence",
@@ -8542,7 +8543,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item JadeHarvestersCourage = new Item
         {
-            Id = 338041,
+            Id = SNOActor.x1_pants_norm_set_09,
             Name = "Jade Harvester's Courage",
             Quality = ItemQuality.Legendary,
             Slug = "jade-harvesters-courage",
@@ -8565,7 +8566,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LegGuardsOfMystery = new Item
         {
-            Id = 408878,
+            Id = SNOActor.p2_Pants_norm_set_02,
             Name = "Leg Guards of Mystery",
             Quality = ItemQuality.Legendary,
             Slug = "leg-guards-of-mystery",
@@ -8588,7 +8589,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MaraudersEncasement = new Item
         {
-            Id = 336993,
+            Id = SNOActor.x1_pants_norm_set_07,
             Name = "Marauder's Encasement",
             Quality = ItemQuality.Legendary,
             Slug = "marauders-encasement",
@@ -8611,7 +8612,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PestilenceIncantations = new Item
         {
-            Id = 467353,
+            Id = SNOActor.p6_pants_norm_set_20,
             Name = "Pestilence Incantations",
             Quality = ItemQuality.Legendary,
             Slug = "pestilence-incantations",
@@ -8634,7 +8635,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RaekorsBreeches = new Item
         {
-            Id = 336986,
+            Id = SNOActor.x1_pants_norm_set_05,
             Name = "Raekor's Breeches",
             Quality = ItemQuality.Legendary,
             Slug = "raekors-breeches",
@@ -8657,7 +8658,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RathmasSkeletalLegplates = new Item
         {
-            Id = 460918,
+            Id = SNOActor.p6_Pants_norm_set_17,
             Name = "Rathma's Skeletal Legplates",
             Quality = ItemQuality.Legendary,
             Slug = "rathmas-skeletal-legplates",
@@ -8680,7 +8681,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RenewalOfTheInvoker = new Item
         {
-            Id = 442732,
+            Id = SNOActor.p4_pants_norm_set_12,
             Name = "Renewal of the Invoker",
             Quality = ItemQuality.Legendary,
             Slug = "renewal-of-the-invoker",
@@ -8703,7 +8704,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RolandsDetermination = new Item
         {
-            Id = 404097,
+            Id = SNOActor.p1_Pants_norm_set_01,
             Name = "Roland's Determination",
             Quality = ItemQuality.Legendary,
             Slug = "rolands-determination",
@@ -8726,7 +8727,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ScalesOfTheDancingSerpent = new Item
         {
-            Id = 338035,
+            Id = SNOActor.x1_pants_norm_set_08,
             Name = "Scales of the Dancing Serpent",
             Quality = ItemQuality.Legendary,
             Slug = "scales-of-the-dancing-serpent",
@@ -8749,7 +8750,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SunwukosLeggings = new Item
         {
-            Id = 429075,
+            Id = SNOActor.p2_pants_norm_set_11,
             Name = "Sunwuko's Leggings",
             Quality = ItemQuality.Legendary,
             Slug = "sunwukos-leggings",
@@ -8772,7 +8773,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TassetOfTheWastes = new Item
         {
-            Id = 408862,
+            Id = SNOActor.p2_Pants_norm_set_01,
             Name = "Tasset of the Wastes",
             Quality = ItemQuality.Legendary,
             Slug = "tasset-of-the-wastes",
@@ -8795,7 +8796,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheShadowsCoil = new Item
         {
-            Id = 332361,
+            Id = SNOActor.x1_pants_norm_set_14,
             Name = "The Shadow's Coil",
             Quality = ItemQuality.Legendary,
             Slug = "the-shadows-coil",
@@ -8818,7 +8819,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TowersOfTheLight = new Item
         {
-            Id = 408882,
+            Id = SNOActor.p2_Pants_norm_set_06,
             Name = "Towers of the Light",
             Quality = ItemQuality.Legendary,
             Slug = "towers-of-the-light",
@@ -8841,7 +8842,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TragoulsHide = new Item
         {
-            Id = 467574,
+            Id = SNOActor.p6_Pants_norm_set_18,
             Name = "Trag'Oul's Hide",
             Quality = ItemQuality.Legendary,
             Slug = "tragouls-hide",
@@ -8864,7 +8865,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item UlianasBurden = new Item
         {
-            Id = 408879,
+            Id = SNOActor.p2_Pants_norm_set_03,
             Name = "Uliana's Burden",
             Quality = ItemQuality.Legendary,
             Slug = "ulianas-burden",
@@ -8887,7 +8888,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item UnholyPlates = new Item
         {
-            Id = 408881,
+            Id = SNOActor.p2_Pants_norm_set_05,
             Name = "Unholy Plates",
             Quality = ItemQuality.Legendary,
             Slug = "unholy-plates",
@@ -8910,7 +8911,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item VyrsFantasticFinery = new Item
         {
-            Id = 332360,
+            Id = SNOActor.x1_pants_norm_set_13,
             Name = "Vyr's Fantastic Finery",
             Quality = ItemQuality.Legendary,
             Slug = "vyrs-fantastic-finery",
@@ -8933,7 +8934,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item WeightOfTheEarth = new Item
         {
-            Id = 340521,
+            Id = SNOActor.x1_pants_norm_set_15,
             Name = "Weight of the Earth",
             Quality = ItemQuality.Legendary,
             Slug = "weight-of-the-earth",
@@ -8956,7 +8957,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BandOfMight = new Item
         {
-            Id = 197839,
+            Id = SNOActor.Ring_norm_unique_005,
             Name = "Band of Might",
             Quality = ItemQuality.Legendary,
             Slug = "band-of-might",
@@ -8979,7 +8980,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CircleOfNailujsEvol = new Item
         {
-            Id = 476592,
+            Id = SNOActor.P6_Ring_norm_unique_01,
             Name = "Circle of Nailuj's Evol",
             Quality = ItemQuality.Legendary,
             Slug = "circle-of-nailujs-evol",
@@ -9002,7 +9003,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item AvariceBand = new Item
         {
-            Id = 298095,
+            Id = SNOActor.x1_Ring_norm_unique_032,
             Name = "Avarice Band",
             Quality = ItemQuality.Legendary,
             Slug = "avarice-band",
@@ -9025,7 +9026,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LeoricsSignet = new Item
         {
-            Id = 197835,
+            Id = SNOActor.Ring_norm_unique_002,
             Name = "Leoric's Signet",
             Quality = ItemQuality.Legendary,
             Slug = "leorics-signet",
@@ -9048,7 +9049,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PandemoniumLoop = new Item
         {
-            Id = 298096,
+            Id = SNOActor.x1_Ring_norm_unique_033,
             Name = "Pandemonium Loop",
             Quality = ItemQuality.Legendary,
             Slug = "pandemonium-loop",
@@ -9071,7 +9072,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RingOfRoyalGrandeur = new Item
         {
-            Id = 298094,
+            Id = SNOActor.x1_Ring_norm_unique_031,
             Name = "Ring of Royal Grandeur",
             Quality = ItemQuality.Legendary,
             Slug = "ring-of-royal-grandeur",
@@ -9094,7 +9095,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ManaldHeal = new Item
         {
-            Id = 212546,
+            Id = SNOActor.Ring_norm_unique_021,
             Name = "Manald Heal",
             Quality = ItemQuality.Legendary,
             Slug = "manald-heal",
@@ -9117,7 +9118,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BrokenPromises = new Item
         {
-            Id = 212589,
+            Id = SNOActor.Ring_norm_unique_006,
             Name = "Broken Promises",
             Quality = ItemQuality.Legendary,
             Slug = "broken-promises",
@@ -9140,7 +9141,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PuzzleRing = new Item
         {
-            Id = 197837,
+            Id = SNOActor.Ring_norm_unique_004,
             Name = "Puzzle Ring",
             Quality = ItemQuality.Legendary,
             Slug = "puzzle-ring",
@@ -9163,7 +9164,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Arcstone = new Item
         {
-            Id = 433313,
+            Id = SNOActor.p2_Ring_norm_unique_02,
             Name = "Arcstone",
             Quality = ItemQuality.Legendary,
             Slug = "arcstone",
@@ -9186,7 +9187,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BandOfTheRueChambers = new Item
         {
-            Id = 298093,
+            Id = SNOActor.x1_Ring_norm_unique_030,
             Name = "Band of the Rue Chambers",
             Quality = ItemQuality.Legendary,
             Slug = "band-of-the-rue-chambers",
@@ -9209,7 +9210,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HaloOfKarini = new Item
         {
-            Id = 449039,
+            Id = SNOActor.p2_Ring_norm_unique_04,
             Name = "Halo of Karini",
             Quality = ItemQuality.Legendary,
             Slug = "halo-of-karini",
@@ -9232,7 +9233,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RechelsRingOfLarceny = new Item
         {
-            Id = 298091,
+            Id = SNOActor.x1_Ring_norm_unique_028,
             Name = "Rechel's Ring of Larceny",
             Quality = ItemQuality.Legendary,
             Slug = "rechels-ring-of-larceny",
@@ -9255,7 +9256,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RogarsHugeStone = new Item
         {
-            Id = 298090,
+            Id = SNOActor.x1_Ring_norm_unique_027,
             Name = "Rogar's Huge Stone",
             Quality = ItemQuality.Legendary,
             Slug = "rogars-huge-stone",
@@ -9278,7 +9279,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheShortMansFinger = new Item
         {
-            Id = 432666,
+            Id = SNOActor.p2_Ring_norm_unique_01,
             Name = "The Short Man's Finger",
             Quality = ItemQuality.Legendary,
             Slug = "the-short-mans-finger",
@@ -9301,7 +9302,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheTallMansFinger = new Item
         {
-            Id = 298088,
+            Id = SNOActor.x1_Ring_norm_unique_025,
             Name = "The Tall Man's Finger",
             Quality = ItemQuality.Legendary,
             Slug = "the-tall-mans-finger",
@@ -9324,7 +9325,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Wyrdward = new Item
         {
-            Id = 298089,
+            Id = SNOActor.x1_Ring_norm_unique_026,
             Name = "Wyrdward",
             Quality = ItemQuality.Legendary,
             Slug = "wyrdward",
@@ -9347,7 +9348,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Nagelring = new Item
         {
-            Id = 212586,
+            Id = SNOActor.Ring_norm_unique_018,
             Name = "Nagelring",
             Quality = ItemQuality.Legendary,
             Slug = "nagelring",
@@ -9370,7 +9371,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LornellesSunstone = new Item
         {
-            Id = 476595,
+            Id = SNOActor.P6_Ring_norm_unique_04,
             Name = "Lornelle's Sunstone",
             Quality = ItemQuality.Legendary,
             Slug = "lornelles-sunstone",
@@ -9393,7 +9394,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BulkathossWeddingBand = new Item
         {
-            Id = 212603,
+            Id = SNOActor.Ring_norm_unique_020,
             Name = "Bul-Kathos's Wedding Band",
             Quality = ItemQuality.Legendary,
             Slug = "bulkathoss-wedding-band",
@@ -9416,7 +9417,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item EternalUnion = new Item
         {
-            Id = 212601,
+            Id = SNOActor.Ring_norm_unique_007,
             Name = "Eternal Union",
             Quality = ItemQuality.Legendary,
             Slug = "eternal-union",
@@ -9439,7 +9440,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item JusticeLantern = new Item
         {
-            Id = 212590,
+            Id = SNOActor.Ring_norm_unique_008,
             Name = "Justice Lantern",
             Quality = ItemQuality.Legendary,
             Slug = "justice-lantern",
@@ -9462,7 +9463,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ObsidianRingOfTheZodiac = new Item
         {
-            Id = 212588,
+            Id = SNOActor.Ring_norm_unique_023,
             Name = "Obsidian Ring of the Zodiac",
             Quality = ItemQuality.Legendary,
             Slug = "obsidian-ring-of-the-zodiac",
@@ -9485,7 +9486,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item KrysbinsSentence = new Item
         {
-            Id = 476594,
+            Id = SNOActor.P6_Ring_norm_unique_03,
             Name = "Krysbin's Sentence",
             Quality = ItemQuality.Legendary,
             Slug = "krysbins-sentence",
@@ -9508,7 +9509,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ConventionOfElements = new Item
         {
-            Id = 433496,
+            Id = SNOActor.p2_Ring_norm_unique_03,
             Name = "Convention of Elements",
             Quality = ItemQuality.Legendary,
             Slug = "convention-of-elements",
@@ -9531,7 +9532,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ElusiveRing = new Item
         {
-            Id = 446188,
+            Id = SNOActor.p4_Ring_norm_unique_02,
             Name = "Elusive Ring",
             Quality = ItemQuality.Legendary,
             Slug = "elusive-ring",
@@ -9554,7 +9555,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HaloOfArlyse = new Item
         {
-            Id = 212602,
+            Id = SNOActor.Ring_norm_unique_009,
             Name = "Halo of Arlyse",
             Quality = ItemQuality.Legendary,
             Slug = "halo-of-arlyse",
@@ -9577,7 +9578,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RingOfEmptiness = new Item
         {
-            Id = 445697,
+            Id = SNOActor.p4_Ring_norm_unique_01,
             Name = "Ring of Emptiness",
             Quality = ItemQuality.Legendary,
             Slug = "ring-of-emptiness",
@@ -9600,7 +9601,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BandOfHollowWhispers = new Item
         {
-            Id = 197834,
+            Id = SNOActor.Ring_norm_unique_001,
             Name = "Band of Hollow Whispers",
             Quality = ItemQuality.Legendary,
             Slug = "band-of-hollow-whispers",
@@ -9623,7 +9624,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item KredesFlame = new Item
         {
-            Id = 197836,
+            Id = SNOActor.Ring_norm_unique_003,
             Name = "Krede's Flame",
             Quality = ItemQuality.Legendary,
             Slug = "kredes-flame",
@@ -9646,7 +9647,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item OculusRing = new Item
         {
-            Id = 212648,
+            Id = SNOActor.Ring_norm_unique_017,
             Name = "Oculus Ring",
             Quality = ItemQuality.Legendary,
             Slug = "oculus-ring",
@@ -9669,7 +9670,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SkullGrasp = new Item
         {
-            Id = 212618,
+            Id = SNOActor.Ring_norm_unique_022,
             Name = "Skull Grasp",
             Quality = ItemQuality.Legendary,
             Slug = "skull-grasp",
@@ -9692,7 +9693,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item StoneOfJordan = new Item
         {
-            Id = 212582,
+            Id = SNOActor.Ring_norm_unique_019,
             Name = "Stone of Jordan",
             Quality = ItemQuality.Legendary,
             Slug = "stone-of-jordan",
@@ -9715,7 +9716,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Unity = new Item
         {
-            Id = 212581,
+            Id = SNOActor.Ring_norm_unique_010,
             Name = "Unity",
             Quality = ItemQuality.Legendary,
             Slug = "unity",
@@ -9738,7 +9739,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LitanyOfTheUndaunted = new Item
         {
-            Id = 212651,
+            Id = SNOActor.Ring_norm_unique_015,
             Name = "Litany of the Undaunted",
             Quality = ItemQuality.Legendary,
             Slug = "litany-of-the-undaunted",
@@ -9761,7 +9762,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item NatalyasReflection = new Item
         {
-            Id = 212545,
+            Id = SNOActor.Ring_norm_unique_011,
             Name = "Natalya's Reflection",
             Quality = ItemQuality.Legendary,
             Slug = "natalyas-reflection",
@@ -9784,7 +9785,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheCompassRose = new Item
         {
-            Id = 212587,
+            Id = SNOActor.Ring_norm_unique_013,
             Name = "The Compass Rose",
             Quality = ItemQuality.Legendary,
             Slug = "the-compass-rose",
@@ -9807,7 +9808,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheWailingHost = new Item
         {
-            Id = 212650,
+            Id = SNOActor.Ring_norm_unique_014,
             Name = "The Wailing Host",
             Quality = ItemQuality.Legendary,
             Slug = "the-wailing-host",
@@ -9830,7 +9831,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ZunimassasPox = new Item
         {
-            Id = 212579,
+            Id = SNOActor.Ring_norm_unique_012,
             Name = "Zunimassa's Pox",
             Quality = ItemQuality.Legendary,
             Slug = "zunimassas-pox",
@@ -9853,7 +9854,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BriggsWrath = new Item
         {
-            Id = 476593,
+            Id = SNOActor.P6_Ring_norm_unique_02,
             Name = "Briggs' Wrath",
             Quality = ItemQuality.Legendary,
             Slug = "briggs-wrath",
@@ -9876,7 +9877,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Focus = new Item
         {
-            Id = 332209,
+            Id = SNOActor.x1_Ring_norm_set_001,
             Name = "Focus",
             Quality = ItemQuality.Legendary,
             Slug = "focus",
@@ -9899,7 +9900,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Restraint = new Item
         {
-            Id = 332210,
+            Id = SNOActor.x1_Ring_norm_set_002,
             Name = "Restraint",
             Quality = ItemQuality.Legendary,
             Slug = "restraint",
@@ -9922,7 +9923,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CovensCriterion = new Item
         {
-            Id = 298191,
+            Id = SNOActor.x1_Shield_norm_unique_15,
             Name = "Coven's Criterion",
             Quality = ItemQuality.Legendary,
             Slug = "covens-criterion",
@@ -9945,7 +9946,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Denial = new Item
         {
-            Id = 152666,
+            Id = SNOActor.Shield_norm_unique_03,
             Name = "Denial",
             Quality = ItemQuality.Legendary,
             Slug = "denial",
@@ -9968,7 +9969,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DefenderOfWestmarch = new Item
         {
-            Id = 298182,
+            Id = SNOActor.x1_Shield_norm_unique_09,
             Name = "Defender of Westmarch",
             Quality = ItemQuality.Legendary,
             Slug = "defender-of-westmarch",
@@ -9991,7 +9992,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item EberliCharo = new Item
         {
-            Id = 298186,
+            Id = SNOActor.x1_Shield_norm_unique_10,
             Name = "Eberli Charo",
             Quality = ItemQuality.Legendary,
             Slug = "eberli-charo",
@@ -10014,7 +10015,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FreezeOfDeflection = new Item
         {
-            Id = 61550,
+            Id = SNOActor.Shield_norm_unique_01,
             Name = "Freeze of Deflection",
             Quality = ItemQuality.Legendary,
             Slug = "freeze-of-deflection",
@@ -10037,7 +10038,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item VotoyiasSpiker = new Item
         {
-            Id = 298188,
+            Id = SNOActor.x1_Shield_norm_unique_12,
             Name = "Vo'Toyias Spiker",
             Quality = ItemQuality.Legendary,
             Slug = "votoyias-spiker",
@@ -10060,7 +10061,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LidlessWall = new Item
         {
-            Id = 195389,
+            Id = SNOActor.Shield_norm_unique_07,
             Name = "Lidless Wall",
             Quality = ItemQuality.Legendary,
             Slug = "lidless-wall",
@@ -10083,7 +10084,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item IvoryTower = new Item
         {
-            Id = 197478,
+            Id = SNOActor.Shield_norm_unique_08,
             Name = "Ivory Tower",
             Quality = ItemQuality.Legendary,
             Slug = "ivory-tower",
@@ -10106,7 +10107,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Stormshield = new Item
         {
-            Id = 192484,
+            Id = SNOActor.Shield_norm_unique_06,
             Name = "Stormshield",
             Quality = ItemQuality.Legendary,
             Slug = "stormshield",
@@ -10129,7 +10130,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item JessethSkullshield = new Item
         {
-            Id = 454765,
+            Id = SNOActor.p6_Shield_norm_unique_01,
             Name = "Jesseth Skullshield",
             Quality = ItemQuality.Legendary,
             Slug = "jesseth-skullshield",
@@ -10152,7 +10153,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GuardOfJohanna = new Item
         {
-            Id = 298187,
+            Id = SNOActor.x1_Shield_norm_unique_11,
             Name = "Guard of Johanna",
             Quality = ItemQuality.Legendary,
             Slug = "guard-of-johanna",
@@ -10175,7 +10176,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Salvation = new Item
         {
-            Id = 299418,
+            Id = SNOActor.x1_CruShield_norm_unique_08,
             Name = "Salvation",
             Quality = ItemQuality.Legendary,
             Slug = "salvation",
@@ -10198,7 +10199,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ShieldOfFury = new Item
         {
-            Id = 298190,
+            Id = SNOActor.x1_Shield_norm_unique_14,
             Name = "Shield of Fury",
             Quality = ItemQuality.Legendary,
             Slug = "shield-of-fury",
@@ -10221,7 +10222,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item AkaratsAwakening = new Item
         {
-            Id = 299414,
+            Id = SNOActor.x1_CruShield_norm_unique_04,
             Name = "Akarat's Awakening",
             Quality = ItemQuality.Legendary,
             Slug = "akarats-awakening",
@@ -10244,7 +10245,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HallowedBulwark = new Item
         {
-            Id = 299413,
+            Id = SNOActor.x1_CruShield_norm_unique_03,
             Name = "Hallowed Bulwark",
             Quality = ItemQuality.Legendary,
             Slug = "hallowed-bulwark",
@@ -10267,7 +10268,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Hellskull = new Item
         {
-            Id = 299415,
+            Id = SNOActor.x1_CruShield_norm_unique_05,
             Name = "Hellskull",
             Quality = ItemQuality.Legendary,
             Slug = "hellskull",
@@ -10290,7 +10291,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Jekangbord = new Item
         {
-            Id = 299412,
+            Id = SNOActor.x1_CruShield_norm_unique_02,
             Name = "Jekangbord",
             Quality = ItemQuality.Legendary,
             Slug = "jekangbord",
@@ -10313,7 +10314,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SublimeConviction = new Item
         {
-            Id = 299416,
+            Id = SNOActor.x1_CruShield_norm_unique_06,
             Name = "Sublime Conviction",
             Quality = ItemQuality.Legendary,
             Slug = "sublime-conviction",
@@ -10336,7 +10337,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheFinalWitness = new Item
         {
-            Id = 299417,
+            Id = SNOActor.x1_CruShield_norm_unique_07,
             Name = "The Final Witness",
             Quality = ItemQuality.Legendary,
             Slug = "the-final-witness",
@@ -10359,7 +10360,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FrydehrsWrath = new Item
         {
-            Id = 405429,
+            Id = SNOActor.p1_CruShield_norm_unique_01,
             Name = "Frydehr's Wrath",
             Quality = ItemQuality.Legendary,
             Slug = "frydehrs-wrath",
@@ -10382,7 +10383,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item UnrelentingPhalanx = new Item
         {
-            Id = 405514,
+            Id = SNOActor.p1_CruShield_norm_unique_02,
             Name = "Unrelenting Phalanx",
             Quality = ItemQuality.Legendary,
             Slug = "unrelenting-phalanx",
@@ -10405,7 +10406,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ShieldOfTheSteed = new Item
         {
-            Id = 298189,
+            Id = SNOActor.x1_Shield_norm_unique_13,
             Name = "Shield of the Steed",
             Quality = ItemQuality.Legendary,
             Slug = "shield-of-the-steed",
@@ -10428,7 +10429,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GazingDemise = new Item
         {
-            Id = 194995,
+            Id = SNOActor.Mojo_norm_unique_05,
             Name = "Gazing Demise",
             Quality = ItemQuality.Legendary,
             Slug = "gazing-demise",
@@ -10451,7 +10452,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Homunculus = new Item
         {
-            Id = 194991,
+            Id = SNOActor.Mojo_norm_unique_04,
             Name = "Homunculus",
             Quality = ItemQuality.Legendary,
             Slug = "homunculus",
@@ -10474,7 +10475,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ShukranisTriumph = new Item
         {
-            Id = 272070,
+            Id = SNOActor.x1_mojo_norm_unique_11,
             Name = "Shukrani's Triumph",
             Quality = ItemQuality.Legendary,
             Slug = "shukranis-triumph",
@@ -10497,7 +10498,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ThingOfTheDeep = new Item
         {
-            Id = 192468,
+            Id = SNOActor.Mojo_norm_unique_02,
             Name = "Thing of the Deep",
             Quality = ItemQuality.Legendary,
             Slug = "thing-of-the-deep",
@@ -10520,7 +10521,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item UhkapianSerpent = new Item
         {
-            Id = 191278,
+            Id = SNOActor.Mojo_norm_unique_01,
             Name = "Uhkapian Serpent",
             Quality = ItemQuality.Legendary,
             Slug = "uhkapian-serpent",
@@ -10543,7 +10544,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ManajumasGoryFetch = new Item
         {
-            Id = 210993,
+            Id = SNOActor.Mojo_norm_unique_06,
             Name = "Manajuma's Gory Fetch",
             Quality = ItemQuality.Legendary,
             Slug = "manajumas-gory-fetch",
@@ -10566,7 +10567,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ZunimassasStringOfSkulls = new Item
         {
-            Id = 216525,
+            Id = SNOActor.Mojo_norm_unique_07,
             Name = "Zunimassa's String of Skulls",
             Quality = ItemQuality.Legendary,
             Slug = "zunimassas-string-of-skulls",
@@ -10589,7 +10590,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HenrisPerquisition = new Item
         {
-            Id = 395199,
+            Id = SNOActor.p2_Mojo_norm_unique_02,
             Name = "Henri's Perquisition",
             Quality = ItemQuality.Legendary,
             Slug = "henris-perquisition",
@@ -10612,7 +10613,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item VileHive = new Item
         {
-            Id = 220326,
+            Id = SNOActor.Mojo_norm_unique_08,
             Name = "Vile Hive",
             Quality = ItemQuality.Legendary,
             Slug = "vile-hive",
@@ -10635,7 +10636,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item WilkensReach = new Item
         {
-            Id = 395198,
+            Id = SNOActor.p2_Mojo_norm_unique_01,
             Name = "Wilken's Reach",
             Quality = ItemQuality.Legendary,
             Slug = "wilkens-reach",
@@ -10658,7 +10659,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item WinterFlurry = new Item
         {
-            Id = 184199,
+            Id = SNOActor.orb_norm_unique_01,
             Name = "Winter Flurry",
             Quality = ItemQuality.Legendary,
             Slug = "winter-flurry",
@@ -10681,7 +10682,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item EtchedSigil = new Item
         {
-            Id = 399318,
+            Id = SNOActor.p2_orb_norm_unique_02,
             Name = "Etched Sigil",
             Quality = ItemQuality.Legendary,
             Slug = "etched-sigil",
@@ -10704,7 +10705,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LightOfGrace = new Item
         {
-            Id = 272038,
+            Id = SNOActor.x1_orb_norm_unique_09,
             Name = "Light of Grace",
             Quality = ItemQuality.Legendary,
             Slug = "light-of-grace",
@@ -10727,7 +10728,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Mirrorball = new Item
         {
-            Id = 272022,
+            Id = SNOActor.x1_orb_norm_unique_07,
             Name = "Mirrorball",
             Quality = ItemQuality.Legendary,
             Slug = "mirrorball",
@@ -10750,7 +10751,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MykensBallOfHate = new Item
         {
-            Id = 272037,
+            Id = SNOActor.x1_orb_norm_unique_08,
             Name = "Myken's Ball of Hate",
             Quality = ItemQuality.Legendary,
             Slug = "mykens-ball-of-hate",
@@ -10773,7 +10774,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheOculus = new Item
         {
-            Id = 192320,
+            Id = SNOActor.orb_norm_unique_02,
             Name = "The Oculus",
             Quality = ItemQuality.Legendary,
             Slug = "the-oculus",
@@ -10796,7 +10797,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Triumvirate = new Item
         {
-            Id = 195325,
+            Id = SNOActor.orb_norm_unique_04,
             Name = "Triumvirate",
             Quality = ItemQuality.Legendary,
             Slug = "triumvirate",
@@ -10819,7 +10820,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ChantodosForce = new Item
         {
-            Id = 212277,
+            Id = SNOActor.orb_norm_unique_05,
             Name = "Chantodo's Force",
             Quality = ItemQuality.Legendary,
             Slug = "chantodos-force",
@@ -10842,7 +10843,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TalRashasUnwaveringGlare = new Item
         {
-            Id = 212780,
+            Id = SNOActor.orb_norm_unique_06,
             Name = "Tal Rasha's Unwavering Glare",
             Quality = ItemQuality.Legendary,
             Slug = "tal-rashas-unwavering-glare",
@@ -10865,7 +10866,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PrimordialSoul = new Item
         {
-            Id = 399317,
+            Id = SNOActor.p2_orb_norm_unique_01,
             Name = "Primordial Soul",
             Quality = ItemQuality.Legendary,
             Slug = "primordial-soul",
@@ -10888,7 +10889,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item OrbOfInfiniteDepth = new Item
         {
-            Id = 399319,
+            Id = SNOActor.p2_orb_norm_unique_03,
             Name = "Orb of Infinite Depth",
             Quality = ItemQuality.Legendary,
             Slug = "orb-of-infinite-depth",
@@ -10911,7 +10912,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FirebirdsEye = new Item
         {
-            Id = 358819,
+            Id = SNOActor.x1_orb_norm_set_06,
             Name = "Firebird's Eye",
             Quality = ItemQuality.Legendary,
             Slug = "firebirds-eye",
@@ -10934,7 +10935,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item EnviousBlade = new Item
         {
-            Id = 271732,
+            Id = SNOActor.x1_dagger_norm_unique_09,
             Name = "Envious Blade",
             Quality = ItemQuality.Legendary,
             Slug = "envious-blade",
@@ -10957,7 +10958,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheBarber = new Item
         {
-            Id = 195400,
+            Id = SNOActor.Dagger_norm_unique_flippy_03,
             Name = "The Barber",
             Quality = ItemQuality.Legendary,
             Slug = "the-barber-49S3Pa",
@@ -10980,7 +10981,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PigSticker = new Item
         {
-            Id = 221313,
+            Id = SNOActor.Dagger_norm_unique_06,
             Name = "Pig Sticker",
             Quality = ItemQuality.Legendary,
             Slug = "pig-sticker",
@@ -11003,7 +11004,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Wizardspike = new Item
         {
-            Id = 219329,
+            Id = SNOActor.Dagger_norm_unique_05,
             Name = "Wizardspike",
             Quality = ItemQuality.Legendary,
             Slug = "wizardspike",
@@ -11026,7 +11027,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Eunjangdo = new Item
         {
-            Id = 410960,
+            Id = SNOActor.p2_Dagger_norm_unique_01,
             Name = "Eun-jang-do",
             Quality = ItemQuality.Legendary,
             Slug = "eunjangdo",
@@ -11049,7 +11050,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item KarleisPoint = new Item
         {
-            Id = 271728,
+            Id = SNOActor.x1_dagger_norm_unique_07,
             Name = "Karlei's Point",
             Quality = ItemQuality.Legendary,
             Slug = "karleis-point",
@@ -11072,7 +11073,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LordGreenstonesFan = new Item
         {
-            Id = 271731,
+            Id = SNOActor.x1_dagger_norm_unique_08,
             Name = "Lord Greenstone's Fan",
             Quality = ItemQuality.Legendary,
             Slug = "lord-greenstones-fan",
@@ -11095,7 +11096,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item OdynSon = new Item
         {
-            Id = 188185,
+            Id = SNOActor.Mace_norm_unique_08,
             Name = "Odyn Son",
             Quality = ItemQuality.Legendary,
             Slug = "odyn-son",
@@ -11118,7 +11119,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MadMonarchsScepter = new Item
         {
-            Id = 271663,
+            Id = SNOActor.x1_Mace_norm_unique_12,
             Name = "Mad Monarch's Scepter",
             Quality = ItemQuality.Legendary,
             Slug = "mad-monarchs-scepter",
@@ -11141,7 +11142,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Nutcracker = new Item
         {
-            Id = 188169,
+            Id = SNOActor.Mace_norm_unique_03,
             Name = "Nutcracker",
             Quality = ItemQuality.Legendary,
             Slug = "nutcracker",
@@ -11164,7 +11165,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TelrandensHand = new Item
         {
-            Id = 188189,
+            Id = SNOActor.Mace_norm_unique_09,
             Name = "Telranden's Hand",
             Quality = ItemQuality.Legendary,
             Slug = "telrandens-hand",
@@ -11187,7 +11188,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item JacesHammerOfVigilance = new Item
         {
-            Id = 271648,
+            Id = SNOActor.x1_Mace_norm_unique_10,
             Name = "Jace's Hammer of Vigilance",
             Quality = ItemQuality.Legendary,
             Slug = "jaces-hammer-of-vigilance",
@@ -11210,7 +11211,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Solanium = new Item
         {
-            Id = 271662,
+            Id = SNOActor.x1_Mace_norm_unique_11,
             Name = "Solanium",
             Quality = ItemQuality.Legendary,
             Slug = "solanium",
@@ -11233,7 +11234,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Nailbiter = new Item
         {
-            Id = 188158,
+            Id = SNOActor.Mace_norm_unique_02,
             Name = "Nailbiter",
             Quality = ItemQuality.Legendary,
             Slug = "nailbiter",
@@ -11256,7 +11257,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Neanderthal = new Item
         {
-            Id = 102665,
+            Id = SNOActor.Mace_norm_unique_01,
             Name = "Neanderthal",
             Quality = ItemQuality.Legendary,
             Slug = "neanderthal",
@@ -11279,7 +11280,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item EchoingFury = new Item
         {
-            Id = 188181,
+            Id = SNOActor.Mace_norm_unique_07,
             Name = "Echoing Fury",
             Quality = ItemQuality.Legendary,
             Slug = "echoing-fury",
@@ -11302,7 +11303,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SunKeeper = new Item
         {
-            Id = 188173,
+            Id = SNOActor.Mace_norm_unique_04,
             Name = "Sun Keeper",
             Quality = ItemQuality.Legendary,
             Slug = "sun-keeper",
@@ -11325,7 +11326,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SaffronWrap = new Item
         {
-            Id = 193664,
+            Id = SNOActor.Belt_norm_unique_01,
             Name = "Saffron Wrap",
             Quality = ItemQuality.Legendary,
             Slug = "saffron-wrap",
@@ -11348,7 +11349,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Goldwrap = new Item
         {
-            Id = 193671,
+            Id = SNOActor.Belt_norm_unique_08,
             Name = "Goldwrap",
             Quality = ItemQuality.Legendary,
             Slug = "goldwrap",
@@ -11371,7 +11372,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item VigilanteBelt = new Item
         {
-            Id = 193665,
+            Id = SNOActor.Belt_norm_unique_02,
             Name = "Vigilante Belt",
             Quality = ItemQuality.Legendary,
             Slug = "vigilante-belt",
@@ -11394,7 +11395,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item InsatiableBelt = new Item
         {
-            Id = 298126,
+            Id = SNOActor.x1_Belt_norm_unique_17,
             Name = "Insatiable Belt",
             Quality = ItemQuality.Legendary,
             Slug = "insatiable-belt",
@@ -11417,7 +11418,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BindingOfTheLost = new Item
         {
-            Id = 440425,
+            Id = SNOActor.p3_Belt_norm_unique_03,
             Name = "Binding of the Lost",
             Quality = ItemQuality.Legendary,
             Slug = "binding-of-the-lost",
@@ -11440,7 +11441,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheShameOfDelsere = new Item
         {
-            Id = 440426,
+            Id = SNOActor.p3_Belt_norm_unique_04,
             Name = "The Shame of Delsere",
             Quality = ItemQuality.Legendary,
             Slug = "the-shame-of-delsere",
@@ -11463,7 +11464,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item KyoshirosSoul = new Item
         {
-            Id = 298136,
+            Id = SNOActor.x1_BarbBelt_norm_unique_13,
             Name = "Kyoshiro's Soul",
             Quality = ItemQuality.Legendary,
             Slug = "kyoshiros-soul",
@@ -11486,7 +11487,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DaynteesBinding = new Item
         {
-            Id = 476720,
+            Id = SNOActor.P6_Belt_norm_unique_01,
             Name = "Dayntee's Binding",
             Quality = ItemQuality.Legendary,
             Slug = "dayntees-binding",
@@ -11509,7 +11510,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SacredHarness = new Item
         {
-            Id = 440423,
+            Id = SNOActor.p3_Belt_norm_unique_01,
             Name = "Sacred Harness",
             Quality = ItemQuality.Legendary,
             Slug = "sacred-harness",
@@ -11532,7 +11533,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BakuliJungleWraps = new Item
         {
-            Id = 193674,
+            Id = SNOActor.BarbBelt_norm_unique_07,
             Name = "Bakuli Jungle Wraps",
             Quality = ItemQuality.Legendary,
             Slug = "bakuli-jungle-wraps",
@@ -11555,7 +11556,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item StringOfEars = new Item
         {
-            Id = 193669,
+            Id = SNOActor.Belt_norm_unique_06,
             Name = "String of Ears",
             Quality = ItemQuality.Legendary,
             Slug = "string-of-ears",
@@ -11578,7 +11579,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FazulasImprobableChain = new Item
         {
-            Id = 440424,
+            Id = SNOActor.p3_Belt_norm_unique_02,
             Name = "Fazula's Improbable Chain",
             Quality = ItemQuality.Legendary,
             Slug = "fazulas-improbable-chain",
@@ -11601,7 +11602,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HergbrashsBinding = new Item
         {
-            Id = 449047,
+            Id = SNOActor.p4_Belt_norm_unique_02,
             Name = "Hergbrash's Binding",
             Quality = ItemQuality.Legendary,
             Slug = "hergbrashs-binding",
@@ -11624,7 +11625,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BeltOfTranscendence = new Item
         {
-            Id = 423248,
+            Id = SNOActor.p1_Belt_norm_unique_02,
             Name = "Belt of Transcendence",
             Quality = ItemQuality.Legendary,
             Slug = "belt-of-transcendence",
@@ -11647,7 +11648,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BlessedOfHaull = new Item
         {
-            Id = 423251,
+            Id = SNOActor.p1_Belt_norm_unique_05,
             Name = "Blessed of Haull",
             Quality = ItemQuality.Legendary,
             Slug = "blessed-of-haull",
@@ -11670,7 +11671,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ChainOfShadows = new Item
         {
-            Id = 445497,
+            Id = SNOActor.p4_Belt_norm_unique_01,
             Name = "Chain of Shadows",
             Quality = ItemQuality.Legendary,
             Slug = "chain-of-shadows",
@@ -11693,7 +11694,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CordOfTheSherma = new Item
         {
-            Id = 298127,
+            Id = SNOActor.x1_Belt_norm_unique_18,
             Name = "Cord of the Sherma",
             Quality = ItemQuality.Legendary,
             Slug = "cord-of-the-sherma",
@@ -11716,7 +11717,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CrashingRain = new Item
         {
-            Id = 423247,
+            Id = SNOActor.p1_Belt_norm_unique_01,
             Name = "Crashing Rain",
             Quality = ItemQuality.Legendary,
             Slug = "crashing-rain",
@@ -11739,7 +11740,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HarringtonWaistguard = new Item
         {
-            Id = 298129,
+            Id = SNOActor.x1_Belt_norm_unique_19,
             Name = "Harrington Waistguard",
             Quality = ItemQuality.Legendary,
             Slug = "harrington-waistguard",
@@ -11762,7 +11763,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HauntingGirdle = new Item
         {
-            Id = 423249,
+            Id = SNOActor.p1_Belt_norm_unique_03,
             Name = "Haunting Girdle",
             Quality = ItemQuality.Legendary,
             Slug = "haunting-girdle",
@@ -11785,7 +11786,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HwojWrap = new Item
         {
-            Id = 298131,
+            Id = SNOActor.x1_Belt_norm_unique_21,
             Name = "Hwoj Wrap",
             Quality = ItemQuality.Legendary,
             Slug = "hwoj-wrap",
@@ -11808,7 +11809,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Omnislash = new Item
         {
-            Id = 423250,
+            Id = SNOActor.p1_Belt_norm_unique_04,
             Name = "Omnislash",
             Quality = ItemQuality.Legendary,
             Slug = "omnislash",
@@ -11831,7 +11832,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item OmrynsChain = new Item
         {
-            Id = 423261,
+            Id = SNOActor.p1_Belt_norm_unique_06,
             Name = "Omryn's Chain",
             Quality = ItemQuality.Legendary,
             Slug = "omryns-chain",
@@ -11854,7 +11855,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RazorStrop = new Item
         {
-            Id = 298124,
+            Id = SNOActor.x1_Belt_norm_unique_15,
             Name = "Razor Strop",
             Quality = ItemQuality.Legendary,
             Slug = "razor-strop",
@@ -11877,7 +11878,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SashOfKnives = new Item
         {
-            Id = 298125,
+            Id = SNOActor.x1_Belt_norm_unique_16,
             Name = "Sash of Knives",
             Quality = ItemQuality.Legendary,
             Slug = "sash-of-knives",
@@ -11900,7 +11901,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SeborsNightmare = new Item
         {
-            Id = 299381,
+            Id = SNOActor.x1_Belt_norm_unique_22,
             Name = "Sebor's Nightmare",
             Quality = ItemQuality.Legendary,
             Slug = "sebors-nightmare",
@@ -11921,9 +11922,9 @@ namespace Trinity.Framework.Reference
         /// <summary>
         /// Angel Hair Braid Punish gains the effect of every rune.
         /// </summary>
-        public static Item AngelHairBraid = new Item
+        public static Item AngelHairBraId = new Item
         {
-            Id = 193666,
+            Id = SNOActor.Belt_norm_unique_03,
             Name = "Angel Hair Braid",
             Quality = ItemQuality.Legendary,
             Slug = "angel-hair-braid",
@@ -11946,7 +11947,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ThundergodsVigor = new Item
         {
-            Id = 212230,
+            Id = SNOActor.BarbBelt_norm_unique_03,
             Name = "Thundergod's Vigor",
             Quality = ItemQuality.Legendary,
             Slug = "thundergods-vigor",
@@ -11969,7 +11970,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BeltOfTheTrove = new Item
         {
-            Id = 193675,
+            Id = SNOActor.BarbBelt_norm_unique_08,
             Name = "Belt of the Trove",
             Quality = ItemQuality.Legendary,
             Slug = "belt-of-the-trove",
@@ -11992,7 +11993,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheWitchingHour = new Item
         {
-            Id = 193670,
+            Id = SNOActor.Belt_norm_unique_07,
             Name = "The Witching Hour",
             Quality = ItemQuality.Legendary,
             Slug = "the-witching-hour",
@@ -12015,7 +12016,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BlackthornesNotchedBelt = new Item
         {
-            Id = 224191,
+            Id = SNOActor.Belt_norm_unique_14,
             Name = "Blackthorne's Notched Belt",
             Quality = ItemQuality.Legendary,
             Slug = "blackthornes-notched-belt",
@@ -12038,7 +12039,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item InnasFavor = new Item
         {
-            Id = 222487,
+            Id = SNOActor.Belt_norm_unique_10,
             Name = "Inna's Favor",
             Quality = ItemQuality.Legendary,
             Slug = "innas-favor",
@@ -12061,7 +12062,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TalRashasBrace = new Item
         {
-            Id = 212657,
+            Id = SNOActor.Belt_norm_unique_09,
             Name = "Tal Rasha's Brace",
             Quality = ItemQuality.Legendary,
             Slug = "tal-rashas-brace",
@@ -12084,7 +12085,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item JangsEnvelopment = new Item
         {
-            Id = 298130,
+            Id = SNOActor.x1_Belt_norm_unique_20,
             Name = "Jang's Envelopment",
             Quality = ItemQuality.Legendary,
             Slug = "jangs-envelopment",
@@ -12107,7 +12108,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HuntersWrath = new Item
         {
-            Id = 440742,
+            Id = SNOActor.P2_Belt_norm_unique_11,
             Name = "Hunter's Wrath",
             Quality = ItemQuality.Legendary,
             Slug = "hunters-wrath",
@@ -12153,7 +12154,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ZoeysSecret = new Item
         {
-            Id = 298137,
+            Id = SNOActor.x1_BarbBelt_norm_unique_14,
             Name = "Zoey's Secret",
             Quality = ItemQuality.Legendary,
             Slug = "zoeys-secret",
@@ -12176,7 +12177,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item KrelmsBuffBelt = new Item
         {
-            Id = 336184,
+            Id = SNOActor.x1_Belt_norm_set_02,
             Name = "Krelm's Buff Belt",
             Quality = ItemQuality.Legendary,
             Slug = "krelms-buff-belt",
@@ -12199,7 +12200,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SpearOfJairo = new Item
         {
-            Id = 470273,
+            Id = SNOActor.p6_spear_norm_unique_01,
             Name = "Spear of Jairo",
             Quality = ItemQuality.Legendary,
             Slug = "spear-of-jairo",
@@ -12222,7 +12223,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ArreatsLaw = new Item
         {
-            Id = 191446,
+            Id = SNOActor.Spear_norm_unique_01,
             Name = "Arreat's Law",
             Quality = ItemQuality.Legendary,
             Slug = "arreats-law",
@@ -12245,7 +12246,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Scrimshaw = new Item
         {
-            Id = 197095,
+            Id = SNOActor.Spear_norm_unique_04,
             Name = "Scrimshaw",
             Quality = ItemQuality.Legendary,
             Slug = "scrimshaw",
@@ -12268,7 +12269,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheThreeHundredthSpear = new Item
         {
-            Id = 196638,
+            Id = SNOActor.Spear_norm_unique_03,
             Name = "The Three Hundredth Spear",
             Quality = ItemQuality.Legendary,
             Slug = "the-three-hundredth-spear",
@@ -12291,7 +12292,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item EmpyreanMessenger = new Item
         {
-            Id = 194241,
+            Id = SNOActor.Spear_norm_unique_02,
             Name = "Empyrean Messenger",
             Quality = ItemQuality.Legendary,
             Slug = "empyrean-messenger",
@@ -12314,7 +12315,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item AkaneshTheHeraldOfRighteousness = new Item
         {
-            Id = 272043,
+            Id = SNOActor.x1_spear_norm_unique_05,
             Name = "Akanesh, the Herald of Righteousness",
             Quality = ItemQuality.Legendary,
             Slug = "akanesh-the-herald-of-righteousness",
@@ -12337,7 +12338,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DeadlyRebirth = new Item
         {
-            Id = 193433,
+            Id = SNOActor.ceremonialDagger_norm_unique_02,
             Name = "Deadly Rebirth",
             Quality = ItemQuality.Legendary,
             Slug = "deadly-rebirth",
@@ -12360,7 +12361,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RhenhoFlayer = new Item
         {
-            Id = 271745,
+            Id = SNOActor.x1_ceremonialDagger_norm_unique_11,
             Name = "Rhen'ho Flayer",
             Quality = ItemQuality.Legendary,
             Slug = "rhenho-flayer",
@@ -12383,7 +12384,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SacredHarvester = new Item
         {
-            Id = 403748,
+            Id = SNOActor.p1_ceremonialDagger_norm_unique_01,
             Name = "Sacred Harvester",
             Quality = ItemQuality.Legendary,
             Slug = "sacred-harvester",
@@ -12406,7 +12407,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheDaggerOfDarts = new Item
         {
-            Id = 403767,
+            Id = SNOActor.p1_ceremonialDagger_norm_unique_02,
             Name = "The Dagger of Darts",
             Quality = ItemQuality.Legendary,
             Slug = "the-dagger-of-darts",
@@ -12429,7 +12430,7 @@ namespace Trinity.Framework.Reference
         ///// </summary>
         //public static Item TheBarber = new Item
         //{
-        //    Id = 0,
+        //    Id = SNOActor.0,
         //    Name = "The Barber",
         //    Quality = ItemQuality.Legendary,
         //    Slug = "the-barber-ReRBQ",
@@ -12452,7 +12453,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LastBreath = new Item
         {
-            Id = 195370,
+            Id = SNOActor.ceremonialDagger_norm_unique_03,
             Name = "Last Breath",
             Quality = ItemQuality.Legendary,
             Slug = "last-breath",
@@ -12475,7 +12476,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheSpiderQueensGrasp = new Item
         {
-            Id = 222978,
+            Id = SNOActor.ceremonialDagger_norm_unique_05,
             Name = "The Spider Queen's Grasp",
             Quality = ItemQuality.Legendary,
             Slug = "the-spider-queens-grasp",
@@ -12498,7 +12499,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item StarmetalKukri = new Item
         {
-            Id = 271738,
+            Id = SNOActor.x1_ceremonialDagger_norm_unique_10,
             Name = "Starmetal Kukri",
             Quality = ItemQuality.Legendary,
             Slug = "starmetal-kukri",
@@ -12521,7 +12522,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item AnessaziEdge = new Item
         {
-            Id = 196250,
+            Id = SNOActor.ceremonialDagger_norm_unique_04,
             Name = "Anessazi Edge",
             Quality = ItemQuality.Legendary,
             Slug = "anessazi-edge",
@@ -12544,7 +12545,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item VoosJuicer = new Item
         {
-            Id = 192579,
+            Id = SNOActor.Dagger_norm_unique_02,
             Name = "Voo's Juicer",
             Quality = ItemQuality.Legendary,
             Slug = "voos-juicer",
@@ -12567,7 +12568,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheGidbinn = new Item
         {
-            Id = 209246,
+            Id = SNOActor.ceremonialDagger_norm_unique_09,
             Name = "The Gidbinn",
             Quality = ItemQuality.Legendary,
             Slug = "the-gidbinn",
@@ -12590,7 +12591,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ManajumasCarvingKnife = new Item
         {
-            Id = 223365,
+            Id = SNOActor.ceremonialDagger_norm_unique_06,
             Name = "Manajuma's Carving Knife",
             Quality = ItemQuality.Legendary,
             Slug = "manajumas-carving-knife",
@@ -12613,7 +12614,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CrystalFist = new Item
         {
-            Id = 175939,
+            Id = SNOActor.fistWeapon_norm_unique_08,
             Name = "Crystal Fist",
             Quality = ItemQuality.Legendary,
             Slug = "crystal-fist",
@@ -12636,7 +12637,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Fleshrake = new Item
         {
-            Id = 145850,
+            Id = SNOActor.fistWeapon_norm_unique_03,
             Name = "Fleshrake",
             Quality = ItemQuality.Legendary,
             Slug = "fleshrake",
@@ -12659,7 +12660,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Scarbringer = new Item
         {
-            Id = 130557,
+            Id = SNOActor.fistWeapon_norm_unique_01,
             Name = "Scarbringer",
             Quality = ItemQuality.Legendary,
             Slug = "scarbringer",
@@ -12682,7 +12683,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SledgeFist = new Item
         {
-            Id = 175938,
+            Id = SNOActor.fistWeapon_norm_unique_07,
             Name = "Sledge Fist",
             Quality = ItemQuality.Legendary,
             Slug = "sledge-fist",
@@ -12705,7 +12706,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Jawbreaker = new Item
         {
-            Id = 271957,
+            Id = SNOActor.x1_fistWeapon_norm_unique_14,
             Name = "Jawbreaker",
             Quality = ItemQuality.Legendary,
             Slug = "jawbreaker",
@@ -12728,7 +12729,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LogansClaw = new Item
         {
-            Id = 145849,
+            Id = SNOActor.fistWeapon_norm_unique_02,
             Name = "Logan's Claw",
             Quality = ItemQuality.Legendary,
             Slug = "logans-claw",
@@ -12751,7 +12752,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheFistOfAzturrasq = new Item
         {
-            Id = 175937,
+            Id = SNOActor.fistWeapon_norm_unique_06,
             Name = "The Fist of Az'Turrasq",
             Quality = ItemQuality.Legendary,
             Slug = "the-fist-of-azturrasq",
@@ -12774,7 +12775,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item WonKhimLau = new Item
         {
-            Id = 145851,
+            Id = SNOActor.fistWeapon_norm_unique_04,
             Name = "Won Khim Lau",
             Quality = ItemQuality.Legendary,
             Slug = "won-khim-lau",
@@ -12797,7 +12798,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ShenlongsFistOfLegend = new Item
         {
-            Id = 208996,
+            Id = SNOActor.fistWeapon_norm_unique_12,
             Name = "Shenlong's Fist of Legend",
             Quality = ItemQuality.Legendary,
             Slug = "shenlongs-fist-of-legend",
@@ -12820,7 +12821,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ShenlongsRelentlessAssault = new Item
         {
-            Id = 208898,
+            Id = SNOActor.fistWeapon_norm_unique_11,
             Name = "Shenlong's Relentless Assault",
             Quality = ItemQuality.Legendary,
             Slug = "shenlongs-relentless-assault",
@@ -12843,7 +12844,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RabidStrike = new Item
         {
-            Id = 196472,
+            Id = SNOActor.fistWeapon_norm_unique_10,
             Name = "Rabid Strike",
             Quality = ItemQuality.Legendary,
             Slug = "rabid-strike",
@@ -12866,7 +12867,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item KyoshirosBlade = new Item
         {
-            Id = 271963,
+            Id = SNOActor.x1_fistWeapon_norm_unique_15,
             Name = "Kyoshiro's Blade",
             Quality = ItemQuality.Legendary,
             Slug = "kyoshiros-blade",
@@ -12889,7 +12890,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LionsClaw = new Item
         {
-            Id = 403772,
+            Id = SNOActor.p1_fistWeapon_norm_unique_01,
             Name = "Lion's Claw",
             Quality = ItemQuality.Legendary,
             Slug = "lions-claw",
@@ -12912,7 +12913,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item VengefulWind = new Item
         {
-            Id = 403775,
+            Id = SNOActor.p1_fistWeapon_norm_unique_02,
             Name = "Vengeful Wind",
             Quality = ItemQuality.Legendary,
             Slug = "vengeful-wind",
@@ -12935,7 +12936,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item JohannasArgument = new Item
         {
-            Id = 403812,
+            Id = SNOActor.p1_flail1H_norm_unique_01,
             Name = "Johanna's Argument",
             Quality = ItemQuality.Legendary,
             Slug = "johannas-argument",
@@ -12958,7 +12959,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Darklight = new Item
         {
-            Id = 299428,
+            Id = SNOActor.x1_flail1H_norm_unique_06,
             Name = "Darklight",
             Quality = ItemQuality.Legendary,
             Slug = "darklight",
@@ -12981,7 +12982,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GyrfalconsFoote = new Item
         {
-            Id = 299427,
+            Id = SNOActor.x1_flail1H_norm_unique_05,
             Name = "Gyrfalcon's Foote",
             Quality = ItemQuality.Legendary,
             Slug = "gyrfalcons-foote",
@@ -13004,7 +13005,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item InviolableFaith = new Item
         {
-            Id = 299429,
+            Id = SNOActor.x1_flail1H_norm_unique_07,
             Name = "Inviolable Faith",
             Quality = ItemQuality.Legendary,
             Slug = "inviolable-faith",
@@ -13027,7 +13028,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item JustiniansMercy = new Item
         {
-            Id = 299424,
+            Id = SNOActor.x1_flail1H_norm_unique_02,
             Name = "Justinian's Mercy",
             Quality = ItemQuality.Legendary,
             Slug = "justinians-mercy",
@@ -13050,7 +13051,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item KassarsRetribution = new Item
         {
-            Id = 299426,
+            Id = SNOActor.x1_flail1H_norm_unique_04,
             Name = "Kassar's Retribution",
             Quality = ItemQuality.Legendary,
             Slug = "kassars-retribution",
@@ -13073,7 +13074,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Swiftmount = new Item
         {
-            Id = 299425,
+            Id = SNOActor.x1_flail1H_norm_unique_03,
             Name = "Swiftmount",
             Quality = ItemQuality.Legendary,
             Slug = "swiftmount",
@@ -13096,7 +13097,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Genzaniku = new Item
         {
-            Id = 116386,
+            Id = SNOActor.Axe_norm_unique_01,
             Name = "Genzaniku",
             Quality = ItemQuality.Legendary,
             Slug = "genzaniku",
@@ -13119,7 +13120,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FleshTearer = new Item
         {
-            Id = 116388,
+            Id = SNOActor.Axe_norm_unique_03,
             Name = "Flesh Tearer",
             Quality = ItemQuality.Legendary,
             Slug = "flesh-tearer",
@@ -13142,7 +13143,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Hack = new Item
         {
-            Id = 271598,
+            Id = SNOActor.x1_Axe_norm_unique_09,
             Name = "Hack",
             Quality = ItemQuality.Legendary,
             Slug = "hack",
@@ -13165,7 +13166,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheButchersSickle = new Item
         {
-            Id = 189973,
+            Id = SNOActor.Axe_norm_unique_06,
             Name = "The Butcher's Sickle",
             Quality = ItemQuality.Legendary,
             Slug = "the-butchers-sickle",
@@ -13188,7 +13189,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SkySplitter = new Item
         {
-            Id = 116389,
+            Id = SNOActor.Axe_norm_unique_04,
             Name = "Sky Splitter",
             Quality = ItemQuality.Legendary,
             Slug = "sky-splitter",
@@ -13211,7 +13212,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheBurningAxeOfSankis = new Item
         {
-            Id = 181484,
+            Id = SNOActor.Axe_norm_unique_05,
             Name = "The Burning Axe of Sankis",
             Quality = ItemQuality.Legendary,
             Slug = "the-burning-axe-of-sankis",
@@ -13234,7 +13235,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MordullusPromise = new Item
         {
-            Id = 271597,
+            Id = SNOActor.x1_Axe_norm_unique_08,
             Name = "Mordullu's Promise",
             Quality = ItemQuality.Legendary,
             Slug = "mordullus-promise",
@@ -13257,7 +13258,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FjordCutter = new Item
         {
-            Id = 192105,
+            Id = SNOActor.mightyWeapon_1H_norm_unique_01,
             Name = "Fjord Cutter",
             Quality = ItemQuality.Legendary,
             Slug = "fjord-cutter",
@@ -13280,7 +13281,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item AmbosPride = new Item
         {
-            Id = 193486,
+            Id = SNOActor.mightyWeapon_1H_norm_unique_03,
             Name = "Ambo's Pride",
             Quality = ItemQuality.Legendary,
             Slug = "ambos-pride",
@@ -13303,7 +13304,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BladeOfTheWarlord = new Item
         {
-            Id = 193611,
+            Id = SNOActor.mightyWeapon_1H_norm_unique_04,
             Name = "Blade of the Warlord",
             Quality = ItemQuality.Legendary,
             Slug = "blade-of-the-warlord",
@@ -13326,7 +13327,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BulkathossSolemnVow = new Item
         {
-            Id = 208771,
+            Id = SNOActor.mightyWeapon_1H_norm_unique_05,
             Name = "Bul-Kathos's Solemn Vow",
             Quality = ItemQuality.Legendary,
             Slug = "bulkathoss-solemn-vow",
@@ -13349,7 +13350,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BulkathossWarriorBlood = new Item
         {
-            Id = 208775,
+            Id = SNOActor.mightyWeapon_1H_norm_unique_06,
             Name = "Bul-Kathos's Warrior Blood",
             Quality = ItemQuality.Legendary,
             Slug = "bulkathoss-warrior-blood",
@@ -13372,7 +13373,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DishonoredLegacy = new Item
         {
-            Id = 272008,
+            Id = SNOActor.x1_mightyWeapon_1H_norm_unique_09,
             Name = "Dishonored Legacy",
             Quality = ItemQuality.Legendary,
             Slug = "dishonored-legacy",
@@ -13395,7 +13396,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Oathkeeper = new Item
         {
-            Id = 272009,
+            Id = SNOActor.x1_mightyWeapon_1H_norm_unique_10,
             Name = "Oathkeeper",
             Quality = ItemQuality.Legendary,
             Slug = "oathkeeper",
@@ -13418,7 +13419,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Remorseless = new Item
         {
-            Id = 271979,
+            Id = SNOActor.x1_mightyWeapon_1H_norm_unique_08,
             Name = "Remorseless",
             Quality = ItemQuality.Legendary,
             Slug = "remorseless",
@@ -13441,7 +13442,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ArthefsSparkOfLife = new Item
         {
-            Id = 59633,
+            Id = SNOActor.twoHandedMace_norm_unique_01,
             Name = "Arthef's Spark of Life",
             Quality = ItemQuality.Legendary,
             Slug = "arthefs-spark-of-life",
@@ -13464,7 +13465,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Crushbane = new Item
         {
-            Id = 99227,
+            Id = SNOActor.twoHandedMace_norm_unique_02,
             Name = "Crushbane",
             Quality = ItemQuality.Legendary,
             Slug = "crushbane",
@@ -13487,7 +13488,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Soulsmasher = new Item
         {
-            Id = 271671,
+            Id = SNOActor.x1_twoHandedMace_norm_unique_09,
             Name = "Soulsmasher",
             Quality = ItemQuality.Legendary,
             Slug = "soulsmasher",
@@ -13510,7 +13511,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Skywarden = new Item
         {
-            Id = 190840,
+            Id = SNOActor.twoHandedMace_norm_unique_03,
             Name = "Skywarden",
             Quality = ItemQuality.Legendary,
             Slug = "skywarden",
@@ -13533,7 +13534,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item WrathOfTheBoneKing = new Item
         {
-            Id = 191584,
+            Id = SNOActor.twoHandedMace_norm_unique_06,
             Name = "Wrath of the Bone King",
             Quality = ItemQuality.Legendary,
             Slug = "wrath-of-the-bone-king",
@@ -13556,7 +13557,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheFurnace = new Item
         {
-            Id = 271666,
+            Id = SNOActor.x1_twoHandedMace_norm_unique_08,
             Name = "The Furnace",
             Quality = ItemQuality.Legendary,
             Slug = "the-furnace",
@@ -13579,7 +13580,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SchaefersHammer = new Item
         {
-            Id = 197717,
+            Id = SNOActor.twoHandedMace_norm_unique_07,
             Name = "Schaefer's Hammer",
             Quality = ItemQuality.Legendary,
             Slug = "schaefers-hammer",
@@ -13602,7 +13603,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SledgeOfAthskeleng = new Item
         {
-            Id = 190866,
+            Id = SNOActor.twoHandedMace_norm_unique_04,
             Name = "Sledge of Athskeleng",
             Quality = ItemQuality.Legendary,
             Slug = "sledge-of-athskeleng",
@@ -13625,7 +13626,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PledgeOfCaldeum = new Item
         {
-            Id = 196570,
+            Id = SNOActor.Polearm_norm_unique_04,
             Name = "Pledge of Caldeum",
             Quality = ItemQuality.Legendary,
             Slug = "pledge-of-caldeum",
@@ -13648,7 +13649,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Standoff = new Item
         {
-            Id = 191570,
+            Id = SNOActor.Polearm_norm_unique_01,
             Name = "Standoff",
             Quality = ItemQuality.Legendary,
             Slug = "standoff",
@@ -13671,7 +13672,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BovineBardiche = new Item
         {
-            Id = 272056,
+            Id = SNOActor.x1_polearm_norm_unique_05,
             Name = "Bovine Bardiche",
             Quality = ItemQuality.Legendary,
             Slug = "bovine-bardiche",
@@ -13694,7 +13695,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item HeartSlaughter = new Item
         {
-            Id = 192569,
+            Id = SNOActor.Polearm_norm_unique_02,
             Name = "Heart Slaughter",
             Quality = ItemQuality.Legendary,
             Slug = "heart-slaughter",
@@ -13717,7 +13718,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Vigilance = new Item
         {
-            Id = 195491,
+            Id = SNOActor.Polearm_norm_unique_03,
             Name = "Vigilance",
             Quality = ItemQuality.Legendary,
             Slug = "vigilance",
@@ -13740,7 +13741,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item StaffOfChiroptera = new Item
         {
-            Id = 184228,
+            Id = SNOActor.Staff_norm_unique_03,
             Name = "Staff of Chiroptera",
             Quality = ItemQuality.Legendary,
             Slug = "staff-of-chiroptera",
@@ -13763,7 +13764,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheBrokenStaff = new Item
         {
-            Id = 59601,
+            Id = SNOActor.Staff_norm_unique_01,
             Name = "The Broken Staff",
             Quality = ItemQuality.Legendary,
             Slug = "the-broken-staff",
@@ -13786,7 +13787,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item AhavarionSpearOfLycander = new Item
         {
-            Id = 271768,
+            Id = SNOActor.x1_staff_norm_unique_08,
             Name = "Ahavarion, Spear of Lycander",
             Quality = ItemQuality.Legendary,
             Slug = "ahavarion-spear-of-lycander",
@@ -13809,7 +13810,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SuwongDiviner = new Item
         {
-            Id = 271775,
+            Id = SNOActor.x1_staff_norm_unique_11,
             Name = "SuWong Diviner",
             Quality = ItemQuality.Legendary,
             Slug = "suwong-diviner",
@@ -13832,7 +13833,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheSmolderingCore = new Item
         {
-            Id = 271774,
+            Id = SNOActor.x1_staff_norm_unique_10,
             Name = "The Smoldering Core",
             Quality = ItemQuality.Legendary,
             Slug = "the-smoldering-core",
@@ -13855,7 +13856,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ValtheksRebuke = new Item
         {
-            Id = 271773,
+            Id = SNOActor.x1_staff_norm_unique_09,
             Name = "Valthek's Rebuke",
             Quality = ItemQuality.Legendary,
             Slug = "valtheks-rebuke",
@@ -13878,7 +13879,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MalothsFocus = new Item
         {
-            Id = 193832,
+            Id = SNOActor.Staff_norm_unique_06,
             Name = "Maloth's Focus",
             Quality = ItemQuality.Legendary,
             Slug = "maloths-focus",
@@ -13901,7 +13902,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Wormwood = new Item
         {
-            Id = 195407,
+            Id = SNOActor.Staff_norm_unique_07,
             Name = "Wormwood",
             Quality = ItemQuality.Legendary,
             Slug = "wormwood",
@@ -13924,7 +13925,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheGrandVizier = new Item
         {
-            Id = 192167,
+            Id = SNOActor.Staff_norm_unique_04,
             Name = "The Grand Vizier",
             Quality = ItemQuality.Legendary,
             Slug = "the-grand-vizier",
@@ -13947,7 +13948,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheTormentor = new Item
         {
-            Id = 193066,
+            Id = SNOActor.Staff_norm_unique_05,
             Name = "The Tormentor",
             Quality = ItemQuality.Legendary,
             Slug = "the-tormentor",
@@ -13970,7 +13971,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheZweihander = new Item
         {
-            Id = 59665,
+            Id = SNOActor.twoHandedSword_norm_unique_01,
             Name = "The Zweihander",
             Quality = ItemQuality.Legendary,
             Slug = "the-zweihander",
@@ -13993,7 +13994,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FaithfulMemory = new Item
         {
-            Id = 198960,
+            Id = SNOActor.twoHandedSword_norm_unique_09,
             Name = "Faithful Memory",
             Quality = ItemQuality.Legendary,
             Slug = "faithful-memory",
@@ -14016,7 +14017,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Blackguard = new Item
         {
-            Id = 270979,
+            Id = SNOActor.twoHandedSword_norm_unique_10,
             Name = "Blackguard",
             Quality = ItemQuality.Legendary,
             Slug = "blackguard",
@@ -14039,7 +14040,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Scourge = new Item
         {
-            Id = 181511,
+            Id = SNOActor.twoHandedSword_norm_unique_06,
             Name = "Scourge",
             Quality = ItemQuality.Legendary,
             Slug = "scourge",
@@ -14062,7 +14063,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item StalgardsDecimator = new Item
         {
-            Id = 271639,
+            Id = SNOActor.x1_twoHandedSword_norm_unique_11,
             Name = "Stalgard's Decimator",
             Quality = ItemQuality.Legendary,
             Slug = "stalgards-decimator",
@@ -14085,7 +14086,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BladeOfProphecy = new Item
         {
-            Id = 184184,
+            Id = SNOActor.twoHandedSword_norm_unique_03,
             Name = "Blade of Prophecy",
             Quality = ItemQuality.Legendary,
             Slug = "blade-of-prophecy",
@@ -14108,7 +14109,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheSultanOfBlindingSand = new Item
         {
-            Id = 184190,
+            Id = SNOActor.twoHandedSword_norm_unique_05,
             Name = "The Sultan of Blinding Sand",
             Quality = ItemQuality.Legendary,
             Slug = "the-sultan-of-blinding-sand",
@@ -14131,7 +14132,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Maximus = new Item
         {
-            Id = 184187,
+            Id = SNOActor.twoHandedSword_norm_unique_04,
             Name = "Maximus",
             Quality = ItemQuality.Legendary,
             Slug = "maximus",
@@ -14154,7 +14155,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheGrandfather = new Item
         {
-            Id = 190360,
+            Id = SNOActor.twoHandedSword_norm_unique_08,
             Name = "The Grandfather",
             Quality = ItemQuality.Legendary,
             Slug = "the-grandfather",
@@ -14177,7 +14178,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Warmonger = new Item
         {
-            Id = 181495,
+            Id = SNOActor.twoHandedSword_norm_unique_07,
             Name = "Warmonger",
             Quality = ItemQuality.Legendary,
             Slug = "warmonger",
@@ -14200,7 +14201,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CamsRebuttal = new Item
         {
-            Id = 271644,
+            Id = SNOActor.x1_twoHandedSword_norm_unique_12,
             Name = "Cam's Rebuttal",
             Quality = ItemQuality.Legendary,
             Slug = "cams-rebuttal",
@@ -14223,7 +14224,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BloodBrother = new Item
         {
-            Id = 271645,
+            Id = SNOActor.x1_twoHandedSword_norm_unique_13,
             Name = "Blood Brother",
             Quality = ItemQuality.Legendary,
             Slug = "blood-brother",
@@ -14246,7 +14247,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item CorruptedAshbringer = new Item
         {
-            Id = 430567,
+            Id = SNOActor.p2_twoHandedSword_norm_unique_02,
             Name = "Corrupted Ashbringer",
             Quality = ItemQuality.Legendary,
             Slug = "corrupted-ashbringer",
@@ -14269,7 +14270,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Balance = new Item
         {
-            Id = 195145,
+            Id = SNOActor.combatStaff_norm_unique_04,
             Name = "Balance",
             Quality = ItemQuality.Legendary,
             Slug = "balance",
@@ -14292,7 +14293,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheFlowOfEternity = new Item
         {
-            Id = 197072,
+            Id = SNOActor.combatStaff_norm_unique_06,
             Name = "The Flow of Eternity",
             Quality = ItemQuality.Legendary,
             Slug = "the-flow-of-eternity",
@@ -14315,7 +14316,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ThePaddle = new Item
         {
-            Id = 197068,
+            Id = SNOActor.combatStaff_norm_unique_03,
             Name = "The Paddle",
             Quality = ItemQuality.Legendary,
             Slug = "the-paddle",
@@ -14338,7 +14339,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item StaffOfKyro = new Item
         {
-            Id = 271749,
+            Id = SNOActor.x1_combatStaff_norm_unique_09,
             Name = "Staff of Kyro",
             Quality = ItemQuality.Legendary,
             Slug = "staff-of-kyro",
@@ -14361,7 +14362,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item WarstaffOfGeneralQuang = new Item
         {
-            Id = 271765,
+            Id = SNOActor.x1_combatStaff_norm_unique_10,
             Name = "Warstaff of General Quang",
             Quality = ItemQuality.Legendary,
             Slug = "warstaff-of-general-quang",
@@ -14384,7 +14385,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item IncenseTorchOfTheGrandTemple = new Item
         {
-            Id = 192342,
+            Id = SNOActor.combatStaff_norm_unique_01,
             Name = "Incense Torch of the Grand Temple",
             Quality = ItemQuality.Legendary,
             Slug = "incense-torch-of-the-grand-temple",
@@ -14407,7 +14408,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FlyingDragon = new Item
         {
-            Id = 197065,
+            Id = SNOActor.combatStaff_norm_unique_02,
             Name = "Flying Dragon",
             Quality = ItemQuality.Legendary,
             Slug = "flying-dragon",
@@ -14430,7 +14431,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item InnasReach = new Item
         {
-            Id = 212208,
+            Id = SNOActor.combatStaff_norm_unique_08,
             Name = "Inna's Reach",
             Quality = ItemQuality.Legendary,
             Slug = "innas-reach",
@@ -14453,7 +14454,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FlailOfTheAscended = new Item
         {
-            Id = 403860,
+            Id = SNOActor.p1_flail2H_norm_unique_02,
             Name = "Flail of the Ascended",
             Quality = ItemQuality.Legendary,
             Slug = "flail-of-the-ascended",
@@ -14476,7 +14477,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item AkkhansAddendum = new Item
         {
-            Id = 395228,
+            Id = SNOActor.p2_flail2H_norm_unique_02,
             Name = "Akkhan's Addendum",
             Quality = ItemQuality.Legendary,
             Slug = "akkhans-addendum",
@@ -14499,7 +14500,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BalefulRemnant = new Item
         {
-            Id = 299435,
+            Id = SNOActor.x1_flail2H_norm_unique_02,
             Name = "Baleful Remnant",
             Quality = ItemQuality.Legendary,
             Slug = "baleful-remnant",
@@ -14522,7 +14523,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FateOfTheFell = new Item
         {
-            Id = 299436,
+            Id = SNOActor.x1_flail2H_norm_unique_03,
             Name = "Fate of the Fell",
             Quality = ItemQuality.Legendary,
             Slug = "fate-of-the-fell",
@@ -14545,7 +14546,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GoldenFlense = new Item
         {
-            Id = 299437,
+            Id = SNOActor.x1_flail2H_norm_unique_04,
             Name = "Golden Flense",
             Quality = ItemQuality.Legendary,
             Slug = "golden-flense",
@@ -14568,7 +14569,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheMortalDrama = new Item
         {
-            Id = 299431,
+            Id = SNOActor.x1_flail2H_norm_unique_01,
             Name = "The Mortal Drama",
             Quality = ItemQuality.Legendary,
             Slug = "the-mortal-drama",
@@ -14591,7 +14592,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item AkkhansLeniency = new Item
         {
-            Id = 403846,
+            Id = SNOActor.p1_flail2H_norm_unique_01,
             Name = "Akkhan's Leniency",
             Quality = ItemQuality.Legendary,
             Slug = "akkhans-leniency",
@@ -14614,7 +14615,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FlailOfTheCharge = new Item
         {
-            Id = 395227,
+            Id = SNOActor.p2_flail2H_norm_unique_01,
             Name = "Flail of the Charge",
             Quality = ItemQuality.Legendary,
             Slug = "flail-of-the-charge",
@@ -14637,7 +14638,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BastionsRevered = new Item
         {
-            Id = 195690,
+            Id = SNOActor.mightyWeapon_2H_norm_unique_03,
             Name = "Bastion's Revered",
             Quality = ItemQuality.Legendary,
             Slug = "bastions-revered",
@@ -14660,7 +14661,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FuryOfTheVanishedPeak = new Item
         {
-            Id = 195138,
+            Id = SNOActor.mightyWeapon_2H_norm_unique_02,
             Name = "Fury of the Vanished Peak",
             Quality = ItemQuality.Legendary,
             Slug = "fury-of-the-vanished-peak",
@@ -14683,7 +14684,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MadawcsSorrow = new Item
         {
-            Id = 272012,
+            Id = SNOActor.x1_mightyWeapon_2H_norm_unique_11,
             Name = "Madawc's Sorrow",
             Quality = ItemQuality.Legendary,
             Slug = "madawcs-sorrow",
@@ -14706,7 +14707,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheGavelOfJudgment = new Item
         {
-            Id = 193657,
+            Id = SNOActor.mightyWeapon_2H_norm_unique_01,
             Name = "The Gavel of Judgment",
             Quality = ItemQuality.Legendary,
             Slug = "the-gavel-of-judgment",
@@ -14729,7 +14730,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ImmortalKingsBoulderBreaker = new Item
         {
-            Id = 210678,
+            Id = SNOActor.mightyWeapon_2H_norm_unique_10,
             Name = "Immortal King's Boulder Breaker",
             Quality = ItemQuality.Legendary,
             Slug = "immortal-kings-boulder-breaker",
@@ -14752,7 +14753,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BladeOfTheTribes = new Item
         {
-            Id = 322776,
+            Id = SNOActor.x1_twoHandedAxe_norm_unique_11,
             Name = "Blade of the Tribes",
             Quality = ItemQuality.Legendary,
             Slug = "blade-of-the-tribes",
@@ -14775,7 +14776,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DemonMachine = new Item
         {
-            Id = 222286,
+            Id = SNOActor.XBow_norm_unique_07,
             Name = "Demon Machine",
             Quality = ItemQuality.Legendary,
             Slug = "demon-machine",
@@ -14798,7 +14799,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BurizadoKyanon = new Item
         {
-            Id = 194219,
+            Id = SNOActor.XBow_norm_unique_03,
             Name = "Buriza-Do Kyanon",
             Quality = ItemQuality.Legendary,
             Slug = "burizado-kyanon",
@@ -14821,7 +14822,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BakkanCaster = new Item
         {
-            Id = 98163,
+            Id = SNOActor.XBow_norm_unique_01,
             Name = "Bakkan Caster",
             Quality = ItemQuality.Legendary,
             Slug = "bakkan-caster",
@@ -14844,7 +14845,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PusSpitter = new Item
         {
-            Id = 204874,
+            Id = SNOActor.XBow_norm_unique_05,
             Name = "Pus Spitter",
             Quality = ItemQuality.Legendary,
             Slug = "pus-spitter",
@@ -14867,7 +14868,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Hellrack = new Item
         {
-            Id = 192836,
+            Id = SNOActor.XBow_norm_unique_02,
             Name = "Hellrack",
             Quality = ItemQuality.Legendary,
             Slug = "hellrack",
@@ -14890,7 +14891,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Manticore = new Item
         {
-            Id = 221760,
+            Id = SNOActor.XBow_norm_unique_06,
             Name = "Manticore",
             Quality = ItemQuality.Legendary,
             Slug = "manticore",
@@ -14913,7 +14914,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ChanonBolter = new Item
         {
-            Id = 271884,
+            Id = SNOActor.x1_xbow_norm_unique_08,
             Name = "Chanon Bolter",
             Quality = ItemQuality.Legendary,
             Slug = "chanon-bolter",
@@ -14936,7 +14937,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item WojahnniAssaulter = new Item
         {
-            Id = 271889,
+            Id = SNOActor.x1_xbow_norm_unique_09,
             Name = "Wojahnni Assaulter",
             Quality = ItemQuality.Legendary,
             Slug = "wojahnni-assaulter",
@@ -14959,7 +14960,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Uskang = new Item
         {
-            Id = 175580,
+            Id = SNOActor.Bow_norm_unique_01,
             Name = "Uskang",
             Quality = ItemQuality.Legendary,
             Slug = "uskang",
@@ -14982,7 +14983,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Etrayu = new Item
         {
-            Id = 175581,
+            Id = SNOActor.Bow_norm_unique_02,
             Name = "Etrayu",
             Quality = ItemQuality.Legendary,
             Slug = "etrayu",
@@ -15005,7 +15006,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheRavensWing = new Item
         {
-            Id = 221938,
+            Id = SNOActor.Bow_norm_unique_07,
             Name = "The Raven's Wing",
             Quality = ItemQuality.Legendary,
             Slug = "the-ravens-wing",
@@ -15028,7 +15029,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Kridershot = new Item
         {
-            Id = 271875,
+            Id = SNOActor.x1_bow_norm_unique_09,
             Name = "Kridershot",
             Quality = ItemQuality.Legendary,
             Slug = "kridershot",
@@ -15051,7 +15052,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Cluckeye = new Item
         {
-            Id = 175582,
+            Id = SNOActor.Bow_norm_unique_03,
             Name = "Cluckeye",
             Quality = ItemQuality.Legendary,
             Slug = "cluckeye",
@@ -15074,7 +15075,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Windforce = new Item
         {
-            Id = 192602,
+            Id = SNOActor.Bow_norm_unique_04,
             Name = "Windforce",
             Quality = ItemQuality.Legendary,
             Slug = "windforce",
@@ -15097,7 +15098,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LeonineBowOfHashir = new Item
         {
-            Id = 271882,
+            Id = SNOActor.x1_bow_norm_unique_11,
             Name = "Leonine Bow of Hashir",
             Quality = ItemQuality.Legendary,
             Slug = "leonine-bow-of-hashir",
@@ -15120,7 +15121,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item OdysseysEnd = new Item
         {
-            Id = 271880,
+            Id = SNOActor.x1_bow_norm_unique_10,
             Name = "Odyssey's End",
             Quality = ItemQuality.Legendary,
             Slug = "odysseys-end",
@@ -15143,7 +15144,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item YangsRecurve = new Item
         {
-            Id = 319407,
+            Id = SNOActor.x1_Bow_norm_unique_08,
             Name = "Yang's Recurve",
             Quality = ItemQuality.Legendary,
             Slug = "yangs-recurve",
@@ -15166,7 +15167,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Helltrapper = new Item
         {
-            Id = 271914,
+            Id = SNOActor.x1_handXbow_norm_unique_11,
             Name = "Helltrapper",
             Quality = ItemQuality.Legendary,
             Slug = "helltrapper",
@@ -15189,7 +15190,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item VallasBequest = new Item
         {
-            Id = 192467,
+            Id = SNOActor.handXbow_norm_unique_01,
             Name = "Valla's Bequest",
             Quality = ItemQuality.Legendary,
             Slug = "vallas-bequest",
@@ -15212,7 +15213,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BalefireCaster = new Item
         {
-            Id = 192528,
+            Id = SNOActor.handXbow_norm_unique_02,
             Name = "Balefire Caster",
             Quality = ItemQuality.Legendary,
             Slug = "balefire-caster",
@@ -15235,7 +15236,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item KmarTenclip = new Item
         {
-            Id = 271892,
+            Id = SNOActor.x1_handXbow_norm_unique_10,
             Name = "K'mar Tenclip",
             Quality = ItemQuality.Legendary,
             Slug = "kmar-tenclip",
@@ -15258,7 +15259,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Calamity = new Item
         {
-            Id = 225181,
+            Id = SNOActor.handXbow_norm_unique_08,
             Name = "Calamity",
             Quality = ItemQuality.Legendary,
             Slug = "calamity",
@@ -15281,7 +15282,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DanettasRevenge = new Item
         {
-            Id = 211749,
+            Id = SNOActor.handXbow_norm_unique_07,
             Name = "Danetta's Revenge",
             Quality = ItemQuality.Legendary,
             Slug = "danettas-revenge",
@@ -15304,7 +15305,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item DanettasSpite = new Item
         {
-            Id = 211745,
+            Id = SNOActor.handXbow_norm_unique_06,
             Name = "Danetta's Spite",
             Quality = ItemQuality.Legendary,
             Slug = "danettas-spite",
@@ -15327,7 +15328,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item NatalyasSlayer = new Item
         {
-            Id = 210874,
+            Id = SNOActor.handXbow_norm_unique_05,
             Name = "Natalya's Slayer",
             Quality = ItemQuality.Legendary,
             Slug = "natalyas-slayer",
@@ -15350,7 +15351,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Dawn = new Item
         {
-            Id = 196409,
+            Id = SNOActor.handXbow_norm_unique_04,
             Name = "Dawn",
             Quality = ItemQuality.Legendary,
             Slug = "dawn",
@@ -15373,7 +15374,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FortressBallista = new Item
         {
-            Id = 395304,
+            Id = SNOActor.p2_handXbow_norm_unique_02,
             Name = "Fortress Ballista",
             Quality = ItemQuality.Legendary,
             Slug = "fortress-ballista",
@@ -15396,7 +15397,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item LiannasWings = new Item
         {
-            Id = 395303,
+            Id = SNOActor.p2_handXbow_norm_unique_01,
             Name = "Lianna's Wings",
             Quality = ItemQuality.Legendary,
             Slug = "liannas-wings",
@@ -15419,7 +15420,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheDemonsDemise = new Item
         {
-            Id = 395305,
+            Id = SNOActor.p2_handXbow_norm_unique_03,
             Name = "The Demon's Demise",
             Quality = ItemQuality.Legendary,
             Slug = "the-demons-demise",
@@ -15442,7 +15443,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Starfire = new Item
         {
-            Id = 182074,
+            Id = SNOActor.Wand_norm_unique_04,
             Name = "Starfire",
             Quality = ItemQuality.Legendary,
             Slug = "starfire",
@@ -15465,7 +15466,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item UnstableScepter = new Item
         {
-            Id = 380733,
+            Id = SNOActor.p1_wand_norm_unique_02,
             Name = "Unstable Scepter",
             Quality = ItemQuality.Legendary,
             Slug = "unstable-scepter",
@@ -15488,7 +15489,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BlackhandKey = new Item
         {
-            Id = 193355,
+            Id = SNOActor.Wand_norm_unique_06,
             Name = "Blackhand Key",
             Quality = ItemQuality.Legendary,
             Slug = "blackhand-key",
@@ -15511,7 +15512,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SerpentsSparker = new Item
         {
-            Id = 272084,
+            Id = SNOActor.x1_wand_norm_unique_02,
             Name = "Serpent's Sparker",
             Quality = ItemQuality.Legendary,
             Slug = "serpents-sparker",
@@ -15534,7 +15535,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item WandOfWoh = new Item
         {
-            Id = 272086,
+            Id = SNOActor.x1_wand_norm_unique_06,
             Name = "Wand of Woh",
             Quality = ItemQuality.Legendary,
             Slug = "wand-of-woh",
@@ -15557,7 +15558,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item FragmentOfDestiny = new Item
         {
-            Id = 181995,
+            Id = SNOActor.Wand_norm_unique_02,
             Name = "Fragment of Destiny",
             Quality = ItemQuality.Legendary,
             Slug = "fragment-of-destiny",
@@ -15580,7 +15581,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GestureOfOrpheus = new Item
         {
-            Id = 182071,
+            Id = SNOActor.Wand_norm_unique_03,
             Name = "Gesture of Orpheus",
             Quality = ItemQuality.Legendary,
             Slug = "gesture-of-orpheus",
@@ -15603,7 +15604,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SloraksMadness = new Item
         {
-            Id = 181982,
+            Id = SNOActor.Wand_norm_unique_01,
             Name = "Slorak's Madness",
             Quality = ItemQuality.Legendary,
             Slug = "sloraks-madness",
@@ -15626,7 +15627,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ChantodosWill = new Item
         {
-            Id = 210479,
+            Id = SNOActor.Wand_norm_unique_07,
             Name = "Chantodo's Will",
             Quality = ItemQuality.Legendary,
             Slug = "chantodos-will",
@@ -15649,7 +15650,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item AetherWalker = new Item
         {
-            Id = 403781,
+            Id = SNOActor.p1_Wand_norm_unique_01,
             Name = "Aether Walker",
             Quality = ItemQuality.Legendary,
             Slug = "aether-walker",
@@ -15672,7 +15673,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item TheExecutioner = new Item
         {
-            Id = 186560,
+            Id = SNOActor.twoHandedAxe_norm_unique_02,
             Name = "The Executioner",
             Quality = ItemQuality.Legendary,
             Slug = "the-executioner",
@@ -15695,7 +15696,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BurstOfWrath = new Item
         {
-            Id = 271601,
+            Id = SNOActor.x1_twoHandedAxe_norm_unique_09,
             Name = "Burst of Wrath",
             Quality = ItemQuality.Legendary,
             Slug = "burst-of-wrath",
@@ -15718,7 +15719,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ButchersCarver = new Item
         {
-            Id = 186494,
+            Id = SNOActor.twoHandedAxe_norm_unique_03,
             Name = "Butcher's Carver",
             Quality = ItemQuality.Legendary,
             Slug = "butchers-carver",
@@ -15741,7 +15742,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MesserschmidtsReaver = new Item
         {
-            Id = 191065,
+            Id = SNOActor.twoHandedAxe_norm_unique_04,
             Name = "Messerschmidt's Reaver",
             Quality = ItemQuality.Legendary,
             Slug = "messerschmidts-reaver",
@@ -15764,7 +15765,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Skorn = new Item
         {
-            Id = 192887,
+            Id = SNOActor.twoHandedAxe_norm_unique_05,
             Name = "Skorn",
             Quality = ItemQuality.Legendary,
             Slug = "skorn",
@@ -15817,16 +15818,16 @@ namespace Trinity.Framework.Reference
 
         public static bool TryGetItemByGameBalanceId(int gbid, out Item item)
         {
-            if (Items.ContainsKey(gbid))
+            if (Items.ContainsKey((SNOActor)gbid))
             {
-                item = Items[gbid];
+                item = Items[(SNOActor)gbid];
                 return true;
             }
             item = default(Item);
             return false;
         }
 
-        public static bool TryGetItemByActorSnoId(int sno, out Item item)
+        public static bool TryGetItemByActorSnoId(SNOActor sno, out Item item)
         {
             if (Items.ContainsKey(sno))
             {
@@ -15840,20 +15841,20 @@ namespace Trinity.Framework.Reference
         /// <summary>
         /// Hashset of all Legendaries ActorSnoId
         /// </summary>
-        public static HashSet<int> ItemIds
+        public static HashSet<SNOActor> ItemIds
         {
-            get { return _itemIds ?? (_itemIds = new HashSet<int>(ToList().Where(i => i.Id != 0).Select(i => i.Id))); }
+            get { return _itemIds ?? (_itemIds = new HashSet<SNOActor>(ToList().Where(i => i.Id != 0).Select(i => i.Id))); }
         }
-        private static HashSet<int> _itemIds;
+        private static HashSet<SNOActor> _itemIds;
 
         /// <summary>
         /// Dictionary of all Legendaries Items
         /// </summary>
-        public static new Dictionary<int, Item> Items
+        public static new Dictionary<SNOActor, Item> Items
         {
             get { return _items ?? (_items = ToList().Where(i => i.Id != 0).DistinctBy(i => i.Id).ToDictionary(k => k.Id, v => v)); }
         }
-        private static Dictionary<int, Item> _items;
+        private static Dictionary<SNOActor, Item> _items;
 
         /// <summary>
         /// Gets equipped legendaries

@@ -339,7 +339,7 @@ namespace Trinity.Routines.Necromancer
             {
                 if (!_isvalid_g_magCount)
                 {       
-                    _g_magCount = Core.Actors.Actors.Count(a => a.ActorSnoId == 472606);
+                    _g_magCount = Core.Actors.Actors.Count(a => a.ActorSnoId == SNOActor.p6_necro_skeletonMage_C);
                     _isvalid_g_magCount = true;
                 }
 
@@ -1284,7 +1284,7 @@ namespace Trinity.Routines.Necromancer
             return true;
         }
 
-        private int _worldId = 0;
+        private SNOWorld _worldId = SNOWorld.Invalid;
         private bool needCheckMonster = false;
         private bool hasDanger = false;
 
@@ -1990,7 +1990,7 @@ namespace Trinity.Routines.Necromancer
             TrinityActor actor = 
                 (from u in TargetUtil.SafeList(false)
                  where fromLocation.Distance2D(u.Position) <= range &&
-                       u.ActorSnoId == 433966
+                       u.ActorSnoId == SNOActor.p2_itemPassive_unique_ring_017_dome
                  orderby u.Distance
                  select u).ToList().FirstOrDefault();
 
@@ -2061,7 +2061,7 @@ namespace Trinity.Routines.Necromancer
         {
             return (from u in ObjectCache
                     where u.IsUnit && u.IsValid && u.Weight > 0 &&
-                          (u.IsBoss || u.ActorSnoId == 360636) && u.IsValid && u.Weight > 0 &&
+                          (u.IsBoss || u.ActorSnoId == SNOActor.X1_LR_Boss_TerrorDemon_A) && u.IsValid && u.Weight > 0 &&
                           u.IsInLineOfSight &&
                           u.Distance <= range
                     orderby
@@ -2073,7 +2073,7 @@ namespace Trinity.Routines.Necromancer
         {				
 			TrinityActor actor = (from u in TargetUtil.SafeList(true)
                 where
-                    u.ActorSnoId == 322194 &&
+                    u.ActorSnoId == SNOActor.X1_Pand_Ext_Ordnance_Tower_Shock_A &&
                     TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
                     (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
@@ -2091,12 +2091,12 @@ namespace Trinity.Routines.Necromancer
         {				
 			return (from u in ObjectCache
                 where u.IsUnit && u.IsValid && u.Weight > 0 &&
-					((u.IsElite && u.EliteType != EliteTypes.Minion) || u.ActorSnoId == 360636) && 
+					((u.IsElite && u.EliteType != EliteTypes.Minion) || u.ActorSnoId == SNOActor.X1_LR_Boss_TerrorDemon_A) && 
                     !u.IsSafeSpot && u != exclude &&
                     u.Type != TrinityObjectType.Shrine &&
                     u.Type != TrinityObjectType.ProgressionGlobe &&
                     u.Type != TrinityObjectType.HealthGlobe &&
-                    u.ActorSnoId != 454066 &&
+                    u.ActorSnoId != SNOActor.P6_Necro_Corpse_Flesh &&
                     TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
                     (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
@@ -2110,12 +2110,12 @@ namespace Trinity.Routines.Necromancer
         {				
 			return (from u in ObjectCache
                 where u.IsUnit && u.IsValid && u.Weight > 0 &&
-					((u.IsElite && u.EliteType != EliteTypes.Minion) || u.ActorSnoId == 360636) && 
+					((u.IsElite && u.EliteType != EliteTypes.Minion) || u.ActorSnoId == SNOActor.X1_LR_Boss_TerrorDemon_A) && 
                     !u.IsSafeSpot && u != exclude &&
                     u.Type != TrinityObjectType.Shrine &&
                     u.Type != TrinityObjectType.ProgressionGlobe &&
                     u.Type != TrinityObjectType.HealthGlobe &&
-                    u.ActorSnoId != 454066 &&
+                    u.ActorSnoId != SNOActor.P6_Necro_Corpse_Flesh &&
                     TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
                     (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
@@ -2134,7 +2134,7 @@ namespace Trinity.Routines.Necromancer
                     u.Type != TrinityObjectType.Shrine &&
                     u.Type != TrinityObjectType.ProgressionGlobe &&
                     u.Type != TrinityObjectType.HealthGlobe &&
-                    u.ActorSnoId != 454066 &&
+                    u.ActorSnoId != SNOActor.P6_Necro_Corpse_Flesh &&
                       TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
                     (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
@@ -2153,7 +2153,7 @@ namespace Trinity.Routines.Necromancer
                     u.Type != TrinityObjectType.Shrine &&
                     u.Type != TrinityObjectType.ProgressionGlobe &&
                     u.Type != TrinityObjectType.HealthGlobe &&
-                    u.ActorSnoId != 454066 &&
+                    u.ActorSnoId != SNOActor.P6_Necro_Corpse_Flesh &&
                       TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
                     (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
@@ -2171,7 +2171,7 @@ namespace Trinity.Routines.Necromancer
                     u.Type != TrinityObjectType.Shrine &&
                     u.Type != TrinityObjectType.ProgressionGlobe &&
                     u.Type != TrinityObjectType.HealthGlobe &&
-                    u.ActorSnoId != 454066 &&
+                    u.ActorSnoId != SNOActor.P6_Necro_Corpse_Flesh &&
                       TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
                     (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
@@ -2189,7 +2189,7 @@ namespace Trinity.Routines.Necromancer
                     u.Type != TrinityObjectType.Shrine &&
                     u.Type != TrinityObjectType.ProgressionGlobe &&
                     u.Type != TrinityObjectType.HealthGlobe &&
-                    u.ActorSnoId != 454066 &&
+                    u.ActorSnoId != SNOActor.P6_Necro_Corpse_Flesh &&
                       TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
                     (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
@@ -2240,7 +2240,7 @@ namespace Trinity.Routines.Necromancer
                     u.Type != TrinityObjectType.Shrine &&
                     u.Type != TrinityObjectType.ProgressionGlobe &&
                     u.Type != TrinityObjectType.HealthGlobe &&
-                    u.ActorSnoId != 454066 &&
+                    u.ActorSnoId != SNOActor.P6_Necro_Corpse_Flesh &&
                       TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
                     (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
@@ -2260,8 +2260,8 @@ namespace Trinity.Routines.Necromancer
                     u.Type != TrinityObjectType.Shrine &&
                     u.Type != TrinityObjectType.ProgressionGlobe &&
                     u.Type != TrinityObjectType.HealthGlobe &&
-                    u.ActorSnoId != 454066
-                orderby
+                    u.ActorSnoId != SNOActor.P6_Necro_Corpse_Flesh
+                 orderby
                     u.Distance
                 select u).FirstOrDefault();
 
@@ -2276,7 +2276,7 @@ namespace Trinity.Routines.Necromancer
                     u.Type != TrinityObjectType.Shrine &&
                     u.Type != TrinityObjectType.ProgressionGlobe &&
                     u.Type != TrinityObjectType.HealthGlobe &&
-                    u.ActorSnoId != 454066 &&
+                    u.ActorSnoId != SNOActor.P6_Necro_Corpse_Flesh &&
                       TrinityGrid.Instance.CanRayCast(pos, u.Position) &&
                     (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
@@ -2291,7 +2291,7 @@ namespace Trinity.Routines.Necromancer
         {				
 			return (from u in ObjectCache
                 where u.IsUnit &&
-					((u.IsElite || u.ActorSnoId == 360636) && u.EliteType != EliteTypes.Minion) && u.IsValid && u.Weight > 0 &&
+					((u.IsElite || u.ActorSnoId == SNOActor.X1_LR_Boss_TerrorDemon_A) && u.EliteType != EliteTypes.Minion) && u.IsValid && u.Weight > 0 &&
                     !u.IsSafeSpot && u != exclude && 
                     (!canRayWalk || (canRayWalk && TrinityGrid.Instance.CanRayWalk(pos, u.Position))) &&
 					u.Position.Distance(pos) <= range
@@ -2353,51 +2353,48 @@ namespace Trinity.Routines.Necromancer
         }
 
         // 你们都很牛逼，老子让让你
-        private List<int> yes = new List<int> 
+        private List<SNOActor> yes = new List<SNOActor> 
         {
-            310888, //x1_SkeletonArcher_Westmarch_Ghost_A-96176 骷髅弓箭手
-            170781, //	SkeletonArcher_E
-            179343, //	SkeletonArcher_F	黑骷髅弓手
-            251042, //	SkeletonArcher_westm_A	骷髅弓手
-            // 192850, //	ThousandPounder_C	疯狂的戈尔格
-            5371, //skeletonMage_Fire_A-915067 火骷髅法师
-            418911, //p1_LR_Ghost_A-96145 吸爷
-            418924, //p1_LR_Ghost_Dark_A-223806 吸爷
-            418918, //			p1_LR_Ghost_B	恶毒亡魂
-            418922, //			p1_LR_Ghost_C	催命恶魂
-            418923, //			p1_LR_Ghost_D	厉鬼
-            3847, //Corpulent_A-868709 怪诞魔
-            4541, //LacuniFemale_A-318986 恶毒妖妇
-            219673, //Succubus_C-12503 地狱妖女
-            152679, //Succubus_B-652352 地狱妖妇
-            169615, //SoulRipper_B-182355 舔爷
-            5436, //	SoulRipper_A	灵魂撕裂者
-            222096, //	SoulRipper_C_Despair	灵魂吞噬者
-            4084, //FallenGrunt_C-923278 沉沦魔
-            239014, //x1_BogFamily_ranged_A-47209 沼泽诱捕兽
-            4299, //GoatMutant_Ranged_A-113207 鲜血氏族标枪
-            204981, //	GoatMutant_Ranged_A_Large_Aggro	鲜血氏族枪兵
-            304307, //x1_leaperAngel_A-4973 叛天灵
-            4985, // QuillDemon_C	寒冰刺背兽
-            322194, //	X1_Pand_Ext_Ordnance_Tower_Shock_A 	电击塔
-            3338, //		Beast_B	长角蛮牛怪
-            3339, //		Beast_C	长毛怪
-            3342, //	Beast_D
-            // 3980, //		DuneDervish_A 沙漠魔煞
-            // 3981, //		DuneDervish_B	沙丘魔煞
-            4551, //		LacuniMale_B	豹人鞭笞者
-            4550, //		LacuniMale_A	豹人战士
-            4542, //		LacuniFemale_B	豹人追踪者
-            4541, //		LacuniFemale_A	豹人女猎手
-            203543, //		LacuniFemale_B_Range	豹人追踪者
-            4548, //		LacuniFemale_C	霜鬓女猎手
-            4552, //		LacuniMale_C	霜鬓追踪者
-            237876, // x1_BogFamily_brute_A 尖牙沼泽兽
-            4303, // GoatMutant_Shaman_A	鲜血氏族巫师
-            237876, // 	x1_BogFamily_brute_A		尖牙沼泽兽
-            363639, // 	x1_BogFamily_brute_A_eventAngryBats	恶疾沼泽兽
-            361665, // 	x1_BogFamily_brute_A_MaggotCrew	尖牙沼泽兽
-            358330, // 	X1_Lore_Bestiary_TuskedBogan	尖牙沼泽兽
+            SNOActor.x1_SkeletonArcher_Westmarch_Ghost_A,
+            SNOActor.SkeletonArcher_E,
+            SNOActor.SkeletonArcher_F,
+            SNOActor.SkeletonArcher_westm_A,
+            SNOActor.skeletonMage_Fire_A,
+            SNOActor.p1_LR_Ghost_A,
+            SNOActor.p1_LR_Ghost_Dark_A,
+            SNOActor.p1_LR_Ghost_B,
+            SNOActor.p1_LR_Ghost_C,
+            SNOActor.p1_LR_Ghost_D,
+            SNOActor.Corpulent_A,
+            SNOActor.LacuniFemale_A,
+            SNOActor.Succubus_C,
+            SNOActor.Succubus_B,
+            SNOActor.SoulRipper_B,
+            SNOActor.SoulRipper_A,
+            SNOActor.SoulRipper_C_Despair,
+            SNOActor.FallenGrunt_C,
+            SNOActor.x1_BogFamily_ranged_A,
+            SNOActor.GoatMutant_Ranged_A,
+            SNOActor.GoatMutant_Ranged_A_Large_Aggro,
+            SNOActor.x1_leaperAngel_A,
+            SNOActor.QuillDemon_C,
+            SNOActor.X1_Pand_Ext_Ordnance_Tower_Shock_A,
+            SNOActor.Beast_B,
+            SNOActor.Beast_C,
+            SNOActor.Beast_D,
+            SNOActor.LacuniMale_B,
+            SNOActor.LacuniMale_A,
+            SNOActor.LacuniFemale_B,
+            SNOActor.LacuniFemale_A,
+            SNOActor.LacuniFemale_B_Range,
+            SNOActor.LacuniFemale_C,
+            SNOActor.LacuniMale_C,
+            SNOActor.x1_BogFamily_brute_A,
+            SNOActor.GoatMutant_Shaman_A,
+            SNOActor.x1_BogFamily_brute_A,
+            SNOActor.x1_BogFamily_brute_A_eventAngryBats,
+            SNOActor.x1_BogFamily_brute_A_MaggotCrew,
+            SNOActor.X1_Lore_Bestiary_TuskedBogan,
             // 0
         };
 
@@ -2543,7 +2540,7 @@ namespace Trinity.Routines.Necromancer
             if (target.Type == TrinityObjectType.Shrine ||
                 target.Type == TrinityObjectType.ProgressionGlobe ||
                 target.Type == TrinityObjectType.HealthGlobe ||
-                target.ActorSnoId == 454066)
+                target.ActorSnoId == SNOActor.P6_Necro_Corpse_Flesh)
                 return false;
 
             return true;
@@ -2583,7 +2580,7 @@ namespace Trinity.Routines.Necromancer
 
         private double lastChangeTime = 0;
         private double timeForSkillChange = 500;
-        private int worldId2 = 0;
+        private SNOWorld worldId2 = SNOWorld.Invalid;
         private double maxCheckIntervalForSkillChange = 30000;
         private double lastChangeWorldTime = 0;
         private bool needTryChangeSkill = false;
@@ -2889,7 +2886,7 @@ namespace Trinity.Routines.Necromancer
                 eliteList =  
                     (from u in ObjectCache
                     where u.IsUnit &&
-                        ((u.IsElite || u.ActorSnoId == 360636) && u.EliteType != EliteTypes.Minion) &&
+                        ((u.IsElite || u.ActorSnoId == SNOActor.X1_LR_Boss_TerrorDemon_A) && u.EliteType != EliteTypes.Minion) &&
                         u.IsValid && u.Weight > 0 &&
                         !u.IsSafeSpot && 
                         u.Distance <= 50f
@@ -2900,7 +2897,7 @@ namespace Trinity.Routines.Necromancer
                 eliteList =  
                     (from u in ObjectCache
                     where u.IsUnit &&
-                        ((u.IsElite || u.ActorSnoId == 360636)) &&
+                        ((u.IsElite || u.ActorSnoId == SNOActor.X1_LR_Boss_TerrorDemon_A)) &&
                         u.IsValid && u.Weight > 0 &&
                         !u.IsSafeSpot && 
                         u.Distance <= 50f

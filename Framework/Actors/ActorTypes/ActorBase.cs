@@ -1,5 +1,6 @@
 using System;
 using Zeta.Common;
+using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 
@@ -51,7 +52,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public int AnnId => CommonData?.AnnId ?? -1;
         public int RActorId => _fixedActor?.RActorId ?? -1;
         public string InternalName { get; internal set; }
-        public int ActorSnoId => CommonData?.ActorSnoId ?? -1;
+        public SNOActor ActorSnoId => CommonData?.ActorSnoId ?? (SNOActor)(-1);
 
         public SNORecordActor ActorInfo => CommonData?.ActorInfo ?? default(SNORecordActor);
         public SNORecordMonster MonsterInfo => CommonData?.MonsterInfo ?? default(SNORecordMonster);

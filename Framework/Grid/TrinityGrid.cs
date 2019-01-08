@@ -234,7 +234,7 @@ namespace Trinity.Framework.Grid
 
         internal IEnumerable<AvoidanceNode> GetRayLineAsNodes(Vector3 from, Vector3 to)
         {
-            return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).Where(n => n != null);
+            return GetRayLine(from, to).Where(p => p.X >= 0 && p.Y >= 0).Select(point => InnerGrid[point.X, point.Y]).Where(n => n != null);
         }
 
         public IEnumerable<AvoidanceNode> GetConeAsNodes(Vector3 position, float arcWidthDegrees, float radius, float rotationRadians)

@@ -465,7 +465,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         {
             if (_deathGateCoroutine == null)
             {
-                _deathGateCoroutine = new MoveThroughDeathGates(1, AdvDia.CurrentWorldId, 1);
+                _deathGateCoroutine = new MoveThroughDeathGates((SNOQuest)1, AdvDia.CurrentWorldId, 1);
             }
 
             if (!await _deathGateCoroutine.GetCoroutine())

@@ -18,8 +18,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             var result = new List<IGrid>();
             foreach (var gridRef in Grids.ToList())
             {
-                IGrid grid;
-                if (!gridRef.TryGetTarget(out grid))
+                if (!gridRef.TryGetTarget(out var grid))
                 {
                     Grids.Remove(gridRef);
                     continue;

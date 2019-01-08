@@ -13,6 +13,7 @@ using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Trinity.UI;
 using Zeta.Common;
+using Zeta.Game;
 
 
 namespace Trinity.Routines.Necromancer
@@ -231,9 +232,9 @@ namespace Trinity.Routines.Necromancer
                 {
                     if (boss == null)
                         boss = unit;
-                    if (unit.ActorSnoId == 360636)
+                    if (unit.ActorSnoId == SNOActor.X1_LR_Boss_TerrorDemon_A)
                         boss = unit;
-                    if (unit.ActorSnoId != 360636 && unit.ActorSnoId != boss.ActorSnoId)
+                    if (unit.ActorSnoId != SNOActor.X1_LR_Boss_TerrorDemon_A && unit.ActorSnoId != boss.ActorSnoId)
                         boss = unit;
                 }
                 else if (unit.IsElite && !unit.IsIllusion && unit.EliteType != EliteTypes.Minion)
@@ -434,12 +435,11 @@ namespace Trinity.Routines.Necromancer
         private bool ShouldSkeletalMage(out TrinityActor target)
         {
             target = null;
-            int skeletalMageCount;
 
             if (!Skills.Necromancer.SkeletalMage.CanCast())
                 return false;
 
-            skeletalMageCount = Core.Actors.Actors.Count(a => a.ActorSnoId == 472606);//counting SkelletonMage
+            var skeletalMageCount = Core.Actors.Actors.Count(a => a.ActorSnoId == SNOActor.p6_necro_skeletonMage_C);
 
             if (skeletalMageCount >= MagesToQuickCast && Player.PrimaryResourcePct < CastMagesPct)
                 return false;

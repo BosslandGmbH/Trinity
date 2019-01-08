@@ -14,10 +14,10 @@ namespace Trinity.Components.Adventurer.Coroutines
     public sealed class UsePortalCoroutine : ICoroutine
     {
         private static UsePortalCoroutine _usePortalCoroutine;
-        private static int _usePortalActorSNO;
-        private static int _usePortalSourceWorldDynamicId;
+        private static SNOActor _usePortalActorSNO;
+        private static SNOWorld _usePortalSourceWorldDynamicId;
 
-        public static async Task<bool> UsePortal(int actorSNO, int sourceWorldDynamicId)
+        public static async Task<bool> UsePortal(SNOActor actorSNO, SNOWorld sourceWorldDynamicId)
         {
             if (_usePortalCoroutine == null || _usePortalActorSNO != actorSNO || _usePortalSourceWorldDynamicId != sourceWorldDynamicId)
             {
@@ -62,10 +62,10 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         #endregion State
 
-        private int _actorId;
-        private int _sourceWorldDynamicId;
+        private SNOActor _actorId;
+        private SNOWorld _sourceWorldDynamicId;
 
-        private UsePortalCoroutine(int actorId, int sourceWorldDynamicId)
+        private UsePortalCoroutine(SNOActor actorId, SNOWorld sourceWorldDynamicId)
         {
             _actorId = actorId;
             _sourceWorldDynamicId = sourceWorldDynamicId;
@@ -183,7 +183,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> Interact(DiaObject actor)
         {
-            await CommonCoroutines.MoveAndStop(actor.Position, actor.InteractDistance, actor.Name);
+            await CommonCoroutines.MoveAndStop(actor.Position, actor.InteractDistance, ((SNOActor)actor.ActorSnoId).ToString());
 
             Core.Logger.Debug($"[UsePortal] Attempting to use portal {((SNOActor)actor.ActorSnoId)} at distance {actor.Distance}");
             StatusText = $"[UsePortal] Attempting to use portal {((SNOActor)actor.ActorSnoId)} at distance {actor.Distance}";

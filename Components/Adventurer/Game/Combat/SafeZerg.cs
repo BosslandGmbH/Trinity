@@ -45,11 +45,11 @@ namespace Trinity.Components.Adventurer.Game.Combat
             ZergCheck();
         }
 
-        public static HashSet<int> CorruptGrowthIds = new HashSet<int>()
+        public static HashSet<SNOActor> CorruptGrowthIds = new HashSet<SNOActor>()
         {
-            210120, //a4dun_Garden_Corruption_Monster
-            210268, //a4dun_Garden_Corruption_HellRift_Monster
-            360111, //a4dun_Garden_Corruption_Monster_Despair
+            SNOActor.a4dun_Garden_Corruption_Monster,
+            SNOActor.a4dun_Garden_Corruption_HellRift_Monster,
+            SNOActor.a4dun_Garden_Corruption_Monster_Despair
         };
 
         private void ZergCheck()

@@ -44,9 +44,9 @@ namespace Trinity.Components.QuestTools
                     var currentQuest = ZetaDia.CurrentQuest;
 
 
-                    s.QuestId = currentQuest?.QuestSnoId ?? 1;
+                    s.QuestId = currentQuest?.QuestSnoId ?? (SNOQuest)1;
                     s.QuestStep = currentQuest?.StepId ?? 1;
-                    s.SceneSnoId = ZetaDia.Me.CurrentScene.SceneInfo.SNOId;
+                    s.SceneSnoId = ZetaDia.Me.CurrentScene.SceneInfo.GetSNOId<SNOScene>();
                     s.SceneName = ZetaDia.Me.CurrentScene.Name;
                     s.WorldSnoId = ZetaDia.Globals.WorldSnoId;
                     s.LevelAreaSnoId = ZetaDia.CurrentLevelAreaSnoId;
@@ -73,7 +73,7 @@ namespace Trinity.Components.QuestTools
                 }
 
                 ActorId = actor.ActorSnoId;
-                ActorSno = (SNOActor)ActorId;
+                ActorSno = ActorId;
                 ActorName = actor.Name;
                 StartAnimation = actor.Animation != 0 ? actor.Animation.ToString() : string.Empty;
                 SetPosition(actor.Position);
@@ -123,7 +123,7 @@ namespace Trinity.Components.QuestTools
             public int MarkerHash { get; set; }
             public string MarkerName { get; set; }
             public SNOActor ActorSno { get; set; }
-            public int ActorId { get; set; }
+            public SNOActor ActorId { get; set; }
             public string ActorName { get; set; }
             public int WaypointNumber { get; set; }
             public float SceneZ { get; set; }
@@ -133,11 +133,11 @@ namespace Trinity.Components.QuestTools
             public float Y { get; set; }
             public float X { get; set; }
             public int QuestStep { get; set; }
-            public int LevelAreaSnoId { get; set; }
-            public int WorldSnoId { get; set; }
+            public SNOLevelArea LevelAreaSnoId { get; set; }
+            public SNOWorld WorldSnoId { get; set; }
             public string SceneName { get; set; }
-            public int SceneSnoId { get; set; }
-            public int QuestId { get; set; }
+            public SNOScene SceneSnoId { get; set; }
+            public SNOQuest QuestId { get; set; }
         }
 
         public static string GenerateActorTags<T>(Func<TrinityActor, bool> actorSelector) where T : ProfileBehavior
@@ -293,9 +293,9 @@ namespace Trinity.Components.QuestTools
         public static string GenerateWorldInfoComment()
         {
             var sceneSnoId = ZetaDia.CurrentLevelAreaSnoId;
-            var sceneSnoName = ZetaDia.SNO.LookupSNOName(SNOGroup.LevelArea, sceneSnoId);
+            var sceneSnoName = ZetaDia.SNO.LookupSNOName(SNOGroup.LevelArea, (int)sceneSnoId);
             var worldSnoId = ZetaDia.Globals.WorldSnoId;
-            var world = ZetaDia.SNO[SNOGroup.Worlds].GetRecord<SNORecordWorld>(worldSnoId);
+            var world = ZetaDia.SNO[SNOGroup.Worlds].GetRecord<SNORecordWorld>((int)worldSnoId);
             return $"<!-- World: {world.Name} ({worldSnoId}) Scene: {sceneSnoName} ({sceneSnoId}) Generated={world.IsGenerated} -->";
         }
 

@@ -107,10 +107,10 @@ namespace Trinity.Components.Combat
 
                 foreach (var r in Core.Actors.Actors)
                 {
-                    if (r.Distance <= 40f && r.ActorSnoId == (int)SNOActor.x1_Fortress_Portal_Switch)
+                    if (r.Distance <= 40f && r.ActorSnoId == SNOActor.x1_Fortress_Portal_Switch)
                         isGateNearby = true;
 
-                    if (r.Distance <= 80f && r.ActorSnoId == 454511) //p43_AD_Valor_BloodStone D1 Switch
+                    if (r.Distance <= 80f && r.ActorSnoId == SNOActor.p43_AD_Valor_BloodStone)
                         isPriorityInteractableNearby = true;
 
                     if (r.Distance <= 40f && (r.GizmoType == GizmoType.Switch || r.IsInteractWhitelisted))
@@ -414,7 +414,7 @@ namespace Trinity.Components.Combat
                             continue;
                         }
 
-                        var stoneFortLevellAreaId = 93173;
+                        var stoneFortLevellAreaId = SNOLevelArea.A3_dun_rmpt_Level02;
                         var behindClosedDoor =
                             TrinityGrid.Instance.IsIntersectedByFlags(
                                 Core.Player.Position,
@@ -644,8 +644,8 @@ namespace Trinity.Components.Combat
 
                                     #endregion
 
-                                    if (Core.Player.CurrentSceneSnoId == 28768 &&
-                                        cacheObject.ActorSnoId == (int)SNOActor.x1_Tentacle_Goatman_Melee_A &&
+                                    if (Core.Player.CurrentSceneSnoId == (SNOScene)28768 &&
+                                        cacheObject.ActorSnoId == SNOActor.x1_Tentacle_Goatman_Melee_A &&
                                         !cacheObject.IsMinimapActive)
                                     {
                                         cacheObject.WeightInfo += "Invisible Goat in Cow King rift event ";
@@ -1010,7 +1010,7 @@ namespace Trinity.Components.Combat
                                     // Campaign A5 Quest "Lost Treasure of the Nephalem" - have to interact with nephalem switches first... 
                                     // Quest: x1_Adria, Id: 257120, Step: 108 - disable all looting, pickup, and objects
                                     if (Core.Player.WorldType != Act.OpenWorld &&
-                                        Core.Player.CurrentQuestSNO == 257120 &&
+                                        Core.Player.CurrentQuestSNO == SNOQuest.x1_Adria &&
                                         Core.Player.CurrentQuestStep == 108)
                                     {
                                         cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} For Quest";
@@ -1050,8 +1050,8 @@ namespace Trinity.Components.Combat
                                     }
 
                                     // Death's Breath Priority
-                                    if (cacheObject.ActorSnoId == 361989 ||
-                                        cacheObject.ActorSnoId == 449044)
+                                    if (cacheObject.ActorSnoId == SNOActor.Crafting_Looted_Reagent_05 ||
+                                        cacheObject.ActorSnoId == SNOActor.itemFlippy_deathsBreath_Flippy_Global)
                                     {
                                         if (IgnoreWhenInAvoidance(cacheObject))
                                             break;
@@ -1399,7 +1399,7 @@ namespace Trinity.Components.Combat
                                     // Campaign A5 Quest "Lost Treasure of the Nephalem" - have to interact with nephalem switches first... 
                                     // Quest: x1_Adria, Id: 257120, Step: 108 - disable all looting, pickup, and objects
                                     if (Core.Player.WorldType != Act.OpenWorld &&
-                                        Core.Player.CurrentQuestSNO == 257120 &&
+                                        Core.Player.CurrentQuestSNO == SNOQuest.x1_Adria &&
                                         Core.Player.CurrentQuestStep == 108)
                                     {
                                         cacheObject.Weight = 0;
@@ -1613,7 +1613,7 @@ namespace Trinity.Components.Combat
                                     cacheObject.Weight += 500d;
 
                                 // Gold Piles in the Goblin Realm get high priority
-                                var isInGoblinRealm = Core.Player.WorldSnoId == (int)SNOWorld.p1_TGoblin_Realm;
+                                var isInGoblinRealm = Core.Player.WorldSnoId == SNOWorld.p1_TGoblin_Realm;
 
                                 if (cacheObject.Distance < 35f &&
                                     isInGoblinRealm)
@@ -1693,7 +1693,7 @@ namespace Trinity.Components.Combat
                                     // Campaign A5 Quest "Lost Treasure of the Nephalem" - have to interact with nephalem switches first... 
                                     // Quest: x1_Adria, Id: 257120, Step: 108 - disable all looting, pickup, and objects
                                     if (Core.Player.WorldType != Act.OpenWorld &&
-                                        Core.Player.CurrentQuestSNO == 257120 &&
+                                        Core.Player.CurrentQuestSNO == SNOQuest.x1_Adria &&
                                         Core.Player.CurrentQuestStep == 108)
                                     {
                                         cacheObject.Weight = MaxWeight;
@@ -1799,7 +1799,7 @@ namespace Trinity.Components.Combat
                                     }
 
                                     // No point in doing Cow Level runs if we're running past the chests
-                                    var isInCowLevel = ZetaDia.Globals.WorldSnoId == (int)SNOWorld.p2_TotallyNotACowLevel;
+                                    var isInCowLevel = ZetaDia.Globals.WorldSnoId == SNOWorld.p2_TotallyNotACowLevel;
 
                                     if (cacheObject.Distance < 35f && isInCowLevel)
                                     {
@@ -2376,7 +2376,7 @@ namespace Trinity.Components.Combat
         /// <returns></returns>
         public double PathBlockedFormula(TrinityActor cacheObject)
         {
-            if (cacheObject.ActorSnoId == 3349) // Belial, can't be pathed to.
+            if (cacheObject.ActorSnoId == SNOActor.Belial) // Belial, can't be pathed to.
                 return 0;
 
             var isInRift = Core.Rift.IsInRift ||
@@ -2470,46 +2470,46 @@ namespace Trinity.Components.Combat
         {
             switch (cacheObject.ActorSnoId)
             {
-                case (int)SNOActor.a4_Heaven_Shrine_Global_Fortune:
-                case (int)SNOActor.Shrine_Global_Fortune:
+                case SNOActor.a4_Heaven_Shrine_Global_Fortune:
+                case SNOActor.Shrine_Global_Fortune:
                     return ShrineTypes.Fortune;
 
-                case (int)SNOActor.a4_Heaven_Shrine_Global_Frenzied:
-                case (int)SNOActor.Shrine_Global_Frenzied:
+                case SNOActor.a4_Heaven_Shrine_Global_Frenzied:
+                case SNOActor.Shrine_Global_Frenzied:
                     return ShrineTypes.Frenzied;
 
-                case (int)SNOActor.a4_Heaven_Shrine_Global_Reloaded:
-                case (int)SNOActor.Shrine_Global_Reloaded:
+                case SNOActor.a4_Heaven_Shrine_Global_Reloaded:
+                case SNOActor.Shrine_Global_Reloaded:
                     return ShrineTypes.RunSpeed;
 
-                case (int)SNOActor.a4_Heaven_Shrine_Global_Enlightened:
-                case (int)SNOActor.Shrine_Global_Enlightened:
+                case SNOActor.a4_Heaven_Shrine_Global_Enlightened:
+                case SNOActor.Shrine_Global_Enlightened:
                     return ShrineTypes.Enlightened;
 
-                case (int)SNOActor.Shrine_Global_Glow:
+                case SNOActor.Shrine_Global_Glow:
                     return ShrineTypes.Glow;
 
-                case (int)SNOActor.a4_Heaven_Shrine_Global_Hoarder:
-                case (int)SNOActor.Shrine_Global_Hoarder:
+                case SNOActor.a4_Heaven_Shrine_Global_Hoarder:
+                case SNOActor.Shrine_Global_Hoarder:
                     return ShrineTypes.Hoarder;
 
-                case (int)SNOActor.x1_LR_Shrine_Infinite_Casting:
+                case SNOActor.x1_LR_Shrine_Infinite_Casting:
                     return ShrineTypes.Casting;
 
-                case (int)SNOActor.x1_LR_Shrine_Electrified_TieredRift:
-                case (int)SNOActor.x1_LR_Shrine_Electrified:
+                case SNOActor.x1_LR_Shrine_Electrified_TieredRift:
+                case SNOActor.x1_LR_Shrine_Electrified:
                     return ShrineTypes.Conduit;
 
-                case (int)SNOActor.x1_LR_Shrine_Invulnerable:
+                case SNOActor.x1_LR_Shrine_Invulnerable:
                     return ShrineTypes.Shield;
 
-                case (int)SNOActor.x1_LR_Shrine_Run_Speed:
+                case SNOActor.x1_LR_Shrine_Run_Speed:
                     return ShrineTypes.Shield;
 
-                case (int)SNOActor.x1_LR_Shrine_Damage:
+                case SNOActor.x1_LR_Shrine_Damage:
                     return ShrineTypes.Damage;
 
-                case (int)SNOActor.Shrine_TreasureGoblin:
+                case SNOActor.Shrine_TreasureGoblin:
                     return ShrineTypes.Goblin;
 
                 default:
@@ -2519,7 +2519,7 @@ namespace Trinity.Components.Combat
 
         public ContainerTypes GetContainerType(TrinityActor cacheObject)
         {
-            if (ZetaDia.Globals.WorldSnoId == (int)SNOWorld.p2_TotallyNotACowLevel)
+            if (ZetaDia.Globals.WorldSnoId == SNOWorld.p2_TotallyNotACowLevel)
                 return ContainerTypes.CowLevel;
 
             if (cacheObject.IsRareChest)

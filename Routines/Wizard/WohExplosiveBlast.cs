@@ -104,14 +104,14 @@ namespace Trinity.Routines.Wizard
             if (Player.IsCastingPortal)
                 return null;
 
-            if (Player.IsInRift && ZetaDia.Storage.RiftCompleted && !Player.IsCastingPortal && !TargetUtil.AnyMobsInRange(12) && InventoryManager.Backpack.Any(i => i.ActorSnoId == 408416))
+            if (Player.IsInRift && ZetaDia.Storage.RiftCompleted && !Player.IsCastingPortal && !TargetUtil.AnyMobsInRange(12) && InventoryManager.Backpack.Any(i => i.ActorSnoId == SNOActor.TieredLootrunKey_0))
             {
                 ZetaDia.Me.UseTownPortal();
                 return null;
             }
 
             // 锁定奥拉什
-            var target = Core.Actors.Actors.FirstOrDefault(u => u.ActorSnoId == 360636) ?? TargetUtil.BestEliteInRange(50) ?? TrinityCombat.Targeting.CurrentTarget;
+            var target = Core.Actors.Actors.FirstOrDefault(u => u.ActorSnoId == SNOActor.X1_LR_Boss_TerrorDemon_A) ?? TargetUtil.BestEliteInRange(50) ?? TrinityCombat.Targeting.CurrentTarget;
 
             if (target.Distance > 15 && Skills.Wizard.Teleport.CanCast())
                 return Teleport(target.Position);
@@ -138,7 +138,7 @@ namespace Trinity.Routines.Wizard
             if (Player.IsCastingPortal)
                 return null;
 
-            if (Player.IsInRift && ZetaDia.Storage.RiftCompleted && !Player.IsCastingPortal && !TargetUtil.AnyMobsInRange(12) && InventoryManager.Backpack.Any(i => i.ActorSnoId == 408416))
+            if (Player.IsInRift && ZetaDia.Storage.RiftCompleted && !Player.IsCastingPortal && !TargetUtil.AnyMobsInRange(12) && InventoryManager.Backpack.Any(i => i.ActorSnoId == SNOActor.TieredLootrunKey_0))
             {
                 ZetaDia.Me.UseTownPortal();
                 return null;
@@ -163,7 +163,7 @@ namespace Trinity.Routines.Wizard
             if (Player.IsCastingPortal)
                 return null;
 
-            if (Player.IsInRift && ZetaDia.Storage.RiftCompleted && !Player.IsCastingPortal && !TargetUtil.AnyMobsInRange(12) && InventoryManager.Backpack.Any(i => i.ActorSnoId == 408416))
+            if (Player.IsInRift && ZetaDia.Storage.RiftCompleted && !Player.IsCastingPortal && !TargetUtil.AnyMobsInRange(12) && InventoryManager.Backpack.Any(i => i.ActorSnoId == SNOActor.TieredLootrunKey_0))
             {
                 ZetaDia.Me.UseTownPortal();
                 return null;

@@ -9,7 +9,6 @@ using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Components.Adventurer.Game.Stats;
 using Trinity.Components.Adventurer.Settings;
-using Trinity.Framework;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
@@ -31,19 +30,18 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
         private static readonly ExperienceTracker s_experienceTracker = new ExperienceTracker();
 
-        public static long CurrentRiftKeyCount => Core.Actors.Inventory
+        public static long CurrentRiftKeyCount => InventoryManager.AllItems
             .Where(i => i.GetRawItemType() == RawItemType.TieredRiftKey)
             .Sum(k => k.ItemStackQuantity);
-
-        //ActorId: 364715, Type: Gizmo, Name: x1_OpenWorld_LootRunObelisk_B - 27053, Distance2d: 9.72007, CollisionRadius: 9.874258, MinimapActive: 1, MinimapIconOverride: 327066, MinimapDisableArrow: 0
-        //ActorId: 345935, Type: Gizmo, Name: X1_OpenWorld_LootRunPortal - 27292, Distance2d: 9.72007, CollisionRadius: 8.316568, MinimapActive: 1, MinimapIconOverride: -1, MinimapDisableArrow: 0
+        
         public static DiaGizmo RiftPortal => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true)
             .FirstOrDefault(g => g.IsFullyValid() &&
-                                 g.ActorSnoId == RiftData.RiftEntryPortalSNO ||
-                                 g.ActorSnoId == RiftData.GreaterRiftEntryPortalSNO);
+                                 (SNOActor)g.ActorSnoId == SNOActor.X1_OpenWorld_LootRunPortal ||
+                                 (SNOActor)g.ActorSnoId == SNOActor.X1_OpenWorld_Tiered_Rifts_Portal);
 
         public static DiaGizmo LootRunSwitch => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true)
             .FirstOrDefault(g => g.IsFullyValid() &&
+                                 (SNOActor)g.ActorSnoId == SNOActor.x1_OpenWorld_LootRunObelisk_B &&
                                  g.CommonData.GizmoType == GizmoType.LootRunSwitch);
 
         public static SNOWorld PreviousWorld { get; set; } = SNOWorld.Invalid;
@@ -54,8 +52,8 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             .Where(g => g.IsFullyValid() &&
                         g.IsPortal &&
                         g.CommonData.PortalDestination?.WorldSNO != PreviousWorld &&
-                        g.CommonData.PortalDestination?.WorldSNO != SNOWorld.X1_Tristram_Adventure_Mode_Hub &&
                         g.CommonData.PortalDestination?.DestLevelAreaSNO != PreviousLevel &&
+                        g.CommonData.PortalDestination?.WorldSNO != SNOWorld.X1_Tristram_Adventure_Mode_Hub &&
                         g.CommonData.PortalDestination?.DestLevelAreaSNO != SNOLevelArea.A1_Tristram_Adventure_Mode_Hub &&
                         !RiftData.PossibleDungeonStoneSNO.Contains(g.ActorSnoId) &&
                         g.CommonData.GizmoType != GizmoType.HearthPortal)
@@ -147,7 +145,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                               ZetaDia.Storage.PlayerDataManager.ActivePlayerData.Coinage >=
                               (empoweredCost + PluginSettings.Current.MinimumGold);
 
-            var lrs = LootRunSwitch;
+            DiaGizmo lrs = LootRunSwitch;
             if (lrs == null)
             {
                 await CommonCoroutines.MoveTo(ZetaDia.Actors.GetActorsOfType<DiaGizmo>()
@@ -179,9 +177,10 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             if (!IsRiftPortalOpen)
                 return CoroutineResult.NoAction;
 
-            if (RiftPortal != null)
+            var rp = RiftPortal;
+            if (rp != null)
                 return await CommonCoroutines.MoveAndInteract(
-                    RiftPortal,
+                    rp,
                     () => ZetaDia.IsInGame &&
                           !ZetaDia.Globals.IsLoadingWorld &&
                           !ZetaDia.Globals.IsPlayingCutscene &&
@@ -207,12 +206,12 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             // TODO: Handle Cow level
             if (ExitPortal == null)
             {
-                await ExplorationCoroutine.Explore(new HashSet<int> { AdvDia.CurrentLevelAreaId });
+                await ExplorationCoroutine.Explore(new HashSet<SNOLevelArea> { AdvDia.CurrentLevelAreaId });
                 return false;
             }
 
-            var tmpWorld = (SNOWorld)ZetaDia.Globals.WorldSnoId;
-            var tmpLevelArea = (SNOLevelArea)ZetaDia.CurrentLevelAreaSnoId;
+            var tmpWorld = ZetaDia.Globals.WorldSnoId;
+            var tmpLevelArea = ZetaDia.CurrentLevelAreaSnoId;
             if (await CommonCoroutines.MoveAndInteract(
                     ExitPortal,
                     () => ZetaDia.Globals.IsLoadingWorld ||
@@ -238,7 +237,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             if (previousResult == CoroutineResult.Failed)
                 return CoroutineResult.Failed;
 
-            var gemToUpgrade = PluginSettings.Current.Gems.GetUpgradeTarget();
+            ACDItem gemToUpgrade = PluginSettings.Current.Gems.GetUpgradeTarget();
             if (gemToUpgrade == null)
                 return CoroutineResult.NoAction;
 

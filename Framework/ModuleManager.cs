@@ -115,7 +115,7 @@ namespace Trinity.Framework
             SafeExecuteOnInstances(m => m.IsInGameChanged(args));
         }
 
-        private static void WorldIdOnChanged(ChangeEventArgs<int> args)
+        private static void WorldIdOnChanged(ChangeEventArgs<SNOWorld> args)
         {
             Core.Logger.Debug("WorldIdOnChanged Fired");
             SafeExecuteOnInstances(m => m.WorldChanged(args));

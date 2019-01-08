@@ -6,11 +6,11 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
     public class KeywardenData
     {
         public Act Act { get; set; }
-        public int KeywardenSNO { get; set; }
-        public int KeySNO { get; set; }
-        public int WorldId { get; set; }
-        public int LevelAreaId { get; set; }
-        public int WaypointLevelAreaId { get; set; }
+        public SNOActor KeywardenSNO { get; set; }
+        public SNOActor KeySNO { get; set; }
+        public SNOWorld WorldId { get; set; }
+        public SNOLevelArea LevelAreaId { get; set; }
+        public SNOLevelArea WaypointLevelAreaId { get; set; }
         public SNOBossEncounter BossEncounter { get; set; }
 
         public bool IsAlive => !ZetaDia.Storage.Quests.IsBossEncounterCompleted(BossEncounter);

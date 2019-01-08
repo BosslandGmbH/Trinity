@@ -25,20 +25,18 @@ namespace Trinity.Modules
             GameEvents.OnGameJoined += (sender, args) => Update();
             GameEvents.OnWorldChanged += (sender, args) => Update();
 
-            AllItems.Source = () => Core.Actors.Inventory.Where(i => !InvalidAnnIds.Contains(i.AnnId));
+            AllItems.Source = () => InventoryManager.AllItems.Where(i => !InvalidAnnIds.Contains(i.AnnId));
             Stash.Source = () => AllItems.Where(i => i.InventorySlot == InventorySlot.SharedStash);
-            Backpack.Source = () => AllItems.Where(i => i.InventorySlot == InventorySlot.BackpackItems);
         }
 
-        public HashSet<int> KanaisCubeIds { get; private set; } = new HashSet<int>();
-        public HashSet<int> PlayerEquippedIds { get; private set; } = new HashSet<int>();
-        public HashSet<int> EquippedIds { get; private set; } = new HashSet<int>();
+        public HashSet<SNOActor> KanaisCubeIds { get; private set; } = new HashSet<SNOActor>();
+        public HashSet<SNOActor> PlayerEquippedIds { get; private set; } = new HashSet<SNOActor>();
+        public HashSet<SNOActor> EquippedIds { get; private set; } = new HashSet<SNOActor>();
         public List<ACDItem> Equipped { get; private set; } = new List<ACDItem>();
         public HashSet<int> InvalidAnnIds { get; private set; } = new HashSet<int>();
         public InventoryCurrency Currency { get; } = new InventoryCurrency();
         public InventorySlice AllItems { get; } = new InventorySlice();
         public InventorySlice Stash { get; } = new InventorySlice();
-        public InventorySlice Backpack { get; } = new InventorySlice();
         public int BackpackItemCount { get; private set; }
         protected override void OnPulse()
         {
@@ -60,10 +58,10 @@ namespace Trinity.Modules
             if (!ZetaDia.IsInGame || ZetaDia.Storage.PlayerDataManager.ActivePlayerData == null)
                 return;
 
-            var kanaisCubeIds = new HashSet<int>(ZetaDia.Storage.PlayerDataManager.ActivePlayerData.KanaisPowersAssignedActorSnoIds);
+            var kanaisCubeIds = new HashSet<SNOActor>(ZetaDia.Storage.PlayerDataManager.ActivePlayerData.KanaisPowersAssignedActorSnoIds);
             var equipped = new List<ACDItem>();
-            var equippedIds = new HashSet<int>();
-            var playerEquippedIds = new HashSet<int>();
+            var equippedIds = new HashSet<SNOActor>();
+            var playerEquippedIds = new HashSet<SNOActor>();
             var backpackItemCount = 0;
             var stashItemCount = 0;
 
@@ -118,35 +116,6 @@ namespace Trinity.Modules
             InvalidAnnIds.Clear();
         }
 
-        /// <summary>
-        /// Get a subset of items up to the desired quantity.
-        /// </summary>
-        public IEnumerable<ACDItem> GetStacksUpToQuantity(List<ACDItem> materialsStacks, int maxStackQuantity)
-        {
-            if (materialsStacks == null || !materialsStacks.Any() || materialsStacks.Count == 1)
-            {
-                return materialsStacks;
-            }
-            long dbQuantity = 0, overlimit = 0;
-            var first = materialsStacks.First();
-            if (first.ItemStackQuantity == 0 && maxStackQuantity == 1 && materialsStacks.All(i => !i.IsCraftingReagent))
-            {
-                return materialsStacks.Take(maxStackQuantity);
-            }
-            var toBeAdded = materialsStacks.TakeWhile(db =>
-            {
-                var thisStackQuantity = db.ItemStackQuantity;
-                if (dbQuantity + thisStackQuantity < maxStackQuantity)
-                {
-                    dbQuantity += thisStackQuantity;
-                    return true;
-                }
-                overlimit++;
-                return overlimit == 1;
-            });
-            return toBeAdded.ToList();
-        }
-
         public class InventorySlice : IEnumerable<ACDItem>
         {
             public Func<IEnumerable<ACDItem>> Source { get; set; }
@@ -155,7 +124,7 @@ namespace Trinity.Modules
                 return Source().Where(i => i.GetItemType() == type).ToList();
             }
 
-            public List<ACDItem> ByActorSno(int actorSno)
+            public List<ACDItem> ByActorSno(SNOActor actorSno)
             {
                 return Source().Where(i => i.ActorSnoId == actorSno).ToList();
             }

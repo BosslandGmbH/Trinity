@@ -38,7 +38,7 @@ namespace Trinity.Components.Coroutines.Town
             if (!ZetaDia.IsInTown)
                 return CoroutineResult.NoAction;
 
-            var itemsToDrop = Core.Inventory.Backpack.Where(ShouldDrop).ToList();
+            var itemsToDrop = InventoryManager.Backpack.Where(ShouldDrop).ToList();
             if (!itemsToDrop.Any())
                 return CoroutineResult.NoAction;
 

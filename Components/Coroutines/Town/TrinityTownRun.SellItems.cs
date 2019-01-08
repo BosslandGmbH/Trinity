@@ -35,7 +35,7 @@ namespace Trinity.Components.Coroutines.Town
             if (!ZetaDia.IsInTown)
                 return CoroutineResult.NoAction;
 
-            var sellItem = Core.Inventory.Backpack
+            var sellItem = InventoryManager.Backpack
                 .FirstOrDefault(i => ShouldSell(i) &&
                                      InventoryManager.CanSellItem(i));
             if (sellItem == null)

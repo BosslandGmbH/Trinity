@@ -24,7 +24,7 @@ namespace Trinity.Components.Coroutines.Town
         /// <param name="itemIds">list of items to withdraw</param>
         /// <param name="maxAmount">amount to withdraw up to (including counts already in backpack)</param>
         /// <returns></returns>
-        public static async Task<bool> TakeItemsFromStash(IEnumerable<int> itemIds, int maxAmount)
+        public static async Task<bool> TakeItemsFromStash(IEnumerable<SNOActor> itemIds, int maxAmount)
         {
             if (!ZetaDia.IsInGame ||
                 !ZetaDia.IsInTown)
@@ -59,7 +59,7 @@ namespace Trinity.Components.Coroutines.Town
                 stash.Interact();
             }
 
-            var itemIdsHashSet = new HashSet<int>(itemIds);
+            var itemIdsHashSet = new HashSet<SNOActor>(itemIds);
             var amountWithdrawn = itemIdsHashSet.ToDictionary(k => k, v => (long)0);
             var overageTaken = itemIdsHashSet.ToDictionary(k => k, v => false);
             var lastStackTaken = itemIdsHashSet.ToDictionary(k => k, v => default(ACDItem));

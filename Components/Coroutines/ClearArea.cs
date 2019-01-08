@@ -24,7 +24,7 @@ namespace Trinity.Components.Coroutines
         public static DateTime ClearStarted = DateTime.MinValue;
         public static int ClearTimeSeconds = 10;
         public static bool IsClearing;
-        public static int StartWorld;
+        public static SNOWorld StartWorld;
 
         static ClearArea()
         {

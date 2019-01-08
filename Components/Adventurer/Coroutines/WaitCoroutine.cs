@@ -17,15 +17,15 @@ namespace Trinity.Components.Adventurer.Coroutines
         public bool IsDone => _isDone;
 
         private WaitTimer _waitTimer;
-        private readonly int _worldId;
-        private int _questId;
+        private readonly SNOWorld _worldId;
+        private SNOQuest _questId;
 
         public WaitCoroutine(int milliSeconds)
         {
             _waitTime = TimeSpan.FromMilliseconds(milliSeconds);
         }
 
-        public WaitCoroutine(int questId, int worldSnoId, int milliSeconds)
+        public WaitCoroutine(SNOQuest questId, SNOWorld worldSnoId, int milliSeconds)
         {
             _worldId = worldSnoId;
             _questId = questId;

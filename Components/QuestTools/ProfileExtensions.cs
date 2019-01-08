@@ -5,6 +5,7 @@ using Trinity.Framework;
 using Zeta.Bot.Profile;
 using Zeta.Bot.Profile.Common;
 using Zeta.Bot.Profile.Composites;
+using Zeta.Game;
 using Zeta.TreeSharp;
 using Action = Zeta.TreeSharp.Action;
 
@@ -67,16 +68,16 @@ namespace Trinity.Components.QuestTools
         /// <returns></returns>
         private static Composite RunEnhanced(this IEnhancedProfileBehavior behavior)
         {
-            if (!(behavior is ProfileBehavior)) 
+            if (!(behavior is ProfileBehavior profile_behavior)) 
                 return new Action(ret => RunStatus.Failure);
 
             behavior.Update();
 
-            if ((behavior as ProfileBehavior).QuestId == 0)
-                (behavior as ProfileBehavior).QuestId = 1;
+            if (profile_behavior.QuestId == 0)
+                profile_behavior.QuestId = (SNOQuest)1;
 
-            if ((behavior as ProfileBehavior).StepId == 0)
-                (behavior as ProfileBehavior).StepId = 1;
+            if (profile_behavior.StepId == 0)
+                profile_behavior.StepId = 1;
             
             (behavior as ProfileBehavior).ResetCachedDone();
 

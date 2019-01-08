@@ -8,15 +8,16 @@ using Trinity.Components.Adventurer.Util;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Common;
+using Zeta.Game;
 
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
     public class MoveToActorCoroutine : IBountySubroutine
     {
-        private readonly int _questId;
-        private readonly int _worldId;
-        private readonly int _actorId;
+        private readonly SNOQuest _questId;
+        private readonly SNOWorld _worldId;
+        private readonly SNOActor _actorId;
         private readonly bool _isExploreAllowed;
 
         private bool _isDone;
@@ -54,7 +55,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public bool IsDone => _isDone || AdvDia.CurrentWorldId != _worldId;
 
-        public MoveToActorCoroutine(int questId, int worldId, int actorId, int maxRange = 5000, 
+        public MoveToActorCoroutine(SNOQuest questId, SNOWorld worldId, SNOActor actorId, int maxRange = 5000, 
             bool isExploreAllowed = true, Func<TrinityActor,bool> actorSelector = null, float stopDistance = -1, int markerId = 0)
         {
             _questId = questId;
@@ -137,7 +138,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 return false;
             }
 
-            var areaIds = BountyData != null ? BountyData.LevelAreaIds : new HashSet<int> { AdvDia.CurrentLevelAreaId };
+            var areaIds = BountyData != null ? BountyData.LevelAreaIds : new HashSet<SNOLevelArea> { AdvDia.CurrentLevelAreaId };
 
             if (!await ExplorationCoroutine.Explore(areaIds, useIgnoreRegions:false)) return false;
 

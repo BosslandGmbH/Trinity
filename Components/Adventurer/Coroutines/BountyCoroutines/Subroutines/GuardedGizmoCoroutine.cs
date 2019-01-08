@@ -18,7 +18,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
     public class GuardedGizmoCoroutine : IBountySubroutine, IDisposable
     {
-        private readonly int _questId;
+        private readonly SNOQuest _questId;
         private InteractionCoroutine _interactionCoroutine;
         private bool _isDone;
         private BountyData _bountyData;
@@ -54,7 +54,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             }
         }
 
-        public int GizmoSNO { get; private set; }
+        public SNOActor GizmoSNO { get; private set; }
 
         public int ObjectSearchRadius
         {
@@ -69,7 +69,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             set => _objectSearchRadius = value;
         }
 
-        public GuardedGizmoCoroutine(int questId, int actorId)
+        public GuardedGizmoCoroutine(SNOQuest questId, SNOActor actorId)
         {
             _questId = questId;
             GizmoSNO = actorId;
@@ -127,7 +127,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         {
             if (PluginSettings.Current.BountyZerg) SafeZerg.Instance.EnableZerg();
             State = States.SearchingForGizmo;
-            if (AdvDia.CurrentLevelAreaId == 263493)
+            if (AdvDia.CurrentLevelAreaId == SNOLevelArea.X1_WESTM_ZONE_03)
             {
                 _objectSearchRadius = 150;
             }

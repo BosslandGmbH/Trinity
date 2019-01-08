@@ -67,7 +67,7 @@ namespace Trinity.Framework.Avoidance.Structures
         /// <summary>
         /// Retrieve a part by ActorSnoId
         /// </summary>
-        public AvoidancePart GetPart(int actorSnoId)
+        public AvoidancePart GetPart(SNOActor actorSnoId)
         {
             return Parts.FirstOrDefault(p => p.ActorSnoId == actorSnoId);
         }

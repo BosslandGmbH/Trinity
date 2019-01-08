@@ -16,7 +16,7 @@ namespace Trinity.Components.Adventurer.Settings
         public int Guid { get; set; }
 
         [DataMember]
-        public int SNO { get; set; }
+        public SNOActor SNO { get; set; }
 
         [DataMember]
         public int Rank { get; set; }

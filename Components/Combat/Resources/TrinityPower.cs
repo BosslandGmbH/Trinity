@@ -22,7 +22,7 @@ namespace Trinity.Components.Combat.Resources
 
         public Vector3 TargetPosition { get; set; }
 
-        public int TargetDynamicWorldId { get; set; }
+        public SNOWorld TargetDynamicWorldId { get; set; }
 
         public int TargetAcdId { get; set; }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Zeta.Common;
+using Zeta.Game;
 using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Components.Adventurer.Game.Exploration
@@ -51,13 +52,13 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         //public uint CustomFlags { get; set; }
         public GridPoint GridPoint { get; set; }
 
-        public int LevelAreaId => _scene.LevelAreaId;
+        public SNOLevelArea LevelAreaId => _scene.LevelAreaId;
 
         public float Distance2DSqr => NavigableCenter2D.DistanceSqr(AdvDia.MyPosition.ToVector2());
 
         public float Distance => NavigableCenter.DistanceSqr(AdvDia.MyPosition);
 
-        public int DynamicWorldId => _scene.DynamicWorldId;
+        public SNOWorld DynamicWorldId => _scene.DynamicWorldId;
 
         public bool IsInNode(Vector3 position)
         {

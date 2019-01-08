@@ -123,7 +123,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
     {
         private DateTime _endTime;
         public GameId GameId { get; set; }
-        public int QuestId { get; set; }
+        public SNOQuest QuestId { get; set; }
         public DateTime StartTime { get; set; }
         public string Name { get; set; }
         public string Steps { get; set; }
@@ -148,7 +148,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
         {
         }
 
-        public static BountyStatistic GetInstance(int questId)
+        public static BountyStatistic GetInstance(SNOQuest questId)
         {
             var gameId = ZetaDia.Service.CurrentGameId;
             var stat = BountyStatistics.Stats.FirstOrDefault(s => s.QuestId == questId && s.GameId == gameId);

@@ -160,7 +160,7 @@ namespace Trinity.Components.Combat
 
             switch (target.Type)
             {
-                case TrinityObjectType.Door when target.ActorSnoId == 454346 &&
+                case TrinityObjectType.Door when target.ActorSnoId == SNOActor.p43_AD_Catacombs_Door_A &&
                                                  target.Targeting.TargetedTimes > 3:
                     // Special case 'p43_AD_Catacombs_Door_A' no way to tell it's locked, blacklist quickly to explore
                     GenericBlacklist.Blacklist(
@@ -279,7 +279,7 @@ namespace Trinity.Components.Combat
             
             // Handle Belial differently, he's never in LineOfSight.
             if (Core.Player.IsInBossEncounter &&
-                target.ActorSnoId == (int)SNOActor.Belial)
+                target.ActorSnoId == SNOActor.Belial)
             {
                 return target.RadiusDistance <= targetRangeRequired;
             }
@@ -333,7 +333,7 @@ namespace Trinity.Components.Combat
             // Handle Belial differently, he's never in LineOfSight.
             if (Core.Player.IsInBossEncounter &&
                 currentTarget != null &&
-                currentTarget.ActorSnoId == (int)SNOActor.Belial)
+                currentTarget.ActorSnoId == SNOActor.Belial)
             {
                 return distance <= rangeRequired;
             }

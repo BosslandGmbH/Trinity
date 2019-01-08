@@ -1032,7 +1032,7 @@ namespace Trinity.Components.Coroutines
             }
         }
 
-        public int ActorSnoId { get; set; }
+        public SNOActor ActorSnoId { get; set; }
         public int GameBalanceId { get; set; }
         public int DynamicId { get; set; }
         public int AcdId { get; set; }

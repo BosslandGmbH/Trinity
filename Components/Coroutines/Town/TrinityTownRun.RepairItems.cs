@@ -78,7 +78,7 @@ namespace Trinity.Components.Coroutines.Town
                 return false;
 
             // Fix for Campaign quest start of ACT1
-            if (ZetaDia.CurrentQuest.QuestSnoId == 87700)
+            if (ZetaDia.CurrentQuest.QuestSnoId == SNOQuest.ProtectorOfTristram)
                 return false;
 
             var currentHighestDurItem = equippedItems.Max(i => i.DurabilityPercent);

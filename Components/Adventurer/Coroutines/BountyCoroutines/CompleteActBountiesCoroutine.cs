@@ -17,7 +17,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 {
     public class CompleteActBountiesCoroutine
     {
-        private const int TYRAEL = 114622;
+        private static SNOActor TYRAEL = SNOActor.Tyrael_Heaven;
 
         private static readonly Dictionary<Act, Vector3> TyraelPositions = new Dictionary<Act, Vector3>
         {

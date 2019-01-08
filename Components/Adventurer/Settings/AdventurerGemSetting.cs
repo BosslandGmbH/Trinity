@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
+using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Settings
 {
@@ -13,7 +14,7 @@ namespace Trinity.Components.Adventurer.Settings
         private int _order;
         private int _limit;
         private bool _isLimited;
-        private int _sno;
+        private SNOActor _sno;
         private Item _item;
         private int _maxRank;
         private string _name;
@@ -78,7 +79,7 @@ namespace Trinity.Components.Adventurer.Settings
         }
 
         [DataMember]
-        public int Sno
+        public SNOActor Sno
         {
             get => _sno;
             set => SetField(ref _sno, value);

@@ -21,7 +21,7 @@ namespace Trinity.Components.Coroutines
             var bagsOpened = 0;
             if (Core.Player.IsInTown)
             {
-                foreach (var item in Core.Inventory.Backpack.ToList())
+                foreach (var item in InventoryManager.Backpack.ToList())
                 {
                     if (item.GetRawItemType() == RawItemType.TreasureBag)
                     {

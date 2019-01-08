@@ -422,7 +422,7 @@ namespace Trinity.Components.Combat.Resources
             return
                 (from u in SafeList(objectsInAoe)
                  where fromLocation.Distance2D(u.Position) <= range &&
-                       u.ActorSnoId == 433966
+                       u.ActorSnoId == SNOActor.p2_itemPassive_unique_ring_017_dome
                  orderby u.Distance
                  select u).ToList();
         }
@@ -452,7 +452,7 @@ namespace Trinity.Components.Combat.Resources
             return
                 (from u in SafeList(objectsInAoe)
                  where fromLocation.Distance2D(u.Position) <= range &&
-                       u.ActorSnoId == 320136
+                       u.ActorSnoId == SNOActor.X1_Monk_innerSanctuaryRune_forbidden_proxy
                  orderby u.Distance
                  select u).ToList();
         }
@@ -482,7 +482,7 @@ namespace Trinity.Components.Combat.Resources
                     m => m.ActorSnoId == actor.ActorSnoId && m.Position.Distance(unitLocation) <= distance);
         }
 
-        internal static List<TrinityActor> GetDiaObjects(uint actorSNO, float range = 25f,
+        internal static List<TrinityActor> GetDiaObjects(SNOActor actorSNO, float range = 25f,
             bool objectsInAoe = false)
         {
             return
@@ -493,7 +493,7 @@ namespace Trinity.Components.Combat.Resources
                  select u).ToList();
         }
 
-        internal static Vector3 GetDiaObjectBestClusterPoint(uint actorSNO, float radius = 15f, float maxRange = 45f,
+        internal static Vector3 GetDiaObjectBestClusterPoint(SNOActor actorSNO, float radius = 15f, float maxRange = 45f,
             bool useWeights = true, bool includeUnitsInAoe = true, bool objectsInAoe = false)
         {
             var clusterUnits =
@@ -512,7 +512,7 @@ namespace Trinity.Components.Combat.Resources
             return
                 (from u in SafeList(objectsInAoe)
                  where u.Distance <= range &&
-                       u.ActorSnoId == 322236
+                       u.ActorSnoId == SNOActor.x1_Wizard_TornadoRune_damage_model
                  orderby u.Distance
                  select u).ToList();
         }
@@ -527,7 +527,7 @@ namespace Trinity.Components.Combat.Resources
 
             var clusterUnits =
                 (from u in SafeList(objectsInAoe)
-                 where u.ActorSnoId == 322236 &&
+                 where u.ActorSnoId == SNOActor.x1_Wizard_TornadoRune_damage_model &&
                        u.Distance <= maxRange
                  orderby u.NearbyUnitsWithinDistance(radius),
                      u.Distance descending

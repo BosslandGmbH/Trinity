@@ -12,23 +12,23 @@ namespace Trinity.Components.Adventurer.Game.Rift
 {
     public static class RiftData
     {
-        public const int RiftStoneSNO = 364715;
-        public const int RiftEntryPortalSNO = 345935;
-        public const int GreaterRiftEntryPortalSNO = 396751;
-        public const int OrekSNO = 363744;
-        public const int UrshiSNO = 398682;
-        public const int TownstoneSNO = 135248;
-        public const int HolyCowSNO = 209133;
+        public const SNOActor RiftStoneSNO = SNOActor.x1_OpenWorld_LootRunObelisk_B;
+        public const SNOActor RiftEntryPortalSNO = SNOActor.X1_OpenWorld_LootRunPortal;
+        public const SNOActor GreaterRiftEntryPortalSNO = SNOActor.X1_OpenWorld_Tiered_Rifts_Portal;
+        public const SNOActor OrekSNO = SNOActor.X1_LR_Nephalem;
+        public const SNOActor UrshiSNO = SNOActor.P1_LR_TieredRift_Nephalem;
+        public const SNOActor TownstoneSNO = SNOActor.Dungeon_Stone_Portal;
+        public const SNOActor HolyCowSNO = SNOActor.TentacleLord;
         
-        public const int GreaterRiftKeySNO = 408416;
-        public static readonly HashSet<int> PossibleDungeonStoneSNO = new HashSet<int>
+        public const SNOActor GreaterRiftKeySNO = SNOActor.TieredLootrunKey_0;
+        public static readonly HashSet<SNOActor> PossibleDungeonStoneSNO = new HashSet<SNOActor>
         {
-            135248,
-            178684
+            SNOActor.Dungeon_Stone_Portal,
+            SNOActor.Dungeon_Stone_Portal_invis
         };
-        public static readonly HashSet<int> PossibleHolyCowLevelID = new HashSet<int>
+        public static readonly HashSet<SNOLevelArea> PossibleHolyCowLevelID = new HashSet<SNOLevelArea>
         {
-            276150,
+            SNOLevelArea.X1_LR_Tileset_Crypt,
         };
         public static Vector3 Act1OrekPosition = new Vector3(391, 591, 24);
         public static Vector3 Act1RiftStonePosition = new Vector3(375, 586, 24);
@@ -52,18 +52,18 @@ namespace Trinity.Components.Adventurer.Game.Rift
         // TentacleLord (209133) Distance: 25.51409
         //new InteractWithUnitCoroutine(0, 288454, 209133, 0, 5),
 
-        public static List<int> RiftWorldIds { get; } = new List<int>
+        public static List<SNOWorld> RiftWorldIds { get; } = new List<SNOWorld>
         {
-            288454,
-            288685,
-            288687,
-            288798,
-            288800,
-            288802,
-            288804,
-            288810,
-            288814,
-            288816,
+            SNOWorld.X1_LR_Level_01,
+            SNOWorld.X1_LR_Level_02,
+            SNOWorld.X1_LR_Level_03,
+            SNOWorld.X1_LR_Level_04,
+            SNOWorld.X1_LR_Level_05,
+            SNOWorld.X1_LR_Level_06,
+            SNOWorld.X1_LR_Level_07,
+            SNOWorld.X1_LR_Level_08,
+            SNOWorld.X1_LR_Level_09,
+            SNOWorld.X1_LR_Level_10,
         };
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Trinity.Components.Adventurer.Game.Rift
         //[QuestTools][TabUi] Id=10 MinimapTextureSnoId=81058 NameHash=-1944927149 IsPointOfInterest=True IsPortalEntrance=False IsPortalExit=False IsWaypoint=False Location=x="980" y="1088" z="6"  Distance=126
         //ActorId: 353823, Type: Monster, Name: X1_LR_Boss_sniperAngel-33548, Distance2d: 32.87272, CollisionRadius: 0, MinimapActive: 1, MinimapIconOverride: -1, MinimapDisableArrow: 0
 
-        public static Dictionary<int, RiftEntryPortal> EntryPortals = new Dictionary<int, RiftEntryPortal>();
+        public static Dictionary<SNOWorld, RiftEntryPortal> EntryPortals = new Dictionary<SNOWorld, RiftEntryPortal>();
 
         public static void AddEntryPortal()
         {
@@ -292,11 +292,11 @@ namespace Trinity.Components.Adventurer.Game.Rift
 
     public class RiftEntryPortal
     {
-        public int ActorSNO { get; set; }
+        public SNOActor ActorSNO { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
 
-        public RiftEntryPortal(int actorSno, float x, float y)
+        public RiftEntryPortal(SNOActor actorSno, float x, float y)
         {
             ActorSNO = actorSno;
             X = (int)x;

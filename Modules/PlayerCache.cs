@@ -44,11 +44,11 @@ namespace Trinity.Modules
         public ActorClass ActorClass { get; private set; }
         public string BattleTag { get; private set; }
         public int SceneId { get; private set; }
-        public int LevelAreaId { get; private set; }
+        public SNOLevelArea LevelAreaId { get; private set; }
         public double PlayerDamagePerSecond { get; private set; }
         public SceneInfo Scene { get; private set; }
-        public int WorldDynamicId { get; private set; }
-        public int WorldSnoId { get; private set; }
+        public SNOWorld WorldDynamicId { get; private set; }
+        public SNOWorld WorldSnoId { get; private set; }
         public bool IsInGame { get; private set; }
         public bool IsDead { get; private set; }
         public bool IsLoadingWorld { get; private set; }
@@ -75,7 +75,7 @@ namespace Trinity.Modules
         public bool IsRanged { get; private set; }
         public bool IsValid { get; private set; }
         public int TieredLootRunlevel { get; private set; }
-        public int CurrentQuestSNO { get; private set; }
+        public SNOQuest CurrentQuestSNO { get; private set; }
         public int CurrentQuestStep { get; private set; }
         public Act WorldType { get; private set; }
         public int MaxBloodShards { get; private set; }
@@ -563,7 +563,7 @@ namespace Trinity.Modules
         public int FreeBackpackSlots { get; set; }
         public int TeamId { get; set; }
         public float Radius { get; set; }
-        public int CurrentSceneSnoId { get; set; }
+        public SNOScene CurrentSceneSnoId { get; set; }
         public bool IsInBossEncounter { get; set; }
 
         public bool IsInBossEncounterArea { get; set; }
@@ -598,7 +598,7 @@ namespace Trinity.Modules
             ActorClass = ActorClass.Invalid;
             BattleTag = String.Empty;
             SceneId = -1;
-            LevelAreaId = -1;
+            LevelAreaId = (SNOLevelArea)(-1);
             Scene = new SceneInfo()
             {
                 SceneId = -1,

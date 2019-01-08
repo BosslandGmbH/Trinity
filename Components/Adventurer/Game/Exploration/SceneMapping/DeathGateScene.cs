@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Zeta.Common;
+using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
 {
     public class DeathGateScene
     {
         public string Name { get; set; }
-        public int SnoId { get; set; }
+        public SNOScene SnoId { get; set; }
         public DeathGateType Type { get; set; }
         public Vector3 RelativeExitPosition { get; set; }
         public Vector3 RelativeEnterPosition { get; set; }

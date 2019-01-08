@@ -60,10 +60,10 @@ namespace Trinity.Framework.Objects
         /// <summary>
         /// All the ActorSnoId ids for the items in this set
         /// </summary>
-        private HashSet<int> _itemIds;
-        public HashSet<int> ItemIds
+        private HashSet<SNOActor> _itemIds;
+        public HashSet<SNOActor> ItemIds
         {
-            get { return _itemIds ?? (_itemIds = new HashSet<int>(Items.Select(i => i.Id))); }
+            get { return _itemIds ?? (_itemIds = new HashSet<SNOActor>(Items.Select(i => i.Id))); }
         }
 
         /// <summary>

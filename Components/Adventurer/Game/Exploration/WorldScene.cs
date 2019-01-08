@@ -26,14 +26,14 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         public Vector2 Max { get; private set; }
 
         //public Rect Rect { get; private set; }
-        public int LevelAreaId { get; set; }
+        public SNOLevelArea LevelAreaId { get; set; }
 
         public bool IsIgnored { get; private set; }
         public bool HasParent { get; set; }
         public bool HasChild { get; set; }
         public bool IsTopLevel => !HasParent;
         public bool GridCreated { get; private set; }
-        public int DynamicWorldId { get; private set; }
+        public SNOWorld DynamicWorldId { get; private set; }
         public int SceneId { get; private set; }
         public SceneExitDirections ExitDirections { get; private set; }
 
@@ -406,7 +406,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public HashSet<Vector3> BlacklistedPositions { get; set; } = new HashSet<Vector3>();
 
-        public int SnoId { get; set; }
+        public SNOScene SnoId { get; set; }
         public bool HasBeenVisited { get; set; }
 
         public Vector3 GetRelativePosition(Vector3 worldPosition)

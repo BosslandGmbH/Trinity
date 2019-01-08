@@ -25,7 +25,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
     {
         private readonly KeywardenData _keywardenData;
         private Vector3 _keywardenLocation = Vector3.Zero;
-        private readonly HashSet<int> _levelAreaIds;
+        private readonly HashSet<SNOLevelArea> _levelAreaIds;
         private WaitCoroutine _waitCoroutine;
         private DateTime _markerCooldownUntil = DateTime.MinValue;
 
@@ -67,7 +67,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
         public KeywardenCoroutine(KeywardenData keywardenData)
         {
             _keywardenData = keywardenData;
-            _levelAreaIds = new HashSet<int> { _keywardenData.LevelAreaId };
+            _levelAreaIds = new HashSet<SNOLevelArea> { _keywardenData.LevelAreaId };
             Id = Guid.NewGuid();
         }
 
@@ -179,7 +179,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
             if (_markerCoroutine == null)
             {
                 Core.Logger.Log("[Keywarden] Following a keywarden marker, lets see where it goes");
-                _markerCoroutine = new MoveToMapMarkerCoroutine(-1, AdvDia.CurrentWorldId, _minimapMarker.NameHash);
+                _markerCoroutine = new MoveToMapMarkerCoroutine(SNOQuest.Invalid, AdvDia.CurrentWorldId, _minimapMarker.NameHash);
             }
 
             if (!_markerCoroutine.IsDone)

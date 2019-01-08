@@ -16,7 +16,7 @@ namespace Trinity.ProfileTags
 
         public override async Task<bool> StartTask()
         {
-            var bountyInfo = ZetaDia.Storage.Quests.Bounties.FirstOrDefault(b => (int)b.Quest == QuestId);
+            var bountyInfo = ZetaDia.Storage.Quests.Bounties.FirstOrDefault(b => b.Quest == QuestId);
             if (bountyInfo == null)
             {
                 Core.Logger.Error($"[RunBountyTag] Bounty is not available in this game.");

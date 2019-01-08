@@ -40,9 +40,9 @@ namespace Trinity.Components.Coroutines.Town
             if (!ZetaDia.IsInTown)
                 return CoroutineResult.NoAction;
 
-            var itemsToSalvage = Core.Inventory.Backpack.Where(ShouldSalvage).ToList();
-            Core.Logger.Verbose(LogCategory.ItemEvents, $"[SalvageItems] Starting salvage for {itemsToSalvage.Count} items");
-            itemsToSalvage.ForEach(i => Core.Logger.Debug(LogCategory.ItemEvents, $"[SalvageItems] Salvaging: {i.Name} ({i.ActorSnoId}) InternalName={i.InternalName} Ann={i.AnnId}"));
+            var itemsToSalvage = InventoryManager.Backpack.Where(ShouldSalvage).ToList();
+            s_logger.Debug($"[{nameof(SalvageItems)}] Starting salvage for {itemsToSalvage.Count} items");
+            itemsToSalvage.ForEach(i => s_logger.Debug($"[{nameof(SalvageItems)}] Salvaging: {(SNOActor)i.ActorSnoId} ({i.ActorSnoId}) InternalName={i.InternalName} Ann={i.AnnId}"));
 
             return await BrainBehavior.DoSalvage(itemsToSalvage);
         }

@@ -5,15 +5,15 @@ using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
 using Zeta.Common;
-
+using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
     public class ClearAreaForNSecondsCoroutine : IBountySubroutine
     {
-        private readonly int _questId;
+        private readonly SNOQuest _questId;
         private readonly int _seconds;
-        private readonly int _actorId;
+        private readonly SNOActor _actorId;
         private readonly int _marker;
         private int _radius;
         private readonly bool _increaseRadius;
@@ -22,7 +22,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private BountyData _bountyData;
         private Vector3 _center;
         private long _startTime;
-        private int _worldId = -1;
+        private SNOWorld _worldId = SNOWorld.Invalid;
 
         private const int OBJECTIVE_SCAN_RANGE = 5000;
 
@@ -52,7 +52,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public bool IsDone => _isDone;
 
-        public ClearAreaForNSecondsCoroutine(int questId, int seconds, int actorId, int marker, int radius = 30, bool increaseRadius = true)
+        public ClearAreaForNSecondsCoroutine(SNOQuest questId, int seconds, SNOActor actorId, int marker, int radius = 30, bool increaseRadius = true)
         {
             _questId = questId;
             _seconds = seconds;
@@ -148,7 +148,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 return false;
             }
 
-            if (_worldId == -1)
+            if (_worldId == SNOWorld.Invalid)
                 _worldId = AdvDia.CurrentWorldId;
 
             if (BountyData != null && BountyData.IsAvailable)

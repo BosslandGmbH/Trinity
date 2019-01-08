@@ -41,7 +41,7 @@ namespace Trinity.Modules
             ResetXp();
         }
 
-        protected override void OnWorldChanged(ChangeEventArgs<int> args)
+        protected override void OnWorldChanged(ChangeEventArgs<SNOWorld> args)
         {
             ResetGold();
             ResetXp();

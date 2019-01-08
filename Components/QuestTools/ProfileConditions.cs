@@ -27,8 +27,7 @@ namespace Trinity.Components.QuestTools
 
         public static string ProfileSetting(string key)
         {
-            string value;
-            return ProfileSettingTag.ProfileSettings.TryGetValue(key, out value) ? value : string.Empty;
+            return ProfileSettingTag.ProfileSettings.TryGetValue(key, out var value) ? value : string.Empty;
         }
 
         public static bool IsCastingOrLoading()
@@ -49,12 +48,12 @@ namespace Trinity.Components.QuestTools
                 );
         }
 
-        public static bool HaveBounty(int questId)
+        public static bool HaveBounty(SNOQuest questId)
         {
             return ZetaDia.Storage.Quests.Bounties.FirstOrDefault(bounty => bounty.Info.QuestSNO == questId && bounty.Info.State != QuestState.Completed) != null;
         }
 
-        public static bool CurrentSceneId(int sceneSnoId)
+        public static bool CurrentSceneId(SNOScene sceneSnoId)
         {
             return ZetaDia.Me.CurrentScene.SceneInfo.SNOId == sceneSnoId;
         }
@@ -165,7 +164,7 @@ namespace Trinity.Components.QuestTools
             return ZetaDia.Service.Hero.Level == level;
         }
 
-        public static long ItemCount(int actorId)
+        public static long ItemCount(SNOActor actorId)
         {
             var items = InventoryManager.StashItems.Where(item => actorId == item.ActorSnoId)
                 .Concat(InventoryManager.Backpack.Where(item => actorId == item.ActorSnoId)).ToList();
@@ -179,7 +178,7 @@ namespace Trinity.Components.QuestTools
             return items.Count;
         }
 
-        public static long BackpackCount(int actorId)
+        public static long BackpackCount(SNOActor actorId)
         {
             var items = InventoryManager.Backpack.Where(item => actorId == item.ActorSnoId).ToList();
 
@@ -192,7 +191,7 @@ namespace Trinity.Components.QuestTools
             return items.Count;
         }
 
-        public static long StashCount(int actorId)
+        public static long StashCount(SNOActor actorId)
         {
             var items = InventoryManager.StashItems.Where(item => actorId == item.ActorSnoId).ToList();
 
@@ -205,29 +204,29 @@ namespace Trinity.Components.QuestTools
             return items.Count;
         }
 
-        public static bool ItemCountGreaterThan(int actorId, int amount)
+        public static bool ItemCountGreaterThan(SNOActor actorId, int amount)
         {
             return ItemCount(actorId) > amount;
         }
 
-        public static bool ItemCountLessThan(int actorId, int amount)
+        public static bool ItemCountLessThan(SNOActor actorId, int amount)
         {
             return ItemCount(actorId) < amount;
         }
 
-        public static bool ActorExistsNearMe(int actorId, float range)
+        public static bool ActorExistsNearMe(SNOActor actorId, float range)
         {
             var nearbyActors = ZetaDia.Actors.GetActorsOfType<DiaObject>(true).Where(i => i.IsValid && i.ActorSnoId == actorId && Vector3.Distance(i.Position, ZetaDia.Me.Position) <= range).ToList();
             return nearbyActors.Count > 0;
         }
 
-        public static bool HasBeenOperated(int actorId)
+        public static bool HasBeenOperated(SNOActor actorId)
         {
             var actor = ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true).FirstOrDefault(a => a.ActorSnoId == actorId);
             return actor != null && actor.HasBeenOperated;
         }
 
-        public static bool ActorAnimationExistsNearMe(int actorId, string animationName, float radius)
+        public static bool ActorAnimationExistsNearMe(SNOActor actorId, string animationName, float radius)
         {
             var actor = ZetaDia.Actors.GetActorsOfType<DiaObject>(true).FirstOrDefault(a => a.ActorSnoId == actorId && a.Distance <= radius);
 
@@ -246,14 +245,14 @@ namespace Trinity.Components.QuestTools
             return result;
         }
 
-        public static bool CurrentAnimation(int actorId, string animationName)
+        public static bool CurrentAnimation(SNOActor actorId, string animationName)
         {
             return ActorAnimationExistsNearMe(actorId, animationName, 200f);
         }
 
-        public static bool IsBountyLevelArea(int questId)
+        public static bool IsBountyLevelArea(SNOQuest questId)
         {
-            var result = ZetaDia.Storage.Quests.Bounties.FirstOrDefault(q => q.Quest == (SNOQuest)questId && q.LevelAreas.Contains((SNOLevelArea)ZetaDia.CurrentLevelAreaSnoId) || q.StartingLevelArea == (SNOLevelArea)ZetaDia.CurrentLevelAreaSnoId);
+            var result = ZetaDia.Storage.Quests.Bounties.FirstOrDefault(q => q.Quest == questId && q.LevelAreas.Contains(ZetaDia.CurrentLevelAreaSnoId) || q.StartingLevelArea == ZetaDia.CurrentLevelAreaSnoId);
 
             return result != null;
         }
@@ -263,11 +262,9 @@ namespace Trinity.Components.QuestTools
             return UIElements.VendorWindow != null && UIElements.VendorWindow.IsValid && UIElements.VendorWindow.IsVisible;
         }
 
-        public static bool QuestComplete(int questId)
+        public static bool QuestComplete(SNOQuest questId)
         {
             return ZetaDia.Storage.Quests.AllQuests.Any(q => q.QuestSNO == questId && q.State == QuestState.Completed);
         }
-
-
     }
 }

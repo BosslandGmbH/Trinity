@@ -2,6 +2,7 @@
 using System.Linq;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
+using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Framework.Reference
@@ -14,7 +15,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SimplicitysStrength = new Item
         {
-            Id = 405802,
+            Id = SNOActor.Unique_Gem_013_x1,
             Name = "Simplicity's Strength",
             Quality = ItemQuality.Legendary,
             Slug = "simplicitys-strength",
@@ -37,7 +38,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BaneOfTheStricken = new Item
         {
-            Id = 428345,
+            Id = SNOActor.Unique_Gem_018_x1,
             Name = "Bane of the Stricken",
             Quality = ItemQuality.Legendary,
             Slug = "bane-of-the-stricken",
@@ -60,7 +61,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BaneOfThePowerful = new Item
         {
-            Id = 405775,
+            Id = SNOActor.Unique_Gem_001_x1,
             Name = "Bane of the Powerful",
             Quality = ItemQuality.Legendary,
             Slug = "bane-of-the-powerful",
@@ -84,7 +85,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GemOfEase = new Item
         {
-            Id = 405783,
+            Id = SNOActor.Unique_Gem_003_x1,
             Name = "Gem of Ease",
             Quality = ItemQuality.Legendary,
             Slug = "gem-of-ease",
@@ -106,7 +107,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item EsotericAlteration = new Item
         {
-            Id = 428033,
+            Id = SNOActor.Unique_Gem_016_x1,
             Name = "Esoteric Alteration",
             Quality = ItemQuality.Legendary,
             Slug = "esoteric-alteration",
@@ -130,7 +131,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BoonOfTheHoarder = new Item
         {
-            Id = 405803,
+            Id = SNOActor.Unique_Gem_014_x1,
             Name = "Boon of the Hoarder",
             Quality = ItemQuality.Legendary,
             Slug = "boon-of-the-hoarder",
@@ -153,7 +154,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Enforcer = new Item
         {
-            Id = 405798, //Enforcer ActorSnoId=405798 GameBalanceId=-1045305945 
+            Id = SNOActor.Unique_Gem_010_x1, //Enforcer ActorSnoId=405798 GameBalanceId=-1045305945 
             Name = "Enforcer",
             Quality = ItemQuality.Legendary,
             Slug = "enforcer",
@@ -175,7 +176,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BaneOfTheTrapped = new Item
         {
-            Id = 405781,
+            Id = SNOActor.Unique_Gem_002_x1,
             Name = "Bane of the Trapped",
             Quality = ItemQuality.Legendary,
             Slug = "bane-of-the-trapped",
@@ -198,7 +199,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GemOfEfficaciousToxin = new Item
         {
-            Id = 405793,
+            Id = SNOActor.Unique_Gem_005_x1,
             Name = "Gem of Efficacious Toxin",
             Quality = ItemQuality.Legendary,
             Slug = "gem-of-efficacious-toxin",
@@ -220,7 +221,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item InvigoratingGemstone = new Item
         {
-            Id = 405797,
+            Id = SNOActor.Unique_Gem_009_x1,
             Name = "Invigorating Gemstone",
             Quality = ItemQuality.Legendary,
             Slug = "invigorating-gemstone",
@@ -242,7 +243,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item GogokOfSwiftness = new Item
         {
-            Id = 405796,
+            Id = SNOActor.Unique_Gem_008_x1,
             Name = "Gogok of Swiftness",
             Quality = ItemQuality.Legendary,
             Slug = "gogok-of-swiftness",
@@ -266,7 +267,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MirinaeTeardropOfTheStarweaver = new Item
         {
-            Id = 405795,
+            Id = SNOActor.Unique_Gem_007_x1,
             Name = "Mirinae, Teardrop of the Starweaver",
             Quality = ItemQuality.Legendary,
             Slug = "mirinae-teardrop-of-the-starweaver",
@@ -288,7 +289,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Iceblink = new Item
         {
-            Id = 428355,
+            Id = SNOActor.Unique_Gem_021_x1,
             Name = "Iceblink",
             Quality = ItemQuality.Legendary,
             Slug = "iceblink",
@@ -311,7 +312,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MoltenWildebeestsGizzard = new Item
         {
-            Id = 428034,
+            Id = SNOActor.Unique_Gem_017_x1,
             Name = "Molten Wildebeest's Gizzard",
             Quality = ItemQuality.Legendary,
             Slug = "molten-wildebeests-gizzard",
@@ -333,7 +334,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item PainEnhancer = new Item
         {
-            Id = 405794,
+            Id = SNOActor.Unique_Gem_006_x1,
             Name = "Pain Enhancer",
             Quality = ItemQuality.Legendary,
             Slug = "pain-enhancer",
@@ -356,7 +357,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Moratorium = new Item
         {
-            Id = 405800,
+            Id = SNOActor.Unique_Gem_011_x1,
             Name = "Moratorium",
             Quality = ItemQuality.Legendary,
             Slug = "moratorium",
@@ -378,7 +379,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Taeguk = new Item
         {
-            Id = 405804,
+            Id = SNOActor.Unique_Gem_015_x1,
             Name = "Taeguk",
             Quality = ItemQuality.Legendary,
             Slug = "taeguk",
@@ -401,7 +402,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item ZeisStoneOfVengeance = new Item
         {
-            Id = 405801,
+            Id = SNOActor.Unique_Gem_012_x1,
             Name = "Zei's Stone of Vengeance",
             Quality = ItemQuality.Legendary,
             Slug = "zeis-stone-of-vengeance",
@@ -424,7 +425,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item WreathOfLightning = new Item
         {
-            Id = 405792,
+            Id = SNOActor.Unique_Gem_004_x1,
             Name = "Wreath of Lightning",
             Quality = ItemQuality.Legendary,
             Slug = "wreath-of-lightning",
@@ -446,7 +447,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item MutilationGuard = new Item
         {
-            Id = 428346,
+            Id = SNOActor.Unique_Gem_019_x1,
             Name = "Mutilation Guard",
             Quality = ItemQuality.Legendary,
             Slug = "mutilation-guard",
@@ -469,7 +470,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item RedSoulShard = new Item
         {
-            Id = 454794,
+            Id = SNOActor.Unique_Gem_022_x1,
             Name = "Red Soul Shard",
             Quality = ItemQuality.Legendary,
             Slug = "red-soul-shard",
@@ -491,7 +492,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item BoyarskysChip = new Item
         {
-            Id = 428347,
+            Id = SNOActor.Unique_Gem_020_x1,
             Name = "Boyarsky's Chip",
             Quality = ItemQuality.Legendary,
             Slug = "boyarskys-chip",
@@ -514,20 +515,20 @@ namespace Trinity.Framework.Reference
         /// <summary>
         /// Hashset of all gem ActorSnoId
         /// </summary>
-        public static HashSet<int> ItemIds
+        public static HashSet<SNOActor> ItemIds
         {
-            get { return _itemIds ?? (_itemIds = new HashSet<int>(ToList().Where(i => i.Id != 0).Select(i => i.Id))); }
+            get { return _itemIds ?? (_itemIds = new HashSet<SNOActor>(ToList().Where(i => i.Id != 0).Select(i => i.Id))); }
         }
-        private static HashSet<int> _itemIds;
+        private static HashSet<SNOActor> _itemIds;
 
         /// <summary>
         /// Dictionary of all gems
         /// </summary>
-        public static new Dictionary<int, Item> Items
+        public static new Dictionary<SNOActor, Item> Items
         {
             get { return _items ?? (_items = ToList().Where(i => i.Id != 0).DistinctBy(i => i.Id).ToDictionary(k => k.Id, v => v)); }
         }
-        private static Dictionary<int, Item> _items;
+        private static Dictionary<SNOActor, Item> _items;
 
         /// <summary>
         /// Gets equipped gems

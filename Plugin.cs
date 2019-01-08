@@ -79,7 +79,7 @@ namespace Trinity
 
         public void OnPulse()
         {
-            if (ZetaDia.CurrentQuest == null || ZetaDia.CurrentQuest.QuestSnoId == -1)
+            if (ZetaDia.CurrentQuest == null || ZetaDia.CurrentQuest.QuestSnoId == SNOQuest.Invalid)
             {
                 Core.Logger.Debug("Waiting while Quest is invalid (-1)");
                 BotMain.PauseFor(TimeSpan.FromSeconds(1));

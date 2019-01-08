@@ -446,7 +446,9 @@ namespace Trinity.Routines
             }
 
             Core.Logger.Log(LogCategory.Avoidance, "Moving away from Critical Avoidance.");
-            if (await CommonCoroutines.MoveAndStop(Core.Avoidance.Avoider.SafeSpot, 5f, "Safe Spot") != MoveResult.ReachedDestination)
+            MoveResult res;
+            if ((res = await CommonCoroutines.MoveAndStop(Core.Avoidance.Avoider.SafeSpot, 5f, "Safe Spot")) != MoveResult.ReachedDestination &&
+                res != MoveResult.Failed)
             {
                 return true;
             }

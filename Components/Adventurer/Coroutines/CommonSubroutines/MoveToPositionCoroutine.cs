@@ -5,12 +5,13 @@ using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Framework.Grid;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
+using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
 {
     public class MoveToPositionCoroutine : ISubroutine
     {
-        private readonly int _worldId;
+        private readonly SNOWorld _worldId;
         private readonly int _distance;
         private readonly Vector3 _position;
         private bool _isDone;
@@ -47,7 +48,7 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
 
         public bool IsDone => _isDone || AdvDia.CurrentWorldId != _worldId;
 
-        public MoveToPositionCoroutine(int worldId, Vector3 position, int distance = 1, bool forceStraightLinePathing = false)
+        public MoveToPositionCoroutine(SNOWorld worldId, Vector3 position, int distance = 1, bool forceStraightLinePathing = false)
         {
             _startTime = DateTime.UtcNow;
             _distance = distance;

@@ -16,7 +16,7 @@ namespace Trinity.Modules
     {
         public delegate void GridProviderEventHandler(List<WorldScene> provider);
 
-        private int _currentWorld;
+        private SNOWorld _currentWorld;
         private HashSet<string> _currentWorldSceneIds;
 
         private List<WorldScene> _currentWorldScenes;
@@ -43,7 +43,7 @@ namespace Trinity.Modules
             Reset();
         }
 
-        protected override void OnWorldChanged(ChangeEventArgs<int> args)
+        protected override void OnWorldChanged(ChangeEventArgs<SNOWorld> args)
         {
             ExplorationHelpers.ClearExplorationPriority();
             PurgeOldScenes();
@@ -103,7 +103,7 @@ namespace Trinity.Modules
                 throw;
             }
 
-            var worldId = 0;
+            SNOWorld worldId = 0;
             foreach (var scene in newScenes)
             {
                 try
@@ -160,7 +160,7 @@ namespace Trinity.Modules
             }
         }
 
-        public SceneData CreateSceneData(IEnumerable<WorldScene> addedScenes, int worldId)
+        public SceneData CreateSceneData(IEnumerable<WorldScene> addedScenes, SNOWorld worldId)
         {
             var scenes = addedScenes.Select(scene => new SceneDataEntry
             {

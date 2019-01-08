@@ -55,7 +55,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             return Core.Scenes.Where(s => s.ExitPositions.Count > 1).FirstOrDefault(s => s.IsInScene(position) && (func == null || func(s)));
         }
 
-        public static ExplorationNode NearestWeightedUnvisitedNode(HashSet<int> levelAreaIds, List<string> ignoreScenes = null)
+        public static ExplorationNode NearestWeightedUnvisitedNode(HashSet<SNOLevelArea> levelAreaIds, List<string> ignoreScenes = null)
         {
             var worldId = AdvDia.CurrentWorldDynamicId;
             var myPosition = AdvDia.MyPosition;
@@ -225,9 +225,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         /// Index by SceneSnoId (Can be found on InfoDumping Tab). Each WorldScene grabs this list of BlacklistedPositions
         /// When Exploration nodes are created within a scene, they are marked 'IsBlacklsited' if any position is inside their bounds.
         /// </summary>
-        public static Dictionary<int, HashSet<Vector3>> BlacklistedPositionsBySceneSnoId = new Dictionary<int, HashSet<Vector3>>
+        public static Dictionary<SNOScene, HashSet<Vector3>> BlacklistedPositionsBySceneSnoId = new Dictionary<SNOScene, HashSet<Vector3>>
         {
-            { 53711, new HashSet<Vector3>
+            { SNOScene.caOut_Oasis_Edge_S_01, new HashSet<Vector3>
                 {
                     // Dulgur oasis scene with decking area in the bottom left of map.
                     new Vector3(811.1603f,646.8987f,1.828806f),
@@ -302,7 +302,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public static void MarkNodesAsVisited(IEnumerable<WorldScene> scenes)
         {
-            var sceneLookup = new HashSet<int>(scenes.Select(s => s.SnoId));
+            var sceneLookup = new HashSet<SNOScene>(scenes.Select(s => s.SnoId));
             ExplorationGrid.Instance.WalkableNodes.Where(s => sceneLookup.Contains(s.Scene.SnoId)).ForEach(s => s.IsVisited = true);
         }
 

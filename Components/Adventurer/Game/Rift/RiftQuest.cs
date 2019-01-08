@@ -1,10 +1,11 @@
+using Zeta.Game;
 using Zeta.Game.Internals;
 
 namespace Trinity.Components.Adventurer.Game.Rift
 {
     public class RiftQuest
     {
-        private const int RIFT_QUEST_ID = 337492;
+        private const SNOQuest RIFT_QUEST_ID = SNOQuest.X1_LR_DungeonFinder;
 
         public QuestState State { get; private set; }
         public RiftStep Step { get; private set; }

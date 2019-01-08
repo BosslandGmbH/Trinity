@@ -51,11 +51,11 @@ namespace Trinity.Framework.Actors
         public int ActivePlayerRActorId { get; private set; }
         public TrinityPlayer Me { get; private set; }
         public Vector3 ActivePlayerPosition { get; set; }
-        public int LastWorldSnoId { get; private set; }
+        public SNOWorld LastWorldSnoId { get; private set; }
 
         protected override void OnPulse() => Update();
 
-        protected override void OnWorldChanged(ChangeEventArgs<int> args)
+        protected override void OnWorldChanged(ChangeEventArgs<SNOWorld> args)
         {
             Clear();
         }
