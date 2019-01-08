@@ -144,48 +144,54 @@ namespace Trinity.Components.Coroutines.Town
                     }
                 }
             }
-            else
-            {
-                var timeout = DateTime.UtcNow.Add(TimeSpan.FromSeconds(30));
-                while (DateTime.UtcNow < timeout)
-                {
-                    if (!UIElements.SalvageWindow.IsVisible)
-                        break;
-
-                    await Coroutine.Yield();
-                    Core.Actors.Update();
-
-                    var freshItems = Core.Inventory.Backpack.Where(i => ShouldSalvage(i) && !Core.Inventory.InvalidAnnIds.Contains(i.AnnId)).ToList();
-                    if (!freshItems.Any())
-                        break;
-
-                    var item = freshItems.First();
-
-                    if (ZetaDia.Actors.GetACDByAnnId(item.AnnId) == null)
-                    {
-                        Core.Logger.Log("AnnId doesn't exist, skipping salvage");
-                        Core.Inventory.InvalidAnnIds.Add(item.AnnId);
-                        continue;
-                    }
-
-                    if (!Core.Actors.IsAnnIdValid(item.AnnId))
-                    {
-                        Core.Logger.Log("AnnId test failed, skipping salvage to prevent disconnect");
-                        Core.Inventory.InvalidAnnIds.Add(item.AnnId);
-                        continue;
-                    }
-
-                    Core.Logger.Log($"Salvaging: {item.Name} ({item.ActorSnoId}) Ancient={item.IsAncient}");
-                    InventoryManager.SalvageItem(item.AnnId);
-                    Core.Inventory.InvalidAnnIds.Add(item.AnnId);
-                    ItemEvents.FireItemSalvaged(item);
-                }
-            }
 
             await Coroutine.Yield();
-
+            await HandleRemainingItems();
+            await Coroutine.Yield();
             await RepairItems.Execute();
             return true;
+        }
+
+        /// <summary>
+        /// Handle remaining salvagable items such as legendaries and skipped ones.
+        /// </summary>
+        /// <returns></returns>
+        private async static Task HandleRemainingItems()
+        {
+            var timeout = DateTime.UtcNow.Add(TimeSpan.FromSeconds(30));
+            while (DateTime.UtcNow < timeout)
+            {
+                if (!UIElements.SalvageWindow.IsVisible)
+                    break;
+
+                await Coroutine.Yield();
+                Core.Actors.Update();
+
+                var freshItems = Core.Inventory.Backpack.Where(i => ShouldSalvage(i) && !Core.Inventory.InvalidAnnIds.Contains(i.AnnId)).ToList();
+                if (!freshItems.Any())
+                    break;
+
+                var item = freshItems.First();
+
+                if (ZetaDia.Actors.GetACDByAnnId(item.AnnId) == null)
+                {
+                    Core.Logger.Log("AnnId doesn't exist, skipping salvage");
+                    Core.Inventory.InvalidAnnIds.Add(item.AnnId);
+                    continue;
+                }
+
+                if (!Core.Actors.IsAnnIdValid(item.AnnId))
+                {
+                    Core.Logger.Log("AnnId test failed, skipping salvage to prevent disconnect");
+                    Core.Inventory.InvalidAnnIds.Add(item.AnnId);
+                    continue;
+                }
+
+                Core.Logger.Log($"Salvaging: {item.Name} ({item.ActorSnoId}) Ancient={item.IsAncient}");
+                InventoryManager.SalvageItem(item.AnnId);
+                Core.Inventory.InvalidAnnIds.Add(item.AnnId);
+                ItemEvents.FireItemSalvaged(item);
+            }
         }
 
         private static readonly HashSet<ItemQuality> RareQualityLevels = new HashSet<ItemQuality>
