@@ -36,16 +36,32 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         
         public static DiaGizmo RiftPortal => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true)
             .FirstOrDefault(g => g.IsFullyValid() &&
-                                 (SNOActor)g.ActorSnoId == SNOActor.X1_OpenWorld_LootRunPortal ||
-                                 (SNOActor)g.ActorSnoId == SNOActor.X1_OpenWorld_Tiered_Rifts_Portal);
+                                 g.ActorSnoId == SNOActor.X1_OpenWorld_LootRunPortal ||
+                                 g.ActorSnoId == SNOActor.X1_OpenWorld_Tiered_Rifts_Portal);
 
         public static DiaGizmo LootRunSwitch => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true)
             .FirstOrDefault(g => g.IsFullyValid() &&
-                                 (SNOActor)g.ActorSnoId == SNOActor.x1_OpenWorld_LootRunObelisk_B &&
+                                 g.ActorSnoId == SNOActor.x1_OpenWorld_LootRunObelisk_B &&
                                  g.CommonData.GizmoType == GizmoType.LootRunSwitch);
 
         public static SNOWorld PreviousWorld { get; set; } = SNOWorld.Invalid;
         public static SNOLevelArea PreviousLevel { get; set; } = SNOLevelArea.Invalid;
+
+        public static HashSet<SNOWorld> TownWorlds { get; } = new HashSet<SNOWorld>()
+        {
+            SNOWorld.X1_Tristram_Adventure_Mode_Hub,
+            SNOWorld.caOUT_RefugeeCamp,
+            SNOWorld.a3dun_hub_keep,
+            SNOWorld.X1_Westmarch_Hub,
+        };
+
+        public static HashSet<SNOLevelArea> TownLevelAreas { get; } = new HashSet<SNOLevelArea>()
+        {
+            SNOLevelArea.A1_Tristram_Adventure_Mode_Hub,
+            SNOLevelArea.A2_caOut_CT_RefugeeCamp_Hub,
+            SNOLevelArea.A3_Dun_Keep_Hub,
+            SNOLevelArea.x1_Westm_Hub
+        };
 
         // TODO: Make sure we detect the Exit portal properly. Might lead to portal cycles and stuff like that when wrong!
         public static DiaGizmo ExitPortal => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true)
@@ -53,11 +69,11 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                         g.IsPortal &&
                         g.CommonData.PortalDestination?.WorldSNO != PreviousWorld &&
                         g.CommonData.PortalDestination?.DestLevelAreaSNO != PreviousLevel &&
-                        g.CommonData.PortalDestination?.WorldSNO != SNOWorld.X1_Tristram_Adventure_Mode_Hub &&
-                        g.CommonData.PortalDestination?.DestLevelAreaSNO != SNOLevelArea.A1_Tristram_Adventure_Mode_Hub &&
+                        !TownWorlds.Contains(g.CommonData.PortalDestination?.WorldSNO ?? SNOWorld.Invalid) &&
+                        !TownLevelAreas.Contains(g.CommonData.PortalDestination?.DestLevelAreaSNO ?? SNOLevelArea.Invalid) &&
                         !RiftData.PossibleDungeonStoneSNO.Contains(g.ActorSnoId) &&
                         g.CommonData.GizmoType != GizmoType.HearthPortal)
-            .OrderBy(g => g.Position.Distance2DSqr(AdvDia.MyPosition))
+            .OrderBy(g => g.DistanceSqr)
             .FirstOrDefault();
 
         public static DiaUnit Urshi => ZetaDia.Actors.GetActorsOfType<DiaUnit>(true)
@@ -93,7 +109,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         public static async Task<CoroutineResult> EnsureIsInTown()
         {
             if (!(ZetaDia.IsInTown &&
-                  (SNOWorld)ZetaDia.Globals.WorldSnoId == SNOWorld.X1_Tristram_Adventure_Mode_Hub) &&
+                  ZetaDia.Globals.WorldSnoId == SNOWorld.X1_Tristram_Adventure_Mode_Hub) &&
                 await WaypointCoroutine.UseWaypoint(WaypointFactory.ActHubs[Act.A1]))
             {
                 return CoroutineResult.Running;
