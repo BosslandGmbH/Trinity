@@ -331,7 +331,7 @@ namespace Trinity.Components.Coroutines.Town
                     return false;
                 }
 
-                if (i.ItemQualityLevel < ItemQuality.Rare4 &&
+                if (i.ItemQualityLevel < ItemQuality.Rare4 ||
                     i.ItemQualityLevel >= ItemQuality.Legendary)
                 {
                     return false;
