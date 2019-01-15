@@ -74,7 +74,7 @@ namespace Trinity.Components.QuestTools
             behavior.Update();
 
             if (profile_behavior.QuestId == 0)
-                profile_behavior.QuestId = (SNOQuest)1;
+                profile_behavior.QuestId = 1;
 
             if (profile_behavior.StepId == 0)
                 profile_behavior.StepId = 1;

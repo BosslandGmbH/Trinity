@@ -38,7 +38,7 @@ namespace Trinity.Components.QuestTools
     {
         public EnhancedLeaveGameTag()
         {
-            QuestId = (int)QuestId <= 0 ? (SNOQuest)1 : QuestId;
+            QuestId = QuestId <= 0 ? 1 : QuestId;
         }
 
         private bool _isDone;
@@ -68,7 +68,7 @@ namespace Trinity.Components.QuestTools
     {
         public EnhancedLoadProfileTag()
         {
-            QuestId = (int)QuestId <= 0 ? (SNOQuest)1 : QuestId;
+            QuestId = QuestId <= 0 ? 1 : QuestId;
         }
 
         private bool _isDone;
@@ -148,7 +148,7 @@ namespace Trinity.Components.QuestTools
     {
         public EnhancedWaitTimerTag()
         {
-            QuestId = (int)QuestId <= 0 ? (SNOQuest)1 : QuestId;
+            QuestId = QuestId <= 0 ? 1 : QuestId;
         }
 
         private bool _isDone;
@@ -178,7 +178,7 @@ namespace Trinity.Components.QuestTools
     {
         public EnhancedUseObjectTag()
         {
-            QuestId = (int)QuestId <= 0 ? (SNOQuest)1 : QuestId;
+            QuestId = QuestId <= 0 ? 1 : QuestId;
         }
 
         private bool _isDone;
@@ -208,7 +208,7 @@ namespace Trinity.Components.QuestTools
     {
         public EnhancedUsePowerTag()
         {
-            QuestId = (int)QuestId <= 0 ? (SNOQuest)1 : QuestId;
+            QuestId = QuestId <= 0 ? 1 : QuestId;
         }
 
         private bool _isDone;
@@ -238,7 +238,7 @@ namespace Trinity.Components.QuestTools
     {
         public EnhancedToggleTargetingTag()
         {
-            QuestId = (int)QuestId <= 0 ? (SNOQuest)1 : QuestId;
+            QuestId = QuestId <= 0 ? 1 : QuestId;
         }
 
         private bool _isDone;

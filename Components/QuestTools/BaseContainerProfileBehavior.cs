@@ -16,7 +16,7 @@ namespace Trinity.Components.QuestTools
         protected BaseContainerProfileBehavior()
         {
             LoadDefaults();
-            QuestId = (int)QuestId <= 0 ? (SNOQuest)1 : QuestId;
+            QuestId = QuestId <= 0 ? 1 : QuestId;
             TagClassName = GetType().Name;
         }
 

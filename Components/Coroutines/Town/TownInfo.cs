@@ -73,7 +73,7 @@ namespace Trinity.Components.Coroutines.Town
             get
             {
                 var vectors = new List<Vector3>();
-                var levelAreaId = ZetaDia.CurrentLevelAreaSnoId;
+                SNOLevelArea levelAreaId = ZetaDia.CurrentLevelAreaSnoId;
                 switch (levelAreaId)
                 {
                     case SNOLevelArea.A1_trOUT_NewTristram: // Campaign A1 Hub
