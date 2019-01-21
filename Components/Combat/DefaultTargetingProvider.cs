@@ -261,7 +261,7 @@ namespace Trinity.Components.Combat
             if (Core.Player.IsInBossEncounter && currentTarget != null && currentTarget.ActorSnoId == (int) SNOActor.Belial)
                 return distance <= rangeRequired;
 
-            return distance <= rangeRequired && (distance < 7f || IsInLineOfSight(position));
+            return distance <= rangeRequired && (distance <= 7.0f || IsInLineOfSight(position));
         }
 
         public bool IsInLineOfSight(TrinityActor currentTarget)
