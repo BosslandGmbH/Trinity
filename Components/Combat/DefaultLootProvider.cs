@@ -825,17 +825,10 @@ namespace Trinity.Components.Combat
             return false;
         }
 
-        private static int _lastBackPackCount;
-        private static int _lastProtectedSlotsCount;
-        private static Vector2 _lastBackPackLocation = new Vector2(-2, -2);
-
         public static readonly Vector2 NoFreeSlot = new Vector2(-1, -1);
 
         internal static void ResetBackPackCheck()
         {
-            _lastBackPackCount = -1;
-            _lastProtectedSlotsCount = -1;
-            _lastBackPackLocation = new Vector2(-2, -2);
             LastCheckBackpackDurability = DateTime.MinValue;
         }
 
@@ -873,22 +866,12 @@ namespace Trinity.Components.Combat
             {
                 try
                 {
-                    if (!forceRefresh && _lastBackPackLocation != new Vector2(-2, -2) && _lastBackPackLocation != new Vector2(-1, -1) &&
-                        _lastBackPackCount == Core.Inventory.BackpackItemCount &&
-                        _lastProtectedSlotsCount == CharacterSettings.Instance.ProtectedBagSlots.Count)
-                    {
-                        return _lastBackPackLocation;
-                    }
-
                     bool[,] backpackSlotBlocked = new bool[10, 6];
 
                     int freeBagSlots = 60;
 
-                    if (!forceRefresh)
-                    {
-                        _lastProtectedSlotsCount = CharacterSettings.Instance.ProtectedBagSlots.Count;
-                        _lastBackPackCount = Core.Inventory.BackpackItemCount;
-                    }
+                    int lastProtectedSlotsCount = CharacterSettings.Instance.ProtectedBagSlots.Count;
+                    int lastBackPackCount = Core.Inventory.BackpackItemCount;
 
                     // Block off the entire of any "protected bag slots"
                     foreach (InventorySquare square in CharacterSettings.Instance.ProtectedBagSlots)
@@ -958,7 +941,7 @@ namespace Trinity.Components.Combat
                     }
 
                     bool noFreeSlots = freeBagSlots < 1;
-                    int unprotectedSlots = 60 - _lastProtectedSlotsCount;
+                    int unprotectedSlots = 60 - lastProtectedSlotsCount;
 
                     // Use count of Unprotected slots if FreeBagSlots is higher than unprotected slots
                     int minFreeSlots = Core.Player.IsInTown ?
@@ -966,13 +949,13 @@ namespace Trinity.Components.Combat
                         Math.Min(FreeBagSlots, unprotectedSlots);
 
                     // free bag slots is less than required
-                    if (noFreeSlots || freeBagSlots < minFreeSlots && !forceRefresh)
+                    if (noFreeSlots || freeBagSlots < minFreeSlots)
                     {
                         Core.Logger.Debug("Free Bag Slots is less than required. FreeSlots={0}, FreeBagSlots={1} FreeBagSlotsInTown={2} IsInTown={3} Protected={4} BackpackCount={5}",
                             freeBagSlots, FreeBagSlots, FreeBagSlotsInTown, Core.Player.IsInTown,
-                            _lastProtectedSlotsCount, _lastBackPackCount);
-                        _lastBackPackLocation = NoFreeSlot;
-                        return _lastBackPackLocation;
+                            lastProtectedSlotsCount, lastBackPackCount);
+
+                        return NoFreeSlot;
                     }
 
                     // 10 columns
@@ -990,10 +973,6 @@ namespace Trinity.Components.Combat
                             if (!isOriginalTwoSlot)
                             {
                                 pos = new Vector2(col, row);
-                                if (!forceRefresh)
-                                {
-                                    _lastBackPackLocation = pos;
-                                }
                                 return pos;
                             }
 
@@ -1006,10 +985,6 @@ namespace Trinity.Components.Combat
                                 continue;
 
                             pos = new Vector2(col, row);
-                            if (!forceRefresh)
-                            {
-                                _lastBackPackLocation = pos;
-                            }
                             return pos;
                         }
                     }
@@ -1018,11 +993,6 @@ namespace Trinity.Components.Combat
                     Core.Logger.Debug("No Free slots!");
 
                     pos = NoFreeSlot;
-                    if (!forceRefresh)
-                    {
-                        _lastBackPackLocation = pos;
-                    }
-
                     return pos;
                 }
                 catch (Exception ex)
