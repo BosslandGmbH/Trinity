@@ -109,22 +109,26 @@ namespace Trinity.Framework.Actors.Properties
             actor.LastInventoryRow = actor.InventoryRow;
             actor.LastInventoryColumn = actor.InventoryColumn;
 
-            if (actor.LastInventorySlot == InventorySlot.None && actor.InventorySlot == InventorySlot.BackpackItems)
-            {
-                actor.OnPickedUp();
-            }
+            bool onPicked = actor.LastInventorySlot == InventorySlot.None &&
+                            actor.InventorySlot == InventorySlot.BackpackItems;
 
-            if (columnChanged || rowChanged || slotChanged)
-            {
-                actor.OnMoved();
-            }
+            bool onMoved = columnChanged || rowChanged || slotChanged;
 
-            if (actor.InventorySlot == InventorySlot.BackpackItems && actor.IsUnidentified && !actor.Attributes.IsUnidentified)
-            {
-                actor.OnIdentified();
-            }
+            bool onIdentified = actor.InventorySlot == InventorySlot.BackpackItems && actor.IsUnidentified &&
+                                !actor.Attributes.IsUnidentified;
 
+            // Hard-update the properties.
             Create(actor);
+
+            // Now trigger the callbacks.
+            if (onPicked)
+                actor.OnPickedUp();
+
+            if (onMoved)
+                actor.OnMoved();
+
+            if (onIdentified)
+                actor.OnIdentified();
         }
 
         public static GlobeTypes GetGlobeType(TrinityActor cacheObject)
