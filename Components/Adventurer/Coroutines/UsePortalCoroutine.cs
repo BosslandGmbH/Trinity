@@ -182,17 +182,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> Interact(DiaObject actor)
         {
-            await MoveTo.Execute(actor.Position, actor.Name, actor.InteractDistance);
-
-            Core.Logger.Debug($"[UsePortal] Attempting to use portal {((SNOActor)actor.ActorSnoId)} at distance {actor.Distance}");
-            StatusText = $"[UsePortal] Attempting to use portal {((SNOActor)actor.ActorSnoId)} at distance {actor.Distance}";
-
-            // Doubly-make sure we interact
-            bool retVal = actor.Interact();
-
-            _interactAttempts++;
-            await Coroutine.Sleep(200);
-            return retVal;
+            return await MoveToAndInteract.Execute(actor);
         }
     }
 }
