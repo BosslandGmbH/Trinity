@@ -469,6 +469,7 @@
         DemonOrganEye = 17,
         DemonOrganSpineCord = 18,
         DemonOrganTooth = 19,
+        GreaterRiftKeys = 20
     }
 
     public enum SocketResult // 2.5.0.44030 @27717400 index:38

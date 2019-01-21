@@ -275,11 +275,8 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         {
             get
             {
-                ZetaDia.Actors.Update();
-                Core.Update();
-                var keys = AdvDia.StashAndBackpackItems.Where(i => i.RawItemType == RawItemType.TieredRiftKey).Sum(k => k.ItemStackQuantity);
-                Core.Logger.Log("I have {0} rift keys.", keys);
-                return keys;
+                return ZetaDia.Storage?.PlayerDataManager?.ActivePlayerData?.GetCurrencyAmount(CurrencyType
+                           .GreaterRiftKeys) ?? 0;
             }
         }
 
