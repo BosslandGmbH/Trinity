@@ -251,13 +251,17 @@ namespace Trinity.Components.Combat
                 }
             }
 
+            // Some calculated values are 3.8 and the minimum possible destination is 4.0 to come by the object.
+            // However the real interactable range is 7.0f.
+            rangeRequired = Math.Max(7f, rangeRequired);
+
             Core.Logger.Verbose(LogCategory.Targetting, $">> CurrentPower={power} CurrentTarget={position} RangeReq:{rangeRequired} Dist:{distance}");
 
             // Handle Belial differently, he's never in LineOfSight.
             if (Core.Player.IsInBossEncounter && currentTarget != null && currentTarget.ActorSnoId == (int) SNOActor.Belial)
                 return distance <= rangeRequired;
 
-            return distance <= rangeRequired && IsInLineOfSight(position);
+            return distance <= rangeRequired && (distance <= 7.0f || IsInLineOfSight(position));
         }
 
         public bool IsInLineOfSight(TrinityActor currentTarget)
