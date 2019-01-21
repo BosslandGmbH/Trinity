@@ -70,19 +70,19 @@ namespace Trinity.Modules
         /// Stone of recall spell (town portal)
         /// </summary>
         public CastTrackInfo StoneOfRecall = new CastTrackInfo(SNOPower.UseStoneOfRecall,
-            i => i.DurationMs > 3900 || ZetaDia.Globals.IsLoadingWorld || ZetaDia.Globals.WorldSnoId != i.WorldId);
+            i => i.DurationMs > 3750 || ZetaDia.Globals.IsLoadingWorld || ZetaDia.Globals.WorldSnoId != i.WorldId);
 
         /// <summary>
         /// Teleport to player spell
         /// </summary>
         public CastTrackInfo TeleportToPlayer = new CastTrackInfo(SNOPower.TeleportToPlayer_Cast,
-            i => i.DurationMs > 3900 || ZetaDia.Globals.IsLoadingWorld || i.StartPosition.Distance(ZetaDia.Me.Position) > 100f);
+            i => i.DurationMs > 3750 || ZetaDia.Globals.IsLoadingWorld || i.StartPosition.Distance(ZetaDia.Me.Position) > 100f);
 
         /// <summary>
         /// Teleport spell (using the waypoint map).
         /// </summary>
         public CastTrackInfo TeleportToWaypoint = new CastTrackInfo(SNOPower.TeleportToWaypoint_Cast,
-            i => i.DurationMs > 3900 || ZetaDia.Globals.IsLoadingWorld || ZetaDia.Globals.WorldSnoId != i.WorldId);
+            i => i.DurationMs > 3750 || ZetaDia.Globals.IsLoadingWorld || ZetaDia.Globals.WorldSnoId != i.WorldId);
 
         #endregion
 

@@ -314,7 +314,9 @@ namespace Trinity.Components.Coroutines.Town
                 ZetaDia.Me.UseTownPortal();
             }
 
-            await Coroutine.Wait(5000, () => !Core.CastStatus.StoneOfRecall.IsCasting && !ZetaDia.IsInTown);
+            await Coroutine.Wait(5000, () =>
+                !Core.CastStatus.StoneOfRecall.IsCasting &&
+                ZetaDia.IsInTown);
 
             return true;
         }
