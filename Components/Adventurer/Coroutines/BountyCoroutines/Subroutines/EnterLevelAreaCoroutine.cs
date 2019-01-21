@@ -329,6 +329,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             }
 
             _interactRange = portal.InteractDistance;
+            if (_interactRange < 7.0f) _interactRange = 7.0f;
 
             Core.Logger.Debug($"[EnterLevelArea] Using interact range from portal: {_interactRange}");
 
