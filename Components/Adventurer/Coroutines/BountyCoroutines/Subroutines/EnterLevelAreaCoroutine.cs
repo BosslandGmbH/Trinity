@@ -17,7 +17,7 @@ using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.Actors.Gizmos;
-
+using Trinity.Components.Coroutines;
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
@@ -343,8 +343,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _objectiveLocation = portal.Position;
             State = States.Entering;
             _prePortalWorldDynamicId = AdvDia.CurrentWorldDynamicId;
-
-            Core.PlayerMover.MoveTowards(portal.Position);
+            await MoveToAndInteract.Execute(portal);
             await Coroutine.Yield();
             return false;
         }
