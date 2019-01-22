@@ -60,42 +60,45 @@ namespace Trinity.DbProvider
 
         protected bool CheckForStuck()
         {
-            _lastPosition = ZetaDia.Me.Position;
-            _lastStuckCheck = DateTime.UtcNow;
-
-            if (IsNotStuck())
+            if (ZetaDia.Me != null)
             {
-                if (_isSuspectedStuck)
-                    Core.Logger.Log(LogCategory.StuckHandler, "No longer suspected of stuck");
+                _lastPosition = ZetaDia.Me.Position;
+                _lastStuckCheck = DateTime.UtcNow;
 
-                if (_isStuck)
-                    Core.Logger.Log(LogCategory.StuckHandler, "No longer stuck!");
-
-                Reset();
-                return _isStuck;
-            }
-
-            if (!_isStuck && !_isSuspectedStuck)
-            {
-                SetSuspectedStuck();
-                return _isStuck;
-            }
-
-            if (_isSuspectedStuck)
-            {
-                var millisecondsSuspected = DateTime.UtcNow.Subtract(_suspectedStuckStartTime).TotalMilliseconds;
-                if (millisecondsSuspected >= _stuckValidationTime)
+                if (IsNotStuck())
                 {
-                    SetStuck();
+                    if (_isSuspectedStuck)
+                        Core.Logger.Log(LogCategory.StuckHandler, "No longer suspected of stuck");
+
+                    if (_isStuck)
+                        Core.Logger.Log(LogCategory.StuckHandler, "No longer stuck!");
+
+                    Reset();
                     return _isStuck;
                 }
 
-                Core.Logger.Log(LogCategory.StuckHandler, "Suspected Stuck for {0}ms", millisecondsSuspected);
-                return _isStuck;
-            }
+                if (!_isStuck && !_isSuspectedStuck)
+                {
+                    SetSuspectedStuck();
+                    return _isStuck;
+                }
 
-            if (_isStuck)
-                return true;
+                if (_isSuspectedStuck)
+                {
+                    var millisecondsSuspected = DateTime.UtcNow.Subtract(_suspectedStuckStartTime).TotalMilliseconds;
+                    if (millisecondsSuspected >= _stuckValidationTime)
+                    {
+                        SetStuck();
+                        return _isStuck;
+                    }
+
+                    Core.Logger.Log(LogCategory.StuckHandler, "Suspected Stuck for {0}ms", millisecondsSuspected);
+                    return _isStuck;
+                }
+
+                if (_isStuck)
+                    return true;
+            }
 
             Reset();
             return _isStuck;
