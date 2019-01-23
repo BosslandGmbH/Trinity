@@ -310,9 +310,8 @@ namespace Trinity.Framework.Actors.ActorTypes
             }
         }
 
-        public DiaObject ToDiaObject() => Actor?.IsValid ?? false ? Actor.BaseAddress.UnsafeCreate<DiaObject>() : null;
+        public DiaObject ToDiaObject() => Actor?.IsValid ?? false ? Actor : null;
 
-        public DiaObject ToDiaUnit() => Actor?.IsValid ?? false ? Actor.BaseAddress.UnsafeCreate<DiaUnit>() : null;
+        public DiaObject ToDiaUnit() => Actor?.IsValid ?? false ? Actor : null;
     }
-
 }

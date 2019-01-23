@@ -12,6 +12,7 @@ using Zeta.Bot.Coroutines;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
+using Zeta.Game.Internals.Actors.Gizmos;
 
 namespace Trinity.Components.Combat
 {
@@ -111,26 +112,27 @@ namespace Trinity.Components.Combat
                 Clear();
                 return false;
             }
-
-            // Gizmos should always use the MoveAndInteract coroutine.
-            // Don't try to outsmart the game with custom shit down the line.
-            if (target.IsGizmo &&
-                target.ToDiaObject() is DiaGizmo obj)
+            
+            if (TryBlacklist(target))
             {
-                // TODO: Fix the interaction condition here.
-                if (await CommonCoroutines.MoveAndInteract(
-                        obj,
-                        () => obj.HasBeenOperated) == CoroutineResult.Running)
-                {
-                    return true;
-                }
-
                 Clear();
                 return false;
             }
 
-            if (TryBlacklist(target))
+            // Gizmos should always use the MoveAndInteract coroutine.
+            // Don't try to outsmart the game with custom shit down the line.
+            if (target.IsGizmo &&
+                target.ToDiaObject() is DiaGizmo obj &&
+                !obj.IsDestructibleObject)
             {
+                // TODO: Fix the interaction condition here.
+                if (await CommonCoroutines.MoveAndInteract(
+                        obj,
+                        () => obj is GizmoLootContainer lc ? lc.IsOpen : obj.HasBeenOperated) == CoroutineResult.Running)
+                {
+                    return true;
+                }
+
                 Clear();
                 return false;
             }
@@ -312,7 +314,7 @@ namespace Trinity.Components.Combat
             {
                 return false;
             }
-
+            
             var rangeRequired = Math.Max(1f, power.MinimumRange);
             var distance = position.Distance(Core.Player.Position);
 

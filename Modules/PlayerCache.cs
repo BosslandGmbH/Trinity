@@ -329,9 +329,21 @@ namespace Trinity.Modules
             var player = ZetaDia.Storage.PlayerDataManager.ActivePlayerData;
 
             BloodShards = player.BloodshardCount;
-            MyDynamicID = _me.CommonData.AnnId;
-            CurrentSceneSnoId = ZetaDia.Me.CurrentScene.SceneInfo.SNOId;
 
+            if (ZetaDia.Me == null)
+            {
+                // Bug out early.
+                return;
+            }
+
+            MyDynamicID = ZetaDia.Me.CommonData?.AnnId ?? 0;
+            CurrentSceneSnoId = ZetaDia.Me.CurrentScene?.SceneInfo?.SNOId ?? SNOScene.None;
+
+            if (CurrentSceneSnoId == SNOScene.None)
+            {
+                // Bug out early.
+                return;
+            }
             //Zeta.Game.ZetaDia.Me.CommonData.GetAttribute<int>(Zeta.Game.Internals.Actors.ActorAttributeType.TieredLootRunRewardChoiceState) > 0;
 
             Coinage = player.Coinage;
