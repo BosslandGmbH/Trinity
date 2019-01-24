@@ -1,69 +1,48 @@
 ﻿using System;
 using System.Diagnostics;
+using log4net;
+using Zeta.Common;
 
 namespace Trinity.Framework.Helpers
 {
-    //public static class PerformanceTracker
-    //{
-    //    public static ConcurrentDictionary<DateTime, TrackedPerformance> Performances = new ConcurrentDictionary<DateTime, TrackedPerformance>();
-
-    //    public class TrackedPerformance
-    //    {
-    //        public TrackedPerformance(DateTime startTime, DateTime endTime)
-    //        {
-    //            StartTime = startTime;
-    //            EndTime = endTime;
-    //            Duration = endTime - startTime;
-    //            Milliseconds = (float)Duration.TotalMilliseconds;
-    //        }
-
-    //        public DateTime StartTime { get; set; }
-    //        public DateTime EndTime { get; set; }
-    //        public TimeSpan Duration { get; set; }
-    //        public float Milliseconds { get; set; }
-    //    }
-    //}
-
     [DebuggerStepThrough]
     public class PerformanceLogger : IDisposable
     {
-        private static readonly log4net.ILog Logging = Zeta.Common.Logger.GetLoggerInstanceForType();
-        private readonly string _BlockName;
-        private readonly Stopwatch _Stopwatch;
-        private bool _IsDisposed;
-        private readonly bool _ForceLog;
+        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private readonly string _blockName;
+        private readonly Stopwatch _stopwatch;
+        private bool _isDisposed;
+        private readonly bool _forceLog;
 
         public PerformanceLogger(string blockName, bool forceLog = false)
         {
-            _ForceLog = forceLog;
-            _BlockName = blockName;
-            _Stopwatch = new Stopwatch();
-            _Stopwatch.Start();
+            _forceLog = forceLog;
+            _blockName = blockName;
+            _stopwatch = new Stopwatch();
+            _stopwatch.Start();
         }
 
         #region IDisposable Members
 
         public void Dispose()
         {
-            if (!_IsDisposed)
+            if (_isDisposed)
+                return;
+
+            _isDisposed = true;
+            _stopwatch.Stop();
+            if (_stopwatch.Elapsed.TotalMilliseconds > 5 || _forceLog)
             {
-                _IsDisposed = true;
-                _Stopwatch.Stop();
-                if (_Stopwatch.Elapsed.TotalMilliseconds > 5 || _ForceLog)
+                if (Core.Settings.Advanced.LogCategories.HasFlag(LogCategory.Performance) || _forceLog)
                 {
-                    if (Core.Settings.Advanced.LogCategories.HasFlag(LogCategory.Performance) || _ForceLog)
-                    {
-                        Logging.DebugFormat("[TrinityPlugin][Performance] Execution of {0} took {1:00.00000}ms.", _BlockName,
-                                            _Stopwatch.Elapsed.TotalMilliseconds);
-                    }
-                    else if (_Stopwatch.Elapsed.TotalMilliseconds > 1000)
-                    {
-                        Logging.ErrorFormat("[TrinityPlugin][Performance] Execution of {0} took {1:00.00000}ms.", _BlockName,
-                                            _Stopwatch.Elapsed.TotalMilliseconds);
-                    }
+                    s_logger.Debug($"[{_blockName}] Execution  took {_stopwatch.Elapsed}.");
                 }
-                GC.SuppressFinalize(this);
+                else if (_stopwatch.Elapsed.TotalMilliseconds > 1000)
+                {
+                    s_logger.Error($"[{_blockName}] Execution  took {_stopwatch.Elapsed}.");
+                }
             }
+            GC.SuppressFinalize(this);
         }
 
         #endregion IDisposable Members

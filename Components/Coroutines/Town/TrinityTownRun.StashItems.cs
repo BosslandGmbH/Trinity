@@ -167,6 +167,7 @@ namespace Trinity.Components.Coroutines.Town
                 {
                     s_logger.Debug($"[{nameof(StashItems)}] Changing to stash page: {page}");
                     InventoryManager.SwitchStashPage(page);
+                    Core.StuckHandler.Reset("Still stashing...");
                     return CoroutineResult.Running;
                 }
 
@@ -185,6 +186,7 @@ namespace Trinity.Components.Coroutines.Town
                 s_logger.Error($"[{nameof(StashItems)}] Exception Stashing Item", ex);
             }
 
+            Core.StuckHandler.Reset("Still stashing...");
             return CoroutineResult.Running;
         }
         

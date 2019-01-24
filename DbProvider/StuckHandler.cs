@@ -23,7 +23,7 @@ using Trinity.Routines;
 
 namespace Trinity.DbProvider
 {
-    public class StuckHandler : IStuckHandler
+    public class StuckHandler : DefaultStuckHandler
     {
         private DateTime _lastStuckCheck = DateTime.MinValue;
         private Vector3 _lastPosition = Vector3.Zero;
@@ -40,7 +40,7 @@ namespace Trinity.DbProvider
             GameEvents.OnWorldChanged += (sender, args) => Reset();
         }
 
-        public bool IsStuck
+        public new bool IsStuck
         {
             get
             {
@@ -333,21 +333,22 @@ namespace Trinity.DbProvider
             return false;
         }
 
-        public async Task<bool> DoUnstick()
-        {
-            Core.Logger.Warn("Trying to get Unstuck...");
-            Navigator.Clear();
-            Navigator.NavigationProvider.Clear();
-            await ClearDestructibleNearby();
+        //Try the default DB Unstick behavior.
+        //public async Task<bool> DoUnstick()
+        //{
+        //    Core.Logger.Warn("Trying to get Unstuck...");
+        //    Navigator.Clear();
+        //    Navigator.NavigationProvider.Clear();
+        //    await ClearDestructibleNearby();
 
-            await Navigator.SearchGridProvider.Update();
-            var startPosition = ZetaDia.Me.Position;
-            Core.Logger.Log("Starting Segment 1...");
-            await MoveAwayFrom(startPosition);
-            Core.Logger.Log("Starting Segment 2 ...");
-            await MoveAwayFrom(startPosition);
-            return true;
-        }
+        //    await Navigator.SearchGridProvider.Update();
+        //    var startPosition = ZetaDia.Me.Position;
+        //    Core.Logger.Log("Starting Segment 1...");
+        //    await MoveAwayFrom(startPosition);
+        //    Core.Logger.Log("Starting Segment 2 ...");
+        //    await MoveAwayFrom(startPosition);
+        //    return true;
+        //}
 
         private async Task<bool> ClearDestructibleNearby()
         {

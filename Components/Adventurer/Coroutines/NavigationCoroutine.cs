@@ -59,20 +59,19 @@ namespace Trinity.Components.Adventurer.Coroutines
 
             LastDestination = _moveToDestination;
 
-            if (await _navigationCoroutine.GetCoroutine())
+            if (!await _navigationCoroutine.GetCoroutine())
+                return false;
+
+            LastResult = _navigationCoroutine.State == States.Completed ? CoroutineResult.Success : CoroutineResult.Failure;
+
+            if (_navigationCoroutine.State == States.Failed)
             {
-                LastResult = _navigationCoroutine.State == States.Completed ? CoroutineResult.Success : CoroutineResult.Failure;
-
-                if (_navigationCoroutine.State == States.Failed)
-                {
-                    Core.Logger.Debug($"NavigationCoroutine failed for {destination} Distance={destination.Distance(ZetaDia.Me.Position)}, within a range of (specified={distance}, actual={_navigationCoroutine._distance}). ({callerPath.Split('\\').LastOrDefault()} > {caller} )");
-                    return true;
-                }
-
-                _navigationCoroutine = null;
+                Core.Logger.Debug($"NavigationCoroutine failed for {destination} Distance={destination.Distance(ZetaDia.Me.Position)}, within a range of (specified={distance}, actual={_navigationCoroutine._distance}). ({callerPath.Split('\\').LastOrDefault()} > {caller} )");
                 return true;
             }
-            return false;
+
+            _navigationCoroutine = null;
+            return true;
         }
 
         private enum States
