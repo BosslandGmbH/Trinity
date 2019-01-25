@@ -1,0 +1,13 @@
+<Profile>
+  <Name>SimpleBounties</Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>True</PickupLoot>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="-1" />
+  <Order>
+    <RunBountySimple act="A1" />
+    <RunBountySimple act="A2" />
+    <RunBountySimple act="A3" />
+    <RunBountySimple act="A4" />
+    <RunBountySimple act="A5" />
+  </Order>
+</Profile>
