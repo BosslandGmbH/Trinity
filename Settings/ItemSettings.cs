@@ -195,7 +195,7 @@ namespace Trinity.Settings
         }
 
         [DataMember]
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         public bool StashTreasureBags
         {
             get => _stashTreasureBags;
