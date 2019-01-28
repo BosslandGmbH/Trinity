@@ -529,7 +529,7 @@ namespace Trinity.Components.Combat
             // Keep any high gems placed in backpack while levelling, so we can socket items with them.
             if (item.IsGem &&
                 item.Stats.GemQuality >= GemQuality.Marquise &&
-                ZetaDia.Me.Level < 70)
+                ZetaDia.Me?.Level < 70)
             {
                 return false;
             }
