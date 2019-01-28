@@ -3,6 +3,7 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using log4net;
 using Trinity.Components.Adventurer;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.DbProvider;
@@ -21,6 +22,8 @@ namespace Trinity.Framework.Grid
 {
     public sealed class TrinityGrid : Grid<AvoidanceNode>
     {
+        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+
         private const int Bounds = 2500;
 
         public override float BoxSize => 2.5f;
@@ -63,7 +66,7 @@ namespace Trinity.Framework.Grid
             }
             catch (Exception ex)
             {
-                Core.Logger.Error($"Exception in CanRayCast from={@from} to={to} {ex}");
+                s_logger.Error($"[{nameof(CanRayCast)}] Failed to raycast from={@from} to={to}", ex);
             }
             return false;
         }
@@ -216,7 +219,7 @@ namespace Trinity.Framework.Grid
             if (!IsValidGridWorldPosition(origin) || !IsValidGridWorldPosition(target)) return false;
             foreach (var node in GetRayLine(target, origin).Select(point => InnerGrid[point.X, point.Y]))
             {
-                if (node == null || flags == null)
+                if (node == null)
                     break;
 
                 foreach (var flag in flags)
@@ -259,36 +262,39 @@ namespace Trinity.Framework.Grid
 
         protected override void OnUpdated(SceneData newNodes)
         {
-            IsUpdatingNodes = true;
-
-            var sw = Stopwatch.StartNew();
-            var nodeCount = 0;
-
-            var gridName = GetType().Name;
-
-            foreach (var scene in newNodes.Scenes)
+            using (var t = new PerformanceLogger(nameof(OnUpdated)))
             {
-                var nodes = scene.ExplorationNodes.SelectMany(n => n.Nodes, (p, c) => new AvoidanceNode(c)).ToList();
+                IsUpdatingNodes = true;
 
-                Core.Logger.Verbose($"[{gridName}] Updating grid for scene '{scene.SceneHash}' with {scene.ExplorationNodes.Count} new nodes");
+                var sw = Stopwatch.StartNew();
+                var nodeCount = 0;
 
-                UpdateInnerGrid(nodes);
-
-                foreach (var node in nodes)
+                foreach (var scene in newNodes.Scenes)
                 {
-                    nodeCount++;
-                    if (GetNeighbors(node).Any(n => (n.NodeFlags & NodeFlags.AllowWalk) == 0))
+                    var nodes = scene.ExplorationNodes.SelectMany(n => n.Nodes, (p, c) => new AvoidanceNode(c))
+                        .ToList();
+
+                    s_logger.Debug(
+                        $"[{nameof(OnUpdated)}] Updating grid for scene '{scene.SceneHash}' with {scene.ExplorationNodes.Count} new nodes");
+
+                    UpdateInnerGrid(nodes);
+
+                    foreach (var node in nodes)
                     {
-                        node.NodeFlags |= NodeFlags.NearWall;
+                        nodeCount++;
+                        if (GetNeighbors(node).Any(n => (n.NodeFlags & NodeFlags.AllowWalk) == 0))
+                        {
+                            node.NodeFlags |= NodeFlags.NearWall;
+                        }
                     }
                 }
+
+                IsUpdatingNodes = false;
+                IsPopulated = true;
+
+                sw.Stop();
+                s_logger.Debug($"[{nameof(OnUpdated)}] Avoidance Grid updated NewNodes={nodeCount} NearestNodeFound={NearestNode != null} Time={t.Elapsed}");
             }
-
-            IsUpdatingNodes = false;
-            IsPopulated = true;
-
-            sw.Stop();
-            Core.Logger.Verbose($"Avoidance Grid updated NewNodes={nodeCount} NearestNodeFound={NearestNode != null} Time={sw.Elapsed.TotalMilliseconds}ms");
         }
 
         public void FlagNodes(IEnumerable<AvoidanceNode> nodes, AvoidanceFlags flags, int weightModification = 0)

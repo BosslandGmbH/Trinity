@@ -1,19 +1,24 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using GreyMagic;
+using log4net;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Framework;
-using Zeta.Game;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Zeta.Common;
+using Zeta.Game;
 using Zeta.Game.Internals;
-using System.Collections;
 
 namespace Trinity.Modules
 {
     public class SceneStorage : Module, IEnumerable<WorldScene>
     {
+        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+
         public delegate void GridProviderEventHandler(List<WorldScene> provider);
 
         private SNOWorld _currentWorld;
@@ -29,8 +34,8 @@ namespace Trinity.Modules
         {
             get
             {
-                Vector3 cachedPos = Core.Player.Position;
-                Vector3 pos = cachedPos == Vector3.Zero ? ZetaDia.Me.Position : cachedPos;
+                var cachedPos = Core.Player.Position;
+                var pos = cachedPos == Vector3.Zero ? ZetaDia.Me.Position : cachedPos;
                 var worldId = ZetaDia.Globals.WorldId;
 
                 return CurrentWorldScenes.FirstOrDefault(
@@ -57,7 +62,10 @@ namespace Trinity.Modules
             CurrentWorldScenes.RemoveAll(s => s.DynamicWorldId != currentWorldDynamicId && now.Subtract(s.GridCreatedTime).TotalSeconds > 240);
         }
 
-        protected override void OnPulse() => Update();
+        protected override void OnPulse()
+        {
+            Update();
+        }
 
         public void Update()
         {
@@ -69,17 +77,17 @@ namespace Trinity.Modules
             {
                 if (!ZetaDia.IsInGame)
                 {
-                    Core.Logger.Debug("[SceneStorage] Left Game....");
+                    s_logger.Debug($"[{nameof(Update)}] Left Game...");
                     Reset();
                     return;
                 }
                 if (ZetaDia.Globals.IsLoadingWorld)
                 {
-                    Core.Logger.Debug("[SceneStorage] World loading....");
+                    s_logger.Debug($"[{nameof(Update)}] World loading...");
                     return;
                 }
 
-                Core.Logger.Debug("[SceneStorage] World has changed from {0} to {1}", _currentWorld, currentWorldId);
+                s_logger.Debug($"[{nameof(Update)}] World has changed from {_currentWorld} to {currentWorldId}.");
                 _currentWorld = currentWorldId;
                 Reset();
             }
@@ -88,19 +96,16 @@ namespace Trinity.Modules
             List<Scene> newScenes;
             try
             {
-                newScenes = ZetaDia.Scenes.Where(s => s.IsAlmostValid() && !CurrentWorldSceneIds.Contains(s.GetSceneNameString())).ToList();
+                newScenes = ZetaDia.Scenes
+                    .Where(s => s.IsAlmostValid() && !CurrentWorldSceneIds.Contains(s.GetSceneNameString())).ToList();
             }
             catch (NullReferenceException)
             {
                 return;
             }
-            catch (Exception ex)
+            catch (PartialReadWriteException)
             {
-                if (ex.Message.Contains("ReadProcessMemory"))
-                {
-                    return;
-                }
-                throw;
+                return;
             }
 
             SNOWorld worldId = 0;
@@ -114,7 +119,7 @@ namespace Trinity.Modules
                     var sceneHashName = scene.GetSceneNameString();
                     worldId = scene.Mesh.WorldId;
 
-                    Scene subScene = scene.Mesh.SubScene;
+                    var subScene = scene.Mesh.SubScene;
                     if (scene.IsAlmostValid() && scene.Mesh.ParentSceneId <= 0 && worldId == currentWorldId)
                     {
                         if (scene.Mesh.Zone.GridSquares.Length <= 1 && (subScene != null && !subScene.HasGridSquares()))
@@ -135,29 +140,29 @@ namespace Trinity.Modules
                 }
             }
 
-            if (addedScenes.Count > 0)
-            {                
-                Core.Logger.Debug("[ScenesStorage] Found {0} new scenes", addedScenes.Count);
-                var sceneData = CreateSceneData(addedScenes, worldId);
-                foreach (var grid in GridStore.GetCurrentGrids())
-                {
-                    grid.Update(sceneData);
-                }
+            if (addedScenes.Count <= 0)
+                return;
 
-                if (CurrentScene != null)
+            s_logger.Debug($"[{nameof(Update)}] Found {addedScenes.Count} new scenes.");
+            var sceneData = CreateSceneData(addedScenes, worldId);
+            foreach (var grid in GridStore.GetCurrentGrids())
+            {
+                grid.Update(sceneData);
+            }
+
+            if (CurrentScene != null)
+            {
+                foreach (var scene in CurrentWorldScenes.Where(s => !s.HasPlayerConnection))
                 {
-                    foreach (var scene in CurrentWorldScenes.Where(s => !s.HasPlayerConnection))
+                    if (scene == CurrentScene || CurrentScene.IsConnected(scene))
                     {
-                        if (scene == CurrentScene || CurrentScene.IsConnected(scene))
-                        {
-                            scene.HasPlayerConnection = true;
-                        }
+                        scene.HasPlayerConnection = true;
                     }
                 }
-
-                ScenesAdded?.Invoke(addedScenes);
-                Core.Logger.Debug("[ScenesStorage] Updates Finished", addedScenes.Count);
             }
+
+            ScenesAdded?.Invoke(addedScenes);
+            s_logger.Debug($"[{nameof(Update)}] Updates Finished.");
         }
 
         public SceneData CreateSceneData(IEnumerable<WorldScene> addedScenes, SNOWorld worldId)
@@ -199,7 +204,7 @@ namespace Trinity.Modules
 
         public void Reset()
         {
-            Core.Logger.Debug("[ScenesStorage] Reseting");
+            s_logger.Debug($"[{nameof(Reset)}] Started");
             CurrentWorldSceneIds.Clear();
             CurrentWorldScenes.Clear();
             foreach (var grid in GridStore.GetCurrentGrids())
@@ -227,7 +232,9 @@ namespace Trinity.Modules
         }
 
         public WorldScene GetScene(Vector3 position)
-            => CurrentWorldScenes.FirstOrDefault(s => s.IsInScene(position));
+        {
+            return CurrentWorldScenes.FirstOrDefault(s => s.IsInScene(position));
+        }
     }
 
     public static class SceneExtensions

@@ -3,6 +3,7 @@ using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using Trinity.Framework.Grid;
 using Trinity.UI.Visualizer;
 using Zeta.Common;
@@ -12,6 +13,8 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 {
     public static class ExplorationHelpers
     {
+        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+
         public static Vector3 PriorityPosition { get; private set; }
 
         public static void ClearExplorationPriority()
@@ -28,7 +31,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
             VisualizerViewModel.DebugPosition = position;
 
-            Core.Logger.Warn($"Setting priority exploration position to '{position}' {position.Distance(Core.Player.Position)} yards away!");
+            s_logger.Warn($"[{nameof(SetExplorationPriority)}] Setting priority exploration position to '{position}' {position.Distance(ZetaDia.Me?.Position ?? Vector3.Zero)} yards away!");
 
             foreach (var connection in Core.Scenes.CurrentScene.GetConnectedScenes(Core.Scenes.GetScene(position)))
             {
@@ -60,7 +63,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             var worldId = AdvDia.CurrentWorldDynamicId;
             var myPosition = AdvDia.MyPosition;
 
-            using (new PerformanceLogger("NearestUnvisitedNodeLocation", true))
+            using (new PerformanceLogger(nameof(NearestWeightedUnvisitedNode), true))
             {
                 var nearestNode = ExplorationGrid.Instance.GetNearestWalkableNodeToPosition(myPosition);
 
@@ -78,7 +81,8 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     if (closestUnvisitedNode != null)
                     {
                         var weight = PriorityDistanceFormula(closestUnvisitedNode);
-                        Core.Logger.Debug(LogCategory.Exploration, $"Explore: Best Rift Weighted Node: [{closestUnvisitedNode.NavigableCenter.X},{closestUnvisitedNode.NavigableCenter.Y},{closestUnvisitedNode.NavigableCenter.Z}] Dist:{closestUnvisitedNode.Distance} Weight: {weight} {(closestUnvisitedNode.Priority ? "(Priority)" : "")} ");
+                        s_logger.Debug(
+                            $"[{nameof(NearestWeightedUnvisitedNode)}] Best Rift Weighted Node: [{closestUnvisitedNode.NavigableCenter.X},{closestUnvisitedNode.NavigableCenter.Y},{closestUnvisitedNode.NavigableCenter.Z}] Dist:{closestUnvisitedNode.Distance} Weight: {weight} {(closestUnvisitedNode.Priority ? "(Priority)" : "")} ");
                         return closestUnvisitedNode;
                     }
                 }
@@ -99,11 +103,12 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                         .ThenByDescending(PriorityDistanceFormula);
 
                     var closestUnvisitedNode = closestUnvisitedNodes.FirstOrDefault();
-                    if (closestUnvisitedNode != null)
-                    {
-                        Core.Logger.Debug(LogCategory.Exploration, $"Explore: Selected Nearby Node: [{closestUnvisitedNode.NavigableCenter.X},{closestUnvisitedNode.NavigableCenter.Y},{closestUnvisitedNode.NavigableCenter.Z}] Dist:{closestUnvisitedNode.Distance} {(closestUnvisitedNode.Priority ? "(Priority)" : "")} ");
-                        return closestUnvisitedNode;
-                    }
+                    if (closestUnvisitedNode == null)
+                        continue;
+
+                    s_logger.Debug(
+                        $"[{nameof(NearestWeightedUnvisitedNode)}] Selected Nearby Node: [{closestUnvisitedNode.NavigableCenter.X},{closestUnvisitedNode.NavigableCenter.Y},{closestUnvisitedNode.NavigableCenter.Z}] Dist:{closestUnvisitedNode.Distance} {(closestUnvisitedNode.Priority ? "(Priority)" : "")} ");
+                    return closestUnvisitedNode;
                 }
 
                 // Try any nearby nodes
@@ -121,7 +126,8 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
                     if (closestUnvisitedNode != null)
                     {
-                        Core.Logger.Debug(LogCategory.Exploration, $"Explore: Selected Nearby Node: [{closestUnvisitedNode.NavigableCenter.X},{closestUnvisitedNode.NavigableCenter.Y},{closestUnvisitedNode.NavigableCenter.Z}] Dist:{closestUnvisitedNode.Distance} {(closestUnvisitedNode.Priority ? "(Priority)" : "")} ");
+                        Core.Logger.Debug(LogCategory.Exploration,
+                            $"Explore: Selected Nearby Node: [{closestUnvisitedNode.NavigableCenter.X},{closestUnvisitedNode.NavigableCenter.Y},{closestUnvisitedNode.NavigableCenter.Z}] Dist:{closestUnvisitedNode.Distance} {(closestUnvisitedNode.Priority ? "(Priority)" : "")} ");
                         return closestUnvisitedNode;
                     }
                 }
@@ -138,7 +144,8 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
                 if (node != null)
                 {
-                    Core.Logger.Debug(LogCategory.Exploration, $"Explore: Selected Nearby Node: [{node.NavigableCenter.X},{node.NavigableCenter.Y},{node.NavigableCenter.Z}] Dist:{node.Distance} {(node.Priority ? "(Priority)" : "")} ");
+                    Core.Logger.Debug(LogCategory.Exploration,
+                        $"Explore: Selected Nearby Node: [{node.NavigableCenter.X},{node.NavigableCenter.Y},{node.NavigableCenter.Z}] Dist:{node.Distance} {(node.Priority ? "(Priority)" : "")} ");
                     return node;
                 }
 
@@ -165,15 +172,13 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     var allNodes = ExplorationGrid.Instance.WalkableNodes.Count(n => levelAreaIds.Contains(n.LevelAreaId));
                     var unvisitedNodes = ExplorationGrid.Instance.WalkableNodes.Count(n => !n.IsVisited && levelAreaIds.Contains(n.LevelAreaId));
 
-                    Core.Logger.Log("[ExplorationLogic] Couldn't find any unvisited nodes. Current AdvDia.LevelAreaSnoIdId: {0}, " +
-                                "ZetaDia.CurrentLevelAreaSnoId: {3}, Total Nodes: {1} Unvisited Nodes: {2} Searching In [{4}] HasNavServerData={5}",
-                                AdvDia.CurrentLevelAreaId, allNodes, unvisitedNodes,
-                                ZetaDia.CurrentLevelAreaSnoId, string.Join(", ", levelAreaIds),
-                                AdvDia.MainGridProvider.Width != 0);
+                    s_logger.WarnFormat(
+                        $"[{nameof(NearestWeightedUnvisitedNode)}] Couldn't find any unvisited nodes. Current AdvDia.LevelAreaSnoIdId: {AdvDia.CurrentLevelAreaId}, ZetaDia.CurrentLevelAreaSnoId: {ZetaDia.CurrentLevelAreaSnoId}, Total Nodes: {allNodes} Unvisited Nodes: {unvisitedNodes} Searching In [{string.Join(", ", levelAreaIds)}] HasNavServerData={AdvDia.MainGridProvider.Width != 0}");
 
                     //Core.Scenes.Reset();
                 }
-                Core.Logger.Debug(LogCategory.Exploration, $"Explore: Selected Nearby Node: [{node?.NavigableCenter.X},{node?.NavigableCenter.Y},{node?.NavigableCenter.Z}] Dist:{node?.Distance} Priority: {node?.Priority} ");
+                s_logger.Debug(
+                    $"[{nameof(NearestWeightedUnvisitedNode)}] Selected Nearby Node: [{node?.NavigableCenter.X},{node?.NavigableCenter.Y},{node?.NavigableCenter.Z}] Dist:{node?.Distance} Priority: {node?.Priority} ");
 
                 return node;
             }
@@ -264,7 +269,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     {
                         node.IsVisited = asVisited;
                     }
-                    Core.Logger.Debug($"Marked {scene.Nodes.Count} exploration nodes for scene {fullname} ({scene.SnoId}) as visited");
+                    s_logger.Debug($"[{nameof(MarkSceneNodes)}] Marked {scene.Nodes.Count} exploration nodes for scene {fullname} ({scene.SnoId}) as visited");
                 }
             }
         }
@@ -286,7 +291,8 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         public static bool MarkIgnoreRegionsAsVisited(WorldScene scene)
         {
             if (scene?.Nodes == null) return false;
-            int modifiedNodes = 0;
+            var modifiedNodes = 0;
+
             foreach (var node in scene.Nodes)
             {
                 if (node == null) continue;
@@ -296,7 +302,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     node.IsVisited = true;
                 }
             }
-            Core.Logger.Debug($"Marked {modifiedNodes} exploration nodes for ignore regions in {scene.Name} ({scene.SnoId}) as visited");
+            s_logger.Debug($"[{nameof(MarkIgnoreRegionsAsVisited)}] Marked {modifiedNodes} exploration nodes for ignore regions in {scene.Name} ({scene.SnoId}) as visited");
             return modifiedNodes > 0;
         }
 

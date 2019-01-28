@@ -4,6 +4,7 @@ using Trinity.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using log4net;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Framework.Grid;
@@ -15,6 +16,8 @@ namespace Trinity.Components.Adventurer.Coroutines
 {
     public sealed class ExplorationCoroutine : ISubroutine
     {
+        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+
         private static ExplorationCoroutine _explorationCoroutine;
         private static HashSet<SNOLevelArea> _exploreLevelAreaIds;
 
@@ -52,7 +55,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Core.Logger.Debug("[Exploration] " + value);
+                    s_logger.Debug($"[{nameof(State)}] {value}");
                     StatusText = "[Exploration] " + value;
                 }
                 _state = value;
@@ -73,7 +76,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         private void OnScenesAdded(List<WorldScene> provider)
         {
             // Clear the current destination when new scenes are added to force it to regenerate the current path.
-            Core.Logger.Debug("[Exploration] New scenes loaded, setting current destination to null");
+            s_logger.Debug($"[{nameof(OnScenesAdded)}] New scenes loaded, setting current destination to null");
             _currentDestination = null;
         }
 
@@ -85,8 +88,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
             if (_breakCondition != null && _breakCondition())
             {
-                Core.Logger.Debug("BreakCondition Triggered");
-                Core.Logger.Debug($"[Exploration] Break condition triggered, so we're done.");
+                s_logger.Debug($"[{nameof(GetCoroutine)}] Break condition triggered, so we're done.");
                 State = States.Completed;
             }
 
@@ -133,7 +135,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 if (_explorationDataMaxWaitUntil != DateTime.MinValue && DateTime.UtcNow > _explorationDataMaxWaitUntil)
                 {
-                    Core.Logger.Debug("[Exploration] Timeout waiting for exploration data");
+                    s_logger.Debug($"[{nameof(Exploring)}] Timeout waiting for exploration data");
                     State = States.Completed;
                     return false;
                 }
@@ -146,7 +148,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                     }
                     Core.Scenes.Update();
                     await Coroutine.Yield();
-                    Core.Logger.Debug("[Exploration] Patiently waiting for exploration data");
+                    s_logger.Debug($"[{nameof(Exploring)}] Patiently waiting for exploration data");
                     return false;
                 }
 
@@ -184,19 +186,19 @@ namespace Trinity.Components.Adventurer.Coroutines
 
                 if (destination == null)
                 {
-                    Core.Logger.Debug($"[Exploration] No more unvisited nodes to explore, so we're done.");
+                    s_logger.Debug($"[{nameof(Exploring)}] No more unvisited nodes to explore, so we're done.");
                     State = States.Completed;
                     return false;
                 }
 
                 if (_currentDestination != destination)
                 {
-                    Core.Logger.Debug($"[Exploration] Destination Changed from {_currentDestination?.NavigableCenter} to {destination.NavigableCenter}");
+                    s_logger.Debug($"[{nameof(Exploring)}] Destination Changed from {_currentDestination?.NavigableCenter} to {destination.NavigableCenter}");
                     _currentDestination = destination;
                 }
                 if (_currentDestination != null)
                 {
-                    Core.Logger.Debug($"[Exploration] Current Destination {_currentDestination?.NavigableCenter}, CanRayWalk={CanRayWalkDestination} MyPosition={AdvDia.MyPosition}");
+                    s_logger.Debug($"[{nameof(Exploring)}] Current Destination {_currentDestination?.NavigableCenter}, CanRayWalk={CanRayWalkDestination} MyPosition={AdvDia.MyPosition}");
                     _currentDestination.IsCurrentDestination = true;
                 }
                 //_newNodePickTimer.Reset();
@@ -206,51 +208,61 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 if (await NavigationCoroutine.MoveTo(_currentDestination.NavigableCenter, 15))
                 {
-                    if (NavigationCoroutine.LastResult == CoroutineResult.Failure && (NavigationCoroutine.LastMoveResult == MoveResult.Failed || NavigationCoroutine.LastMoveResult == MoveResult.PathGenerationFailed))
+                    if (_currentDestination != null)
                     {
-                        _currentDestination.FailedNavigationAttempts++;
+                        if (NavigationCoroutine.LastResult == CoroutineResult.Failure &&
+                            (NavigationCoroutine.LastMoveResult == MoveResult.Failed ||
+                             NavigationCoroutine.LastMoveResult == MoveResult.PathGenerationFailed))
+                        {
+                            _currentDestination.FailedNavigationAttempts++;
 
-                        var canClientPathTo = await AdvDia.Navigator.CanFullyClientPathTo(_currentDestination.NavigableCenter);
-                        if (_currentDestination.FailedNavigationAttempts >= 10 && !canClientPathTo)
+                            var canClientPathTo =
+                                await AdvDia.Navigator.CanFullyClientPathTo(_currentDestination.NavigableCenter);
+                            if (_currentDestination.FailedNavigationAttempts >= 10 && !canClientPathTo)
+                            {
+                                s_logger.Debug(
+                                    $"[{nameof(Exploring)}] Unable to client path to {_currentDestination.NavigableCenter} and failed {_currentDestination.FailedNavigationAttempts} times; Ignoring Node.");
+                                _currentDestination.IsVisited = true;
+                                _currentDestination.IsIgnored = true;
+                                _currentDestination.IsCurrentDestination = false;
+                                _currentDestination = null;
+                                _failedNavigationAttempts++;
+                            }
+                            else if (!CanRayWalkDestination && _currentDestination.Distance < 25f &&
+                                     _currentDestination.FailedNavigationAttempts >= 3 ||
+                                     _currentDestination.FailedNavigationAttempts >= 15)
+                            {
+                                s_logger.Debug(
+                                    $"[{nameof(Exploring)}] Failed to Navigate to {_currentDestination.NavigableCenter} {_currentDestination.FailedNavigationAttempts} times; Ignoring Node.");
+                                _currentDestination.IsVisited = true;
+                                _currentDestination.IsIgnored = true;
+                                _currentDestination.IsCurrentDestination = false;
+                                _currentDestination = null;
+                                _failedNavigationAttempts++;
+                            }
+                        }
+                        else
                         {
-                            Core.Logger.Debug($"[Exploration] Unable to client path to {_currentDestination.NavigableCenter} and failed {_currentDestination.FailedNavigationAttempts} times; Ignoring Node.");
+                            s_logger.Debug($"[{nameof(Exploring)}] Destination Reached!");
+                            _currentDestination.FailedNavigationAttempts = 0;
                             _currentDestination.IsVisited = true;
-                            _currentDestination.IsIgnored = true;
                             _currentDestination.IsCurrentDestination = false;
                             _currentDestination = null;
-                            _failedNavigationAttempts++;
                         }
-                        else if (!CanRayWalkDestination && _currentDestination.Distance < 25f && _currentDestination.FailedNavigationAttempts >= 3 || _currentDestination.FailedNavigationAttempts >= 15)
-                        {
-                            Core.Logger.Debug($"[Exploration] Failed to Navigate to {_currentDestination.NavigableCenter} {_currentDestination.FailedNavigationAttempts} times; Ignoring Node.");
-                            _currentDestination.IsVisited = true;
-                            _currentDestination.IsIgnored = true;
-                            _currentDestination.IsCurrentDestination = false;
-                            _currentDestination = null;
-                            _failedNavigationAttempts++;
-                        }
-                    }
-                    else
-                    {
-                        Core.Logger.Debug($"[Exploration] Destination Reached!");
-                        _currentDestination.FailedNavigationAttempts = 0;
-                        _currentDestination.IsVisited = true;
-                        _currentDestination.IsCurrentDestination = false;
-                        _currentDestination = null;
                     }
 
                     if (_failedNavigationAttempts > 25)
                     {
                         if (_allowReExplore)
                         {
-                            Core.Logger.Debug($"[Exploration] Exploration Resetting");
+                            s_logger.Debug($"[{nameof(Exploring)}] Exploration Resetting");
                             Core.Scenes.Reset();
                             Navigator.Clear();
                             _failedNavigationAttempts = 0;
                         }
                         else
                         {
-                            Core.Logger.Debug($"[Exploration] too many failed navigation attempts, aborting.");
+                            s_logger.Debug($"[{nameof(Exploring)}] too many failed navigation attempts, aborting.");
                             State = States.Completed;
                             return false;
                         }
@@ -259,7 +271,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 return false;
             }
 
-            Core.Logger.Debug($"[Exploration] We found no explore destination, so we're done.");
+            s_logger.Debug($"[{nameof(Exploring)}] We found no explore destination, so we're done.");
             Core.Scenes.Reset();
             Navigator.Clear();
 

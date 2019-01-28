@@ -51,5 +51,12 @@ namespace Trinity.Framework.Helpers
         {
             Dispose();
         }
+
+        public TimeSpan Elapsed => _stopwatch.Elapsed;
+
+        public override string ToString()
+        {
+            return _stopwatch.Elapsed.ToString();
+        }
     }
 }

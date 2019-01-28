@@ -15,11 +15,14 @@ using Trinity.Settings;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;
+using log4net;
 
 namespace Trinity.Modules
 {
     public class GridEnricher : Module
     {
+        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+
         public const float GlobeWeightRadiusFactor = 1f;
         public const float MonsterWeightRadiusFactor = 1f;
         public const float GizmoWeightRadiusFactor = 1f;
@@ -83,9 +86,9 @@ namespace Trinity.Modules
                 if (TrinityGrid.Instance.NearestNode == null ||
                     TrinityGrid.Instance.NearestNode.DynamicWorldId != ZetaDia.Globals.WorldId)
                 {
+                    s_logger.Debug($"[{nameof(UpdateGrid)}] No Player Nearest Node or WorldId Mismatch");
                     Core.Scenes.Reset();
                     Core.Scenes.Update();
-                    Core.Logger.Debug(LogCategory.Avoidance, "No Player Nearest Node or WorldId Mismatch");
                     return;
                 }
 
@@ -151,7 +154,7 @@ namespace Trinity.Modules
                             var handler = avoidance.Definition.Handler;
                             if (handler == null)
                             {
-                                Core.Logger.Error(LogCategory.Avoidance, $"Avoidance: {avoidance.Definition.Name} has no handler");
+                                s_logger.Error($"[{nameof(UpdateGrid)}] Avoidance: {avoidance.Definition.Name} has no handler");
                                 continue;
                             }
 
@@ -173,7 +176,7 @@ namespace Trinity.Modules
                         }
                         catch (Exception ex)
                         {
-                            Core.Logger.Error(LogCategory.Avoidance, $"Exception in AvoidanceHandler updating nodes. Name={avoidance.Definition?.Name} Handler={avoidance.Definition?.Handler?.GetType()} {ex} {Environment.StackTrace}");
+                            s_logger.Error($"[{nameof(UpdateGrid)}] Exception in AvoidanceHandler updating nodes. Name={avoidance.Definition?.Name} Handler={avoidance.Definition?.Handler?.GetType()}", ex);
                         }
                     }
 
@@ -233,7 +236,7 @@ namespace Trinity.Modules
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Log("Exception in UpdateGrid {0}", ex);
+                    s_logger.Error($"[{nameof(UpdateGrid)}] Exception in UpdateGrid", ex);
 
                     if (ex is CoroutineStoppedException)
                         throw;
@@ -324,7 +327,7 @@ namespace Trinity.Modules
         {
             if (TrinityCombat.Routines.Current == null)
             {
-                Core.Logger.Debug("UpdateKiteFromFlags failed to update becasue no routine is selected");
+                s_logger.Debug($"[{nameof(UpdateKiteFromFlags)}] UpdateKiteFromFlags failed to update becasue no routine is selected");
                 return;
             }
 

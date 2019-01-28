@@ -128,7 +128,5 @@ namespace Trinity.Modules
 
             return speedperSecond;
         }
-
-
     }
 }

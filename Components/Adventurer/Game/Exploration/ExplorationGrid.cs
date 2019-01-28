@@ -1,9 +1,10 @@
-﻿using System;
-using Trinity.Framework;
+﻿using log4net;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Components.Adventurer.Game.Events;
+using Trinity.Framework.Helpers;
 using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
@@ -12,6 +13,8 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 {
     public sealed class ExplorationGrid : Grid<ExplorationNode>
     {
+        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+
         private const int GRID_BOUNDS = 500;
 
         private static readonly ConcurrentDictionary<SNOWorld, List<Vector3>> KnownPositions = new ConcurrentDictionary<SNOWorld, List<Vector3>>();
@@ -81,7 +84,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         private IEnumerable<ExplorationNode> GetRayLineAsNodes(Vector3 from, Vector3 to)
         {
             var rayLine = GetRayLine(from, to);
-            return rayLine.Select(point => InnerGrid[point.X, point.Y]).Where(n => n is ExplorationNode).Cast<ExplorationNode>();
+            return rayLine.Select(point => InnerGrid[point.X, point.Y]).Where(n => n != null).Cast<ExplorationNode>();
         }
 
         public static List<IGroupNode> GetExplorationNodesInRadius(ExplorationNode centerNode, float radius)
@@ -180,31 +183,34 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         protected override void OnUpdated(SceneData newNodes)
         {
-            // Note this excludes scenes already processed so that visiting the previous world with a cached grid maintains its nodes states.
-            // e.g. going to town and coming back to dungeon -> scene updates should remember its visited/explored state.
-
-            var gridName = GetType().Name;
-
-            foreach (var scene in newNodes.Scenes.Where(s => !_processedSceneHashes.Contains(s.SceneHash)))
+            using (var t = new PerformanceLogger(nameof(OnUpdated)))
             {
-                Core.Logger.Verbose($"[{gridName}] Updating grid for scene '{scene.SceneHash}' with {scene.ExplorationNodes.Count} new nodes");
+                // Note this excludes scenes already processed so that visiting the previous world with a cached grid maintains its nodes states.
+                // e.g. going to town and coming back to dungeon -> scene updates should remember its visited/explored state.
 
-                UpdateInnerGrid(scene.ExplorationNodes);
-
-                foreach (var node in scene.ExplorationNodes)
+                foreach (var scene in newNodes.Scenes.Where(s => !_processedSceneHashes.Contains(s.SceneHash)))
                 {
-                    if (node == null)
-                        continue;
+                    s_logger.Debug(
+                        $"[{nameof(OnUpdated)}] Updating grid for scene '{scene.SceneHash}' with {scene.ExplorationNodes.Count} new nodes");
 
-                    node.AStarValue = (byte)(node.HasEnoughNavigableCells ? 1 : 2);
+                    UpdateInnerGrid(scene.ExplorationNodes);
 
-                    if (!node.IsIgnored && node.HasEnoughNavigableCells)
-                        WalkableNodes.Add(node);
+                    foreach (var node in scene.ExplorationNodes)
+                    {
+                        if (node == null)
+                            continue;
+
+                        node.AStarValue = (byte)(node.HasEnoughNavigableCells ? 1 : 2);
+
+                        if (!node.IsIgnored && node.HasEnoughNavigableCells)
+                            WalkableNodes.Add(node);
+                    }
+
+                    _processedSceneHashes.Add(scene.SceneHash);
                 }
-                _processedSceneHashes.Add(scene.SceneHash);
-            }
 
-            Core.Logger.Debug("[ExplorationGrid] Updated WalkableNodes={0}", WalkableNodes.Count);
+                s_logger.Debug($"[{nameof(OnUpdated)}] Updated WalkableNodes={WalkableNodes.Count} Time={t.Elapsed}");
+            }
         }
     }
 }
