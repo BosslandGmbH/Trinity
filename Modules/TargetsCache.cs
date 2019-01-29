@@ -1,8 +1,8 @@
-﻿using log4net;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Serilog;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.Components.Coroutines;
@@ -27,7 +27,7 @@ namespace Trinity.Modules
     /// </summary>
     public class TargetsCache : Module, IEnumerable<TrinityActor>
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         public ulong LastUpdatedTick;
         public List<TrinityActor> Entries = new List<TrinityActor>();

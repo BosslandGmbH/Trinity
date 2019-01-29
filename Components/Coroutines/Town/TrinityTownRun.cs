@@ -1,10 +1,10 @@
 ﻿using Buddy.Coroutines;
-using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Serilog;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Actors.Attributes;
@@ -23,7 +23,7 @@ namespace Trinity.Components.Coroutines.Town
 {
     public static partial class TrinityTownRun
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
         private static bool _isStartLocationOutOfTown;
 
         public static bool IsTownRunRequired => (ZetaDia.IsInTown ||
@@ -150,7 +150,7 @@ namespace Trinity.Components.Coroutines.Town
             var bookActor = TownInfo.BookOfCain;
             if (bookActor == null)
             {
-                s_logger.Warn($"[{nameof(IdentifyItems)}] TownInfo.BookOfCain not found Act={ZetaDia.CurrentAct} WorldSnoId={(SNOWorld)ZetaDia.Globals.WorldSnoId}");
+                s_logger.Warning($"[{nameof(IdentifyItems)}] TownInfo.BookOfCain not found Act={ZetaDia.CurrentAct} WorldSnoId={(SNOWorld)ZetaDia.Globals.WorldSnoId}");
                 return CoroutineResult.Failed;
             }
 
@@ -161,7 +161,7 @@ namespace Trinity.Components.Coroutines.Town
                 case null when await CommonCoroutines.MoveTo(bookActor.Position) != MoveResult.ReachedDestination:
                     return CoroutineResult.Running;
                 case null:
-                    s_logger.Warn($"[{nameof(IdentifyItems)}] TownInfo.BookOfCain.GetActor() not found Act={ZetaDia.CurrentAct} WorldSnoId={(SNOWorld)ZetaDia.Globals.WorldSnoId}");
+                    s_logger.Warning($"[{nameof(IdentifyItems)}] TownInfo.BookOfCain.GetActor() not found Act={ZetaDia.CurrentAct} WorldSnoId={(SNOWorld)ZetaDia.Globals.WorldSnoId}");
                     return CoroutineResult.Failed;
             }
 
@@ -172,7 +172,7 @@ namespace Trinity.Components.Coroutines.Town
                 return CoroutineResult.Running;
             }
 
-            s_logger.Info($"[{nameof(IdentifyItems)}] Identifying Items");
+            s_logger.Information($"[{nameof(IdentifyItems)}] Identifying Items");
             await Coroutine.Wait(TimeSpan.FromSeconds(10), () => !CommonCoroutines.IsInteracting);
             return CoroutineResult.Running;
         }
@@ -234,7 +234,7 @@ namespace Trinity.Components.Coroutines.Town
             if (previousResult == CoroutineResult.Failed)
                 return CoroutineResult.Failed;
 
-            s_logger.Info("Town run finished!");
+            s_logger.Information("Town run finished!");
             IsVendoring = false;
             return CoroutineResult.Done;
         }

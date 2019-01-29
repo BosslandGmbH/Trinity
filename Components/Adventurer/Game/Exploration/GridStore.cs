@@ -1,8 +1,7 @@
-﻿using System;
-using Trinity.Framework;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using log4net;
 using Zeta.Common;
 using Zeta.Game;
 
@@ -10,7 +9,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 {
     public static class GridStore
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         // Contains a list of grids that have been created without blocking their garbage disposal.
         internal static List<WeakReference<IGrid>> Grids = new List<WeakReference<IGrid>>();

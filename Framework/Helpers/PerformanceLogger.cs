@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Diagnostics;
-using log4net;
 using Zeta.Common;
 
 namespace Trinity.Framework.Helpers
@@ -8,7 +8,7 @@ namespace Trinity.Framework.Helpers
     [DebuggerStepThrough]
     public class PerformanceLogger : IDisposable
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
         private readonly string _blockName;
         private readonly Stopwatch _stopwatch;
         private bool _isDisposed;

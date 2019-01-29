@@ -1,10 +1,10 @@
-﻿using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using log4net;
+using Trinity.Framework;
 using Trinity.Framework.Grid;
+using Trinity.Framework.Helpers;
 using Trinity.UI.Visualizer;
 using Zeta.Common;
 using Zeta.Game;
@@ -13,7 +13,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 {
     public static class ExplorationHelpers
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         public static Vector3 PriorityPosition { get; private set; }
 
@@ -31,7 +31,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
             VisualizerViewModel.DebugPosition = position;
 
-            s_logger.Warn($"[{nameof(SetExplorationPriority)}] Setting priority exploration position to '{position}' {position.Distance(ZetaDia.Me?.Position ?? Vector3.Zero)} yards away!");
+            s_logger.Warning($"[{nameof(SetExplorationPriority)}] Setting priority exploration position to '{position}' {position.Distance(ZetaDia.Me?.Position ?? Vector3.Zero)} yards away!");
 
             foreach (var connection in Core.Scenes.CurrentScene.GetConnectedScenes(Core.Scenes.GetScene(position)))
             {
@@ -172,7 +172,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     var allNodes = ExplorationGrid.Instance.WalkableNodes.Count(n => levelAreaIds.Contains(n.LevelAreaId));
                     var unvisitedNodes = ExplorationGrid.Instance.WalkableNodes.Count(n => !n.IsVisited && levelAreaIds.Contains(n.LevelAreaId));
 
-                    s_logger.WarnFormat(
+                    s_logger.Warning(
                         $"[{nameof(NearestWeightedUnvisitedNode)}] Couldn't find any unvisited nodes. Current AdvDia.LevelAreaSnoIdId: {AdvDia.CurrentLevelAreaId}, ZetaDia.CurrentLevelAreaSnoId: {ZetaDia.CurrentLevelAreaSnoId}, Total Nodes: {allNodes} Unvisited Nodes: {unvisitedNodes} Searching In [{string.Join(", ", levelAreaIds)}] HasNavServerData={AdvDia.MainGridProvider.Width != 0}");
 
                     //Core.Scenes.Reset();
@@ -196,7 +196,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             var visitedMultiplier = 1d;
             var exitSceneMultiplier = 1d;
             var exploredPercent = ExplorationGrid.Instance.WalkableNodes.Count(x => x.Scene.HasBeenVisited) /
-                                  ExplorationGrid.Instance.WalkableNodes.Count();
+                                  ExplorationGrid.Instance.WalkableNodes.Count;
 
             // for now.. restrict this group of checks from effecting bounties.
             if (Core.Rift.IsInRift)

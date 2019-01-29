@@ -1,5 +1,5 @@
 ﻿using Buddy.Coroutines;
-using log4net;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -27,7 +27,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
     public static class RiftCoroutine
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
         private static readonly ExperienceTracker s_experienceTracker = new ExperienceTracker();
 
         public static long CurrentRiftKeyCount => InventoryManager.AllItems
@@ -334,7 +334,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             if (await UpgradeGems() == CoroutineResult.Running)
                 return false;
 
-            s_logger.Info("Rift done, let's force a town run...");
+            s_logger.Information("Rift done, let's force a town run...");
             BrainBehavior.ForceTownrun(nameof(RiftCoroutine));
 
             return true;

@@ -1,7 +1,7 @@
-using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Serilog;
 using Trinity.Components.Adventurer.Game.Exploration.Algorithms;
 using Trinity.Framework;
 using Zeta.Common;
@@ -11,7 +11,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 {
     public abstract class Grid<T> : IGrid<T> where T : INode
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         public SplitArray<T> InnerGrid;
 
@@ -23,9 +23,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         public DateTime LastUpdated { get; set; }
 
         public int MinX = int.MaxValue;
-        public int MaxX = 0;
+        public int MaxX;
         public int MinY = int.MaxValue;
-        public int MaxY = 0;
+        public int MaxY;
         internal int GridMaxX;
         internal int GridMaxY;
         internal int BaseSize;
@@ -128,7 +128,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             if (gridPoint.X < 0 || gridPoint.X > GridMaxX) return default(T);
             if (gridPoint.Y < 0 || gridPoint.Y > GridMaxY) return default(T);
 
-            return (T)InnerGrid[gridPoint.X, gridPoint.Y];
+            return InnerGrid[gridPoint.X, gridPoint.Y];
         }
 
         public T GetNearestNode(Vector3 position)
@@ -139,7 +139,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             if (x < 0 || x > GridMaxX) return default(T);
             if (y < 0 || y > GridMaxY) return default(T);
 
-            return (T)InnerGrid[x, y];
+            return InnerGrid[x, y];
         }
 
         public int ToGridDistance(float value)
@@ -178,7 +178,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     var gridNode = InnerGrid[x, y];
                     if (gridNode != null)
                     {
-                        neighbors.Add((T)gridNode);
+                        neighbors.Add(gridNode);
                     }
                 }
             }
@@ -268,8 +268,8 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                                 continue;
                         }
 
-                        if (condition != null && condition((T)gridNode))
-                            neighbors.Add((T)gridNode);
+                        if (condition != null && condition(gridNode))
+                            neighbors.Add(gridNode);
                     }
                 }
             }
@@ -296,10 +296,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 case Direction.NorthEast: x += BaseSize; y += BaseSize; break;
             }
 
-            if (!IsValidNodePosition(x, y))
-                return default(T);
-
-            return (T)InnerGrid[x, y];
+            return !IsValidNodePosition(x, y) ? default(T) : InnerGrid[x, y];
         }
 
         protected IEnumerable<GridPoint> GetRayLine(Vector3 from, Vector3 to)
@@ -326,9 +323,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             return new Vector3(ToWorldDistance(gridPoint.X), ToWorldDistance(gridPoint.Y), 0);
         }
 
-        public abstract bool CanRayCast(Vector3 @from, Vector3 to);
+        public abstract bool CanRayCast(Vector3 from, Vector3 to);
 
-        public abstract bool CanRayWalk(Vector3 @from, Vector3 to);
+        public abstract bool CanRayWalk(Vector3 from, Vector3 to);
 
         public abstract void Reset();
 

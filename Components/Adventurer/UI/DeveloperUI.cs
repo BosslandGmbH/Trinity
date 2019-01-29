@@ -850,7 +850,7 @@ namespace Trinity.Components.Adventurer.UI
         {
             var bounties = ZetaDia.Storage.Quests.Bounties
                 .Where(b => GetDynamicBountyTypeFromName(b.Info.DisplayName) != BountyDataFactory.DynamicBountyType.None &&
-                            !BountyDataFactory.DynamicBountyDirectory.ContainsKey(b.Info.Quest));
+                            !BountyDataFactory.DynamicBountyDirectory.ContainsKey(b.Info.QuestSNO));
 
             foreach (var bounty in bounties)
             {

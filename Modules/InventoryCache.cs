@@ -1,9 +1,8 @@
-﻿using log4net;
+﻿using Serilog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Framework;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
@@ -18,7 +17,7 @@ namespace Trinity.Modules
 {
     public class InventoryCache : Module, IEnumerable<ACDItem>
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         public InventoryCache()
         {
@@ -33,7 +32,7 @@ namespace Trinity.Modules
         public HashSet<SNOActor> PlayerEquippedIds { get; private set; } = new HashSet<SNOActor>();
         public HashSet<SNOActor> EquippedIds { get; private set; } = new HashSet<SNOActor>();
         public List<ACDItem> Equipped { get; private set; } = new List<ACDItem>();
-        public HashSet<int> InvalidAnnIds { get; private set; } = new HashSet<int>();
+        public HashSet<int> InvalidAnnIds { get; } = new HashSet<int>();
         public InventoryCurrency Currency { get; } = new InventoryCurrency();
         public InventorySlice AllItems { get; } = new InventorySlice();
         public InventorySlice Stash { get; } = new InventorySlice();
@@ -177,19 +176,19 @@ namespace Trinity.Modules
                 switch (recipe)
                 {
                     case TransmuteRecipe.ExtractLegendaryPower:
-                        return HasCurrency(_currencyRecipeExtractLegendaryPower);
+                        return HasCurrency(s_currencyRecipeExtractLegendaryPower);
                     case TransmuteRecipe.ReforgeLegendary:
-                        return HasCurrency(_currencyRecipeReforgeLegendary);
+                        return HasCurrency(s_currencyRecipeReforgeLegendary);
                     case TransmuteRecipe.UpgradeRareItem:
-                        return HasCurrency(_currencyRecipeUpgradeRareItem);
+                        return HasCurrency(s_currencyRecipeUpgradeRareItem);
                     case TransmuteRecipe.ConvertSetItem:
-                        return HasCurrency(_currencyRecipeConvertSetItem);
+                        return HasCurrency(s_currencyRecipeConvertSetItem);
                     case TransmuteRecipe.ConvertCraftingMaterialsFromNormal:
-                        return HasCurrency(_currencyRecipeConvertFromNormal);
+                        return HasCurrency(s_currencyRecipeConvertFromNormal);
                     case TransmuteRecipe.ConvertCraftingMaterialsFromMagic:
-                        return HasCurrency(_currencyRecipeConvertFromMagic);
+                        return HasCurrency(s_currencyRecipeConvertFromMagic);
                     case TransmuteRecipe.ConvertCraftingMaterialsFromRare:
-                        return HasCurrency(_currencyRecipeConvertFromRare);
+                        return HasCurrency(s_currencyRecipeConvertFromRare);
                 }
 
                 return true; // recipes that dont require currency.
@@ -203,7 +202,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Extracts a legendary power; requires legendary item.
             /// </summary>
-            private static readonly Dictionary<CurrencyType, int> _currencyRecipeExtractLegendaryPower = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> s_currencyRecipeExtractLegendaryPower = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.KhanduranRune, 1},
                 {CurrencyType.CaldeumNightshade, 1},
@@ -216,7 +215,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces random legendary; requires legendary item.
             /// </summary>
-            private static readonly Dictionary<CurrencyType, int> _currencyRecipeReforgeLegendary = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> s_currencyRecipeReforgeLegendary = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.KhanduranRune, 5},
                 {CurrencyType.CaldeumNightshade, 5},
@@ -229,7 +228,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces legendary item; requires rare item.
             /// </summary>
-            private static readonly Dictionary<CurrencyType, int> _currencyRecipeUpgradeRareItem = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> s_currencyRecipeUpgradeRareItem = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.ReusableParts, 50},
                 {CurrencyType.ArcaneDust, 50},
@@ -240,7 +239,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces random set item; requires set item.
             /// </summary>
-            private static readonly Dictionary<CurrencyType, int> _currencyRecipeConvertSetItem = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> s_currencyRecipeConvertSetItem = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.ForgottenSoul, 10},
                 {CurrencyType.DeathsBreath, 10}
@@ -249,7 +248,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces ReusableParts (requires normal item) -or- Veiled Crystals (requires rare item)
             /// </summary>
-            private static readonly Dictionary<CurrencyType, int> _currencyRecipeConvertFromMagic = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> s_currencyRecipeConvertFromMagic = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.ArcaneDust, 100},
                 {CurrencyType.DeathsBreath, 1}
@@ -258,7 +257,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces Arcane Dust (requires magic item) -or- Veiled Crystals (requires rare item)
             /// </summary>
-            private static readonly Dictionary<CurrencyType, int> _currencyRecipeConvertFromNormal = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> s_currencyRecipeConvertFromNormal = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.ReusableParts, 100},
                 {CurrencyType.DeathsBreath, 1}
@@ -267,7 +266,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces ReusableParts (requires normal item) -or- Arcane Dust (requires magic item)
             /// </summary>
-            private static readonly Dictionary<CurrencyType, int> _currencyRecipeConvertFromRare = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> s_currencyRecipeConvertFromRare = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.VeiledCrystal, 100},
                 {CurrencyType.DeathsBreath, 1}

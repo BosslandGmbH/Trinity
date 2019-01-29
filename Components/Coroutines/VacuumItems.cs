@@ -1,6 +1,6 @@
-﻿using log4net;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using Serilog;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
@@ -16,7 +16,7 @@ namespace Trinity.Components.Coroutines
     /// </summary>
     public class VacuumItems
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         /* Should be able to wait for finishing this task While doing something.
          * Otherwise we see the bot locks in dilemma between going to Quest/Rift
@@ -58,7 +58,7 @@ namespace Trinity.Components.Coroutines
 
             // The item was picked up trigger RecordSpell and log the info collected above.
             SpellHistory.RecordSpell(SNOPower.Axe_Operate_Gizmo);
-            s_logger.Info(logLine);
+            s_logger.Information(logLine);
 
             // We are not done yet so return false.
             return false;

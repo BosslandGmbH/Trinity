@@ -1,7 +1,7 @@
-using log4net;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Serilog;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Helpers;
@@ -14,7 +14,7 @@ namespace Trinity.Components.Coroutines
 {
     public class UsePotion
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         public static ACDItem ActivePotion =>
             InventoryManager.Backpack
@@ -46,17 +46,17 @@ namespace Trinity.Components.Coroutines
                 ZetaDia.Me.CommonData
                     .GetAttribute<bool>(ActorAttributeType.PowerImmobilize))
             {
-                s_logger.Warn($"[{nameof(DrinkPotion)}] Can't use potion while incapacitated!");
+                s_logger.Warning($"[{nameof(DrinkPotion)}] Can't use potion while incapacitated!");
                 return CoroutineResult.NoAction;
             }
 
             if (ActivePotion == null)
             {
-                s_logger.Warn($"[{nameof(DrinkPotion)}] No Available potions!");
+                s_logger.Warning($"[{nameof(DrinkPotion)}] No Available potions!");
                 return CoroutineResult.NoAction;
             }
 
-            s_logger.Info($"[{nameof(DrinkPotion)}] Using Potion {ActivePotion.Name}");
+            s_logger.Information($"[{nameof(DrinkPotion)}] Using Potion {ActivePotion.Name}");
             InventoryManager.UseItem(ActivePotion.AnnId);
             SpellHistory.RecordSpell(new TrinityPower(SNOPower.DrinkHealthPotion));
             SnapShot.Record();

@@ -3,7 +3,7 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using log4net;
+using Serilog;
 using Trinity.Components.Adventurer;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.DbProvider;
@@ -14,7 +14,6 @@ using Trinity.Modules;
 using Zeta.Common;
 using Zeta.Game;
 using Direction = Trinity.Components.Adventurer.Game.Exploration.Direction;
-
 using NodeFlags = Trinity.Components.Adventurer.Game.Exploration.NodeFlags;
 using SceneData = Trinity.Components.Adventurer.Game.Exploration.SceneData;
 
@@ -22,7 +21,7 @@ namespace Trinity.Framework.Grid
 {
     public sealed class TrinityGrid : Grid<AvoidanceNode>
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         private const int Bounds = 2500;
 
@@ -56,25 +55,25 @@ namespace Trinity.Framework.Grid
             return CanRayCast(ZetaDia.Me.Position, to);
         }
 
-        public override bool CanRayCast(Vector3 @from, Vector3 to)
+        public override bool CanRayCast(Vector3 from, Vector3 to)
         {
             try
             {
                 if (!IsPopulated) return false;
-                if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
+                if (!IsValidGridWorldPosition(from) || !IsValidGridWorldPosition(to)) return false;
                 return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowProjectile));
             }
             catch (Exception ex)
             {
-                s_logger.Error($"[{nameof(CanRayCast)}] Failed to raycast from={@from} to={to}", ex);
+                s_logger.Error($"[{nameof(CanRayCast)}] Failed to raycast from={from} to={to}", ex);
             }
             return false;
         }
 
 
-        public bool UnsafeCanRayCast(Vector3 @from, Vector3 to)
+        public bool UnsafeCanRayCast(Vector3 from, Vector3 to)
         {
-            if (@from == Vector3.Zero || to == Vector3.Zero) return false;
+            if (from == Vector3.Zero || to == Vector3.Zero) return false;
             return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowProjectile));
         }
 
@@ -119,15 +118,15 @@ namespace Trinity.Framework.Grid
             return GetRayLine(Core.Player.Position, targetActor.Position).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk));
         }
 
-        public override bool CanRayWalk(Vector3 @from, Vector3 to)
+        public override bool CanRayWalk(Vector3 from, Vector3 to)
         {
-            if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
+            if (!IsValidGridWorldPosition(from) || !IsValidGridWorldPosition(to)) return false;
             return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk) && !node.NodeFlags.HasFlag(NodeFlags.NearWall));
         }
 
-        public bool IsIntersectedByFlags(Vector3 @from, Vector3 to, params AvoidanceFlags[] flags)
+        public bool IsIntersectedByFlags(Vector3 from, Vector3 to, params AvoidanceFlags[] flags)
         {
-            if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
+            if (!IsValidGridWorldPosition(from) || !IsValidGridWorldPosition(to)) return false;
             return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).Any(node => node != null && flags != null && flags.Any(f => node.AvoidanceFlags.HasFlag(f)));
         }
 
@@ -510,10 +509,11 @@ namespace Trinity.Framework.Grid
 
             var playerPosition = ZetaDia.Me.Position;
             var currentPath = PlayerMover.NavigationProvider.CurrentPath.TakeWhile(p => p.Distance(playerPosition) < GridEnricher.MaxDistance);
-            if (!currentPath.Any())
+            var enumerable = currentPath as Vector3[] ?? currentPath.ToArray();
+            if (!enumerable.Any())
                 return false;
 
-            var overFlags = currentPath.Any(p => Core.Avoidance.Grid.IsIntersectedByFlags(ZetaDia.Me.Position, p, flags));
+            var overFlags = enumerable.Any(p => Core.Avoidance.Grid.IsIntersectedByFlags(ZetaDia.Me.Position, p, flags));
             return overFlags;
         }
 
@@ -521,10 +521,7 @@ namespace Trinity.Framework.Grid
         {
             //return GetNearestNode(new GridPoint(x, y));
 
-            if (!IsValidNodePosition(x, y))
-                return default(AvoidanceNode);
-
-            return InnerGrid[x, y];
+            return !IsValidNodePosition(x, y) ? default(AvoidanceNode) : InnerGrid[x, y];
         }
 
         public bool CanStandAt(Vector3 position)

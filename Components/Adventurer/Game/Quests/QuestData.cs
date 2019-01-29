@@ -124,7 +124,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
         {
         }
 
-        public QuestStepObjectiveData(QuestData questData, QuestStepData questStepData, QuestStepObjective objective)
+        public QuestStepObjectiveData(QuestData questData, QuestStepData questStepData, Zeta.Game.Internals.SNO.QuestStepObjective objective)
         {
             _questData = questData;
             _questStepData = questStepData;

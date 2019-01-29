@@ -1,6 +1,6 @@
-﻿using log4net;
-using System;
+﻿using System;
 using System.Linq;
+using Serilog;
 using Trinity.Framework;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Helpers;
@@ -37,7 +37,7 @@ namespace Trinity.Components.Combat
 
     public class DefaultLootProvider : ILootProvider
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         public static int FreeBagSlots { get; set; } = 4;
         public static int FreeBagSlotsInTown { get; set; } = 30;
@@ -53,12 +53,12 @@ namespace Trinity.Components.Combat
                 return false;
             }
 
-            RawItemType rit = item.GetRawItemType();
-            TrinityItemType tit = item.GetTrinityItemType();
-            TrinityItemQuality tiq = item.GetTrinityItemQuality();
-            TrinityItemBaseType tib = item.GetTrinityItemBaseType();
+            var rit = item.GetRawItemType();
+            var tit = item.GetTrinityItemType();
+            var tiq = item.GetTrinityItemQuality();
+            var tib = item.GetTrinityItemBaseType();
             var gbi = item.GameBalanceId;
-            ItemQuality iql = item.ItemQualityLevel;
+            var iql = item.ItemQualityLevel;
 
             if (rit == RawItemType.CosmeticPet)
             {
@@ -521,10 +521,10 @@ namespace Trinity.Components.Combat
             }
 
             // Now look for Misc items we might want to keep
-            TrinityItemType trinityItemType = item.GetTrinityItemType();
-            TrinityItemBaseType trinityBaseType = item.GetTrinityItemBaseType();
-            ItemBaseType baseType = item.GetItemBaseType();
-            ItemType itemType = item.GetItemType();
+            var trinityItemType = item.GetTrinityItemType();
+            var trinityBaseType = item.GetTrinityItemBaseType();
+            var baseType = item.GetItemBaseType();
+            var itemType = item.GetItemType();
 
             // Keep any high gems placed in backpack while levelling, so we can socket items with them.
             if (item.IsGem &&
@@ -642,7 +642,7 @@ namespace Trinity.Components.Combat
 
             if (trinityItemType == TrinityItemType.HealthPotion)
             {
-                ACDItem equippedPotion = Core.Player.EquippedHealthPotion;
+                var equippedPotion = Core.Player.EquippedHealthPotion;
                 if (equippedPotion == null)
                 {
                     s_logger.Debug($"[{nameof(ShouldStash)}] Potion being stashed because it's not equiped - Item: \"{item.Name}\", InternalName: \"{item.InternalName}\", Sno: {item.ActorSnoId}, GBId: 0x{item.GameBalanceId:x8}, RawItemType: {item.GetRawItemType()}");
@@ -806,7 +806,7 @@ namespace Trinity.Components.Combat
 
             if (item.GetTrinityItemType() == TrinityItemType.HealthPotion)
             {
-                ACDItem equippedPotion = Core.Player.EquippedHealthPotion;
+                var equippedPotion = Core.Player.EquippedHealthPotion;
                 if (equippedPotion == null)
                 {
                     s_logger.Debug($"[{nameof(ShouldDrop)}] IGNORE: EquippedHealthPotion == null - Item: \"{item?.Name}\", InternalName: \"{item?.InternalName}\", Sno: {item?.ActorSnoId}, GBId: 0x{item?.GameBalanceId:x8}");
@@ -911,7 +911,7 @@ namespace Trinity.Components.Combat
 
             if (item.GetTrinityItemType() == TrinityItemType.HealthPotion)
             {
-                ACDItem equippedPotion = Core.Player.EquippedHealthPotion;
+                var equippedPotion = Core.Player.EquippedHealthPotion;
                 if (equippedPotion == null)
                 {
                     s_logger.Debug($"[{nameof(ShouldSell)}] IGNORE: EquippedHealthPotion == null - Item: \"{item?.Name}\", InternalName: \"{item?.InternalName}\", Sno: {item?.ActorSnoId}, GBId: 0x{item?.GameBalanceId:x8}");
@@ -1025,18 +1025,18 @@ namespace Trinity.Components.Combat
         {
             get
             {
-                Vector2 validLocation = FindBackpackLocation(true, true);
+                var validLocation = FindBackpackLocation(true, true);
                 return validLocation.X >= 0 && validLocation.Y >= 0;
             }
         }
 
-        private static readonly CacheField<bool> _isValidTwoSlotBackpackLocation = new CacheField<bool>(UpdateSpeed.Fast);
+        private static readonly CacheField<bool> s_isValidTwoSlotBackpackLocation = new CacheField<bool>(UpdateSpeed.Fast);
 
-        public static bool CachedIsValidTwoSlotBackpackLocation => _isValidTwoSlotBackpackLocation.GetValue(IsValidTwoSlotBackpackLocation);
+        public static bool CachedIsValidTwoSlotBackpackLocation => s_isValidTwoSlotBackpackLocation.GetValue(IsValidTwoSlotBackpackLocation);
 
         public static bool IsValidTwoSlotBackpackLocation()
         {
-            Vector2 validLocation = FindBackpackLocation(true, false);
+            var validLocation = FindBackpackLocation(true, false);
             return validLocation.X >= 0 && validLocation.Y >= 0;
         }
 
@@ -1073,14 +1073,14 @@ namespace Trinity.Components.Combat
                     }
 
                     // Block off the entire of any "protected bag slots"
-                    foreach (InventorySquare square in CharacterSettings.Instance.ProtectedBagSlots)
+                    foreach (var square in CharacterSettings.Instance.ProtectedBagSlots)
                     {
                         backpackSlotBlocked[square.Column, square.Row] = true;
                         freeBagSlots--;
                     }
 
                     // Map out all the items already in the backpack
-                    foreach (ACDItem item in InventoryManager.Backpack)
+                    foreach (var item in InventoryManager.Backpack)
                     {
                         if (!item.IsValid)
                         {

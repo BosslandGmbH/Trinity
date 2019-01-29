@@ -1,12 +1,10 @@
-﻿using log4net;
+﻿using Serilog;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Coroutines.Town;
 using Trinity.Components.QuestTools;
-using Trinity.Framework;
-using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Reference;
 using Trinity.ProfileTags.EmbedTags;
@@ -23,7 +21,7 @@ namespace Trinity.ProfileTags
     [XmlElement("Transmute")]
     public class TransmuteTag : BaseProfileBehavior
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
         [XmlElement("Items")]
         [Description("Items to be transmuted")]
         public List<ItemTag> Items { get; set; }

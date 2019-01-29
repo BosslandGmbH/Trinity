@@ -4,7 +4,7 @@ using Trinity.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using log4net;
+using Serilog;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Framework.Grid;
@@ -16,7 +16,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 {
     public sealed class ExplorationCoroutine : ISubroutine
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         private static ExplorationCoroutine _explorationCoroutine;
         private static HashSet<SNOLevelArea> _exploreLevelAreaIds;

@@ -1,4 +1,4 @@
-﻿using log4net;
+﻿using Serilog;
 using System;
 using System.Collections.Generic;
 using Trinity.Components.Combat;
@@ -13,7 +13,7 @@ namespace Trinity.Framework
 {
     public class HookManager
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
         private static readonly Dictionary<string, Composite> s_originalHooks = new Dictionary<string, Composite>();
         private static bool _hooksAttached;
 
@@ -90,7 +90,7 @@ namespace Trinity.Framework
                 s_originalHooks.Add(hookName, TreeHooks.Instance.Hooks[hookName][0]);
             }
 
-            s_logger.Info($"Replacing {hookName} Hook");
+            s_logger.Information($"Replacing {hookName} Hook");
             TreeHooks.Instance.ReplaceHook(hookName, behavior);
         }
 
@@ -101,7 +101,7 @@ namespace Trinity.Framework
             {
                 return;
             }
-            s_logger.Info($"Replacing {hook} Hook with Original");
+            s_logger.Information($"Replacing {hook} Hook with Original");
             TreeHooks.Instance.ReplaceHook(hook, s_originalHooks[hook]);
         }
     }

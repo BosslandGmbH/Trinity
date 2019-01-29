@@ -142,7 +142,7 @@ namespace Trinity.Components.Coroutines.Town
             if (!await TakeItemsFromStash(stashCandidates))
                 return false;
 
-            s_logger.Info($"[{nameof(FetchExtractionCandidatesFromStash)}] Got Legendaries from Stash");
+            s_logger.Information($"[{nameof(FetchExtractionCandidatesFromStash)}] Got Legendaries from Stash");
 
             s_extractionCandidatesTakenFromStash.AddRange(stashCandidates.Select(i => i.AnnId));
             // Signal that we are not done...
@@ -218,7 +218,7 @@ namespace Trinity.Components.Coroutines.Town
             if (!await PutExtractionCandidatesBackToStash())
                 return CoroutineResult.Running;
 
-            s_logger.Info($"[{nameof(ExtractLegendaryPowers)}] Finished");
+            s_logger.Information($"[{nameof(ExtractLegendaryPowers)}] Finished");
             return CoroutineResult.Done;
         }
 

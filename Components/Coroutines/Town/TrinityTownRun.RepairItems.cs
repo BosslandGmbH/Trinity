@@ -53,7 +53,7 @@ namespace Trinity.Components.Coroutines.Town
             }
 
             await Coroutine.Yield();
-            s_logger.Info($"[{nameof(RepairItems)}] Repairing equipment while at this vendor");
+            s_logger.Information($"[{nameof(RepairItems)}] Repairing equipment while at this vendor");
             Repair(shouldRepairAll);
             return CoroutineResult.Done;
         }

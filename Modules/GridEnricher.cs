@@ -1,27 +1,27 @@
+using Buddy.Coroutines;
+using Serilog;
 using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using Buddy.Coroutines;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Combat;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Settings;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Grid;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Settings;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;
-using log4net;
 
 namespace Trinity.Modules
 {
     public class GridEnricher : Module
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         public const float GlobeWeightRadiusFactor = 1f;
         public const float MonsterWeightRadiusFactor = 1f;

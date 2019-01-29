@@ -1,7 +1,6 @@
+using Serilog;
 using System.Linq;
 using System.Runtime.Serialization;
-using log4net;
-using Trinity.Framework;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -11,7 +10,7 @@ namespace Trinity.Components.Adventurer.Settings
     [DataContract]
     public class AdventurerGem
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         public int Guid { get; set; }
 
@@ -87,7 +86,7 @@ namespace Trinity.Components.Adventurer.Settings
                 var chance = CalculateUpgradeChance(riftLevel, rank);
                 if (chance < requiredChance || MaxRank != 0 && rank >= MaxRank)
                 {
-                    //Core.Logger.Debug($"{Name} RiftLevel={riftLevel} Chance={chance} RequiredChance={requiredChance} CurrentRank={Rank} TestingRank={rank} MaxRank={MaxRank} Upgrades={i} ");
+                    //s_logger.Debug($"{Name} RiftLevel={riftLevel} Chance={chance} RequiredChance={requiredChance} CurrentRank={Rank} TestingRank={rank} MaxRank={MaxRank} Upgrades={i} ");
                     return i;
                 }
             }

@@ -171,7 +171,7 @@ namespace Trinity.Components.Coroutines.Town
                     return CoroutineResult.Running;
                 }
 
-                s_logger.Info($"[{nameof(StashItems)}] Stashing: {item.Name} ({item.ActorSnoId}) [{item.InventoryColumn},{item.InventoryRow} {item.InventorySlot}] Quality={item.ItemQualityLevel} IsAncient={item.Stats.IsAncient} InternalName={item.InternalName} StashPage={page}");
+                s_logger.Information($"[{nameof(StashItems)}] Stashing: {item.Name} ({item.ActorSnoId}) [{item.InventoryColumn},{item.InventoryRow} {item.InventorySlot}] Quality={item.ItemQualityLevel} IsAncient={item.Stats.IsAncient} InternalName={item.InternalName} StashPage={page}");
 
                 ItemEvents.FireItemStashed(item);
                 InventoryManager.MoveItem(

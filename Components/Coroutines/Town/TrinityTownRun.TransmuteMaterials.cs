@@ -90,7 +90,7 @@ namespace Trinity.Components.Coroutines.Town
                 return false;
             }
 
-            s_logger.Info($"[{nameof(IsMaterialTransmutationPossible)}] You have enough Materials to convert '{from} ({GetCurrency(from)})' to '{to}', Deaths={Core.Inventory.Currency.DeathsBreath}");
+            s_logger.Information($"[{nameof(IsMaterialTransmutationPossible)}] You have enough Materials to convert '{from} ({GetCurrency(from)})' to '{to}', Deaths={Core.Inventory.Currency.DeathsBreath}");
             return true;
         }
 

@@ -251,6 +251,14 @@ namespace Trinity.Routines.Wizard
             private SkillSettings _teleport;
             private int _clusterSize;
             private float _emergencyHealthPct;
+            private bool _getStacksBeforeArchon;
+
+            [DefaultValue(true)]
+            public bool GetStacksBeforeArchon
+            {
+                get => _getStacksBeforeArchon;
+                set => SetField(ref _getStacksBeforeArchon, value);
+            }
 
             [DefaultValue(10)]
             public int ClusterSize
@@ -274,7 +282,7 @@ namespace Trinity.Routines.Wizard
 
             #region Skill Defaults
 
-            private static readonly SkillSettings TeleportDefaults = new SkillSettings
+            private static readonly SkillSettings s_teleportDefaults = new SkillSettings
             {
                 UseMode = UseTime.Default,
                 RecastDelayMs = 200,
@@ -286,7 +294,7 @@ namespace Trinity.Routines.Wizard
             public override void LoadDefaults()
             {
                 base.LoadDefaults();
-                Teleport = TeleportDefaults.Clone();
+                Teleport = s_teleportDefaults.Clone();
             }
 
             #region IDynamicSetting

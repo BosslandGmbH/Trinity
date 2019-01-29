@@ -50,7 +50,7 @@ namespace Trinity.Components.Coroutines.Town
                 // No need to wait here... Drop is doing a Yield when successful.
             }
 
-            s_logger.Info($"[{nameof(DropItems)}] Dropped {dropCount} Items");
+            s_logger.Information($"[{nameof(DropItems)}] Dropped {dropCount} Items");
             return CoroutineResult.Done;
         }
 
@@ -62,7 +62,7 @@ namespace Trinity.Components.Coroutines.Town
             if (!ZetaDia.IsInGame || !ZetaDia.IsInTown || item.IsAccountBound)
                 return CoroutineResult.NoAction;
 
-            s_logger.Info($"[{nameof(Drop)}] Dropping {item.Name} ({item.ActorSnoId}) in town. AnnId={item.AnnId} ");
+            s_logger.Information($"[{nameof(Drop)}] Dropping {item.Name} ({item.ActorSnoId}) in town. AnnId={item.AnnId} ");
 
             bool dropResult = false;
             try
@@ -71,7 +71,7 @@ namespace Trinity.Components.Coroutines.Town
             }
             catch (InjectionSEHException)
             {
-                s_logger.Info($"[{nameof(DropItems)}] Failed to Drop {item.Name} ({item.ActorSnoId}) in town. AnnId={item.AnnId} ");
+                s_logger.Information($"[{nameof(DropItems)}] Failed to Drop {item.Name} ({item.ActorSnoId}) in town. AnnId={item.AnnId} ");
                 DroppedItemAnnIds.Add(item.AnnId);
             }
 

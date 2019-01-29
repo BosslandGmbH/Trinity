@@ -1,7 +1,7 @@
-﻿using System;
-using log4net;
-using Trinity.Framework;
+﻿using Serilog;
+using System;
 using Trinity.Components.Adventurer.Game.Events;
+using Trinity.Framework;
 using Zeta.Common;
 using Zeta.Game;
 
@@ -9,7 +9,7 @@ namespace Trinity.Components.Adventurer.Game.Stats
 {
     public class ExperienceTracker : PulsingObject
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         private double _currentExperience;
         private double _minExperience;
@@ -81,19 +81,19 @@ namespace Trinity.Components.Adventurer.Game.Stats
             if (Math.Abs(_minExperience) < double.Epsilon || _minExperience > thisExpHour)
                 _minExperience = thisExpHour;
 
-            s_logger.Info($"[{reporterName}] Runs count: {_tick}");
-            s_logger.Info($"[{reporterName}] This run time: {timeOfLastRun}");
-            s_logger.Info($"[{reporterName}] Average run time: {averageRunTime}");
-            s_logger.Info($"[{reporterName}] Best run time: {_bestTime}");
-            s_logger.Info($"[{reporterName}] Worse run time: {_worseTime}");
-            s_logger.Info($"[{reporterName}] This run XP Gained: {_currentExperience:0,0}");
-            s_logger.Info($"[{reporterName}] This run / Hour: {thisExpHour:0,0}");
-            s_logger.Info($"[{reporterName}] Total XP Gained: {_totalExperience:0,0}");
-            s_logger.Info($"[{reporterName}] Total XP / Hour: {(_totalExperience / timeOfSession.TotalHours):0,0}");
-            s_logger.Info($"[{reporterName}] Best XP / Hour (single run): {_maxExperience:0,0}");
-            s_logger.Info($"[{reporterName}] Worse XP / Hour (single run): {_minExperience:0,0}");
-            s_logger.Info($"[{reporterName}] Best XP / Single run: {_maxExperienceRun:0,0}");
-            s_logger.Info($"[{reporterName}] Worse XP / Single run: {_minExperienceRun:0,0}");
+            s_logger.Information($"[{reporterName}] Runs count: {_tick}");
+            s_logger.Information($"[{reporterName}] This run time: {timeOfLastRun}");
+            s_logger.Information($"[{reporterName}] Average run time: {averageRunTime}");
+            s_logger.Information($"[{reporterName}] Best run time: {_bestTime}");
+            s_logger.Information($"[{reporterName}] Worse run time: {_worseTime}");
+            s_logger.Information($"[{reporterName}] This run XP Gained: {_currentExperience:0,0}");
+            s_logger.Information($"[{reporterName}] This run / Hour: {thisExpHour:0,0}");
+            s_logger.Information($"[{reporterName}] Total XP Gained: {_totalExperience:0,0}");
+            s_logger.Information($"[{reporterName}] Total XP / Hour: {(_totalExperience / timeOfSession.TotalHours):0,0}");
+            s_logger.Information($"[{reporterName}] Best XP / Hour (single run): {_maxExperience:0,0}");
+            s_logger.Information($"[{reporterName}] Worse XP / Hour (single run): {_minExperience:0,0}");
+            s_logger.Information($"[{reporterName}] Best XP / Single run: {_maxExperienceRun:0,0}");
+            s_logger.Information($"[{reporterName}] Worse XP / Single run: {_minExperienceRun:0,0}");
         }
 
         public static ExperienceTrackerResult GetResult()

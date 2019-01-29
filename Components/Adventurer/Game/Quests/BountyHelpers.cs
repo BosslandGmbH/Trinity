@@ -273,21 +273,21 @@ namespace Trinity.Components.Adventurer.Game.Quests
         {
             return
                 ZetaDia.Storage.Quests.AllQuests.Any(
-                    q => q.Quest == ActBountyFinishingQuests[act] && q.State == QuestState.InProgress);
+                    q => q.QuestSNO == ActBountyFinishingQuests[act] && q.State == QuestState.InProgress);
         }
 
         public static bool IsAnyActTurninInProgress()
         {
             return
                 ZetaDia.Storage.Quests.AllQuests.Any(
-                    q => ActBountyFinishingQuests.Values.Contains(q.Quest) && q.State == QuestState.InProgress);
+                    q => ActBountyFinishingQuests.Values.Contains(q.QuestSNO) && q.State == QuestState.InProgress);
         }
 
         public static bool IsActTurninCompleted(Act act)
         {
             return
                 ZetaDia.Storage.Quests.AllQuests.Any(
-                    q => q.Quest == ActBountyFinishingQuests[act] && q.State == QuestState.Completed);
+                    q => q.QuestSNO == ActBountyFinishingQuests[act] && q.State == QuestState.Completed);
         }
 
         public static bool QuestNpcExistsNearMe(float radius)

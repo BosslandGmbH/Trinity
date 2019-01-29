@@ -73,7 +73,7 @@ namespace Trinity.Components.Coroutines.Town
                 {
                     if (Core.Settings.Items.GamblingTypes == GambleSlotTypes.None)
                     {
-                        s_logger.Warn($"[{nameof(IsGamblePossible)}] Select at least one thing to buy in settings");
+                        s_logger.Warning($"[{nameof(IsGamblePossible)}] Select at least one thing to buy in settings");
                         return false;
                     }
                 }
@@ -125,14 +125,14 @@ namespace Trinity.Components.Coroutines.Town
 
             if (item == null)
             {
-                s_logger.Warn($"[{nameof(BuyItem)}] Could not find the item requested by rotation in slot {slot}. Going to buy a random item.");
+                s_logger.Warning($"[{nameof(BuyItem)}] Could not find the item requested by rotation in slot {slot}. Going to buy a random item.");
                 item = ZetaDia.Actors.GetActorsOfType<ACDItem>().FirstOrDefault(a => a.InternalName.StartsWith("PH_"));
                 return true;
             }
 
             slot = TownInfo.MysterySlotTypeAndId.FirstOrDefault(o => item.ActorSnoId == o.Value).Key;
             InventoryManager.BuyItem(item.AnnId);
-            s_logger.Info($"[{nameof(BuyItem)}] Buying: '{slot}'");
+            s_logger.Information($"[{nameof(BuyItem)}] Buying: '{slot}'");
             _gambleRotation.Remove(slot);
             return true;
         }

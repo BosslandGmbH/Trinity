@@ -1,11 +1,11 @@
-﻿using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using log4net;
 using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using Trinity.Modules;
 using Zeta.Common;
 using Zeta.Game;
@@ -15,7 +15,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 {
     public class WorldScene
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         private readonly float _boxSize;
         private readonly float _boxTolerance;
@@ -301,7 +301,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     continue;
                 }
 
-                var onEastEdge = other.NorthWest.Y == NorthEast.Y && other.SouthWest.Y == SouthEast.Y;
+                var onEastEdge = Math.Abs(other.NorthWest.Y - NorthEast.Y) < float.Epsilon && Math.Abs(other.SouthWest.Y - SouthEast.Y) < float.Epsilon;
                 withinBounds = other.Size.X < Size.X
                     ? other.NorthWest.X >= NorthEast.X && other.SouthWest.X <= SouthEast.X
                     : other.NorthWest.X <= NorthEast.X && other.SouthWest.X >= SouthEast.X;
@@ -323,7 +323,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     continue;
                 }
 
-                var onWestEdge = other.NorthEast.Y == NorthWest.Y && other.SouthEast.Y == SouthWest.Y;
+                var onWestEdge = Math.Abs(other.NorthEast.Y - NorthWest.Y) < float.Epsilon && Math.Abs(other.SouthEast.Y - SouthWest.Y) < float.Epsilon;
                 withinBounds = other.Size.X < Size.X
                     ? other.NorthEast.X >= NorthWest.X && other.SouthEast.X <= SouthWest.X
                     : other.NorthEast.X <= NorthWest.X && other.SouthEast.X >= SouthWest.X;

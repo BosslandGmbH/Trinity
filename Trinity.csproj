@@ -66,11 +66,6 @@
       <HintPath>$(SolutionDir)\packages\Buddy.Coroutines.1.0.5\lib\net461\Buddy.Coroutines.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(SolutionDir)\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <ProjectReference Include="$(SolutionDir)\Demonbuddy\Demonbuddy.csproj">
       <Project>{E7F256CB-7848-4494-B69B-D33557147BAF}</Project>
       <Name>Demonbuddy</Name>
@@ -1132,6 +1127,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Serilog">
+      <Version>2.8.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>

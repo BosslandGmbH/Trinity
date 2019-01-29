@@ -1,10 +1,9 @@
-﻿using System;
+﻿using GreyMagic;
+using Serilog;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using GreyMagic;
-using log4net;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
@@ -17,7 +16,7 @@ namespace Trinity.Modules
 {
     public class SceneStorage : Module, IEnumerable<WorldScene>
     {
-        private static readonly ILog s_logger = Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         public delegate void GridProviderEventHandler(List<WorldScene> provider);
 
