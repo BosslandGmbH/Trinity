@@ -86,7 +86,7 @@ namespace Trinity.Modules
                     return;
                 }
 
-                s_logger.Debug($"[{nameof(Update)}] World has changed from {_currentWorld} to {currentWorldId}.");
+                s_logger.Information($"[{nameof(Update)}] World has changed from {_currentWorld} to {currentWorldId}.");
                 _currentWorld = currentWorldId;
                 Reset();
             }
@@ -142,7 +142,7 @@ namespace Trinity.Modules
             if (addedScenes.Count <= 0)
                 return;
 
-            s_logger.Debug($"[{nameof(Update)}] Found {addedScenes.Count} new scenes.");
+            s_logger.Information($"[{nameof(Update)}] Found {addedScenes.Count} new scenes.");
             var sceneData = CreateSceneData(addedScenes, worldId);
             foreach (var grid in GridStore.GetCurrentGrids())
             {
@@ -161,7 +161,7 @@ namespace Trinity.Modules
             }
 
             ScenesAdded?.Invoke(addedScenes);
-            s_logger.Debug($"[{nameof(Update)}] Updates Finished.");
+            s_logger.Information($"[{nameof(Update)}] Updates Finished.");
         }
 
         public SceneData CreateSceneData(IEnumerable<WorldScene> addedScenes, SNOWorld worldId)
