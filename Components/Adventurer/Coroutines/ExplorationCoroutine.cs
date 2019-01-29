@@ -14,7 +14,7 @@ using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Coroutines
 {
-    public sealed class ExplorationCoroutine : ISubroutine
+    public sealed class ExplorationCoroutine : ISubroutine, IDisposable
     {
         private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
@@ -30,6 +30,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             }
             if (await _explorationCoroutine.GetCoroutine())
             {
+                _explorationCoroutine.Dispose();
                 _explorationCoroutine = null;
                 return true;
             }
@@ -164,8 +165,8 @@ namespace Trinity.Components.Adventurer.Coroutines
                 // Ignore marking nodes as Visited for bounties.
                 if (destination != null && ZetaDia.Storage.Quests.ActiveBounty == null)
                 {
-                    WorldScene destScene = destination.Scene;
-                    Vector3 destinationPos = destination.NavigableCenter;
+                    var destScene = destination.Scene;
+                    var destinationPos = destination.NavigableCenter;
 
                     var exitPositions = destScene.ExitPositions;
                     var connectedScenes = destScene.ConnectedScenes();
@@ -308,5 +309,10 @@ namespace Trinity.Components.Adventurer.Coroutines
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            Core.Scenes.ScenesAdded -= OnScenesAdded;
+        }
     }
 }
