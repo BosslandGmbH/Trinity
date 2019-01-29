@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Serilog;
 using Trinity.Framework.Actors.ActorTypes;
+using Zeta.Common;
 
 namespace Trinity.Framework.Helpers
 {
@@ -49,43 +51,38 @@ namespace Trinity.Framework.Helpers
     // 黑白灰 修改黑名单支持同时到期时间多个对象
     public class GenericBlacklist
     {
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
-        private static void addToExpireCache(DateTime k, string v)
+        private static void AddToExpireCache(DateTime k, string v)
         {
-
             HashSet<string> ls = null;
-            if (ExpireCache.ContainsKey(k))
+            if (s_expireCache.ContainsKey(k))
             {
-                ls = ExpireCache[k];
+                ls = s_expireCache[k];
             }
             else
             {
                 ls = new HashSet<string>();
-                ExpireCache.Add(k, ls);
+                s_expireCache.Add(k, ls);
             }
             ls.Add(v);
         }
 
-        private static bool removeFromExpireCache(DateTime k, string v)
+        private static bool RemoveFromExpireCache(DateTime k, string v)
         {
-            if (!ExpireCache.ContainsKey(k))
+            if (!s_expireCache.ContainsKey(k))
             {
                 return false;
             }
-            var ls = ExpireCache[k];
-            if (ls == null)
-            {
-                return false;
-            }
-            return ls.Remove(v);
+            var ls = s_expireCache[k];
+            return ls != null && ls.Remove(v);
         }
 
         public static void Blacklist(TrinityActor objectToBlacklist, TimeSpan duration = default(TimeSpan), string reason = "")
         {
-            Core.Logger.Debug($@"Blacklisting {objectToBlacklist.InternalName} ActorSnoId: {objectToBlacklist.ActorSnoId} RActorId: {objectToBlacklist.RActorId}
+            s_logger.Debug($@"[{nameof(Blacklist)}] Blacklisting {objectToBlacklist.InternalName} ActorSnoId: {objectToBlacklist.ActorSnoId} RActorId: {objectToBlacklist.RActorId}
             Because: {reason}
-            Duration: {duration:g}
-            ");
+            Duration: {duration:g}");
 
             DateTime expires;
             if (duration == default(TimeSpan))
@@ -107,10 +104,10 @@ namespace Trinity.Framework.Helpers
             });
         }
 
-        private static readonly Dictionary<string, GenericCacheObject> DataCache = new Dictionary<string, GenericCacheObject>();
-        private static readonly Dictionary<DateTime, HashSet<string>> ExpireCache = new Dictionary<DateTime, HashSet<string>>();
+        private static readonly Dictionary<string, GenericCacheObject> s_dataCache = new Dictionary<string, GenericCacheObject>();
+        private static readonly Dictionary<DateTime, HashSet<string>> s_expireCache = new Dictionary<DateTime, HashSet<string>>();
 
-        private static readonly object Synchronizer = new object();
+        private static readonly object s_synchronizer = new object();
 
         private static Thread _manager;
 
@@ -124,12 +121,12 @@ namespace Trinity.Framework.Helpers
             if (string.IsNullOrWhiteSpace(obj.Key))
                 return false;
 
-            lock (Synchronizer)
+            lock (s_synchronizer)
             {
                 if (ContainsKey(obj.Key))
                     return false;
-                DataCache.Add(obj.Key, obj);
-                addToExpireCache(obj.Expires, obj.Key);
+                s_dataCache.Add(obj.Key, obj);
+                AddToExpireCache(obj.Expires, obj.Key);
                 return true;
             }
         }
@@ -139,12 +136,12 @@ namespace Trinity.Framework.Helpers
             if (string.IsNullOrWhiteSpace(obj.Key))
                 return false;
 
-            lock (Synchronizer)
+            lock (s_synchronizer)
             {
                 RemoveObject(obj.Key);
 
-                DataCache.Add(obj.Key, obj);
-                addToExpireCache(obj.Expires, obj.Key);
+                s_dataCache.Add(obj.Key, obj);
+                AddToExpireCache(obj.Expires, obj.Key);
 
                 return true;
             }
@@ -155,13 +152,13 @@ namespace Trinity.Framework.Helpers
             if (string.IsNullOrWhiteSpace(key))
                 return false;
 
-            lock (Synchronizer)
+            lock (s_synchronizer)
             {
                 if (!ContainsKey(key))
                     return false;
-                GenericCacheObject oldObj = DataCache[key];
-                DataCache.Remove(key);
-                removeFromExpireCache(oldObj.Expires, oldObj.Key);
+                GenericCacheObject oldObj = s_dataCache[key];
+                s_dataCache.Remove(key);
+                RemoveFromExpireCache(oldObj.Expires, oldObj.Key);
                 return true;
             }
         }
@@ -171,9 +168,9 @@ namespace Trinity.Framework.Helpers
             if (string.IsNullOrWhiteSpace(key))
                 return false;
 
-            lock (Synchronizer)
+            lock (s_synchronizer)
             {
-                return DataCache.ContainsKey(key);
+                return s_dataCache.ContainsKey(key);
             }
         }
 
@@ -182,7 +179,7 @@ namespace Trinity.Framework.Helpers
             if (obj.Key == "")
                 return false;
 
-            lock (Synchronizer)
+            lock (s_synchronizer)
             {
                 return ContainsKey(obj.Key);
             }
@@ -190,11 +187,11 @@ namespace Trinity.Framework.Helpers
 
         public static GenericCacheObject GetObject(string key)
         {
-            lock (Synchronizer)
+            lock (s_synchronizer)
             {
                 if (ContainsKey(key))
                 {
-                    return DataCache[key];
+                    return s_dataCache[key];
                 }
                 return new GenericCacheObject();
             }
@@ -208,7 +205,7 @@ namespace Trinity.Framework.Helpers
                 {
                     if (_manager == null || (_manager != null && !_manager.IsAlive))
                     {
-                        Core.Logger.Log("Starting up Generic Blacklist Manager thread");
+                        s_logger.Information($"[{nameof(MaintainBlacklist)}] Starting up Generic Blacklist Manager thread");
                         _manager = new Thread(Manage)
                         {
                             Name = "TrinityPlugin Generic Blacklist",
@@ -220,8 +217,7 @@ namespace Trinity.Framework.Helpers
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Log("Exception in Generic Blacklist Manager");
-                    Core.Logger.Log(ex.ToString());
+                    s_logger.Error(ex, $"[{nameof(MaintainBlacklist)}] Exception in Generic Blacklist Manager");
                 }
             }
         }
@@ -234,14 +230,14 @@ namespace Trinity.Framework.Helpers
                 {
                     long nowTicks = DateTime.UtcNow.Ticks;
 
-                    lock (Synchronizer)
+                    lock (s_synchronizer)
                     {
-                        foreach (KeyValuePair<DateTime, HashSet<string>> kv in ExpireCache.Where(kv => kv.Key.Ticks < nowTicks).ToList())
+                        foreach (KeyValuePair<DateTime, HashSet<string>> kv in s_expireCache.Where(kv => kv.Key.Ticks < nowTicks).ToList())
                         {
-                            ExpireCache.Remove(kv.Key);
+                            s_expireCache.Remove(kv.Key);
                             foreach (var v in kv.Value)
                             {
-                                DataCache.Remove(v);
+                                s_dataCache.Remove(v);
                             }
                         }
                     }
@@ -251,7 +247,7 @@ namespace Trinity.Framework.Helpers
                 catch (ThreadAbortException) { }
                 catch (Exception ex)
                 {
-                    Core.Logger.Error("Blacklist manager crashed: {0}", ex.Message);
+                    s_logger.Error(ex, $"[{nameof(Manage)}] Blacklist manager crashed");
                 }
             }
         }
@@ -266,10 +262,10 @@ namespace Trinity.Framework.Helpers
 
         public static void ClearBlacklist()
         {
-            lock (Synchronizer)
+            lock (s_synchronizer)
             {
-                DataCache.Clear();
-                ExpireCache.Clear();
+                s_dataCache.Clear();
+                s_expireCache.Clear();
             }
         }
     }

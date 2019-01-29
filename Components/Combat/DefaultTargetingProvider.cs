@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Threading.Tasks;
 using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
@@ -32,6 +33,8 @@ namespace Trinity.Components.Combat
 
     public class DefaultTargetingProvider : ITargetingProvider
     {
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
+
         public TrinityActor CurrentTarget { get; private set; }
 
         public TrinityPower CurrentPower { get; private set; }
@@ -47,9 +50,7 @@ namespace Trinity.Components.Combat
             if (CurrentTarget != null &&
                 CurrentTarget.Targeting.TotalTargetedTime > TimeSpan.FromSeconds(30))
             {
-                Core.Logger.Log(
-                    LogCategory.Targetting,
-                    $"Long target time detected: {CurrentTarget} duration: {CurrentTarget.Targeting.TotalTargetedTime.TotalSeconds:N2}s");
+                s_logger.Information($"[{nameof(SetCurrentTarget)}] Long target time detected: {CurrentTarget} duration: {CurrentTarget.Targeting.TotalTargetedTime.TotalSeconds:N2}s");
             }
 
             if (target != null &&
@@ -67,9 +68,7 @@ namespace Trinity.Components.Combat
             if (target == null &&
                 CurrentTarget != null)
             {
-                Core.Logger.Log(
-                    LogCategory.Targetting,
-                    $"Clearing Target. Was: {CurrentTarget}");
+                s_logger.Information($"[{nameof(SetCurrentTarget)}] Clearing Target. Was: {CurrentTarget}");
             }
 
             if (CurrentTarget != null)
@@ -81,9 +80,7 @@ namespace Trinity.Components.Combat
             if (target != null)
             {
                 target?.Targeting.UpdateTargetInfo(true);
-                Core.Logger.Log(
-                    LogCategory.Targetting,
-                    $"New Target: {target.Name} {target.Targeting} WeightInfo={target.WeightInfo} Targeting={target.Targeting}");
+                s_logger.Information($"[{nameof(SetCurrentTarget)}] New Target: {target.Name} {target.Targeting} WeightInfo={target.WeightInfo} Targeting={target.Targeting}");
             }
 
             CurrentTarget = target;
@@ -275,9 +272,7 @@ namespace Trinity.Components.Combat
 
             var targetRangeRequired = target.IsHostile || target.IsDestroyable ? spellRange : objectRange;
 
-            Core.Logger.Verbose(
-                LogCategory.Targetting,
-                $">> CurrentPower={TrinityCombat.Targeting.CurrentPower} CurrentTarget={target} RangeReq:{targetRangeRequired} RadDist:{target.RadiusDistance}");
+            s_logger.Verbose($"[{nameof(IsInRange)}] >> CurrentPower={TrinityCombat.Targeting.CurrentPower} CurrentTarget={target} RangeReq:{targetRangeRequired} RadDist:{target.RadiusDistance}");
             
             // Handle Belial differently, he's never in LineOfSight.
             if (Core.Player.IsInBossEncounter &&
@@ -330,7 +325,7 @@ namespace Trinity.Components.Combat
                 }
             }
 
-            Core.Logger.Verbose(LogCategory.Targetting, $">> CurrentPower={power} CurrentTarget={position} RangeReq:{rangeRequired} Dist:{distance}");
+            s_logger.Verbose($"[{nameof(IsInRange)}] >> CurrentPower={power} CurrentTarget={position} RangeReq:{rangeRequired} Dist:{distance}");
 
             // Handle Belial differently, he's never in LineOfSight.
             if (Core.Player.IsInBossEncounter &&

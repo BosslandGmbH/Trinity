@@ -126,8 +126,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
                     if (closestUnvisitedNode != null)
                     {
-                        Core.Logger.Debug(LogCategory.Exploration,
-                            $"Explore: Selected Nearby Node: [{closestUnvisitedNode.NavigableCenter.X},{closestUnvisitedNode.NavigableCenter.Y},{closestUnvisitedNode.NavigableCenter.Z}] Dist:{closestUnvisitedNode.Distance} {(closestUnvisitedNode.Priority ? "(Priority)" : "")} ");
+                        s_logger.Debug($"[{nameof(NearestWeightedUnvisitedNode)}] Selected Nearby Node: [{closestUnvisitedNode.NavigableCenter.X},{closestUnvisitedNode.NavigableCenter.Y},{closestUnvisitedNode.NavigableCenter.Z}] Dist:{closestUnvisitedNode.Distance} {(closestUnvisitedNode.Priority ? "(Priority)" : "")} ");
                         return closestUnvisitedNode;
                     }
                 }
@@ -144,15 +143,14 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
                 if (node != null)
                 {
-                    Core.Logger.Debug(LogCategory.Exploration,
-                        $"Explore: Selected Nearby Node: [{node.NavigableCenter.X},{node.NavigableCenter.Y},{node.NavigableCenter.Z}] Dist:{node.Distance} {(node.Priority ? "(Priority)" : "")} ");
+                    s_logger.Debug($"[{nameof(NearestWeightedUnvisitedNode)}] Selected Nearby Node: [{node.NavigableCenter.X},{node.NavigableCenter.Y},{node.NavigableCenter.Z}] Dist:{node.Distance} {(node.Priority ? "(Priority)" : "")} ");
                     return node;
                 }
 
                 if (ExplorationGrid.Instance.NearestNode != null &&
                     !levelAreaIds.Contains(ZetaDia.CurrentLevelAreaSnoId))
                 {
-                    Core.Logger.Debug("[ExplorationLogic] Adventurer is trying to find nodes that are not in this LevelArea. DefinedIds='{0}' CurrentId='{0}'. Marking current area's nodes as valid.", string.Join(", ", levelAreaIds), ZetaDia.CurrentLevelAreaSnoId);
+                    s_logger.Debug($"[{nameof(NearestWeightedUnvisitedNode)}] Adventurer is trying to find nodes that are not in this LevelArea. DefinedIds='{string.Join(", ", levelAreaIds)}' CurrentId='{ZetaDia.CurrentLevelAreaSnoId}'. Marking current area's nodes as valid.");
                     levelAreaIds.Add(ZetaDia.CurrentLevelAreaSnoId);
 
                     // Ignore level area match

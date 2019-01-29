@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using Serilog;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
 using Zeta.Common;
@@ -41,7 +42,9 @@ namespace Trinity.Framework.Actors
     /// </summary>
     public class ActorCache : Module, IActorCache
     {
-        public Dictionary<int, TrinityActor> _rActors = new Dictionary<int, TrinityActor>();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
+
+        public Dictionary<int, TrinityActor> RActors = new Dictionary<int, TrinityActor>();
         private Dictionary<int, ACDItem> _inventory = new Dictionary<int, ACDItem>();
 
         private readonly Dictionary<int, short> _annToAcdIndex = new Dictionary<int, short>();
@@ -75,7 +78,7 @@ namespace Trinity.Framework.Actors
             var gameId = ZetaDia.Service.CurrentGameId;
             if (_gameId != gameId)
             {
-                Core.Logger.Debug("Game Change Detected");
+                s_logger.Debug($"[{nameof(Update)}] Game Change Detected");
                 ZetaDia.Actors.Update();
                 _gameId = gameId;
                 return;
@@ -108,7 +111,7 @@ namespace Trinity.Framework.Actors
             foreach (var zetaActor in ZetaDia.Actors.RActorList)
             {
                 var rid = zetaActor.RActorId;
-                if (_rActors.TryGetValue(rid, out var actor))
+                if (RActors.TryGetValue(rid, out var actor))
                 {
                     actor.OnUpdated();
                 }
@@ -133,7 +136,7 @@ namespace Trinity.Framework.Actors
                 }
             }
 
-            Interlocked.Exchange(ref _rActors, newRactors);
+            Interlocked.Exchange(ref RActors, newRactors);
             Interlocked.Exchange(ref _acdToRActorIndex, newAcdToRactorDict);
         }
 
@@ -162,10 +165,10 @@ namespace Trinity.Framework.Actors
 
         #region Lookup Methods
 
-        public IEnumerable<TrinityActor> Actors => _rActors.Values;
+        public IEnumerable<TrinityActor> Actors => RActors.Values;
 
         public IEnumerable<T> OfType<T>() where T : TrinityActor
-            => _rActors.Values.OfType<T>();
+            => RActors.Values.OfType<T>();
 
         public IEnumerable<ACDItem> Inventory => _inventory.Values;
 
@@ -237,8 +240,8 @@ namespace Trinity.Framework.Actors
 
         public void Clear()
         {
-            Core.Logger.Warn("Resetting ActorCache");
-            foreach (var pair in _rActors)
+            s_logger.Warning($"[{nameof(Clear)}] Resetting ActorCache");
+            foreach (var pair in RActors)
             {
                 pair.Value.Attributes?.Destroy();
                 // TODO: Cleanup once verified.
@@ -246,7 +249,7 @@ namespace Trinity.Framework.Actors
                 //pair.Value.CommonData = null;
                 //pair.Value.Attributes = null;
             }
-            _rActors.Clear();
+            RActors.Clear();
             _inventory.Clear();
             _acdToRActorIndex.Clear();
             ActivePlayerRActorId = 0;
@@ -262,10 +265,10 @@ namespace Trinity.Framework.Actors
                 return default(T);
 
             var rActorId = _acdToRActorIndex[acdId];
-            if (!_rActors.ContainsKey(rActorId))
+            if (!RActors.ContainsKey(rActorId))
                 return default(T);
 
-            return _rActors[rActorId] as T;
+            return RActors[rActorId] as T;
         }
 
         IEnumerator IEnumerable.GetEnumerator() => Actors.GetEnumerator();
