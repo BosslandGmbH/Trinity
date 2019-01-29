@@ -77,13 +77,13 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         {
             //nodes = nodes.OrderBy(n => n.Center.X).ThenBy(n => n.Center.Y).ToList();
 
-            var worldId = AdvDia.CurrentWorldDynamicId;
+            var worldId = ZetaDia.Me?.WorldId ?? SNOWorld.Invalid;
 
             foreach (var node in nodes)
             {
                 if (node.DynamicWorldId != worldId)
                 {
-                    Core.Logger.Debug("[{0}] A node has different worldId than current world, skipping", GetType().Name);
+                    s_logger.Verbose($"[{nameof(UpdateInnerGrid)}] A node has different worldId than current world, skipping");
                     return;
                 }
 
@@ -254,23 +254,23 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                         continue;
 
                     var gridNode = InnerGrid[x, y];
-                    if (gridNode != null)
+                    if (gridNode == null)
+                        continue;
+
+                    if (gridDistanceMin > 0 && (x > gridX - gridDistanceMin && x < gridX + gridDistanceMin && y > gridY - gridDistanceMin && y < gridY + gridDistanceMin))
                     {
-                        if (gridDistanceMin > 0 && (x > gridX - gridDistanceMin && x < gridX + gridDistanceMin && y > gridY - gridDistanceMin && y < gridY + gridDistanceMin))
-                        {
-                            if (gridNode.Center.DistanceSqr(v2Center) <= worldDistanceMinSqr)
-                                continue;
-                        }
-
-                        if (!isRoughRounded || row <= roundWidth || col <= roundWidth || edgelength - row <= roundWidth || edgelength - col <= roundWidth)
-                        {
-                            if (gridNode.Center.DistanceSqr(v2Center) >= worldDistanceMaxSqr)
-                                continue;
-                        }
-
-                        if (condition != null && condition(gridNode))
-                            neighbors.Add(gridNode);
+                        if (gridNode.Center.DistanceSqr(v2Center) <= worldDistanceMinSqr)
+                            continue;
                     }
+
+                    if (!isRoughRounded || row <= roundWidth || col <= roundWidth || edgelength - row <= roundWidth || edgelength - col <= roundWidth)
+                    {
+                        if (gridNode.Center.DistanceSqr(v2Center) >= worldDistanceMaxSqr)
+                            continue;
+                    }
+
+                    if (condition != null && condition(gridNode))
+                        neighbors.Add(gridNode);
                 }
             }
             return neighbors;
