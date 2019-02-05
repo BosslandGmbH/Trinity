@@ -336,7 +336,8 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
             s_logger.Information("Rift done, let's force a town run...");
             BrainBehavior.ForceTownrun(nameof(RiftCoroutine));
-
+            PreviousWorld = SNOWorld.Invalid;
+            PreviousLevel = SNOLevelArea.Invalid;
             return true;
         }
     }
