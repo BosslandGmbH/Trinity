@@ -103,7 +103,7 @@ namespace Trinity.Modules
         {
             if (cacheObject == null)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Debug($"[{nameof(ShouldTargetActor)}] IGNORE: NullObject");
 #endif
                 return false;
@@ -111,7 +111,7 @@ namespace Trinity.Modules
 
             if (cacheObject.AcdId == -1)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldTargetActor)}] IGNORE: InvalidCommonData");
 #endif
                 return false;
@@ -123,7 +123,7 @@ namespace Trinity.Modules
             if (cacheObject.ActorType == ActorType.ClientEffect)
             {
                 var result = cacheObject.IsAllowedClientEffect;
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldTargetActor)}] {(result ? "TARGET" : "IGNORE")}: ClientEffect");
 #endif
                 return result;
@@ -149,26 +149,30 @@ namespace Trinity.Modules
                 case TrinityObjectType.BuffedRegion:
                 case TrinityObjectType.Gate:
                 case TrinityObjectType.BloodShard:
+#if LOG_TARGETS_CACHE
                     s_logger.Verbose($"[{nameof(ShouldTargetActor)}] TARGET: Player, PowerGlobe, HealthGlobe, ProgressionGlobe, BuffedRegion, Gate, BloodShard");
+#endif
                     return true;
 
                 case TrinityObjectType.Unit:
                     return ShouldIncludeUnit(cacheObject);
 
                 case TrinityObjectType.Avoidance:
-#if DEBUG
+#if LOG_TARGETS_CACHE
                     s_logger.Verbose($"[{nameof(ShouldTargetActor)}] IGNORE: Avoidance");
 #endif
                     return false;
 
                 case TrinityObjectType.Environment:
-#if DEBUG
+#if LOG_TARGETS_CACHE
                     s_logger.Verbose($"[{nameof(ShouldTargetActor)}] IGNORE: Environment");
 #endif
                     return false;
 
                 case TrinityObjectType.Banner:
+#if LOG_TARGETS_CACHE
                     s_logger.Verbose($"[{nameof(ShouldTargetActor)}] IGNORE: Banner");
+#endif
                     return false;
 
                 case TrinityObjectType.Destructible:
@@ -184,7 +188,7 @@ namespace Trinity.Modules
 
                 default:
                     var objectType = cacheObject.ToDiaObject()?.GetType().FullName;
-#if DEBUG
+#if LOG_TARGETS_CACHE
                     s_logger.Verbose($"[{nameof(ShouldTargetActor)}] IGNORE: Unhandled TrinityObjectType - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}, ObjectType: \"{objectType}\", TrinityObjectType: \"{cacheObject.Type}\"");
 #endif
                     return false;
@@ -221,7 +225,7 @@ namespace Trinity.Modules
         {
             if (cacheObject.IsExcludedId && !(ClearArea.IsClearing && cacheObject.IsHostile))
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: ExcludedId - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return false;
@@ -229,7 +233,7 @@ namespace Trinity.Modules
 
             if (cacheObject.IsExcludedType)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: ExcludedType - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return false;
@@ -237,7 +241,7 @@ namespace Trinity.Modules
 
             if (!cacheObject.IsValid)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: Invalid - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return false;
@@ -247,7 +251,7 @@ namespace Trinity.Modules
             {
                 if (!GameData.IsCursedChestOrShrine.Contains(cacheObject.ActorSnoId))
                 {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                     s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: BlacklistedByProfile - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                     return false;
@@ -256,7 +260,7 @@ namespace Trinity.Modules
 
             if (cacheObject is TrinityItem item && item.ToAcdItem().GetIsCosmeticItem())
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] INCLUDE: Cosmetic - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return true;
@@ -264,7 +268,7 @@ namespace Trinity.Modules
 
             if (cacheObject.IsUnit && cacheObject.Attributes == null)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: Unit No Attributes - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return false;
@@ -272,10 +276,12 @@ namespace Trinity.Modules
 
             if (cacheObject.IsUntargetable)
             {
-                // Include corpulents even when they are untargetable otherwise it messes up the avoidance.
                 if (IsCorpulent(cacheObject))
+                {
+                    // Include corpulents even when they are untargetable otherwise it messes up the avoidance.
                     return true;
-#if DEBUG
+                }
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: Untargetable - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return false;
@@ -286,7 +292,7 @@ namespace Trinity.Modules
                 !isQuestGiverOutsideTown &&
                 !cacheObject.IsBoss)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: NPC - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return false;
@@ -294,7 +300,7 @@ namespace Trinity.Modules
 
             if (cacheObject.IsDead)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: IsDead - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return false;
@@ -304,7 +310,7 @@ namespace Trinity.Modules
             {
                 if (cacheObject.IsGizmo && cacheObject.IsUsed)
                 {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                     s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: Used Gizmo - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                     return false;
@@ -312,7 +318,7 @@ namespace Trinity.Modules
 
                 if (cacheObject.IsMonster && !GameData.CorruptGrowthIds.Contains(cacheObject.ActorSnoId))
                 {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                     s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: Monster Obstacle - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                     return false;
@@ -321,7 +327,7 @@ namespace Trinity.Modules
 
             if (cacheObject.IsBlacklisted)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: Blacklisted - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return false;
@@ -329,7 +335,7 @@ namespace Trinity.Modules
 
             if (cacheObject.ZDiff > ZDiffLimit(cacheObject))
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: ZDiffLimit - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return false;
@@ -338,7 +344,7 @@ namespace Trinity.Modules
             if (!cacheObject.IsInLineOfSight &&
                 !ShouldIgnoreLoS(cacheObject))
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeCommon)}] IGNORE: No Line of Sight - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return false;
@@ -430,7 +436,7 @@ namespace Trinity.Modules
             
             if (cacheObject.MonsterRace == MonsterRace.Unknown)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeUnit)}] IGNORE: MonsterRace == Unknown");
 #endif
                 return false;
@@ -440,7 +446,7 @@ namespace Trinity.Modules
             {
                 if (cacheObject.IsSameTeam)
                 {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                     s_logger.Verbose($"[{nameof(ShouldIncludeUnit)}] IGNORE: IsSameTeam");
 #endif
                     return false;
@@ -448,7 +454,7 @@ namespace Trinity.Modules
 
                 if (cacheObject.IsNoDamage)
                 {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                     s_logger.Verbose($"[{nameof(ShouldIncludeUnit)}] IGNORE: IsNoDamage");
 #endif
                     return false;
@@ -456,7 +462,7 @@ namespace Trinity.Modules
 
                 if (cacheObject.IsFriendly)
                 {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                     s_logger.Verbose($"[{nameof(ShouldIncludeUnit)}] IGNORE: IsFriendly");
 #endif
                     return false;
@@ -467,13 +473,13 @@ namespace Trinity.Modules
                     // Include corpulents even when they are invulnerable otherwise it messes up the avoidance.
                     if (IsCorpulent(cacheObject))
                     {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                         s_logger.Verbose($"[{nameof(ShouldIncludeUnit)}] INCLUDE: IsCorpulent");
 #endif
                         return true;
                     }
 
-#if DEBUG
+#if LOG_TARGETS_CACHE
                     s_logger.Verbose($"[{nameof(ShouldIncludeUnit)}] IGNORE: IsInvulnerable");
 #endif
                     return false;
@@ -482,7 +488,7 @@ namespace Trinity.Modules
 
             if (cacheObject.IsSummonedByPlayer)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeUnit)}] IGNORE: SummonedByPlayer");
 #endif
                 return false;
@@ -490,13 +496,13 @@ namespace Trinity.Modules
 
             if (cacheObject.IsDead)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeUnit)}] IGNORE: IsDead");
 #endif
                 return false;
             }
 
-#if DEBUG
+#if LOG_TARGETS_CACHE
             s_logger.Verbose($"[{nameof(ShouldIncludeUnit)}] INCLUDE: Default");
 #endif
             return true;
@@ -506,7 +512,7 @@ namespace Trinity.Modules
         {
             if (item == null)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeGold)}] IGNORE: NullItem");
 #endif
                 return false;
@@ -514,7 +520,7 @@ namespace Trinity.Modules
 
             if (!Core.Settings.Items.PickupGold)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeGold)}] IGNORE: GoldPickupDisabled - Item: \"{item?.Name}\", InternalName: \"{item?.InternalName}\", Sno: {item?.ActorSnoId}, GBId: 0x{item?.GameBalanceId:x8}, RawItemType: {item.GetRawItemType()}");
 #endif
                 return false;
@@ -522,7 +528,7 @@ namespace Trinity.Modules
 
             if (item.GetGoldAmount() < Core.Settings.Items.MinGoldStack)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeGold)}] IGNORE: MinGoldStack - Item: \"{item?.Name}\", InternalName: \"{item?.InternalName}\", Sno: {item?.ActorSnoId}, GBId: 0x{item?.GameBalanceId:x8}, RawItemType: {item.GetRawItemType()}");
 #endif
                 return false;
@@ -535,7 +541,7 @@ namespace Trinity.Modules
         {
             if (item == null)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeItem)}] IGNORE: NullItem");
 #endif
                 return false;
@@ -543,7 +549,7 @@ namespace Trinity.Modules
 
             if (item.GetIsPickupNoClick() && TrinityCombat.Loot.IsBackpackFull)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeItem)}] IGNORE: Backpack is Full - Item: \"{item?.Name}\", InternalName: \"{item?.InternalName}\", Sno: {item?.ActorSnoId}, GBId: 0x{item?.GameBalanceId:x8}, RawItemType: {item.GetRawItemType()}");
 #endif
                 return false;
@@ -551,7 +557,7 @@ namespace Trinity.Modules
 
             if (item.GetIsMyDroppedItem())
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeItem)}] IGNORE: Dropped Item - Item: \"{item?.Name}\", InternalName: \"{item?.InternalName}\", Sno: {item?.ActorSnoId}, GBId: 0x{item?.GameBalanceId:x8}, RawItemType: {item.GetRawItemType()}");
 #endif
                 return false;
@@ -559,7 +565,7 @@ namespace Trinity.Modules
 
             if (item.GetIsUntargetable())
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeItem)}] IGNORE: Untargetable - Item: \"{item?.Name}\", InternalName: \"{item?.InternalName}\", Sno: {item?.ActorSnoId}, GBId: 0x{item?.GameBalanceId:x8}, RawItemType: {item.GetRawItemType()}");
 #endif
                 return false;
@@ -569,7 +575,7 @@ namespace Trinity.Modules
                 item.ItemQualityLevel <= ItemQuality.Rare4 &&
                 item.Distance > CharacterSettings.Instance.LootRadius)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeItem)}] IGNORE: OutOfRange {CharacterSettings.Instance.LootRadius} - Item: \"{item?.Name}\", InternalName: \"{item?.InternalName}\", Sno: {item?.ActorSnoId}, GBId: 0x{item?.GameBalanceId:x8}, RawItemType: {item.GetRawItemType()}");
 #endif
                 return false;
@@ -577,7 +583,7 @@ namespace Trinity.Modules
 
             if (!TrinityCombat.Loot.ShouldPickup(item))
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeItem)}] IGNORE: LootProvider.ShouldPickup - Item: \"{item?.Name}\", InternalName: \"{item?.InternalName}\", Sno: {item?.ActorSnoId}, GBId: 0x{item?.GameBalanceId:x8}, RawItemType: {item.GetRawItemType()}");
 #endif
                 return false;
@@ -590,7 +596,7 @@ namespace Trinity.Modules
         {
             if (cacheObject.IsUsed)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeGizmo)}] IGNORE: Used Gizmo - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return false;
@@ -598,7 +604,7 @@ namespace Trinity.Modules
 
             if (cacheObject.IsInteractWhitelisted)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeGizmo)}] INTERACT: Interact Whitelist - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return true;
@@ -606,7 +612,7 @@ namespace Trinity.Modules
 
             if (GameData.ForceDestructibles.Contains(cacheObject.ActorSnoId))
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeGizmo)}] INTERACT: Force Destructibles - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return true;
@@ -614,7 +620,7 @@ namespace Trinity.Modules
 
             if (TrinityTownRun.IsVendoring && cacheObject.Distance > 10f)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeGizmo)}] IGNORE: Want to Town Run - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return false;
@@ -623,7 +629,7 @@ namespace Trinity.Modules
             //TODO: Why are we ignoreing doors????
             if (GameData.DoorsToAlwaysIgnore.Contains(cacheObject.ActorSnoId))
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeGizmo)}] IGNORE: Always Ignore Door - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return false;
@@ -632,7 +638,7 @@ namespace Trinity.Modules
             if (GameData.SceneSpecificDoorsIgnore.ContainsKey(Core.Player.CurrentSceneSnoId) &&
                 GameData.SceneSpecificDoorsIgnore[Core.Player.CurrentSceneSnoId] == cacheObject.ActorSnoId)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeGizmo)}] IGNORE: Scene Specific Ignore Door - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return false;
@@ -643,13 +649,13 @@ namespace Trinity.Modules
                 cacheObject.Distance > 5f &&
                 cacheObject.GizmoType != GizmoType.BreakableChest)
             {
-#if DEBUG
+#if LOG_TARGETS_CACHE
                 s_logger.Verbose($"[{nameof(ShouldIncludeGizmo)}] IGNORE: Cant Reach Destructible - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
                 return false;
             }
 
-#if DEBUG
+#if LOG_TARGETS_CACHE
             s_logger.Verbose($"[{nameof(ShouldIncludeGizmo)}] INTERACT: Default - Item: \"{cacheObject?.Name}\", InternalName: \"{cacheObject?.InternalName}\", Sno: {cacheObject?.ActorSnoId}, GBId: 0x{cacheObject?.GameBalanceId:x8}");
 #endif
             return true;
