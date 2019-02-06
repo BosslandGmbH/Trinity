@@ -10,6 +10,7 @@ using Trinity.Framework.Helpers;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
+using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;
 
@@ -93,6 +94,14 @@ namespace Trinity.Components.Combat
             // When combat is disabled, we're still allowing trinity to handle non-unit targets.
             if (!IsCombatAllowed && IsUnitOrInvalid(target))
                 return CoroutineResult.NoAction;
+
+            // Sometimes it is standing still and stuck - need to handle that before we are entering
+            // the target one.
+            if (Navigator.StuckHandler.IsStuck)
+            {
+                await Navigator.StuckHandler.DoUnstick();
+                return CoroutineResult.Running;
+            }
 
             if (await Targeting.HandleTarget(target))
                 return CoroutineResult.Running;
