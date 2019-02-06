@@ -9,9 +9,7 @@ using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Components.Adventurer.Game.Stats;
 using Trinity.Components.Adventurer.Settings;
-using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects.Enums;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
@@ -30,9 +28,9 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
         private static readonly ExperienceTracker s_experienceTracker = new ExperienceTracker();
 
-        public static long CurrentRiftKeyCount => InventoryManager.AllItems
-            .Where(i => i.GetRawItemType() == RawItemType.TieredRiftKey)
-            .Sum(k => k.ItemStackQuantity);
+        public static long CurrentRiftKeyCount =>
+            ZetaDia.Storage?.PlayerDataManager?.ActivePlayerData
+                ?.GetCurrencyAmount(CurrencyType.GreaterRiftKeys) ?? 0;
         
         public static DiaGizmo RiftPortal => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true)
             .FirstOrDefault(g => g.IsFullyValid() &&
