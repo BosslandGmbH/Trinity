@@ -522,6 +522,7 @@
     <Compile Include="ProfileTags\RunActBountiesTag.cs" />
     <Compile Include="ProfileTags\ReloadProfileTag.cs" />
     <Compile Include="ProfileTags\ClearAreaTag.cs" />
+    <Compile Include="ProfileTags\RunBountySimple.cs" />
     <Compile Include="ProfileTags\TakeReturnPortalTag.cs" />
     <Compile Include="ProfileTags\TownPortalTag.cs" />
     <Compile Include="ProfileTags\TownRunTag.cs" />

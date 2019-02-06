@@ -335,7 +335,7 @@ namespace Trinity.Components.Combat
                 return distance <= rangeRequired;
             }
 
-            return distance <= rangeRequired && IsInLineOfSight(position);
+            return distance <= rangeRequired && (distance <= 7.0f || IsInLineOfSight(position));
         }
 
         public bool IsInLineOfSight(TrinityActor currentTarget)

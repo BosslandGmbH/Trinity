@@ -1,0 +1,79 @@
+<Profile>
+  <Name>SimpleBounties Act1</Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>False</PickupLoot>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <ToggleTargeting combat="True" looting="True" killRadius="90" lootRadius="300" />
+    <TargetBlacklists>  
+        <!--All Cursed Chests and Shrines-->
+        <TargetBlacklist actorId="364559"/>
+        <TargetBlacklist actorId="364601"/>
+        <TargetBlacklist actorId="365097"/>
+        <TargetBlacklist actorId="365718"/>
+        <TargetBlacklist actorId="365746"/>
+        <TargetBlacklist actorId="368169"/>
+        <TargetBlacklist actorId="369539"/>
+        <TargetBlacklist actorId="370696"/>
+        <TargetBlacklist actorId="374353"/>
+        <TargetBlacklist actorId="374355"/>
+        <TargetBlacklist actorId="374356"/>
+        <TargetBlacklist actorId="374391"/>
+        <TargetBlacklist actorId="376511"/>
+        <!-- Soulstone bridge -->
+        <TargetBlacklist actorId="165405"/>
+        <!--Tomb of Sardar - Locked Door-->
+        <TargetBlacklist actorId="153836"/>
+        <!--The True Son of the Wolf - Unattackable NPCs-->
+        <TargetBlacklist actorId="356218"/>
+        <TargetBlacklist actorId="356219"/>
+        <TargetBlacklist actorId="336711"/>
+        <!--Guarded Gizmo and Pingers-->
+        <TargetBlacklist actorId="435630"/>
+        <TargetBlacklist actorId="434971"/>
+        <TargetBlacklist actorId="430733"/>
+        <TargetBlacklist actorId="432259"/>
+        <TargetBlacklist actorId="434366"/>
+        <TargetBlacklist actorId="432770"/>
+        <TargetBlacklist actorId="433051"/>
+        <TargetBlacklist actorId="432331"/>
+        <TargetBlacklist actorId="432885"/>
+        <TargetBlacklist actorId="433184"/>
+        <TargetBlacklist actorId="433295"/>
+        <TargetBlacklist actorId="433385"/>
+        <TargetBlacklist actorId="433402"/>
+        <TargetBlacklist actorId="433124"/>
+        <TargetBlacklist actorId="433246"/>
+        <TargetBlacklist actorId="433316"/>
+        <!--ActorId: 301177, Type: Gizmo, Name: x1_PandExt_Time_Activator-81064, Distance2d: 18.63588, CollisionRadius: 15.18807, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0-->
+        <TargetBlacklist actorId="301177"/>
+        <!--ActorId: 227305, Type: Gizmo, Name: Lore_Inarius_Corrupt-55475, Distance2d: 9.442262, CollisionRadius: 11.92656, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0-->
+        <TargetBlacklist actorId="227305"/>
+        <TargetBlacklist actorId="81068"/>
+        <TargetBlacklist actorId="354407"/>
+        <TargetBlacklist actorId="153419"/>
+        <TargetBlacklist actorId="306536"/>
+        <TargetBlacklist actorId="3892"/>
+        <TargetBlacklist actorId="190236"/>
+        <TargetBlacklist actorId="220636"/>
+        <TargetBlacklist actorId="185391"/>
+        <!-- x1_Fortress_Event_Worldstone_Jamella (334487) Distance: 27.00935-->
+        <TargetBlacklist actorId="334487"/>
+        <TargetBlacklist actorId="354407"/>
+	
+  </TargetBlacklists>  
+  <Order>
+    <LogMessage message="Loading SimpleBounties - Act1" />
+    <RunBountySimple act="A1" />
+
+    <If condition="HasQuest(312429)">
+      <UseTownPortal questId="312429" stepId="2" />
+      <WaitTimer questId="312429" stepId="2" waitTime ="1000" />
+
+      <MoveToActor questId="312429" stepId="2" x="414" y="537" z="24" actorId="114622" interactRange="8"  pathPrecision="5" pathPointLimit="250" />
+      <WaitTimer questId="312429" stepId="2" waitTime ="1000" />
+
+      <Interact questId="312429" stepId="2" actorId="114622" x="414" y="537" z="24" interactAttempts="5" interactRange="8" />
+      <WaitTimer questId="1" waitTime="2000" />
+    </If>
+  </Order>
+</Profile>

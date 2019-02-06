@@ -507,6 +507,7 @@ namespace Trinity.Routines
             }
 
             if (CurrentPower.SNOPower != SNOPower.Walk &&
+                CurrentPower.TargetPosition != Vector3.Zero &&
                 CurrentPower.TargetPosition.Distance(Core.Player.Position) >
                 TrinityCombat.Targeting.MaxTargetDistance)
             {
@@ -670,11 +671,9 @@ namespace Trinity.Routines
             // But for goblin kamakazi we need a special exception to force it to always target the goblin.
 
             power = null;
-            if (!target.IsTreasureGoblin ||
-                Core.Settings.Weighting.GoblinPriority != TargetPriority.Kamikaze)
-            {
-                return false;
-            }
+            if (!target.IsTreasureGoblin
+                || Core.Settings.Weighting.GoblinPriority != TargetPriority.Kamikaze
+                || target.Position == Vector3.Zero) return false;
 
             Core.Logger.Log(LogCategory.Targetting, $"Forcing Kamakazi Target on {target}, routineProvided={routinePower}");
 

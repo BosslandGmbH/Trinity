@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Trinity.Framework;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
@@ -54,6 +55,7 @@ namespace Trinity.Modules
 
         public void Update()
         {
+            /*
             if (!ZetaDia.IsInGame || ZetaDia.Storage.PlayerDataManager.ActivePlayerData == null)
                 return;
 
@@ -107,7 +109,9 @@ namespace Trinity.Modules
             Equipped = equipped;
             EquippedIds = equippedIds;
             PlayerEquippedIds = playerEquippedIds;
-            BackpackItemCount = backpackItemCount;
+            BackpackItemCount = backpackItemCount;*/
+
+            BackpackItemCount = Core.Actors.Inventory.Count(c => c.InventorySlot == InventorySlot.BackpackItems);
         }
 
         public void Clear()
