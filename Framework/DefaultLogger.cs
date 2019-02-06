@@ -7,7 +7,6 @@ namespace Trinity.Framework
 {
     public interface IFrameworkLogger
     {
-        string Prefix { get; set; }
         void Debug(string s, params object[] args);
         void Debug(LogCategory category, string s, params object[] args);
         void Log(string s, params object[] args);
@@ -25,8 +24,6 @@ namespace Trinity.Framework
     public class DefaultLogger : IFrameworkLogger
     {
         private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
-
-        public string Prefix { get; set; } = $"{TrinityPlugin.Instance.Name} {TrinityPlugin.Instance.Version}";
 
         public void Log(string s, params object[] args)
             => LogToCategory(LogCategory.None, TrinityLogLevel.Info, s, args);
@@ -72,8 +69,8 @@ namespace Trinity.Framework
             if (!(Core.Settings?.Advanced?.LogCategories.HasFlag(category) ?? true))
                 return;
 
-            var cat = category != LogCategory.None ? $" [{category}] " : string.Empty;
-            var msg = $"[{Prefix}]{cat} {s}";
+            var cat = category != LogCategory.None ? $"[{category}] " : string.Empty;
+            var msg = $"{cat}{s}";
 
             if (_lastMessage == msg)
                 return;
