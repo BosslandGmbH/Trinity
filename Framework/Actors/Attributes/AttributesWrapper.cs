@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Serilog;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Memory;
+using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
@@ -14,6 +16,7 @@ namespace Trinity.Framework.Actors.Attributes
 {
     internal class AttributesWrapper
     {
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
         private ACD _commonData;
         private AttributeTable _table;
 
@@ -68,9 +71,9 @@ namespace Trinity.Framework.Actors.Attributes
                 var attribute = _commonData.GetAttribute<T>(type, modifier);
                 return attribute;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Core.Logger.Debug($" Unable to get Attribute for Type: {type} | Modifier: {modifier}");
+                s_logger.Warning(ex, $"Unable to get Attribute for Type: {type} | Modifier: {modifier}");
             }
             return default(T);
         }
@@ -92,9 +95,9 @@ namespace Trinity.Framework.Actors.Attributes
                 var attribute = _commonData.GetAttribute<T>(type);
                 return attribute;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Core.Logger.Debug($" Unable to get Attribute for Type: {type}");
+                s_logger.Warning(ex, $"Unable to get Attribute for Type: {type}");
             }
             return defaultProducer();
         }
