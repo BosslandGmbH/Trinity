@@ -121,6 +121,7 @@ namespace Trinity.Framework.Avoidance
                 avoidance.Actors.RemoveAll(a => !_currentRActorIds.Contains(a.RActorId));
             }
             CurrentAvoidances.RemoveAll(a => !a.Actors.Any(actor => actor.IsValid));
+            CurrentAvoidances.RemoveAll(a => a.IsExpired);
         }
 
         #region Settings

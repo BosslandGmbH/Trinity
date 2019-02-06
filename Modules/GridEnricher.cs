@@ -158,7 +158,7 @@ namespace Trinity.Modules
                                 continue;
                             }
 
-                            if (avoidance.IsAllowed)
+                            if (avoidance.IsAllowed && !avoidance.IsExpired)
                             {
                                 handler.UpdateNodes(TrinityGrid.Instance, avoidance);
 
