@@ -527,6 +527,7 @@ namespace Trinity.Components.Combat
             var itemType = item.GetItemType();
 
             // Keep any high gems placed in backpack while levelling, so we can socket items with them.
+            // Default to keep in backpack when Me happens to be null.
             if (item.IsGem &&
                 item.Stats.GemQuality >= GemQuality.Marquise &&
                 ZetaDia.Me?.Level < 70)

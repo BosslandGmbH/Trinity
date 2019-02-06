@@ -33,9 +33,12 @@ namespace Trinity.Components.Coroutines.Town
                                                      .Any(i => i.DurabilityPercent <= CharacterSettings.Instance.RepairWhenDurabilityBelow));
 
         // TODO: Make sure that is actually the portal we came from an not an open Rift portal (might cause a lot of empty meters).
-        public static DiaGizmo ReturnPortal => ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true).FirstOrDefault(g => g.IsFullyValid() && g.IsTownPortal);
+        public static DiaGizmo ReturnPortal => ZetaDia.Actors
+            .GetActorsOfType<DiaGizmo>(true)
+            .FirstOrDefault(g => g.IsFullyValid() && g.IsTownPortal);
 
-        private static readonly Lazy<PropertyInfo> s_vendorProperty = new Lazy<PropertyInfo>(() => typeof(BrainBehavior).GetProperty("IsVendoring"));
+        private static readonly Lazy<PropertyInfo> s_vendorProperty =
+            new Lazy<PropertyInfo>(() => typeof(BrainBehavior).GetProperty("IsVendoring"));
         public static bool IsVendoring
         {
             get => BrainBehavior.IsVendoring;

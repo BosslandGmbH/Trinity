@@ -60,6 +60,7 @@ namespace Trinity.DbProvider
 
         protected bool CheckForStuck()
         {
+            // Don't revert that if. It's not really an early exit ;)
             if (ZetaDia.Me != null)
             {
                 _lastPosition = ZetaDia.Me.Position;
