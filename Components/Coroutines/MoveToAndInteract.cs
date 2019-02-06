@@ -35,8 +35,7 @@ namespace Trinity.Components.Coroutines
             if (Core.Player.IsInTown)
                 GameUI.CloseVendorWindow();
 
-            return await CommonCoroutines.MoveAndInteract(obj, () => !IsInteracting &&
-                                                                     interactLimit-- > 0) == CoroutineResult.Running;
+            return await CommonCoroutines.MoveAndInteract(obj, () => IsInteracting || interactLimit-- < 0) == CoroutineResult.Running;
         }
 
         public static async Task<bool> Execute(IFindable actor, int interactLimit = 5)
