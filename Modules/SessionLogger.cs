@@ -128,7 +128,7 @@ namespace Trinity.Modules
 
         protected override int UpdateIntervalMs => 500;
 
-        public bool IsRunning => IsRecording && IsSettingEnabled && IsWired && TrinityPlugin.IsEnabled;
+        public bool IsRunning => IsRecording && IsSettingEnabled && IsWired && Plugin.IsEnabled;
 
         protected override void OnPulse()
         {

@@ -54,7 +54,7 @@ namespace Trinity.Framework.Avoidance
 
         protected override void OnPulse()
         {
-            if (!TrinityPlugin.IsEnabled || ZetaDia.Globals.IsLoadingWorld)
+            if (!Plugin.IsEnabled || ZetaDia.Globals.IsLoadingWorld)
                 return;
 
             UpdateAvoidances();

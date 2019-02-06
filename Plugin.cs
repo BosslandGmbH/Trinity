@@ -2,7 +2,11 @@ using System;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using System.IO;
+using System.Reflection;
+using System.Threading;
 using System.Windows;
+using Serilog;
+using Serilog.Events;
 using Trinity.DbProvider;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
@@ -11,28 +15,32 @@ using Trinity.UI.Visualizer;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Bot.Settings;
+using Zeta.Common;
 using Zeta.Common.Plugins;
 using Zeta.Game;
 using Application = System.Windows.Application;
 
 namespace Trinity
 {
-    public class TrinityPlugin : IPlugin
+    public class Plugin : IPlugin
     {
-        private static TrinityPlugin _instance;
-        public string Name => "Trinity";
-        public Version Version => new Version(2, 6, 448);
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
+
+        private static Plugin _instance;
+        public string Name { get; } = typeof(Plugin).Assembly.GetCustomAttribute<AssemblyTitleAttribute>().Title;
+        public Version Version { get; } = new Version(typeof(Plugin).Assembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version);
         public string Author => "xzjv, TarasBulba, rrrix, jubisman, Phelon and many more";
-        public string Description => $"v{Version} provides combat, exploration and much more";
+        public string Description { get; } = typeof(Plugin).Assembly.GetCustomAttribute<AssemblyDescriptionAttribute>().Description;
         public Window DisplayWindow => UILoader.GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));
         public bool Equals(IPlugin other) => other?.Name == Name && other?.Version == Version;
-        public static TrinityPlugin Instance => _instance ?? (_instance = new TrinityPlugin());
+        public static Plugin Instance => _instance ?? (_instance = new Plugin());
         public static bool IsEnabled { get; private set; }
         public bool IsInitialized { get; private set; }
 
-        public TrinityPlugin()
+        public Plugin()
         {
             _instance = this;
+            Logger.Enricher.AddOrUpdate(Name, () => new ScalarValue(Version));
             UILoader.Preload();
             PluginManager.OnPluginsReloaded += PluginManager_OnPluginsReloaded;
             InstallRoutine();
@@ -81,7 +89,7 @@ namespace Trinity
         {
             if (ZetaDia.CurrentQuest == null || ZetaDia.CurrentQuest.QuestSnoId == SNOQuest.Invalid)
             {
-                Core.Logger.Debug("Waiting while Quest is invalid (-1)");
+                s_logger.Verbose("Waiting while Quest is invalid (-1)");
                 BotMain.PauseFor(TimeSpan.FromSeconds(1));
             }
 
@@ -97,7 +105,6 @@ namespace Trinity
                 if (IsEnabled || !Application.Current.CheckAccess())
                     return;
 
-
                 Core.Init();
                 BotMain.OnStart += OnStart;
                 BotMain.OnStop += OnStop;
@@ -108,7 +115,8 @@ namespace Trinity
                 SetupDemonBuddy();
                 UILoader.PreLoadWindowContent();
                 ModuleManager.Enable();
-                Core.Logger.Log($"is now ENABLED: {Description} - now in action!");
+                s_logger.Information($@"{Name} v{Version} is now ENABLED.
+{Description}");
                 IsEnabled = true;
             }
         }
@@ -143,7 +151,7 @@ namespace Trinity
             ItemManager.Current = new BlankItemManager();
             Zeta.Bot.RoutineManager.Current = null;
             ModuleManager.Disable();
-            Core.Logger.Log($"is now DISABLED!");
+            s_logger.Information($@"{Name} v{Version} is now DISABLED.");
         }
 
         private static void OnStop(IBot bot)
@@ -154,6 +162,5 @@ namespace Trinity
         public void OnShutdown()
         {
         }
-
     }
 }

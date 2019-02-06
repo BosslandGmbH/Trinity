@@ -32,7 +32,7 @@ namespace Trinity.Framework
 
         private static void ReplaceTreeHooks()
         {
-            if (TrinityPlugin.IsEnabled)
+            if (Plugin.IsEnabled)
             {
                 ReplaceCombatHook();
                 ReplaceVendorRunHook();

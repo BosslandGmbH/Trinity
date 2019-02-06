@@ -70,7 +70,7 @@ namespace Trinity.Framework
             if (Core.Settings.Routine == null)
                 return;
 
-            if (!TrinityPlugin.IsEnabled)
+            if (!Plugin.IsEnabled)
                 return;
 
             // Ignore wizards going into archon mode.
