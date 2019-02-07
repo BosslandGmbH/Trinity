@@ -5,6 +5,7 @@ using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.QuestTools;
 using Trinity.Framework.Objects.Enums;
 using Zeta.Game;
+using Zeta.Game.Internals;
 using Zeta.XmlEngine;
 
 
@@ -32,10 +33,6 @@ namespace Trinity.ProfileTags
         [Description("Name hash id of the marker")]
         public int MarkerHash { get; set; }
 
-        [XmlAttribute("markerName")]
-        [Description("Full or partial name of the marker")]
-        public string MarkerName { get; set; }
-
         [XmlAttribute("markerType")]
         [DefaultValue(default(WorldMarkerType))]
         [Description("Type of the Marker")]
@@ -60,11 +57,6 @@ namespace Trinity.ProfileTags
                 }
 
                 _task = new MoveToMapMarkerCoroutine(QuestId, ZetaDia.Globals.WorldSnoId, MarkerHash, Zerg);
-                return false;
-            }
-            if (!string.IsNullOrEmpty(MarkerName))
-            {
-                _task = new MoveToMapMarkerCoroutine(QuestId, ZetaDia.Globals.WorldSnoId, MarkerName, Zerg);
                 return false;
             }
             if (MarkerType != default(WorldMarkerType))

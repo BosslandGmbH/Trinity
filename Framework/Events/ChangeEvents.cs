@@ -22,19 +22,19 @@ namespace Trinity.Framework.Events
         public static TrinityChangeDetector<bool> IsInBossEncounter { get; } = new TrinityChangeDetector<bool>(()
             => ZetaDia.Me.IsInBossEncounter);
 
-        public static TrinityChangeDetector<HashSet<int>> EquippedItems { get; } = new TrinityChangeDetector<HashSet<int>>(()
+        public static TrinityChangeDetector<HashSet<SNOActor>> EquippedItems { get; } = new TrinityChangeDetector<HashSet<SNOActor>>(()
             => Core.Inventory.EquippedIds, SlowUpdateInterval);
 
-        public static TrinityChangeDetector<IEnumerable<TrinityItem>> BackpackItems { get; } = new TrinityChangeDetector<IEnumerable<TrinityItem>>(()
-            => Core.Inventory.Backpack, SlowUpdateInterval);
+        public static TrinityChangeDetector<IEnumerable<ACDItem>> BackpackItems { get; } = new TrinityChangeDetector<IEnumerable<ACDItem>>(()
+            => InventoryManager.Backpack, SlowUpdateInterval);
 
         public static TrinityChangeDetector<HashSet<SNOPower>> Skills { get; } = new TrinityChangeDetector<HashSet<SNOPower>>(()
             => Core.Hotbar.ActivePowers, SlowUpdateInterval);
 
-        public static TrinityChangeDetector<int> WorldId { get; } = new TrinityChangeDetector<int>(()
+        public static TrinityChangeDetector<SNOWorld> WorldId { get; } = new TrinityChangeDetector<SNOWorld>(()
             => ZetaDia.Globals.WorldSnoId);
 
-        public static TrinityChangeDetector<int> LevelAreaId { get; } = new TrinityChangeDetector<int>(()
+        public static TrinityChangeDetector<SNOLevelArea> LevelAreaId { get; } = new TrinityChangeDetector<SNOLevelArea>(()
             => ZetaDia.CurrentLevelAreaSnoId);
 
         public static TrinityChangeDetector<int> HeroId { get; } = new TrinityChangeDetector<int>(()

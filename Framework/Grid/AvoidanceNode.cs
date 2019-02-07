@@ -4,6 +4,7 @@ using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Framework.Avoidance;
 using Trinity.Framework.Avoidance.Structures;
 using Zeta.Common;
+using Zeta.Game;
 
 namespace Trinity.Framework.Grid
 {
@@ -41,8 +42,8 @@ namespace Trinity.Framework.Grid
         public Vector2 BottomLeft { get; private set; }
         public Vector2 TopRight { get; private set; }
         public Vector2 BottomRight { get; private set; }
-        public int DynamicWorldId { get; private set; }
-        public int LevelAreaId { get; private set; }
+        public SNOWorld DynamicWorldId { get; private set; }
+        public SNOLevelArea LevelAreaId { get; private set; }
         public NodeFlags NodeFlags { get; set; }
         public GridPoint GridPoint { get; set; }
         public int Weight { get; set; }

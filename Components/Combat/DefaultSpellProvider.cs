@@ -2,14 +2,17 @@
 using Buddy.Coroutines;
 using System.Threading.Tasks;
 using Trinity.Components.Combat.Resources;
+using Trinity.Components.Coroutines;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Zeta.Bot;
+using Zeta.Bot.Coroutines;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
@@ -68,8 +71,7 @@ namespace Trinity.Components.Combat
                 if (!TrinityCombat.Targeting.IsInRange(target, power))
                 {
                     Core.Logger.Log(LogCategory.Movement, $"Moving to {castInfo}");
-                    PlayerMover.MoveTo(target.Position);
-                    return true;
+                    return await CommonCoroutines.MoveAndStop(target.Position, power.MinimumRange, "AttackPosition") == MoveResult.ReachedDestination;
                 }
             }
             else if (power.TargetPosition != Vector3.Zero)
@@ -84,8 +86,7 @@ namespace Trinity.Components.Combat
                 if (!TrinityCombat.Targeting.IsInRange(power.TargetPosition, power))
                 {
                     Core.Logger.Log(LogCategory.Movement, $"Moving to position for {castInfo}");
-                    PlayerMover.MoveTo(power.TargetPosition);
-                    return true;
+                    return await CommonCoroutines.MoveAndStop(power.TargetPosition, power.MinimumRange, "AttackPosition") == MoveResult.ReachedDestination;
                 }
             }
 
@@ -171,7 +172,7 @@ namespace Trinity.Components.Combat
         public HashSet<SNOPower> AllowInvalidTargetPowers = new HashSet<SNOPower>
         {
             // these new skills are failing with PowerInvalidTarget, somethign to do with check on mouse highlighted target?
-            SNOPower.P6_Necro_CommandSkeletons, 
+            SNOPower.P6_Necro_CommandSkeletons,
             SNOPower.P6_Necro_CorpseLance,
         };
 
@@ -254,7 +255,7 @@ namespace Trinity.Components.Combat
         {
             if (GameData.ResetNavigationPowers.Contains(power))
             {
-                Core.Grids.Avoidance.AdvanceNavigatorPath(40f, RayType.Walk);
+                TrinityGrid.Instance.AdvanceNavigatorPath(40f, RayType.Walk);
             }
         }
     }

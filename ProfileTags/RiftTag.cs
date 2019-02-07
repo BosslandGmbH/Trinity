@@ -1,6 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.RiftCoroutines;
+using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.QuestTools;
 using Zeta.Game.Internals;
@@ -25,8 +28,6 @@ namespace Trinity.ProfileTags
 
     public class RiftProfileBehavior : BaseProfileBehavior
     {
-        protected RiftCoroutine _riftCoroutine;
-
         #region XmlAttributes
 
         [XmlAttribute("type")]
@@ -46,7 +47,7 @@ namespace Trinity.ProfileTags
         [XmlAttribute("getXPShrine")]
         [Description("If nephalem rifts should be run until bonux XP shrine is found")]
         public bool IsGetXPShrine { get; set; }
-        
+
         [XmlAttribute("count")]
         [XmlAttribute("riftCount")]
         [Description("The number of rifts to complete before tag finishes")]
@@ -54,28 +55,41 @@ namespace Trinity.ProfileTags
 
         #endregion
 
+        private int _remainingRuns;
+
         public override async Task<bool> StartTask()
         {
-            if (Level == 0) Level = -1;
-
-            var riftOptions = new RiftCoroutine.RiftOptions
+            if (Level == 0)
             {
-                RiftCount = RiftCount > 0 ? RiftCount : PluginSettings.Current.RiftCount,
-                IsEmpowered = IsEmpowered || PluginSettings.Current.UseEmpoweredRifts,
-                NormalRiftForXPShrine = IsGetXPShrine || PluginSettings.Current.NormalRiftForXPShrine,
-            };
+                Level = SelectedRiftType == RiftType.Greater ?
+                    RiftData.GetGreaterRiftLevel() :
+                    -1;
+            }
 
-            _riftCoroutine = new RiftCoroutine(SelectedRiftType, riftOptions);
+            _remainingRuns = Math.Max(RiftCount, PluginSettings.Current.RiftCount);
+            _remainingRuns = _remainingRuns == 0 ? -1 : _remainingRuns;
             return false;
         }
 
         public override async Task<bool> MainTask()
         {
-            if (!await _riftCoroutine.GetCoroutine())
+            if (!await RiftCoroutine.RunRift(SelectedRiftType,
+                Level,
+                PluginSettings.Current.EmpoweredRiftLevelLimit,
+                IsEmpowered || PluginSettings.Current.UseEmpoweredRifts,
+                IsGetXPShrine || PluginSettings.Current.NormalRiftForXPShrine))
+            {
+                return false;
+            }
+
+            // When _remainingRuns has a negative start value we just keep going.
+            if (_remainingRuns < 0)
                 return false;
 
-            return true;
+            // We just completed a rift. Let's decrement remaining runs. 
+            Interlocked.Decrement(ref _remainingRuns);
+            // When remaining runs equals 0 we are done.
+            return _remainingRuns == 0;
         }
-
     }
 }

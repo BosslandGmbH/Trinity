@@ -34,45 +34,45 @@ namespace Trinity.Framework.Actors.Properties
         {
             switch (cacheObject.ActorSnoId)
             {
-                case (int)SNOActor.a4_Heaven_Shrine_Global_Fortune:
-                case (int)SNOActor.Shrine_Global_Fortune:
+                case SNOActor.a4_Heaven_Shrine_Global_Fortune:
+                case SNOActor.Shrine_Global_Fortune:
                     return ShrineTypes.Fortune;
 
-                case (int)SNOActor.a4_Heaven_Shrine_Global_Frenzied:
-                case (int)SNOActor.Shrine_Global_Frenzied:
+                case SNOActor.a4_Heaven_Shrine_Global_Frenzied:
+                case SNOActor.Shrine_Global_Frenzied:
                     return ShrineTypes.Frenzied;
 
-                case (int)SNOActor.a4_Heaven_Shrine_Global_Reloaded:
-                case (int)SNOActor.Shrine_Global_Reloaded:
+                case SNOActor.a4_Heaven_Shrine_Global_Reloaded:
+                case SNOActor.Shrine_Global_Reloaded:
                     return ShrineTypes.RunSpeed;
 
-                case (int)SNOActor.a4_Heaven_Shrine_Global_Enlightened:
-                case (int)SNOActor.Shrine_Global_Enlightened:
+                case SNOActor.a4_Heaven_Shrine_Global_Enlightened:
+                case SNOActor.Shrine_Global_Enlightened:
                     return ShrineTypes.Enlightened;
 
-                case (int)SNOActor.Shrine_Global_Glow:
+                case SNOActor.Shrine_Global_Glow:
                     return ShrineTypes.Glow;
 
-                case (int)SNOActor.a4_Heaven_Shrine_Global_Hoarder:
-                case (int)SNOActor.Shrine_Global_Hoarder:
+                case SNOActor.a4_Heaven_Shrine_Global_Hoarder:
+                case SNOActor.Shrine_Global_Hoarder:
                     return ShrineTypes.Hoarder;
 
-                case (int)SNOActor.x1_LR_Shrine_Infinite_Casting:
+                case SNOActor.x1_LR_Shrine_Infinite_Casting:
                     return ShrineTypes.Casting;
 
-                case (int)SNOActor.x1_LR_Shrine_Electrified_TieredRift:
-                case (int)SNOActor.x1_LR_Shrine_Electrified:
+                case SNOActor.x1_LR_Shrine_Electrified_TieredRift:
+                case SNOActor.x1_LR_Shrine_Electrified:
                     return ShrineTypes.Conduit;
 
-                case (int)SNOActor.x1_LR_Shrine_Invulnerable:
-                case (int)SNOActor.x1_LR_Shrine_Run_Speed:
+                case SNOActor.x1_LR_Shrine_Invulnerable:
+                case SNOActor.x1_LR_Shrine_Run_Speed:
                     return ShrineTypes.Shield;
 
-                case (int)SNOActor.x1_LR_Shrine_Damage:
+                case SNOActor.x1_LR_Shrine_Damage:
                     return ShrineTypes.Damage;
 
 
-                case (int)SNOActor.Shrine_TreasureGoblin:
+                case SNOActor.Shrine_TreasureGoblin:
                     return ShrineTypes.Goblin;
 
                 default:

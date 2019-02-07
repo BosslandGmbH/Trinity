@@ -4,6 +4,7 @@ using Zeta.XmlEngine;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
+using Zeta.Game;
 
 namespace Trinity.ProfileTags
 {
@@ -34,7 +35,7 @@ namespace Trinity.ProfileTags
         [XmlAttribute("actorSnoId")]
         [Description("Actors to find within the area cleared")]
         [DefaultValue(0)]
-        public int ActorId { get; set; }
+        public SNOActor ActorId { get; set; }
 
         public override async Task<bool> StartTask()
         {

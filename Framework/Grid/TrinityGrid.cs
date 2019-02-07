@@ -3,6 +3,8 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Serilog;
+using Trinity.Components.Adventurer;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors.ActorTypes;
@@ -12,7 +14,6 @@ using Trinity.Modules;
 using Zeta.Common;
 using Zeta.Game;
 using Direction = Trinity.Components.Adventurer.Game.Exploration.Direction;
-
 using NodeFlags = Trinity.Components.Adventurer.Game.Exploration.NodeFlags;
 using SceneData = Trinity.Components.Adventurer.Game.Exploration.SceneData;
 
@@ -20,12 +21,7 @@ namespace Trinity.Framework.Grid
 {
     public sealed class TrinityGrid : Grid<AvoidanceNode>
     {
-        static TrinityGrid()
-        {
-            Flags = Enum.GetValues(typeof(AvoidanceFlags)).Cast<AvoidanceFlags>().ToList();
-        }
-
-        private static List<AvoidanceFlags> Flags { get; set; }
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         private const int Bounds = 2500;
 
@@ -39,18 +35,13 @@ namespace Trinity.Framework.Grid
 
         public static TrinityGrid GetWorldGrid()
         {
-            if (_currentGrid == null)
-            {
-                _currentGrid = new TrinityGrid();
-            }
-            else if (_currentGrid == null || ZetaDia.Globals.WorldId != _currentGrid.WorldDynamicId)
+            if (_currentGrid == null ||
+                AdvDia.CurrentWorldDynamicId != _currentGrid.WorldDynamicId)
             {
                 _currentGrid = new TrinityGrid();
             }
             return _currentGrid;
         }
-
-        public static TrinityGrid GetUnsafeGrid() => _currentGrid;
 
         public bool IsValidGridWorldPosition(Vector3 position)
         {
@@ -59,25 +50,30 @@ namespace Trinity.Framework.Grid
 
         public bool IsPopulated { get; set; }
 
-        public override bool CanRayCast(Vector3 @from, Vector3 to)
+        public bool CanRayCast(Vector3 to)
+        {
+            return CanRayCast(ZetaDia.Me.Position, to);
+        }
+
+        public override bool CanRayCast(Vector3 from, Vector3 to)
         {
             try
             {
                 if (!IsPopulated) return false;
-                if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
+                if (!IsValidGridWorldPosition(from) || !IsValidGridWorldPosition(to)) return false;
                 return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowProjectile));
             }
             catch (Exception ex)
             {
-                Core.Logger.Error($"Exception in CanRayCast from={@from} to={to} {ex}");
+                s_logger.Error($"[{nameof(CanRayCast)}] Failed to raycast from={from} to={to}", ex);
             }
             return false;
         }
 
 
-        public bool UnsafeCanRayCast(Vector3 @from, Vector3 to)
+        public bool UnsafeCanRayCast(Vector3 from, Vector3 to)
         {
-            if (@from == Vector3.Zero || to == Vector3.Zero) return false;
+            if (from == Vector3.Zero || to == Vector3.Zero) return false;
             return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowProjectile));
         }
 
@@ -96,7 +92,7 @@ namespace Trinity.Framework.Grid
             return CanRayWalk(Core.Player.Position, targetActor.Position, radiusDegrees);
         }
 
-        public bool CanRayWalk(Vector3 from, Vector3 to,  float radiusDegrees)
+        public bool CanRayWalk(Vector3 from, Vector3 to, float radiusDegrees)
         {
             var radiusRadians = MathEx.ToRadians(radiusDegrees);
             var angleTo = (float)MathUtil.FindDirectionRadian(from, to);
@@ -122,15 +118,15 @@ namespace Trinity.Framework.Grid
             return GetRayLine(Core.Player.Position, targetActor.Position).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk));
         }
 
-        public override bool CanRayWalk(Vector3 @from, Vector3 to)
+        public override bool CanRayWalk(Vector3 from, Vector3 to)
         {
-            if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
+            if (!IsValidGridWorldPosition(from) || !IsValidGridWorldPosition(to)) return false;
             return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk) && !node.NodeFlags.HasFlag(NodeFlags.NearWall));
         }
 
-        public bool IsIntersectedByFlags(Vector3 @from, Vector3 to, params AvoidanceFlags[] flags)
+        public bool IsIntersectedByFlags(Vector3 from, Vector3 to, params AvoidanceFlags[] flags)
         {
-            if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
+            if (!IsValidGridWorldPosition(from) || !IsValidGridWorldPosition(to)) return false;
             return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).Any(node => node != null && flags != null && flags.Any(f => node.AvoidanceFlags.HasFlag(f)));
         }
 
@@ -222,7 +218,7 @@ namespace Trinity.Framework.Grid
             if (!IsValidGridWorldPosition(origin) || !IsValidGridWorldPosition(target)) return false;
             foreach (var node in GetRayLine(target, origin).Select(point => InnerGrid[point.X, point.Y]))
             {
-                if (node == null || flags == null)
+                if (node == null)
                     break;
 
                 foreach (var flag in flags)
@@ -240,7 +236,7 @@ namespace Trinity.Framework.Grid
 
         internal IEnumerable<AvoidanceNode> GetRayLineAsNodes(Vector3 from, Vector3 to)
         {
-            return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).Where(n => n != null);
+            return GetRayLine(from, to).Where(p => p.X >= 0 && p.Y >= 0).Select(point => InnerGrid[point.X, point.Y]).Where(n => n != null);
         }
 
         public IEnumerable<AvoidanceNode> GetConeAsNodes(Vector3 position, float arcWidthDegrees, float radius, float rotationRadians)
@@ -265,36 +261,39 @@ namespace Trinity.Framework.Grid
 
         protected override void OnUpdated(SceneData newNodes)
         {
-            IsUpdatingNodes = true;
-
-            var sw = Stopwatch.StartNew();
-            var nodeCount = 0;
-
-            var gridName = GetType().Name;
-
-            foreach (var scene in newNodes.Scenes)
+            using (var t = new PerformanceLogger(nameof(OnUpdated)))
             {
-                var nodes = scene.ExplorationNodes.SelectMany(n => n.Nodes, (p, c) => new AvoidanceNode(c)).ToList();
+                IsUpdatingNodes = true;
 
-                Core.Logger.Verbose($"[{gridName}] Updating grid for scene '{scene.SceneHash}' with {scene.ExplorationNodes.Count} new nodes");
+                var sw = Stopwatch.StartNew();
+                var nodeCount = 0;
 
-                UpdateInnerGrid(nodes);
-
-                foreach (var node in nodes)
+                foreach (var scene in newNodes.Scenes)
                 {
-                    nodeCount++;
-                    if (GetNeighbors(node).Any(n => (n.NodeFlags & NodeFlags.AllowWalk) == 0))
+                    var nodes = scene.ExplorationNodes.SelectMany(n => n.Nodes, (p, c) => new AvoidanceNode(c))
+                        .ToList();
+
+                    s_logger.Debug(
+                        $"[{nameof(OnUpdated)}] Updating grid for scene '{scene.SceneHash}' with {scene.ExplorationNodes.Count} new nodes");
+
+                    UpdateInnerGrid(nodes);
+
+                    foreach (var node in nodes)
                     {
-                        node.NodeFlags |= NodeFlags.NearWall;
+                        nodeCount++;
+                        if (GetNeighbors(node).Any(n => (n.NodeFlags & NodeFlags.AllowWalk) == 0))
+                        {
+                            node.NodeFlags |= NodeFlags.NearWall;
+                        }
                     }
                 }
+
+                IsUpdatingNodes = false;
+                IsPopulated = true;
+
+                sw.Stop();
+                s_logger.Debug($"[{nameof(OnUpdated)}] Avoidance Grid updated NewNodes={nodeCount} NearestNodeFound={NearestNode != null} Time={t.Elapsed}");
             }
-
-            IsUpdatingNodes = false;
-            IsPopulated = true;
-
-            sw.Stop();
-            Core.Logger.Verbose($"Avoidance Grid updated NewNodes={nodeCount} NearestNodeFound={NearestNode != null} Time={sw.Elapsed.TotalMilliseconds}ms");
         }
 
         public void FlagNodes(IEnumerable<AvoidanceNode> nodes, AvoidanceFlags flags, int weightModification = 0)
@@ -510,10 +509,11 @@ namespace Trinity.Framework.Grid
 
             var playerPosition = ZetaDia.Me.Position;
             var currentPath = PlayerMover.NavigationProvider.CurrentPath.TakeWhile(p => p.Distance(playerPosition) < GridEnricher.MaxDistance);
-            if (!currentPath.Any())
+            var enumerable = currentPath as Vector3[] ?? currentPath.ToArray();
+            if (!enumerable.Any())
                 return false;
 
-            var overFlags = currentPath.Any(p => Core.Avoidance.Grid.IsIntersectedByFlags(ZetaDia.Me.Position, p, flags));
+            var overFlags = enumerable.Any(p => Core.Avoidance.Grid.IsIntersectedByFlags(ZetaDia.Me.Position, p, flags));
             return overFlags;
         }
 
@@ -521,10 +521,7 @@ namespace Trinity.Framework.Grid
         {
             //return GetNearestNode(new GridPoint(x, y));
 
-            if (!IsValidNodePosition(x, y))
-                return default(AvoidanceNode);
-
-            return InnerGrid[x, y];
+            return !IsValidNodePosition(x, y) ? default(AvoidanceNode) : InnerGrid[x, y];
         }
 
         public bool CanStandAt(Vector3 position)

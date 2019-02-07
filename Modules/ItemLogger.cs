@@ -3,8 +3,10 @@ using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using System.IO;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Objects;
 using Trinity.Settings;
+using Zeta.Game.Internals.Actors;
 using ItemEvents = Trinity.Framework.Events.ItemEvents;
 
 namespace Trinity.Modules
@@ -30,12 +32,12 @@ namespace Trinity.Modules
             ItemEvents.OnItemDropped += item => LogItem(ItemAction.Dropped, item);
         }
 
-        private void LogItem(ItemAction action, TrinityItem item)
+        private void LogItem(ItemAction action, ACDItem item)
         {
             if (!IsEnabled || !Core.Settings.Advanced.LogItems)
                 return;           
             
-            if (item.TrinityItemQuality < TrinityItemQuality.Legendary && !Core.Settings.Advanced.LogAllItems)
+            if (item.GetTrinityItemQuality() < TrinityItemQuality.Legendary && !Core.Settings.Advanced.LogAllItems)
                 return;
 
             if (action == ItemAction.Dropped && !Core.Settings.Advanced.LogDroppedItems)
@@ -47,12 +49,12 @@ namespace Trinity.Modules
             File.AppendAllText(path, message);
         }
 
-        public string LogTemplate(ItemAction action, TrinityItem item)
+        public string LogTemplate(ItemAction action, ACDItem item)
             => $"{Environment.NewLine}" +
                $"{DateTime.UtcNow.ToLocalTime():f} {Environment.NewLine}" +
-               $"{item.Name} ({item.ActorSnoId}), {item.RawItemType} {Environment.NewLine}" +
-               $"{item.ItemBaseType}: {item.TrinityItemType}, {item.TrinityItemQuality}" +
-               $"{(item.IsAncient ? ", Ancient" : string.Empty)}, {item.Attributes}" + 
+               $"{item.Name} ({item.ActorSnoId}), {item.GetRawItemType()} {Environment.NewLine}" +
+               $"{item.ItemBaseType}: {item.GetTrinityItemType()}, {item.GetTrinityItemQuality()}" +
+               $"{(item.Stats.IsAncient ? ", Ancient" : string.Empty)}, {item.Stats}" + 
                $"{Environment.NewLine}";
     }
 

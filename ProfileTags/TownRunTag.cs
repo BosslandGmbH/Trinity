@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Trinity.Components.Coroutines.Town;
 using Trinity.Components.QuestTools;
+using Zeta.Bot.Logic;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags
@@ -11,7 +12,7 @@ namespace Trinity.ProfileTags
     {
         public override async Task<bool> StartTask()
         {
-            TrinityTownRun.IsWantingTownRun = true;
+            BrainBehavior.ForceTownrun(nameof(TownRunTag));
             return true;
         }
     }

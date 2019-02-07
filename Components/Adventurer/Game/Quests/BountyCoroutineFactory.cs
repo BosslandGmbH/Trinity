@@ -36,7 +36,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 return null;
             }
 
-            var bountyData = BountyDataFactory.GetBountyData((int)bountyInfo.Quest);
+            var bountyData = BountyDataFactory.GetBountyData(bountyInfo.Quest);
             if (bountyData == null)
             {
                 Core.Logger.Log("Unsupported bounty: {0} - {1}", (int)bountyInfo.Quest, bountyInfo.Info.DisplayName);
@@ -84,7 +84,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
             if (bounty == null)
             {
-                bounty = new GenericBountyCoroutine((int)bountyInfo.Quest);
+                bounty = new GenericBountyCoroutine(bountyInfo.Quest);
                 //if (bounty.QuestData.Steps.First().Objectives.Any(o => o.ObjectiveType == QuestStepObjectiveType.EnterLevelArea))
                 //    return null;
                 //if (bounty.QuestData.QuestType != BountyQuestType.KillMonster && bounty.QuestData.QuestType != BountyQuestType.ClearZone)

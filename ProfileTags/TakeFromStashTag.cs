@@ -6,8 +6,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Coroutines.Town;
 using Trinity.Components.QuestTools;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.ProfileTags.EmbedTags;
 using Trinity.Settings;
+using Zeta.Game;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags
@@ -41,7 +43,7 @@ namespace Trinity.ProfileTags
                     {
                         if (item.Quality != TrinityItemQuality.Invalid && item.Quality != TrinityItemQuality.None)
                         {
-                            stashItem = Core.Inventory.Stash.FirstOrDefault(i => i.TrinityItemQuality == item.Quality);
+                            stashItem = Core.Inventory.Stash.FirstOrDefault(i => i.GetTrinityItemQuality() == item.Quality);
                         }
                         if (stashItem == null)
                         {
@@ -51,7 +53,7 @@ namespace Trinity.ProfileTags
                     }
                 }
 
-                if (!await TakeItemsFromStash.Execute(new List<int> { item.Id }, Math.Max(1, item.Quantity)))
+                if (!await TrinityTownRun.TakeItemsFromStash(new List<SNOActor> { item.Id }, Math.Max(1, item.Quantity)))
                 {
                     Core.Logger.Error("[TakeFromStash] TakeItemsFromStash coroutine failed.");
                     return true;

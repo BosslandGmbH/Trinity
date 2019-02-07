@@ -13,23 +13,18 @@ using Zeta.Game.Internals.Actors.Gizmos;
 
 namespace Trinity.Components.Adventurer.Coroutines
 {
+    // TODO: Go over that coroutine and simplify it.
     public sealed class WaypointCoroutine : ICoroutine
     {
         private static WaypointCoroutine _waypointCoroutine;
         private static int _useWaypointWaypointNumber;
 
-        public static int GetWaypointNumber(int snoLevelAreaId)
+        public static int GetWaypointNumber(SNOLevelArea snoLevelAreaId)
         {
             Waypoint wp = ZetaDia.Storage.ActManager.GetWaypointByLevelAreaSnoId(snoLevelAreaId);
             return wp?.Number ?? 0;
         }
-
-        public static int GetWaypointNumber(SNOLevelArea levelArea)
-        {
-            Waypoint wp = ZetaDia.Storage.ActManager.GetWaypointByLevelArea(SNOLevelArea.A1_Tristram_Adventure_Mode_Hub);
-            return wp?.Number ?? 0;
-        }
-
+        
         public static async Task<bool> UseWaypoint(int waypointNumber)
         {
             if (_waypointCoroutine == null || _useWaypointWaypointNumber != waypointNumber)

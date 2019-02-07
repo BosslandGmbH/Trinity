@@ -728,7 +728,7 @@ namespace Trinity.Components.Adventurer.UI
                     var bounties =
                         ZetaDia.Storage.Quests.Bounties.Where(
                             b =>
-                                BountyDataFactory.GetBountyData((int)b.Quest) == null &&
+                                BountyDataFactory.GetBountyData(b.Quest) == null &&
                                 b.State != QuestState.Completed)
                             .ToList();
 
@@ -748,7 +748,7 @@ namespace Trinity.Components.Adventurer.UI
                     var bountiesNoCoroutines = ZetaDia.Storage.Quests.Bounties.Where(
                         b =>
                         {
-                            BountyData bd = BountyDataFactory.GetBountyData((int)b.Quest);
+                            BountyData bd = BountyDataFactory.GetBountyData(b.Quest);
                             if (bd != null && bd.Coroutines.Count == 0)
                                 return true;
 
@@ -850,7 +850,7 @@ namespace Trinity.Components.Adventurer.UI
         {
             var bounties = ZetaDia.Storage.Quests.Bounties
                 .Where(b => GetDynamicBountyTypeFromName(b.Info.DisplayName) != BountyDataFactory.DynamicBountyType.None &&
-                            !BountyDataFactory.DynamicBountyDirectory.ContainsKey((int)b.Info.Quest));
+                            !BountyDataFactory.DynamicBountyDirectory.ContainsKey(b.Info.QuestSNO));
 
             foreach (var bounty in bounties)
             {
@@ -867,7 +867,6 @@ namespace Trinity.Components.Adventurer.UI
             if (name.Contains("The Bound Shaman")) return BountyDataFactory.DynamicBountyType.BoundShaman;
             if (name.Contains("Plague of Burrowers")) return BountyDataFactory.DynamicBountyType.PlagueOfBurrowers;
             return BountyDataFactory.DynamicBountyType.None;
-            ;
         }
 
         private static void DumpSceneInfo(object sender, RoutedEventArgs e)
@@ -1311,7 +1310,7 @@ namespace Trinity.Components.Adventurer.UI
                     Core.Update();
 
                     var quest = ZetaDia.CurrentQuest;
-                    var questId = quest?.QuestSnoId ?? 1;
+                    var questId = quest?.QuestSnoId ?? (SNOQuest)1;
                     var questStep = quest?.StepId ?? 1;
                     var sceneId = ZetaDia.Me.CurrentScene.SceneInfo.SNOId;
                     var sceneName = ZetaDia.Me.CurrentScene.Name;
@@ -1379,7 +1378,7 @@ namespace Trinity.Components.Adventurer.UI
                     Core.Update();
 
                     var quest = ZetaDia.CurrentQuest;
-                    var questId = quest?.QuestSnoId ?? 1;
+                    var questId = quest?.QuestSnoId ?? (SNOQuest)1;
                     var questStep = quest?.StepId ?? 1;
                     var sceneId = ZetaDia.Me.CurrentScene.SceneInfo.SNOId;
                     var sceneName = ZetaDia.Me.CurrentScene.Name;
@@ -1438,7 +1437,7 @@ namespace Trinity.Components.Adventurer.UI
                     ZetaDia.Actors.Update();
 
                     var quest = ZetaDia.CurrentQuest;
-                    var questId = quest?.QuestSnoId ?? 1;
+                    var questId = quest?.QuestSnoId ?? (SNOQuest)1;
                     var questStep = quest?.StepId ?? 1;
                     var sceneId = ZetaDia.Me.CurrentScene.SceneInfo.SNOId;
                     var sceneName = ZetaDia.Me.CurrentScene.Name;

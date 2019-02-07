@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Settings;
@@ -14,36 +14,35 @@ namespace Trinity.Framework.Helpers
     {
         public static T To<T>(this IConvertible obj)
         {
-            var t = typeof(T);
+            Type t = typeof(T);
             if (t.IsEnum)
-            {
                 return (T)Enum.ToObject(typeof(T), obj);
-            }
-            var u = Nullable.GetUnderlyingType(t);
+
+            Type u = Nullable.GetUnderlyingType(t);
             if (u != null)
-            {
                 return (obj == null) ? default(T) : (T)Convert.ChangeType(obj, u);
-            }
+
             return (T)Convert.ChangeType(obj, t);
         }
 
         public static T ConvertTo<T>(int integerValue, float floatValue)
         {
-            var t = typeof(T);
+            Type t = typeof(T);
             if (integerValue is T)
-            {
                 return (T)Convert.ChangeType(integerValue, t);
-            }
+
             if (floatValue is T)
             {
                 var roundedFloat = Math.Round(floatValue, 2, MidpointRounding.AwayFromZero);
                 return (T)Convert.ChangeType(roundedFloat, t);
             }
+
             if (t.IsEnum)
-            {
                 return (T)Enum.ToObject(typeof(T), integerValue);
-            }
-            if (typeof(T) == typeof(double)) return (T)Convert.ChangeType(floatValue, t);
+
+            if (typeof(T) == typeof(double))
+                return (T)Convert.ChangeType(floatValue, t);
+
             try
             {
                 return (T)Convert.ChangeType(integerValue, t);
@@ -52,33 +51,6 @@ namespace Trinity.Framework.Helpers
             {
                 return default(T);
             }
-        }
-
-        public static TrinityItemQuality GetTrinityItemQuality(ItemQuality quality)
-        {
-            switch (quality)
-            {
-                case ItemQuality.Inferior:
-                    return TrinityItemQuality.Inferior;
-
-                case ItemQuality.Normal:
-                case ItemQuality.Superior:
-                    return TrinityItemQuality.Common;
-
-                case ItemQuality.Magic1:
-                case ItemQuality.Magic2:
-                case ItemQuality.Magic3:
-                    return TrinityItemQuality.Magic;
-
-                case ItemQuality.Rare4:
-                case ItemQuality.Rare5:
-                case ItemQuality.Rare6:
-                    return TrinityItemQuality.Rare;
-
-                case ItemQuality.Legendary:
-                    return TrinityItemQuality.Legendary;
-            }
-            return TrinityItemQuality.None;
         }
 
         //internal static ItemType GItemTypeToItemType(TrinityItemType itemType)
@@ -303,7 +275,6 @@ namespace Trinity.Framework.Helpers
             if (name.StartsWith("p5_")) name = name.Substring(3, name.Length - 3);
             if (name.StartsWith("p6_")) name = name.Substring(3, name.Length - 3);
             if (ItemExpansionRegex.IsMatch(name)) name = name.Substring(3, name.Length - 3);
-
             if (name.StartsWith("demonorgan_")) return TrinityItemType.UberReagent;
             if (name.StartsWith("infernalmachine_")) return TrinityItemType.PortalDevice;
             if (name.StartsWith("a1_")) return TrinityItemType.SpecialItem;
@@ -330,9 +301,23 @@ namespace Trinity.Framework.Helpers
             if (name.StartsWith("fistweapon_")) return TrinityItemType.FistWeapon;
             if (name.StartsWith("flail1h_")) return TrinityItemType.Flail;
             if (name.StartsWith("flail2h_")) return TrinityItemType.TwoHandFlail;
-            if (name.StartsWith("followeritem_enchantress_") || dbFollowerType == FollowerType.Enchantress) return TrinityItemType.FollowerEnchantress;
-            if (name.StartsWith("followeritem_scoundrel_") || dbFollowerType == FollowerType.Scoundrel) return TrinityItemType.FollowerScoundrel;
-            if (name.StartsWith("followeritem_templar_") || dbFollowerType == FollowerType.Templar) return TrinityItemType.FollowerTemplar;
+            if (name.StartsWith("followeritem_enchantress_") ||
+                dbFollowerType == FollowerType.Enchantress)
+            {
+                return TrinityItemType.FollowerEnchantress;
+            }
+            if (name.StartsWith("followeritem_scoundrel_") ||
+                dbFollowerType == FollowerType.Scoundrel)
+            {
+                return TrinityItemType.FollowerScoundrel;
+            }
+
+            if (name.StartsWith("followeritem_templar_") ||
+                dbFollowerType == FollowerType.Templar)
+            {
+                return TrinityItemType.FollowerTemplar;
+            }
+
             if (name.StartsWith("gloves_")) return TrinityItemType.Gloves;
             if (name.StartsWith("handxbow_")) return TrinityItemType.HandCrossbow;
             if (name.StartsWith("healthglobe")) return TrinityItemType.HealthGlobe;
@@ -347,7 +332,13 @@ namespace Trinity.Framework.Helpers
             if (name.StartsWith("orb_")) return TrinityItemType.Orb;
             if (name.StartsWith("page_of_")) return TrinityItemType.CraftTome;
             if (name.StartsWith("pants_")) return TrinityItemType.Legs;
-            if (name.StartsWith("polearm_") || dbItemType == ItemType.Polearm) return TrinityItemType.TwoHandPolearm;
+
+            if (name.StartsWith("polearm_") ||
+                dbItemType == ItemType.Polearm)
+            {
+                return TrinityItemType.TwoHandPolearm;
+            }
+
             if (name.StartsWith("quiver_")) return TrinityItemType.Quiver;
             if (name.StartsWith("ring_")) return TrinityItemType.Ring;
             if (name.StartsWith("ruby_")) return TrinityItemType.Ruby;
@@ -371,17 +362,26 @@ namespace Trinity.Framework.Helpers
             if (name.StartsWith("normal_rifts_orb")) return TrinityItemType.ProgressionGlobe;
             if (name.StartsWith("consumable_add_sockets")) return TrinityItemType.ConsumableAddSockets; // Ramaladni's Gift
             if (name.StartsWith("tieredlootrunkey_")) return TrinityItemType.TieredLootrunKey;
-            if (name.StartsWith("demonkey_") || name.StartsWith("demontrebuchetkey") || name.StartsWith("quest_")) return TrinityItemType.InfernalKey;
+
+            if (name.StartsWith("demonkey_") ||
+                name.StartsWith("demontrebuchetkey") ||
+                name.StartsWith("quest_"))
+            {
+                return TrinityItemType.InfernalKey;
+            }
+
             if (name.StartsWith("offhand_")) return TrinityItemType.Mojo;
             if (name.StartsWith("horadricrelic")) return TrinityItemType.HoradricRelic;
-
             // Follower item types
-            if (name.StartsWith("jewelbox_") || dbItemType == ItemType.FollowerSpecial)
+            if (name.StartsWith("jewelbox_") ||
+                dbItemType == ItemType.FollowerSpecial)
             {
                 if (dbFollowerType == FollowerType.Scoundrel)
                     return TrinityItemType.FollowerScoundrel;
+
                 if (dbFollowerType == FollowerType.Templar)
                     return TrinityItemType.FollowerTemplar;
+
                 if (dbFollowerType == FollowerType.Enchantress)
                     return TrinityItemType.FollowerEnchantress;
             }
@@ -391,38 +391,47 @@ namespace Trinity.Framework.Helpers
             {
                 if (dbItemType == ItemType.CraftingPage)
                     return TrinityItemType.CraftTome;
+
                 return TrinityItemType.CraftingMaterial;
             }
             if (name.StartsWith("chestarmor_"))
             {
                 if (dbItemType == ItemType.Cloak)
                     return TrinityItemType.Cloak;
+
                 return TrinityItemType.Chest;
             }
             if (name.StartsWith("helm_"))
             {
                 if (dbItemType == ItemType.SpiritStone)
                     return TrinityItemType.SpiritStone;
+
                 if (dbItemType == ItemType.VoodooMask)
                     return TrinityItemType.VoodooMask;
+
                 if (dbItemType == ItemType.WizardHat)
                     return TrinityItemType.WizardHat;
+
                 return TrinityItemType.Helm;
             }
             if (name.StartsWith("helmcloth_"))
             {
                 if (dbItemType == ItemType.SpiritStone)
                     return TrinityItemType.SpiritStone;
+
                 if (dbItemType == ItemType.VoodooMask)
                     return TrinityItemType.VoodooMask;
+
                 if (dbItemType == ItemType.WizardHat)
                     return TrinityItemType.WizardHat;
+
                 return TrinityItemType.Helm;
             }
             if (name.StartsWith("belt_"))
             {
                 if (dbItemType == ItemType.MightyBelt)
                     return TrinityItemType.MightyBelt;
+
                 return TrinityItemType.Belt;
             }
             return TrinityItemType.Unknown;
@@ -848,7 +857,7 @@ namespace Trinity.Framework.Helpers
 
                 case RawItemType.PortalDevice:
                     return TrinityItemType.PortalDevice;
-               
+
                 case RawItemType.TwoHandedScythe:
                     return TrinityItemType.TwoHandScythe;
 
@@ -878,7 +887,7 @@ namespace Trinity.Framework.Helpers
                     }
                     break;
             }
-            
+
 
             return TrinityItemType.Unknown;
         }
@@ -914,7 +923,7 @@ namespace Trinity.Framework.Helpers
             {
                 case RawItemType.Axe:
                 case RawItemType.Axe2H:
-                    return ItemType.Axe;                               
+                    return ItemType.Axe;
 
                 case RawItemType.Sword:
                 case RawItemType.Sword2H:
@@ -1199,7 +1208,7 @@ namespace Trinity.Framework.Helpers
                 case ItemType.HandCrossbow:
                 case ItemType.Bow:
                 case ItemType.Phylactery:
-                case ItemType.Scythe:                
+                case ItemType.Scythe:
                     return true;
             }
             return false;
@@ -1232,6 +1241,7 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemType.VoodooMask:
                     if (actorClass != ActorClass.Witchdoctor)
                         return false;
+
                     break;
 
                 case TrinityItemType.SpiritStone:
@@ -1239,6 +1249,7 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemType.TwoHandDaibo:
                     if (actorClass != ActorClass.Monk)
                         return false;
+
                     break;
 
                 case TrinityItemType.MightyBelt:
@@ -1246,6 +1257,7 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemType.TwoHandMighty:
                     if (actorClass != ActorClass.Barbarian)
                         return false;
+
                     break;
 
                 case TrinityItemType.Orb:
@@ -1253,6 +1265,7 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemType.Wand:
                     if (actorClass != ActorClass.Wizard)
                         return false;
+
                     break;
 
                 case TrinityItemType.Flail:
@@ -1260,6 +1273,7 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemType.CrusaderShield:
                     if (actorClass != ActorClass.Crusader)
                         return false;
+
                     break;
 
                 case TrinityItemType.Phylactery:
@@ -1267,6 +1281,7 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemType.TwoHandScythe:
                     if (actorClass != ActorClass.Necromancer)
                         return false;
+
                     break;
 
                 case TrinityItemType.Cloak:
@@ -1276,16 +1291,23 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemType.TwoHandCrossbow:
                     if (actorClass != ActorClass.DemonHunter)
                         return false;
+
                     break;
-                
+
             }
 
             return true;
         }
 
-        public static bool IsWeapon(TrinityItem item) => WeaponTypes.Contains(item.ItemType);
+        public static bool IsWeapon(ACDItem item)
+        {
+            return WeaponTypes.Contains(item.GetItemType());
+        }
 
-        public static bool IsArmor(TrinityItem item) => ArmorTypes.Contains(item.ItemType);
+        public static bool IsArmor(ACDItem item)
+        {
+            return ArmorTypes.Contains(item.GetItemType());
+        }
 
         internal static HashSet<ItemType> OffHandTypes = new HashSet<ItemType>
         {

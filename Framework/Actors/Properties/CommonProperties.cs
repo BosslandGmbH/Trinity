@@ -29,33 +29,44 @@ namespace Trinity.Framework.Actors.Properties
 
         public static void UpdateLineOfSight(TrinityActor actor)
         {
-            var grid = TrinityGrid.GetUnsafeGrid();
+            if (!ZetaDia.IsInGame ||
+                ZetaDia.Me == null ||
+                ZetaDia.Globals.IsLoadingWorld ||
+                ZetaDia.Globals.IsPlayingCutscene)
+            {
+                return;
+            }
+
+            var grid = TrinityGrid.Instance;
             if (grid == null)
                 return;
 
-            if (actor.Position != Vector3.Zero && grid.GridBounds != 0)
+            if (actor.Position == Vector3.Zero ||
+                grid.GridBounds == 0)
             {
-                var inLineOfSight = grid.CanRayCast(Core.Player.Position, actor.Position);
-                actor.IsInLineOfSight = inLineOfSight;
+                return;
+            }
 
-                if (!actor.HasBeenInLoS && inLineOfSight)
-                    actor.HasBeenInLoS = true;
+            var inLineOfSight = grid.CanRayCast(ZetaDia.Me.Position, actor.Position);
+            actor.IsInLineOfSight = inLineOfSight;
 
-                if (inLineOfSight)
-                {
-                    actor.IsWalkable = grid.CanRayWalk(actor);
+            if (!actor.HasBeenInLoS && inLineOfSight)
+                actor.HasBeenInLoS = true;
 
-                    if (actor.IsWalkable)
-                        actor.HasBeenWalkable = true;
-                }
-                else
-                {
-                    actor.IsWalkable = false;
-                }
+            if (inLineOfSight)
+            {
+                actor.IsWalkable = grid.CanRayWalk(actor);
+
+                if (actor.IsWalkable)
+                    actor.HasBeenWalkable = true;
+            }
+            else
+            {
+                actor.IsWalkable = false;
             }
         }
 
-        public static TrinityObjectType GetObjectType(ActorType actorType, int actorSno, GizmoType gizmoType, string internalName)
+        public static TrinityObjectType GetObjectType(ActorType actorType, SNOActor actorSno, GizmoType gizmoType, string internalName)
         {
             if (GameData.ObjectTypeOverrides.ContainsKey(actorSno))
                 return GameData.ObjectTypeOverrides[actorSno];
@@ -160,7 +171,7 @@ namespace Trinity.Framework.Actors.Properties
 
         public static SpecialTypes GetSpecialType(TrinityActor cacheObject)
         {
-            if (cacheObject.ActorSnoId == 4860) //SNOActor.PlayerHeadstone
+            if (cacheObject.ActorSnoId == SNOActor.PlayerHeadstone)
                 return SpecialTypes.PlayerTombstone;
 
             return SpecialTypes.None;

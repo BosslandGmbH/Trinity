@@ -4,10 +4,12 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.IO;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Zeta.Bot;
+using Zeta.Game.Internals.Actors;
 using ItemEvents = Trinity.Framework.Events.ItemEvents;
 
 namespace Trinity.Modules
@@ -59,7 +61,7 @@ namespace Trinity.Modules
         public int Magics { get; set; }
         public int Ancients { get; set; }
         public int Crafting { get; set; }
-        public int CraftingStackQuantity { get; set; }
+        public long CraftingStackQuantity { get; set; }
         public int Pets { get; set; }
         public int Wings { get; set; }
         public int Gems { get; set; }
@@ -105,14 +107,14 @@ namespace Trinity.Modules
             // For the stats on the Main UI
             ItemEvents.OnItemPickedUp += item =>
             {
-                if (item.IsGold || item.IsGem)
+                if (item.GetIsGold() || item.IsGem)
                     return;
-                GameEvents.FireItemLooted(item.AcdId);
+                GameEvents.FireItemLooted(item.ACDId);
             };
 
-            ItemEvents.OnItemSalvaged += item => GameEvents.FireItemSalvaged(item.AcdId);
-            ItemEvents.OnItemStashed += item => GameEvents.FireItemStashed(item.AcdId);
-            ItemEvents.OnItemSold += item => GameEvents.FireItemSold(item.AcdId);
+            ItemEvents.OnItemSalvaged += item => GameEvents.FireItemSalvaged(item.ACDId);
+            ItemEvents.OnItemStashed += item => GameEvents.FireItemStashed(item.ACDId);
+            ItemEvents.OnItemSold += item => GameEvents.FireItemSold(item.ACDId);
 
             IsWired = true;
         }
@@ -126,7 +128,7 @@ namespace Trinity.Modules
 
         protected override int UpdateIntervalMs => 500;
 
-        public bool IsRunning => IsRecording && IsSettingEnabled && IsWired && TrinityPlugin.IsEnabled;
+        public bool IsRunning => IsRecording && IsSettingEnabled && IsWired && Plugin.IsEnabled;
 
         protected override void OnPulse()
         {
@@ -163,13 +165,13 @@ namespace Trinity.Modules
                 Current.Actors.Goblins++;
         }
 
-        public void RecordItemStats(ItemStats stats, TrinityItem item)
+        public void RecordItemStats(ItemStats stats, ACDItem item)
         {
             if (!IsRunning) return;
 
             stats.Total++;
 
-            if (item.IsAncient)
+            if (item.Stats.IsAncient)
                 stats.Ancients++;
 
             if (GameData.PetTable.Contains(item.GameBalanceId) || GameData.PetSnoIds.Contains(item.ActorSnoId))
@@ -181,13 +183,13 @@ namespace Trinity.Modules
             if (Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.Wings) && GameData.WingsTable.Contains(item.GameBalanceId) || GameData.CosmeticSnoIds.Contains(item.ActorSnoId))
                 stats.Wings++;
 
-            if (item.TrinityItemType == TrinityItemType.HealthPotion)
+            if (item.GetTrinityItemType() == TrinityItemType.HealthPotion)
                 stats.Potions++;
 
-            if (item.TrinityItemType == TrinityItemType.UberReagent)
+            if (item.GetTrinityItemType() == TrinityItemType.UberReagent)
                 stats.Ubers++;
 
-            if (item.TrinityItemType == TrinityItemType.ConsumableAddSockets)
+            if (item.GetTrinityItemType() == TrinityItemType.ConsumableAddSockets)
                 stats.Gifts++;
 
             if (item.IsCraftingReagent)
@@ -196,11 +198,11 @@ namespace Trinity.Modules
                 stats.CraftingStackQuantity += item.ItemStackQuantity;
             }
 
-            if (item.IsEquipment)
+            if (item.GetIsEquipment())
             {
                 stats.Equipment++;
 
-                switch (item.TrinityItemQuality)
+                switch (item.GetTrinityItemQuality())
                 {
                     case TrinityItemQuality.Set:
                         stats.Sets++;
@@ -225,8 +227,10 @@ namespace Trinity.Modules
         private void Start()
         {
             SeenActorAnnIds = new HashSet<int>();
-            Current = new StatsSession();
-            Current.StartTime = DateTime.UtcNow;
+            Current = new StatsSession
+            {
+                StartTime = DateTime.UtcNow
+            };
             IsRecording = true;
         }
 

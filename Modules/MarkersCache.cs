@@ -15,7 +15,6 @@ namespace Trinity.Modules
     public interface IMarkerProvider : IEnumerable<TrinityMarker>
     {
         TrinityMarker FindMarker(int hash);
-        TrinityMarker FindMarker(string name);
         TrinityMarker FindMarker(WorldMarkerType type);
     }
 
@@ -25,12 +24,11 @@ namespace Trinity.Modules
         public float Distance { get; set; }
         public Vector3 Position { get; set; }
         public int NameHash { get; set; }
-        public string Name { get; set; }
         public WorldMarkerType MarkerType { get; set; }
-        public int WorldSnoId { get; set; }
+        public SNOWorld WorldSnoId { get; set; }
         public int Id { get; set; }
 
-        public override string ToString() => $"{Name} at {Position} Distance {Distance} Type={MarkerType} TextureId={TextureId}";
+        public override string ToString() => $"{NameHash} at {Position} Distance {Distance} Type={MarkerType} TextureId={TextureId}";
     }
 
 
@@ -38,9 +36,6 @@ namespace Trinity.Modules
     {
         public TrinityMarker FindMarker(int hash)
             => CurrentWorldMarkers.FirstOrDefault(m => m.NameHash == hash);
-
-        public TrinityMarker FindMarker(string name)
-            => CurrentWorldMarkers.Where(m => m.Name.ToLowerInvariant().Contains(name.ToLowerInvariant())).OrderBy(m => m.Distance).FirstOrDefault();
 
         public TrinityMarker FindMarker(WorldMarkerType type) 
             => CurrentWorldMarkers.Where(m => m.MarkerType == type).OrderBy(m => m.Distance).FirstOrDefault();
@@ -62,18 +57,16 @@ namespace Trinity.Modules
 
         private TrinityMarker Create(int key, MinimapMarker newItem, out bool success)
         {
-            var nativeMarker = (Marker)newItem;
             success = true;
             return new TrinityMarker
             {
-                Name = nativeMarker.Name,
-                Id = nativeMarker.Id,
-                NameHash = nativeMarker.NameHash,
-                WorldSnoId = nativeMarker.WorldId,
-                Position = nativeMarker.Position,
-                Distance = nativeMarker.Distance,
-                TextureId = nativeMarker.MinimapTextureId,
-                MarkerType = nativeMarker.MarkerType,
+                Id = newItem.Id,
+                NameHash = newItem.NameHash,
+                WorldSnoId = newItem.WorldId,
+                Position = newItem.Position,
+                Distance = newItem.Distance,
+                TextureId = newItem.MinimapTextureSnoId,
+                MarkerType = newItem.MarkerType,
             };
         }
 

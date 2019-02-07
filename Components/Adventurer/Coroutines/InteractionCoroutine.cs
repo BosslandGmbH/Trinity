@@ -7,6 +7,7 @@ using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Framework.Reference;
 using Zeta.Bot;
+using Zeta.Bot.Coroutines;
 using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.Game.Internals;
@@ -48,7 +49,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         #endregion State
 
-        private readonly int _actorId;
+        private readonly SNOActor _actorId;
         private readonly TimeSpan _timeOut;
         private readonly TimeSpan _sleepTime;
         private readonly int _interactAttempts;
@@ -58,7 +59,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         private bool _isPortal;
         private bool _isNephalemStone;
         private bool _isOrek;
-        private int _startingWorldId;
+        private SNOWorld _startingWorldId;
         private readonly bool _ignoreSanityChecks;
         private readonly string _endAnimation;
         private readonly string _startAnimation;
@@ -66,7 +67,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         private DateTime _castWaitStartTime = DateTime.MinValue;
         private readonly int _markerHash;
 
-        public InteractionCoroutine(int actorId, TimeSpan timeOut, TimeSpan sleepTime, int interactAttempts = 3,
+        public InteractionCoroutine(SNOActor actorId, TimeSpan timeOut, TimeSpan sleepTime, int interactAttempts = 3,
             bool ignoreSanityChecks = false, string startAnimation = "", string endAnimation = "", int markerHash = 0)
         {
             _actorId = actorId;
@@ -176,11 +177,11 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 _isQuestGiver = unit.IsQuestGiver;
             }
-            if (actor.ActorSnoId == 364715)
+            if (actor.ActorSnoId == SNOActor.x1_OpenWorld_LootRunObelisk_B)
             {
                 _isNephalemStone = true;
             }
-            if (actor.ActorSnoId == 363744)
+            if (actor.ActorSnoId == SNOActor.X1_LR_Nephalem)
             {
                 _isOrek = true;
             }
@@ -206,7 +207,6 @@ namespace Trinity.Components.Adventurer.Coroutines
                 : ActorFinder.FindObject(_actorId);
             return actor;
         }
-
 
         private async Task<bool> Interacting()
         {
@@ -344,9 +344,13 @@ namespace Trinity.Components.Adventurer.Coroutines
 
             Core.Logger.Debug($"Attempting to interact with {((SNOActor)actor.ActorSnoId)} at distance {actor.Distance} #{_currentInteractAttempt}");
 
-            var interactionResult = await Interact(actor);
-
-            await Coroutine.Yield(); // Coroutine.Sleep(300);
+            // TODO: Fix condition here.
+            while (await CommonCoroutines.MoveAndInteract(
+                       actor,
+                       () => true) == Zeta.Bot.Coroutines.CoroutineResult.Running)
+            {
+                await Coroutine.Yield(); // Coroutine.Sleep(300);
+            }
 
             if (ActorFinder.IsDeathGate(actor))
             {
@@ -369,30 +373,25 @@ namespace Trinity.Components.Adventurer.Coroutines
             //    return true;
             //}
 
-            if (interactionResult)
+            if (_currentInteractAttempt <= _interactAttempts)
             {
-                if (_currentInteractAttempt <= _interactAttempts)
-                {
-                    _currentInteractAttempt++;
-                    return false;
-                }
-                if (!_isPortal && !_isNephalemStone && !_isOrek && actor.IsInteractableQuestObject())
-                {
-                    return false;
-                }
-                if (_isNephalemStone && !UIElements.RiftDialog.IsVisible)
-                {
-                    return false;
-                }
-                if (_isOrek && AdvDia.RiftQuest.State != QuestState.Completed)
-                {
-                    return false;
-                }
-                State = States.Completed;
+                _currentInteractAttempt++;
+                return false;
             }
-
-            Core.Logger.Debug($"Interaction Failed");
-            return false;
+            if (!_isPortal && !_isNephalemStone && !_isOrek && actor.IsInteractableQuestObject())
+            {
+                return false;
+            }
+            if (_isNephalemStone && !UIElements.RiftDialog.IsVisible)
+            {
+                return false;
+            }
+            if (_isOrek && AdvDia.RiftQuest.State != QuestState.Completed)
+            {
+                return false;
+            }
+            State = States.Completed;
+            return true;
         }
 
         private static bool TimedOut()
@@ -408,58 +407,6 @@ namespace Trinity.Components.Adventurer.Coroutines
         private static bool Failed()
         {
             return true;
-        }
-
-        private async Task<bool> Interact(DiaObject actor)
-        {
-            //var world = ZetaDia.Globals.WorldId;
-            //bool retVal = false;
-            //switch (actor.ActorType)
-            //{
-            //    case ActorType.Gizmo:
-            //        switch (actor.ActorInfo.GizmoType)
-            //        {
-            //            case GizmoType.BossPortal:
-            //            case GizmoType.Portal:
-            //            case GizmoType.ReturnPortal:
-            //                retVal = ZetaDia.Me.UsePower(SNOPower.GizmoOperatePortalWithAnimation, actor.Position);
-            //                break;
-            //            default:
-            //                retVal = ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, actor.Position);
-            //                break;
-            //        }
-            //        break;
-            //    case ActorType.Monster:
-            //        retVal = ZetaDia.Me.UsePower(SNOPower.Axe_Operate_NPC, actor.Position);
-            //        break;
-            //}
-
-            //if (!ZetaDia.Globals.IsLoadingWorld && world == ZetaDia.Globals.WorldId)
-            //{
-            //Core.Logger.Debug($"Fallback Interaction Used");
-            //actor.Interact();
-            //}
-
-            var world = ZetaDia.Globals.WorldId;
-
-            if (actor == null || !actor.IsFullyValid())
-                return false;
-
-            var ret = actor.Interact();
-            await Coroutine.Yield();
-            if (_isPortal)
-            {
-                await Coroutine.Yield();
-            }
-            if (!ZetaDia.Globals.IsLoadingWorld && world == ZetaDia.Globals.WorldId)
-            {
-                await Coroutine.Yield();
-                if (actor.IsFullyValid())
-                {
-                    ret = actor.Interact();
-                }
-            }
-            return ret;
         }
 
         public void Reset()

@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using Trinity.Components.Coroutines;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Reference;
@@ -100,7 +101,7 @@ namespace Trinity.Framework.Helpers
         private static DateTime _lastCacheClear = DateTime.MinValue;
         private static Dictionary<int, CachedBuff> _lastBuffs = new Dictionary<int, CachedBuff>();
         private static Dictionary<string, DateTime> _seenAnimationCache = new Dictionary<string, DateTime>();
-        private static Dictionary<int, DateTime> _seenUnknownCache = new Dictionary<int, DateTime>();
+        private static Dictionary<SNOActor, DateTime> _seenUnknownCache = new Dictionary<SNOActor, DateTime>();
 
         public static void LogAnimation(TrinityActor cacheObject)
         {
@@ -233,7 +234,7 @@ namespace Trinity.Framework.Helpers
 
                 Action<ACDItem, TrinityLogLevel> logACDItem = (i, l) =>
                 {
-                    Core.Logger.Log($"Item: {i.ItemType}: {i.Name} ({i.ActorSnoId}) is Equipped");
+                    Core.Logger.Log($"Item: {i.GetItemType()}: {i.Name} ({i.ActorSnoId}) is Equipped");
                 };
 
                 if (ZetaDia.Me == null || !ZetaDia.Me.IsValid)
@@ -406,7 +407,7 @@ namespace Trinity.Framework.Helpers
         internal static void DumpItemSNOReference()
         {
             string[] names = Enum.GetNames(typeof(SNOActor));
-            int[] values = (int[])Enum.GetValues(typeof(SNOActor));
+            SNOActor[] values = (SNOActor[])Enum.GetValues(typeof(SNOActor));
             var toLog = new List<string>();
             for (int i = 0; i < names.Length; i++)
             {
@@ -460,15 +461,14 @@ namespace Trinity.Framework.Helpers
         {
             Core.Logger.Log("Starting ItemList Backpack Test");
 
-            var backpackItems = Core.Inventory.Backpack;
+            var backpackItems = InventoryManager.Backpack as ACDItem[] ?? InventoryManager.Backpack.ToArray();
             var total = backpackItems.Count();
             var toBeStashed = 0;
 
             foreach (var acdItem in backpackItems)
             {
-                Core.Logger.Log($"{acdItem.Name} ActorSnoId={acdItem.ActorSnoId} GameBalanceId={acdItem.GameBalanceId} ACDId={acdItem.AcdId} AnnId={acdItem.AnnId}");
+                Core.Logger.Log($"{acdItem.Name} ActorSnoId={acdItem.ActorSnoId} GameBalanceId={acdItem.GameBalanceId} ACDId={acdItem.ACDId} AnnId={acdItem.AnnId}");
                 Core.Logger.Verbose(acdItem.ToString());
-                Core.Logger.Verbose(acdItem.Attributes.ToString());
 
                 if (ItemListEvaluator.ShouldStashItem(acdItem, true))
                     toBeStashed++;
@@ -506,12 +506,11 @@ namespace Trinity.Framework.Helpers
             {
                 try
                 {
-                    sbTopList.AppendFormat("\nName={0} InternalName={1} ActorSnoId={2} DynamicID={3} InventorySlot={4}",
-                        item.Name, item.InternalName, item.ActorSnoId, item.AnnId, item.InventorySlot);
+                    sbTopList.Append($"\nName={item.Name} InternalName={item.InternalName} ActorSnoId={item.ActorSnoId} DynamicID={item.AnnId} InventorySlot={item.InventorySlot:G}");
                 }
                 catch (Exception)
                 {
-                    sbTopList.AppendFormat("Exception reading data from ACDItem ACDId={0}", item.ACDId);
+                    sbTopList.Append($"Exception reading data from ACDItem ACDId={item.ACDId}");
                 }
             }
             Core.Logger.Log(sbTopList.ToString());

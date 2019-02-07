@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Zeta.Common;
+using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Game.Exploration
 {
@@ -31,7 +32,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
     public interface IGrid
     {
-        int WorldDynamicId { get; }
+        SNOWorld WorldDynamicId { get; }
 
         void Update(ISceneData sceneData);
 
@@ -40,7 +41,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
     public interface ISceneData
     {
-        int WorldDynamicId { get; }
+        SNOWorld WorldDynamicId { get; }
         List<ISceneDataEntry> Scenes { get; }
     }
 

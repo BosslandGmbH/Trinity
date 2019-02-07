@@ -1,13 +1,13 @@
 ﻿using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Components.Adventurer.Coroutines;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Game.Rift;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
 using Zeta.Bot.Settings;
 using Zeta.Common;
 using Zeta.Game;
@@ -58,7 +58,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
             {
                 try
                 {
-                    var actor = ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).Where(
+                    DiaUnit actor = ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).Where(
                         u =>
                             u.IsValid &&
                             u.CommonData != null &&
@@ -96,7 +96,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
             return ZetaDia.Actors.GetActorByACDId(acdGuid) as DiaUnit;
         }
 
-        public static TrinityActor FindActor(int actorId, int marker = 0, float maxRange = 500, string internalName = "", Func<TrinityActor,bool> condition = null)
+        public static TrinityActor FindActor(SNOActor actorId, int marker = 0, float maxRange = 500, string internalName = "", Func<TrinityActor, bool> condition = null)
         {
             TrinityActor actor = null;
             if (actorId != 0)
@@ -121,7 +121,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
             return actor;
         }
 
-        public static DiaObject FindObject(int actorId)
+        public static DiaObject FindObject(SNOActor actorId)
         {
             return ZetaDia.Actors.GetActorsOfType<DiaObject>(true).Where(
             u =>
@@ -132,7 +132,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
             ).OrderBy(u => u.Distance).FirstOrDefault();
         }
 
-        public static DiaUnit FindUnit(int actorId)
+        public static DiaUnit FindUnit(SNOActor actorId)
         {
             return ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).Where(
                 u =>
@@ -143,7 +143,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
                 ).OrderBy(u => u.Distance).FirstOrDefault();
         }
 
-        public static DiaGizmo FindGizmo(int actorId, Func<DiaGizmo, bool> func = null)
+        public static DiaGizmo FindGizmo(SNOActor actorId, Func<DiaGizmo, bool> func = null)
         {
             return ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true).Where(
                 u =>
@@ -166,7 +166,10 @@ namespace Trinity.Components.Adventurer.Game.Actors
                 ).OrderBy(u => u.Distance).FirstOrDefault();
         }
 
-        public static bool IsDeathGate(DiaObject o) => o != null && o.IsValid && o.ActorSnoId == 328830;
+        public static bool IsDeathGate(DiaObject o)
+        {
+            return o != null && o.IsValid && o.ActorSnoId == SNOActor.x1_Fortress_Portal_Switch;
+        }
 
         public static DiaGizmo FindNearestDeathGate()
         {
@@ -175,8 +178,8 @@ namespace Trinity.Components.Adventurer.Game.Actors
             //    !ExplorationData.FortressWorldIds.Contains(AdvDia.CurrentWorldId))
             //    return null;
 
-            var gizmo = ZetaDia.Actors.GetActorsOfType<DiaObject>(true)
-                    .Where(u => u.IsValid && u.ActorSnoId == 328830 && u.Distance < 200)
+            DiaObject gizmo = ZetaDia.Actors.GetActorsOfType<DiaObject>(true)
+                    .Where(u => u.IsValid && u.ActorSnoId == SNOActor.x1_Fortress_Portal_Switch && u.Distance < 200)
                     .OrderBy(u => u.Distance)
                     .FirstOrDefault();
 
@@ -192,9 +195,9 @@ namespace Trinity.Components.Adventurer.Game.Actors
             //328830
             if (ExplorationData.FortressLevelAreaIds.Contains(AdvDia.CurrentLevelAreaId) || ExplorationData.FortressWorldIds.Contains(AdvDia.CurrentWorldId))
             {
-                var gizmo =
+                DiaObject gizmo =
                     ZetaDia.Actors.GetActorsOfType<DiaObject>(true)
-                        .Where(u => u.IsValid && u.ActorSnoId == 328830 && !NavigationCoroutine.IsDeathGateIgnored(u.Position, ignoreList))
+                        .Where(u => u.IsValid && u.ActorSnoId == SNOActor.x1_Fortress_Portal_Switch && !NavigationCoroutine.IsDeathGateIgnored(u.Position, ignoreList))
                         .OrderBy(u => u.Position.Distance(position))
                         .FirstOrDefault();
                 return gizmo as DiaGizmo;
@@ -223,7 +226,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
 
         public static bool IsInteractableQuestObject(this TrinityActor actor)
         {
-            var a = ZetaDia.Actors.GetActorByACDId(actor.AcdId);
+            DiaObject a = ZetaDia.Actors.GetActorByACDId(actor.AcdId);
             return a?.IsInteractableQuestObject() ?? false;
         }
 
@@ -265,74 +268,74 @@ namespace Trinity.Components.Adventurer.Game.Actors
             return false;
         }
 
-        private static readonly HashSet<int> GizmoInteractBlacklist = new HashSet<int>
-                                                                      {
-                                                                          (int)SNOActor.caOut_Boneyards_Dervish_Alter-10883,
-                                                                          (int)SNOActor.caOut_Oasis_Mine_Entrance_A-26687,
-                                                                      };
+        private static readonly HashSet<SNOActor> GizmoInteractBlacklist = new HashSet<SNOActor>
+        {
+            SNOActor.caOut_Boneyards_Dervish_Alter - 10883,
+            SNOActor.caOut_Oasis_Mine_Entrance_A - 26687,
+        };
 
-        private static readonly HashSet<int> GuardedGizmos = new HashSet<int>
-                                                             {
-                                                                 434366,
-                                                                 430733,
-                                                                 432259,
-                                                                 432770,
-                                                                 433051,
-                                                                 433184,
-                                                                 433385,
-                                                                 433124,
-                                                                 433402,
-                                                                 433316,
-                                                                 433246,
-                                                                 433295
-                                                             };
+        private static readonly HashSet<SNOActor> GuardedGizmos = new HashSet<SNOActor>
+        {
+            SNOActor.px_Leorics_Camp_WorthamMilitia_Ex,
+            SNOActor.px_Wilderness_Camp_TemplarPrisoners,
+            SNOActor.px_Highlands_Camp_ResurgentCult_Totem,
+            SNOActor.px_SpiderCaves_Camp_Cocoon,
+            SNOActor.px_caOut_Cage_BountyCamp,
+            SNOActor.px_Bridge_Camp_LostPatrol,
+            SNOActor.px_Bounty_Ramparts_Camp_Switch,
+            SNOActor.px_Bounty_Camp_TrappedAngels,
+            SNOActor.px_Bounty_Camp_Hellportals_Frame,
+            SNOActor.X1_westm_Necro_Jar_of_Souls_Camp_graveyard,
+            SNOActor.px_Bounty_Death_Orb_Little,
+            SNOActor.px_Bounty_Camp_azmodan_fight_spawner
+        };
 
-        private static readonly HashSet<int> CursedGizmos = new HashSet<int>
+        private static readonly HashSet<SNOActor> CursedGizmos = new HashSet<SNOActor>
                                                             {
-                                                                364601,
-                                                                365097,
-                                                                368169
+                                                                (SNOActor)364601,
+                                                                SNOActor.x1_Global_Chest_CursedChest_B,
+                                                                (SNOActor)368169
                                                             };
 
-        public static readonly HashSet<int> InteractWhitelist = new HashSet<int>
-                                                            {
-                                                                          RiftData.UrshiSNO,
-                                                                301177,
-                                                                363744,
-                                                                93713,
-                                                                331397,
-                                                                183609,
-                                                                289249,
-                                                                // A5 - Bounty: Finding the Forgotten (368611)
-                                                                309381,
-                                                                309400,
-                                                                309398,
-                                                                309387,
-                                                                309403,
-                                                                309391,
-                                                                309410,
-                                                                309380,
-                                                                // A5 - Bounty: A Shameful Death (368445)
-                                                                321930,
-                                                                // A2 - Bounty: Lost Treasure of Khan Dakab (346067)
-                                                                175603,
-                                                                328830, // Death Gate
-                                                                114622,
-                                                                // Guarded Gizmos
-                                                                 434366,
-                                                                 430733,
-                                                                 432259,
-                                                                 432770,
-                                                                 433051,
-                                                                 433184,
-                                                                 433385,
-                                                                 433124,
-                                                                 433402,
-                                                                 433316,
-                                                                 433246,
+        public static readonly HashSet<SNOActor> InteractWhitelist = new HashSet<SNOActor>
+        {
+            RiftData.UrshiSNO,
+            SNOActor.x1_PandExt_Time_Activator,
+            SNOActor.X1_LR_Nephalem,
+            SNOActor.a1dun_Crypts_Jar_of_Souls,
+            SNOActor.x1_westm_Graveyard_Floor_Sarcophagus_Undead_Husband_Event,
+            SNOActor.caldeumTortured_Poor_Male_A_ZakarwaPrisoner,
+            SNOActor.x1_Westm_Corpse_A_01,
+            // A5 - Bounty: Finding the Forgotten (368611)
+            SNOActor.x1_Westm_Corpse_C_01,
+            SNOActor.x1_Westm_Corpse_D_02,
+            SNOActor.x1_Westm_Corpse_C_06,
+            SNOActor.x1_Westm_Corpse_A_05,
+            SNOActor.x1_Westm_Corpse_D_05,
+            SNOActor.x1_Westm_Corpse_B_04,
+            SNOActor.x1_Westm_Corpse_E_06,
+            SNOActor.x1_Westm_Corpse_B_01,
+            // A5 - Bounty: A Shameful Death (368445)
+            SNOActor.x1_westmarchGuard_CaptainStokely_Event,
+            // A2 - Bounty: Lost Treasure of Khan Dakab (346067)
+            SNOActor.a2dun_Aqd_Act_Waterwheel_Lever_A_01_WaterPuzzle,
+            SNOActor.x1_Fortress_Portal_Switch, // Death Gate
+            SNOActor.Tyrael_Heaven,
+            // Guarded Gizmos
+            SNOActor.px_Leorics_Camp_WorthamMilitia_Ex,
+            SNOActor.px_Wilderness_Camp_TemplarPrisoners,
+            SNOActor.px_Highlands_Camp_ResurgentCult_Totem,
+            SNOActor.px_SpiderCaves_Camp_Cocoon,
+            SNOActor.px_caOut_Cage_BountyCamp,
+            SNOActor.px_Bridge_Camp_LostPatrol,
+            SNOActor.px_Bounty_Ramparts_Camp_Switch,
+            SNOActor.px_Bounty_Camp_TrappedAngels,
+            SNOActor.px_Bounty_Camp_Hellportals_Frame,
+            SNOActor.X1_westm_Necro_Jar_of_Souls_Camp_graveyard,
+            SNOActor.px_Bounty_Death_Orb_Little,
 
-                                                                 450222 // cursed shrine bounty
-                                                            };
+            SNOActor.P4_BountyGrounds_CursedShrine_A5 // cursed shrine bounty
+        };
 
         public static bool IsGizmoInteractable(DiaGizmo gizmo)
         {
@@ -382,7 +385,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
                     return true;
 
                 case GizmoType.Switch:
-                    if (gizmo.ActorSnoId == 328830) return true;
+                    if (gizmo.ActorSnoId == SNOActor.x1_Fortress_Portal_Switch) return true;
                     break;
             }
             if (GizmoInteractBlacklist.Contains(gizmo.ActorSnoId))
@@ -398,7 +401,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
             {
                 return false;
             }
-            if (gizmo.ActorSnoId == 455675 && gizmo.CommonData?.MinimapActive == 1)
+            if (gizmo.ActorSnoId == SNOActor.p43_AD_Valor_Pedestal && gizmo.CommonData?.MinimapActive == 1)
             {
                 return true; //p43_AD_Valor_Pedestal-19848 Special Valor Event in Diablo1 Area
             }

@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Buddy.Coroutines;
+using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Buddy.Coroutines;
-using log4net;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
+using Zeta.Common;
 using Zeta.Game;
 using Zeta.TreeSharp;
 using Action = System.Action;
@@ -15,7 +16,7 @@ namespace Trinity.Framework.Helpers
 {
     public static class CoroutineHelper
     {
-        private static readonly ILog Logger = Zeta.Common.Logger.GetLoggerInstanceForType();
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
         private static Coroutine _updateCoroutine;
         public static List<Task> Tasks = new List<Task>();
         private static CancellationToken _token;
@@ -66,7 +67,7 @@ namespace Trinity.Framework.Helpers
             BotMain.IsPausedForStateExecution = true;
             StartNew(task, stopCondition, () =>
             {
-                Core.Logger.Log("ForceRunCoroutine Finished");
+                s_logger.Debug("ForceRunCoroutine Finished");
                 BotMain.IsPausedForStateExecution = false;
 
             }, tickMilliseconds);
@@ -120,7 +121,7 @@ namespace Trinity.Framework.Helpers
                 }
                 catch (Exception ex)
                 {
-                    Logger.ErrorFormat("CoroutineHelper.StartNew threw exception {0}", ex);
+                    s_logger.Error("CoroutineHelper.StartNew threw exception.", ex);
                 }
                 finally
                 {
@@ -172,7 +173,7 @@ namespace Trinity.Framework.Helpers
         {
             if (taskProducer == null)
             {
-                Logger.ErrorFormat("CoroutineHelper.ToCoroutine task cannot be null");
+                s_logger.Error("CoroutineHelper.ToCoroutine task cannot be null");
                 return true;
             }
 
@@ -180,7 +181,7 @@ namespace Trinity.Framework.Helpers
             {
                 _updateCoroutine = new Coroutine(async () =>
                 {
-                    var result = await taskProducer();
+                    T result = await taskProducer();
 
                     if (stopCondition != null)
                         return stopCondition(result);
@@ -201,23 +202,19 @@ namespace Trinity.Framework.Helpers
             }
             catch (CoroutineException ex)
             {
-                Logger.ErrorFormat("CoroutineHelper.ToCoroutine update coroutine threw exception {0}", ex);
+                s_logger.Error("CoroutineHelper.ToCoroutine update coroutine threw exception {0}", ex);
                 return true;
             }
 
             if (!_updateCoroutine.IsFinished)
                 return true; // Still updating
 
-            if (_updateCoroutine.Status != CoroutineStatus.RanToCompletion)
-            {
-                Logger.ErrorFormat("CoroutineHelper.ToCoroutine update coroutine went into status {0}", _updateCoroutine.Status);
-                return true;
-            }
+            if (_updateCoroutine.Status == CoroutineStatus.RanToCompletion)
+                return !(bool)_updateCoroutine.Result;
 
-            if (!(bool)_updateCoroutine.Result)
-                return true; // failed, so retry
+            s_logger.Error("CoroutineHelper.ToCoroutine update coroutine went into status {0}", _updateCoroutine.Status);
+            return true;
 
-            return false;
         }
     }
 }

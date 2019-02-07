@@ -9,7 +9,7 @@ using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-
+using Trinity.Framework.Actors.Attributes;
 
 namespace Trinity.Modules
 {
@@ -39,7 +39,7 @@ namespace Trinity.Modules
 
                 Action<ACDItem, TrinityLogLevel> logACDItem = (i, l) =>
                 {
-                    Core.Logger.Log($"Item: {i.ItemType}: {i.Name} ({i.ActorSnoId}) is Equipped");
+                    Core.Logger.Log($"Item: {i.GetItemType()}: {i.Name} ({i.ActorSnoId}) is Equipped");
                 };
 
                 if (ZetaDia.Me == null || !ZetaDia.Me.IsValid)

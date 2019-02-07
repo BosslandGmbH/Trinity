@@ -1,9 +1,12 @@
 using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using System.Linq;
 using System.Threading.Tasks;
+using Serilog;
 using Trinity.Components.Combat.Resources;
+using Trinity.Framework.Actors.Attributes;
+using Trinity.Framework.Helpers;
+using Zeta.Bot.Coroutines;
+using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
@@ -11,60 +14,53 @@ namespace Trinity.Components.Coroutines
 {
     public class UsePotion
     {
-        public static async Task<bool> Execute()
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
+
+        public static ACDItem ActivePotion =>
+            InventoryManager.Backpack
+                .FirstOrDefault(i => i.GetItemType() == ItemType.Potion &&
+                                     i.IsEquipped) ?? InventoryManager.BaseHealthPotion;
+
+        public static async Task<CoroutineResult> DrinkPotion()
         {
-            if (ShouldUsePotion())
+            if (!ZetaDia.IsInGame ||
+                ZetaDia.Globals.IsLoadingWorld ||
+                ZetaDia.Globals.IsPlayingCutscene ||
+                ZetaDia.IsInTown ||
+                SpellHistory.TimeSinceUse(SNOPower.DrinkHealthPotion) <= TimeSpan.FromSeconds(30) ||
+                ZetaDia.Me == null ||
+                !ZetaDia.Me.IsFullyValid() ||
+                ZetaDia.Me.IsDead ||
+                Combat.TrinityCombat.Routines.Current == null)
             {
-                DrinkPotion();
-                return true;
-            }
-            return false;
-        }
-
-        public static bool ShouldUsePotion()
-        {
-            if (Core.Player == null || Combat.TrinityCombat.Routines.Current == null)
-                return false;
-
-            if (Core.Player.CurrentHealthPct > Combat.TrinityCombat.Routines.Current.PotionHealthPct)
-                return false;
-
-            if (Core.Player.IsIncapacitated || !(Core.Player.CurrentHealthPct > 0) || Core.Player.IsInTown)
-                return false;
-
-            if (SpellHistory.TimeSinceUse(SNOPower.DrinkHealthPotion) <= TimeSpan.FromSeconds(30))
-                return false;
-
-            return Core.Player.CurrentHealthPct <= Combat.TrinityCombat.Routines.Current.PotionHealthPct;
-        }
-
-        public static bool DrinkPotion()
-        {
-            var legendaryPotions = Core.Inventory.Backpack.Where(i =>  
-            new [] { "healthpotion_legendary_", "healthpotionlegendary_" }.Contains(i.InternalName.ToLower())).ToList();
-
-            if (legendaryPotions.Any())
-            {
-                Core.Logger.Verbose(LogCategory.None, "Using Potion", 0);
-                var dynamicId = legendaryPotions.First().AnnId;
-                InventoryManager.UseItem(dynamicId);
-                SpellHistory.RecordSpell(new TrinityPower(SNOPower.DrinkHealthPotion));
-                SnapShot.Record();
-                return true;
+                return CoroutineResult.NoAction;
             }
 
-            var potion = InventoryManager.BaseHealthPotion;
-            if (potion != null)
+            if (ZetaDia.Me.HitpointsCurrentPct > Combat.TrinityCombat.Routines.Current.PotionHealthPct)
+                return CoroutineResult.NoAction;
+
+            if (ZetaDia.Me.IsFeared ||
+                ZetaDia.Me.IsStunned ||
+                ZetaDia.Me.IsFrozen ||
+                ZetaDia.Me.IsBlind ||
+                ZetaDia.Me.CommonData
+                    .GetAttribute<bool>(ActorAttributeType.PowerImmobilize))
             {
-                Core.Logger.Verbose(LogCategory.None, "Using Potion", 0);
-                InventoryManager.UseItem(potion.AnnId);
-                SpellHistory.RecordSpell(new TrinityPower(SNOPower.DrinkHealthPotion));
-                SnapShot.Record();
-                return true;
+                s_logger.Warning($"[{nameof(DrinkPotion)}] Can't use potion while incapacitated!");
+                return CoroutineResult.NoAction;
             }
 
-            Core.Logger.Verbose(LogCategory.None, "No Available potions!", 0);
-            return false;
+            if (ActivePotion == null)
+            {
+                s_logger.Warning($"[{nameof(DrinkPotion)}] No Available potions!");
+                return CoroutineResult.NoAction;
+            }
+
+            s_logger.Information($"[{nameof(DrinkPotion)}] Using Potion {ActivePotion.Name}");
+            InventoryManager.UseItem(ActivePotion.AnnId);
+            SpellHistory.RecordSpell(new TrinityPower(SNOPower.DrinkHealthPotion));
+            SnapShot.Record();
+            return CoroutineResult.Done;
         }
     }
 }

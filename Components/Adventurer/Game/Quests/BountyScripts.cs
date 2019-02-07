@@ -100,8 +100,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 ScriptItems = new List<BountyScriptItem>
                                                 {
-                                                    new BountyScriptItem {ActorId = 4798, Type = BountyScriptItemType.InteractWithMonster},
-                                                    new BountyScriptItem {ActorId = 3707, Type = BountyScriptItemType.InteractWithGizmo},
+                                                    new BountyScriptItem {ActorId = SNOActor.oldNecromancer, Type = BountyScriptItemType.InteractWithMonster},
+                                                    new BountyScriptItem {ActorId = SNOActor.caOut_Totem_A, Type = BountyScriptItemType.InteractWithGizmo},
                                                 }
             });
 
@@ -109,8 +109,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 ScriptItems = new List<BountyScriptItem>
                                                 {
-                                                    new BountyScriptItem {ActorId = 385817, Type = BountyScriptItemType.InteractWithGizmo, WorldId = 157882},
-                                                    new BountyScriptItem {ActorId = 153836, Type = BountyScriptItemType.InteractWithGizmo, WorldId = 157882},
+                                                    new BountyScriptItem {ActorId = SNOActor.LootType3_DeadEndCorpse_CaldeumGuard_Cleaver_A_Corpse_01, Type = BountyScriptItemType.InteractWithGizmo, WorldId = SNOWorld.a2dun_Aqd_Oasis_RandomFacePuzzle_Small},
+                                                    new BountyScriptItem {ActorId = SNOActor.a2dun_Aqd_GodHead_Door, Type = BountyScriptItemType.InteractWithGizmo, WorldId = SNOWorld.a2dun_Aqd_Oasis_RandomFacePuzzle_Small},
                                                 }
             });
 
@@ -118,7 +118,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 ScriptItems = new List<BountyScriptItem>
                                                 {
-                                                    new BountyScriptItem {ActorId = 336711, Type = BountyScriptItemType.InteractWithMonster, WorldId = 336902},
+                                                    new BountyScriptItem {ActorId = SNOActor.x1_NPC_Westmarch_Aldritch, Type = BountyScriptItemType.InteractWithMonster, WorldId = SNOWorld.X1_Westm_Int_Gen_A_04_KingEvent03},
                                                 }
             });
 
@@ -126,7 +126,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 ScriptItems = new List<BountyScriptItem>
                                                 {
-                                                    new BountyScriptItem {ActorId = 365097, Type = BountyScriptItemType.InteractWithGizmo, WorldId = 181644},
+                                                    new BountyScriptItem {ActorId = SNOActor.x1_Global_Chest_CursedChest_B, Type = BountyScriptItemType.InteractWithGizmo, WorldId = SNOWorld.a4dun_Sigil_C},
                                                 }
             });
 
@@ -134,9 +134,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 ScriptItems = new List<BountyScriptItem>
                                                 {
-                                                    new BountyScriptItem {ActorId = 4798, Type = BountyScriptItemType.InteractWithMonster, WorldId = 303361},
-                                                    new BountyScriptItem {ActorId = 316371, Type = BountyScriptItemType.InteractWithGizmo, WorldId = 303361},
-                                                    new BountyScriptItem {ActorId = 4798, Type = BountyScriptItemType.InteractWithMonster, WorldId = 303361},
+                                                    new BountyScriptItem {ActorId = SNOActor.oldNecromancer, Type = BountyScriptItemType.InteractWithMonster, WorldId = SNOWorld.X1_westm_Int_Gen_A02Necromancer},
+                                                    new BountyScriptItem {ActorId = SNOActor.X1_westm_Necro_Jar_of_Souls, Type = BountyScriptItemType.InteractWithGizmo, WorldId = SNOWorld.X1_westm_Int_Gen_A02Necromancer},
+                                                    new BountyScriptItem {ActorId = SNOActor.oldNecromancer, Type = BountyScriptItemType.InteractWithMonster, WorldId = SNOWorld.X1_westm_Int_Gen_A02Necromancer},
                                                 }
             });
 
@@ -144,8 +144,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 ScriptItems = new List<BountyScriptItem>
                                                 {
-                                                    new BountyScriptItem {ActorId = 205312, Type = BountyScriptItemType.InteractWithMonster, WorldId = 95804},
-                                                    new BountyScriptItem {ActorId = 205468, Type = BountyScriptItemType.InteractWithMonster, WorldId = 95804},
+                                                    new BountyScriptItem {ActorId = SNOActor.bastionsKeepGuard_Melee_A_01_snatched, Type = BountyScriptItemType.InteractWithMonster, WorldId = SNOWorld.A3_Battlefields_02},
+                                                    new BountyScriptItem {ActorId = SNOActor.OmniNPC_Female_Act3_B_MedicalCamp, Type = BountyScriptItemType.InteractWithMonster, WorldId = SNOWorld.A3_Battlefields_02},
                                                 }
             });
         }
@@ -187,9 +187,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
     public class BountyScriptItem
     {
         public BountyScriptItemType Type { get; set; }
-        public int ActorId { get; set; }
+        public SNOActor ActorId { get; set; }
         public TimeSpan WaitTime { get; set; }
-        public int WorldId { get; set; }
+        public SNOWorld WorldId { get; set; }
 
         public DiaObject FindMatchingActor()
         {
@@ -206,17 +206,15 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 switch (Type)
                 {
                     case BountyScriptItemType.InteractWithGizmo:
-                        if (actor is DiaGizmo)
+                        if (actor is DiaGizmo gizmo)
                         {
-                            var gizmo = actor as DiaGizmo;
                             return gizmo.IsFullyValid() && ActorFinder.IsGizmoInteractable(gizmo);
                         }
                         return false;
 
                     case BountyScriptItemType.InteractWithMonster:
-                        if (actor is DiaUnit)
+                        if (actor is DiaUnit unit)
                         {
-                            var unit = actor as DiaUnit;
                             return ActorFinder.IsUnitInteractable(unit);
                         }
                         return false;

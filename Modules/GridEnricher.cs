@@ -1,32 +1,34 @@
+using Buddy.Coroutines;
+using Serilog;
 using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using Buddy.Coroutines;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Combat;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Settings;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Grid;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Settings;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;
 
-
 namespace Trinity.Modules
 {
     public class GridEnricher : Module
     {
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
+
         public const float GlobeWeightRadiusFactor = 1f;
         public const float MonsterWeightRadiusFactor = 1f;
         public const float GizmoWeightRadiusFactor = 1f;
         public const int MaxDistance = 70;
 
-        public HashSet<int> ActiveAvoidanceSnoIds = new HashSet<int>();
+        public HashSet<SNOActor> ActiveAvoidanceSnoIds = new HashSet<SNOActor>();
 
         private readonly HashSet<GizmoType> _flaggedGizmoTypes = new HashSet<GizmoType>
         {
@@ -68,7 +70,6 @@ namespace Trinity.Modules
         public Vector3 MonsterCentroid { get; set; }
         public Vector3 AvoidanceCentroid { get; set; }
         public AvoidanceNode HighestNode { get; set; }
-        public TrinityGrid Grid => Core.Grids.Avoidance;
         public AvoidanceSettings Settings => Core.Avoidance.Settings;
 
         protected override int UpdateIntervalMs => 1000;
@@ -76,19 +77,18 @@ namespace Trinity.Modules
 
         public void UpdateGrid()
         {
-            var grid = Core.Grids.Avoidance;
-
-            grid.IsUpdatingNodes = true;
+            TrinityGrid.Instance.IsUpdatingNodes = true;
 
             using (new PerformanceLogger("UpdateGrid"))
             {
                 HighestNodeWeight = 0;
 
-                if (grid.NearestNode == null || grid.NearestNode.DynamicWorldId != ZetaDia.Globals.WorldId)
+                if (TrinityGrid.Instance.NearestNode == null ||
+                    TrinityGrid.Instance.NearestNode.DynamicWorldId != ZetaDia.Globals.WorldId)
                 {
+                    s_logger.Debug($"[{nameof(UpdateGrid)}] No Player Nearest Node or WorldId Mismatch");
                     Core.Scenes.Reset();
                     Core.Scenes.Update();
-                    Core.Logger.Debug(LogCategory.Avoidance, "No Player Nearest Node or WorldId Mismatch");
                     return;
                 }
 
@@ -97,12 +97,19 @@ namespace Trinity.Modules
                 var avoidanceNodes = new AvoidanceLayer();
                 var monsterNodes = new AvoidanceLayer();
                 var obstacleNodes = new AvoidanceLayer();
-                var activeAvoidanceSnoIds = new HashSet<int>();
+                var activeAvoidanceSnoIds = new HashSet<SNOActor>();
                 var kiteFromNodes = new AvoidanceLayer();
 
-                var nodePool = grid.GetNodesInRadius(Core.Player.Position, node => node.IsWalkable, MaxDistance).Select(n => n.Reset()).ToList();
+                var nodePool = TrinityGrid.Instance
+                    .GetNodesInRadius(Core.Player.Position, node => node.IsWalkable, MaxDistance)
+                    .Select(n => n.Reset()).ToList();
+
                 //var allNodes = Grid.GetNodesInRadius(Core.Player.Position, node => node != null, MaxDistance).ToList();
-                var nearestNodes = grid.GetNodesInRadius(Core.Player.Position, node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk), Settings.AvoiderLocalRadius).ToList();
+                var nearestNodes = TrinityGrid.Instance
+                    .GetNodesInRadius(Core.Player.Position, node => node != null &&
+                                                                    node.NodeFlags.HasFlag(NodeFlags.AllowWalk), Settings.AvoiderLocalRadius)
+                    .ToList();
+
                 var weightSettings = Settings.WeightingOptions;
 
                 try
@@ -147,13 +154,13 @@ namespace Trinity.Modules
                             var handler = avoidance.Definition.Handler;
                             if (handler == null)
                             {
-                                Core.Logger.Error(LogCategory.Avoidance, $"Avoidance: {avoidance.Definition.Name} has no handler");
+                                s_logger.Error($"[{nameof(UpdateGrid)}] Avoidance: {avoidance.Definition.Name} has no handler");
                                 continue;
                             }
 
-                            if (avoidance.IsAllowed)
+                            if (avoidance.IsAllowed && !avoidance.IsExpired)
                             {
-                                handler.UpdateNodes(grid, avoidance);
+                                handler.UpdateNodes(TrinityGrid.Instance, avoidance);
 
                                 avoidance.Actors.ForEach(a =>
                                 {
@@ -169,7 +176,7 @@ namespace Trinity.Modules
                         }
                         catch (Exception ex)
                         {
-                            Core.Logger.Error(LogCategory.Avoidance, $"Exception in AvoidanceHandler updating nodes. Name={avoidance.Definition?.Name} Handler={avoidance.Definition?.Handler?.GetType()} {ex} {Environment.StackTrace}");
+                            s_logger.Error($"[{nameof(UpdateGrid)}] Exception in AvoidanceHandler updating nodes. Name={avoidance.Definition?.Name} Handler={avoidance.Definition?.Handler?.GetType()}", ex);
                         }
                     }
 
@@ -229,7 +236,7 @@ namespace Trinity.Modules
                 }
                 catch (Exception ex)
                 {
-                    Core.Logger.Log("Exception in UpdateGrid {0}", ex);
+                    s_logger.Error($"[{nameof(UpdateGrid)}] Exception in UpdateGrid", ex);
 
                     if (ex is CoroutineStoppedException)
                         throw;
@@ -249,7 +256,7 @@ namespace Trinity.Modules
                 ActiveAvoidanceSnoIds = activeAvoidanceSnoIds;
             }
 
-            grid.IsUpdatingNodes = true;
+            TrinityGrid.Instance.IsUpdatingNodes = true;
         }
 
         private void UpdateGizmoFlags(TrinityActor actor)
@@ -259,7 +266,7 @@ namespace Trinity.Modules
                 return;
 
             var importantGizmo = _importantGizmoTypes.Contains(actor.GizmoType);
-            foreach (var node in Grid.GetNodesInRadius(actor.Position, actor.Radius * GizmoWeightRadiusFactor))
+            foreach (var node in TrinityGrid.Instance.GetNodesInRadius(actor.Position, actor.Radius * GizmoWeightRadiusFactor))
             {
                 node.AddNodeFlags(AvoidanceFlags.Gizmo);
 
@@ -280,7 +287,7 @@ namespace Trinity.Modules
             if (actor.Type != TrinityObjectType.Door)
                 return;
 
-            foreach (var node in Grid.GetNodesInRadius(actor.Position, actor.CollisionRadius))
+            foreach (var node in TrinityGrid.Instance.GetNodesInRadius(actor.Position, actor.CollisionRadius))
             {
                 // Mark area around closed doors so that monsters behind them can be ignored.
                 if ((!actor.IsUsed || actor.IsLockedDoor) && !actor.IsExcludedId)
@@ -299,7 +306,7 @@ namespace Trinity.Modules
             if (actor.ActorType != ActorType.Monster)
                 return;
 
-            foreach (var node in Grid.GetNodesInRadius(actor.Position, actor.CollisionRadius * MonsterWeightRadiusFactor))
+            foreach (var node in TrinityGrid.Instance.GetNodesInRadius(actor.Position, actor.CollisionRadius * MonsterWeightRadiusFactor))
             {
                 node.Weight += 2;
 
@@ -320,7 +327,7 @@ namespace Trinity.Modules
         {
             if (TrinityCombat.Routines.Current == null)
             {
-                Core.Logger.Debug("UpdateKiteFromFlags failed to update becasue no routine is selected");
+                s_logger.Debug($"[{nameof(UpdateKiteFromFlags)}] UpdateKiteFromFlags failed to update becasue no routine is selected");
                 return;
             }
 
@@ -342,7 +349,7 @@ namespace Trinity.Modules
             if (!isKiting)
                 return;
 
-            foreach (var node in Grid.GetNodesInRadius(actor.Position, actor.CollisionRadius + kiteDistance))
+            foreach (var node in TrinityGrid.Instance.GetNodesInRadius(actor.Position, actor.CollisionRadius + kiteDistance))
             {
                 if (!node.IsWalkable)
                     continue;
@@ -358,7 +365,7 @@ namespace Trinity.Modules
             if (actor.Type != TrinityObjectType.HealthGlobe)
                 return;
 
-            foreach (var node in Grid.GetNodesInRadius(actor.Position, actor.Radius * GlobeWeightRadiusFactor))
+            foreach (var node in TrinityGrid.Instance.GetNodesInRadius(actor.Position, actor.Radius * GlobeWeightRadiusFactor))
             {
                 if (Settings.WeightingOptions.HasFlag(WeightingOptions.Globes))
                     node.Weight -= 6;
@@ -372,12 +379,12 @@ namespace Trinity.Modules
             if (actor.GizmoType != GizmoType.Gate)
                 return;
 
-            if (actor.ActorSnoId == 3048) // a2dun_Zolt_Sand_Wall
+            if (actor.ActorSnoId == SNOActor.a2dun_Zolt_Sand_Wall) // a2dun_Zolt_Sand_Wall
             {
                 var startPoint = MathEx.GetPointAt(actor.Position, 15f, MathEx.WrapAngle((float)(actor.Rotation - Math.PI / 2)));
                 var endPoint = MathEx.GetPointAt(actor.Position, 15f, MathEx.WrapAngle((float)(actor.Rotation + Math.PI / 2)));
-                var nodes = Grid.GetRayLineAsNodes(startPoint, endPoint);
-                Grid.FlagNodes(nodes, AvoidanceFlags.ProjectileBlocking);
+                var nodes = TrinityGrid.Instance.GetRayLineAsNodes(startPoint, endPoint);
+                TrinityGrid.Instance.FlagNodes(nodes, AvoidanceFlags.ProjectileBlocking);
             }
         }
 
@@ -388,11 +395,11 @@ namespace Trinity.Modules
                 if (cachedPos.WorldId != Core.Player.WorldSnoId)
                     continue;
 
-                var nearestNode = Grid.GetNearestNode(cachedPos.Position);
+                var nearestNode = TrinityGrid.Instance.GetNearestNode(cachedPos.Position);
                 if (nearestNode == null)
                     continue;
 
-                var weightChange = Grid.IsInKiteDirection(cachedPos.Position, 90) ? -1 : 0;
+                var weightChange = TrinityGrid.Instance.IsInKiteDirection(cachedPos.Position, 90) ? -1 : 0;
                 var shouldChangeWeight = Settings.WeightingOptions.HasFlag(WeightingOptions.Globes);
 
                 foreach (var node in nearestNode.AdjacentNodes)

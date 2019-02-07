@@ -4,15 +4,17 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
+using Trinity.Modules;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Settings.ItemList
 {
     public class ItemListEvaluator
     {
-        internal static bool ShouldStashItem(TrinityItem cItem, bool test = false)
+        internal static bool ShouldStashItem(ACDItem cItem, bool test = false)
         {
             if (ShouldStashItemType(cItem, test))
             {
@@ -29,9 +31,9 @@ namespace Trinity.Settings.ItemList
             return ShouldStashItem(item, cItem, test);
         }
 
-        internal static bool ShouldStashItemType(TrinityItem cItem, bool test = false)
+        internal static bool ShouldStashItemType(ACDItem cItem, bool test = false)
         {
-            var typeEntry = Core.Settings.ItemList.GetitemTypeRule(cItem.TrinityItemType);
+            var typeEntry = Core.Settings.ItemList.GetitemTypeRule(cItem.GetTrinityItemType());
 
             if (typeEntry == null)
             {
@@ -41,14 +43,14 @@ namespace Trinity.Settings.ItemList
 
             if (!typeEntry.IsSelected)
             {
-                Core.Logger.Verbose($"  >>  {cItem.Name} ({cItem.TrinityItemType}) is not a selected item type - {typeEntry.Type}");
+                Core.Logger.Verbose($"  >>  {cItem.Name} ({cItem.GetTrinityItemType()}) is not a selected item type - {typeEntry.Type}");
                 return false;
             }
 
             return typeEntry.IsSelected && EvaluateRules(cItem, typeEntry, test);
         }
 
-        internal static bool ShouldStashItem(Item referenceItem, TrinityItem cItem, bool test = false)
+        internal static bool ShouldStashItem(Item referenceItem, ACDItem cItem, bool test = false)
         {
             var id = referenceItem.Id;
 
@@ -93,7 +95,7 @@ namespace Trinity.Settings.ItemList
             return false;
         }
 
-        private static bool EvaluateRules(TrinityItem cItem, LItem itemSetting, bool isTest)
+        private static bool EvaluateRules(ACDItem cItem, LItem itemSetting, bool isTest)
         {
             if (itemSetting == null)
             {
@@ -177,7 +179,7 @@ namespace Trinity.Settings.ItemList
             }
         }
 
-        internal static bool EvaluateProperty(LRule itemRule, TrinityItem item, out float newValue)
+        internal static bool EvaluateProperty(LRule itemRule, ACDItem item, out float newValue)
         {
             var prop = itemRule.ItemProperty;
             var value = (float)itemRule.Value;
@@ -199,39 +201,39 @@ namespace Trinity.Settings.ItemList
                     break;
 
                 case ItemProperty.Ancient:
-                    itemValue = item.IsAncient ? 1 : 0;
+                    itemValue = item.Stats.IsAncient ? 1 : 0;
                     ruleValue = value;
-                    result = item.IsAncient && Math.Abs(value - 1) < double.Epsilon;
+                    result = item.Stats.IsAncient && Math.Abs(value - 1) < double.Epsilon;
                     returnValue = ruleValue;
                     break;
 
                 case ItemProperty.PrimaryStat:
-                    itemValue = item.Attributes.PrimaryStat;
+                    itemValue = item.Stats.HighestPrimaryAttribute;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.CriticalHitChance:
-                    itemValue = item.Attributes.CritPercent;
+                    itemValue = item.Stats.CritPercent;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.CriticalHitDamage:
-                    itemValue = item.Attributes.CritDamagePercent;
+                    itemValue = item.Stats.CritDamagePercent;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.AttackSpeed:
-
-                    itemValue = item.Attributes.AttacksPerSecondPercent;
-                    if (itemValue == 0)
+                    itemValue = item.Stats.AttackSpeedPercent;
+                    // TODO: Check if this is required.
+                    if (Math.Abs(itemValue) < double.Epsilon)
                     {
-                        itemValue = item.Attributes.AttacksPerSecondItemPercent;
+                        itemValue = item.AttacksPerSecondItemPercent;
                     }
                     ruleValue = value;
                     result = itemValue >= ruleValue;
@@ -239,119 +241,119 @@ namespace Trinity.Settings.ItemList
                     break;
 
                 case ItemProperty.ResourceCost:
-                    itemValue = item.Attributes.ResourceCostReductionPercent;
+                    itemValue = item.Stats.ResourceCostReductionPercent;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.Cooldown:
-                    itemValue = item.Attributes.CooldownPercent;
+                    itemValue = item.Stats.PowerCooldownReductionPercent;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.ResistAll:
-                    itemValue = item.Attributes.ResistAll;
+                    itemValue = item.Stats.ResistAll;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.Sockets:
-                    itemValue = item.Attributes.Sockets;
+                    itemValue = item.Stats.Sockets;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = ruleValue;
                     break;
 
                 case ItemProperty.Vitality:
-                    itemValue = item.Attributes.Vitality;
+                    itemValue = item.Stats.Vitality;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.AreaDamage:
-                    itemValue = item.Attributes.AreaDamagePercent;
+                    itemValue = item.SplashDamageEffectPercent * 100f;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.Thorns:
-                    itemValue = item.Attributes.Thorns;
+                    itemValue = item.Stats.Thorns;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.FireSkills:
-                    itemValue = item.Attributes.FireSkillDamagePercentBonus;
+                    itemValue = item.Stats.FireSkillDamagePercentBonus;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.ColdSkills:
-                    itemValue = item.Attributes.ColdSkillDamagePercentBonus;
+                    itemValue = item.Stats.ColdSkillDamagePercentBonus;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.LightningSkills:
-                    itemValue = item.Attributes.LightningSkillDamagePercentBonus;
+                    itemValue = item.Stats.LightningSkillDamagePercentBonus;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.ArcaneSkills:
-                    itemValue = item.Attributes.ArcaneSkillDamagePercentBonus;
+                    itemValue = item.Stats.ArcaneSkillDamagePercentBonus;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.HolySkills:
-                    itemValue = item.Attributes.HolySkillDamagePercentBonus;
+                    itemValue = item.Stats.HolySkillDamagePercentBonus;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.PoisonSkills:
-                    itemValue = item.Attributes.PoisonSkillDamagePercentBonus;
+                    itemValue = item.Stats.PosionSkillDamagePercentBonus;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.PhysicalSkills:
-                    itemValue = item.Attributes.PhysicalSkillDamagePercentBonus;
+                    itemValue = item.Stats.PhysicalSkillDamagePercentBonus;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.DamageAgainstElites:
-                    itemValue = item.Attributes.DamageAgainstElites;
+                    itemValue = item.Stats.DamagePercentBonusVsElites;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.DamageFromElites:
-                    itemValue = item.Attributes.DamageFromElites;
+                    itemValue = item.Stats.DamagePercentReductionFromElites;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.BaseMaxDamage:
-                    itemValue = item.Attributes.MaxDamage;
+                    itemValue = item.Stats.MaxDamage;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
@@ -359,11 +361,11 @@ namespace Trinity.Settings.ItemList
 
                 case ItemProperty.SkillDamage:
                     var skillId = variant;
-                    var skill = ItemDataUtils.GetSkillsForItemType(item.TrinityItemType, Core.Player.ActorClass).FirstOrDefault(s => s.Id == skillId);
+                    var skill = ItemDataUtils.GetSkillsForItemType(item.GetTrinityItemType(), Core.Player.ActorClass).FirstOrDefault(s => s.Id == skillId);
                     if (skill != null)
                     {
                         friendlyVariant = skill.Name;
-                        itemValue = item.Attributes.SkillDamagePercent(skill.SNOPower) * 100;
+                        itemValue = item.SkillDamagePercent(skill.SNOPower) * 100;
                     }
                     ruleValue = value;
                     result = itemValue >= ruleValue;
@@ -377,7 +379,7 @@ namespace Trinity.Settings.ItemList
                     {
                         var damageType = TypeConversions.GetDamageType(element);
                         friendlyVariant = ((EnumValue<Element>)element).Name;
-                        itemValue = item.Attributes.GetElementalDamage(damageType);
+                        itemValue = item.GetElementalDamage(damageType);
                     }
                     ruleValue = value;
                     result = itemValue >= ruleValue;
@@ -385,189 +387,189 @@ namespace Trinity.Settings.ItemList
                     break;
 
                 case ItemProperty.PercentDamage:
-                    itemValue = item.Attributes.WeaponDamagePercent;
+                    itemValue = item.Stats.WeaponDamagePercent;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.CriticalHitsGrantArcane:
-                    itemValue = item.Attributes.ArcaneOnCrit;
+                    itemValue = item.Stats.ArcaneOnCrit;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.Armor:
-                    itemValue = item.Attributes.ArmorBonusItem;
+                    itemValue = item.Stats.ArmorBonus;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.ChanceToBlock:
-                    itemValue = item.Attributes.BlockChanceBonusPercent;
+                    itemValue = item.Stats.BlockChanceBonus;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.ChanceToBlockTotal:
-                    itemValue = item.Attributes.BlockChanceItemTotal;
+                    itemValue = item.Stats.BlockChance;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.HatredRegen:
-                    itemValue = item.Attributes.HatredRegen;
+                    itemValue = item.Stats.HatredRegen;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.LifePercent:
-                    itemValue = item.Attributes.LifePercent *100;
+                    itemValue = item.Stats.LifePercent;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.LifePerHit:
-                    itemValue = item.Attributes.LifeOnHit;
+                    itemValue = item.Stats.LifeOnHit;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.RegenerateLifePerSecond:
-                    itemValue = item.Attributes.HealthPerSecond;
+                    itemValue = item.Stats.HealthPerSecond;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.ManaRegen:
-                    itemValue = item.Attributes.ManaRegen;
+                    itemValue = item.Stats.ManaRegen;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.MovementSpeed:
-                    itemValue = item.Attributes.MovementSpeedPercent;
+                    itemValue = item.Stats.MovementSpeed;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.SpiritRegen:
-                    itemValue = item.Attributes.SpiritRegen;
+                    itemValue = item.Stats.SpiritRegen;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.WrathRegen:
-                    itemValue =
+                    itemValue = item.Stats.FaithRegen;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.LifePerFury:
-                    itemValue = item.Attributes.LifePerFury;
+                    itemValue = item.Stats.HealPerFury;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.LifePerSpirit:
-                    itemValue = item.Attributes.LifePerSpirit;
+                    itemValue = item.Stats.HealPerSpirit;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.LifePerWrath:
-                    itemValue = item.Attributes.LifePerWrath;
+                    itemValue = item.Stats.HealPerFaith;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.MaximumArcane:
-                    itemValue = item.Attributes.MaxArcanePower;
+                    itemValue = item.Stats.MaxArcanum;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.MaximumSpirit:
-                    itemValue = item.Attributes.MaxSpirit;
+                    itemValue = item.Stats.MaxSpirit;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.MaximumDiscipline:
-                    itemValue = item.Attributes.MaxDiscipline;
+                    itemValue = item.Stats.MaxDiscipline;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.MaximumFury:
-                    itemValue = item.Attributes.MaxFury;
+                    itemValue = item.Stats.MaxFury;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.MaximumMana:
-                    itemValue = item.Attributes.MaxMana;
+                    itemValue = item.Stats.MaxMana;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.MaximumWrath:
-                    itemValue = item.Attributes.MaximumWrath;
+                    itemValue = item.Stats.MaxFaith;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.ChanceToBlind:
-                    itemValue = item.Attributes.ChanceToBlind;
+                    itemValue = item.Stats.WeaponOnHitBlindProcChance;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.ChanceToFreeze:
-                    itemValue = item.Attributes.ChanceToFreeze;
+                    itemValue = item.Stats.WeaponOnHitFreezeProcChance;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.ChanceToImmobilize:
-                    itemValue = item.Attributes.ChanceToImmobilize;
+                    itemValue = item.Stats.WeaponOnHitImmobilizeProcChance;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.ChanceToStun:
-                    itemValue = item.Attributes.ChanceToStun;
+                    itemValue = item.Stats.WeaponOnHitStunProcChance;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
                     break;
 
                 case ItemProperty.MaximumEssence:
-                    itemValue = item.Attributes.MaxEssence;
+                    itemValue = item.ResourceMaxEssence;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
@@ -584,8 +586,7 @@ namespace Trinity.Settings.ItemList
                         var mod = itemRule.AttributeModifier.Trim();
                         var val = itemRule.AttributeValue.Trim();
 
-                        ActorAttributeType attribute;
-                        if (!Enum.TryParse(key, true, out attribute))
+                        if (!Enum.TryParse(key, true, out ActorAttributeType attribute))
                             error += $"No ActorAttributeType exists with key '{itemRule.AttributeKey}'. ";
 
                         var modifierId = -1;
@@ -604,7 +605,7 @@ namespace Trinity.Settings.ItemList
                             break;
                         }
 
-                        itemValue = item.Attributes.GetAttribute<float>(attribute, modifierId);
+                        itemValue = item.GetAttribute<float>(attribute, modifierId);
                         ruleValue = value;
                         result = itemValue >= ruleValue;
                         returnValue = itemValue;

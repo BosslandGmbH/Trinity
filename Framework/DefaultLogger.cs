@@ -1,12 +1,12 @@
-﻿using log4net;
+﻿using Serilog;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
+using Zeta.Common;
 
 namespace Trinity.Framework
 {
     public interface IFrameworkLogger
     {
-        string Prefix { get; set; }
         void Debug(string s, params object[] args);
         void Debug(LogCategory category, string s, params object[] args);
         void Log(string s, params object[] args);
@@ -23,9 +23,7 @@ namespace Trinity.Framework
 
     public class DefaultLogger : IFrameworkLogger
     {
-        private readonly ILog _Logger = Zeta.Common.Logger.GetLoggerInstanceForType();
-
-        public string Prefix { get; set; } = $"{TrinityPlugin.Instance.Name} {TrinityPlugin.Instance.Version}";
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         public void Log(string s, params object[] args)
             => LogToCategory(LogCategory.None, TrinityLogLevel.Info, s, args);
@@ -63,40 +61,40 @@ namespace Trinity.Framework
         public void Error(LogCategory category, string s, params object[] args)
             => LogToCategory(category, TrinityLogLevel.Error, s, args);
 
-        private string LastMessage;
+        private string _lastMessage;
         private void LogToCategory(LogCategory category, TrinityLogLevel level, string s, object[] args)
         {
             if (args.Length > 0)
                 s = string.Format(s, args);
-            if (Core.Settings?.Advanced?.LogCategories.HasFlag(category) ?? true)
-            {
-                var cat = category != LogCategory.None ? $" [{category}] " : string.Empty;
-                var msg = $"[{Prefix}]{cat} {s}";
+            if (!(Core.Settings?.Advanced?.LogCategories.HasFlag(category) ?? true))
+                return;
 
-                if (LastMessage == msg)
-                    return;
-                LastMessage = msg;
-                    switch (level)
-                {
-                    case TrinityLogLevel.Warn:
-                        _Logger.Warn(msg);
-                        break;
-                    case TrinityLogLevel.Verbose:
-                        _Logger.Debug(msg);
-                        break;
-                    case TrinityLogLevel.Debug:
-                        _Logger.Debug(msg);
-                        break;
-                    case TrinityLogLevel.Error:
-                        _Logger.Error(msg);
-                        break;
-                    case TrinityLogLevel.Info:
-                        _Logger.Info(msg);
-                        break;
-                    case TrinityLogLevel.Raw:
-                        _Logger.Info(s);
-                        break;
-                }
+            var cat = category != LogCategory.None ? $"[{category}] " : string.Empty;
+            var msg = $"{cat}{s}";
+
+            if (_lastMessage == msg)
+                return;
+            _lastMessage = msg;
+            switch (level)
+            {
+                case TrinityLogLevel.Warn:
+                    s_logger.Warning(msg);
+                    break;
+                case TrinityLogLevel.Verbose:
+                    s_logger.Verbose(msg);
+                    break;
+                case TrinityLogLevel.Debug:
+                    s_logger.Debug(msg);
+                    break;
+                case TrinityLogLevel.Error:
+                    s_logger.Error(msg);
+                    break;
+                case TrinityLogLevel.Info:
+                    s_logger.Information(msg);
+                    break;
+                case TrinityLogLevel.Raw:
+                    s_logger.Information(s);
+                    break;
             }
 
         }

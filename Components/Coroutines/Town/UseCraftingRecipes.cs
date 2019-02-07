@@ -73,15 +73,15 @@
 //                }
 
 //                // Use all the Jeweller plans
-//                while (GameUI.IsJewelerWindowOpen && Core.Inventory.Backpack.Any(i => i.RawItemType == RawItemType.CraftingPlan_Jeweler))
+//                while (GameUI.IsJewelerWindowOpen && Core.Inventory.Backpack.Any(i => i.GetRawItemType() == RawItemType.CraftingPlan_Jeweler))
 //                {
 //                    Core.Logger.Verbose("[UseCraftingRecipes] Using Jeweler Plans");
-//                    InventoryManager.UseItem(Core.Inventory.Backpack.First(i => i.RawItemType == RawItemType.CraftingPlan_Jeweler).AnnId);
+//                    InventoryManager.UseItem(Core.Inventory.Backpack.First(i => i.GetRawItemType() == RawItemType.CraftingPlan_Jeweler).AnnId);
 //                    await Coroutine.Sleep(25);
 //                }
 
 //                // Move to Jeweller.
-//                if (!GameUI.IsJewelerWindowOpen && Core.Inventory.Backpack.Any(i => i.RawItemType == RawItemType.CraftingPlan_Jeweler))
+//                if (!GameUI.IsJewelerWindowOpen && Core.Inventory.Backpack.Any(i => i.GetRawItemType() == RawItemType.CraftingPlan_Jeweler))
 //                {
 //                    Core.Logger.Verbose("[UseCraftingRecipes] Moving to Jeweler");
 

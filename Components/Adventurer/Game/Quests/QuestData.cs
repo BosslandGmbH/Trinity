@@ -10,18 +10,18 @@ namespace Trinity.Components.Adventurer.Game.Quests
 {
     public class QuestData
     {
-        public int QuestId { get; set; }
+        public SNOQuest QuestId { get; set; }
         public bool IsDataComplete { get; set; }
         public bool IsReadOnly { get; set; }
         public string Name { get; set; }
         public string InternalName { get; set; }
         public Act Act { get; set; }
         public string ActName { get; set; }
-        public HashSet<int> LevelAreaIds { get; set; }
+        public HashSet<SNOLevelArea> LevelAreaIds { get; set; }
         public List<QuestStepData> Steps { get; set; }
         public WaypointData Waypoint { get; set; }
 
-        public static QuestData GetQuestData(int questId)
+        public static QuestData GetQuestData(SNOQuest questId)
         {
             var bountyInfo = GetBountyInfo(questId);
             var questData = new QuestData();
@@ -38,9 +38,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
             questData.Act = bountyInfo.Act;
             questData.ActName = bountyInfo.Act.ToString();
 
-            questData.LevelAreaIds = new HashSet<int>(bountyInfo.LevelAreas.Select(la => (int)la));
+            questData.LevelAreaIds = new HashSet<SNOLevelArea>(bountyInfo.LevelAreas);
 
-            questData.Waypoint = WaypointFactory.GetWaypointByLevelAreaId((int)bountyInfo.StartingLevelArea);
+            questData.Waypoint = WaypointFactory.GetWaypointByLevelAreaId(bountyInfo.StartingLevelArea);
 
             foreach (var step in bountyInfo.Info.QuestRecord.Steps)
             {
@@ -70,9 +70,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return Steps.SelectMany(s => s.Objectives).Any(o => o.ObjectiveType == objectiveType && o.IsActive);
         }
 
-        private static BountyInfo GetBountyInfo(int questId)
+        private static BountyInfo GetBountyInfo(SNOQuest questId)
         {
-            return ZetaDia.Storage.Quests.Bounties.FirstOrDefault(b => (int)b.Quest == questId);
+            return ZetaDia.Storage.Quests.Bounties.FirstOrDefault(b => b.Quest == questId);
         }
     }
 
@@ -124,7 +124,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
         {
         }
 
-        public QuestStepObjectiveData(QuestData questData, QuestStepData questStepData, QuestStepObjective objective)
+        public QuestStepObjectiveData(QuestData questData, QuestStepData questStepData, Zeta.Game.Internals.SNO.QuestStepObjective objective)
         {
             _questData = questData;
             _questStepData = questStepData;
@@ -146,7 +146,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
             }
         }
 
-        private static bool IsQuestObjectiveActive(int questId, int questStepId, QuestStepObjectiveType objectiveType)
+        private static bool IsQuestObjectiveActive(SNOQuest questId, int questStepId, QuestStepObjectiveType objectiveType)
         {
             var currentQuest = QuestInfo.FromId(questId);
             if (currentQuest == null)

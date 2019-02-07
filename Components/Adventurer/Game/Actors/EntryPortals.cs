@@ -8,7 +8,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
     public static class EntryPortals
     {
         private static readonly HashSet<int> _entryPortalWhiteList = new HashSet<int> { 705396550, 1825723588, 1037011047 };
-        public static Dictionary<int, int> EntryPortalHashNames = new Dictionary<int, int>();
+        public static Dictionary<SNOWorld, int> EntryPortalHashNames = new Dictionary<SNOWorld, int>();
 
         public static void AddEntryPortal()
         {
@@ -33,7 +33,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
             }
         }
 
-        public static bool IsEntryPortal(int currentWorldId, int markerNameHash)
+        public static bool IsEntryPortal(SNOWorld currentWorldId, int markerNameHash)
         {
             return EntryPortalHashNames.ContainsKey(currentWorldId) && EntryPortalHashNames[currentWorldId] == markerNameHash;
         }

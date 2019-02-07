@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
@@ -55,20 +56,17 @@ namespace Trinity.Routines.Wizard
         #endregion
         public TrinityPower GetOffensivePower()
         {
-            TrinityPower power;
-            TrinityActor target;
-
             if (IsArchonActive)
             {
                 if (!IsArchonSlowTimeActive)
                     return ArchonSlowTime();
 
-                if (ShouldArchonDisintegrationWave(out target))
+                if (ShouldArchonDisintegrationWave(out var target))
                     return ArchonDisintegrationWave(target);
             }
             else
             {
-                if (TrySpecialPower(out power))
+                if (TrySpecialPower(out var power))
                     return power;
 
                 if (TrySecondaryPower(out power))
@@ -111,7 +109,7 @@ namespace Trinity.Routines.Wizard
             // Jump away from monsters but within cast range
             if (Avoider.TryGetSafeSpot(out position, 15f, 50f, Player.Position, 
                 n => n.AvoidanceFlags.HasFlag(AvoidanceFlags.Monster) 
-                && Core.Grids.CanRayCast(n.NavigableCenter, CurrentTarget.Position)))
+                && TrinityGrid.Instance.CanRayCast(n.NavigableCenter, CurrentTarget.Position)))
             {
                 Core.Logger.Log(LogCategory.Routine,"Teleport to Safespot (ShouldTeleport)");
                 return true;
@@ -185,8 +183,7 @@ namespace Trinity.Routines.Wizard
         {
             if (AllowedToUse(Settings.Teleport, Skills.Wizard.Teleport))
             {
-                TrinityPower trinityPower;
-                if (TryPredictiveTeleport(destination, out trinityPower))
+                if (TryPredictiveTeleport(destination, out var trinityPower))
                     return trinityPower;
             }
 

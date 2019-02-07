@@ -22,7 +22,7 @@ namespace Trinity.Components.Combat.Resources
 
         public Vector3 TargetPosition { get; set; }
 
-        public int TargetDynamicWorldId { get; set; }
+        public SNOWorld TargetDynamicWorldId { get; set; }
 
         public int TargetAcdId { get; set; }
 
@@ -55,11 +55,11 @@ namespace Trinity.Components.Combat.Resources
             if (IsCastOnSelf)
                 return;
 
-            if (TargetAcdId != -1)
-                TargetAcdId = target.AcdId;
+            if (target?.AcdId != -1)
+                TargetAcdId = target?.AcdId ?? -1;
 
-            if (TargetPosition != Vector3.Zero)
-                TargetPosition = target.Position;
+            if (target?.Position != Vector3.Zero)
+                TargetPosition = target?.Position ?? Vector3.Zero;
         }
 
         public TrinityPower()

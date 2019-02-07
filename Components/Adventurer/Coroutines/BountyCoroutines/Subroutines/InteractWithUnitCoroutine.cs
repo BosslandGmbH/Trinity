@@ -16,9 +16,9 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
     public class InteractWithUnitCoroutine : IBountySubroutine
     {
-        private readonly int _questId;
-        private readonly int _worldId;
-        private readonly int _actorId;
+        private readonly SNOQuest _questId;
+        private readonly SNOWorld _worldId;
+        private readonly SNOActor _actorId;
         private readonly int _marker;
         private readonly int _interactAttemps;
         private readonly int _secondsToSleepAfterInteraction;
@@ -60,7 +60,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public bool IsDone => _isDone | AdvDia.CurrentWorldId != _worldId;
 
-        public InteractWithUnitCoroutine(int questId, int worldId, int actorId, int marker, int interactAttemps = 3, int secondsToSleepAfterInteraction = 1, int secondsToTimeout = 4)
+        public InteractWithUnitCoroutine(SNOQuest questId, SNOWorld worldId, SNOActor actorId, int marker, int interactAttemps = 3, int secondsToSleepAfterInteraction = 1, int secondsToTimeout = 4)
         {
             _questId = questId;
             _worldId = worldId;

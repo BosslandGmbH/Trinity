@@ -1,6 +1,5 @@
-﻿using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -8,6 +7,9 @@ using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
+using Trinity.Framework;
+using Trinity.Framework.Grid;
+using Trinity.Framework.Helpers;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Common.Helpers;
@@ -15,11 +17,12 @@ using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.Actors.Gizmos;
 
-
 namespace Trinity.Components.Adventurer.Coroutines
 {
     public sealed class NavigationCoroutine : ICoroutine
     {
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
+
         private static NavigationCoroutine _navigationCoroutine;
         private static Vector3 _moveToDestination = Vector3.Zero;
         private static int _moveToDistance;
@@ -50,7 +53,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
                 _navigationCoroutine = new NavigationCoroutine(destination, distance, straightLinePath);
 
-                Core.Logger.Debug($"Created Navigation Task for {destination}, within a range of (specified={distance}, actual={_navigationCoroutine._distance}). ({callerPath.Split('\\').LastOrDefault()} > {caller} )");
+                s_logger.Debug($"[{nameof(MoveTo)}] Created Navigation Task for {destination}, within a range of (specified={distance}, actual={_navigationCoroutine._distance}). ({callerPath.Split('\\').LastOrDefault()} > {caller} )");
 
                 _moveToDestination = destination;
                 _moveToDistance = distance;
@@ -58,20 +61,19 @@ namespace Trinity.Components.Adventurer.Coroutines
 
             LastDestination = _moveToDestination;
 
-            if (await _navigationCoroutine.GetCoroutine())
+            if (!await _navigationCoroutine.GetCoroutine())
+                return false;
+
+            LastResult = _navigationCoroutine.State == States.Completed ? CoroutineResult.Success : CoroutineResult.Failure;
+
+            if (_navigationCoroutine.State == States.Failed)
             {
-                LastResult = _navigationCoroutine.State == States.Completed ? CoroutineResult.Success : CoroutineResult.Failure;
-
-                if (_navigationCoroutine.State == States.Failed)
-                {
-                    Core.Logger.Debug($"NavigationCoroutine failed for {destination} Distance={destination.Distance(ZetaDia.Me.Position)}, within a range of (specified={distance}, actual={_navigationCoroutine._distance}). ({callerPath.Split('\\').LastOrDefault()} > {caller} )");
-                    return true;
-                }
-
-                _navigationCoroutine = null;
+                s_logger.Debug($"[{nameof(MoveTo)}] NavigationCoroutine failed for {destination} Distance={destination.Distance(ZetaDia.Me.Position)}, within a range of (specified={distance}, actual={_navigationCoroutine._distance}). ({callerPath.Split('\\').LastOrDefault()} > {caller} )");
                 return true;
             }
-            return false;
+
+            _navigationCoroutine = null;
+            return true;
         }
 
         private enum States
@@ -95,7 +97,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 if (_state == value) return;
 
-                Core.Logger.Debug($"Navigation State Changed from {_state} to {value}, Destination={Destination} Dist3D={AdvDia.MyPosition.Distance(Destination)} Dist2D={AdvDia.MyPosition.Distance2D(Destination)}");
+                s_logger.Debug($"[{nameof(State)}] Navigation State Changed from {_state} to {value}, Destination={Destination} Dist3D={AdvDia.MyPosition.Distance(Destination)} Dist2D={AdvDia.MyPosition.Distance2D(Destination)}");
 
                 switch (value)
                 {
@@ -109,8 +111,8 @@ namespace Trinity.Components.Adventurer.Coroutines
                     case States.InteractingWithDeathGate:
                     case States.Completed:
                     case States.Failed:
-                        Core.Logger.Debug("[Navigation] " + value);
-                        StatusText = "[Navigation] " + value;
+                        s_logger.Debug($"[{nameof(State)}] {value}");
+                        StatusText = $"[Navigation] {value}";
                         break;
                 }
                 if (value != States.NotStarted)
@@ -163,7 +165,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                     return Completed();
 
                 case States.Failed:
-                    Core.Logger.Debug($"CanFullyClientPath={await AdvDia.Navigator.CanFullyClientPathTo(Destination)}");
+                    s_logger.Debug($"[{nameof(GetCoroutine)}] CanFullyClientPath={await AdvDia.Navigator.CanFullyClientPathTo(Destination)}");
                     return Failed();
 
                 case States.LastResortMovement:
@@ -255,7 +257,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             }
             if (DateTime.UtcNow > _lastResortTimeoutBase + TimeSpan.FromSeconds(duration))
             {
-                Core.Logger.Log($"Movement Failed (Timeout)");
+                s_logger.Information($"[{nameof(IsLastResortTimeout)}] Movement Failed (Timeout)");
                 LastMoveResult = MoveResult.Failed;
                 _lastResortTimeoutBase = DateTime.MaxValue;
                 State = States.Failed;
@@ -269,7 +271,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> NotStarted()
         {
-            var zDiff = Math.Abs((float)(Destination.Z - AdvDia.MyPosition.Z));
+            var zDiff = Math.Abs(Destination.Z - AdvDia.MyPosition.Z);
             var distanceToDestination = AdvDia.MyPosition.Distance(Destination);
 
             //if (PluginEvents.CurrentProfileType == ProfileType.Rift &&
@@ -310,7 +312,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
             //}
 
-            Core.Logger.Debug("{0} {1} (Distance: {2})", (_mover == Mover.StraightLine ? "Moving towards" : "Moving to"), Destination, distanceToDestination);
+            s_logger.Debug($"[{nameof(NotStarted)}] {0} {1} (Distance: {2})", (_mover == Mover.StraightLine ? "Moving towards" : "Moving to"), Destination, distanceToDestination);
             State = States.Moving;
             _pathGenetionTimer.Reset();
             return false;
@@ -319,7 +321,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         private async Task<bool> Moving()
         {
             // Account for portals directly below current terrain.
-            var zDiff = Math.Abs((float)(Destination.Z - AdvDia.MyPosition.Z));
+            var zDiff = Math.Abs(Destination.Z - AdvDia.MyPosition.Z);
             var distanceToDestination = AdvDia.MyPosition.Distance(Destination);
 
             if (_timeout == DateTime.MaxValue)
@@ -354,7 +356,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                             Navigator.PlayerMover.MoveTowards(Destination);
                             LastMoveResult = MoveResult.Moved;
                             if (Destination != LastDestination)
-                                Core.Logger.Debug($"MoveTowards Destination={Destination} Dist3D={AdvDia.MyPosition.Distance(Destination)} Dist2D={AdvDia.MyPosition.Distance2D(Destination)}");
+                                s_logger.Debug($"[{nameof(Moving)}] MoveTowards Destination={Destination} Dist3D={AdvDia.MyPosition.Distance(Destination)} Dist2D={AdvDia.MyPosition.Distance2D(Destination)}");
                             return false;
 
                         case Mover.Navigator:
@@ -368,7 +370,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                             }
 
                             if (Destination != LastDestination)
-                                Core.Logger.Debug($"Navigator MoveResult = {LastMoveResult}, Destination={Destination} Dist3D={AdvDia.MyPosition.Distance(Destination)} Dist2D={AdvDia.MyPosition.Distance2D(Destination)}");
+                                s_logger.Debug($"[{nameof(Moving)}] Navigator MoveResult = {LastMoveResult}, Destination={Destination} Dist3D={AdvDia.MyPosition.Distance(Destination)} Dist2D={AdvDia.MyPosition.Distance2D(Destination)}");
                             break;
                     }
                 }
@@ -378,7 +380,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
                         if (_distance != 0 && distanceToDestination <= _distance || distanceToDestination <= 5f)
                         {
-                            Core.Logger.Debug("Completed (Distance to destination: {0})", distanceToDestination);
+                            s_logger.Debug($"[{nameof(Moving)}] Completed (Distance to destination: {0})", distanceToDestination);
                             State = States.Completed;
                         }
                         else
@@ -386,12 +388,12 @@ namespace Trinity.Components.Adventurer.Coroutines
                             // DB Navigator will report ReachedDestination when failing to navigate to positions that require a death gate to reach. Redirect to gate position.
                             if (Core.Rift.IsInRift && ActorFinder.FindNearestDeathGate() != null)
                             {
-                                Core.Logger.Debug($"Starting Death Gate Sequence.");
+                                s_logger.Debug($"[{nameof(Moving)}] Starting Death Gate Sequence.");
                                 State = States.MovingToDeathGate;
                             }
                             else
                             {
-                                Core.Logger.Debug($"Navigator reports DestinationReached but we're not at destination, failing. Mover={_mover}");
+                                s_logger.Debug($"[{nameof(Moving)}] Navigator reports DestinationReached but we're not at destination, failing. Mover={_mover}");
                                 State = States.LastResortMovement;
                                 LastMoveResult = MoveResult.Failed;
                             }
@@ -399,16 +401,16 @@ namespace Trinity.Components.Adventurer.Coroutines
                         return false;
 
                     case MoveResult.Failed:
-                        Core.Logger.Debug($"Navigator reports Failed movement attempt. Mover={_mover}");
+                        s_logger.Debug($"[{nameof(Moving)}] Navigator reports Failed movement attempt. Mover={_mover}");
                         State = States.LastResortMovement;
                         return false;
 
                     case MoveResult.PathGenerationFailed:
-                        Core.Logger.Debug("[Navigation] Path generation failed.");
+                        s_logger.Debug($"[{nameof(Moving)}] Path generation failed.");
                         Core.PlayerMover.MoveTowards(Destination);
-                        if (distanceToDestination < 100 && Core.Grids.CanRayWalk(AdvDia.MyPosition, Destination))
+                        if (distanceToDestination < 100 && TrinityGrid.Instance.CanRayWalk(AdvDia.MyPosition, Destination))
                         {
-                            
+
                             _mover = Mover.StraightLine;
                             return false;
                         }
@@ -423,7 +425,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                             return false;
                         }
                         _unstuckAttemps++;
-                        Core.Logger.Debug("[Navigation] Unstuck attempt #{0}", _unstuckAttemps);
+                        s_logger.Debug($"[{nameof(Moving)}] Unstuck attempt #{0}", _unstuckAttemps);
                         break;
 
                     case MoveResult.PathGenerated:
@@ -433,7 +435,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                     case MoveResult.PathGenerating:
                         if (_pathGenetionTimer.IsFinished)
                         {
-                            Core.Logger.Log("Patiently waiting for the Navigation Server");
+                            s_logger.Debug($"[{nameof(Moving)}] Patiently waiting for the Navigation Server");
                             _pathGenetionTimer.Reset();
                         }
                         break;
@@ -464,7 +466,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         {
             if (_deathGateCoroutine == null)
             {
-                _deathGateCoroutine = new MoveThroughDeathGates(1, AdvDia.CurrentWorldId, 1);
+                _deathGateCoroutine = new MoveThroughDeathGates((SNOQuest)1, AdvDia.CurrentWorldId, 1);
             }
 
             if (!await _deathGateCoroutine.GetCoroutine())
@@ -605,27 +607,27 @@ namespace Trinity.Components.Adventurer.Coroutines
 
             if (_deathGate != null)
             {
-                Core.Logger.Debug($"Added origin gate to ignore list. (DiaGizmo) {_deathGate.Position}");
+                s_logger.Debug($"[{nameof(SetUsedGatesToIgnored)}] Added origin gate to ignore list. (DiaGizmo) {_deathGate.Position}");
                 _deathGateIgnoreList[_deathGate.Position] = DateTime.UtcNow;
             }
 
             if (_deathGate?.Position != _deathGatePosition)
             {
-                Core.Logger.Debug($"Added origin gate position to ignore list. (Reference) {_deathGatePosition}");
+                s_logger.Debug($"[{nameof(SetUsedGatesToIgnored)}] Added origin gate position to ignore list. (Reference) {_deathGatePosition}");
                 _deathGateIgnoreList[_deathGatePosition] = DateTime.UtcNow;
             }
 
-            var destinationGate = ActorFinder.FindNearestDeathGate();
+            DiaGizmo destinationGate = ActorFinder.FindNearestDeathGate();
             if (destinationGate != null)
             {
-                Core.Logger.Debug($"Added destination gate to ignore list (DiaGizmo) {destinationGate}");
+                s_logger.Debug($"[{nameof(SetUsedGatesToIgnored)}] Added destination gate to ignore list (DiaGizmo) {destinationGate}");
                 _deathGateIgnoreList[destinationGate.Position] = DateTime.UtcNow;
             }
 
-            var destinationGateReferencePosition = DeathGates.NearestGateToPosition(AdvDia.MyPosition);
+            Vector3 destinationGateReferencePosition = DeathGates.NearestGateToPosition(AdvDia.MyPosition);
             if (destinationGateReferencePosition != Vector3.Zero)
             {
-                Core.Logger.Debug($"Added destination gate to ignore list (Reference) {destinationGateReferencePosition}");
+                s_logger.Debug($"[{nameof(SetUsedGatesToIgnored)}] Added destination gate to ignore list (Reference) {destinationGateReferencePosition}");
                 _deathGateIgnoreList[destinationGateReferencePosition] = DateTime.UtcNow;
             }
 
@@ -641,7 +643,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private bool Failed(bool reset = false)
         {
-            Core.Logger.Debug($"[Navigation] Navigation Error (MoveResult: {LastMoveResult}, Distance: {AdvDia.MyPosition.Distance(Destination)}) Failures={FailCount}.");
+            s_logger.Debug($"[{nameof(Failed)}] Navigation Error (MoveResult: {LastMoveResult}, Distance: {AdvDia.MyPosition.Distance(Destination)}) Failures={FailCount}.");
 
             if (LastDestination == Destination)
             {
@@ -650,19 +652,19 @@ namespace Trinity.Components.Adventurer.Coroutines
 
                 if (FailCount > 5)
                 {
-                    var canWalkTo = Core.Grids.CanRayWalk(AdvDia.MyPosition, Destination);
+                    var canWalkTo = TrinityGrid.Instance.CanRayWalk(AdvDia.MyPosition, Destination);
                     var canStandAt = AdvDia.MainGridProvider.CanStandAt(Destination);
                     var portalNearby = ZetaDia.Actors.GetActorsOfType<GizmoPortal>().Any(g => g.Position.Distance(Destination) < 30f);
                     if (distance < 25f && !portalNearby && (!canStandAt && !canWalkTo))
                     {
-                        Core.Logger.Debug($"Destination cant be reached. A. Position={Destination} Distance={distance}");
+                        s_logger.Debug($"[{nameof(Failed)}] Destination cant be reached. A. Position={Destination} Distance={distance}");
                         ResetNavigator();
                         //Reset();
                     }
                 }
                 else if (FailCount > 15)
                 {
-                    Core.Logger.Debug($"Destination cant be reached. B. Position={Destination} Distance={distance}");
+                    s_logger.Debug($"[{nameof(Failed)}] Destination cant be reached. B. Position={Destination} Distance={distance}");
                     //Reset();
                 }
             }

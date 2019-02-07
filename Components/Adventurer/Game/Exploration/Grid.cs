@@ -1,8 +1,9 @@
 using System;
-using Trinity.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using Serilog;
 using Trinity.Components.Adventurer.Game.Exploration.Algorithms;
+using Trinity.Framework;
 using Zeta.Common;
 using Zeta.Game;
 
@@ -10,9 +11,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 {
     public abstract class Grid<T> : IGrid<T> where T : INode
     {
-        public delegate void GridUpdatedEventHandler(object sender, SceneData newNodes);
-
-        //public event GridUpdatedEventHandler Updated;
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
         public SplitArray<T> InnerGrid;
 
@@ -24,9 +23,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         public DateTime LastUpdated { get; set; }
 
         public int MinX = int.MaxValue;
-        public int MaxX = 0;
+        public int MaxX;
         public int MinY = int.MaxValue;
-        public int MaxY = 0;
+        public int MaxY;
         internal int GridMaxX;
         internal int GridMaxY;
         internal int BaseSize;
@@ -42,16 +41,16 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             LastUpdated = DateTime.MinValue;
             var worldId = ZetaDia.Globals.WorldId;
 
-            Core.Logger.Debug("[{0}] Creating grid [{1},{1}] ZetaWorldId={2} AdvDiaWorldId={3}", GetType().Name, GridBounds, worldId, AdvDia.CurrentWorldDynamicId);
+            s_logger.Debug($"[{nameof(CreateGrid)}] Creating grid [{GridBounds},{GridBounds}] ZetaWorldId={worldId} AdvDiaWorldId={AdvDia.CurrentWorldDynamicId}");
 
             InnerGrid = new SplitArray<T>(GridBounds, GridBounds);
             WorldDynamicId = AdvDia.CurrentWorldDynamicId;
 
             var currentScenes = Core.Scenes.CurrentWorldScenes;
-            if (currentScenes.Any() && currentScenes.First().DynamicWorldId == worldId)
+            if (currentScenes.Any(c => c.DynamicWorldId == worldId))
             {
-                Core.Logger.Debug("[{0}] Importing Current World Data from SceneStorage", GetType().Name);
-                Update(Core.Scenes.CreateSceneData(currentScenes, currentScenes.First().DynamicWorldId));
+                s_logger.Debug($"[{nameof(CreateGrid)}] Importing Current World Data from SceneStorage.");
+                Update(Core.Scenes.CreateSceneData(currentScenes, worldId));
             }
 
             GridStore.Grids.Add(new WeakReference<IGrid>(this));
@@ -59,14 +58,14 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public void Update(ISceneData newSceneData)
         {
-            Core.Logger.Debug($"Update called for {this.GetType().Name}");
+            s_logger.Debug($"[{nameof(Update)}] called.");
 
             var data = newSceneData as SceneData;
-            if (data?.WorldDynamicId == AdvDia.CurrentWorldDynamicId)
-            {
-                LastUpdated = DateTime.UtcNow;
-                OnUpdated(data);
-            }
+            if (data?.WorldDynamicId != AdvDia.CurrentWorldDynamicId)
+                return;
+
+            LastUpdated = DateTime.UtcNow;
+            OnUpdated(data);
         }
 
 
@@ -78,13 +77,13 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         {
             //nodes = nodes.OrderBy(n => n.Center.X).ThenBy(n => n.Center.Y).ToList();
 
-            var worldId = AdvDia.CurrentWorldDynamicId;
+            var worldId = ZetaDia.Me?.WorldId ?? SNOWorld.Invalid;
 
             foreach (var node in nodes)
             {
                 if (node.DynamicWorldId != worldId)
                 {
-                    Core.Logger.Debug("[{0}] A node has different worldId than current world, skipping", GetType().Name);
+                    s_logger.Verbose($"[{nameof(UpdateInnerGrid)}] A node has different worldId than current world, skipping");
                     return;
                 }
 
@@ -129,7 +128,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             if (gridPoint.X < 0 || gridPoint.X > GridMaxX) return default(T);
             if (gridPoint.Y < 0 || gridPoint.Y > GridMaxY) return default(T);
 
-            return (T)InnerGrid[gridPoint.X, gridPoint.Y];
+            return InnerGrid[gridPoint.X, gridPoint.Y];
         }
 
         public T GetNearestNode(Vector3 position)
@@ -140,7 +139,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             if (x < 0 || x > GridMaxX) return default(T);
             if (y < 0 || y > GridMaxY) return default(T);
 
-            return (T)InnerGrid[x, y];
+            return InnerGrid[x, y];
         }
 
         public int ToGridDistance(float value)
@@ -179,7 +178,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     var gridNode = InnerGrid[x, y];
                     if (gridNode != null)
                     {
-                        neighbors.Add((T)gridNode);
+                        neighbors.Add(gridNode);
                     }
                 }
             }
@@ -255,23 +254,23 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                         continue;
 
                     var gridNode = InnerGrid[x, y];
-                    if (gridNode != null)
+                    if (gridNode == null)
+                        continue;
+
+                    if (gridDistanceMin > 0 && (x > gridX - gridDistanceMin && x < gridX + gridDistanceMin && y > gridY - gridDistanceMin && y < gridY + gridDistanceMin))
                     {
-                        if (gridDistanceMin > 0 && (x > gridX - gridDistanceMin && x < gridX + gridDistanceMin && y > gridY - gridDistanceMin && y < gridY + gridDistanceMin))
-                        {
-                            if (gridNode.Center.DistanceSqr(v2Center) <= worldDistanceMinSqr)
-                                continue;
-                        }
-
-                        if (!isRoughRounded || row <= roundWidth || col <= roundWidth || edgelength - row <= roundWidth || edgelength - col <= roundWidth)
-                        {
-                            if (gridNode.Center.DistanceSqr(v2Center) >= worldDistanceMaxSqr)
-                                continue;
-                        }
-
-                        if (condition != null && condition((T)gridNode))
-                            neighbors.Add((T)gridNode);
+                        if (gridNode.Center.DistanceSqr(v2Center) <= worldDistanceMinSqr)
+                            continue;
                     }
+
+                    if (!isRoughRounded || row <= roundWidth || col <= roundWidth || edgelength - row <= roundWidth || edgelength - col <= roundWidth)
+                    {
+                        if (gridNode.Center.DistanceSqr(v2Center) >= worldDistanceMaxSqr)
+                            continue;
+                    }
+
+                    if (condition != null && condition(gridNode))
+                        neighbors.Add(gridNode);
                 }
             }
             return neighbors;
@@ -297,10 +296,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 case Direction.NorthEast: x += BaseSize; y += BaseSize; break;
             }
 
-            if (!IsValidNodePosition(x, y))
-                return default(T);
-
-            return (T)InnerGrid[x, y];
+            return !IsValidNodePosition(x, y) ? default(T) : InnerGrid[x, y];
         }
 
         protected IEnumerable<GridPoint> GetRayLine(Vector3 from, Vector3 to)
@@ -327,12 +323,12 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             return new Vector3(ToWorldDistance(gridPoint.X), ToWorldDistance(gridPoint.Y), 0);
         }
 
-        public abstract bool CanRayCast(Vector3 @from, Vector3 to);
+        public abstract bool CanRayCast(Vector3 from, Vector3 to);
 
-        public abstract bool CanRayWalk(Vector3 @from, Vector3 to);
+        public abstract bool CanRayWalk(Vector3 from, Vector3 to);
 
         public abstract void Reset();
 
-        public int WorldDynamicId { get; set; }
+        public SNOWorld WorldDynamicId { get; set; }
     }
 }

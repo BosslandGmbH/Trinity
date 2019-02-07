@@ -1,9 +1,11 @@
-﻿using System;
-using Trinity.Framework;
+﻿using Serilog;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework;
+using Trinity.Framework.Actors.Attributes;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Settings;
 using Zeta.Bot;
@@ -14,31 +16,42 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Modules
 {
-    public class InventoryCache : Module, IEnumerable<TrinityItem>
+    public class InventoryCache : Module, IEnumerable<ACDItem>
     {
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
+
         public InventoryCache()
         {
             GameEvents.OnGameJoined += (sender, args) => Update();
             GameEvents.OnWorldChanged += (sender, args) => Update();
 
-            AllItems.Source = () => Core.Actors.Inventory.Where(i => !InvalidAnnIds.Contains(i.AnnId));
-            Stash.Source = () => Core.Inventory.AllItems.Where(i => i.InventorySlot == InventorySlot.SharedStash);
-            Backpack.Source = () => Core.Inventory.AllItems.Where(i => i.InventorySlot == InventorySlot.BackpackItems);
+            AllItems.Source = () => InventoryManager.AllItems.Where(i => !InvalidAnnIds.Contains(i.AnnId));
+            Stash.Source = () => AllItems.Where(i => i.InventorySlot == InventorySlot.SharedStash);
         }
 
-        public HashSet<int> KanaisCubeIds { get; private set; } = new HashSet<int>();
-        public HashSet<int> PlayerEquippedIds { get; private set; } = new HashSet<int>();
-        public HashSet<int> EquippedIds { get; private set; } = new HashSet<int>();
-        public List<TrinityItem> Equipped { get; private set; } = new List<TrinityItem>();
-        public HashSet<int> InvalidAnnIds { get; private set; } = new HashSet<int>();
+        public HashSet<SNOActor> KanaisCubeIds { get; private set; } = new HashSet<SNOActor>();
+        public HashSet<SNOActor> PlayerEquippedIds { get; private set; } = new HashSet<SNOActor>();
+        public HashSet<SNOActor> EquippedIds { get; private set; } = new HashSet<SNOActor>();
+        public List<ACDItem> Equipped { get; private set; } = new List<ACDItem>();
+        public HashSet<int> InvalidAnnIds { get; } = new HashSet<int>();
         public InventoryCurrency Currency { get; } = new InventoryCurrency();
         public InventorySlice AllItems { get; } = new InventorySlice();
         public InventorySlice Stash { get; } = new InventorySlice();
-        public InventorySlice Backpack { get; } = new InventorySlice();
         public int BackpackItemCount { get; private set; }
-        protected override void OnPulse() => Update();
-        IEnumerator IEnumerable.GetEnumerator() => AllItems.GetEnumerator();
-        public IEnumerator<TrinityItem> GetEnumerator() => AllItems.GetEnumerator();
+        protected override void OnPulse()
+        {
+            Update();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return AllItems.GetEnumerator();
+        }
+
+        public IEnumerator<ACDItem> GetEnumerator()
+        {
+            return AllItems.GetEnumerator();
+        }
 
         public void Update()
         {
@@ -46,19 +59,24 @@ namespace Trinity.Modules
             if (!ZetaDia.IsInGame || ZetaDia.Storage.PlayerDataManager.ActivePlayerData == null)
                 return;
 
-            var kanaisCubeIds = new HashSet<int>(ZetaDia.Storage.PlayerDataManager.ActivePlayerData.KanaisPowersAssignedActorSnoIds);
-            var equipped = new List<TrinityItem>();
-            var equippedIds = new HashSet<int>();
-            var playerEquippedIds = new HashSet<int>();
+            var kanaisCubeIds = new HashSet<SNOActor>(ZetaDia.Storage.PlayerDataManager.ActivePlayerData.KanaisPowersAssignedActorSnoIds);
+            var equipped = new List<ACDItem>();
+            var equippedIds = new HashSet<SNOActor>();
+            var playerEquippedIds = new HashSet<SNOActor>();
             var backpackItemCount = 0;
+            var stashItemCount = 0;
 
-            foreach (var item in Core.Actors.Inventory)
+            foreach (var item in AllItems)
             {
                 if (!item.IsValid)
                     continue;
 
                 switch (item.InventorySlot)
                 {
+                    case InventorySlot.SharedStash:
+                        stashItemCount++;
+                        break;
+
                     case InventorySlot.BackpackItems:
                         backpackItemCount++;
                         break;
@@ -101,44 +119,56 @@ namespace Trinity.Modules
             InvalidAnnIds.Clear();
         }
 
-        /// <summary>
-        /// Get a subset of items up to the desired quantity.
-        /// </summary>
-        public IEnumerable<TrinityItem> GetStacksUpToQuantity(List<TrinityItem> materialsStacks, int maxStackQuantity)
+        public class InventorySlice : IEnumerable<ACDItem>
         {
-            if (materialsStacks == null || !materialsStacks.Any() || materialsStacks.Count == 1)
+            public Func<IEnumerable<ACDItem>> Source { get; set; }
+            public List<ACDItem> ByItemType(ItemType type)
             {
-                return materialsStacks;
+                return Source().Where(i => i.GetItemType() == type).ToList();
             }
-            long dbQuantity = 0, overlimit = 0;
-            var first = materialsStacks.First();
-            if (first.ItemStackQuantity == 0 && maxStackQuantity == 1 && materialsStacks.All(i => !i.IsCraftingReagent))
-            {
-                return materialsStacks.Take(maxStackQuantity);
-            }
-            var toBeAdded = materialsStacks.TakeWhile(db =>
-            {
-                var thisStackQuantity = db.ItemStackQuantity;
-                if (dbQuantity + thisStackQuantity < maxStackQuantity)
-                {
-                    dbQuantity += thisStackQuantity;
-                    return true;
-                }
-                overlimit++;
-                return overlimit == 1;
-            });
-            return toBeAdded.ToList();
-        }
 
-        public class InventorySlice : IEnumerable<TrinityItem>
-        {
-            public Func<IEnumerable<TrinityItem>> Source { get; set; }
-            public List<TrinityItem> ByItemType(ItemType type) => Source().Where(i => i.ItemType == type).ToList();
-            public List<TrinityItem> ByActorSno(int actorSno) => Source().Where(i => i.ActorSnoId == actorSno).ToList();
-            public List<TrinityItem> ByQuality(TrinityItemQuality quality) => Source().Where(i => i.TrinityItemQuality == quality).ToList();
-            public void Update() => Source().ForEach(i => i.OnUpdated());
-            public IEnumerator<TrinityItem> GetEnumerator() => Source().GetEnumerator();
-            IEnumerator IEnumerable.GetEnumerator() => Source().GetEnumerator();
+            public List<ACDItem> ByActorSno(SNOActor actorSno)
+            {
+                return Source().Where(i => i.ActorSnoId == actorSno).ToList();
+            }
+
+            public List<ACDItem> ByQuality(TrinityItemQuality quality)
+            {
+                return Source().Where(i =>
+{
+    switch (quality)
+    {
+        case TrinityItemQuality.Invalid:
+            return false;
+        case TrinityItemQuality.None:
+            return false;
+        case TrinityItemQuality.Inferior:
+            return i.ItemQualityLevel == ItemQuality.Inferior;
+        case TrinityItemQuality.Common:
+            return i.ItemQualityLevel >= ItemQuality.Normal && i.ItemQualityLevel <= ItemQuality.Superior;
+        case TrinityItemQuality.Magic:
+            return i.ItemQualityLevel >= ItemQuality.Magic1 && i.ItemQualityLevel <= ItemQuality.Magic3;
+        case TrinityItemQuality.Rare:
+            return i.ItemQualityLevel >= ItemQuality.Rare4 && i.ItemQualityLevel <= ItemQuality.Rare6;
+        case TrinityItemQuality.Legendary:
+            return i.ItemQualityLevel == ItemQuality.Legendary;
+        case TrinityItemQuality.Set:
+            return i.IsSetItem();
+        default:
+            throw new ArgumentOutOfRangeException(nameof(quality), quality, null);
+    }
+}).ToList();
+            }
+
+            public IEnumerator<ACDItem> GetEnumerator()
+            {
+                return Source().GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return Source().GetEnumerator();
+            }
         }
 
         public class InventoryCurrency
@@ -150,31 +180,33 @@ namespace Trinity.Modules
                 switch (recipe)
                 {
                     case TransmuteRecipe.ExtractLegendaryPower:
-                        return HasCurrency(_currencyRecipeExtractLegendaryPower);
+                        return HasCurrency(s_currencyRecipeExtractLegendaryPower);
                     case TransmuteRecipe.ReforgeLegendary:
-                        return HasCurrency(_currencyRecipeReforgeLegendary);
+                        return HasCurrency(s_currencyRecipeReforgeLegendary);
                     case TransmuteRecipe.UpgradeRareItem:
-                        return HasCurrency(_currencyRecipeUpgradeRareItem);
+                        return HasCurrency(s_currencyRecipeUpgradeRareItem);
                     case TransmuteRecipe.ConvertSetItem:
-                        return HasCurrency(_currencyRecipeConvertSetItem);
+                        return HasCurrency(s_currencyRecipeConvertSetItem);
                     case TransmuteRecipe.ConvertCraftingMaterialsFromNormal:
-                        return HasCurrency(_currencyRecipeConvertFromNormal);
+                        return HasCurrency(s_currencyRecipeConvertFromNormal);
                     case TransmuteRecipe.ConvertCraftingMaterialsFromMagic:
-                        return HasCurrency(_currencyRecipeConvertFromMagic);
+                        return HasCurrency(s_currencyRecipeConvertFromMagic);
                     case TransmuteRecipe.ConvertCraftingMaterialsFromRare:
-                        return HasCurrency(_currencyRecipeConvertFromRare);
+                        return HasCurrency(s_currencyRecipeConvertFromRare);
                 }
 
                 return true; // recipes that dont require currency.
             }
 
             public bool HasCurrency(IDictionary<CurrencyType, int> recipe)
-                => recipe.All(requirement => PlayerData.GetCurrencyAmount(requirement.Key) >= requirement.Value);
+            {
+                return recipe.All(requirement => PlayerData.GetCurrencyAmount(requirement.Key) >= requirement.Value);
+            }
 
             /// <summary>
             /// Extracts a legendary power; requires legendary item.
             /// </summary>
-            private static readonly Dictionary<CurrencyType, int> _currencyRecipeExtractLegendaryPower = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> s_currencyRecipeExtractLegendaryPower = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.KhanduranRune, 1},
                 {CurrencyType.CaldeumNightshade, 1},
@@ -187,7 +219,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces random legendary; requires legendary item.
             /// </summary>
-            private static readonly Dictionary<CurrencyType, int> _currencyRecipeReforgeLegendary = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> s_currencyRecipeReforgeLegendary = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.KhanduranRune, 5},
                 {CurrencyType.CaldeumNightshade, 5},
@@ -200,7 +232,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces legendary item; requires rare item.
             /// </summary>
-            private static readonly Dictionary<CurrencyType, int> _currencyRecipeUpgradeRareItem = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> s_currencyRecipeUpgradeRareItem = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.ReusableParts, 50},
                 {CurrencyType.ArcaneDust, 50},
@@ -211,7 +243,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces random set item; requires set item.
             /// </summary>
-            private static readonly Dictionary<CurrencyType, int> _currencyRecipeConvertSetItem = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> s_currencyRecipeConvertSetItem = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.ForgottenSoul, 10},
                 {CurrencyType.DeathsBreath, 10}
@@ -220,7 +252,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces ReusableParts (requires normal item) -or- Veiled Crystals (requires rare item)
             /// </summary>
-            private static readonly Dictionary<CurrencyType, int> _currencyRecipeConvertFromMagic = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> s_currencyRecipeConvertFromMagic = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.ArcaneDust, 100},
                 {CurrencyType.DeathsBreath, 1}
@@ -229,7 +261,7 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces Arcane Dust (requires magic item) -or- Veiled Crystals (requires rare item)
             /// </summary>
-            private static readonly Dictionary<CurrencyType, int> _currencyRecipeConvertFromNormal = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> s_currencyRecipeConvertFromNormal = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.ReusableParts, 100},
                 {CurrencyType.DeathsBreath, 1}
@@ -238,13 +270,17 @@ namespace Trinity.Modules
             /// <summary>
             /// Produces ReusableParts (requires normal item) -or- Arcane Dust (requires magic item)
             /// </summary>
-            private static readonly Dictionary<CurrencyType, int> _currencyRecipeConvertFromRare = new Dictionary<CurrencyType, int>
+            private static readonly Dictionary<CurrencyType, int> s_currencyRecipeConvertFromRare = new Dictionary<CurrencyType, int>
             {
                 {CurrencyType.VeiledCrystal, 100},
                 {CurrencyType.DeathsBreath, 1}
             };
 
-            public long GetCurrency(CurrencyType type) => PlayerData.GetCurrencyAmount(type);
+            public long GetCurrency(CurrencyType type)
+            {
+                return PlayerData.GetCurrencyAmount(type);
+            }
+
             public long OrganDiablo => PlayerData.GetCurrencyAmount(CurrencyType.DemonOrganDiablo);
             public long OrganLeoric => PlayerData.GetCurrencyAmount(CurrencyType.DemonOrganSkeletonKing);
             public long OrganGhom => PlayerData.GetCurrencyAmount(CurrencyType.DemonOrganGhom);

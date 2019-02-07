@@ -66,11 +66,6 @@
       <HintPath>$(SolutionDir)\packages\Buddy.Coroutines.1.0.5\lib\net461\Buddy.Coroutines.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(SolutionDir)\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <ProjectReference Include="$(SolutionDir)\Demonbuddy\Demonbuddy.csproj">
       <Project>{E7F256CB-7848-4494-B69B-D33557147BAF}</Project>
       <Name>Demonbuddy</Name>
@@ -129,10 +124,6 @@
     </Reference>
     <Reference Include="Microsoft.Scripting.Metadata">
       <HintPath>$(SolutionDir)\Libs\Microsoft.Scripting.Metadata.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Udis86Net">
-      <HintPath>$(SolutionDir)\Libs\Udis86Net.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -225,7 +216,6 @@
     <Compile Include="Components\Adventurer\Coroutines\KeywardenCoroutines\KeywardenDataFactory.cs" />
     <Compile Include="Components\Adventurer\Coroutines\NavigationCoroutine.cs" />
     <Compile Include="Components\Adventurer\Coroutines\RiftCoroutines\RiftCoroutine.cs" />
-    <Compile Include="Components\Adventurer\Coroutines\RiftCoroutines\UpgradeGemsCoroutine.cs" />
     <Compile Include="Components\Adventurer\Coroutines\TownPortalCoroutine.cs" />
     <Compile Include="Components\Adventurer\Coroutines\UsePortalCoroutine.cs" />
     <Compile Include="Components\Adventurer\Coroutines\WaitCoroutine.cs" />
@@ -291,7 +281,11 @@
     <Compile Include="Components\Adventurer\UI\ConfigWindow.cs" />
     <Compile Include="Components\Adventurer\UI\DeveloperUI.cs" />
     <Compile Include="Components\Adventurer\UI\MainUI.cs" />
+    <Compile Include="Components\Coroutines\Town\TrinityTownRun.ExtractLegendaryPowers.cs" />
     <Compile Include="Components\QuestTools\BaseContainerProfileBehavior.cs" />
+    <Compile Include="Framework\Actors\Attributes\ACDItemExtensions.cs" />
+    <Compile Include="Framework\Actors\Attributes\AttributeKey.cs" />
+    <Compile Include="Framework\Actors\Attributes\DescriptorHelper.cs" />
     <Compile Include="Framework\Objects\Enums\RequirementType.cs" />
     <Compile Include="Modules\ProfilePulsator.cs" />
     <Compile Include="Components\QuestTools\BaseProfileBehavior.cs" />
@@ -339,9 +333,7 @@
     <Compile Include="Components\Coroutines\AutoEquipItems.cs" />
     <Compile Include="Components\Coroutines\AutoEquipSkills.cs" />
     <Compile Include="Components\Coroutines\ClearArea.cs" />
-    <Compile Include="Components\Coroutines\EmergencyRepair.cs" />
     <Compile Include="Components\Coroutines\EquipBehavior.cs" />
-    <Compile Include="Components\Coroutines\MoveTo.cs" />
     <Compile Include="Components\Coroutines\MoveToAndInteract.cs" />
     <Compile Include="Components\Coroutines\OpenBountyCache.cs" />
     <Compile Include="Framework\Helpers\Extensions\DoubleExtensions.cs" />
@@ -350,24 +342,18 @@
     <Compile Include="Framework\Helpers\Extensions\RectExtentions.cs" />
     <Compile Include="Framework\Objects\Enums\InventoryItemType.cs" />
     <Compile Include="Framework\Helpers\CoroutineHelper.cs" />
-    <Compile Include="Components\Coroutines\Town\ConvertMaterials.cs" />
-    <Compile Include="Components\Coroutines\Town\CubeItemsToMaterials.cs" />
-    <Compile Include="Components\Coroutines\Town\CubeRaresToLegendary.cs" />
-    <Compile Include="Components\Coroutines\Town\DropItems.cs" />
-    <Compile Include="Components\Coroutines\Town\ExtractLegendaryPowers.cs" />
-    <Compile Include="Components\Coroutines\Town\Gamble.cs" />
-    <Compile Include="Components\Coroutines\Town\IdentifyItems.cs" />
-    <Compile Include="Components\Coroutines\Town\PutItemsInStash.cs" />
-    <Compile Include="Components\Coroutines\Town\RepairItems.cs" />
+    <Compile Include="Components\Coroutines\Town\TrinityTownRun.TransmuteMaterials.cs" />
+    <Compile Include="Components\Coroutines\Town\TrinityTownRun.DropItems.cs" />
+    <Compile Include="Components\Coroutines\Town\TrinityTownRun.Gamble.cs" />
+    <Compile Include="Components\Coroutines\Town\TrinityTownRun.RepairItems.cs" />
     <Compile Include="Components\Coroutines\Town\ReturnToStash.cs" />
-    <Compile Include="Components\Coroutines\Town\SalvageItems.cs" />
-    <Compile Include="Components\Coroutines\Town\SellItems.cs" />
+    <Compile Include="Components\Coroutines\Town\TrinityTownRun.SalvageItems.cs" />
+    <Compile Include="Components\Coroutines\Town\TrinityTownRun.SellItems.cs" />
     <Compile Include="Components\Coroutines\Town\ServiceType.cs" />
-    <Compile Include="Components\Coroutines\Town\StashItems.cs" />
-    <Compile Include="Components\Coroutines\Town\TakeItemsFromStash.cs" />
+    <Compile Include="Components\Coroutines\Town\TrinityTownRun.StashItems.cs" />
+    <Compile Include="Components\Coroutines\Town\TrinityTownRun.TakeItemsFromStash.cs" />
     <Compile Include="Components\Coroutines\Town\TownActor.cs" />
     <Compile Include="Components\Coroutines\Town\TownInfo.cs" />
-    <Compile Include="Components\Coroutines\Town\Transmute.cs" />
     <Compile Include="Components\Coroutines\Town\TrinityTownRun.cs" />
     <Compile Include="Components\Coroutines\Town\UseCraftingRecipes.cs" />
     <Compile Include="Components\Coroutines\UsePotion.cs" />
@@ -380,7 +366,6 @@
     <Compile Include="DbProvider\StuckHandler.cs" />
     <Compile Include="DbProvider\TrinityCombatProvider.cs" />
     <Compile Include="DbProvider\TrinityRoutine.cs" />
-    <Compile Include="Framework\Actors\ActorExtensions.cs" />
     <Compile Include="Framework\Actors\ActorCache.cs" />
     <Compile Include="Framework\Actors\ActorFactory.cs" />
     <Compile Include="Framework\Actors\ActorTypes\ActorBase.cs" />
@@ -389,7 +374,6 @@
     <Compile Include="Framework\Actors\ActorTypes\TrinityPlayer.cs" />
     <Compile Include="Framework\Actors\Properties\CommonProperties.cs" />
     <Compile Include="Framework\Actors\Properties\GizmoProperties.cs" />
-    <Compile Include="Framework\Actors\Properties\ItemProperties.cs" />
     <Compile Include="Framework\Actors\Properties\PlayerProperties.cs" />
     <Compile Include="Framework\Actors\Properties\UnitProperties.cs" />
     <Compile Include="Framework\Avoidance\AvoidanceDefinitions.cs" />
@@ -452,7 +436,6 @@
     <Compile Include="Framework\Helpers\FullyObservableCollection.cs" />
     <Compile Include="Framework\Helpers\GameBalanceTable.cs" />
     <Compile Include="Framework\Helpers\GenericBlacklist.cs" />
-    <Compile Include="Framework\Grid\GridHelper.cs" />
     <Compile Include="Framework\Helpers\HashGenerator.cs" />
     <Compile Include="Framework\Helpers\InterfaceLoader.cs" />
     <Compile Include="Framework\Helpers\JsonSerializer.cs" />
@@ -489,7 +472,6 @@
     <Compile Include="Framework\Objects\Enums\RawItemType.cs" />
     <Compile Include="Framework\Objects\Enums\RawMonsterType.cs" />
     <Compile Include="Framework\Objects\Enums\RawQualityType.cs" />
-    <Compile Include="Framework\Objects\Enums\SnoGameBalanceType.cs" />
     <Compile Include="Framework\Objects\Enums\SnoMarker.cs" />
     <Compile Include="Framework\Objects\Enums\SnoStringListType.cs" />
     <Compile Include="Framework\Objects\Enums\SnoType.cs" />
@@ -497,17 +479,12 @@
     <Compile Include="Framework\Objects\Enums\TargetCategory.cs" />
     <Compile Include="Framework\Objects\Enums\TeamType.cs" />
     <Compile Include="Framework\Objects\Enums\UpdateSpeed.cs" />
-    <Compile Include="Framework\Objects\Enums\WorldMarkerType.cs" />
     <Compile Include="Framework\Objects\IFindable.cs" />
     <Compile Include="Framework\Objects\Item.cs" />
     <Compile Include="Framework\Objects\ItemStatRange.cs" />
     <Compile Include="Framework\Objects\IUnique.cs" />
     <Compile Include="Framework\Objects\Memory\Container.cs" />
-    <Compile Include="Framework\Objects\Memory\GameBalanceHelper.cs" />
     <Compile Include="Framework\Objects\Memory\MemoryWrapper.cs" />
-    <Compile Include="Framework\Objects\Memory\ItemRecord.cs" />
-    <Compile Include="Framework\Objects\Memory\Marker.cs" />
-    <Compile Include="Framework\Objects\Memory\StringListHelper.cs" />
     <Compile Include="Framework\Objects\Memory\SnoDictionary.cs" />
     <Compile Include="Framework\Objects\Memory\SnoManager.cs" />
     <Compile Include="Framework\Objects\Memory\Symbols.cs" />
@@ -571,6 +548,7 @@
     <Compile Include="Routines\Necromancer\NecromancerDefault.cs" />
     <Compile Include="Routines\Necromancer\NecromancerBase.cs" />
     <Compile Include="Routines\Necromancer\NecromancerRathmaFacerollGC.cs" />
+    <Compile Include="Routines\Necromancer\NEC_RathmaCDRSimulacrum4.cs" />
     <Compile Include="Routines\Wizard\WizardChannelMeteor.cs" />
     <Compile Include="Routines\Wizard\WizardManaldCoE.cs" />
     <Compile Include="Routines\Wizard\WizardParalysisArchonBlizzard.cs" />
@@ -604,7 +582,6 @@
     <Compile Include="Modules\WindowTitle.cs" />
     <Compile Include="Modules\StatusBar.cs" />
     <Compile Include="Modules\TargetsCache.cs" />
-    <Compile Include="Modules\WorldCache.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Framework\Reference\GameData.cs" />
@@ -1151,6 +1128,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Serilog">
+      <Version>2.8.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>

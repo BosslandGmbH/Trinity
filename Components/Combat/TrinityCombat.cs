@@ -4,9 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Combat.Resources;
 using Trinity.Components.Coroutines;
+using Trinity.Components.Coroutines.Town;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Zeta.Bot;
+using Zeta.Bot.Coroutines;
+using Zeta.Bot.Logic;
+using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;
 
@@ -51,61 +55,73 @@ namespace Trinity.Components.Combat
         /// </summary>
         public static ILootProvider Loot { get; set; } = DefaultProviders.Loot;
 
-        /// <summary>
-        /// Combat Hook entry-point, manages when lower-level hooks can run and executes trinity features.
-        /// </summary>
-        public static async Task<bool> MainCombatTask()
+        public static async Task<CoroutineResult> RunCombat()
         {
-            if (!ZetaDia.IsInGame || ZetaDia.Globals.IsLoadingWorld || !ZetaDia.Me.IsValid)
-                return false;
+            if (!ZetaDia.IsInGame ||
+                ZetaDia.Globals.IsLoadingWorld ||
+                ZetaDia.Globals.IsPlayingCutscene ||
+                !ZetaDia.Me.IsFullyValid() ||
+                ZetaDia.Me.IsDead)
+            {
+                return CoroutineResult.NoAction;
+            }
 
-            if (Core.IsOutOfGame || Core.Player.IsDead)
-                return false;
+            if (ZetaDia.IsInTown &&
+                BrainBehavior.IsVendoring)
+            {
+                return CoroutineResult.NoAction;
+            }
 
-            if (!Core.Scenes.CurrentWorldScenes.Any())
-                return false;
+            if (Core.Scenes.CurrentWorldSceneIds.Count == 0)
+                return CoroutineResult.NoAction;
 
-            // Allow a 'false' return in routine (to continue with profile) and skip default behavior.
-            var startHookResult = await Routines.Current.HandleStart();
-            if (Routines.Current.ShouldReturnStartResult)
-                return startHookResult;
+            await UsePotion.DrinkPotion();
 
-            await UsePotion.Execute();
+            // TODO: Why is OpenTreasureBags called during combat? Move to Townrun.
             await OpenTreasureBags.Execute();
-            await VacuumItems.Execute();
+
+            if (!await VacuumItems.Execute())
+                return CoroutineResult.Running;
 
             var target = Weighting.WeightActors(Core.Targets);
 
             if (await CastBuffs())
-                return true;
+                return CoroutineResult.Running;
 
             if (await Routines.Current.HandleBeforeCombat())
-                return true;
+                return CoroutineResult.Running;
 
             // When combat is disabled, we're still allowing trinity to handle non-unit targets.
             if (!IsCombatAllowed && IsUnitOrInvalid(target))
-                return false;
+                return CoroutineResult.NoAction;
+
+            // Sometimes it is standing still and stuck - need to handle that before we are entering
+            // the target one.
+            if (Navigator.StuckHandler.IsStuck)
+            {
+                await Navigator.StuckHandler.DoUnstick();
+                return CoroutineResult.Running;
+            }
 
             if (await Targeting.HandleTarget(target))
-                return true;
+                return CoroutineResult.Running;
 
             // We're not in combat at this point.
 
             if (await Routines.Current.HandleOutsideCombat())
-                return true;
+                return CoroutineResult.Running;
 
             if (!Core.Player.IsCasting && (!TargetUtil.AnyMobsInRange(20f) || !Core.Player.IsTakingDamage))
             {
-                await EmergencyRepair.Execute();
                 await AutoEquipSkills.Instance.Execute();
                 await AutoEquipItems.Instance.Execute();
-                return false;
+                return CoroutineResult.NoAction;
             }
 
             // Allow Profile to Run.
-            return false;
+            return CoroutineResult.NoAction;
         }
-
+        
         private static bool IsUnitOrInvalid(TrinityActor target)
         {
             if (target == null || target.IsUnit) return true;

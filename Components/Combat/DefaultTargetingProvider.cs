@@ -1,20 +1,19 @@
-﻿#region
-
+﻿using Serilog;
 using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using System.Threading.Tasks;
 using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Grid;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
+using Zeta.Bot.Coroutines;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-
-
-#endregion
+using Zeta.Game.Internals.Actors.Gizmos;
 
 namespace Trinity.Components.Combat
 {
@@ -34,6 +33,8 @@ namespace Trinity.Components.Combat
 
     public class DefaultTargetingProvider : ITargetingProvider
     {
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
+
         public TrinityActor CurrentTarget { get; private set; }
 
         public TrinityPower CurrentPower { get; private set; }
@@ -42,16 +43,18 @@ namespace Trinity.Components.Combat
 
         public TrinityPower LastPower { get; private set; }
 
-        public float MaxTargetDistance { get; private set; } = 200f;
+        public float MaxTargetDistance { get; } = 200f;
 
         public void SetCurrentTarget(TrinityActor target)
         {
-            if (CurrentTarget != null && CurrentTarget.Targeting.TotalTargetedTime > TimeSpan.FromSeconds(30))
+            if (CurrentTarget != null &&
+                CurrentTarget.Targeting.TotalTargetedTime > TimeSpan.FromSeconds(30))
             {
-                Core.Logger.Log(LogCategory.Targetting, $"Long target time detected: {CurrentTarget} duration: {CurrentTarget.Targeting.TotalTargetedTime.TotalSeconds:N2}s");
+                s_logger.Information($"[{nameof(SetCurrentTarget)}] Long target time detected: {CurrentTarget} duration: {CurrentTarget.Targeting.TotalTargetedTime.TotalSeconds:N2}s");
             }
 
-            if (target != null && target.IsMe)
+            if (target != null &&
+                target.IsMe)
             {
                 return;
             }
@@ -62,9 +65,10 @@ namespace Trinity.Components.Combat
                 return;
             }
 
-            if (target == null && CurrentTarget != null)
+            if (target == null &&
+                CurrentTarget != null)
             {
-                Core.Logger.Log(LogCategory.Targetting, $"Clearing Target. Was: {CurrentTarget}");
+                s_logger.Information($"[{nameof(SetCurrentTarget)}] Clearing Target. Was: {CurrentTarget}");
             }
 
             if (CurrentTarget != null)
@@ -76,7 +80,7 @@ namespace Trinity.Components.Combat
             if (target != null)
             {
                 target?.Targeting.UpdateTargetInfo(true);
-                Core.Logger.Log(LogCategory.Targetting, $"New Target: {target.Name} {target.Targeting} WeightInfo={target.WeightInfo} Targeting={target.Targeting}");
+                s_logger.Information($"[{nameof(SetCurrentTarget)}] New Target: {target.Name} {target.Targeting} WeightInfo={target.WeightInfo} Targeting={target.Targeting}");
             }
 
             CurrentTarget = target;
@@ -99,14 +103,33 @@ namespace Trinity.Components.Combat
             if (await TrinityCombat.Routines.Current.HandleKiting())
                 return true;
 
-            if (target == null || !target.IsValid)
+            if (target == null ||
+                !target.IsValid)
+            {
+                Clear();
+                return false;
+            }
+            
+            if (TryBlacklist(target))
             {
                 Clear();
                 return false;
             }
 
-            if (TryBlacklist(target))
+            // Gizmos should always use the MoveAndInteract coroutine.
+            // Don't try to outsmart the game with custom shit down the line.
+            if (target.IsGizmo &&
+                target.ToDiaObject() is DiaGizmo obj &&
+                !obj.IsDestructibleObject)
             {
+                // TODO: Fix the interaction condition here.
+                if (await CommonCoroutines.MoveAndInteract(
+                        obj,
+                        () => obj is GizmoLootContainer lc ? lc.IsOpen : obj.HasBeenOperated) == CoroutineResult.Running)
+                {
+                    return true;
+                }
+
                 Clear();
                 return false;
             }
@@ -134,31 +157,42 @@ namespace Trinity.Components.Combat
             if (target.IsBlacklisted)
                 return false;
 
-            if (target.Type == TrinityObjectType.Door)
+            switch (target.Type)
             {
-                if (target.ActorSnoId == 454346 && target.Targeting.TargetedTimes > 3)
-                {
+                case TrinityObjectType.Door when target.ActorSnoId == SNOActor.p43_AD_Catacombs_Door_A &&
+                                                 target.Targeting.TargetedTimes > 3:
                     // Special case 'p43_AD_Catacombs_Door_A' no way to tell it's locked, blacklist quickly to explore
-                    GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(15), $"Probably locked door p43_AD_Catacombs_Door_A at {target.Position}");
+                    GenericBlacklist.Blacklist(
+                        target, TimeSpan.FromSeconds(15),
+                        $"Probably locked door p43_AD_Catacombs_Door_A at {target.Position}");
                     return true;
-                }
-
-                if (!target.IsUsed)
+                case TrinityObjectType.Door when !target.IsUsed:
                     return false;
             }
 
-            if (LastPower != null && LastPower.SNOPower == SNOPower.Axe_Operate_Gizmo && target.IsGizmo && target.IsLastTarget && target.Targeting.TargetedTimes > 25 && target.IsItem && (target as TrinityItem).IsLowQuality)
+            if (LastPower != null &&
+                LastPower.SNOPower == SNOPower.Axe_Operate_Gizmo &&
+                target.IsGizmo &&
+                target.IsLastTarget &&
+                target.Targeting.TargetedTimes > 25 &&
+                target.IsItem &&
+                target is TrinityItem item &&
+                item.ToAcdItem().IsLowQuality)
             {
                 // There's a weird stuck where bot is unable to interact with an item, possibly move/interact range related.
-                GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(120), $"Failed too many times to pickup low quality item. {target.Name} Distance={target.Distance}");
+                GenericBlacklist.Blacklist(
+                    target,
+                    TimeSpan.FromSeconds(120),
+                    $"Failed too many times to pickup low quality item. {target.Name} Distance={target.Distance}");
                 return true;
             }
 
-            if (target.Type == TrinityObjectType.ProgressionGlobe)
-                return false;
-
-            if (target.Type == TrinityObjectType.Shrine)
-                return false;
+            switch (target.Type)
+            {
+                case TrinityObjectType.ProgressionGlobe:
+                case TrinityObjectType.Shrine:
+                    return false;
+            }
 
             if (target.IsElite)
                 return false;
@@ -166,44 +200,71 @@ namespace Trinity.Components.Combat
             var times = target.Targeting.TargetedTimes;
             var duration = target.Targeting.TotalTargetedTime;
 
-            if (duration > TimeSpan.FromSeconds(10) && times > 5)
+            if (duration > TimeSpan.FromSeconds(10) &&
+                times > 5)
             {
-                GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(5), $"Micro-Blacklist for reposition / anti-flipflop (Times={times} Duration={duration})");
+                GenericBlacklist.Blacklist(
+                    target,
+                    TimeSpan.FromSeconds(5),
+                    $"Micro-Blacklist for reposition / anti-flipflop (Times={times} Duration={duration})");
                 return true;
             }
 
-            if (target.IsCorruptGrowth && duration > TimeSpan.FromSeconds(10) && Core.Player.MovementSpeed <= 2)
+            if (target.IsCorruptGrowth &&
+                duration > TimeSpan.FromSeconds(10) &&
+                Core.Player.MovementSpeed <= 2)
             {
-                GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(3), $"Micro-Blacklist for corrupt growth reposition (Times={times} Duration={duration})");
+                GenericBlacklist.Blacklist(
+                    target,
+                    TimeSpan.FromSeconds(3),
+                    $"Micro-Blacklist for corrupt growth reposition (Times={times} Duration={duration})");
                 return true;
             }
 
-            if (duration > TimeSpan.FromSeconds(30) && !target.IsElite)
+            if (duration > TimeSpan.FromSeconds(30) &&
+                !target.IsElite)
             {
-                GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(60), $"Targetted for too long ({duration})");
+                GenericBlacklist.Blacklist(
+                    target,
+                    TimeSpan.FromSeconds(60),
+                    $"Targetted for too long ({duration})");
                 return true;
             }
 
-            if (duration > TimeSpan.FromSeconds(30) && target.Targeting.TargetedTimes > 50 && !target.IsBoss)
+            if (duration <= TimeSpan.FromSeconds(30) ||
+                target.Targeting.TargetedTimes <= 50 ||
+                target.IsBoss)
             {
-                GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(60), $"Targetted too many times ({times})");
-                return true;
+                return false;
             }
 
-            return false;
+            GenericBlacklist.Blacklist(
+                target,
+                TimeSpan.FromSeconds(60),
+                $"Targetted too many times ({times})");
+            return true;
+
         }
-
 
         public bool IsInRange(TrinityActor target, TrinityPower power)
         {
-            if (target == null || target.IsSafeSpot)
+            if (target == null ||
+                target.IsSafeSpot)
+            {
                 return false;
+            }
 
-            if (CurrentPower != null && CurrentPower.IsCastOnSelf)
+            if (CurrentPower != null &&
+                CurrentPower.IsCastOnSelf)
+            {
                 return true;
+            }
 
-            if (GameData.ForceSameZDiffSceneSnoIds.Contains(Core.Player.CurrentSceneSnoId) && Math.Abs(target.Position.Z - Core.Player.Position.Z) > 2)
+            if (GameData.ForceSameZDiffSceneSnoIds.Contains(Core.Player.CurrentSceneSnoId) &&
+                Math.Abs(target.Position.Z - Core.Player.Position.Z) > 2)
+            {
                 return false;
+            }
 
             var objectRange = Math.Max(2f, target.RequiredRadiusDistance);
 
@@ -211,12 +272,14 @@ namespace Trinity.Components.Combat
 
             var targetRangeRequired = target.IsHostile || target.IsDestroyable ? spellRange : objectRange;
 
-            Core.Logger.Verbose(LogCategory.Targetting, $">> CurrentPower={TrinityCombat.Targeting.CurrentPower} CurrentTarget={target} RangeReq:{targetRangeRequired} RadDist:{target.RadiusDistance}");
-
-
+            s_logger.Verbose($"[{nameof(IsInRange)}] >> CurrentPower={TrinityCombat.Targeting.CurrentPower} CurrentTarget={target} RangeReq:{targetRangeRequired} RadDist:{target.RadiusDistance}");
+            
             // Handle Belial differently, he's never in LineOfSight.
-            if (Core.Player.IsInBossEncounter && target.ActorSnoId == (int)SNOActor.Belial)
+            if (Core.Player.IsInBossEncounter &&
+                target.ActorSnoId == SNOActor.Belial)
+            {
                 return target.RadiusDistance <= targetRangeRequired;
+            }
 
             return target.RadiusDistance <= targetRangeRequired && IsInLineOfSight(target);
         }
@@ -226,40 +289,51 @@ namespace Trinity.Components.Combat
             if (position == Vector3.Zero)
                 return false;
 
-            if (power == null || power.SNOPower == SNOPower.None)
+            if (power == null ||
+                power.SNOPower == SNOPower.None)
+            {
                 return false;
+            }
 
             if (power.IsCastOnSelf)
                 return true;
 
-            if (power.CastWhenBlocked && PlayerMover.IsBlocked)
+            if (power.CastWhenBlocked &&
+                PlayerMover.IsBlocked)
+            {
                 return true;
+            }
 
-            if (GameData.ForceSameZDiffSceneSnoIds.Contains(Core.Player.CurrentSceneSnoId) && Math.Abs(position.Z - Core.Player.Position.Z) > 2)
+            if (GameData.ForceSameZDiffSceneSnoIds.Contains(Core.Player.CurrentSceneSnoId) &&
+                Math.Abs(position.Z - Core.Player.Position.Z) > 2)
+            {
                 return false;
-
+            }
+            
             var rangeRequired = Math.Max(1f, power.MinimumRange);
             var distance = position.Distance(Core.Player.Position);
 
             TrinityActor currentTarget = TrinityCombat.Targeting.CurrentTarget;
-            if (Core.Player.IsInBossEncounter && currentTarget != null)
+            if (Core.Player.IsInBossEncounter &&
+                currentTarget != null)
             {
-                var positionIsBoss = currentTarget.IsBoss && currentTarget.Position.Distance(position) < 10f;
+                var positionIsBoss = currentTarget.IsBoss &&
+                                     currentTarget.Position.Distance(position) < 10f;
                 if (positionIsBoss)
                 {
                     rangeRequired += currentTarget.CollisionRadius;
                 }
             }
 
-            // Some calculated values are 3.8 and the minimum possible destination is 4.0 to come by the object.
-            // However the real interactable range is 7.0f.
-            rangeRequired = Math.Max(7f, rangeRequired);
-
-            Core.Logger.Verbose(LogCategory.Targetting, $">> CurrentPower={power} CurrentTarget={position} RangeReq:{rangeRequired} Dist:{distance}");
+            s_logger.Verbose($"[{nameof(IsInRange)}] >> CurrentPower={power} CurrentTarget={position} RangeReq:{rangeRequired} Dist:{distance}");
 
             // Handle Belial differently, he's never in LineOfSight.
-            if (Core.Player.IsInBossEncounter && currentTarget != null && currentTarget.ActorSnoId == (int) SNOActor.Belial)
+            if (Core.Player.IsInBossEncounter &&
+                currentTarget != null &&
+                currentTarget.ActorSnoId == SNOActor.Belial)
+            {
                 return distance <= rangeRequired;
+            }
 
             return distance <= rangeRequired && (distance <= 7.0f || IsInLineOfSight(position));
         }
@@ -273,22 +347,29 @@ namespace Trinity.Components.Combat
                 return true;
 
             var requiresRayWalk = Core.ProfileSettings.Options.CurrentSceneOptions.AlwaysRayWalk;
-            if (!requiresRayWalk && currentTarget.Targeting.TotalTargetedTime < TimeSpan.FromSeconds(5) && currentTarget.IsInLineOfSight)
+            if (!requiresRayWalk &&
+                currentTarget.Targeting.TotalTargetedTime < TimeSpan.FromSeconds(5) &&
+                currentTarget.IsInLineOfSight)
+            {
                 return true;
+            }
 
-            return Core.Grids.Avoidance.CanRayWalk(currentTarget, 5f);
+            return TrinityGrid.Instance.CanRayWalk(currentTarget, 5f);
         }
 
         public bool IsInLineOfSight(Vector3 position)
         {
             var longTargetTime = CurrentTarget?.Targeting.TotalTargetedTime < TimeSpan.FromSeconds(10);
 
-            if (longTargetTime || Core.BlockedCheck.IsBlocked || Core.StuckHandler.IsStuck || Core.ProfileSettings.Options.CurrentSceneOptions.AlwaysRayWalk)
+            if (longTargetTime ||
+                Core.BlockedCheck.IsBlocked ||
+                Core.StuckHandler.IsStuck ||
+                Core.ProfileSettings.Options.CurrentSceneOptions.AlwaysRayWalk)
             {
-                return Core.Grids.Avoidance.CanRayWalk(Core.Player.Position, position, 5f);
+                return TrinityGrid.Instance.CanRayWalk(Core.Player.Position, position, 5f);
             }
 
-            return Core.Grids.Avoidance.CanRayCast(Core.Player.Position, position);
+            return TrinityGrid.Instance.CanRayCast(Core.Player.Position, position);
         }
 
         void ITargetingProvider.Clear()

@@ -14,11 +14,11 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
     {
         private States _state;
         private DiaObject _actor;
-        private readonly int _actorId;
+        private readonly SNOActor _actorId;
         private float _attackRange;
         private SNOPower _attackSkill;
 
-        public AttackCoroutine(int actorId)
+        public AttackCoroutine(SNOActor actorId)
         {
             _actorId = actorId;
             Id = Guid.NewGuid();

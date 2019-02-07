@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
@@ -217,7 +218,7 @@ namespace Trinity.Routines.Wizard
                 if (target.IsBoss && target.Distance < 25 && (Skills.Wizard.ArchonTeleport.TimeSinceUse > 2000 || Skills.Wizard.Teleport.TimeSinceUse > 2000))
                         Core.Avoidance.Avoider.TryGetSafeSpot(out position, 40, 50, CurrentTarget.Position);
 
-                if (position != Vector3.Zero && !Core.Grids.Avoidance.IsIntersectedByFlags(ZetaDia.Me.Position, position, AvoidanceFlags.Combat, AvoidanceFlags.CriticalAvoidance))
+                if (position != Vector3.Zero && !TrinityGrid.Instance.IsIntersectedByFlags(ZetaDia.Me.Position, position, AvoidanceFlags.Combat, AvoidanceFlags.CriticalAvoidance))
                         return Teleport(position);
                 }
 

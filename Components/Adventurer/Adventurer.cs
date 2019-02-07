@@ -37,7 +37,7 @@ namespace Trinity.Components.Adventurer
             }
         }
 
-        protected override void OnWorldChanged(ChangeEventArgs<int> args)
+        protected override void OnWorldChanged(ChangeEventArgs<SNOWorld> args)
         {
             PluginEvents.WorldChangeTime = PluginTime.CurrentMillisecond;
             Core.Logger.Debug("[BotEvents] World has changed to WorldId: {0} LevelAreaSnoIdId: {1}", ZetaDia.Globals.WorldSnoId, ZetaDia.CurrentLevelAreaSnoId);

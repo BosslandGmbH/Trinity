@@ -28,7 +28,7 @@ namespace Trinity.ProfileTags
         [XmlAttribute("levelAreaSnoId")]
         [XmlAttribute("destinationLevelAreaSnoId")]
         [Description("Id of level area to arrive at")]
-        public int DestinationLevelAreaSnoId { get; set; }
+        public SNOLevelArea DestinationLevelAreaSnoId { get; set; }
 
         public override async Task<bool> MainTask()
         {
@@ -53,7 +53,7 @@ namespace Trinity.ProfileTags
             var bountiesNoCoroutines = ZetaDia.Storage.Quests.Bounties.Where(
                         b =>
                         {
-                            BountyData bd = BountyDataFactory.GetBountyData((int)b.Quest);
+                            BountyData bd = BountyDataFactory.GetBountyData(b.Quest);
                             if (bd != null && bd.Coroutines.Count == 0)
                                 return true;
 
@@ -62,7 +62,7 @@ namespace Trinity.ProfileTags
 
             var bounties = ZetaDia.Storage.Quests.Bounties.Where(
                             b =>
-                                BountyDataFactory.GetBountyData((int)b.Quest) == null &&
+                                BountyDataFactory.GetBountyData(b.Quest) == null &&
                                 b.State != QuestState.Completed)
                             .ToList();
 

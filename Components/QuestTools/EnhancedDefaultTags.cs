@@ -4,6 +4,7 @@ using Zeta.Bot.Profile;
 using Zeta.Bot.Profile.Common;
 using Zeta.Bot.Profile.Composites;
 using Zeta.Common;
+using Zeta.Game;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 using Action = Zeta.TreeSharp.Action;

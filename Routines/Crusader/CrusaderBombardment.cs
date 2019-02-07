@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Trinity.Framework;
 using System.Windows.Controls;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
-using Trinity.Components.Coroutines.Town;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
@@ -43,20 +42,29 @@ namespace Trinity.Routines.Crusader
 
         public override bool SetWeight(TrinityActor cacheObject)
         {
-            if (Settings.IgnoreTrash && cacheObject.IsTrashMob && Core.Rift.IsInRift && !cacheObject.IsTreasureGoblin && !cacheObject.IsMinimapActive && !cacheObject.IsBountyObjective && !cacheObject.IsQuestMonster && (Core.Rift.IsGreaterRift || !TrinityTownRun.IsTryingToTownPortal()))
+            if (!Settings.IgnoreTrash ||
+                !cacheObject.IsTrashMob ||
+                !Core.Rift.IsInRift ||
+                cacheObject.IsTreasureGoblin ||
+                cacheObject.IsMinimapActive ||
+                cacheObject.IsBountyObjective ||
+                cacheObject.IsQuestMonster ||
+                !Core.Rift.IsGreaterRift)
             {
-                cacheObject.WeightInfo += $"Routine(IgnoreTrash)";
-                cacheObject.Weight = 0;
-                return true;
+                return false;
             }
-            return false;
+
+            cacheObject.WeightInfo += $"Routine(IgnoreTrash)";
+            cacheObject.Weight = 0;
+            return true;
         }
 
         public TrinityPower GetOffensivePower()
         {
             // Credit: Phelon's LoN Bombardment routine.
 
-            if (AllowedToUse(Settings.Akarats, Skills.Crusader.AkaratsChampion) && ShouldAkaratsChampion())
+            if (AllowedToUse(Settings.Akarats, Skills.Crusader.AkaratsChampion) &&
+                ShouldAkaratsChampion())
             {
                 Core.Logger.Verbose(LogCategory.Routine, $"Akarats");
                 return AkaratsChampion();
@@ -105,7 +113,7 @@ namespace Trinity.Routines.Crusader
 
             if (CurrentTarget.Distance < 16f)
             {
-                Core.Logger.Log(LogCategory.Routine,$"ZigZag");
+                Core.Logger.Log(LogCategory.Routine, $"ZigZag");
                 return Walk(TargetUtil.GetZigZagTarget(CurrentTarget.Position), 3f);
             }
 
@@ -121,9 +129,7 @@ namespace Trinity.Routines.Crusader
             // Note iron skin is gated below by Convention of Elements check,            
             if (Player.HasBuff(SNOPower.X1_Crusader_IronSkin))
             {
-                TrinityActor target;
-
-                if (ShouldBombardment(out target))
+                if (ShouldBombardment(out var target))
                 {
                     trinityPower = Bombardment(target);
                     return true;
@@ -142,11 +148,17 @@ namespace Trinity.Routines.Crusader
                 }
             }
 
-            var eliteExists = HostileMonsters.Any(u => u.IsElite && !TrinityCombat.Weighting.ShouldIgnore(u));
+            var eliteExists = HostileMonsters.Any(u => u.IsElite &&
+                                                       !TrinityCombat.Weighting.ShouldIgnore(u));
 
             // Provoke with Votoyias spiker.
-            var inProvokeRange = !eliteExists || CurrentTarget != null && CurrentTarget.IsElite && CurrentTarget.Distance < 15f;
-            if (!ShouldWaitForConventionofElements(Skills.Crusader.Provoke, Element.Physical,0,1000) && Skills.Crusader.Provoke.CanCast() && inProvokeRange)
+            var inProvokeRange = !eliteExists ||
+                                 CurrentTarget != null &&
+                                 CurrentTarget.IsElite &&
+                                 CurrentTarget.Distance < 15f;
+            if (!ShouldWaitForConventionofElements(Skills.Crusader.Provoke, Element.Physical, 0, 1000) &&
+                Skills.Crusader.Provoke.CanCast() &&
+                inProvokeRange)
             {
                 trinityPower = Provoke();
                 return true;
@@ -154,14 +166,18 @@ namespace Trinity.Routines.Crusader
 
             // Wait for CoE to Cast Damage CD's
             var isCastWindow = !ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 1000);
-            var isTargetCloseEnough = !eliteExists || CurrentTarget != null && CurrentTarget.IsElite && CurrentTarget.Distance < 20f;
-            if (Skills.Crusader.Bombardment.CanCast() && (ShouldBombardWheneverPossible && isTargetCloseEnough || isCastWindow))
+            var isTargetCloseEnough = !eliteExists ||
+                                      CurrentTarget != null &&
+                                      CurrentTarget.IsElite &&
+                                      CurrentTarget.Distance < 20f;
+            if (Skills.Crusader.Bombardment.CanCast() &&
+                (ShouldBombardWheneverPossible &&
+                 isTargetCloseEnough ||
+                 isCastWindow) &&
+                ShouldIronSkin())
             {
-                if (ShouldIronSkin())
-                {
-                    trinityPower = IronSkin();
-                    return true;
-                }
+                trinityPower = IronSkin();
+                return true;
             }
 
             return false;
@@ -171,14 +187,21 @@ namespace Trinity.Routines.Crusader
         {
             get
             {
-                if (Settings.Bombardment.WaitForConvention == ConventionMode.GreaterRift && Core.Rift.IsGreaterRift)
+                if (Settings.Bombardment.WaitForConvention == ConventionMode.GreaterRift &&
+                    Core.Rift.IsGreaterRift)
+                {
                     return false;
+                }
 
                 if (Settings.Bombardment.WaitForConvention == ConventionMode.Always)
                     return false;
 
-                if (Settings.Bombardment.WaitForConvention == ConventionMode.RiftBoss && Core.Rift.IsInRift && HostileMonsters.Any(u => u.IsBoss))
+                if (Settings.Bombardment.WaitForConvention == ConventionMode.RiftBoss &&
+                    Core.Rift.IsInRift &&
+                    HostileMonsters.Any(u => u.IsBoss))
+                {
                     return false;
+                }
 
                 return true;
             }
@@ -209,11 +232,18 @@ namespace Trinity.Routines.Crusader
             if (target == null && Settings.BombardmentOOC)
             {
                 // The check is needed becasue its normally only "ironskin" that decide when ever possible to cast bombardment or not.
-                var isCastWindow = !ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 1000); 
-                if (isCastWindow && !ShouldBombardWheneverPossible || ShouldBombardWheneverPossible)
+                var isCastWindow = !ShouldWaitForConventionofElements(
+                    Skills.Crusader.Bombardment,
+                    Element.Physical,
+                    1500,
+                    1000);
+
+                if (isCastWindow &&
+                    !ShouldBombardWheneverPossible ||
+                    ShouldBombardWheneverPossible)
                 {
                     // Get the closest target possible
-                    target = HostileMonsters.Where(x => x.Distance < 150f).OrderBy(x => x.Distance).FirstOrDefault(); 
+                    target = HostileMonsters.Where(x => x.Distance < 150f).OrderBy(x => x.Distance).FirstOrDefault();
                 }
             }
 
@@ -231,8 +261,11 @@ namespace Trinity.Routines.Crusader
         protected override bool ShouldSteedCharge()
         {
             // Steed disables all skills for a second so make sure it doesn't prevent bombardment.
-            if (Legendary.ConventionOfElements.IsEquipped && TimeToElementStart(Element.Physical) < 2000)
+            if (Legendary.ConventionOfElements.IsEquipped &&
+                TimeToElementStart(Element.Physical) < 2000)
+            {
                 return false;
+            }
 
             return base.ShouldSteedCharge();
         }
@@ -245,31 +278,33 @@ namespace Trinity.Routines.Crusader
             if (Player.HasBuff(SNOPower.X1_Crusader_IronSkin))
                 return false;
 
-            if (!HostileMonsters.Any(u => u.Distance < 80f))
-                return false;
-
-            return true;
+            return HostileMonsters.Any(u => u.Distance < 80f);
         }
 
 
         public TrinityPower GetBuffPower()
         {
-            TrinityPower power;
-
-            if (TryLaw(out power))
+            if (TryLaw(out var power))
             {
                 //Core.Logger.Verbose(LogCategory.Routine, $"Buff Law");
                 return power;
             }
 
-            if (!Player.IsInTown && Settings.BombardmentOOC && HostileMonsters.Any(u => u.Distance < 150f))
+            if (!Player.IsInTown &&
+                Settings.BombardmentOOC &&
+                HostileMonsters.Any(u => u.Distance < 150f))
             {
                 //Core.Logger.Verbose(LogCategory.Routine, $"Buff Bombard Func");
 
                 // Break Steed to bombard OOC only if waiting for CoE
-                var goodTimetoCast = !ShouldBombardWheneverPossible || !IsSteedCharging;
-                if (goodTimetoCast && TryBombard(out power))
+                var goodTimetoCast = !ShouldBombardWheneverPossible ||
+                                     !IsSteedCharging;
+
+                if (goodTimetoCast &&
+                    TryBombard(out power))
+                {
                     return power;
+                }
             }
 
             return null;
@@ -368,7 +403,7 @@ namespace Trinity.Routines.Crusader
 
             private static readonly SkillSettings BombardmentDefaults = new SkillSettings
             {
-                WaitForConvention = ConventionMode.Always,              
+                WaitForConvention = ConventionMode.Always,
             };
 
             #endregion

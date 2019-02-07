@@ -15,6 +15,8 @@ using Trinity.UI;
 using Zeta.Common;
 using Zeta.Game;
 using Trinity.Framework.Reference;
+using Zeta.Bot.Coroutines;
+using Zeta.Bot.Navigation;
 
 namespace Trinity.Routines.Wizard
 {
@@ -90,11 +92,11 @@ namespace Trinity.Routines.Wizard
             if (!TrinityCombat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
             {
                 Core.Logger.Log(LogCategory.Avoidance, "Waiting for avoidance to clear (out of combat)");
-                return await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f, () => !IsAvoidanceRequired);
+                return await CommonCoroutines.MoveAndStop(Core.Avoidance.Avoider.SafeSpot, 5f, "Safe Spot") != MoveResult.ReachedDestination;
             }
 
             Core.Logger.Log(LogCategory.Avoidance, "Avoiding");
-            return await MoveTo.Execute(Core.Avoidance.Avoider.SafeSpot, "Safe Spot", 5f, () => !IsAvoidanceRequired);
+            return await CommonCoroutines.MoveAndStop(Core.Avoidance.Avoider.SafeSpot, 5f, "Safe Spot") != MoveResult.ReachedDestination;
         }
 
         public TrinityPower GetOffensivePower()
@@ -102,14 +104,14 @@ namespace Trinity.Routines.Wizard
             if (Player.IsCastingPortal)
                 return null;
 
-            if (Player.IsInRift && ZetaDia.Storage.RiftCompleted && !Player.IsCastingPortal && !TargetUtil.AnyMobsInRange(12) && InventoryManager.Backpack.Any(i => i.ActorSnoId == 408416))
+            if (Player.IsInRift && ZetaDia.Storage.RiftCompleted && !Player.IsCastingPortal && !TargetUtil.AnyMobsInRange(12) && InventoryManager.Backpack.Any(i => i.ActorSnoId == SNOActor.TieredLootrunKey_0))
             {
                 ZetaDia.Me.UseTownPortal();
                 return null;
             }
 
             // 锁定奥拉什
-            var target = Core.Actors.Actors.FirstOrDefault(u => u.ActorSnoId == 360636) ?? TargetUtil.BestEliteInRange(50) ?? TrinityCombat.Targeting.CurrentTarget;
+            var target = Core.Actors.Actors.FirstOrDefault(u => u.ActorSnoId == SNOActor.X1_LR_Boss_TerrorDemon_A) ?? TargetUtil.BestEliteInRange(50) ?? TrinityCombat.Targeting.CurrentTarget;
 
             if (target.Distance > 15 && Skills.Wizard.Teleport.CanCast())
                 return Teleport(target.Position);
@@ -136,7 +138,7 @@ namespace Trinity.Routines.Wizard
             if (Player.IsCastingPortal)
                 return null;
 
-            if (Player.IsInRift && ZetaDia.Storage.RiftCompleted && !Player.IsCastingPortal && !TargetUtil.AnyMobsInRange(12) && InventoryManager.Backpack.Any(i => i.ActorSnoId == 408416))
+            if (Player.IsInRift && ZetaDia.Storage.RiftCompleted && !Player.IsCastingPortal && !TargetUtil.AnyMobsInRange(12) && InventoryManager.Backpack.Any(i => i.ActorSnoId == SNOActor.TieredLootrunKey_0))
             {
                 ZetaDia.Me.UseTownPortal();
                 return null;
@@ -161,7 +163,7 @@ namespace Trinity.Routines.Wizard
             if (Player.IsCastingPortal)
                 return null;
 
-            if (Player.IsInRift && ZetaDia.Storage.RiftCompleted && !Player.IsCastingPortal && !TargetUtil.AnyMobsInRange(12) && InventoryManager.Backpack.Any(i => i.ActorSnoId == 408416))
+            if (Player.IsInRift && ZetaDia.Storage.RiftCompleted && !Player.IsCastingPortal && !TargetUtil.AnyMobsInRange(12) && InventoryManager.Backpack.Any(i => i.ActorSnoId == SNOActor.TieredLootrunKey_0))
             {
                 ZetaDia.Me.UseTownPortal();
                 return null;

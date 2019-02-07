@@ -6,6 +6,7 @@ using System.Linq;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Reference;
@@ -345,7 +346,7 @@ namespace Trinity.Components.Combat.Resources
             if (position.Distance(Player.Position) > 30f)
                 position = MathEx.CalculatePointFrom(Player.Position, position, 30f);
 
-            return Core.Grids.Avoidance.IsIntersectedByFlags(Player.Position, position, AvoidanceFlags.Monster);
+            return TrinityGrid.Instance.IsIntersectedByFlags(Player.Position, position, AvoidanceFlags.Monster);
         }
 
         internal static Vector3 FreezePiercePoint(float maxRange, float skillRadius,
@@ -421,7 +422,7 @@ namespace Trinity.Components.Combat.Resources
             return
                 (from u in SafeList(objectsInAoe)
                  where fromLocation.Distance2D(u.Position) <= range &&
-                       u.ActorSnoId == 433966
+                       u.ActorSnoId == SNOActor.p2_itemPassive_unique_ring_017_dome
                  orderby u.Distance
                  select u).ToList();
         }
@@ -451,7 +452,7 @@ namespace Trinity.Components.Combat.Resources
             return
                 (from u in SafeList(objectsInAoe)
                  where fromLocation.Distance2D(u.Position) <= range &&
-                       u.ActorSnoId == 320136
+                       u.ActorSnoId == SNOActor.X1_Monk_innerSanctuaryRune_forbidden_proxy
                  orderby u.Distance
                  select u).ToList();
         }
@@ -481,7 +482,7 @@ namespace Trinity.Components.Combat.Resources
                     m => m.ActorSnoId == actor.ActorSnoId && m.Position.Distance(unitLocation) <= distance);
         }
 
-        internal static List<TrinityActor> GetDiaObjects(uint actorSNO, float range = 25f,
+        internal static List<TrinityActor> GetDiaObjects(SNOActor actorSNO, float range = 25f,
             bool objectsInAoe = false)
         {
             return
@@ -492,7 +493,7 @@ namespace Trinity.Components.Combat.Resources
                  select u).ToList();
         }
 
-        internal static Vector3 GetDiaObjectBestClusterPoint(uint actorSNO, float radius = 15f, float maxRange = 45f,
+        internal static Vector3 GetDiaObjectBestClusterPoint(SNOActor actorSNO, float radius = 15f, float maxRange = 45f,
             bool useWeights = true, bool includeUnitsInAoe = true, bool objectsInAoe = false)
         {
             var clusterUnits =
@@ -511,7 +512,7 @@ namespace Trinity.Components.Combat.Resources
             return
                 (from u in SafeList(objectsInAoe)
                  where u.Distance <= range &&
-                       u.ActorSnoId == 322236
+                       u.ActorSnoId == SNOActor.x1_Wizard_TornadoRune_damage_model
                  orderby u.Distance
                  select u).ToList();
         }
@@ -526,7 +527,7 @@ namespace Trinity.Components.Combat.Resources
 
             var clusterUnits =
                 (from u in SafeList(objectsInAoe)
-                 where u.ActorSnoId == 322236 &&
+                 where u.ActorSnoId == SNOActor.x1_Wizard_TornadoRune_damage_model &&
                        u.Distance <= maxRange
                  orderby u.NearbyUnitsWithinDistance(radius),
                      u.Distance descending
@@ -1328,7 +1329,7 @@ namespace Trinity.Components.Combat.Resources
                 if (zigZagTargetList.Count() >= minTargets)
                 {
                     zigZagPoint = zigZagTargetList.OrderByDescending(u => u.Distance).FirstOrDefault().Position;
-                    if (Core.Grids.CanRayCast(zigZagPoint) && zigZagPoint.Distance(Player.Position) >= minDistance)
+                    if (TrinityGrid.Instance.CanRayCast(zigZagPoint) && zigZagPoint.Distance(Player.Position) >= minDistance)
                     {
                         Core.Logger.Log(LogCategory.Movement, "Returning ZigZag: TargetBased {0} r-dist={1} t-dist={2}", zigZagPoint, ringDistance, zigZagPoint.Distance(Player.Position));
                         return zigZagPoint;
@@ -1988,14 +1989,15 @@ namespace Trinity.Components.Combat.Resources
             var circlePositions = StuckHandler.GetCirclePoints(16, target.AxialRadius + radiusDistance, target.Position);
             circlePositions.AddRange(StuckHandler.GetCirclePoints(16, target.AxialRadius + radiusDistance + 15f, target.Position));
 
-            Func<Vector3, bool> isValid = p => Core.Grids.CanRayCast(p) && !IsPositionOnMonster(p, radiusDistance);
+            bool IsValid(Vector3 p) => TrinityGrid.Instance.CanRayCast(p) &&
+                                       !IsPositionOnMonster(p, radiusDistance);
 
-            var validPositions = circlePositions.Where(isValid).ToList();
+            var validPositions = circlePositions.Where(IsValid).ToList();
             if (!validPositions.Any())
             {
                 // Try with points around the player instead
                 circlePositions = StuckHandler.GetCirclePoints(12, 30f, Player.Position);
-                validPositions = circlePositions.Where(isValid).ToList();
+                validPositions = circlePositions.Where(IsValid).ToList();
             }
 
             validPositions = validPositions.OrderBy(p => p.Distance(Player.Position)).ToList();
@@ -2040,7 +2042,7 @@ namespace Trinity.Components.Combat.Resources
             if (_lastSafeSpotPosition != Vector3.Zero && safeSpotIsClose && safeSpotHasNoMonster)
                 return _lastSafeSpotPosition;
 
-            Func<Vector3, bool> isValid = p => Core.Grids.CanRayCast(p) && !IsPositionOnMonster(p);
+            bool IsValid(Vector3 p) => TrinityGrid.Instance.CanRayCast(p) && !IsPositionOnMonster(p);
 
             var circlePositions = StuckHandler.GetCirclePoints(8, 10, Player.Position);
 
@@ -2051,8 +2053,8 @@ namespace Trinity.Components.Combat.Resources
                 circlePositions.AddRange(StuckHandler.GetCirclePoints(8, 30, Player.Position));
 
             var closestMonster = GetClosestUnit();
-            var proximityTarget = closestMonster != null ? closestMonster.Position : Player.Position;
-            var validPositions = circlePositions.Where(isValid).OrderByDescending(p => p.Distance(proximityTarget));
+            var proximityTarget = closestMonster?.Position ?? Player.Position;
+            var validPositions = circlePositions.Where(IsValid).OrderByDescending(p => p.Distance(proximityTarget));
 
             RadarDebug.Draw(validPositions);
 

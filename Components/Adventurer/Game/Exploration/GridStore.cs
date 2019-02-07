@@ -1,15 +1,17 @@
-﻿using System;
-using Trinity.Framework;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Zeta.Common;
 using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Game.Exploration
 {
     public static class GridStore
     {
-        // Contains a list of grids that have been created without blocking their garbage disposal.
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
 
+        // Contains a list of grids that have been created without blocking their garbage disposal.
         internal static List<WeakReference<IGrid>> Grids = new List<WeakReference<IGrid>>();
 
         public static List<IGrid> GetCurrentGrids()
@@ -18,8 +20,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             var result = new List<IGrid>();
             foreach (var gridRef in Grids.ToList())
             {
-                IGrid grid;
-                if (!gridRef.TryGetTarget(out grid))
+                if (!gridRef.TryGetTarget(out var grid))
                 {
                     Grids.Remove(gridRef);
                     continue;
@@ -29,7 +30,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     result.Add(grid);
             }
 
-            Core.Logger.Debug("[GridStore] contains {0} grid instances, {1} for Current world", Grids.Count, result.Count);
+            s_logger.Debug($"[{nameof(GetCurrentGrids)}] contains {Grids.Count} grid instances, {result.Count} for Current world.");
 
             return result;
         }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Quests;
 using Zeta.Bot;
+using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 {
@@ -40,7 +41,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
         private ISubroutine _currentStep;
         private static ISubroutine _lastGenericBountySubroutine;
 
-        public GenericBountyCoroutine(int questId)
+        public GenericBountyCoroutine(SNOQuest questId)
             : base(questId)
         {
             Bounty = BountyDataFactory.GetBountyData(questId);

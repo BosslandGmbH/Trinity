@@ -15,7 +15,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
         private States _state;
         private BountyData _bountyData;
 
-        public int QuestId { get; private set; }
+        public SNOQuest QuestId { get; private set; }
         public int BoxSize { get; set; }
         public float BoxTolerance { get; set; }
         public bool ZergMode = false;
@@ -40,7 +40,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
                 if ((BountyData.LevelAreaIds != null && BountyData.LevelAreaIds.Contains(AdvDia.CurrentLevelAreaId)))
                     return true;
 
-                if (ZetaDia.Storage.Quests.ActiveBounty != null && (int)ZetaDia.Storage.Quests.ActiveBounty.Quest == QuestId)
+                if (ZetaDia.Storage.Quests.ActiveBounty != null && ZetaDia.Storage.Quests.ActiveBounty.Quest == QuestId)
                     return true;
 
                 return false;
@@ -88,7 +88,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         #endregion State
 
-        protected BountyCoroutine(int questId)
+        protected BountyCoroutine(SNOQuest questId)
         {
             QuestId = questId;
             BoxSize = 30;
@@ -181,7 +181,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         private async Task<bool> Completed()
         {
-            if (_completedWaitTimer == null) _completedWaitTimer = QuestId == 359927 ? new WaitTimer(TimeSpan.FromSeconds(15)) : new WaitTimer(TimeSpan.FromSeconds(3));
+            if (_completedWaitTimer == null) _completedWaitTimer = QuestId == SNOQuest.X1_Bounty_A5_PandFortress_Kill_Malthael ? new WaitTimer(TimeSpan.FromSeconds(15)) : new WaitTimer(TimeSpan.FromSeconds(3));
             if (!_completedWaitTimer.IsFinished)
                 return false;
 

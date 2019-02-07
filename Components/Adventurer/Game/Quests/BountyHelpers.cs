@@ -54,26 +54,26 @@ namespace Trinity.Components.Adventurer.Game.Quests
         public class ObjectiveActor
         {
             public int MarkerNameHash { get; set; }
-            public int ActorId { get; set; }
-            public int DestWorldId { get; set; }
+            public SNOActor ActorId { get; set; }
+            public SNOWorld DestWorldId { get; set; }
         }
 
         public static Dictionary<int, ObjectiveActor> DynamicBountyPortals = new Dictionary<int, ObjectiveActor>
         {
             //texture = 81058
 
-            { -2005510577, new ObjectiveActor { MarkerNameHash = -2005510577, ActorId = 446440, DestWorldId = 443801 } },
-            { 498366490, new ObjectiveActor { MarkerNameHash = 498366490, ActorId = 448494, DestWorldId = 448396 } },
-            { -816816641, new ObjectiveActor { MarkerNameHash = -816816641, ActorId = 448500, DestWorldId = 448373 } },
-            { -728782754, new ObjectiveActor { MarkerNameHash = -728782754, ActorId = 448505, DestWorldId = 448402 } },
-            { -2005068563, new ObjectiveActor { MarkerNameHash = -2005068563, ActorId = 446440, DestWorldId = 443705 } },
-            { 124027337, new ObjectiveActor { MarkerNameHash = 124027337, ActorId = 446439, DestWorldId = 443678 } },
-            { -1454464458, new ObjectiveActor { MarkerNameHash = -1454464458, ActorId = 446440, DestWorldId = 443720 } },
-            { 1012772770, new ObjectiveActor { MarkerNameHash = 1012772770, ActorId = 448515, DestWorldId = 448366 } },
-            { 467573611, new ObjectiveActor { MarkerNameHash = 467573611, ActorId = 448491, DestWorldId = 448409 } },
-            { 1012330756, new ObjectiveActor { MarkerNameHash = 1012330756, ActorId = 448491, DestWorldId = 448381 } },
-            { -2002131030, new ObjectiveActor { MarkerNameHash = -2002131030, ActorId = 446559, DestWorldId = 443686 } },
-            { 37697317, new ObjectiveActor { MarkerNameHash = 37697317, ActorId = 444404, DestWorldId = 443756 } },
+            { -2005510577, new ObjectiveActor { MarkerNameHash = -2005510577, ActorId = SNOActor.P4_bounty_grounds_Crypt_Shrines, DestWorldId = SNOWorld.p4_bounty_grounds_Neph } },
+            { 498366490, new ObjectiveActor { MarkerNameHash = 498366490, ActorId = SNOActor.P4_bounty_grounds_Leorics_Garden_Champ_A5, DestWorldId = SNOWorld.p4_A5_bounty_grounds_Leorics_Garden } },
+            { -816816641, new ObjectiveActor { MarkerNameHash = -816816641, ActorId = SNOActor.P4_bounty_grounds_Swr_Burrowers_A5, DestWorldId = SNOWorld.p4_A5_bounty_grounds_Swr } },
+            { -728782754, new ObjectiveActor { MarkerNameHash = -728782754, ActorId = SNOActor.P4_bounty_grounds_Keep_Shaman_A5, DestWorldId = SNOWorld.p4_A5_bounty_grounds_Keep } },
+            { -2005068563, new ObjectiveActor { MarkerNameHash = -2005068563, ActorId = SNOActor.P4_bounty_grounds_Crypt_Shrines, DestWorldId = SNOWorld.p4_bounty_grounds_Zolt } },
+            { 124027337, new ObjectiveActor { MarkerNameHash = 124027337, ActorId = SNOActor.P4_bounty_grounds_Keep_Shaman, DestWorldId = SNOWorld.p4_bounty_grounds_Keep } },
+            { -1454464458, new ObjectiveActor { MarkerNameHash = -1454464458, ActorId = SNOActor.P4_bounty_grounds_Crypt_Shrines, DestWorldId = SNOWorld.p4_bounty_grounds_Crypt } },
+            { 1012772770, new ObjectiveActor { MarkerNameHash = 1012772770, ActorId = SNOActor.P4_bounty_grounds_Zolt_A5, DestWorldId = SNOWorld.p4_A5_bounty_grounds_Zolt } },
+            { 467573611, new ObjectiveActor { MarkerNameHash = 467573611, ActorId = SNOActor.P4_bounty_grounds_Crypt_Shrines_A5, DestWorldId = SNOWorld.p4_A5_bounty_grounds_Crypt } },
+            { 1012330756, new ObjectiveActor { MarkerNameHash = 1012330756, ActorId = SNOActor.P4_bounty_grounds_Crypt_Shrines_A5, DestWorldId = SNOWorld.p4_A5_bounty_grounds_Neph } },
+            { -2002131030, new ObjectiveActor { MarkerNameHash = -2002131030, ActorId = SNOActor.P4_bounty_grounds_Swr_Burrowers, DestWorldId = SNOWorld.p4_bounty_grounds_Swr } },
+            { 37697317, new ObjectiveActor { MarkerNameHash = 37697317, ActorId = SNOActor.P4_bounty_grounds_Leorics_Garden_Champ, DestWorldId = SNOWorld.p4_bounty_grounds_Leorics_Garden } },
         };
 
         public static Vector3 ScanForMarkerLocation(int markerNameHash, int searchRadius)
@@ -100,12 +100,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return marker?.Position ?? Vector3.Zero;
         }
 
-        public static Vector3 ScanForMarkerLocation(string name, int searchRadius)
-        {
-            var marker = Core.Markers.FirstOrDefault(m => m.Name.ToLowerInvariant().Contains(name.ToLowerInvariant()) && m.Position.Distance(AdvDia.MyPosition) <= searchRadius && !EntryPortals.IsEntryPortal(AdvDia.CurrentWorldDynamicId, m.NameHash));
-            return marker?.Position ?? Vector3.Zero;
-        }
-
         public static TrinityMarker ScanForMarker(Vector3 markerPosition, int searchRadius = 5)
         {
             return Core.Markers.Where(m => m.Position.Distance2D(markerPosition) <= searchRadius).OrderBy(m => m.MarkerType == WorldMarkerType.Objective).FirstOrDefault();
@@ -126,11 +120,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return Core.Markers.FirstOrDefault(m => m.MarkerType == type && m.Position.Distance(AdvDia.MyPosition) <= searchRadius && !EntryPortals.IsEntryPortal(AdvDia.CurrentWorldDynamicId, m.NameHash));
         }
 
-        public static TrinityMarker ScanForMarker(string name, int searchRadius)
-        {
-            return Core.Markers.FirstOrDefault(m => m.Name.ToLowerInvariant().Contains(name.ToLowerInvariant()) && m.Position.Distance(AdvDia.MyPosition) <= searchRadius && !EntryPortals.IsEntryPortal(AdvDia.CurrentWorldDynamicId, m.NameHash));
-        }
-
         public static Vector3 TryFindObjectivePosition(IList<ObjectiveActor> objectives, int searchRadius, out ObjectiveActor foundObjective)
         {
             var objectiveMarkers = new HashSet<int>(objectives.Select(o => o.MarkerNameHash));
@@ -146,7 +135,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return Vector3.Zero;
         }
 
-        public static Vector3 ScanForActorLocation(int actorId, int searchRadius, Vector3 origin = default(Vector3), Func<TrinityActor, bool> func = null)
+        public static Vector3 ScanForActorLocation(SNOActor actorId, int searchRadius, Vector3 origin = default(Vector3), Func<TrinityActor, bool> func = null)
         {
             origin = origin != Vector3.Zero ? origin : Core.Player.Position;
             var actor = Core.Actors.Where(a => a.ActorSnoId == actorId && a.Position.Distance(origin) <= searchRadius && (func == null || func(a))).OrderBy(a => a.Distance).FirstOrDefault();
@@ -176,12 +165,12 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return ScanForActor(internalName, searchRadius)?.Position ?? Vector3.Zero;
         }
 
-        public static TrinityActor ScanForActor(int actorSnoId, int markerHash, int searchRadius = 500, Func<TrinityActor, bool> func = null)
+        public static TrinityActor ScanForActor(SNOActor actorSnoId, int markerHash, int searchRadius = 500, Func<TrinityActor, bool> func = null)
         {
             return Core.Actors.Where(a => a.ActorSnoId == actorSnoId && a.Distance <= searchRadius && (func == null || func(a))).Where(a => GetMarkerNearActor(a)?.NameHash == markerHash).OrderBy(a => a.Distance).FirstOrDefault();
         }
 
-        public static TrinityActor ScanForActor(int actorSnoId, int searchRadius = 500, Func<TrinityActor, bool> func = null)
+        public static TrinityActor ScanForActor(SNOActor actorSnoId, int searchRadius = 500, Func<TrinityActor, bool> func = null)
         {
             return Core.Actors.Where(a => a.ActorSnoId == actorSnoId && a.Distance <= searchRadius && (func == null || func(a))).OrderBy(a => a.Distance).FirstOrDefault();
         }
@@ -226,7 +215,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         public static bool AreAllActBountiesSupported(Act act)
         {
-            int numSupported = ZetaDia.Storage.Quests.Bounties.Count(b => b.Act == act && BountyDataFactory.GetBountyData((int)b.Quest) != null);
+            int numSupported = ZetaDia.Storage.Quests.Bounties.Count(b => b.Act == act && BountyDataFactory.GetBountyData(b.Quest) != null);
             bool hasUnsupported = numSupported != 5;
             if (hasUnsupported)
             {
@@ -284,21 +273,21 @@ namespace Trinity.Components.Adventurer.Game.Quests
         {
             return
                 ZetaDia.Storage.Quests.AllQuests.Any(
-                    q => q.Quest == ActBountyFinishingQuests[act] && q.State == QuestState.InProgress);
+                    q => q.QuestSNO == ActBountyFinishingQuests[act] && q.State == QuestState.InProgress);
         }
 
         public static bool IsAnyActTurninInProgress()
         {
             return
                 ZetaDia.Storage.Quests.AllQuests.Any(
-                    q => ActBountyFinishingQuests.Values.Contains(q.Quest) && q.State == QuestState.InProgress);
+                    q => ActBountyFinishingQuests.Values.Contains(q.QuestSNO) && q.State == QuestState.InProgress);
         }
 
         public static bool IsActTurninCompleted(Act act)
         {
             return
                 ZetaDia.Storage.Quests.AllQuests.Any(
-                    q => q.Quest == ActBountyFinishingQuests[act] && q.State == QuestState.Completed);
+                    q => q.QuestSNO == ActBountyFinishingQuests[act] && q.State == QuestState.Completed);
         }
 
         public static bool QuestNpcExistsNearMe(float radius)

@@ -12,11 +12,11 @@ using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 
-
 namespace Trinity.Modules
 {
+    // TODO: Clean that class up. We might be able to remove it completely.
     public class PlayerCache : Module
-    {       
+    {
         public int ActorSnoId { get; set; }
 
         public SummonInfo Summons = new SummonInfo();
@@ -44,11 +44,11 @@ namespace Trinity.Modules
         public ActorClass ActorClass { get; private set; }
         public string BattleTag { get; private set; }
         public int SceneId { get; private set; }
-        public int LevelAreaId { get; private set; }
+        public SNOLevelArea LevelAreaId { get; private set; }
         public double PlayerDamagePerSecond { get; private set; }
         public SceneInfo Scene { get; private set; }
-        public int WorldDynamicId { get; private set; }
-        public int WorldSnoId { get; private set; }
+        public SNOWorld WorldDynamicId { get; private set; }
+        public SNOWorld WorldSnoId { get; private set; }
         public bool IsInGame { get; private set; }
         public bool IsDead { get; private set; }
         public bool IsLoadingWorld { get; private set; }
@@ -75,7 +75,7 @@ namespace Trinity.Modules
         public bool IsRanged { get; private set; }
         public bool IsValid { get; private set; }
         public int TieredLootRunlevel { get; private set; }
-        public int CurrentQuestSNO { get; private set; }
+        public SNOQuest CurrentQuestSNO { get; private set; }
         public int CurrentQuestStep { get; private set; }
         public Act WorldType { get; private set; }
         public int MaxBloodShards { get; private set; }
@@ -91,20 +91,15 @@ namespace Trinity.Modules
         public float ShieldHitpoints { get; private set; }
         public DateTime LastInCombatTime { get; private set; }
 
-        public bool IsMelee
-            =>
-                Core.Player.ActorClass == ActorClass.Barbarian || Core.Player.ActorClass == ActorClass.Monk ||
-                Core.Player.ActorClass == ActorClass.Crusader;
-
-        public bool IsInventoryLockedForGreaterRift { get; set; }
+        public bool IsMelee => Core.Player.ActorClass == ActorClass.Barbarian ||
+                               Core.Player.ActorClass == ActorClass.Monk ||
+                               Core.Player.ActorClass == ActorClass.Crusader;
 
         public List<float> HealthHistory { get; set; } = new List<float>();
 
-        public bool HasBuff(SNOPower power)
-            => Core.Buffs.HasBuff(power);
+        public bool HasBuff(SNOPower power) => Core.Buffs.HasBuff(power);
 
-        public bool HasBuff(SNOPower power, int variantId)
-            => Core.Buffs.HasBuff(power, variantId);
+        public bool HasBuff(SNOPower power, int variantId) => Core.Buffs.HasBuff(power, variantId);
 
         public class SceneInfo
         {
@@ -221,7 +216,7 @@ namespace Trinity.Modules
             IsCasting = _me.LoopingAnimationEndTime > 0;
             IsInteractingWithGizmo = commonData.GetAttribute<bool>(ActorAttributeType.PowerBuff0VisualEffectNone, (int)SNOPower.Axe_Operate_Gizmo);
             CurrentAnimation = commonData.CurrentAnimation;
-            IsInventoryLockedForGreaterRift = ZetaDia.Storage.RiftStarted && ZetaDia.Storage.CurrentRiftType == RiftType.Greater && !ZetaDia.Storage.RiftCompleted;
+
             ShieldHitpoints = commonData.GetAttribute<float>(ActorAttributeType.DamageShieldAmount);
 
             Summons = GetPlayerSummonCounts();
@@ -251,7 +246,7 @@ namespace Trinity.Modules
 
             var averageHealth = HealthHistory.Average();
             IsTakingDamage = averageHealth > CurrentHealth;
-            
+
             // For WD Angry Chicken
             IsHidden = _me.IsHidden;
         }
@@ -332,11 +327,23 @@ namespace Trinity.Modules
         internal void UpdateSlowChangingData()
         {
             var player = ZetaDia.Storage.PlayerDataManager.ActivePlayerData;
-            
-            BloodShards = player.BloodshardCount;
-            MyDynamicID = _me.CommonData.AnnId;
-            CurrentSceneSnoId = ZetaDia.Me.CurrentScene.SceneInfo.SNOId;
 
+            BloodShards = player.BloodshardCount;
+
+            if (ZetaDia.Me == null)
+            {
+                // Bug out early.
+                return;
+            }
+
+            MyDynamicID = ZetaDia.Me.CommonData?.AnnId ?? 0;
+            CurrentSceneSnoId = ZetaDia.Me.CurrentScene?.SceneInfo?.SNOId ?? SNOScene.None;
+
+            if (CurrentSceneSnoId == SNOScene.None)
+            {
+                // Bug out early.
+                return;
+            }
             //Zeta.Game.ZetaDia.Me.CommonData.GetAttribute<int>(Zeta.Game.Internals.Actors.ActorAttributeType.TieredLootRunRewardChoiceState) > 0;
 
             Coinage = player.Coinage;
@@ -430,11 +437,7 @@ namespace Trinity.Modules
 
         public bool IsChannelling => ChannelAnimations.Contains(CurrentAnimation);
 
-        //private float GetMaxPrimaryResource(DiaActivePlayer player)
-        //{
-        //    return player.MaxPrimaryResource;
-        //}
-
+        // TODO: Figure out if this method is used at all. When not delete if it is used fix the magic numbers.
         private float GetMaxPrimaryResource(DiaActivePlayer player)
         {
             switch (ActorClass)
@@ -450,19 +453,19 @@ namespace Trinity.Modules
                 case ActorClass.DemonHunter:
                     return player.CommonData.GetAttribute<float>(149 | (int)ResourceType.Hatred << 12) + player.CommonData.GetAttribute<float>(ActorAttributeType.ResourceMaxBonusHatred);
                 case ActorClass.Witchdoctor:
-                    return player.CommonData.GetAttribute<float>(149 | (int)ResourceType.Mana << 12) + player.CommonData.GetAttribute<float>(ActorAttributeType.ResourceMaxBonusMana);            
+                    return player.CommonData.GetAttribute<float>(149 | (int)ResourceType.Mana << 12) + player.CommonData.GetAttribute<float>(ActorAttributeType.ResourceMaxBonusMana);
             }
             return -1;
         }
-
-        
 
         public ACDItem EquippedHealthPotion
         {
             get
             {
+                // TODO: Check if that can really trigger an exception.
                 try
                 {
+                    // TODO: Figure out the magic and replace it with some named constant.
                     var element = UXHelper.GetControl(13566120389425937876);
                     if (element != null && element.IsValid)
                     {
@@ -572,7 +575,7 @@ namespace Trinity.Modules
         public int FreeBackpackSlots { get; set; }
         public int TeamId { get; set; }
         public float Radius { get; set; }
-        public int CurrentSceneSnoId { get; set; }
+        public SNOScene CurrentSceneSnoId { get; set; }
         public bool IsInBossEncounter { get; set; }
 
         public bool IsInBossEncounterArea { get; set; }
@@ -607,7 +610,7 @@ namespace Trinity.Modules
             ActorClass = ActorClass.Invalid;
             BattleTag = String.Empty;
             SceneId = -1;
-            LevelAreaId = -1;
+            LevelAreaId = (SNOLevelArea)(-1);
             Scene = new SceneInfo()
             {
                 SceneId = -1,

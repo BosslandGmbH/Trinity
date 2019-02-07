@@ -1,6 +1,5 @@
-﻿using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -12,34 +11,33 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using Trinity.Components.Adventurer.Coroutines.RiftCoroutines;
 using Trinity.Components.Coroutines;
 using Trinity.Components.Coroutines.Town;
-using Trinity.Framework.Objects.Enums;
-using Zeta.Bot;
-using Zeta.Common;
-using Zeta.Game;
-using Zeta.Game.Internals.Actors;
-using Zeta.TreeSharp;
-
-using UIElement = Zeta.Game.Internals.UIElement;
-
-// For Debug Watch Panel Namespace.
-
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
+using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Trinity.UI.Visualizer;
+using Zeta.Bot;
+using Zeta.Bot.Coroutines;
+using Zeta.Common;
+using Zeta.Game;
+using Zeta.Game.Internals.Actors;
+using Zeta.TreeSharp;
 using CurrencyType = Zeta.Game.CurrencyType;
-
+using UIElement = Zeta.Game.Internals.UIElement;
 
 namespace Trinity.UI
 {
     internal class TabUi
     {
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
         private static UniformGrid _tabGrid;
         private static TabItem _tabItem;
-        private static DateTime LastStartedConvert = DateTime.UtcNow;
 
         internal static void InstallTab()
         {
@@ -48,127 +46,136 @@ namespace Trinity.UI
             var hasAccessToApp = Application.Current.CheckAccess();
 
             if (!hasAccessToApp)
-                Core.Logger.Log("Current Thread Id={0} Name='{1}' cannot access the current application. CanAccessDispatcher={2}",
+                s_logger.Debug("Current Thread Id={0} Name='{1}' cannot access the current application. CanAccessDispatcher={2}",
                     Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread.Name, Application.Current.Dispatcher.CheckAccess());
 
             //Core.Logger.Log($"ApplicationDispatcherThreadId={Application.Current.Dispatcher.Thread.ManagedThreadId} " +
             //           $"CurrenThreadId={Thread.CurrentThread.ManagedThreadId}" +
             //           $"CanAccessMainWindow={Application.Current.MainWindow.CheckAccess()}");
 
-            if (!Application.Current.MainWindow.CheckAccess())
+            if (Application.Current.MainWindow != null && !Application.Current.MainWindow.CheckAccess())
             {
-                Core.Logger.Log("Current Thread {0} '{1}' cannot access MainWindow Dispatcher",
+                s_logger.Debug("Current Thread {0} '{1}' cannot access MainWindow Dispatcher",
                     Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread.Name);
 
                 return;
             }
 
-            Application.Current.MainWindow.Dispatcher.Invoke(() =>
-            {
-                var mainWindow = Application.Current.MainWindow;
-
-                _tabGrid = new UniformGrid
+            if (Application.Current.MainWindow != null)
+                Application.Current.MainWindow.Dispatcher.Invoke(() =>
                 {
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    Columns = 4,
-                    MaxHeight = 180,
-                    Margin = new Thickness(0, 0, 16, 0)
-                };
+                    Window mainWindow = Application.Current.MainWindow;
 
-                CreateStretchyGroup(string.Empty, new List<Control>
-                {
-                    CreateMajorButton("Configure", ShowMainTrinityUIEventHandler),
-                    CreateMajorButton("Open Visualizer", OpenRadarButtonHandler)
-                });
+                    _tabGrid = new UniformGrid
+                    {
+                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        Columns = 4,
+                        MaxHeight = 180,
+                        Margin = new Thickness(0, 0, 16, 0)
+                    };
 
-                CreateGroup("Items", new List<Control>
-                {
-                    CreateButton("Sort Backpack", SortBackEventHandler),
-                    CreateButton("Sort Stash", SortStashEventHandler),
-                    CreateButton("Stack Materials", StackCraftingMaterialsInStash),
-                    CreateButton("Stash Backpack", DepositBackpackToStash),                    
-                });
+                    CreateStretchyGroup(string.Empty, new List<Control>
+                    {
+                        CreateMajorButton("Configure", ShowMainTrinityUIEventHandler),
+                        CreateMajorButton("Open Visualizer", OpenRadarButtonHandler)
+                    });
 
-                CreateGroup("Cube Backpack", new List<Control>
-                {
-                    CreateButton("Upgrade Rares", RunUpgradeBackpackRares),
-                    CreateButton("Extract Powers", RunExtractBackpackPowers),
-                    CreateButton("Convert to Magic", btnClick_ConvertToBlue),
-                    CreateButton("Convert to Common", btnClick_ConvertToCommon),
-                    CreateButton("Convert to Rare", btnClick_ConvertToRare),
+                    CreateGroup("Items", new List<Control>
+                    {
+                        CreateButton("Sort Backpack", SortBackEventHandler),
+                        CreateButton("Sort Stash", SortStashEventHandler),
+                        CreateButton("Stack Materials", StackCraftingMaterialsInStash),
+                        CreateButton("Stash Backpack", DepositBackpackToStash),
+                    });
 
-                    //CreateButton("Find New ActorIds", GetNewActorSNOsEventHandler),
-                    ////CreateButton("Log Invalid Items", LogInvalidHandler),
-                    //CreateButton("> Gizmo Attribtues", StartGizmoTestHandler),
-                    //CreateButton("> Unit Attribtues", StartUnitTestHandler),
-                    //CreateButton("> Player Attribtues", StartPlayerTestHandler),
-                    ////CreateButton("> Log Power Data", LogPowerDataHandler),
-                    ////CreateButton("Dump Item Powers", StartDataTestHandler),
-                    ////CreateButton("> Buff Test", StartBuffTestHandler),
-                    ////CreateButton("> Stop Tests", StopTestHandler),
-                    //CreateButton("> Unit Monitor", StartUnitMonitor),
-                    //CreateButton("> Player Monitor", StartPlayerMonitor),
-                });
+                    CreateGroup("Cube Backpack", new List<Control>
+                    {
+                        CreateButton("Upgrade Rares", RunUpgradeBackpackRares),
+                        CreateButton("Extract Powers", RunExtractBackpackPowers),
+                        CreateButton("Convert to Magic", btnClick_ConvertToBlue),
+                        CreateButton("Convert to Common", btnClick_ConvertToCommon),
+                        CreateButton("Convert to Rare", btnClick_ConvertToRare),
 
-                CreateGroup("Tools", new List<Control>
+                        //CreateButton("Find New ActorIds", GetNewActorSNOsEventHandler),
+                        ////CreateButton("Log Invalid Items", LogInvalidHandler),
+                        //CreateButton("> Gizmo Attribtues", StartGizmoTestHandler),
+                        //CreateButton("> Unit Attribtues", StartUnitTestHandler),
+                        //CreateButton("> Player Attribtues", StartPlayerTestHandler),
+                        ////CreateButton("> Log Power Data", LogPowerDataHandler),
+                        ////CreateButton("Dump Item Powers", StartDataTestHandler),
+                        ////CreateButton("> Buff Test", StartBuffTestHandler),
+                        ////CreateButton("> Stop Tests", StopTestHandler),
+                        //CreateButton("> Unit Monitor", StartUnitMonitor),
+                        //CreateButton("> Player Monitor", StartPlayerMonitor),
+                    });
+
+                    CreateGroup("Tools", new List<Control>
+                    {
+                        CreateButton("Dump My Build", DumpBuildEventHandler),
+                        CreateButton("Drop Legendaries", DropLegendariesEventHandler),
+                        //CreateButton("Log Run Time", btnClick_LogRunTime),
+                        CreateButton("Open Log File", OpenLogFileHandler),
+                        CreateButton("Open Settings File", OpenSettingsFileHandler),
+
+                        //CreateButton("Log Town Actor", LogTownActor),
+                        //CreateButton("Test UIElement", TestUIElement),
+                        //CreateButton("Test SNOReader", TestSNOReader),
+                        //CreateButton("Dump Offsets", DumpOffsets),
+                        //CreateButton("Start Internals", StartInternals),
+                        //CreateButton("Stop Internals", StopInternals),
+                        //CreateButton("Clsoe Vendor", CloseVendorWindowTest),
+
+                        //CreateButton("Test", TestUIElement),
+
+                        //CreateButton("Upgrade Rares", RunUpgradeBackpackRares),
+                        //CreateButton("Extract Powers", ExtractBackpackPowers),
+                        CreateButton("ItemList Check", btnClick_TestItemList),
+
+                        //CreateButton("Stash Test", StashItems),
+                        //CreateButton("Test Internals", TestInternals),
+
+                        CreateButton("TriggerTest", (o, s) =>
                         {
-                            CreateButton("Dump My Build", DumpBuildEventHandler),
-                            CreateButton("Drop Legendaries", DropLegendariesEventHandler),
-                            //CreateButton("Log Run Time", btnClick_LogRunTime),
-                            CreateButton("Open Log File", OpenLogFileHandler),
-                            CreateButton("Open Settings File", OpenSettingsFileHandler),
+                            var keys = RiftCoroutine.CurrentRiftKeyCount;
+                            s_logger.Information($"Have {keys} Rift Keys.");
+                        })
+                });
 
-                            //CreateButton("Log Town Actor", LogTownActor),
-                            //CreateButton("Test UIElement", TestUIElement),
-                            //CreateButton("Test SNOReader", TestSNOReader),
-                            //CreateButton("Dump Offsets", DumpOffsets),
-                            //CreateButton("Start Internals", StartInternals),
-                            //CreateButton("Stop Internals", StopInternals),
-                            //CreateButton("Clsoe Vendor", CloseVendorWindowTest),
+                    //CreateButton("Scan UIElement", btnClick_ScanUIElement)
+                    //CreateButton("Reload Item Rules", ReloadItemRulesEventHandler);
+                    //CreateButton("Show Cache", ShowCacheWindowEventHandler);
+                    //CreateButton("Open Radar", OpenRadarButtonHandler);
+                    //CreateButton("Start Progression", StartProgressionTestHandler);
+                    //CreateButton("Stop Progression", StopProgressionTestHandler);
+                    //CreateButton("Cache Test", CacheTestCacheEventHandler);
+                    //CreateButton("Special Test", btnClick_SpecialTestHandler);
+                    //CreateButton("1000 Rare => Magic", btnClick_MassConvertRareToMagic);
+                    //CreateButton("Move to Stash", btnClick_MoveToStash);
+                    //CreateButton("Move to Cube", btnClick_MoveToCube);
+                    //CreateButton("Rares => Legendary", btnClick_UpgradeRares);
+                    //CreateButton("Test1", btnClick_Test1);
+                    //CreateButton("Test2", btnClick_HijackTest);
 
-                            //CreateButton("Test", TestUIElement),
 
-                            //CreateButton("Upgrade Rares", RunUpgradeBackpackRares),
-                            //CreateButton("Extract Powers", ExtractBackpackPowers),
-                            CreateButton("ItemList Check", btnClick_TestItemList),
 
-                            //CreateButton("Stash Test", StashItems),
-                            //CreateButton("Test Internals", TestInternals),
-                        });
+                    _tabItem = new TabItem
+                    {
+                        Header = "Trinity",
+                        Content = _tabGrid
+                    };
 
-                //CreateButton("Scan UIElement", btnClick_ScanUIElement)
-                //CreateButton("Reload Item Rules", ReloadItemRulesEventHandler);
-                //CreateButton("Show Cache", ShowCacheWindowEventHandler);
-                //CreateButton("Open Radar", OpenRadarButtonHandler);
-                //CreateButton("Start Progression", StartProgressionTestHandler);
-                //CreateButton("Stop Progression", StopProgressionTestHandler);
-                //CreateButton("Cache Test", CacheTestCacheEventHandler);
-                //CreateButton("Special Test", btnClick_SpecialTestHandler);
-                //CreateButton("1000 Rare => Magic", btnClick_MassConvertRareToMagic);
-                //CreateButton("Move to Stash", btnClick_MoveToStash);
-                //CreateButton("Move to Cube", btnClick_MoveToCube);
-                //CreateButton("Rares => Legendary", btnClick_UpgradeRares);
-                //CreateButton("Test1", btnClick_Test1);
-                //CreateButton("Test2", btnClick_HijackTest);
+                    var tabs = mainWindow.FindName("tabControlMain") as TabControl;
+                    if (tabs == null)
+                        return;
 
-                _tabItem = new TabItem
-                {
-                    Header = "Trinity",
-                    Content = _tabGrid
-                };
-
-                var tabs = mainWindow.FindName("tabControlMain") as TabControl;
-                if (tabs == null)
-                    return;
-
-                tabs.Items.Add(_tabItem);
-            });
+                    tabs.Items.Add(_tabItem);
+                });
         }
 
         private static void OpenSettingsFileHandler(object sender, RoutedEventArgs e)
         {
-            string logFile = "";
+            var logFile = "";
 
             try
             {
@@ -180,12 +187,12 @@ namespace Trinity.UI
                 }
                 else
                 {
-                    Core.Logger.Error("Unable to open settings file {0} - file does not exist", logFile);
+                    s_logger.Error("Unable to open settings file {0} - file does not exist", logFile);
                 }
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error opening settings file: {0} {1}", logFile, ex.Message);
+                s_logger.Error(ex, "Error opening settings file: {0}", logFile);
             }
         }
 
@@ -229,7 +236,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                s_logger.Error(ex, "Exception.");
             }
         }
 
@@ -237,9 +244,9 @@ namespace Trinity.UI
         {
             try
             {
-                var dataContext = VisualizerViewModel.Instance;
+                VisualizerViewModel dataContext = VisualizerViewModel.Instance;
 
-                var window = UILoader.CreateNonModalWindow(
+                Window window = UILoader.CreateNonModalWindow(
                     "Visualizer\\Visualizer.xaml",
                     "Radar Visualizer",
                     dataContext,
@@ -254,7 +261,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error Opening Radar Window:" + ex);
+                s_logger.Error(ex, "Error Opening Radar Window.");
             }
         }
 
@@ -262,11 +269,11 @@ namespace Trinity.UI
         {
             try
             {
-                Core.Logger.Log("Bot {0} has been running for {1} hours {2} minutes and {3} seconds", Core.Player.Name, GameStats.Instance.RunTime.Hours, GameStats.Instance.RunTime.Minutes, GameStats.Instance.RunTime.Seconds);
+                s_logger.Information("Bot {0} has been running for {1} hours {2} minutes and {3} seconds", Core.Player.Name, GameStats.Instance.RunTime.Hours, GameStats.Instance.RunTime.Minutes, GameStats.Instance.RunTime.Seconds);
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception {0}", ex);
+                s_logger.Error(ex, "Exception.");
             }
         }
 
@@ -286,7 +293,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception {0}", ex);
+                s_logger.Error(ex, "Exception.");
             }
         }
 
@@ -297,12 +304,14 @@ namespace Trinity.UI
                 if (!BotMain.IsRunning)
                 {
                     //ActorManager.Start();
-                    TaskDispatcher.Start(ret => Components.Coroutines.Town.StashItems.Execute(), o => o == null || (RunStatus)o != RunStatus.Running);
+                    TaskDispatcher.Start(
+                        async ret => await TrinityTownRun.StashItems() != CoroutineResult.Running,
+                        o => o == null || (RunStatus)o != RunStatus.Running);
                 }
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error running StashItems: " + ex);
+                s_logger.Error(ex, "Error running StashItems.");
             }
         }
 
@@ -314,7 +323,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception {0}", ex);
+                s_logger.Error(ex, "Exception");
             }
         }
 
@@ -322,11 +331,11 @@ namespace Trinity.UI
         {
             try
             {
-                Core.Logger.Log("Finished Cache Test");
+                s_logger.Debug("Finished Cache Test");
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception {0}", ex);
+                s_logger.Error(ex, "Exception");
             }
         }
 
@@ -338,7 +347,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error Starting Rift Progression : " + ex);
+                s_logger.Error(ex, "Error Starting Rift Progression");
             }
         }
 
@@ -372,7 +381,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error Starting LazyCache: " + ex);
+                s_logger.Error(ex, "Error Starting LazyCache.");
             }
         }
 
@@ -462,7 +471,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error Starting LazyCache: " + ex);
+                s_logger.Error(ex, "Error Starting LazyCache.");
             }
         }
 
@@ -587,7 +596,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error Starting LazyCache: " + ex);
+                s_logger.Error(ex, "Error Starting LazyCache.");
             }
         }
 
@@ -742,18 +751,18 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                s_logger.Error(ex, "Exception during StartDataTestHandler.");
             }
         }
 
         private static void OpenLogFileHandler(object sender, RoutedEventArgs e)
         {
-            string logFile = "";
+            var logFile = "";
             try
             {
-                string exePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+                var exePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
-                int myPid = Process.GetCurrentProcess().Id;
+                var myPid = Process.GetCurrentProcess().Id;
                 DateTime startTime = Process.GetCurrentProcess().StartTime;
                 if (exePath != null)
                     logFile = Path.Combine(exePath, "Logs", myPid + " " + startTime.ToString("yyyy-MM-dd HH.mm") + ".txt");
@@ -762,12 +771,12 @@ namespace Trinity.UI
                     Process.Start(logFile);
                 else
                 {
-                    Core.Logger.Error("Unable to open log file {0} - file does not exist", logFile);
+                    s_logger.Error("Unable to open log file {0} - file does not exist", logFile);
                 }
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error opening log file: {0} {1}", logFile, ex.Message);
+                s_logger.Error(ex, "Error opening log file: {0}", logFile);
             }
         }
 
@@ -775,12 +784,12 @@ namespace Trinity.UI
 
         private static void LogTownActor(object sender, RoutedEventArgs e)
         {
-            string logFile = "";
+            var logFile = "";
             try
             {
                 using (ZetaDia.Memory.AcquireFrame())
                 {
-                    var nearestActor = ZetaDia.Actors.GetActorsOfType<DiaObject>(true)
+                    DiaObject nearestActor = ZetaDia.Actors.GetActorsOfType<DiaObject>(true)
                         .Where(a => a.IsFullyValid() && (a is DiaUnit || a is DiaGizmo) && a.CommonData.SummonedByACDId <= 0 &&
                         a.ACDId != ZetaDia.ActivePlayerACDId).OrderBy(a => a.Distance).FirstOrDefault();
 
@@ -789,7 +798,7 @@ namespace Trinity.UI
 
                     var internalName = NameRegex.Replace(nearestActor.Name, "");
 
-                    Core.Logger.Raw($@"
+                    s_logger.Verbose($@"
             public static TownActor {internalName} = new TownActor
             {{
                 Name = ""{internalName}"",
@@ -810,38 +819,38 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error in LogTownActor: {0} {1}", logFile, ex.Message);
+                s_logger.Error(ex, "Error in LogTownActor: {0}", logFile);
             }
         }
 
         private static void TestUIElement(object sender, RoutedEventArgs e)
         {
-            string logFile = "";
+            var logFile = "";
             try
             {
                 using (ZetaDia.Memory.AcquireFrame())
                 {
-                    var uiMapT = UXHelper.UIMapByType;
+                    ILookup<ControlType, UXControl> uiMapT = UXHelper.UIMapByType;
 
-                    var recipieRadios = uiMapT[ControlType.RecipeListRadioButton].Where(u => u.IsVisible);
+                    IEnumerable<UXControl> recipieRadios = uiMapT[ControlType.RecipeListRadioButton].Where(u => u.IsVisible);
 
-                    var text = uiMapT[ControlType.Text].Where(u => u.IsVisible);
+                    IEnumerable<UXControl> text = uiMapT[ControlType.Text].Where(u => u.IsVisible);
 
-                    var ibuttons = uiMapT[ControlType.ItemButton].Where(u => u.IsVisible);
+                    IEnumerable<UXControl> ibuttons = uiMapT[ControlType.ItemButton].Where(u => u.IsVisible);
 
-                    var hotbarButtons = uiMapT[ControlType.HotbarButton].Where(u => u.IsVisible);
+                    IEnumerable<UXControl> hotbarButtons = uiMapT[ControlType.HotbarButton].Where(u => u.IsVisible);
 
-                    var allVisible = UXHelper.UIMap.Where(u => u.Value.IsVisible);
+                    IEnumerable<KeyValuePair<ulong, UXControl>> allVisible = UXHelper.UIMap.Where(u => u.Value.IsVisible);
 
                     // [23194B50] Mouseover: 0xE062F8B5040F3076, Name: Root.NormalLayer.vendor_dialog_mainPage.tab_3
 
-                    var test = GameUI.GamePotion;
+                    UIElement test = GameUI.GamePotion;
 
-                    foreach (var el in UIElement.UIMap)
+                    foreach (UIElement el in UIElement.UIMap)
                     {
                         if (el.Name.ToLower().Contains("minimap"))
                         {
-                            var mapel = el;
+                            UIElement mapel = el;
                         }
                     }
 
@@ -914,7 +923,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error in TestUIElement: {0} {1}", logFile, ex.Message);
+                s_logger.Error(ex, "Error in TestUIElement: {0}", logFile);
             }
         }
 
@@ -978,7 +987,7 @@ namespace Trinity.UI
 
         private static void MonitorActors(DiaObject testunit, Dictionary<int, HashSet<ActorAttributeType>> unitAtts)
         {
-            var existingAtts = unitAtts.GetOrCreateValue(testunit.ACDId, new HashSet<ActorAttributeType>());
+            HashSet<ActorAttributeType> existingAtts = unitAtts.GetOrCreateValue(testunit.ACDId, new HashSet<ActorAttributeType>());
             var atts = Enum.GetValues(typeof(ActorAttributeType)).Cast<ActorAttributeType>().ToList();
             var annId = ZetaDia.Me.CommonData.AnnId;
             var acdId = ZetaDia.Me.ACDId;
@@ -988,7 +997,7 @@ namespace Trinity.UI
 
             //[TrinityPlugin 2.14.34] Unit FallenGrunt_A-69336 has MonsterAffix_IllusionistCast (PowerBuff0VisualEffectNone)
 
-            foreach (var att in atts)
+            foreach (ActorAttributeType att in atts)
             {
                 try
                 {
@@ -999,7 +1008,7 @@ namespace Trinity.UI
                     {
                         if (!existingAtts.Contains(att) || att.ToString().ToLower().Contains("time") || att.ToString().ToLower().Contains("tick"))
                         {
-                            Core.Logger.Log("Unit {0} ({4}) has gained {1} (i:{2} f:{3:00.00000})", testunit.Name, att.ToString(), attiResult, attfResult, testunit.ActorSnoId);
+                            s_logger.Information("Unit {0} ({4}) has gained {1} (i:{2} f:{3:00.00000})", testunit.Name, att.ToString(), attiResult, attfResult, testunit.ActorSnoId);
                             existingAtts.Add(att);
                         }
                     }
@@ -1014,7 +1023,7 @@ namespace Trinity.UI
 
                         if (existingAtts.Contains(att))
                         {
-                            Core.Logger.Log("Unit {0} ({4}) has lost {1} (i:{2} f:{3:00.00000})", testunit.Name, att.ToString(), attiResult, attfResult, testunit.ActorSnoId);
+                            s_logger.Information("Unit {0} ({4}) has lost {1} (i:{2} f:{3:00.00000})", testunit.Name, att.ToString(), attiResult, attfResult, testunit.ActorSnoId);
                             existingAtts.Remove(att);
                         }
                     }
@@ -1035,15 +1044,15 @@ namespace Trinity.UI
                 SNOPower.Monk_ExplodingPalm
             };
 
-            foreach (var power in allpowers)
+            foreach (SNOPower power in allpowers)
             {
-                foreach (var buffattr in allBuffAttributes)
+                foreach (ActorAttributeType buffattr in allBuffAttributes)
                 {
                     try
                     {
                         if (testunit.CommonData.GetAttribute<int>(((int)power << 12) + ((int)buffattr & 0xFFF)) == 1)
                         {
-                            Core.Logger.Log("Unit {0} has {1} ({2})", testunit.Name, power, buffattr);
+                            s_logger.Information("Unit {0} has {1} ({2})", testunit.Name, power, buffattr);
                         }
                     }
                     catch (Exception)
@@ -1054,16 +1063,16 @@ namespace Trinity.UI
 
             var allTimeAttributes = allAttributes.Where(a => a.ToString().ToLower().Contains("time") || a.ToString().ToLower().Contains("tick")).ToList();
 
-            foreach (var power in allpowers)
+            foreach (SNOPower power in allpowers)
             {
-                foreach (var timeAttr in allTimeAttributes)
+                foreach (ActorAttributeType timeAttr in allTimeAttributes)
                 {
                     try
                     {
                         var result = testunit.CommonData.GetAttribute<int>((int)timeAttr & ((1 << 12) - 1) | ((int)power << 12));
                         if (result > 1)
                         {
-                            Core.Logger.Log("Unit {0} has {1} ({2}) Value={3}", testunit.Name, power, timeAttr, result);
+                            s_logger.Information("Unit {0} has {1} ({2}) Value={3}", testunit.Name, power, timeAttr, result);
                         }
                     }
                     catch (Exception)
@@ -1103,7 +1112,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error Starting LazyCache: " + ex);
+                s_logger.Error(ex, "Error Starting LazyCache.");
             }
         }
 
@@ -1115,7 +1124,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error Starting LazyCache: " + ex);
+                s_logger.Error(ex, "Error Starting LazyCache.");
             }
         }
 
@@ -1135,15 +1144,15 @@ namespace Trinity.UI
         {
             try
             {
-                Core.Logger.Log("Starting");
+                s_logger.Information("Starting");
 
-                CoroutineHelper.RunCoroutine(() => CubeRaresToLegendary.Execute());
+                CoroutineHelper.RunCoroutine(() => TrinityTownRun.TransmuteRareToLegendary());
 
-                Core.Logger.Log("Finished");
+                s_logger.Information("Finished");
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                s_logger.Error(ex, "Exception");
             }
         }
 
@@ -1153,13 +1162,12 @@ namespace Trinity.UI
             {
                 var alltypes = Enum.GetValues(typeof(ItemSelectionType)).Cast<ItemSelectionType>().ToList();
 
-                CoroutineHelper.RunCoroutine(
-                    () => CubeRaresToLegendary.Execute(alltypes),
-                    result => !CubeRaresToLegendary.CanRun());
+                CoroutineHelper.RunCoroutine(async () =>
+                    await TrinityTownRun.TransmuteRareToLegendary(alltypes) != CoroutineResult.Running);
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                s_logger.Error(ex, "Exception");
             }
         }
 
@@ -1167,11 +1175,12 @@ namespace Trinity.UI
         {
             try
             {
-                CoroutineHelper.RunCoroutine(ExtractLegendaryPowers.Execute);
+                CoroutineHelper.RunCoroutine(async () =>
+                    await TrinityTownRun.ExtractLegendaryPowers() != CoroutineResult.Running);
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                s_logger.Error(ex, "Exception");
             }
         }
 
@@ -1179,11 +1188,12 @@ namespace Trinity.UI
         {
             try
             {
-                CoroutineHelper.RunCoroutine(ExtractLegendaryPowers.ExtractAllBackpack);
+                CoroutineHelper.RunCoroutine(async () =>
+                    await TrinityTownRun.ExtractAllBackpack() != CoroutineResult.Running);
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                s_logger.Error(ex, "Exception.");
             }
         }
 
@@ -1243,12 +1253,13 @@ namespace Trinity.UI
         {
             try
             {
-                Core.Logger.Log("Starting Conversion of Backpack to Magic Dust.");
-                TaskDispatcher.Start(ret => ConvertMaterials.Execute(CurrencyType.ArcaneDust));
+                s_logger.Information("Starting Conversion of Backpack to Magic Dust.");
+                TaskDispatcher.Start(async ret =>
+                    await TrinityTownRun.TransmuteMaterials(CurrencyType.ArcaneDust) != CoroutineResult.Running);
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                s_logger.Error(ex, "Exception");
             }
         }
 
@@ -1256,12 +1267,13 @@ namespace Trinity.UI
         {
             try
             {
-                Core.Logger.Log("Starting Conversion of Backpack to Reusable Parts.");
-                TaskDispatcher.Start(ret => ConvertMaterials.Execute(CurrencyType.ReusableParts));
+                s_logger.Information("Starting Conversion of Backpack to Reusable Parts.");
+                TaskDispatcher.Start(async ret =>
+                    await TrinityTownRun.TransmuteMaterials(CurrencyType.ReusableParts) != CoroutineResult.Running);
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                s_logger.Error(ex, "Exception.");
             }
         }
 
@@ -1269,12 +1281,13 @@ namespace Trinity.UI
         {
             try
             {
-                Core.Logger.Log("Starting Conversion of Backpack to Veiled Crystals.");
-                TaskDispatcher.Start(ret => ConvertMaterials.Execute(CurrencyType.VeiledCrystal));
+                s_logger.Information("Starting Conversion of Backpack to Veiled Crystals.");
+                TaskDispatcher.Start(async ret =>
+                    await TrinityTownRun.TransmuteMaterials(CurrencyType.VeiledCrystal) != CoroutineResult.Running);
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Exception: " + ex);
+                s_logger.Error(ex, "Exception.");
             }
         }
 
@@ -1319,7 +1332,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error btnClick_ScanUIElement:" + ex);
+                s_logger.Error(ex, "Error btnClick_ScanUIElement");
             }
         }
 
@@ -1327,12 +1340,12 @@ namespace Trinity.UI
         {
             try
             {
-                var configWindow = UILoader.GetDisplayWindow();
+                Window configWindow = UILoader.GetDisplayWindow();
                 configWindow.ShowDialog();
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error showing Configuration from TabUI:" + ex);
+                s_logger.Error(ex, "Error showing Configuration from TabUI.");
             }
         }
 
@@ -1344,7 +1357,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("DumpBuildEventHandler: " + ex);
+                s_logger.Error(ex, "DumpBuildEventHandler");
             }
         }
 
@@ -1356,7 +1369,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error logging new items:" + ex);
+                s_logger.Error(ex, "Error logging new items.");
             }
         }
 
@@ -1368,7 +1381,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error sorting backpack:" + ex);
+                s_logger.Error(ex, "Error sorting backpack.");
             }
         }
 
@@ -1378,15 +1391,21 @@ namespace Trinity.UI
             {
                 using (ZetaDia.Memory.AcquireFrame())
                 {
-                    InventoryManager.Backpack.Where(i => i.ItemQualityLevel == ItemQuality.Legendary).ForEach(i => i.Drop());
+                    InventoryManager.Backpack
+                        .Where(i => i.ItemQualityLevel == ItemQuality.Legendary)
+                        .ForEach(i => i.Drop());
 
-                    if (BotMain.IsRunning && !BotMain.IsPausedForStateExecution)
+                    if (BotMain.IsRunning &&
+                        !BotMain.IsPausedForStateExecution)
+                    {
+                        // TODO: Why should the bot pause here...?
                         BotMain.PauseFor(TimeSpan.FromSeconds(2));
+                    }
                 }
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error dropping legendaries:" + ex);
+                s_logger.Error(ex, "Error dropping legendaries.");
             }
         }
 
@@ -1394,14 +1413,14 @@ namespace Trinity.UI
         {
             try
             {
-                Core.Logger.Log("This must be started with stash open.");
-                Core.Logger.Warn("Please wait - this may take up to 30 seconds before starting.");
+                s_logger.Information("This must be started with stash open.");
+                s_logger.Warning("Please wait - this may take up to 30 seconds before starting.");
 
                 ItemSort.SortStash();
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error dropping legendaries:" + ex);
+                s_logger.Error(ex, "Error dropping legendaries");
             }
         }
 
@@ -1409,13 +1428,13 @@ namespace Trinity.UI
         {
             try
             {
-                TaskDispatcher.Start(ret => Components.Coroutines.Town.StashItems.StackCraftingMaterials());
+                TaskDispatcher.Start(async ret => !await TrinityTownRun.StackCraftingMaterials());
 
                 ItemSort.SortStash();
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error dropping legendaries:" + ex);
+                s_logger.Error(ex, "Error dropping legendaries");
             }
         }
 
@@ -1423,13 +1442,14 @@ namespace Trinity.UI
         {
             try
             {
-                TaskDispatcher.Start(ret => Components.Coroutines.Town.StashItems.Execute());
+                TaskDispatcher.Start(async ret =>
+                    await TrinityTownRun.StashItems() != CoroutineResult.Running);
 
                 ItemSort.SortStash();
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error dropping legendaries:" + ex);
+                s_logger.Error(ex, "Error dropping legendaries");
             }
         }
 
@@ -1437,7 +1457,7 @@ namespace Trinity.UI
         {
             try
             {
-                Core.Logger.Log("This feature has been disabled");
+                s_logger.Information("This feature has been disabled");
                 return;
 
                 //var result = MessageBox.Show("Are you sure? This may remove and salvage/sell items from your stash! Permanently!", "Clean Stash Confirmation",
@@ -1450,7 +1470,7 @@ namespace Trinity.UI
             }
             catch (Exception ex)
             {
-                Core.Logger.Error("Error Cleaning Stash:" + ex);
+                s_logger.Error(ex, "Error Cleaning Stash.");
             }
         }
 
@@ -1461,11 +1481,14 @@ namespace Trinity.UI
             Application.Current.Dispatcher.Invoke(
                 () =>
                 {
-                    var mainWindow = Application.Current.MainWindow;
-                    var tabs = mainWindow.FindName("tabControlMain") as TabControl;
-                    if (tabs == null)
-                        return;
-                    tabs.Items.Remove(_tabItem);
+                    Window mainWindow = Application.Current.MainWindow;
+                    if (mainWindow != null)
+                    {
+                        var tabs = mainWindow.FindName("tabControlMain") as TabControl;
+                        if (tabs == null)
+                            return;
+                        tabs.Items.Remove(_tabItem);
+                    }
                 }
                 );
         }
@@ -1507,7 +1530,7 @@ namespace Trinity.UI
             var group = new UniformGrid
             {
                 Columns = 1,
-                Background = BackgroundBrush,
+                Background = s_backgroundBrush,
                 Height = 160,
                 Margin = new Thickness(10, 10, 10, 10),
             };
@@ -1515,7 +1538,7 @@ namespace Trinity.UI
             if (!string.IsNullOrEmpty(title))
                 group.Children.Add(CreateTitle(title));
 
-            foreach (var item in items)
+            foreach (Control item in items)
             {
                 if (item != null)
                     group.Children.Add(item);
@@ -1524,7 +1547,7 @@ namespace Trinity.UI
             _tabGrid.Children.Add(group);
         }
 
-        private static readonly SolidColorBrush BackgroundBrush = new SolidColorBrush(Color.FromRgb(67, 67, 67));
+        private static readonly SolidColorBrush s_backgroundBrush = new SolidColorBrush(Color.FromRgb(67, 67, 67));
 
         //private static Dictionary<int, AttributeItem> _lastAtts;
         //private static int _lastAnn;
@@ -1534,7 +1557,7 @@ namespace Trinity.UI
         {
             var group = new StackPanel
             {
-                Background = BackgroundBrush,
+                Background = s_backgroundBrush,
                 Height = 170,
                 Margin = new Thickness(7, -13, 0, 0),
                 ClipToBounds = false
@@ -1543,7 +1566,7 @@ namespace Trinity.UI
             if (!string.IsNullOrEmpty(title))
                 group.Children.Add(CreateTitle(title));
 
-            foreach (var item in items)
+            foreach (Control item in items)
             {
                 if (item != null)
                     group.Children.Add(item);

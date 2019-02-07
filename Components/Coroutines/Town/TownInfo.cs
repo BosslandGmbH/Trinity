@@ -33,7 +33,7 @@ namespace Trinity.Components.Coroutines.Town
             ServiceType.Peddler,
         };
 
-        public static IEnumerable<TownActor> CurrentAct => TownActors.Where(i => i.LevelAreaId == ZetaDia.CurrentLevelAreaSnoId);
+        public static IEnumerable<TownActor> CurrentAct => TownActors.Where(i => i.LevelAreaId == (SNOLevelArea)ZetaDia.CurrentLevelAreaSnoId);
 
         public static TownActor NearestMerchant => CurrentAct.Where(i => VendorServiceTypes.Contains(i.ServiceType)).OrderBy(i => i.Distance).FirstOrDefault();
 
@@ -73,17 +73,17 @@ namespace Trinity.Components.Coroutines.Town
             get
             {
                 var vectors = new List<Vector3>();
-                var levelAreaId = ZetaDia.CurrentLevelAreaSnoId;
+                SNOLevelArea levelAreaId = ZetaDia.CurrentLevelAreaSnoId;
                 switch (levelAreaId)
                 {
-                    case 19947: // Campaign A1 Hub
+                    case SNOLevelArea.A1_trOUT_NewTristram: // Campaign A1 Hub
                         vectors.Add(new Vector3(2984.255f, 2819.564f, 24.04533f));
                         vectors.Add(new Vector3(2961.75f, 2814.551f, 24.04533f));
                         vectors.Add(new Vector3(2999.527f, 2840.646f, 24.04532f));
                         vectors.Add(new Vector3(2962.378f, 2852.275f, 24.04533f));
                         break;
 
-                    case 332339: // OpenWorld A1 Hub
+                    case SNOLevelArea.A1_Tristram_Adventure_Mode_Hub: // OpenWorld A1 Hub
                         vectors.Add(new Vector3(361.1273f, 520.1647f, 24.04533f));
                         vectors.Add(new Vector3(391.9926f, 528.0787f, 24.04533f));
                         vectors.Add(new Vector3(373.4539f, 561.2624f, 24.01137f));
@@ -92,14 +92,14 @@ namespace Trinity.Components.Coroutines.Town
                         vectors.Add(new Vector3(366.5748f, 568.8141f, 24.04532f));
                         break;
 
-                    case 168314: // A2 Hub
+                    case SNOLevelArea.A2_caOut_CT_RefugeeCamp_Hub: // A2 Hub
                         vectors.Add(new Vector3(297.4033f, 299.373f, 0.1000002f));
                         vectors.Add(new Vector3(301.3916f, 238.0036f, 0.1f));
                         vectors.Add(new Vector3(342.6914f, 245.5927f, -0.08884031f));
                         vectors.Add(new Vector3(339.4829f, 269.1677f, 0.1000038f));
                         break;
 
-                    case 92945: // A3/A4 Hub
+                    case SNOLevelArea.A3_Dun_Keep_Hub: // A3/A4 Hub
                         vectors.Add(new Vector3(404.9528f, 376.1343f, 0.3325971f));
                         vectors.Add(new Vector3(375.729f, 346.2118f, 0.100001f));
                         vectors.Add(new Vector3(344.1237f, 382.0998f, 0.4986931f));
@@ -113,7 +113,7 @@ namespace Trinity.Components.Coroutines.Town
                         vectors.Add(new Vector3(446.3181f, 351.8981f, 0.1000005f));
                         break;
 
-                    case 270011: // A5 Hub
+                    case SNOLevelArea.x1_Westm_Hub: // A5 Hub
                         vectors.Add(new Vector3(569.0485f, 795.1511f, 2.659489f));
                         vectors.Add(new Vector3(551.3872f, 804.597f, 2.659653f));
                         vectors.Add(new Vector3(597.4126f, 765.3945f, 2.745319f));
@@ -132,25 +132,25 @@ namespace Trinity.Components.Coroutines.Town
             }
         }
 
-        public static Dictionary<GambleSlotTypes, int> MysterySlotTypeAndId = new Dictionary<GambleSlotTypes, int>
+        public static Dictionary<GambleSlotTypes, SNOActor> MysterySlotTypeAndId = new Dictionary<GambleSlotTypes, SNOActor>
         {
-            {GambleSlotTypes.OneHanded, (int)SNOActor.PH_1HWeapon},
-            {GambleSlotTypes.TwoHanded, (int)SNOActor.PH_2HWeapon},
-            {GambleSlotTypes.Quiver, (int)SNOActor.PH_Quiver},
-            {GambleSlotTypes.Orb, (int)SNOActor.PH_Orb},
-            {GambleSlotTypes.Mojo, (int)SNOActor.PH_Mojo},
-            {GambleSlotTypes.Helm, (int)SNOActor.PH_Helm},
-            {GambleSlotTypes.Gloves, (int)SNOActor.PH_Gloves},
-            {GambleSlotTypes.Boots, (int)SNOActor.PH_Boots},
-            {GambleSlotTypes.Chest, (int)SNOActor.PH_ChestArmor},
-            {GambleSlotTypes.Belt, (int)SNOActor.PH_Belt},
-            {GambleSlotTypes.Pants, (int)SNOActor.PH_Pants},
-            {GambleSlotTypes.Bracers, (int)SNOActor.PH_Bracers},
-            {GambleSlotTypes.Shield, (int)SNOActor.PH_Shield},
-            {GambleSlotTypes.Ring, (int)SNOActor.PH_Ring},
-            {GambleSlotTypes.Amulet,(int)SNOActor.PH_Amulet},
-            {GambleSlotTypes.Shoulder, (int)SNOActor.PH_Shoulders},
-            {GambleSlotTypes.Phylactery, (int)SNOActor.PH_Phylactery}
+            {GambleSlotTypes.OneHanded, SNOActor.PH_1HWeapon},
+            {GambleSlotTypes.TwoHanded, SNOActor.PH_2HWeapon},
+            {GambleSlotTypes.Quiver, SNOActor.PH_Quiver},
+            {GambleSlotTypes.Orb, SNOActor.PH_Orb},
+            {GambleSlotTypes.Mojo, SNOActor.PH_Mojo},
+            {GambleSlotTypes.Helm, SNOActor.PH_Helm},
+            {GambleSlotTypes.Gloves, SNOActor.PH_Gloves},
+            {GambleSlotTypes.Boots, SNOActor.PH_Boots},
+            {GambleSlotTypes.Chest, SNOActor.PH_ChestArmor},
+            {GambleSlotTypes.Belt, SNOActor.PH_Belt},
+            {GambleSlotTypes.Pants, SNOActor.PH_Pants},
+            {GambleSlotTypes.Bracers, SNOActor.PH_Bracers},
+            {GambleSlotTypes.Shield, SNOActor.PH_Shield},
+            {GambleSlotTypes.Ring, SNOActor.PH_Ring},
+            {GambleSlotTypes.Amulet,SNOActor.PH_Amulet},
+            {GambleSlotTypes.Shoulder, SNOActor.PH_Shoulders},
+            {GambleSlotTypes.Phylactery, SNOActor.PH_Phylactery}
         };
 
         public static Dictionary<GambleSlotTypes, int> MysterySlotTypeAndPrice = new Dictionary<GambleSlotTypes, int>

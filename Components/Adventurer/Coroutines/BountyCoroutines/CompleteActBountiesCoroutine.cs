@@ -17,7 +17,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 {
     public class CompleteActBountiesCoroutine
     {
-        private const int TYRAEL = 114622;
+        private static SNOActor TYRAEL = SNOActor.Tyrael_Heaven;
 
         private static readonly Dictionary<Act, Vector3> TyraelPositions = new Dictionary<Act, Vector3>
         {
@@ -176,7 +176,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
         {
             if (await _interactionCoroutine.GetCoroutine())
             {
-                if (!ZetaDia.Storage.Quests.AllQuests.Any(q => q.Quest == BountyHelpers.ActBountyFinishingQuests[_act] && q.State == QuestState.InProgress))
+                if (!ZetaDia.Storage.Quests.AllQuests.Any(q => q.QuestSNO == BountyHelpers.ActBountyFinishingQuests[_act] && q.State == QuestState.InProgress))
                 {
                     State = States.Completed;
                     return false;

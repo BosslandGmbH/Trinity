@@ -15,6 +15,7 @@ namespace Trinity.Framework.Avoidance.Structures
         public Vector3 StartPosition { get; set; }
         public bool IsImmune { get; set; }
         public bool IsAllowed => Settings.IsEnabled && Core.Player.CurrentHealthPct * 100 <= Settings.HealthPct;
+        public bool IsExpired => CreationTime.AddSeconds(10) > DateTime.UtcNow;
 
         public override string ToString()
             => $"{GetType().Name}: {Definition.Name} Ignored={!IsAllowed} Settings({Settings.HealthPct}/{Settings.DistanceMultiplier}) " +

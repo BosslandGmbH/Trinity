@@ -798,16 +798,13 @@ namespace Trinity.Framework.Reference
         /// <summary>
         /// All items that are part of a set, as ActorSnoId
         /// </summary>        
-        public static HashSet<int> SetItemIds
+        public static HashSet<SNOActor> SetItemIds
         {
             get
             {
-                return (_setItemIds = new HashSet<int>(SetItems.Select(i => i.Id)));
+                return (_setItemIds = new HashSet<SNOActor>(SetItems.Select(i => i.Id)));
             }
         }
-        private static HashSet<int> _setItemIds;
-
-
+        private static HashSet<SNOActor> _setItemIds;
     }
-
 }

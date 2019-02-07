@@ -1,5 +1,6 @@
 ﻿using System;
 using Zeta.Common;
+using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Game.Exploration
 {
@@ -27,10 +28,10 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         //public bool IsVisited { get { return _explorationNode.IsVisited; } }
         //public bool IsIgnored { get { return _explorationNode.IsVisited; } }
-        public int LevelAreaId => _scene.LevelAreaId;
+        public SNOLevelArea LevelAreaId => _scene.LevelAreaId;
 
         //public float Distance2DSqr { get { return NavigableCenter2D.DistanceSqr(AdvDia.MyPosition.ToVector2()); } }
-        public int DynamicWorldId => _scene.DynamicWorldId;
+        public SNOWorld DynamicWorldId => _scene.DynamicWorldId;
 
         public NodeFlags NodeFlags { get; set; }
 

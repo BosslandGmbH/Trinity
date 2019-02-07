@@ -32,7 +32,7 @@ namespace Trinity.Modules
             public int TotalCastTimeMs;
             public DateTime StartTime;
             public Vector3 StartPosition;
-            public int WorldId;
+            public SNOWorld WorldId;
             public SNOPower Power;
             public int DurationMs;
             public CastResult LastResult;

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Trinity.Components.Combat.Resources;
 using Trinity.Components.Coroutines.Town;
 using Trinity.DbProvider;
+using Zeta.Bot.Coroutines;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
@@ -23,7 +24,7 @@ namespace Trinity.Components.Coroutines
         public static DateTime ClearStarted = DateTime.MinValue;
         public static int ClearTimeSeconds = 10;
         public static bool IsClearing;
-        public static int StartWorld;
+        public static SNOWorld StartWorld;
 
         static ClearArea()
         {
@@ -65,7 +66,7 @@ namespace Trinity.Components.Coroutines
             if (noMonsters)
             {
                 Core.Logger.Debug($"No Monsters nearby, go back to portal position. Distance={StartPosition.Distance(ZetaDia.Me.Position)}");
-                await MoveTo.Execute(StartPosition, "Town Portal Position", 15f, () => ZetaDia.Globals.WorldSnoId != StartWorld || Navigator.StuckHandler.IsStuck || PlayerMover.IsBlocked);
+                await CommonCoroutines.MoveAndStop(StartPosition, 15f, "Town Portal Position");
                 Stop();
                 return false;
             }
@@ -74,7 +75,7 @@ namespace Trinity.Components.Coroutines
             if (clearFinished)
             {
                 Core.Logger.Debug("Clear timer finished, go back to portal position. Distance={StartPosition.Distance(ZetaDia.Me.Position)}");
-                await MoveTo.Execute(StartPosition, "Town Portal Position", 15f, () => ZetaDia.Globals.WorldSnoId != StartWorld || Navigator.StuckHandler.IsStuck || PlayerMover.IsBlocked);
+                await CommonCoroutines.MoveAndStop(StartPosition, 15f, "Town Portal Position");
                 Stop();
                 return false;
             }

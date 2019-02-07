@@ -4,6 +4,7 @@ using Trinity.Framework;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Coroutines;
+using Zeta.Bot.Coroutines;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
@@ -13,10 +14,10 @@ namespace Trinity.Components.Adventurer.Coroutines
     public sealed class UsePortalCoroutine : ICoroutine
     {
         private static UsePortalCoroutine _usePortalCoroutine;
-        private static int _usePortalActorSNO;
-        private static int _usePortalSourceWorldDynamicId;
+        private static SNOActor _usePortalActorSNO;
+        private static SNOWorld _usePortalSourceWorldDynamicId;
 
-        public static async Task<bool> UsePortal(int actorSNO, int sourceWorldDynamicId)
+        public static async Task<bool> UsePortal(SNOActor actorSNO, SNOWorld sourceWorldDynamicId)
         {
             if (_usePortalCoroutine == null || _usePortalActorSNO != actorSNO || _usePortalSourceWorldDynamicId != sourceWorldDynamicId)
             {
@@ -61,10 +62,10 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         #endregion State
 
-        private int _actorId;
-        private int _sourceWorldDynamicId;
+        private SNOActor _actorId;
+        private SNOWorld _sourceWorldDynamicId;
 
-        private UsePortalCoroutine(int actorId, int sourceWorldDynamicId)
+        private UsePortalCoroutine(SNOActor actorId, SNOWorld sourceWorldDynamicId)
         {
             _actorId = actorId;
             _sourceWorldDynamicId = sourceWorldDynamicId;

@@ -8,12 +8,11 @@ using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 
-
 namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
 {
     public static class DeathGates
     {
-        public static Dictionary<int, DeathGateScene> SceneDefs = new Dictionary<int, DeathGateScene>();
+        public static Dictionary<SNOScene, DeathGateScene> SceneDefs = new Dictionary<SNOScene, DeathGateScene>();
         private static readonly Dictionary<string, DeathGateScene> _scenes = new Dictionary<string, DeathGateScene>();
 
         static DeathGates()
@@ -23,10 +22,10 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
             // Y axis increases from top left to bottom right.
             // Scene size of 240/240
 
-            SceneDefs.Add(464285, new DeathGateScene
+            SceneDefs.Add(SNOScene.P6_Lost_Souls_x1_fortress_EW_05_soul_well, new DeathGateScene
             {
                 Name = "P6_Lost_Souls_x1_fortress_EW_05_soul_well",
-                SnoId = 464285,
+                SnoId = SNOScene.P6_Lost_Souls_x1_fortress_EW_05_soul_well,
                 RelativeEnterPosition = new Vector3(186.25f, 76.25f, -74.9f),
                 RelativeExitPosition = new Vector3(181.25f, 8.75f, -94.9f),
                 Type = DeathGateType.ExitSequence,
@@ -36,10 +35,10 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 }
             });
 
-            SceneDefs.Add(338627, new DeathGateScene
+            SceneDefs.Add(SNOScene.x1_fortress_island_NW_01, new DeathGateScene
             {
                 Name = "x1_fortress_island_NW_01",
-                SnoId = 338627,
+                SnoId = SNOScene.x1_fortress_island_NW_01,
                 RelativeEnterPosition = new Vector3(87.62366f, 119.2921f, 20.28859f),
                 RelativeExitPosition = new Vector3(92.89557f, 182.072f, 10.28859f),
                 Type = DeathGateType.ExitSequence,
@@ -49,10 +48,10 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 }
             });
 
-            SceneDefs.Add(345345, new DeathGateScene
+            SceneDefs.Add(SNOScene.x1_fortress_NE_05_soul_well, new DeathGateScene
             {
                 Name = "x1_fortress_NE_05_soul_well",
-                SnoId = 345345,
+                SnoId = SNOScene.x1_fortress_NE_05_soul_well,
                 RelativeEnterPosition = new Vector3(13.75f, 201.25f, 0.09999714f),
                 RelativeExitPosition = new Vector3(97.70514f, 195.0026f, 20.1f),
                 Type = DeathGateType.EnterSequence,
@@ -62,10 +61,10 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 }
             });
 
-            SceneDefs.Add(348859, new DeathGateScene
+            SceneDefs.Add(SNOScene.x1_fortress_soul_grinder_A_W01_N01, new DeathGateScene
             {
                 Name = "x1_fortress_soul_grinder_A_W01_N01",
-                SnoId = 348859,
+                SnoId = SNOScene.x1_fortress_soul_grinder_A_W01_N01,
                 RelativeEnterPosition = new Vector3(11.25f, 198.75f, 0.1f),
                 RelativeExitPosition = new Vector3(87.75464f, 202.8271f, 0.1f),
                 Type = DeathGateType.EnterSequence,
@@ -75,10 +74,10 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 }
             });
 
-            SceneDefs.Add(338171, new DeathGateScene
+            SceneDefs.Add(SNOScene.x1_fortress_island_EW_01, new DeathGateScene
             {
                 Name = "x1_fortress_island_EW_01",
-                SnoId = 338171,
+                SnoId = SNOScene.x1_fortress_island_EW_01,
                 RelativeEnterPosition = new Vector3(87.11646f, 134.7203f, 0.100001f),
                 RelativeExitPosition = new Vector3(42.62024f, 103.5811f, -9.899999f),
                 Type = DeathGateType.ExitSequence,
@@ -88,10 +87,10 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 }
             });
 
-            SceneDefs.Add(338614, new DeathGateScene
+            SceneDefs.Add(SNOScene.x1_fortress_island_NS_01, new DeathGateScene
             {
                 Name = "x1_fortress_island_NS_01",
-                SnoId = 338614,
+                SnoId = SNOScene.x1_fortress_island_NS_01,
                 RelativeEnterPosition = new Vector3(158.75f, 151.25f, 10.28859f),
                 RelativeExitPosition = new Vector3(96.25f, 118.75f, -9.899998f),
                 Type = DeathGateType.ExitSequence,
@@ -105,10 +104,10 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
             //Scene: x1_fortress_island_NE_01, SnoId: 338583,
             //LevelArea: x1_fortress_level_02_islands, Id: 459863
 
-            SceneDefs.Add(338583, new DeathGateScene
+            SceneDefs.Add(SNOScene.x1_fortress_island_NE_01, new DeathGateScene
             {
                 Name = "x1_fortress_island_NE_01",
-                SnoId = 338583,
+                SnoId = SNOScene.x1_fortress_island_NE_01,
                 RelativeEnterPosition = new Vector3(163.245f, 109.2724f, 10.1f),
                 RelativeExitPosition = new Vector3(104.1263f, 79.61856f, -9.9f),
                 Type = DeathGateType.ExitSequence,
@@ -122,10 +121,10 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
             //Scene: x1_fortress_island_NW_01_Waypoint, SnoId: 459857,
             //LevelArea: x1_fortress_level_02_islands, Id: 459863
 
-            SceneDefs.Add(459857, new DeathGateScene
+            SceneDefs.Add(SNOScene.x1_fortress_island_NW_01_Waypoint, new DeathGateScene
             {
                 Name = "x1_fortress_island_NW_01_Waypoint",
-                SnoId = 459857,
+                SnoId = SNOScene.x1_fortress_island_NW_01_Waypoint,
                 RelativeEnterPosition = new Vector3(90.64246f, 180.9426f, 10.28859f),
                 RelativeExitPosition = new Vector3(87.58826f, 118.2887f, 20.28859f),
                 Type = DeathGateType.ExitSequence,
@@ -135,10 +134,10 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 }
             });
 
-            SceneDefs.Add(338652, new DeathGateScene
+            SceneDefs.Add(SNOScene.x1_fortress_island_SW_01, new DeathGateScene
             {
                 Name = "x1_fortress_island_SW_01",
-                SnoId = 338652,
+                SnoId = SNOScene.x1_fortress_island_SW_01,
                 RelativeEnterPosition = new Vector3(191.8892f, 162.4253f, 0.1f),
                 RelativeExitPosition = new Vector3(141.25f, 91.25f, -9.9f),
                 Type = DeathGateType.ExitSequence,
@@ -148,19 +147,19 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 }
             });
 
-            SceneDefs.Add(361790, new DeathGateScene
+            SceneDefs.Add(SNOScene.x1_fortress_island_NS_02, new DeathGateScene
             {
                 Name = "x1_fortress_island_NS_02",
-                SnoId = 361790,
+                SnoId = SNOScene.x1_fortress_island_NS_02,
                 RelativeEnterPosition = new Vector3(111.6139f, 55.86285f, -9.900001f),
                 RelativeExitPosition = new Vector3(62.54431f, 57.38367f, 10.28859f),
                 Type = DeathGateType.ExitSequence
             });
 
-            SceneDefs.Add(360993, new DeathGateScene
+            SceneDefs.Add(SNOScene.x1_fortress_island_EW_02, new DeathGateScene
             {
                 Name = "x1_fortress_island_EW_02",
-                SnoId = 360993,
+                SnoId = SNOScene.x1_fortress_island_EW_02,
                 RelativeEnterPosition = new Vector3(90.86368f, 86.26465f, 10.1f),
                 RelativeExitPosition = new Vector3(148.1292f, 107.3582f, 10.1f),
                 Type = DeathGateType.ExitSequence,

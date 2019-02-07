@@ -1,6 +1,6 @@
 using System;
-using Trinity.Framework.Helpers;
 using System.Collections.Generic;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Zeta.Common;
 using Zeta.Game;
@@ -15,31 +15,34 @@ namespace Trinity.Framework.Reference
     /// </summary>
     internal class GameData
     {
-        public const int PlayerHeadstoneSNO = 4860;
+        public const SNOActor PlayerHeadstoneSNO = SNOActor.PlayerHeadstone;
 
         public const int RiftTrialLevelAreaId = 405915;
 
         public const int WallerSNO = 226808;
 
 
-        public static HashSet<int> NecroCorpseSnoIds = new HashSet<int>
+        public static HashSet<SNOActor> NecroCorpseSnoIds = new HashSet<SNOActor>
         {
-            454066, //P6_Necro_Corpse_Flesh
+            SNOActor.P6_Necro_Corpse_Flesh
         };
-            
+
         /// <summary>
         /// Some questing sequences have odd line of sight issues around stairs
         /// Areas listed here should have the bot move onto the same ZDiff as target
         /// Before casting spells.
         /// </summary>
-        public static HashSet<int> ForceSameZDiffSceneSnoIds = new HashSet<int>
+        public static HashSet<SNOScene> ForceSameZDiffSceneSnoIds = new HashSet<SNOScene>
         {
             //World: x1_Heaven_Pandemonium_Portal, Id: 339160, AnnId: 2000355341, IsGenerated: False
             //Scene: x1_Heaven_Pandemonium_Portal_E03_S03, SnoId: 339214,
             //LevelArea: x1_Heaven_Pandemonium_Portal, Id: 339468
             //Quest: x1_ToHeaven: The Pandemonium Gate (263851) MainQuest Step: GoGate (15)
             //Objective: 0: Go to the Pandemonium Gate (InProgress)
-            339214,339202,339199,339205
+            SNOScene.x1_Heaven_Pandemonium_Portal_E03_S03,
+            SNOScene.x1_Heaven_Pandemonium_Portal_E03_S02,
+            SNOScene.x1_Heaven_Pandemonium_Portal_E02_S03,
+            SNOScene.x1_Heaven_Pandemonium_Portal_E02_S02
         };
 
         public static HashSet<GizmoType> PortalTypes = new HashSet<GizmoType>
@@ -61,35 +64,47 @@ namespace Trinity.Framework.Reference
             GizmoType.ReformingDestroyableObject,
         };
 
-        public static HashSet<int> IsCursedChestOrShrine = new HashSet<int>
+        public static HashSet<SNOActor> IsCursedChestOrShrine = new HashSet<SNOActor>
         {
-            364559,364601,365097,365718,365746,368169,369539,370696,374353,374355,374356,374391,376511
+            SNOActor.x1_Global_Chest_CursedChest,
+            (SNOActor)364601,
+            SNOActor.x1_Global_Chest_CursedChest_B,
+            SNOActor.x1_Spawner_Skeleton_C_Cursed,
+            SNOActor.x1_Spawner_Shield_Skeleton_C_Cursed,
+            (SNOActor)368169,
+            SNOActor.x1_leaperAngel_A_CursedChest,
+            SNOActor.Spiderling_A_CursedChest,
+            SNOActor.TentacleBear_A_CursedChest,
+            SNOActor.TentacleBear_B_CursedChest,
+            SNOActor.TentacleBear_C_CursedChest,
+            SNOActor.x1_Global_Chest_CursedChest_B_MutantEvent,
+            SNOActor.x1_Spawner_Zombie_Inferno_C_CursedChest
         };
-
-
-        public static HashSet<int> MenuWorldSnoIds = new HashSet<int>
+        
+        public static HashSet<SNOWorld> MenuWorldSnoIds = new HashSet<SNOWorld>
         {
-            50623, //AxeBadData
-            50627, //AxeFlatWorld
-            238775, //BattleNet_Act1Screen
-            191376, //BattleNet_Act2Screen
-            191389, //BattleNet_Act3Screen, BattleNet_Act4Screen
-            288104, //BattleNet_Act5Screen
-            148534, //BattleNet_MainScreen
-            194282, //BattleNet_PVPScreen
+            SNOWorld.AxeBadData,
+            SNOWorld.AxeFlatWorld,
+            SNOWorld.BattleNet_Act1Screen,
+            SNOWorld.BattleNet_Act2Screen,
+            SNOWorld.BattleNet_Act3Screen,
+            SNOWorld.BattleNet_Act4Screen,
+            SNOWorld.BattleNet_Act5Screen,
+            SNOWorld.BattleNet_MainScreen,
+            SNOWorld.BattleNet_PVPScreen
         };
 
         /// <summary>
         /// Client effects that will be let into the object cache
         /// </summary>
-        public static readonly HashSet<int> AllowedClientEffects = new HashSet<int>
+        public static readonly HashSet<SNOActor> AllowedClientEffects = new HashSet<SNOActor>
         {
-            (int)SNOActor.p2_itemPassive_unique_ring_017_dome,
-            (int)SNOActor.monk_serenity_goldRings_AOE,
-            (int)SNOActor.monk_serenity_goldRings_health,
-            (int)SNOActor.monk_serenity_goldRings_immune,
-            (int)SNOActor.monk_serenity_goldRings_reflect,
-            (int)SNOActor.monk_serenity_goldRings_spirit,
+            SNOActor.p2_itemPassive_unique_ring_017_dome,
+            SNOActor.monk_serenity_goldRings_AOE,
+            SNOActor.monk_serenity_goldRings_health,
+            SNOActor.monk_serenity_goldRings_immune,
+            SNOActor.monk_serenity_goldRings_reflect,
+            SNOActor.monk_serenity_goldRings_spirit,
         };
 
         public static readonly Dictionary<Skill, Set> AllRuneSetsBySkill = new Dictionary<Skill, Set>
@@ -98,192 +113,108 @@ namespace Trinity.Framework.Reference
             { Skills.Wizard.Archon, Sets.VyrsAmazingArcana },
         };
 
-        public static readonly HashSet<int> AvoidanceSNO = new HashSet<int>
+        public static readonly HashSet<SNOActor> AvoidanceSNO = new HashSet<SNOActor>
         {
-            // Butcher Floor Panels
-            201454, 201464, 201426, 201438, 200969, 201423, 201242,
-
-            //fastMummy_Gibs, Type=Unknown Dist=0 RActorId=-896461776 ACDId=-896461776 ActorSnoId=4108 Weight=0 WeightReasons=
-            4108,
-            //X1_Unique_Monster_Generic_AOE_DOT_Fire_10foot, Type=Unknown Dist=0 RActorId=-965410672 ACDId=-1665138248 ActorSnoId=359693 Weight=0 WeightReasons=
-            359693,
-            //p4_ratKing_ratBall_model, Type=Unknown Dist=0 RActorId=-1891447664 ACDId=-1891447664 ActorSnoId=427100 Weight=0 WeightReasons=
-            427100,
-            //X1_Unique_Monster_Generic_Projectile_Poison, Type=Unknown Dist=14.0947 RActorId=-1882521582 ACDId=-2050752476 ActorSnoId=377092 Weight=0 WeightReasons=
-            377092,
-            //a2dun_Zolt_Random_FallingRocks_C, Type=Unknown Dist=0.01172495 RActorId=-1399259057 ACDId=-1794506715 ActorSnoId=3026 Weight=0 WeightReasons=
-            3026,
-            //ZK_tornado_antimatter, Type=Unknown Dist=40.28544 RActorId=-1803735817 ACDId=-1803735817 ActorSnoId=186103 Weight=0 WeightReasons=
-            186103,
-            //ZK_tornado_model, Type=Unknown Dist=30.1086 RActorId=-1811046521 ACDId=-1811046521 ActorSnoId=186055 Weight=0 WeightReasons=
-            186055,
+            SNOActor.ButcherLair_FloorPanel_UpperRight_Base,
+            SNOActor.ButcherLair_FloorPanel_LowerRight_Base,
+            SNOActor.ButcherLair_FloorPanel_MidMiddle_Base,
+            SNOActor.ButcherLair_FloorPanel_UpperMid_Base,
+            SNOActor.ButcherLair_FloorPanel_LowerMid_Base,
+            SNOActor.ButcherLair_FloorPanel_UpperLeft_Base,
+            SNOActor.ButcherLair_FloorPanel_LowerLeft_Base,
+            SNOActor.fastMummy_Gibs,
+            SNOActor.X1_Unique_Monster_Generic_AOE_DOT_Fire_10foot,
+            SNOActor.p4_ratKing_ratBall_model,
+            SNOActor.X1_Unique_Monster_Generic_Projectile_Poison,
+            SNOActor.a2dun_Zolt_Random_FallingRocks_C,
+            SNOActor.ZK_tornado_antimatter,
+            SNOActor.ZK_tornado_model,
             //X1_LR_Boss_morluSpellcaster_Ice ActorSnoId=344119
-            //g_monster_projectile_cold_impact ActorSnoId=159164  // Ice AOE Telegraph
-            159164,
-            //Grenadier_Proj_mortar_inpact
-            365810,
-	        //MorluSpellcaster_Meteor_Pending
-            159369,
-	        //Demonic_Meteor_Pending
-            185367,
-	        //x1_sniperAngel_shardBolt_bolt
-            333605,
-	        //x1_sniperAngel_shardBolt_orb
-            333688,
-            // a1dun_leor_BigFireGrate, Type=Unit
-            108012,
-            // arcaneEnchantedDummy_spawn
-            257306,
-            //monsterAffix_Frozen_deathExplosion_Proxy
-            402,
-            //monsterAffix_Molten_deathStart_Proxy
-            4803,
-            //monsterAffix_Molten_deathExplosion_Proxy
-            4804,
-            //monsterAffix_Electrified_deathExplosion_proxy
-            4806,
-            //monsterAffix_Desecrator_telegraph
-            84606,
-            //monsterAffix_Desecrator_damage_AOE
-            84608,
-            //monsterAffix_Vortex_proxy
-            85809,
-            //monsterAffix_Vortex_model
-            89862,
-            //monsterAffix_Molten_trail
-            95868,
-            //monsterAffix_healthLink_jumpActor
-            98220,
-            //monsterAffix_Plagued_endCloud
-            108869,
-            //monsterAffix_frenzySwipe
-            //143266,
-            //monsterAffix_vortex_target_trailActor
-            210407,
-            //monsterAffix_missileDampening_shield_add
-            219458,
-            //MonsterAffix_ArcaneEnchanted_PetSweep
-            219702,
-            //monsterAffix_missileDampening_outsideGeo
-            220191,
-            //MonsterAffix_ArcaneEnchanted_PetSweep_reverse
-            221225,
-            //MonsterAffix_ArcaneEnchanted_Proxy
-            221560,
-            //MonsterAffix_ArcaneEnchanted_trailActor
-            221658,
-            //monsterAffix_frozen_iceClusters
-            223675,
-            //x1_MonsterAffix_frozenPulse_monster
-            349774,
-            //x1_MonsterAffix_frozenPulse_shard_search
-            366924,
-            //x1_MonsterAffix_frozenPulse_shard
-            349779,
-            //monsterAffix_plagued_groundGeo
-            223933,
-            //monsterAffix_molten_fireRing
-            224225,
-            //monsterAffix_waller_wall
-            226296,
-            //monsterAffix_Avenger_glowSphere
-            226722,
-            //monsterAffix_ghostly_distGeo
-            226799,
-            //monsterAffix_waller_model
-            226808,
-            //monsterAffix_invulnerableMinion_distGeo
-            227697,
-            //monsterAffix_linked_chainHit
-            228275,
-            //monsterAffix_entangler_ringGlow_geo
-            228885,
-            //monsterAffix_molten_bomb_buildUp_geo
-            247980,
-            //monsterAffix_invulnerableMinion_colorGeo
-            248043,
-            //MonsterAffix_Mortar_Pending
-            250031,
-            //x1_MonsterAffix_CorpseBomber_projectile
-            316389,
-            //X1_MonsterAffix_corpseBomber_bomb
-            325761,
-            //X1_MonsterAffix_LightningStorm_Wanderer
-            328307,
-            //X1_MonsterAffix_TeleportMines
-            337109,
-            //x1_MonsterAffix_CorpseBomber_bomb_start
-            340319,
-            //x1_MonsterAffix_Thunderstorm_Impact
-            341512,
-            //X1_MonsterAffix_Orbiter_Projectile
-            343539,
-            //X1_MonsterAffix_Orbiter_FocalPoint
-            343582,
-            //x1_Spawner_Skeleton_MonsterAffix_World_1
-            345764,
-            //x1_Spawner_Skeleton_MonsterAffix_World_2
-            345765,
-            //x1_Spawner_Skeleton_MonsterAffix_World_3
-            345766,
-            //x1_Spawner_Skeleton_MonsterAffix_World_4
-            345767,
-            //x1_Spawner_Skeleton_MonsterAffix_World_5
-            345768,
-            //x1_MonsterAffix_orbiter_projectile_orb
-            346805,
-            //x1_MonsterAffix_orbiter_projectile_focus
-            346837,
-            //x1_MonsterAffix_orbiter_glowSphere
-            346839,
-            //x1_monsteraffix_mortar_blastwave
-            365830,
-            //x1_monsterAffix_generic_coldDOT_runeGeo
-            377326,
-            //x1_monsterAffix_generic_coldDOT_rune_emitter
-            377374,
-            //MonsterAffix_Avenger_ArcaneEnchanted_PetSweep
-            384431,
-            //MonsterAffix_Avenger_ArcaneEnchanted_PetSweep_reverse
-            384433,
-            //X1_MonsterAffix_Avenger_Orbiter_Projectile
-            384575,
-            //X1_MonsterAffix_Avenger_Orbiter_FocalPoint
-            384576,
-            //x1_MonsterAffix_Avenger_CorpseBomber_bomb_start
-            384614,
-            //x1_MonsterAffix_Avenger_CorpseBomber_projectile
-            384617,
-            //x1_MonsterAffix_Avenger_frozenPulse_monster
-            384631,
-            //x1_MonsterAffix_Avenger_arcaneEnchanted_dummySpawn
-            386997,
-            //x1_MonsterAffix_Avenger_ArcaneEnchanted_trailActor
-            387010,
-            //x1_MonsterAffix_Avenger_orbiter_projectile_orb
-            387679,
-            //x1_MonsterAffix_Avenger_orbiter_projectile_focus
-            388435,
-            //x1_MonsterAffix_Avenger_corpseBomber_slime
-            389483,
-	        //x1_Bog_bloodSpring_medium
-            332922,
-	        //x1_Bog_bloodSpring_large
-            332923,
-	        //x1_Bog_bloodSpring_small
-            332924,
-            //p4_RatKing_RatBallMonster
-            427170,
-            //x1_LR_Boss_MalletDemon_FallingRocks
-            368453,
-            //X1_LR_Boss_FireNova_projectile
-            373937,
-            //X1_LR_Boss_AsteroidRain
-            378237,
-            //x1_LR_boss_terrorDemon_A_projectile
-            434843,
-            //x1_Bog_Bear_Trap
-            237062
+            SNOActor.g_monster_projectile_cold_impact,
+            SNOActor.Grenadier_Proj_mortar_inpact,
+	        SNOActor.MorluSpellcaster_Meteor_Pending,
+	        SNOActor.Demonic_Meteor_Pending,
+	        SNOActor.x1_sniperAngel_shardBolt_bolt,
+	        SNOActor.x1_sniperAngel_shardBolt_orb,
+            SNOActor. a1dun_leor_BigFireGrate,
+            SNOActor. arcaneEnchantedDummy_spawn,
+            SNOActor.monsterAffix_Frozen_deathExplosion_Proxy,
+            SNOActor.monsterAffix_Molten_deathStart_Proxy,
+            SNOActor.monsterAffix_Molten_deathExplosion_Proxy,
+            SNOActor.monsterAffix_Electrified_deathExplosion_proxy,
+            SNOActor.monsterAffix_Desecrator_telegraph,
+            SNOActor.monsterAffix_Desecrator_damage_AOE,
+            SNOActor.monsterAffix_Vortex_proxy,
+            SNOActor.monsterAffix_Vortex_model,
+            SNOActor.monsterAffix_Molten_trail,
+            SNOActor.monsterAffix_healthLink_jumpActor,
+            SNOActor.monsterAffix_Plagued_endCloud,
+            //SNOActor.monsterAffix_frenzySwipe,
+            SNOActor.monsterAffix_vortex_target_trailActor,
+            //SNOActor.monsterAffix_missileDampening_shield_add
+            (SNOActor)219458,
+            SNOActor.MonsterAffix_ArcaneEnchanted_PetSweep,
+            SNOActor.monsterAffix_missileDampening_outsideGeo,
+            SNOActor.MonsterAffix_ArcaneEnchanted_PetSweep_reverse,
+            SNOActor.MonsterAffix_ArcaneEnchanted_Proxy,
+            SNOActor.MonsterAffix_ArcaneEnchanted_trailActor,
+            SNOActor.monsterAffix_frozen_iceClusters,
+            SNOActor.x1_MonsterAffix_frozenPulse_monster,
+            SNOActor.x1_MonsterAffix_frozenPulse_shard_search,
+            SNOActor.x1_MonsterAffix_frozenPulse_shard,
+            SNOActor.monsterAffix_plagued_groundGeo,
+            SNOActor.monsterAffix_molten_fireRing,
+            SNOActor.monsterAffix_waller_wall,
+            SNOActor.monsterAffix_Avenger_glowSphere,
+            SNOActor.monsterAffix_ghostly_distGeo,
+            SNOActor.monsterAffix_waller_model,
+            SNOActor.monsterAffix_invulnerableMinion_distGeo,
+            SNOActor.monsterAffix_linked_chainHit,
+            SNOActor.monsterAffix_entangler_ringGlow_geo,
+            SNOActor.monsterAffix_molten_bomb_buildUp_geo,
+            SNOActor.monsterAffix_invulnerableMinion_colorGeo,
+            SNOActor.MonsterAffix_Mortar_Pending,
+            SNOActor.x1_MonsterAffix_CorpseBomber_projectile,
+            SNOActor.X1_MonsterAffix_corpseBomber_bomb,
+            SNOActor.X1_MonsterAffix_LightningStorm_Wanderer,
+            SNOActor.X1_MonsterAffix_TeleportMines,
+            SNOActor.x1_MonsterAffix_CorpseBomber_bomb_start,
+            SNOActor.x1_MonsterAffix_Thunderstorm_Impact,
+            SNOActor.X1_MonsterAffix_Orbiter_Projectile,
+            SNOActor.X1_MonsterAffix_Orbiter_FocalPoint,
+            SNOActor.x1_Spawner_Skeleton_MonsterAffix_World_1,
+            SNOActor.x1_Spawner_Skeleton_MonsterAffix_World_2,
+            SNOActor.x1_Spawner_Skeleton_MonsterAffix_World_3,
+            SNOActor.x1_Spawner_Skeleton_MonsterAffix_World_4,
+            SNOActor.x1_Spawner_Skeleton_MonsterAffix_World_5,
+            SNOActor.x1_MonsterAffix_orbiter_projectile_orb,
+            SNOActor.x1_MonsterAffix_orbiter_projectile_focus,
+            SNOActor.x1_MonsterAffix_orbiter_glowSphere,
+            SNOActor.x1_monsteraffix_mortar_blastwave,
+            SNOActor.x1_monsterAffix_generic_coldDOT_runeGeo,
+            SNOActor.x1_monsterAffix_generic_coldDOT_rune_emitter,
+            SNOActor.MonsterAffix_Avenger_ArcaneEnchanted_PetSweep,
+            SNOActor.MonsterAffix_Avenger_ArcaneEnchanted_PetSweep_reverse,
+            SNOActor.X1_MonsterAffix_Avenger_Orbiter_Projectile,
+            SNOActor.X1_MonsterAffix_Avenger_Orbiter_FocalPoint,
+            SNOActor.x1_MonsterAffix_Avenger_CorpseBomber_bomb_start,
+            SNOActor.x1_MonsterAffix_Avenger_CorpseBomber_projectile,
+            SNOActor.x1_MonsterAffix_Avenger_frozenPulse_monster,
+            SNOActor.x1_MonsterAffix_Avenger_arcaneEnchanted_dummySpawn,
+            SNOActor.x1_MonsterAffix_Avenger_ArcaneEnchanted_trailActor,
+            SNOActor.x1_MonsterAffix_Avenger_orbiter_projectile_orb,
+            SNOActor.x1_MonsterAffix_Avenger_orbiter_projectile_focus,
+            SNOActor.x1_MonsterAffix_Avenger_corpseBomber_slime,
+	        SNOActor.x1_Bog_bloodSpring_medium,
+	        SNOActor.x1_Bog_bloodSpring_large,
+	        SNOActor.x1_Bog_bloodSpring_small,
+            SNOActor.p4_RatKing_RatBallMonster,
+            SNOActor.x1_LR_Boss_MalletDemon_FallingRocks,
+            SNOActor.X1_LR_Boss_FireNova_projectile,
+            //SNOActor.X1_LR_Boss_AsteroidRain
+            (SNOActor)378237,
+            SNOActor.x1_LR_boss_terrorDemon_A_projectile,
+            SNOActor.x1_Bog_Bear_Trap
         };
 
         public static readonly HashSet<int> BlackHoleIds = new HashSet<int>
@@ -322,19 +253,19 @@ namespace Trinity.Framework.Reference
             343300,
         };
 
-        public static readonly HashSet<int> BloodShardSNO = new HashSet<int>
+        public static readonly HashSet<SNOActor> BloodShardSNO = new HashSet<SNOActor>
         {
-            359504, // HoradricRelic
+            SNOActor.HoradricRelic,
         };
 
-        public static readonly HashSet<int> BuffedLocationSno = new HashSet<int>
+        public static readonly HashSet<SNOActor> BuffedLocationSno = new HashSet<SNOActor>
         {
-            (int)SNOActor.p2_itemPassive_unique_ring_017_dome,
-            (int)SNOActor.monk_serenity_goldRings_AOE,
-            (int)SNOActor.monk_serenity_goldRings_health,
-            (int)SNOActor.monk_serenity_goldRings_immune,
-            (int)SNOActor.monk_serenity_goldRings_reflect,
-            (int)SNOActor.monk_serenity_goldRings_spirit,
+            SNOActor.p2_itemPassive_unique_ring_017_dome,
+            SNOActor.monk_serenity_goldRings_AOE,
+            SNOActor.monk_serenity_goldRings_health,
+            SNOActor.monk_serenity_goldRings_immune,
+            SNOActor.monk_serenity_goldRings_reflect,
+            SNOActor.monk_serenity_goldRings_spirit,
         };
 
         public static readonly HashSet<SNOAnim> ChargeAnimations = new HashSet<SNOAnim>
@@ -367,57 +298,36 @@ namespace Trinity.Framework.Reference
             TrinityObjectType.ProgressionGlobe
         };
 
-        public static readonly HashSet<int> ExtremePriorityInteractable = new HashSet<int>
+        public static readonly HashSet<SNOActor> ExtremePriorityInteractable = new HashSet<SNOActor>
         {
-            (int)SNOActor.a3dun_Keep_Bridge_Switch // switch with bridge area is marked as walkable so raycast passes incorrectly.
+            SNOActor.a3dun_Keep_Bridge_Switch // switch with bridge area is marked as walkable so raycast passes incorrectly.
         };
 
         /// <summary>
         /// Monsters who pretend to be dead/hidden
         /// </summary>
-        public static readonly HashSet<int> FakeDeathMonsters = new HashSet<int>()
+        public static readonly HashSet<SNOActor> FakeDeathMonsters = new HashSet<SNOActor>()
         {
-            //morluMelee_A
-            4755,
-            //morluMelee_B
-            4757,
-            //morluMelee_C
-            4758,
-            //bloodScratch_morluMelee_attack01
-            //219793,
-            //bloodScratch_morluMelee_attack02
-            //219808,
-            //morluMelee_A_Unique_01
-            219925,
-            //morluMelee_A_Unique_02
-            219936,
-            //morluMelee_asheyState_glowSphere
-            //221119,
-            //morluMelee_B_asheyState_glowSphere
-            //221120,
-            //x1_Spawner_MorluMelee_A_Challenge
-            //307092,
-            //x1_Spawner_MorluMelee_C_Ressurect
-            //344038,
-            //x1_Event_SpeedKill_morluMelee_B_Spawner
-            //370327,
-            //P2_morluMelee_A_Unique_01
-            409614,
-            //P2_morluMelee_A_Unique_02
-            409843,
+            SNOActor.morluMelee_A,
+            SNOActor.morluMelee_B,
+            SNOActor.morluMelee_C,
+            SNOActor.morluMelee_A_Unique_01,
+            SNOActor.morluMelee_A_Unique_02,
+            SNOActor.P2_morluMelee_A_Unique_01,
+            SNOActor.P2_morluMelee_A_Unique_02,
         };
 
-        public static readonly HashSet<int> ForceTypeAsBarricade = new HashSet<int>
+        public static readonly HashSet<SNOActor> ForceTypeAsBarricade = new HashSet<SNOActor>
         {
-            5792, // GizmoType=Door ActorSnoId=5792
-            210120, // A4 Corrupt Growth
-            210268, // A4 Corrupt Growth
+            SNOActor.trDun_Cath_WoodDoor_A_Barricaded,
+            SNOActor.a4dun_Garden_Corruption_Monster,
+            SNOActor.a4dun_Garden_Corruption_HellRift_Monster,
         };
 
-        public static readonly HashSet<int> GreaterProgressionGlobeSNO = new HashSet<int>
+        public static readonly HashSet<SNOActor> GreaterProgressionGlobeSNO = new HashSet<SNOActor>
         {
-            405765, //p1_tiered_rifts_Orb_flippy
-            401751, //p1_tiered_rifts_Orb
+            SNOActor.p1_tiered_rifts_Orb_flippy,
+            SNOActor.p1_tiered_rifts_Orb
         };
 
         public static readonly HashSet<TrinityObjectType> InteractableTypes = new HashSet<TrinityObjectType>
@@ -432,9 +342,9 @@ namespace Trinity.Framework.Reference
             TrinityObjectType.CursedShrine
         };
 
-        public static readonly HashSet<int> KeywardenSno = new HashSet<int>
+        public static readonly HashSet<SNOActor> KeywardenSno = new HashSet<SNOActor>
         {
-            (int)SNOActor.DuneDervish_B_Unique_Uber
+            SNOActor.DuneDervish_B_Unique_Uber
         };
 
         public static readonly HashSet<SNOAnim> LeapAnimations = new HashSet<SNOAnim>
@@ -490,14 +400,14 @@ namespace Trinity.Framework.Reference
             434918, //p1_rifts_Orb_flippy
         };
 
-        public static readonly Dictionary<int, TrinityObjectType> ObjectTypeOverrides = new Dictionary<int, TrinityObjectType>
+        public static readonly Dictionary<SNOActor, TrinityObjectType> ObjectTypeOverrides = new Dictionary<SNOActor, TrinityObjectType>
         {
             // Needed for A5 bounty clicky on death orbs
             //ActorSnoId=334466 AnimSnoId=x1_Death_Orb_Event_Worldstone_idle TargetedCount=2 Type=Unit
-            { 334466, TrinityObjectType.Interactable },
-            { 309432, TrinityObjectType.Interactable },
-            { 432258, TrinityObjectType.Interactable },
-            { 221574, TrinityObjectType.Interactable} //a1dun_Leoric_IronMaiden_Event, Type=Door GizmoType=Door ActorSnoId=221574
+            { SNOActor.x1_Death_Orb_Little_Event_Worldstone, TrinityObjectType.Interactable },
+            { SNOActor.x1_westm_Bridge, TrinityObjectType.Interactable },
+            { SNOActor.px_Highlands_Camp_ResurgentCult_Portal, TrinityObjectType.Interactable },
+            { SNOActor.a1dun_Leoric_IronMaiden_Event, TrinityObjectType.Interactable} //a1dun_Leoric_IronMaiden_Event, Type=Door GizmoType=Door ActorSnoId=221574
             //{ 54882, ObjectType.Door } //a3dun_Keep_Door_Wooden_A, Type=Interactable GizmoType=Door
             //{ 433403, ObjectType.Interactable}
         };
@@ -558,20 +468,20 @@ namespace Trinity.Framework.Reference
             { Legendary.KekegisUnbreakableSpirit, SNOPower.ItemPassive_Unique_Ring_569_x1 },
         };
 
-        public static readonly HashSet<int> PowerGlobeSNO = new HashSet<int>
+        public static readonly HashSet<SNOActor> PowerGlobeSNO = new HashSet<SNOActor>
         {
-            301283, // Console_PowerGlobe
-            308862, // Console_powerGlobe_castBuff_geo
-            376019, // Console_PowerGlobe_NoFlippy
-            376114, // Console_PowerGlobe_v2_x1_NoFlippy
+            SNOActor.Console_PowerGlobe,
+            SNOActor.Console_powerGlobe_castBuff_geo,
+            SNOActor.Console_PowerGlobe_NoFlippy,
+            SNOActor.Console_PowerGlobe_v2_x1_NoFlippy,
         };
 
-        public static readonly HashSet<int> ProgressionGlobeSNO = new HashSet<int>
+        public static readonly HashSet<SNOActor> ProgressionGlobeSNO = new HashSet<SNOActor>
         {
-            436807, //p1_normal_rifts_Orb
-            405765, //p1_tiered_rifts_Orb_flippy
-            401751, //p1_tiered_rifts_Orb
-            434918, //p1_rifts_Orb_flippy
+            SNOActor.p1_normal_rifts_Orb,
+            SNOActor.p1_tiered_rifts_Orb_flippy,
+            SNOActor.p1_tiered_rifts_Orb,
+            SNOActor.p1_rifts_Orb_flippy
         };
 
         public static readonly HashSet<SNOActor> Shrines = new HashSet<SNOActor>
@@ -683,206 +593,197 @@ namespace Trinity.Framework.Reference
             SNOPower.ItemPassive_Unique_Ring_735_x1,
         };
 
-        public static HashSet<int> CorruptGrowthIds = new HashSet<int>()
+        public static HashSet<SNOActor> CorruptGrowthIds = new HashSet<SNOActor>()
         {
-            210120, //a4dun_Garden_Corruption_Monster
-            210268, //a4dun_Garden_Corruption_HellRift_Monster
-            360111, //a4dun_Garden_Corruption_Monster_Despair
+            SNOActor.a4dun_Garden_Corruption_Monster,
+            SNOActor.a4dun_Garden_Corruption_HellRift_Monster,
+            SNOActor.a4dun_Garden_Corruption_Monster_Despair
         };
 
-        public static HashSet<int> CosmeticSnoIds = new HashSet<int>
+        public static HashSet<SNOActor> CosmeticSnoIds = new HashSet<SNOActor>
         {
             //331905, //ActorId: 331905, Type: Item, Name: Amberwing
-
-            410998, //portrait - 410998 (Cosmetic_Portrait_Frame_1)
-
-            451114, //ActorId:  Type: Item, Name: Falcon's Wings
-
-            410998, //Type: Item, Name: Whimsyshire
-
-            446796, //cos_wings_Bird_01_wizF-8635 ActorSnoId: 446796,
-
-            (int) SNOActor.AngelWings_common_model, //150054
-            (int) SNOActor.Fate_angelWings_model, //159931
-            (int) SNOActor.AngelWings_corrupt_model, //170563
-            (int) SNOActor.Hope_angelWings_model, //174571
-            (int) SNOActor.Hope_angelWings_model_Dim, //195016
-            (int) SNOActor.hero_angelWings_model, //198230
-            (int) SNOActor.angel_death_wings_dissipate_emitter, //199650
-            (int) SNOActor.AngelWings_Blue, //210787
-            (int) SNOActor.BugWings, //255315
-            (int) SNOActor.hero_bugWings_barbF, //255316
-            (int) SNOActor.hero_bugWings_barbM, //255718
-            (int) SNOActor.hero_bugWings_DHF, //255719
-            (int) SNOActor.hero_bugWings_DHM, //255720
-            (int) SNOActor.hero_bugWings_monkF, //255721
-            (int) SNOActor.hero_bugWings_monkM, //255722
-            (int) SNOActor.hero_bugWings_WDF, //255723
-            (int) SNOActor.hero_bugWings_WDM, //255724
-            (int) SNOActor.hero_bugWings_wizF, //255725
-            (int) SNOActor.hero_bugWings_wizM, //255726
-            (int) SNOActor.hero_bugWings_cdrF, //261498
-            (int) SNOActor.hero_bugWings_cdrM, //261499
-            (int) SNOActor.x1_AngelWings_dark_TEST_model, //301144
-            (int) SNOActor.AngelWings_Red, //317018
-            (int) SNOActor.hero_redWings_model, //317119
-            (int) SNOActor.x1_AngelWings_Short_Cool_model, //328514
-            (int) SNOActor.x1_Dark_Angel_Wings, //348370
-            (int) SNOActor.x1_Urzael_Wings_flameSweep, //363632
-            (int) SNOActor.x1_Urzael_Wings_transform_midway, //363657
-            (int) SNOActor.x1_Malthael_Death_Short_Wings_model, //370161
-            (int) SNOActor.AngelWings_common_model_noRagdoll, //377926
-            (int) SNOActor.hero_angelWings_Imperius_model, //378320
-            (int) SNOActor.x1_AngelWings_Imperius, //378342
-            (int) SNOActor.hero_angelWings_model_gold, //378978
-            (int) SNOActor.Cosmetic_Wings_Blue, //409078
-            (int) SNOActor.Cosmetic_Wings_Red, //409079
-            (int) SNOActor.Cosmetic_Wings_Bug, //409080
-            (int) SNOActor.Cosmetic_Wings_Imperius, //409081
-            (int) SNOActor.cos_wings_angel_twoTone_purple_01, //429082
-            (int) SNOActor.cos_wings_demonic_blackBlue_01, //429085
-            (int) SNOActor.cos_wings_demonic_blackYellow_01, //429087
-            (int) SNOActor.cos_wings_angel_twoTone_gold_01, //429091
-            (int) SNOActor.cos_wings_demonic_blackRed_01, //429094
-            (int) SNOActor.cos_wings_angel_twoTone_greyscale_01, //429103
-            (int) SNOActor.cos_wings_angel_flame_cyan_01, //429110
-            (int) SNOActor.cos_wings_demonic_blackCyan_01, //429114
-            (int) SNOActor.cos_wings_angel_flame_orange_01, //429181
-            (int) SNOActor.cos_wings_bat, //429863
-            (int) SNOActor.cos_wings_bat_DHM, //431031
-            (int) SNOActor.cos_wings_bat_DHF, //431033
-            (int) SNOActor.cos_wings_bat_barbM, //431036
-            (int) SNOActor.cos_wings_bat_barbF, //431038
-            (int) SNOActor.cos_wings_bat_wizM, //431041
-            (int) SNOActor.cos_wings_bat_wizF, //431043
-            (int) SNOActor.cos_wings_bat_WDM, //431046
-            (int) SNOActor.cos_wings_bat_WDF, //431048
-            (int) SNOActor.cos_wings_bat_monkM, //431056
-            (int) SNOActor.cos_wings_bat_monkF, //431058
-            (int) SNOActor.cos_wings_bat_cdrM, //431061
-            (int) SNOActor.cos_wings_bat_cdrF, //431063
-            (int) SNOActor.cos_wings_bat_02_barbM, //435216
-            (int) SNOActor.cos_wings_bat_02_barbF, //435218
-            (int) SNOActor.cos_wings_bat_02_wizM, //435222
-            (int) SNOActor.cos_wings_bat_02_wizF, //435224
-            (int) SNOActor.cos_wings_bat_02_WDM, //435227
-            (int) SNOActor.cos_wings_bat_02_WDF, //435229
-            (int) SNOActor.cos_wings_bat_02_monkM, //435232
-            (int) SNOActor.cos_wings_bat_02_monkF, //435234
-            (int) SNOActor.cos_wings_bat_02_cdrM, //435237
-            (int) SNOActor.cos_wings_bat_02_cdrF, //435239
-            (int) SNOActor.cos_wings_bat_02_DHF, //435240
-            (int) SNOActor.cos_wings_bat_02_DHM, //435241
-            (int) SNOActor.cos_wings_bat_03_DHM, //435245
-            (int) SNOActor.cos_wings_bat_03_DHF, //435247
-            (int) SNOActor.cos_wings_bat_03_barbM, //435250
-            (int) SNOActor.cos_wings_bat_03_barbF, //435252
-            (int) SNOActor.cos_wings_bat_03_wizM, //435255
-            (int) SNOActor.cos_wings_bat_03_wizF, //435257
-            (int) SNOActor.cos_wings_bat_03_WDM, //435260
-            (int) SNOActor.cos_wings_bat_03_WDF, //435262
-            (int) SNOActor.cos_wings_bat_03_monkM, //435265
-            (int) SNOActor.cos_wings_bat_03_monkF, //435267
-            (int) SNOActor.cos_wings_bat_03_cdrM, //435270
-            (int) SNOActor.cos_wings_bat_03_cdrF, //435272
-            (int) SNOActor.cos_wings_bat_04_DHM, //436085
-            (int) SNOActor.cos_wings_bat_04_DHF, //436087
-            (int) SNOActor.cos_wings_bat_04_barbM, //436090
-            (int) SNOActor.cos_wings_bat_04_barbF, //436092
-            (int) SNOActor.cos_wings_bat_04_wizM, //436095
-            (int) SNOActor.cos_wings_bat_04_wizF, //436097
-            (int) SNOActor.cos_wings_bat_04_WDM, //436100
-            (int) SNOActor.cos_wings_bat_04_WDF, //436102
-            (int) SNOActor.cos_wings_bat_04_monkM, //436105
-            (int) SNOActor.cos_wings_bat_04_monkF, //436107
-            (int) SNOActor.cos_wings_bat_04_cdrM, //436110
-            (int) SNOActor.cos_wings_bat_04_cdrF, //436112
-            (int) SNOActor.cos_wings_bat_05_DHM, //436203
-            (int) SNOActor.cos_wings_bat_05_DHF, //436206
-            (int) SNOActor.cos_wings_bat_05_barbM, //436209
-            (int) SNOActor.cos_wings_bat_05_barbF, //436211
-            (int) SNOActor.cos_wings_bat_05_wizM, //436214
-            (int) SNOActor.cos_wings_bat_05_wizF, //436216
-            (int) SNOActor.cos_wings_bat_05_WDM, //436219
-            (int) SNOActor.cos_wings_bat_05_WDF, //436221
-            (int) SNOActor.cos_wings_bat_05_monkM, //436224
-            (int) SNOActor.cos_wings_bat_05_monkF, //436226
-            (int) SNOActor.cos_wings_bat_05_cdrM, //436229
-            (int) SNOActor.cos_wings_bat_05_cdrF, //436231
-            (int) SNOActor.cos_wings_bat_06_DHM, //436236
-            (int) SNOActor.cos_wings_bat_06_DHF, //436239
-            (int) SNOActor.cos_wings_bat_06_barbM, //436242
-            (int) SNOActor.cos_wings_bat_06_barbF, //436244
-            (int) SNOActor.cos_wings_bat_06_wizM, //436247
-            (int) SNOActor.cos_wings_bat_06_wizF, //436249
-            (int) SNOActor.cos_wings_bat_06_WDM, //436252
-            (int) SNOActor.cos_wings_bat_06_WDF, //436254
-            (int) SNOActor.cos_wings_bat_06_monkM, //436257
-            (int) SNOActor.cos_wings_bat_06_monkF, //436259
-            (int) SNOActor.cos_wings_bat_06_cdrM, //436262
-            (int) SNOActor.cos_wings_bat_06_cdrF, //436264
-            (int) SNOActor.cos_wings_bat_07_DHM, //437351
-            (int) SNOActor.cos_wings_bat_07_DHF, //437353
-            (int) SNOActor.cos_wings_bat_07_barbM, //437356
-            (int) SNOActor.cos_wings_bat_07_barbF, //437359
-            (int) SNOActor.cos_wings_bat_07_wizM, //437362
-            (int) SNOActor.cos_wings_bat_07_wizF, //437364
-            (int) SNOActor.cos_wings_bat_07_WDM, //437368
-            (int) SNOActor.cos_wings_bat_07_WDF, //437370
-            (int) SNOActor.cos_wings_bat_07_monkM, //437373
-            (int) SNOActor.cos_wings_bat_07_monkF, //437375
-            (int) SNOActor.cos_wings_bat_07_cdrM, //437378
-            (int) SNOActor.cos_wings_bat_07_cdrF, //437380
-            (int) SNOActor.cos_wings_angel_twoTone_blue_01, //437586
+            SNOActor.Cosmetic_Portrait_Frame_1,
+            SNOActor.Cosmetic_Wings_bird,
+            SNOActor.Cosmetic_Portrait_Frame_Whimsyshire,
+            SNOActor.cos_wings_Bird_01_wizF,
+            SNOActor.AngelWings_common_model, //150054
+            SNOActor.Fate_angelWings_model, //159931
+            SNOActor.AngelWings_corrupt_model, //170563
+            SNOActor.Hope_angelWings_model, //174571
+            SNOActor.Hope_angelWings_model_Dim, //195016
+            SNOActor.hero_angelWings_model, //198230
+            SNOActor.angel_death_wings_dissipate_emitter, //199650
+            SNOActor.AngelWings_Blue, //210787
+            SNOActor.BugWings, //255315
+            SNOActor.hero_bugWings_barbF, //255316
+            SNOActor.hero_bugWings_barbM, //255718
+            SNOActor.hero_bugWings_DHF, //255719
+            SNOActor.hero_bugWings_DHM, //255720
+            SNOActor.hero_bugWings_monkF, //255721
+            SNOActor.hero_bugWings_monkM, //255722
+            SNOActor.hero_bugWings_WDF, //255723
+            SNOActor.hero_bugWings_WDM, //255724
+            SNOActor.hero_bugWings_wizF, //255725
+            SNOActor.hero_bugWings_wizM, //255726
+            SNOActor.hero_bugWings_cdrF, //261498
+            SNOActor.hero_bugWings_cdrM, //261499
+            SNOActor.x1_AngelWings_dark_TEST_model, //301144
+            SNOActor.AngelWings_Red, //317018
+            SNOActor.hero_redWings_model, //317119
+            SNOActor.x1_AngelWings_Short_Cool_model, //328514
+            SNOActor.x1_Dark_Angel_Wings, //348370
+            SNOActor.x1_Urzael_Wings_flameSweep, //363632
+            SNOActor.x1_Urzael_Wings_transform_midway, //363657
+            SNOActor.x1_Malthael_Death_Short_Wings_model, //370161
+            SNOActor.AngelWings_common_model_noRagdoll, //377926
+            SNOActor.hero_angelWings_Imperius_model, //378320
+            SNOActor.x1_AngelWings_Imperius, //378342
+            SNOActor.hero_angelWings_model_gold, //378978
+            SNOActor.Cosmetic_Wings_Blue, //409078
+            SNOActor.Cosmetic_Wings_Red, //409079
+            SNOActor.Cosmetic_Wings_Bug, //409080
+            SNOActor.Cosmetic_Wings_Imperius, //409081
+            SNOActor.cos_wings_angel_twoTone_purple_01, //429082
+            SNOActor.cos_wings_demonic_blackBlue_01, //429085
+            SNOActor.cos_wings_demonic_blackYellow_01, //429087
+            SNOActor.cos_wings_angel_twoTone_gold_01, //429091
+            SNOActor.cos_wings_demonic_blackRed_01, //429094
+            SNOActor.cos_wings_angel_twoTone_greyscale_01, //429103
+            SNOActor.cos_wings_angel_flame_cyan_01, //429110
+            SNOActor.cos_wings_demonic_blackCyan_01, //429114
+            SNOActor.cos_wings_angel_flame_orange_01, //429181
+            SNOActor.cos_wings_bat, //429863
+            SNOActor.cos_wings_bat_DHM, //431031
+            SNOActor.cos_wings_bat_DHF, //431033
+            SNOActor.cos_wings_bat_barbM, //431036
+            SNOActor.cos_wings_bat_barbF, //431038
+            SNOActor.cos_wings_bat_wizM, //431041
+            SNOActor.cos_wings_bat_wizF, //431043
+            SNOActor.cos_wings_bat_WDM, //431046
+            SNOActor.cos_wings_bat_WDF, //431048
+            SNOActor.cos_wings_bat_monkM, //431056
+            SNOActor.cos_wings_bat_monkF, //431058
+            SNOActor.cos_wings_bat_cdrM, //431061
+            SNOActor.cos_wings_bat_cdrF, //431063
+            SNOActor.cos_wings_bat_02_barbM, //435216
+            SNOActor.cos_wings_bat_02_barbF, //435218
+            SNOActor.cos_wings_bat_02_wizM, //435222
+            SNOActor.cos_wings_bat_02_wizF, //435224
+            SNOActor.cos_wings_bat_02_WDM, //435227
+            SNOActor.cos_wings_bat_02_WDF, //435229
+            SNOActor.cos_wings_bat_02_monkM, //435232
+            SNOActor.cos_wings_bat_02_monkF, //435234
+            SNOActor.cos_wings_bat_02_cdrM, //435237
+            SNOActor.cos_wings_bat_02_cdrF, //435239
+            SNOActor.cos_wings_bat_02_DHF, //435240
+            SNOActor.cos_wings_bat_02_DHM, //435241
+            SNOActor.cos_wings_bat_03_DHM, //435245
+            SNOActor.cos_wings_bat_03_DHF, //435247
+            SNOActor.cos_wings_bat_03_barbM, //435250
+            SNOActor.cos_wings_bat_03_barbF, //435252
+            SNOActor.cos_wings_bat_03_wizM, //435255
+            SNOActor.cos_wings_bat_03_wizF, //435257
+            SNOActor.cos_wings_bat_03_WDM, //435260
+            SNOActor.cos_wings_bat_03_WDF, //435262
+            SNOActor.cos_wings_bat_03_monkM, //435265
+            SNOActor.cos_wings_bat_03_monkF, //435267
+            SNOActor.cos_wings_bat_03_cdrM, //435270
+            SNOActor.cos_wings_bat_03_cdrF, //435272
+            SNOActor.cos_wings_bat_04_DHM, //436085
+            SNOActor.cos_wings_bat_04_DHF, //436087
+            SNOActor.cos_wings_bat_04_barbM, //436090
+            SNOActor.cos_wings_bat_04_barbF, //436092
+            SNOActor.cos_wings_bat_04_wizM, //436095
+            SNOActor.cos_wings_bat_04_wizF, //436097
+            SNOActor.cos_wings_bat_04_WDM, //436100
+            SNOActor.cos_wings_bat_04_WDF, //436102
+            SNOActor.cos_wings_bat_04_monkM, //436105
+            SNOActor.cos_wings_bat_04_monkF, //436107
+            SNOActor.cos_wings_bat_04_cdrM, //436110
+            SNOActor.cos_wings_bat_04_cdrF, //436112
+            SNOActor.cos_wings_bat_05_DHM, //436203
+            SNOActor.cos_wings_bat_05_DHF, //436206
+            SNOActor.cos_wings_bat_05_barbM, //436209
+            SNOActor.cos_wings_bat_05_barbF, //436211
+            SNOActor.cos_wings_bat_05_wizM, //436214
+            SNOActor.cos_wings_bat_05_wizF, //436216
+            SNOActor.cos_wings_bat_05_WDM, //436219
+            SNOActor.cos_wings_bat_05_WDF, //436221
+            SNOActor.cos_wings_bat_05_monkM, //436224
+            SNOActor.cos_wings_bat_05_monkF, //436226
+            SNOActor.cos_wings_bat_05_cdrM, //436229
+            SNOActor.cos_wings_bat_05_cdrF, //436231
+            SNOActor.cos_wings_bat_06_DHM, //436236
+            SNOActor.cos_wings_bat_06_DHF, //436239
+            SNOActor.cos_wings_bat_06_barbM, //436242
+            SNOActor.cos_wings_bat_06_barbF, //436244
+            SNOActor.cos_wings_bat_06_wizM, //436247
+            SNOActor.cos_wings_bat_06_wizF, //436249
+            SNOActor.cos_wings_bat_06_WDM, //436252
+            SNOActor.cos_wings_bat_06_WDF, //436254
+            SNOActor.cos_wings_bat_06_monkM, //436257
+            SNOActor.cos_wings_bat_06_monkF, //436259
+            SNOActor.cos_wings_bat_06_cdrM, //436262
+            SNOActor.cos_wings_bat_06_cdrF, //436264
+            SNOActor.cos_wings_bat_07_DHM, //437351
+            SNOActor.cos_wings_bat_07_DHF, //437353
+            SNOActor.cos_wings_bat_07_barbM, //437356
+            SNOActor.cos_wings_bat_07_barbF, //437359
+            SNOActor.cos_wings_bat_07_wizM, //437362
+            SNOActor.cos_wings_bat_07_wizF, //437364
+            SNOActor.cos_wings_bat_07_WDM, //437368
+            SNOActor.cos_wings_bat_07_WDF, //437370
+            SNOActor.cos_wings_bat_07_monkM, //437373
+            SNOActor.cos_wings_bat_07_monkF, //437375
+            SNOActor.cos_wings_bat_07_cdrM, //437378
+            SNOActor.cos_wings_bat_07_cdrF, //437380
+            SNOActor.cos_wings_angel_twoTone_blue_01, //437586
         };
 
-        public static HashSet<int> CursedChestSNO = new HashSet<int>
+        public static HashSet<SNOActor> CursedChestSNO = new HashSet<SNOActor>
         {
-            //x1_Global_Chest_CursedChest
-            364559,
-            //x1_Global_Chest_CursedChest_B
-            365097,
-            //x1_Global_Chest_CursedChest_B_MutantEvent
-            374391,
+            SNOActor.x1_Global_Chest_CursedChest,
+            SNOActor.x1_Global_Chest_CursedChest_B,
+            SNOActor.x1_Global_Chest_CursedChest_B_MutantEvent,
         };
 
-        public static HashSet<int> CursedShrineSNO = new HashSet<int>
+        public static HashSet<SNOActor> CursedShrineSNO = new HashSet<SNOActor>
         {
             //x1_Event_CursedShrine
-            364601,
-            //x1_Event_CursedShrine_Heaven
-            368169,
+            (SNOActor)364601,
+            //SNOActor.x1_Event_CursedShrine_Heaven
+            (SNOActor)368169,
         };
 
         /// <summary>
         /// ActorSnoId that we always want to completely ignore
         /// </summary>
-        public static HashSet<int> ExcludedActorIds = new HashSet<int>
+        public static HashSet<SNOActor> ExcludedActorIds = new HashSet<SNOActor>
         {
-            -1,
-            4176, // Generic Proxy
-            5502, // Start Location
-            375658, // Banter Trigger
-            3462, // Box Trigger
-            5466, // Sphere Trigger
-            3461, // OneShot Box Trigger
-            3795, // Checkpoint
-            5992, // OneShot Trigger Sphere
-            180941, // SavePoint
-            143853, //DH_discipline ActorSnoId=143853
-            143854, //DH_hatred ActorSnoId=143854
-            4433, //HealthBall_forecast ActorSnoId=4433
-            3440, //bottomBarUI ActorSnoId=3440
-            447059, //JobsDone ActorSnoId=447059
-            3441, //bottomBar_buttonFX ActorSnoId=3441
-            447057, //JobsDone_shineBox ActorSnoId=447057
-            123504, //actor_isSlowed_color ActorSnoId=123504
-            3441, //bottomBar_buttonFX ActorSnoId=3441
-            179841, //HirelingHeadstone ActorSnoId=179841
-            4434, //HealthBall_liquid ActorSnoId=4434
-            375094, //invisBoxCollision_flippy ActorSnoId=375094
-            89880, //g_LightGlow_Orange ActorSnoId=89880
-            177040, //chain in heart of damnned a3dun_battlefield_Demon_ChainPylon_locked
+            SNOActor.Invalid,
+            SNOActor.Generic_Proxy,
+            SNOActor.Start_Location_0,
+            SNOActor.X1_AdventureMode_HubBanterTrigger,
+            SNOActor.BoxTrigger,
+            SNOActor.SphereTrigger,
+            SNOActor.BoxTriggerOneShot,
+            SNOActor.Checkpoint,
+            SNOActor.TriggerSphereOneShot,
+            SNOActor.Savepoint,
+            (SNOActor)143853, //DH_discipline ActorSnoId=143853
+            (SNOActor)143854, //DH_hatred ActorSnoId=143854
+            (SNOActor)4433, //HealthBall_forecast ActorSnoId=4433
+            SNOActor.bottomBarUI,
+            SNOActor.JobsDone,
+            SNOActor.bottomBar_buttonFX,
+            SNOActor.JobsDone_shineBox,
+            SNOActor.actor_isSlowed_color,
+            SNOActor.HirelingHeadstone,
+            (SNOActor)4434, //HealthBall_liquid ActorSnoId=4434
+            SNOActor.invisBoxCollision_flippy,
+            SNOActor.g_LightGlow_Orange,
+            SNOActor.a3dun_battlefield_Demon_ChainPylon_locked,
         };
 
         /// <summary>
@@ -922,20 +823,14 @@ namespace Trinity.Framework.Reference
         //    { 185999, AvoidanceType.DiabloRingOfFire },
         //    { 136533, AvoidanceType.DiabloLightning },
         //};
-        public static HashSet<int> GoldSNO = new HashSet<int>
+        public static HashSet<SNOActor> GoldSNO = new HashSet<SNOActor>
         {
-            //GoldCoin
-            376,
-            //GoldLarge
-            4311,
-            //GoldMedium
-            4312,
-            //GoldSmall
-            4313,
-            //PlacedGold
-            166389,
-            //GoldCoins
-            209200,
+            SNOActor.GoldCoin,
+            SNOActor.GoldLarge,
+            SNOActor.GoldMedium,
+            SNOActor.GoldSmall,
+            SNOActor.PlacedGold,
+            SNOActor.GoldCoins,
         };
 
         //public static Dictionary<int, AvoidanceType> AvoidanceTypeSNO = new Dictionary<int, AvoidanceType>
@@ -989,30 +884,19 @@ namespace Trinity.Framework.Reference
         //    //{185924, AvoidanceType.ZoltBubble},
         //    {139741, AvoidanceType.ZoltTwister}
         //};
-        public static HashSet<int> HealthGlobeSNO = new HashSet<int>
+        public static HashSet<SNOActor> HealthGlobeSNO = new HashSet<SNOActor>
         {
-            //HealthGlobe
-            4267,
-            //HealthGlobe_02
-            85798,
-            //healthGlobe_swipe
-            85816,
-            //HealthGlobe_03
-            209093,
-            //HealthGlobe_04
-            209120,
-            //X1_NegativeHealthGlobe
-            333196,
-            //x1_healthGlobe
-            366139,
-            //x1_healthGlobe_playerIsHealed_attract
-            367978,
-            //HealthGlobe_steak
-            375124,
-            //HealthGlobe_steak_02
-            375125,
-            //x1_healthGlobe_steak_model
-            375132,
+            SNOActor.HealthGlobe,
+            SNOActor.HealthGlobe_02,
+            SNOActor.healthGlobe_swipe,
+            SNOActor.HealthGlobe_03,
+            SNOActor.HealthGlobe_04,
+            SNOActor.X1_NegativeHealthGlobe,
+            SNOActor.x1_healthGlobe,
+            SNOActor.x1_healthGlobe_playerIsHealed_attract,
+            SNOActor.HealthGlobe_steak,
+            SNOActor.HealthGlobe_steak_02,
+            SNOActor.x1_healthGlobe_steak_model,
         };
 
         public static HashSet<int> HealthWellSNO = new HashSet<int>
@@ -1029,13 +913,13 @@ namespace Trinity.Framework.Reference
             180575,
         };
 
-        public static HashSet<int> HerdingMatsSnoIds = new HashSet<int>()
+        public static HashSet<SNOActor> HerdingMatsSnoIds = new HashSet<SNOActor>()
         {
-            215500, // "Gibbering Gemstone", Cow_Gem_Flippy-3672 ActorId: 215500
-            214604, //"gibbering-gemstone": ["Gibbering Gemstone", 214604, "Cow_Gem"],
-            214605, //"leorics-shinbone": ["Leoric's Shinbone", 214605, "Cow_Bone"],
-            214603, //"liquid-rainbow": ["Liquid Rainbow", 214603, "Cow_Water"],
-            180697, //"wirts-bell": ["Wirt's Bell", 180697, "CowBell"],
+            SNOActor.Cow_Gem_Flippy,
+            SNOActor.Cow_Gem,
+            SNOActor.Cow_Bone,
+            SNOActor.Cow_Water,
+            SNOActor.CowBell,
         };
 
         public static List<SNOPower> InteractPowers = new List<SNOPower>
@@ -1061,71 +945,66 @@ namespace Trinity.Framework.Reference
         /// <summary>
         /// Mark the area underneath these objects @ radius 'unwalkable' - use with caution.
         /// </summary>
-        public static Dictionary<int, float> PathFindingObstacles = new Dictionary<int, float>
+        public static Dictionary<SNOActor, float> PathFindingObstacles = new Dictionary<SNOActor, float>
         {
-            {(int) SNOActor.a3_Battlefield_demonic_forge, 16f},
-            {(int) SNOActor.a3_crater_st_demonic_forge, 16f},
-            {(int) SNOActor.Player_Shared_Stash, 6f},
-            {(int) SNOActor.PoolOfReflection, 8f},
-            {(int) SNOActor.a2dun_Aqd_Act_Wood_Platform_A_01, 5f} // Environment post blocking nav
+            {SNOActor.a3_Battlefield_demonic_forge, 16f},
+            {SNOActor.a3_crater_st_demonic_forge, 16f},
+            {SNOActor.Player_Shared_Stash, 6f},
+            {SNOActor.PoolOfReflection, 8f},
+            {SNOActor.a2dun_Aqd_Act_Wood_Platform_A_01, 5f}
         };
 
-        public static HashSet<int> PetSnoIds = new HashSet<int>()
+        public static HashSet<SNOActor> PetSnoIds = new HashSet<SNOActor>()
         {
-            (int) SNOActor.x1_promoPet_fallenHound_skeletal, // 360090,
-            (int) SNOActor.Cosmetic_Pet_FallenHound_Skeletal, // 410448,
-            (int) SNOActor.cos_pet_teddybear_01, // 430903,
-            (int) SNOActor.cos_pet_thousandPounder_01, // 430905,
-            (int) SNOActor.cos_pet_teddybear_02, // 430906,
-            (int) SNOActor.cos_pet_teddybear_03, // 430908,
-            (int) SNOActor.cos_pet_teddybear_04, // 430910,
-            (int) SNOActor.cos_pet_fallenHound_01, // 433063,
-            (int) SNOActor.cos_pet_protossProbe_01, // 434428,
-            (int) SNOActor.cos_pet_crawlingHand_01, // 436532,
-            (int) SNOActor.cos_pet_crawlingHand_02, // 436534,
-            (int) SNOActor.cos_pet_crawlingHand_03, // 436961,
-            (int) SNOActor.cos_pet_teddybear_05, // 437119,
-            (int) SNOActor.cos_pet_fallenHound_02, // 437807,
-            (int) SNOActor.cos_pet_fallenHound_03, // 439196,
-            (int) SNOActor.cos_pet_fallenHound_04, // 439221,
-            (int) SNOActor.cos_pet_fallenHound_05, // 439233,
-            (int) SNOActor.cos_pet_fallenHound_06, // 439237,
-            (int) SNOActor.cos_pet_goatman_melee_01, // 439337,
-            (int) SNOActor.p3_cos_pet_Murkgoblin_A, // 441208,
-            (int) SNOActor.cos_pet_goatman_melee_02, // 441214,
-            (int) SNOActor.p3_cos_pet_jadeSerpent, // 441437,
+            SNOActor.x1_promoPet_fallenHound_skeletal, // 360090,
+            SNOActor.Cosmetic_Pet_FallenHound_Skeletal, // 410448,
+            SNOActor.cos_pet_teddybear_01, // 430903,
+            SNOActor.cos_pet_thousandPounder_01, // 430905,
+            SNOActor.cos_pet_teddybear_02, // 430906,
+            SNOActor.cos_pet_teddybear_03, // 430908,
+            SNOActor.cos_pet_teddybear_04, // 430910,
+            SNOActor.cos_pet_fallenHound_01, // 433063,
+            SNOActor.cos_pet_protossProbe_01, // 434428,
+            SNOActor.cos_pet_crawlingHand_01, // 436532,
+            SNOActor.cos_pet_crawlingHand_02, // 436534,
+            SNOActor.cos_pet_crawlingHand_03, // 436961,
+            SNOActor.cos_pet_teddybear_05, // 437119,
+            SNOActor.cos_pet_fallenHound_02, // 437807,
+            SNOActor.cos_pet_fallenHound_03, // 439196,
+            SNOActor.cos_pet_fallenHound_04, // 439221,
+            SNOActor.cos_pet_fallenHound_05, // 439233,
+            SNOActor.cos_pet_fallenHound_06, // 439237,
+            SNOActor.cos_pet_goatman_melee_01, // 439337,
+            SNOActor.p3_cos_pet_Murkgoblin_A, // 441208,
+            SNOActor.cos_pet_goatman_melee_02, // 441214,
+            SNOActor.p3_cos_pet_jadeSerpent, // 441437,
+            SNOActor.Cosmetic_Pet_hoodednightmare_01,
+            SNOActor.Cosmetic_Pet_squire,
+            SNOActor.Cosmetic_Pet_cowking_01,
+            SNOActor.Cosmetic_Pet_bladedsoul_01,
+		    SNOActor.treasureGoblin_K,
+            SNOActor.Cosmetic_Pet_mimic_01,
+            SNOActor.TentacleBear_C_Unique_Cosmetic_02,
+            SNOActor.Cosmetic_Portrait_Frame_1,
 
-            451019, //Pet found! - Picking it up Cosmetic_Pet_hoodednightmare_01 Sno=451019 GbId=347688656
-            451040, //Pet found! - Picking it up Cosmetic_Pet_squire Sno=451040 GbId=1967180567
-            451051, //Pet found! - Picking it up Cosmetic_Pet_cowking_01 Sno=451051 GbId=-1526517200
-            451053, //Pet found! - Picking it up Cosmetic_Pet_bladedsoul_01 Sno=451053 GbId=-1967557379
+            SNOActor.Cosmetic_Pet_ghost_01,  //ActorId:  Type: Item, Name: Haunting Hannah
+            SNOActor.Cosmetic_Pet_fallenHound_04, //ActorId:  Type: Item, Name: Buddy
+            SNOActor.Cosmetic_Pet_spider_01, //ActorId:  Type: Item, Name: Charlotte
+            SNOActor.Cosmetic_Pet_teddyBear_04, //Type: Item, Name: Overseer Lady Josephine
+            SNOActor.Cosmetic_Pet_VoodooDoll_01, //Type: Item, Name: Ms. Madeleine
+            SNOActor.Cosmetic_Pet_zombie_01, //Type: Item, Name: Liv Moore
+            SNOActor.Cosmetic_Pet_ghost_01, //Type: Item, Name: Haunting Hannah
+            SNOActor.Cosmetic_Pet_FloatingSkull_02, //Type: Item, Name: Humbart Wessel
+            SNOActor.Cosmetic_Pet_succubus_01, //Cosmetic_Pet_succubus_01-39125 ActorSnoId: 451042
+            SNOActor.cos_pet_squire, //Monster Name: cos_pet_squire-216 ActorSnoId: 445705,
+            SNOActor.Cosmetic_Pet_fallenHound_04, //Type: Item, Name: Buddy
+            SNOActor.cos_pet_spider_01,  //Name: cos_pet_spider_01-10773 ActorSnoId: 450065, Distance: 545.0016
+            SNOActor.Cosmetic_Pet_goatman_melee_02, //Lady Morhanlu: ActorId: 451017, Type: Item, Name: ?????
+            SNOActor.cos_pet_teddybear_04, //20DFD214] Type: Monster Name: cos_pet_teddybear_04-411489 ActorSnoId: 430910, Distance: 11.76465
+            SNOActor.Cosmetic_Pet_FloatingSkull_02, //ActorId: 451031, Type: Item, Name: Cosmetic_Pet_FloatingSkull_02-22954, Distance2d: 23.11925, CollisionRadius: 0, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0
 
-            // Yahoo !treasureGoblin_K-613 ActorSnoId: 450993, Menagerist Goblin
-		    450993,
-
-            451021, //The Mimic ActorId: 451021, Type: Item, Name: ?????
-
-            451002, //sir williams - 451002 (TentacleBear_C_Unique_Cosmetic_02)
-            //portrait - 410998 (Cosmetic_Portrait_Frame_1)
-
-            451015,  //ActorId:  Type: Item, Name: Haunting Hannah
-            451013, //ActorId:  Type: Item, Name: Buddy
-            451036, //ActorId:  Type: Item, Name: Charlotte
-            451044, //Type: Item, Name: Overseer Lady Josephine
-            451046, //Type: Item, Name: Ms. Madeleine
-            451057, //Type: Item, Name: Liv Moore
-            451015, //Type: Item, Name: Haunting Hannah
-            451031, //Type: Item, Name: Humbart Wessel
-            451042, //Cosmetic_Pet_succubus_01-39125 ActorSnoId: 451042
-            445705, //Monster Name: cos_pet_squire-216 ActorSnoId: 445705,
-            451013, //Type: Item, Name: Buddy
-            450065,  //Name: cos_pet_spider_01-10773 ActorSnoId: 450065, Distance: 545.0016
-            451017, //Lady Morhanlu: ActorId: 451017, Type: Item, Name: ?????
-            430910, //20DFD214] Type: Monster Name: cos_pet_teddybear_04-411489 ActorSnoId: 430910, Distance: 11.76465
-            451031, //ActorId: 451031, Type: Item, Name: Cosmetic_Pet_FloatingSkull_02-22954, Distance2d: 23.11925, CollisionRadius: 0, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0
-
-            451025, //Blaze ActorId: 451025, Type: Item, Name: ?????
-            451049, //Friendly Gauntlet //ActorId: 451049, Type: Item, Name: ?????? ????
+            SNOActor.Cosmetic_Pet_FloatingSkull_01, //Blaze ActorId: 451025, Type: Item, Name: ?????
+            SNOActor.Cosmetic_Pet_crawlingHand_03, //Friendly Gauntlet //ActorId: 451049, Type: Item, Name: ?????? ????
 
             //ActorId: 451031, Type: Item, Name: Humbart Wessel
         };
@@ -1174,32 +1053,20 @@ namespace Trinity.Framework.Reference
             { 2429, 664373032, 1663345352, "P5_Cosmetic_Pet_zombie_01" },
         };
 
-        public static HashSet<int> PlayerBannerSNO = new HashSet<int>
+        public static HashSet<SNOActor> PlayerBannerSNO = new HashSet<SNOActor>
         {
-            //Banner_Player_1
-            123714,
-            //Banner_Player_2
-            123715,
-            //Banner_Player_3
-            123716,
-            //Banner_Player_4
-            123717,
-            //Banner_Player_1_Act2
-            212879,
-            //Banner_Player_2_Act2
-            212880,
-            //Banner_Player_3_Act2
-            212881,
-            //Banner_Player_4_Act2
-            212882,
-            //Banner_Player_1_Act5
-            367451,
-            //Banner_Player_2_Act5
-            367452,
-            //Banner_Player_3_Act5
-            367453,
-            //Banner_Player_4_Act5
-            367454,
+            SNOActor.Banner_Player_1,
+            SNOActor.Banner_Player_2,
+            SNOActor.Banner_Player_3,
+            SNOActor.Banner_Player_4,
+            SNOActor.Banner_Player_1_Act2,
+            SNOActor.Banner_Player_2_Act2,
+            SNOActor.Banner_Player_3_Act2,
+            SNOActor.Banner_Player_4_Act2,
+            SNOActor.Banner_Player_1_Act5,
+            SNOActor.Banner_Player_2_Act5,
+            SNOActor.Banner_Player_3_Act5,
+            SNOActor.Banner_Player_4_Act5,
         };
 
         public static List<TrinityObjectType> PlayerBlockingTypes = new List<TrinityObjectType>
@@ -1409,65 +1276,59 @@ namespace Trinity.Framework.Reference
             SNOPower.Wizard_Archon_Teleport,
         };
 
-        public static HashSet<int> ShrineSNO = new HashSet<int>
+        public static HashSet<SNOActor> ShrineSNO = new HashSet<SNOActor>
         {
-            (int)SNOActor.shrine_fxSphere_corrupt, //5333,
-            (int)SNOActor.Shrine_Global, //135384,
-            (int)SNOActor.shrine_fxGeo_model_Global, //139931,
-            (int)SNOActor.Shrine_Global_Glow, //156680,
-            (int)SNOActor.Shrine_Global_Blessed, //176074,
-            (int)SNOActor.Shrine_Global_Enlightened, //176075,
-            (int)SNOActor.Shrine_Global_Fortune, //176076,
-            (int)SNOActor.Shrine_Global_Frenzied, //176077,
-            (int)SNOActor.a4_Heaven_Shrine_Global_Blessed, //225025,
-            (int)SNOActor.a4_Heaven_Shrine_Global_Fortune, //225027,
-            (int)SNOActor.a4_Heaven_Shrine_Global_Frenzied, //225028,
-            (int)SNOActor.a4_Heaven_Shrine_Global_Enlightened, //225030,
-            (int)SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Blessed, //225261,
-            (int)SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Enlightened, //225262,
-            (int)SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Fortune, //225263,
-            (int)SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Frenzied, //225266,
-            (int)SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Hoarder, //260342,
-            (int)SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Reloaded, //260343,
-            (int)SNOActor.a4_Heaven_Shrine_Global_Hoarder, //260344,
-            (int)SNOActor.a4_Heaven_Shrine_Global_Reloaded, //260345,
-            (int)SNOActor.Shrine_Global_Hoarder, //260346,
-            (int)SNOActor.Shrine_Global_Reloaded, //260347,
-            (int)SNOActor.Shrine_TreasureGoblin, //269349,
-            (int)SNOActor.PVP_Shrine_Murderball, //275729,
-            (int)SNOActor.x1_LR_Shrine_Damage, //330695,
-            (int)SNOActor.x1_LR_Shrine_Electrified, //330696,
-            (int)SNOActor.x1_LR_Shrine_Infinite_Casting, //330697,
-            (int)SNOActor.x1_LR_Shrine_Invulnerable, //330698,
-            (int)SNOActor.x1_LR_Shrine_Run_Speed, //330699,
-            //(int)SNOActor.x1_Event_CursedShrine, //364601,
-            //(int)SNOActor.x1_Event_CursedShrine_Heaven, //368169,
-            (int)SNOActor.x1_player_isShielded_riftShrine_model, //369696,
-            (int)SNOActor.x1_LR_Shrine_Electrified_TieredRift, //398654,
-            (int)SNOActor.a4_Heaven_Shrine_TreasureGoblin, //434409,
-            (int)SNOActor.shrine_Shadow, //434722,
+            SNOActor.shrine_fxSphere_corrupt, //5333,
+            SNOActor.Shrine_Global, //135384,
+            SNOActor.shrine_fxGeo_model_Global, //139931,
+            SNOActor.Shrine_Global_Glow, //156680,
+            SNOActor.Shrine_Global_Blessed, //176074,
+            SNOActor.Shrine_Global_Enlightened, //176075,
+            SNOActor.Shrine_Global_Fortune, //176076,
+            SNOActor.Shrine_Global_Frenzied, //176077,
+            SNOActor.a4_Heaven_Shrine_Global_Blessed, //225025,
+            SNOActor.a4_Heaven_Shrine_Global_Fortune, //225027,
+            SNOActor.a4_Heaven_Shrine_Global_Frenzied, //225028,
+            SNOActor.a4_Heaven_Shrine_Global_Enlightened, //225030,
+            SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Blessed, //225261,
+            SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Enlightened, //225262,
+            SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Fortune, //225263,
+            SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Frenzied, //225266,
+            SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Hoarder, //260342,
+            SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Reloaded, //260343,
+            SNOActor.a4_Heaven_Shrine_Global_Hoarder, //260344,
+            SNOActor.a4_Heaven_Shrine_Global_Reloaded, //260345,
+            SNOActor.Shrine_Global_Hoarder, //260346,
+            SNOActor.Shrine_Global_Reloaded, //260347,
+            SNOActor.Shrine_TreasureGoblin, //269349,
+            SNOActor.PVP_Shrine_Murderball, //275729,
+            SNOActor.x1_LR_Shrine_Damage, //330695,
+            SNOActor.x1_LR_Shrine_Electrified, //330696,
+            SNOActor.x1_LR_Shrine_Infinite_Casting, //330697,
+            SNOActor.x1_LR_Shrine_Invulnerable, //330698,
+            SNOActor.x1_LR_Shrine_Run_Speed, //330699,
+            //SNOActor.x1_Event_CursedShrine, //364601,
+            //SNOActor.x1_Event_CursedShrine_Heaven, //368169,
+            SNOActor.x1_player_isShielded_riftShrine_model, //369696,
+            SNOActor.x1_LR_Shrine_Electrified_TieredRift, //398654,
+            SNOActor.a4_Heaven_Shrine_TreasureGoblin, //434409,
+            SNOActor.shrine_Shadow, //434722,
         };
 
-        public static HashSet<int> SlowTimeSNO = new HashSet<int>()
+        public static HashSet<SNOActor> SlowTimeSNO = new HashSet<SNOActor>()
         {
-            5422, //slowTime_model_01
-            5423, //slowTime_model_02
+            SNOActor.slowTime_model_01,
+            SNOActor.slowTime_model_02,
         };
 
-        public static HashSet<int> SpiderPetIds = new HashSet<int>
+        public static HashSet<SNOActor> SpiderPetIds = new HashSet<SNOActor>
         {
-            //witchDoctor_CorpseSpider_crimsonRune,
-            106731,
-            //witchDoctor_CorpseSpider_indigoRune,
-            106749,
-            //witchDoctor_CorpseSpider,
-            107031,
-            //witchDoctor_CorpseSpider_obsidianRune,
-            107067,
-            //witchDoctor_CorpseSpider_goldenRune,
-            107107,
-            //witchDoctor_CorpseSpider_alabasterRune,
-            107112,
+            SNOActor.witchDoctor_CorpseSpider_crimsonRune,
+            SNOActor.witchDoctor_CorpseSpider_indigoRune,
+            SNOActor.witchDoctor_CorpseSpider,
+            SNOActor.witchDoctor_CorpseSpider_obsidianRune,
+            SNOActor.witchDoctor_CorpseSpider_goldenRune,
+            SNOActor.witchDoctor_CorpseSpider_alabasterRune,
         };
 
         public static HashSet<int> SummonerSNO = new HashSet<int>
@@ -1564,9 +1425,12 @@ namespace Trinity.Framework.Reference
             396863,
         };
 
-        public static HashSet<int> TownLevelAreaIds = new HashSet<int>()
+        public static HashSet<SNOLevelArea> TownLevelAreaIds = new HashSet<SNOLevelArea>()
         {
-            332339,168314,92945,270011
+            SNOLevelArea.A1_Tristram_Adventure_Mode_Hub,
+            SNOLevelArea.A2_caOut_CT_RefugeeCamp_Hub,
+            SNOLevelArea.A3_Dun_Keep_Hub,
+            SNOLevelArea.x1_Westm_Hub
         };
 
         public static GameBalanceTable TransmogTable = new GameBalanceTable
@@ -1693,11 +1557,11 @@ namespace Trinity.Framework.Reference
             271235, // Pandemonium Fortress 2
         };
 
-        public static HashSet<int> AncientIds { get; } = new HashSet<int>
+        public static HashSet<SNOActor> AncientIds { get; } = new HashSet<SNOActor>
         {
-            90443, //Name: Barbarian_CallOfTheAncients_1-1028
-            90535, //Name: Barbarian_CallOfTheAncients_2-1029
-            90536, //Name: Barbarian_CallOfTheAncients_3-1030
+            SNOActor.Barbarian_CallOfTheAncients_1,
+            SNOActor.Barbarian_CallOfTheAncients_2,
+            SNOActor.Barbarian_CallOfTheAncients_3
         };
 
         public static Dictionary<int, string> AnimatioNamesById => _animatioNamesById ?? (_animatioNamesById = SNOAnim.Invalid.ToDictionary(true));
@@ -1884,218 +1748,470 @@ namespace Trinity.Framework.Reference
         /// <summary>
         /// Contains ActorSnoId's of world objects that should be blacklisted
         /// </summary>
-        public static HashSet<int> BlackListIds { get; } = new HashSet<int>
+        public static HashSet<SNOActor> BlackListIds { get; } = new HashSet<SNOActor>
         {
-            (int)SNOActor.x1_BogCave_Stalagmite_Group_C,                    // Destructible object that can't be reached.
-            (int)SNOActor.x1_BogCave_Stalagmite_Group_D,                    // Destructible object that can't be reached.
-            (int)SNOActor.x1_BogCave_Stalagmite_Fungus_E,                   // Destructible object that can't be reached.
+            SNOActor.x1_BogCave_Stalagmite_Group_C,                    // Destructible object that can't be reached.
+            SNOActor.x1_BogCave_Stalagmite_Group_D,                    // Destructible object that can't be reached.
+            SNOActor.x1_BogCave_Stalagmite_Fungus_E,                   // Destructible object that can't be reached.
 
-            (int)SNOActor.Gharbad_The_Weak_Ghost,                           // Event NPC
-            (int)SNOActor.x1_NPC_Westmarch_Gorrel_NonUnique,                // NPC for bounty: Noble Deaths.
-            (int)SNOActor.bastionsKeepGuard_Melee_A_01_snatched,            // NPC you can't attack.
-            (int)SNOActor.bastionsKeepGuard_Melee_A_02_BlazeOfGlory,        // NPC you can't attack.
-            (int)SNOActor.Bucket_Crane_caOut_Mining_Breakable,              // Obstacle in Dahlgur Oasis.
-            (int)SNOActor.trDun_Cath_Bannister_x6,                          // Unbreakable obstacle.
-            (int)SNOActor.A2C2DyingGhostGuy,                                // NPC for bounty: The Guardian Spirits.
-            (int)SNOActor.Angel_Trooper_A,                                  // NPC for bounty: Lost Host
-            (int)SNOActor.x1_SurvivorCaptain_Rescue_Guards,                 // NPC for bounty: The Last Stand
-            (int)SNOActor.bastionsKeepGuard_Melee_A_02_NPC_RescueEscort,    
-            (int)SNOActor.P4_Forest_DyingGuy,                               // Guy in Greyhollow Island the bot tries to attack.
+            SNOActor.Gharbad_The_Weak_Ghost,                           // Event NPC
+            SNOActor.x1_NPC_Westmarch_Gorrel_NonUnique,                // NPC for bounty: Noble Deaths.
+            SNOActor.bastionsKeepGuard_Melee_A_01_snatched,            // NPC you can't attack.
+            SNOActor.bastionsKeepGuard_Melee_A_02_BlazeOfGlory,        // NPC you can't attack.
+            SNOActor.Bucket_Crane_caOut_Mining_Breakable,              // Obstacle in Dahlgur Oasis.
+            SNOActor.trDun_Cath_Bannister_x6,                          // Unbreakable obstacle.
+            SNOActor.A2C2DyingGhostGuy,                                // NPC for bounty: The Guardian Spirits.
+            SNOActor.Angel_Trooper_A,                                  // NPC for bounty: Lost Host
+            SNOActor.x1_SurvivorCaptain_Rescue_Guards,                 // NPC for bounty: The Last Stand
+            SNOActor.bastionsKeepGuard_Melee_A_02_NPC_RescueEscort,
+            SNOActor.P4_Forest_DyingGuy,                               // Guy in Greyhollow Island the bot tries to attack.
 
             // Obstacle you can't destroy.
-            467026, // LS_a3dun_Keep_Exploding_Arch_A-6641 
-
-            464983, // P6_Church_IronMaiden-8410 (464983)
+            SNOActor.LS_a3dun_Keep_Exploding_Arch_A,
+            SNOActor.P6_Church_IronMaiden,
 
             // these bounty chests are not clickable they have a protection globe on them during event then sno changes.
-            (int)SNOActor.x1_Global_Chest_Locked,
+            SNOActor.x1_Global_Chest_Locked,
 
             // prevent trin from interacting with this NPC as part of mysterious cave bounty due to
             // extremely poor navigation in the little nook where he lives. profile to manually move within scene.
-            (int)SNOActor.A2_UniqueVendor_Event_MapVendor,
+            SNOActor.A2_UniqueVendor_Event_MapVendor,
 
             // prevent trin from interacting before clear area, bounty must force interact
-            (int)SNOActor.px_Bounty_Ramparts_Camp_Switch, // a4 catapault command bounty,
+            SNOActor.px_Bounty_Ramparts_Camp_Switch, // a4 catapault command bounty,
 
-            456331, //p43_AD_Valor_Pedestal_Locked-21607
+            SNOActor.p43_AD_Valor_Pedestal_Locked,
 
-            326271,//x1_PandExt_Ballista_Angelic_A-1035 (326271)
+            SNOActor.x1_PandExt_Ballista_Angelic_A,
 
-            181195, //a2dun_Cald_Belial_Acid_Attack-1533 (181195) Type=Door
-            (int)SNOActor.x1_Malthael_DeathFogMonster, //x1_Malthael_DeathFogMonster-23399 (325136)
+            SNOActor.a2dun_Cald_Belial_Acid_Attack,
+            SNOActor.x1_Malthael_DeathFogMonster,
 
-            444403, //p4_Leoric_Chandelier - 30646.SNO = 444403,
-            53628, //iron railing destuctible
-            (int)SNOActor.x1_BogCave_Stalagmite_Fungus_A, //255245,
+            SNOActor.p4_Leoric_Chandelier,
+            SNOActor.a2dun_Swr_Act_Iron_Railing_A_01,
+            SNOActor.x1_BogCave_Stalagmite_Fungus_A, //255245,
 
-            (int)SNOActor.PT_Blacksmith,
-            (int)SNOActor.trOut_OldTristram_AdriaCellar_Cauldron, //-6946 (131123)
+            SNOActor.PT_Blacksmith,
+            SNOActor.trOut_OldTristram_AdriaCellar_Cauldron, //-6946 (131123)
 
-            (int)SNOActor.trDun_Cath_Chandelier_Trap, //Name = trDun_Cath_Chandelier_Trap - 25291.SNO = 5744,
+            SNOActor.trDun_Cath_Chandelier_Trap, //Name = trDun_Cath_Chandelier_Trap - 25291.SNO = 5744,
 
-            (int)SNOActor.a2dun_Spider_Ground_Spawner, //
+            SNOActor.a2dun_Spider_Ground_Spawner, //
 
-            (int)SNOActor.a2dun_Zolt_SandBridgeBase, // bridge that is of type door, can't be interacted with.
-            (int)SNOActor.a3dun_crater_st_Demon_ChainPylon_Fire_Azmodan, // door with irregular properties
+            SNOActor.a2dun_Zolt_SandBridgeBase, // bridge that is of type door, can't be interacted with.
+            SNOActor.a3dun_crater_st_Demon_ChainPylon_Fire_Azmodan, // door with irregular properties
 
-            (int)SNOActor.caOut_Oasis_Sub240_Water_Money_Center_Wheel,
-            (int)SNOActor.a1dun_leor_firewall1,
-            (int)SNOActor.a1dun_leor_firewall2, //(89579) fire floor tiles
+            SNOActor.caOut_Oasis_Sub240_Water_Money_Center_Wheel,
+            SNOActor.a1dun_leor_firewall1,
+            SNOActor.a1dun_leor_firewall2, //(89579) fire floor tiles
 
-            (int)SNOActor.a2dun_Zolt_Random_Breakable_Statue,
+            SNOActor.a2dun_Zolt_Random_Breakable_Statue,
 
-            (int)SNOActor.x1_Catacombs_Breakable_Corner_Wall,
-            (int)SNOActor.x1_Catacombs_Breakable_Wall_A,
+            SNOActor.x1_Catacombs_Breakable_Corner_Wall,
+            SNOActor.x1_Catacombs_Breakable_Wall_A,
 
-            (int)SNOActor.Cow_B, //95263
+            SNOActor.Cow_B, //95263
 
-            (int)SNOActor.a1dun_Leor_Jail_Door_SuperLocked_A_Fake,
-            (int)SNOActor.a3dun_Keep_BucketMetal_A_Breakable,
-            (int)SNOActor.x1_Catacombs_Breakable_Half_Bridge_Walkway_A,
-            (int)SNOActor.x1_PandExt_Breakable_Angel_B, // x1_PandExt_Breakable_Angel_B-159982 (338281)
+            SNOActor.a1dun_Leor_Jail_Door_SuperLocked_A_Fake,
+            SNOActor.a3dun_Keep_BucketMetal_A_Breakable,
+            SNOActor.x1_Catacombs_Breakable_Half_Bridge_Walkway_A,
+            SNOActor.x1_PandExt_Breakable_Angel_B, // x1_PandExt_Breakable_Angel_B-159982 (338281)
 
-            (int)SNOActor.a4dunSpire_Interactives_Izual_Ice_Barrier_A,
+            SNOActor.a4dunSpire_Interactives_Izual_Ice_Barrier_A,
 
-            (int)SNOActor.trDun_Cath_Braizer_Trap, // hanging chandelier triggered by trap switch
+            SNOActor.trDun_Cath_Braizer_Trap, // hanging chandelier triggered by trap switch
 
-            (int)SNOActor.x1_BogCave_Breakable_Stalagmites_A,
-            (int)SNOActor.x1_BogCave_Breakable_Stalagmites_B,
-            (int)SNOActor.x1_BogCave_Breakable_Stalagmites_C,
-            (int)SNOActor.x1_BogCave_Breakable_Stalagmites_E,
-            (int)SNOActor.x1_BogCave_Breakable_Stalagmites_F,
-            (int)SNOActor.x1_BogCave_Breakable_Stalagmites_G,
-            (int)SNOActor.px_Cave_A_Breakable_Stalagmites_A,
-            (int)SNOActor.px_Cave_A_Breakable_Stalagmites_B,
-            (int)SNOActor.px_Cave_A_Breakable_Stalagmites_C,
-            (int)SNOActor. px_Cave_A_Breakable_Stalagmites_E,
-            (int)SNOActor.px_Cave_A_Breakable_Stalagmites_F,
-            (int)SNOActor.px_Cave_A_Breakable_Stalagmites_G,
+            SNOActor.x1_BogCave_Breakable_Stalagmites_A,
+            SNOActor.x1_BogCave_Breakable_Stalagmites_B,
+            SNOActor.x1_BogCave_Breakable_Stalagmites_C,
+            SNOActor.x1_BogCave_Breakable_Stalagmites_E,
+            SNOActor.x1_BogCave_Breakable_Stalagmites_F,
+            SNOActor.x1_BogCave_Breakable_Stalagmites_G,
+            SNOActor.px_Cave_A_Breakable_Stalagmites_A,
+            SNOActor.px_Cave_A_Breakable_Stalagmites_B,
+            SNOActor.px_Cave_A_Breakable_Stalagmites_C,
+            SNOActor. px_Cave_A_Breakable_Stalagmites_E,
+            SNOActor.px_Cave_A_Breakable_Stalagmites_F,
+            SNOActor.px_Cave_A_Breakable_Stalagmites_G,
 
-            (int)SNOActor.x1_Adria_CauldronSpawner_Temp,
-            (int)SNOActor.x1_Fortress_Ring_Hazard,
-            (int)SNOActor.P4_Ruins_Frost_Trap_Swinging_Blade,
+            SNOActor.x1_Adria_CauldronSpawner_Temp,
+            SNOActor.x1_Fortress_Ring_Hazard,
+            SNOActor.P4_Ruins_Frost_Trap_Swinging_Blade,
 
-            (int)SNOActor.a2dun_Aqd_Act_Wood_Platform_A_01, //Name=a2dun_Aqd_Act_Wood_Platform_A_01-30200. SNO=62125,
-            (int)SNOActor.a2dun_Swr_Breakable_Wall_A, //a2dun_Swr_Breakable_Wall_A-305214 (2965)
+            SNOActor.a2dun_Aqd_Act_Wood_Platform_A_01, //Name=a2dun_Aqd_Act_Wood_Platform_A_01-30200. SNO=62125,
+            SNOActor.a2dun_Swr_Breakable_Wall_A, //a2dun_Swr_Breakable_Wall_A-305214 (2965)
 
-            165415, //ActorId: 165415, Type: Gizmo, Name: a2dun_Zolt_SandBridgeBase_BossFight-529, Distance2d: 41.01208, CollisionRadius: 18.31754, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0
-            165415, //ActorId: 165415, Type: Gizmo, Name: a2dun_Zolt_SandBridgeBase_BossFight-921, Distance2d: 41.67792, CollisionRadius: 18.31754, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0
+            SNOActor.a2dun_Zolt_SandBridgeBase_BossFight, //ActorId: 165415, Type: Gizmo, Name: a2dun_Zolt_SandBridgeBase_BossFight-921, Distance2d: 41.67792, CollisionRadius: 18.31754, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0
             //156328, //ActorId: 156328, Type: Gizmo, Name: a2dun_Zolt_black_soulstone-515, Distance2d: 41.42352, CollisionRadius: 20.39608, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0
 
-            5674, //trDun_book_pile_b ActorSnoId=5674
-            362323, // x1_WestmHub_GuardNoHelmUnarmed
+            SNOActor.trDun_book_pile_b,
+            SNOActor.x1_WestmHub_GuardNoHelmUnarmed,
             // World Objects
-            163449, 2909, 58283, 58321, 87809, 90150, 91600, 97023, 97350, 97381, 72689, 121327, 54515, 3340, 122076, 123640,
-            60665, 60844, 78554, 86400, 86428, 81699, 86266, 86400, 6190, 80002, 104596, 58836, 104827, 74909, 6155, 6156, 6158, 6159, 75132,
-            181504, 91688, 3007, 3011, 3014, 130858, 131573, 214396, 182730, 226087, 141639, 206569, 15119, 54413, 54926, 2979, 5776, 3949,
-            108490, 52833, 200371, 153752, 2972, 206527, 3628,
+            SNOActor.trDun_Crypt_DeathoftheKing_Sword_Clickable,
+            SNOActor.a1dun_Leor_Candlestand_1,
+            SNOActor.a1dun_Leor_Barrel_Torture_A_01,
+            SNOActor.a1dun_leor_Torture_Table_A_01,
+            SNOActor.a1dun_leor_Basket_of_Heads,
+            SNOActor.a1dun_Leor_Fire_Gutter_Light,
+            SNOActor.a1dun_leor_Torture_Rolling_Wheel,
+            SNOActor.a1dun_Leor_Iron_Maiden,
+            SNOActor.a1dun_Leor_Barrel_Water,
+            SNOActor.a1dun_Leor_Jail_SittingGuard_A,
+            SNOActor.MinimapIconStairs_Switch,
+            SNOActor.demonFlyer_A_swoop,
+            SNOActor.a3dun_keep_TableGroup_D_Breakable,
+            SNOActor.Beast_Corpse_A_01,
+            SNOActor.a3dun_rmpt_OilVat_A,
+            SNOActor.trOut_TristramField_Cart_Broken_Burnt,
+            SNOActor.WoodFenceE_Fields_trOut,
+            SNOActor.WoodFenceC_Fields_trOut,
+            SNOActor.Hen_House_trOut_Farms,
+            SNOActor.trOut_Wilderness_Planter_A,
+            SNOActor.trOut_Wilderness_Planter_B,
+            SNOActor.trOut_Wagon_Barricade,
+            SNOActor.trOut_Wilderness_Gargoyle_A,
+            SNOActor.trOut_Wilderness_Planter_A,
+            SNOActor.trOut_Pumpkin_D1,
+            SNOActor.trOut_Farms_Butcher_Smoke_House,
+            SNOActor.trOut_FesteringWoods_Neph_Column_B,
+            SNOActor.Bucket_A_Fields_trOut,
+            SNOActor.trOut_FesteringWoods_Neph_Column_C_Broken_Base,
+            SNOActor.Tombstone_A_Wilderness_trOut_Wilderness,
+            SNOActor.trOut_OldTristramTombstoneDestructibleA,
+            SNOActor.trOut_OldTristramTombstoneDestructibleB,
+            SNOActor.trOut_OldTristramTombstoneDestructibleD,
+            SNOActor.trOut_OldTristramTombstoneDestructibleE,
+            SNOActor.Tombstone_B_Wilderness_trOut_Wilderness,
+            SNOActor.a3dun_rmpt_Exploding_Grate_A_BridgeEvent,
+            SNOActor.caOut_Breakable_Wagon_a,
+            SNOActor.a2dun_Zolt_Random_Breakable_Arch_A,
+            SNOActor.a2dun_Zolt_Random_Breakable_Corner,
+            SNOActor.a2dun_Zolt_Random_Breakable_HalfWall_A,
+            SNOActor.Fence_A_caOut_Mining_Interactive,
+            SNOActor.Fence_C_caOut_Mining_Interactive,
+            SNOActor.a3Battlefield_Props_burnt_supply_wagon_B_Breakable,
+            SNOActor.a3dun_rmpt_Exploding_Barrel_Snow,
+            SNOActor.a4dun_Diablo_Bone_Prison,
+            SNOActor.a3dun_Keep_Exploding_Arch_A,
+            SNOActor.a3dun_Crater_DemonClawBomb_A_Monster,
+            (SNOActor)15119,
+            SNOActor.a3dun_keep_TableGroup_A_Breakable,
+            SNOActor.a3dun_Keep_Bed_A_Breakable,
+            SNOActor.a2dun_Zolt_FloatingLights,
+            (SNOActor)5776,
+            SNOActor.destructibleCandles3,
+            SNOActor.a3dun_Keep_Crate_D_Snow,
+            SNOActor.a3dun_Keep_Exploding_Barrel,
+            SNOActor.CaOut_Target_Dummy,
+            SNOActor.a3dun_rmpt_catapult_follower_event_gate,
+            SNOActor.a2dun_Zolt_Breakable_Pillar_A,
+            SNOActor.trDun_Cave_SwordOfJustice_Blade,
+            SNOActor.caOut_Cage,
             //a3dun_crater_st_Demo_ChainPylon_Fire_Azmodan, a3dun_crater_st_Demon_ChainPylon_Fire_MistressOfPain
-            201680,
-            217285,  //trOut_Leor_painting
-            5902, // trDun_Magic_Painting_H_NoSpawn
-            // uber fire chains in Realm of Turmoil
-            263014,
-            249192, 251416, 249191, 251730, // summoned skeleton from ring
+            SNOActor.a3dun_crater_st_Demon_ChainPylon_Fire_MistressOfPain,
+            SNOActor.trOut_Leor_painting,
+            SNOActor.trDun_Magic_Painting_H_NoSpawn,
+            (SNOActor)263014,
+            (SNOActor)249192, (SNOActor)251416, SNOActor.Skeleton_A_Unique_Ring_015, SNOActor.Skeleton_Archer_A_Unique_Ring_015, // summoned skeleton from ring
             // Units below here
-            111456, 5013, 5014, 205756, 205746, 4182, 4183, 4644, 4062, 4538, 52693, 162575, 2928, 51291, 51292,
-            96132, 90958, 90959, 80980, 51292, 51291, 2928, 3546, 129345, 81857, 138428, 81857, 60583, 170038, 174854, 190390,
-            194263, 87189, 90072, 107031, 106584, 186130, 187265,
-            108012, 103279, 74004, 84531, 84538,  190492, 6318, 107705, 105681, 89934,
-            89933, 182276, 117574, 182271, 182283, 182278, 128895, 81980, 82111, 81226, 81227, 107067, 106749,
-            107107, 107112, 106731, 107752, 107829, 90321, 107828, 121327, 249320, 81232, 81231, 81239, 81515, 210433, 195414,
-            80758, 80757, 80745, 81229, 81230, 82109, 83024, 83025, 82972, 83959, 249190, 251396, 138472, 118260, 200226, 192654, 245828,
-            215103, 132951, 217508, 199998, 199997, 114527, 245910, 169123, 123885, 169890, 168878, 169891, 169077, 169904, 169907,
-            169906, 169908, 169905, 169909, 80140,
-            4176, 178664, 173827, 133741, 159144, 181748, 159098, 206569, 200706, 5895, 5896, 5897, 5899, 4686, 85843, 249338,
-            251416, 249192, 183892,196899, 196900, 196903, 223333, 220636, 218951, 245838,
+            SNOActor.Voiceover_FreedPrisoner,
+            SNOActor.Raven_Pecking,
+            SNOActor.Raven_Perched,
+            SNOActor.caOut_Raven_Pecking_A,
+            SNOActor.caOut_Raven_Perched_A,
+            SNOActor.GhostKnight2,
+            SNOActor.GhostKnight3,
+            SNOActor.Scoundrel,
+            SNOActor.Enchantress,
+            SNOActor.Templar,
+            SNOActor.Hireling_Templar,
+            SNOActor.caldeumPoor_Legless_Male_02,
+            SNOActor.Kadin,
+            SNOActor.Aleser,
+            SNOActor.Caliem,
+            SNOActor.Bezir,
+            SNOActor.SuperCaldeumGuard_Spear_B,
+            SNOActor.DavydImpostor,
+            SNOActor.Davyd,
+            SNOActor.Caliem,
+            SNOActor.Aleser,
+            SNOActor.Kadin,
+            SNOActor.caldeumGuard_Cleaver_A,
+            SNOActor.Maghda_A_TempProjection,
+            SNOActor.caldeumGuard_Spear_Imperial,
+            SNOActor.caldeumGuard_Captain_B_Khamsin,
+            SNOActor.caldeumGuard_Spear_Imperial,
+            SNOActor.Khamsin_Mine_Unique,
+            SNOActor.Tyrael_Act3,
+            SNOActor.SacrificeLadyA,
+            SNOActor.A3_Hub_SacrificeLadyNew,
+            SNOActor.Mystic_B,
+            SNOActor.Fetish_Melee_A,
+            SNOActor.Fetish_doubleStack_Shaman_A,
+            SNOActor.witchDoctor_CorpseSpider,
+            SNOActor.Witchdoctor_spiritWalk_Dummy,
+            SNOActor.DemonVoiceover,
+            SNOActor.ZoltunKulleFollower,
+            SNOActor.a1dun_leor_BigFireGrate,
+            SNOActor.Voiceover_JailWarden,
+            SNOActor.TownAttackVillager,
+            SNOActor.OmniNPC_Tristram_Male_B,
+            SNOActor.OmniNPC_Tristram_Female_B,
+            SNOActor.Crater_St_SuccubusPrison_Male_A,
+            SNOActor.Twister_model,
+            SNOActor.Witchdoctor_spiritWalk_Dummy_female,
+            SNOActor.KulleVoiceover,
+            SNOActor.Fetish_Skeleton_A,
+            SNOActor.Fetish_Ranged_A,
+            SNOActor.Witchdoctor_BigBadVoodoo_fetish_blue,
+            SNOActor.Witchdoctor_BigBadVoodoo_fetish,
+            SNOActor.Witchdoctor_BigBadVoodoo_fetish_red,
+            SNOActor.Witchdoctor_BigBadVoodoo_fetish_yellow,
+            SNOActor.Witchdoctor_BigBadVoodoo_fetish_purple,
+            SNOActor.A1_GenericVendor_Tinker_Voiceover,
+            SNOActor.NPC_Human_Male_Event_FarmAmbush,
+            SNOActor.Wizard_HydraHead_Acid_1,
+            (SNOActor)81226,
+            (SNOActor)81227,
+            SNOActor.witchDoctor_CorpseSpider_obsidianRune,
+            SNOActor.witchDoctor_CorpseSpider_indigoRune,
+            SNOActor.witchDoctor_CorpseSpider_goldenRune,
+            SNOActor.witchDoctor_CorpseSpider_alabasterRune,
+            SNOActor.witchDoctor_CorpseSpider_crimsonRune,
+            SNOActor.Fetish_Hex_D,
+            SNOActor.Fetish_Hex_E,
+            SNOActor.Fetish_Hex_A,
+            SNOActor.Fetish_Hex_C,
+            SNOActor.demonFlyer_A_swoop,
+            (SNOActor)249320,
+            SNOActor.Wizard_HydraHead_Arcane_3,
+            SNOActor.Wizard_HydraHead_Arcane_2,
+            SNOActor.Wizard_Hydra_RuneArcane_Pool,
+            SNOActor.Wizard_HydraHead_Arcane_1,
+            SNOActor.Catapult_a3dunKeep_WarMachines_Snow_Firing,
+            SNOActor.rmpt_FloorExplosion_directional,
+            SNOActor.Wizard_HydraHead_Default_3,
+            SNOActor.Wizard_HydraHead_Default_2,
+            SNOActor.Wizard_HydraHead_Default_1,
+            SNOActor.Wizard_HydraHead_Lightning_2,
+            SNOActor.Wizard_HydraHead_Lightning_3,
+            SNOActor.Wizard_HydraHead_Lightning_1,
+            SNOActor.Wizard_HydraHead_Frost_2,
+            SNOActor.Wizard_HydraHead_Frost_3,
+            SNOActor.Wizard_HydraHead_Frost_1,
+            SNOActor.Wizard_HydraHead_Big,
+            (SNOActor)249190,
+            (SNOActor)251396,
+            SNOActor.bastionsKeepGuard_Melee_A_01_NPC,
+            SNOActor.bastionsKeepGuard_Melee_A_01,
+            SNOActor.LootType2_BastionsKeepGuard_Frosty_Melee_Corpse_05,
+            SNOActor.LustVoiceover,
+            (SNOActor)245828,
+            SNOActor.Diablo_VO,
+            SNOActor.demonFlyer_A_bomber,
+            SNOActor.caldeumMiddleClass_Male_A_TimedDungeon,
+            SNOActor.a3dun_keep_firewall2,
+            SNOActor.a3dun_keep_firewall1,
+            SNOActor.BelialVoiceover,
+            (SNOActor)245910,
+            SNOActor.Monk_female_mysticAlly_golden,
+            SNOActor.Monk_female_mysticAlly,
+            SNOActor.Monk_female_mysticAlly_indigo,
+            SNOActor.Monk_female_mysticAlly_crimson,
+            SNOActor.Monk_female_mysticAlly_alabaster,
+            SNOActor.Monk_female_mysticAlly_obsidian,
+            SNOActor.Monk_male_mysticAlly,
+            SNOActor.Monk_male_mysticAlly_indigo,
+            SNOActor.Monk_male_mysticAlly_crimson,
+            SNOActor.Monk_male_mysticAlly_golden,
+            SNOActor.Monk_male_mysticAlly_alabaster,
+            SNOActor.Monk_male_mysticAlly_obsidian,
+            SNOActor.SkeletonKing_Target_Proxy,
+            SNOActor.Generic_Proxy,
+            SNOActor.DH_Companion_Ferret,
+            SNOActor.DH_companion_spider,
+            SNOActor.DH_Companion,
+            SNOActor.DH_Companion_RuneE,
+            SNOActor.DH_companion_Boar,
+            SNOActor.DH_Companion_RuneC,
+            SNOActor.a3dun_Crater_DemonClawBomb_A_Monster,
+            SNOActor.bastionsKeepGuard_Melee_A_01_NPC_Frosty,
+            SNOActor.trDun_Magic_Painting,
+            SNOActor.trDun_Magic_Painting_B,
+            SNOActor.trDun_Magic_Painting_C,
+            SNOActor.trDun_Magic_Painting_E_NoSpawn,
+            SNOActor.MinimapIconStairs,
+            SNOActor.EnchantressNPC,
+            (SNOActor)249338,
+            (SNOActor)251416,
+            (SNOActor)249192,
+            SNOActor.Skeleton_A_Necromancer,
+            SNOActor.a4dun_Aspect_Ghost_01,
+            SNOActor.a4dun_Aspect_Ghost_02,
+            SNOActor.a4dun_Aspect_Ghost_05,
+            SNOActor.a4dun_Spire_HellFissure,
+            SNOActor.a4dun_spire_Spike_Trap_Monster,
+            SNOActor.demonFlyer_C_bomber,
+            (SNOActor)245838,
             //bone pile
-            218951,245838,
+            SNOActor.demonFlyer_C_bomber,
+            (SNOActor)245838,
             // rrrix act 1
-            108882, 245919, 5944, 165475, 199998, 168875, 105323, 85690, 105321, 108266, 89578,
-            175181, // trDun_Crypt_Skeleton_King_Throne_Parts
+            SNOActor.GhostKnight1_Festering,
+            (SNOActor)245919,
+            SNOActor.trDun_SkeletonKing_Sealed_Door,
+            SNOActor.trOut_Town_Attack_Church_Switch,
+            SNOActor.a3dun_keep_firewall2,
+            SNOActor.trOut_Cath_Entrance_Door,
+            SNOActor.a1dunLeor_Interactive_Door_Locked_B,
+            SNOActor.Crypt_Alcove_Of_Rot_Custom,
+            SNOActor.a1dunLeor_Interactive_Door_Locked_A,
+            SNOActor.a1dun_Leor_Spike_TrapDoor,
+            SNOActor.a1dun_leor_firewall1,
+            SNOActor.trDun_Crypt_Skeleton_King_Throne_Parts,
             // rrrix act 2
-            213907, 92519, 61544, 105681, 114527, 114642, 139933, 144405, 156890, 164057, 164195, 180254, 180802, 180809, 181173, 181174, 181177, 181181,
-            181182, 181185, 181290, 181292, 181306, 181309, 181313, 181326, 181563, 181857, 181858, 187265, 191433, 191462, 191641, 192880, 192881, 196413, 196435,
-            197280, 199191, 199264, 199274, 199597, 199664, 200979, 200982, 201236, 201580, 201581, 201583, 204183, 205746, 205756, 210087, 213907,  219223,
-            220114, 3011, 3205, 3539, 3582, 3584, 3595, 3600, 4580, 52693, 5466, 55005, 5509, 62522,
-            205756, 5509, 200371, 167185, 181195, 217346, 178161, 60108,
+            SNOActor.a2dun_Zolt_Head_Container,
+            SNOActor.caOut_Boneyards_Bloodhawknest,
+            SNOActor.Intro_Jeweler,
+            SNOActor.KulleVoiceover,
+            SNOActor.BelialVoiceover,
+            SNOActor.a2dun_Swr_Grate_Spawner_a,
+            SNOActor.caldeumFormerRichGuy,
+            SNOActor.caldeumEliteChapLady,
+            SNOActor.Caldeum_FormerNoblewoman,
+            SNOActor.caldeumGuard_Captain_B_Ravd,
+            SNOActor.caldeumGuard_Cleaver_A_Jarulf,
+            SNOActor.a2dun_Cald_Belial_Magic_Blocker,
+            (SNOActor)180802,
+            (SNOActor)180809,
+            SNOActor.caldeumPoor_Female_D_Town,
+            SNOActor.caldeumPoor_Female_E_Town,
+            SNOActor.caldeumPoor_Male_D_Town,
+            SNOActor.caldeumTortured_Poor_Female_B_Town,
+            SNOActor.caldeumTortured_Poor_Female_C_Town,
+            SNOActor.caldeumTortured_Poor_Male_G_Town,
+            SNOActor.caldeumPoor_Male_C_Town,
+            SNOActor.caldeumPoor_Male_E_Town,
+            SNOActor.caldeumChild_Male_A_Town,
+            SNOActor.caldeumPoor_Male_B_Town,
+            SNOActor.caldeumMiddleClass_Male_C_NoWanderNoTurn_Town,
+            SNOActor.caldeumTortured_Poor_Male_C_Town,
+            SNOActor.vizjereiMale_A_Town,
+            SNOActor.caldeumGuard_Cleaver_A_Town,
+            SNOActor.caldeumGuard_Spear_Imperial_Town,
+            SNOActor.ZoltunKulleFollower,
+            SNOActor.vizjereiMale_A_RichThief,
+            SNOActor.caldeumWealthy_Male_A_Fountain,
+            SNOActor.caldeumPoor_Female_B_Town_Gate,
+            SNOActor.Faraz,
+            SNOActor.Bahaar,
+            SNOActor.caldeumChild_Female_C,
+            SNOActor.caldeumChild_Female_B_Follow,
+            SNOActor.caldeumPoor_Female_Shopper,
+            SNOActor.a2dun_Cave_Worms_Bush_A,
+            SNOActor.a2dun_Cave_Worms_Bush_B,
+            SNOActor.a2dun_Cave_Worms_Bush_C,
+            SNOActor.a2dun_Cave_Worms_Rocks_A,
+            SNOActor.a2dun_Cave_Worms_Rocks_B,
+            SNOActor.caldeumMiddleClass_Male_A_Ambient,
+            SNOActor.caldeumPoor_Male_A_Ambient,
+            SNOActor.caldeumChild_Male_A_Town_Bunny,
+            SNOActor.caldeumPoor_Male_C_Ambient,
+            SNOActor.caldeumPoor_Male_D_Ambient,
+            SNOActor.caldeumPoor_Male_F_Ambient,
+            SNOActor.g_portal_Ladder_Short_Blue_largeRadius,
+            SNOActor.caOut_Raven_Perched_A,
+            SNOActor.caOut_Raven_Pecking_A,
+            SNOActor.Zakarum_Female_Wealthy_Gates,
+            SNOActor.a2dun_Zolt_Head_Container,
+            SNOActor.a2dun_Swr_Arch_Spawner_ZombieCrawler_01,
+            SNOActor.HakanProjection,
+            SNOActor.a2dun_Zolt_Random_Breakable_Corner,
+            SNOActor.Asheara,
+            SNOActor.caldeumChild_Female_A,
+            SNOActor.caldeumPoor_Male_A,
+            SNOActor.caldeumPoor_Male_B,
+            SNOActor.caldeumTortured_Poor_Male_B,
+            SNOActor.caldeumTortured_Poor_Male_G,
+            SNOActor.Leah,
+            SNOActor.Hireling_Templar,
+            SNOActor.SphereTrigger,
+            SNOActor.a2dun_Swr_Arch_Spawner_CryptChild_01,
+            SNOActor.SuperCaldeumGuard_Cleaver_A,
+            SNOActor.Hakan,
+            SNOActor.caOut_Raven_Pecking_A,
+            SNOActor.SuperCaldeumGuard_Cleaver_A,
+            SNOActor.CaOut_Target_Dummy,
+            SNOActor.trOut_Cultists_Summoning_Portal_B,
+            SNOActor.a2dun_Cald_Belial_Acid_Attack,
+            SNOActor.a2dun_Zolt_Shadow_Realm_Portal_Exit_B_Door,
+            SNOActor.caOut_Oasis_Mine_Entrance_A,
+            SNOActor.Belial_Spray_Marker,
             // rrrix act 3
-            182443, 211456,
+            SNOActor.a3_Battlefield_GuardCatapult_Door,
+            SNOActor.a3dun_Keep_Barrel_Snow_No_Skirt,
             // uber fire chains in Realm of Turmoil and Iron Gate in Realm of Chaos
-            263014,
-            5724, 5727,
-            5869, // trDun_Gargoyle_01
-            5738, // trDun_Cath_Breakable_pillar
-
-            105478, // a1dun_Leor_Spike_Spawner_Switch
-            /*
-             * A5
-             */
-
-            (int)SNOActor.X1_Pand_HexMaze_PortalChampSummon, // Monster that looks like a portal, and summons champions.
+            (SNOActor)263014,
+            SNOActor.trDun_Cath_BookcaseShelves_A,
+            SNOActor.trDun_Cath_BookcaseShelves_B,
+            SNOActor.trDun_Gargoyle_01,
+            SNOActor.trDun_Cath_Breakable_pillar,
+            SNOActor.a1dun_Leor_Spike_Spawner_Switch,
+            SNOActor.X1_Pand_HexMaze_PortalChampSummon, // Monster that looks like a portal, and summons champions.
 
             // 4798, old necromancer bounty quest actor
 
-            // Pandemonium Fortress
-            357297, // X1_Fortress_Rack_C
-            //374196, // X1_Fortress_Rack_C_Stump
-            357295, // X1_Fortress_Rack_B
-            //374195, // X1_Fortress_Rack_B_Stump
-            357299, // X1_Fortress_Rack_D
-            //374197, // X1_Fortress_Rack_D_Stump
-            357301, // X1_Fortress_Rack_E
-            //374198, // X1_Fortress_Rack_E_Stump
-            357306, // X1_Fortress_Rack_F
-            //374199, // X1_Fortress_Rack_F_Stump
-            365503, // X1_Fortress_FloatRubble_A
-            365562, // X1_Fortress_FloatRubble_B
-            365580, // X1_Fortress_FloatRubble_C
-            365602, // X1_Fortress_FloatRubble_D
-            365611, // X1_Fortress_FloatRubble_E
-            365739, // X1_Fortress_FloatRubble_F
+            // Pandemonium Fortress,
+            SNOActor.X1_Fortress_Rack_C,
+            // SNOActor.X1_Fortress_Rack_C_Stump,
+            SNOActor.X1_Fortress_Rack_B,
+            //SNOActor.X1_Fortress_Rack_B_Stump,
+            SNOActor.X1_Fortress_Rack_D,
+            //SNOActor.X1_Fortress_Rack_D_Stump,
+            SNOActor.X1_Fortress_Rack_E,
+            //SNOActor.X1_Fortress_Rack_E_Stump,
+            SNOActor.X1_Fortress_Rack_F,
+            //SNOActor.X1_Fortress_Rack_F_Stump,
+            SNOActor.X1_Fortress_FloatRubble_A,
+            SNOActor.X1_Fortress_FloatRubble_B,
+            SNOActor.X1_Fortress_FloatRubble_C,
+            SNOActor.X1_Fortress_FloatRubble_D,
+            SNOActor.X1_Fortress_FloatRubble_E,
+            SNOActor.X1_Fortress_FloatRubble_F,
+            SNOActor.x1_Abattoir_furnaceWall,
+            SNOActor.x1_abattoir_furnace_01,
+            SNOActor.x1_Abattoir_furnaceSpinner_Event_Phase2, //-- this is a rotating avoidance, with a fire "beam" about 45f in length
+            SNOActor.x1_Catacombs_Weapon_Rack_Raise,
+            SNOActor.x1_Westm_HeroWorship03_VO,
+            SNOActor.X1_Westm_Door_Giant_Closed,
+            SNOActor.X1_Westm_Door_Giant_Opening_Event,
+            SNOActor.x1_Pand_Ext_ImperiusCharge_Barricade,
+            SNOActor.x1_Westm_DeathOrb_Caster_TEST,
+            SNOActor.X1_Westm_Breakable_Wolf_Head_A,
 
-            355365, // x1_Abattoir_furnaceWall
-
-            304313, // x1_abattoir_furnace_01
-            375383, // x1_Abattoir_furnaceSpinner_Event_Phase2 -- this is a rotating avoidance, with a fire "beam" about 45f in length
-
-            265637, // x1_Catacombs_Weapon_Rack_Raise
-
-            321479, // x1_Westm_HeroWorship03_VO
-
-            328008, // X1_Westm_Door_Giant_Closed
-            312441, // X1_Westm_Door_Giant_Opening_Event
-
-            328942, // x1_Pand_Ext_ImperiusCharge_Barricade
-            324867, // x1_Westm_DeathOrb_Caster_TEST
-            313302, // X1_Westm_Breakable_Wolf_Head_A
-
-            368268, // x1_Urzael_SoundSpawner
-            368626, // x1_Urzael_SoundSpawner
-            368599, // x1_Urzael_SoundSpawner
-            368621, // x1_Urzael_SoundSpawner
-
-            377253, // x1_Fortress_Crystal_Prison_Shield
-            316221, // X1_WarpToPortal
-            370187, // x1_Malthael_Boss_Orb_Collapse
-            328830, // x1_Fortress_Portal_Switch
-            374174, // X1_WarpToPortal
-
-            356639, // x1_Catacombs_Breakable_Window_Relief
+            SNOActor.x1_Urzael_SoundSpawner,
+            SNOActor.x1_Urzael_SoundSpawner_04,
+            SNOActor.x1_Urzael_SoundSpawner_02,
+            SNOActor.x1_Urzael_SoundSpawner_03,
+            SNOActor.x1_Fortress_Crystal_Prison_Shield,
+            SNOActor.X1_WarpToPortal,
+            SNOActor.x1_Malthael_Boss_Orb_Collapse,
+            SNOActor.x1_Fortress_Portal_Switch,
+            SNOActor.X1_WarpToPortal,
+            SNOActor.x1_Catacombs_Breakable_Window_Relief,
 
             //x1_Westm_HeroWorship01_VO Dist=10 IsElite=False LoS=True HP=1,00 Dir=SW - Name=x1
             //It's trying to attack that in town
-            //x1_Westm_HeroWorship01_VO = 321451,
-            //x1_Westm_HeroWorship02_VO = 321454,
-            //x1_Westm_HeroWorship03_VO = 321479,
-            321451, 321454, 321479,
+            SNOActor.x1_Westm_HeroWorship01_VO,
+            SNOActor.x1_Westm_HeroWorship02_VO,
+            SNOActor.x1_Westm_HeroWorship03_VO,
 
-            (int)SNOActor.px_Bounty_Ramparts_Camp_CatapultIdle, // not interactable
-            (int)SNOActor.px_Bounty_Ramparts_Camp_CatapultFiring,
+            SNOActor.px_Bounty_Ramparts_Camp_CatapultIdle, // not interactable
+            SNOActor.px_Bounty_Ramparts_Camp_CatapultFiring,
 
             // Bulba
-            430733, //A1 Templar Inquisition
-            432259, //A1 The Triune Reborn
+            SNOActor.px_Wilderness_Camp_TemplarPrisoners,
+            SNOActor.px_Highlands_Camp_ResurgentCult_Totem,
             //434366, //A1 : Wortham Survivors
             //432770, //A1: Queen's Desert
             //433051, //A2: Prisoners of the Cult
@@ -2109,17 +2225,13 @@ namespace Trinity.Framework.Reference
             //433246, //A5: Death's Embrace
             //433316, //A5: Rathma's Gift
 
-			356805,  //A5
-			193154,  //A4
-
-            435630, // Pinger 1
-            434971, // Pinger 2
-
-            //175603, //A3 - Oasis - a2dun_Aqd_Act_Waterwheel_Lever_A_01_WaterPuzzle
-
-            287208, // X1_Westm_Door_Giant_Closed_A
-
-            446170, // x1_Monstrosity_ScorpionBug_A_CryptCursedShrine
+			SNOActor.x1_Catacombs_chest_rare_GardenEvent,
+			SNOActor.a4dun_spire_CorruptedWallAngel_Column_2,
+            SNOActor.px_Bounty_Camp_Pinger_450,
+            SNOActor.px_Bounty_Camp_Pinger,
+            SNOActor.a2dun_Aqd_Act_Waterwheel_Lever_A_01_WaterPuzzle,
+            SNOActor.X1_Westm_Door_Giant_Closed_A,
+            SNOActor.x1_Monstrosity_ScorpionBug_A_CryptCursedShrine
         };
 
         // A list of bosses in the game, just to make CERTAIN they are treated as elites
@@ -2183,10 +2295,34 @@ namespace Trinity.Framework.Reference
         /// <summary>
         /// Contains the list of Boss Level Area ID's
         /// </summary>
-        public static HashSet<int> BossLevelAreaIDs { get; } = new HashSet<int>
+        public static HashSet<SNOLevelArea> BossLevelAreaIDs { get; } = new HashSet<SNOLevelArea>
         {
-            109457, 185228, 60194, 130163, 60714, 19789, 62726, 90881, 195268, 58494, 81178, 60757, 111232, 112580,
-            119656, 111516, 143648, 215396, 119882, 109563, 153669, 215235, 55313, 60193, 19789, 330576, 109563
+            SNOLevelArea.A1_trOut_Tristram_Inn,
+            SNOLevelArea.A3_Dun_Keep_Hub_Inn,
+            SNOLevelArea.A2_Dun_Zolt_BossFight_Level04,
+            SNOLevelArea.A1_trOut_Tristram_CainsHouse,
+            SNOLevelArea.A1_trDun_Cain_Intro,
+            SNOLevelArea.A1_trDun_Level07D,
+            SNOLevelArea.A1_C6_SpiderCave_01_Queen,
+            SNOLevelArea.A1_trDun_ButchersLair_02,
+            SNOLevelArea.A2_caOut_Cellar_Alcarnus_Main,
+            SNOLevelArea.A2_Dun_Swr_Adria_Level01,
+            SNOLevelArea.A2_Belial_Room_Intro,
+            SNOLevelArea.A2_Belial_Room_01,
+            SNOLevelArea.A3_Gluttony_Boss,
+            SNOLevelArea.A3_Battlefield_C,
+            SNOLevelArea.A3_dun_Crater_ST_Level04B,
+            SNOLevelArea.A3_AzmodanFight,
+            SNOLevelArea.A4_dun_LibraryOfFate,
+            SNOLevelArea.a4dun_spire_exterior,
+            SNOLevelArea.A4_dun_Garden3_SpireEntrance,
+            SNOLevelArea.A4_dun_Diablo_Arena,
+            SNOLevelArea.a4dun_Diablo_ShadowRealm_01,
+            SNOLevelArea.A4_dun_Diablo_Arena_Phase3,
+            SNOLevelArea.A2_caOut_CT_RefugeeCamp,
+            SNOLevelArea.A1_trDun_Level07D,
+            SNOLevelArea.X1_Malthael_Boss_Arena,
+            SNOLevelArea.A4_dun_Diablo_Arena
         };
 
         public static HashSet<int> BountyTurnInQuests { get; } = new HashSet<int>()
@@ -2210,67 +2346,64 @@ namespace Trinity.Framework.Reference
         /// <summary>
         /// Chests/average-level containers that deserve a bit of extra radius (ie - they are more worthwhile to loot than "random" misc/junk containers)
         /// </summary>
-        public static HashSet<int> ContainerWhiteListIds { get; } = new HashSet<int>
+        public static HashSet<SNOActor> ContainerWhiteListIds { get; } = new HashSet<SNOActor>
         {
-            (int)SNOActor.x1_Catacombs_Weapon_Rack_Raise,
-            62859,  // TrOut_Fields_Chest
-            62865,  // TrOut_Highlands_Chest
-            62872,  // CaOut_Oasis_Chest
-            78790,  // trOut_wilderness_chest
-            79016,  // trOut_Tristram_chest
-            94708,  // a1dun_Leor_Chest
-            96522,  // a1dun_Cath_chest
-            130170, // a3dun_Crater_Chest
-            108122, // caOut_StingingWinds_Chest
-            111870, // A3_Battlefield_Chest_Snowy
-            111947, // A3_Battlefield_Chest_Frosty
-            213447, // Lore_AzmodanChest3
-            213446, // Lore_AzmodanChest2
-            51300,  // a3dun_Keep_Chest_A
-            179865, // a3dun_Crater_ST_Chest
-            109264, // a3dun_Keep_Chest_Rare
-            212491, // a1dun_Random_Cloud
-            210422, // a1dun_random_pot_of_gold_A
-            211861, // Pinata
-            196945, // a2dun_Spider_EggSack__Chest
-            70534,  // a2dun_Spider_Chest
-            //289794, // Weaponracks on battlefields of eternity --> best place to farm white crafting materials
-            103919, // Demonic Vessels
-            78030,  // GizmoType: Chest Name: trOut_Wilderness_Scarecrow_A-3924 ActorSnoId: 78030
-            173325, // Anvil of Fury
-
-            301177, // A5 Timeless Prison Switch
-
-            // Kevin Spacey was here
-            193023, //LootType3_GraveGuard_C_Corpse_03
-            156682, //Adventurer_A_Corpse_01_WarrivEvent
-            5758, //trDun_Cath_FloorSpawner_01
-            5724, //trDun_Cath_BookcaseShelves_A
-            85790, //Cath_Lecturn_ LachdanansScroll
-            227305, //Lore_Inarius_Corrupt
-            137125, //FesteringWoods_WarriorsRest_Lore
+            SNOActor.x1_Catacombs_Weapon_Rack_Raise,
+            SNOActor.TrOut_Fields_Chest,
+            SNOActor.TrOut_Highlands_Chest,
+            SNOActor.CaOut_Oasis_Chest,
+            SNOActor.trOut_wilderness_chest,
+            SNOActor.trOut_Tristram_chest,
+            SNOActor.a1dun_Leor_Chest,
+            SNOActor.a1dun_Cath_chest,
+            SNOActor.a3dun_Crater_Chest,
+            SNOActor.caOut_StingingWinds_Chest,
+            SNOActor.A3_Battlefield_Chest_Snowy,
+            SNOActor.A3_Battlefield_Chest_Frosty,
+            SNOActor.Lore_AzmodanChest3,
+            SNOActor.Lore_AzmodanChest2,
+            SNOActor.a3dun_Keep_Chest_A,
+            SNOActor.a3dun_Crater_ST_Chest,
+            SNOActor.a3dun_Keep_Chest_Rare,
+            SNOActor.a1dun_Random_Cloud,
+            SNOActor.a1dun_random_pot_of_gold_A,
+            SNOActor.Pinata,
+            SNOActor.a2dun_Spider_EggSack__Chest,
+            SNOActor.a2dun_Spider_Chest,
+            //SNOActor.X1_PandExt_ArmorRack, // Weaponracks on battlefields of eternity --> best place to farm white crafting materials
+            SNOActor.a3Battlefield_Props_Demonic_Container_A,
+            SNOActor.trOut_Wilderness_Scarecrow_A,
+            SNOActor.trOut_OldTristram_AnvilOfFury,
+            SNOActor.x1_PandExt_Time_Activator,
+            SNOActor.LootType3_GraveGuard_C_Corpse_03,
+            SNOActor.Adventurer_A_Corpse_01_WarrivEvent,
+            SNOActor.trDun_Cath_FloorSpawner_01,
+            SNOActor.trDun_Cath_BookcaseShelves_A,
+            SNOActor.Cath_Lecturn_LachdanansScroll,
+            SNOActor.Lore_Inarius_Corrupt,
+            SNOActor.FesteringWoods_WarriorsRest_Lore
         };
 
-        public static Dictionary<int, float> CustomObjectRadius { get; } = new Dictionary<int, float>
+        public static Dictionary<SNOActor, float> CustomObjectRadius { get; } = new Dictionary<SNOActor, float>
         {
-            {(int) SNOActor.a3dun_Keep_Bridge_Switch, 4},
-            {(int) SNOActor.a3dun_Keep_Bridge, 4},
-            {(int) SNOActor.a3dun_Keep_Door_Wooden_A, 40},
-            {(int) SNOActor.Belial, 25},
-            {(int) SNOActor.SpiderQueen, 10},
-            {(int) SNOActor.a4dun_Garden_Purification_Well_Enlightened, 35},
-            {(int) SNOActor.a4dun_DIablo_Arena_Health_Well, 10},
-            {(int) SNOActor.x1_Death_Orb_Master_Monster, 45f},
-            {(int) SNOActor.x1_PandExt_Time_Activator, 15f},
-            {(int) SNOActor.x1_Catacombs_Nephalem_Event_Switch, 5f},
-            {(int) SNOActor.x1_westm_Bridge, 40f},
-            {(int) SNOActor.a3dun_Keep_SiegeTowerDoor_A, 14f},
-            {(int) SNOActor.x1_Malthael_DeathFogMonster, 15f},
-            {(int) SNOActor.a4dun_Garden_Corruption_Monster, 20f},
-            {(int) SNOActor.a4dun_Garden_Corruption_HellRift_Monster, 20f},
-            {(int) SNOActor.a4dun_Garden_Corruption_Monster_Despair, 20f},
-            {(int) SNOActor.p6_Event_Moor_BloodCollection_Altar, 22f},
-            {(int) SNOActor.Rockworm_Stationary_QueenWorm, 12f}
+            {SNOActor.a3dun_Keep_Bridge_Switch, 4},
+            {SNOActor.a3dun_Keep_Bridge, 4},
+            {SNOActor.a3dun_Keep_Door_Wooden_A, 40},
+            {SNOActor.Belial, 25},
+            {SNOActor.SpiderQueen, 10},
+            {SNOActor.a4dun_Garden_Purification_Well_Enlightened, 35},
+            {SNOActor.a4dun_DIablo_Arena_Health_Well, 10},
+            {SNOActor.x1_Death_Orb_Master_Monster, 45f},
+            {SNOActor.x1_PandExt_Time_Activator, 15f},
+            {SNOActor.x1_Catacombs_Nephalem_Event_Switch, 5f},
+            {SNOActor.x1_westm_Bridge, 40f},
+            {SNOActor.a3dun_Keep_SiegeTowerDoor_A, 14f},
+            {SNOActor.x1_Malthael_DeathFogMonster, 15f},
+            {SNOActor.a4dun_Garden_Corruption_Monster, 20f},
+            {SNOActor.a4dun_Garden_Corruption_HellRift_Monster, 20f},
+            {SNOActor.a4dun_Garden_Corruption_Monster_Despair, 20f},
+            {SNOActor.p6_Event_Moor_BloodCollection_Altar, 22f},
+            {SNOActor.Rockworm_Stationary_QueenWorm, 12f}
         };
 
         public static Dictionary<int, float> DefaultAvoidanceAnimationCustomRadius { get; } = new Dictionary<int, float>()
@@ -2337,22 +2470,27 @@ namespace Trinity.Framework.Reference
             {139741, 15},
         };
 
-        public static HashSet<int> DemonHunterPetIds { get; } = new HashSet<int>
+        public static HashSet<SNOActor> DemonHunterPetIds { get; } = new HashSet<SNOActor>
         {
-            178664,
-            173827,
-            133741,
-            159144,
-            181748,
-            159098,
-            159102,
-            159144,
-            334861,
+            SNOActor.DH_Companion_Ferret,
+            SNOActor.DH_companion_spider,
+            SNOActor.DH_Companion,
+            SNOActor.DH_Companion_RuneE,
+            SNOActor.DH_companion_Boar,
+            SNOActor.DH_Companion_RuneC,
+            SNOActor.DH_Companion_RuneD,
+            SNOActor.DH_Companion_RuneE,
+            (SNOActor)334861,
         };
 
-        public static HashSet<int> DemonHunterSentryIds { get; } = new HashSet<int>
+        public static HashSet<SNOActor> DemonHunterSentryIds { get; } = new HashSet<SNOActor>
         {
-            141402, 150025, 150024, 168815, 150026, 150027,
+            SNOActor.DH_sentry,
+            SNOActor.DH_sentry_addsMissiles,
+            SNOActor.DH_sentry_addsDuration,
+            SNOActor.DH_sentry_tether,
+            SNOActor.DH_sentry_addsHeals,
+            SNOActor.DH_sentry_addsShield,
         };
 
         /// <summary>
@@ -2376,110 +2514,110 @@ namespace Trinity.Framework.Reference
         };
 
         // De-weight to zero but they still need to be processed for ClsoedDoor checks. todo proper fix.
-        public static HashSet<int> DoorsToAlwaysIgnore { get; } = new HashSet<int>
+        public static HashSet<SNOActor> DoorsToAlwaysIgnore { get; } = new HashSet<SNOActor>
         {
-            115373, //caOut_Oasis_Door_Aqueduct_A_Top-5549
-            454194, //p43_AD_trDun_Cath_WoodDoor_Lazarus-56453 (454194)
-            454187, //p43_AD_a1dun_Leor_Jail_Door_SuperLocked_A-61290 (454187)
-            454173, //43_AD_a1dun_Leor_Gate_A-61285 (454173)
-            465787, //P6_Church_BloodPool-25682
+            SNOActor.caOut_Oasis_Door_Aqueduct_A_Top,
+            SNOActor.p43_AD_trDun_Cath_WoodDoor_Lazarus,
+            SNOActor.p43_AD_a1dun_Leor_Jail_Door_SuperLocked_A,
+            SNOActor.p43_AD_a1dun_Leor_Gate_A,
+            SNOActor.P6_Church_BloodPool,
         };
 
-        public static HashSet<int> EventQuests { get; } = new HashSet<int>()
+        public static HashSet<SNOQuest> EventQuests { get; } = new HashSet<SNOQuest>()
         {
-            365821, // [D7499CC] Quest: x1_Catacombs_NS_06Mutant_Evant, QuestSnoId: 365821, QuestMeter: -1, QuestState: InProgress, QuestStep: 10, KillCount: 0, BonusCount: 0
-            369381, // [2ECD96F4] Quest: x1_Event_Horde_HunterKillers, QuestSnoId: 369381, QuestMeter: 0.004814815, QuestState: InProgress, QuestStep: 14, KillCount: 0, BonusCount: 0
-            369431, // [2ECD9860] Quest: x1_Event_WaveFight_AncientEvils, QuestSnoId: 369431, QuestMeter: -1, QuestState: InProgress, QuestStep: 13, KillCount: 0, BonusCount: 0
-            336293, // [417DD860] Quest: X1_Graveyard_GraveRobber_Event, QuestSnoId: 336293, QuestMeter: -1, QuestState: InProgress, QuestStep: 46, KillCount: 0, BonusCount: 0
-            369414, // [33955B38] Quest: X1_Pand_Ext_ForgottenWar_Adventure, QuestSnoId: 369414, QuestMeter: -1, QuestState: InProgress, QuestStep: 2, KillCount: 1, BonusCount: 0
+            SNOQuest.x1_Catacombs_NS_06Mutant_Evant,
+            SNOQuest.x1_Event_Horde_HunterKillers,
+            SNOQuest.x1_Event_WaveFight_AncientEvils,
+            SNOQuest.X1_Graveyard_GraveRobber_Event,
+            SNOQuest.X1_Pand_Ext_ForgottenWar_Adventure,
 
-            368306, // x1_Event_Horde_ArmyOfHell,
-            369332, // x1_Event_Horde_Bonepit,
-            365252, // x1_Event_Horde_DeathCellar,
-            365150, // x1_Event_Horde_Deathfire,
-            365695, // x1_Event_Horde_DesertFortress,
-            367979, // x1_Event_Horde_Dustbowl,
-            364880, // x1_Event_Horde_FleshpitGrove,
-            369525, // x1_Event_Horde_FlyingAssasins,
-            365796, // x1_Event_Horde_FoulHatchery,
-            365305, // x1_Event_Horde_GhoulSwarm,
-            369366, // x1_Event_Horde_GuardSlaughter,
-            369381, // x1_Event_Horde_HunterKillers,
-            368035, // x1_Event_Horde_InfernalSky,
-            // 365269, // x1_Event_Horde_SpiderTrap,
-            366331, // x1_Event_Horde_UdderChaos,
-            239301, // x1_Event_Jar_Of_Souls_NecroVersion,
-            370334, // x1_Event_SpeedKill_Angel_Corrupt_A,
-            370316, // x1_Event_SpeedKill_BileCrawler_A,
-            369841, // x1_Event_SpeedKill_Bloodhawk_A,
-            370556, // x1_Event_SpeedKill_Boss_Adria,
-            370373, // x1_Event_SpeedKill_Boss_Despair,
-            370154, // x1_Event_SpeedKill_Boss_Ghom,
-            369892, // x1_Event_SpeedKill_Boss_Maghda,
-            365630, // x1_Event_SpeedKill_Boss_SkeletonKing,
-            370349, // x1_Event_SpeedKill_Champion_BigRed_A,
-            370082, // x1_Event_SpeedKill_Champion_FallenHound_D,
-            369895, // x1_Event_SpeedKill_Champion_FleshPitFlyer_C,
-            365586, // x1_Event_SpeedKill_Champion_GhostA,
-            365593, // x1_Event_SpeedKill_Champion_GoatmanB,
-            370364, // x1_Event_SpeedKill_Champion_MalletDemon_A,
-            369906, // x1_Event_SpeedKill_Champion_SandShark_A,
-            370135, // x1_Event_SpeedKill_Champion_SoulRipper_A,
-            370837, // x1_Event_SpeedKill_Champion_SquiggletA,
-            365617, // x1_Event_SpeedKill_Champion_SummonableA,
-            370077, // x1_Event_SpeedKill_Champion_azmodanBodyguard_A,
-            370066, // x1_Event_SpeedKill_Champion_creepMob_A,
-            370341, // x1_Event_SpeedKill_Champion_morluSpellcaster_A,
-            370516, // x1_Event_SpeedKill_Champion_x1_FloaterAngel_A,
-            370544, // x1_Event_SpeedKill_Champon_x1_Rockworm_Pand_A,
-            370320, // x1_Event_SpeedKill_CoreEliteDemon_A,
-            370038, // x1_Event_SpeedKill_Fallen_C,
-            365551, // x1_Event_SpeedKill_GhostHumansA,
-            370053, // x1_Event_SpeedKill_Ghoul_E,
-            364644, // x1_Event_SpeedKill_GoatmanA,
-            365509, // x1_Event_SpeedKill_Goatman_Melee_A_Ghost,
-            370044, // x1_Event_SpeedKill_Goatmutant_B,
-            369873, // x1_Event_SpeedKill_Lacuni_B,
-            370049, // x1_Event_SpeedKill_Monstrosity_Scorpion_A,
-            369910, // x1_Event_SpeedKill_Rare_Ghoul_B,
-            365622, // x1_Event_SpeedKill_Rare_Skeleton2HandA,
-            370147, // x1_Event_SpeedKill_Rare_ThousandPounder,
-            370359, // x1_Event_SpeedKill_Rare_demonTrooper_C,
-            370499, // x1_Event_SpeedKill_Rare_x1_westmarchBrute_C,
-            370060, // x1_Event_SpeedKill_Skeleton_E,
-            364635, // x1_Event_SpeedKill_SkeletonsA,
-            369856, // x1_Event_SpeedKill_Snakeman_A,
-            369884, // x1_Event_SpeedKill_Spiderling_B,
-            369863, // x1_Event_SpeedKill_Swarm_A,
-            370666, // x1_Event_SpeedKill_TentacleBears,
-            369832, // x1_Event_SpeedKill_TriuneCultist_C,
-            365526, // x1_Event_SpeedKill_TriuneVesselA,
-            365547, // x1_Event_SpeedKill_ZombieB,
-            370033, // x1_Event_SpeedKill_demonFlyer_B,
-            369817, // x1_Event_SpeedKill_electricEel_A,
-            369837, // x1_Event_SpeedKill_fastMummy_A,
-            370329, // x1_Event_SpeedKill_morluMelee_B,
-            370482, // x1_Event_SpeedKill_x1_BileCrawler_Skeletal_A,
-            370435, // x1_Event_SpeedKill_x1_BogFamily_A,
-            370452, // x1_Event_SpeedKill_x1_Monstrosity_ScorpionBug_A,
-            370427, // x1_Event_SpeedKill_x1_Skeleton_Ghost_A,
-            370561, // x1_Event_SpeedKill_x1_Tentacle_A,
-            370445, // x1_Event_SpeedKill_x1_bogBlight_Maggot_A,
-            370466, // x1_Event_SpeedKill_x1_leaperAngel_A,
-            370489, // x1_Event_SpeedKill_x1_portalGuardianMinion_A,
-            370476, // x1_Event_SpeedKill_x1_westmarchHound_A,
-            369431, // x1_Event_WaveFight_AncientEvils,
-            365751, // x1_Event_WaveFight_ArmyOfTheDead,
-            368092, // x1_Event_WaveFight_BloodClanAssault,
-            365300, // x1_Event_WaveFight_ChamberOfBone,
-            365033, // x1_Event_WaveFight_CultistLegion,
-            368056, // x1_Event_WaveFight_DeathChill,
-            365678, // x1_Event_WaveFight_FallenWarband,
-            368124, // x1_Event_WaveFight_ForsakenSoldiers,
-            369482, // x1_Event_WaveFight_HostileRealm,
-            368334, // x1_Event_WaveFight_Juggernaut,
-            365133, // x1_Event_WaveFight_KhazraWarband,
-            365953, // x1_Event_WaveFight_SunkenGrave,
+            SNOQuest.x1_Event_Horde_ArmyOfHell,
+            SNOQuest.x1_Event_Horde_Bonepit,
+            SNOQuest.x1_Event_Horde_DeathCellar,
+            SNOQuest.x1_Event_Horde_Deathfire,
+            SNOQuest.x1_Event_Horde_DesertFortress,
+            SNOQuest.x1_Event_Horde_Dustbowl,
+            SNOQuest.x1_Event_Horde_FleshpitGrove,
+            SNOQuest.x1_Event_Horde_FlyingAssasins,
+            SNOQuest.x1_Event_Horde_FoulHatchery,
+            SNOQuest.x1_Event_Horde_GhoulSwarm,
+            SNOQuest.x1_Event_Horde_GuardSlaughter,
+            SNOQuest.x1_Event_Horde_HunterKillers,
+            SNOQuest.x1_Event_Horde_InfernalSky,
+            SNOQuest.x1_Event_Horde_SpiderTrap,
+            SNOQuest.x1_Event_Horde_UdderChaos,
+            SNOQuest.x1_Event_Jar_Of_Souls_NecroVersion,
+            SNOQuest.x1_Event_SpeedKill_Angel_Corrupt_A,
+            SNOQuest.x1_Event_SpeedKill_BileCrawler_A,
+            SNOQuest.x1_Event_SpeedKill_Bloodhawk_A,
+            SNOQuest.x1_Event_SpeedKill_Boss_Adria,
+            SNOQuest.x1_Event_SpeedKill_Boss_Despair,
+            SNOQuest.x1_Event_SpeedKill_Boss_Ghom,
+            SNOQuest.x1_Event_SpeedKill_Boss_Maghda,
+            SNOQuest.x1_Event_SpeedKill_Boss_SkeletonKing,
+            SNOQuest.x1_Event_SpeedKill_Champion_BigRed_A,
+            SNOQuest.x1_Event_SpeedKill_Champion_FallenHound_D,
+            SNOQuest.x1_Event_SpeedKill_Champion_FleshPitFlyer_C,
+            SNOQuest.x1_Event_SpeedKill_Champion_GhostA,
+            SNOQuest.x1_Event_SpeedKill_Champion_GoatmanB,
+            SNOQuest.x1_Event_SpeedKill_Champion_MalletDemon_A,
+            SNOQuest.x1_Event_SpeedKill_Champion_SandShark_A,
+            SNOQuest.x1_Event_SpeedKill_Champion_SoulRipper_A,
+            SNOQuest.x1_Event_SpeedKill_Champion_SquiggletA,
+            SNOQuest.x1_Event_SpeedKill_Champion_SummonableA,
+            SNOQuest.x1_Event_SpeedKill_Champion_azmodanBodyguard_A,
+            SNOQuest.x1_Event_SpeedKill_Champion_creepMob_A,
+            SNOQuest.x1_Event_SpeedKill_Champion_morluSpellcaster_A,
+            SNOQuest.x1_Event_SpeedKill_Champion_x1_FloaterAngel_A,
+            SNOQuest.x1_Event_SpeedKill_Champon_x1_Rockworm_Pand_A,
+            SNOQuest.x1_Event_SpeedKill_CoreEliteDemon_A,
+            SNOQuest.x1_Event_SpeedKill_Fallen_C,
+            SNOQuest.x1_Event_SpeedKill_GhostHumansA,
+            SNOQuest.x1_Event_SpeedKill_Ghoul_E,
+            SNOQuest.x1_Event_SpeedKill_GoatmanA,
+            SNOQuest.x1_Event_SpeedKill_Goatman_Melee_A_Ghost,
+            SNOQuest.x1_Event_SpeedKill_Goatmutant_B,
+            SNOQuest.x1_Event_SpeedKill_Lacuni_B,
+            SNOQuest.x1_Event_SpeedKill_Monstrosity_Scorpion_A,
+            SNOQuest.x1_Event_SpeedKill_Rare_Ghoul_B,
+            SNOQuest.x1_Event_SpeedKill_Rare_Skeleton2HandA,
+            SNOQuest.x1_Event_SpeedKill_Rare_ThousandPounder,
+            SNOQuest.x1_Event_SpeedKill_Rare_demonTrooper_C,
+            SNOQuest.x1_Event_SpeedKill_Rare_x1_westmarchBrute_C,
+            SNOQuest.x1_Event_SpeedKill_Skeleton_E,
+            SNOQuest.x1_Event_SpeedKill_SkeletonsA,
+            SNOQuest.x1_Event_SpeedKill_Snakeman_A,
+            SNOQuest.x1_Event_SpeedKill_Spiderling_B,
+            SNOQuest.x1_Event_SpeedKill_Swarm_A,
+            SNOQuest.x1_Event_SpeedKill_TentacleBears,
+            SNOQuest.x1_Event_SpeedKill_TriuneCultist_C,
+            SNOQuest.x1_Event_SpeedKill_TriuneVesselA,
+            SNOQuest.x1_Event_SpeedKill_ZombieB,
+            SNOQuest.x1_Event_SpeedKill_demonFlyer_B,
+            SNOQuest.x1_Event_SpeedKill_electricEel_A,
+            SNOQuest.x1_Event_SpeedKill_fastMummy_A,
+            SNOQuest.x1_Event_SpeedKill_morluMelee_B,
+            SNOQuest.x1_Event_SpeedKill_x1_BileCrawler_Skeletal_A,
+            SNOQuest.x1_Event_SpeedKill_x1_BogFamily_A,
+            SNOQuest.x1_Event_SpeedKill_x1_Monstrosity_ScorpionBug_A,
+            SNOQuest.x1_Event_SpeedKill_x1_Skeleton_Ghost_A,
+            SNOQuest.x1_Event_SpeedKill_x1_Tentacle_A,
+            SNOQuest.x1_Event_SpeedKill_x1_bogBlight_Maggot_A,
+            SNOQuest.x1_Event_SpeedKill_x1_leaperAngel_A,
+            SNOQuest.x1_Event_SpeedKill_x1_portalGuardianMinion_A,
+            SNOQuest.x1_Event_SpeedKill_x1_westmarchHound_A,
+            SNOQuest.x1_Event_WaveFight_AncientEvils,
+            SNOQuest.x1_Event_WaveFight_ArmyOfTheDead,
+            SNOQuest.x1_Event_WaveFight_BloodClanAssault,
+            SNOQuest.x1_Event_WaveFight_ChamberOfBone,
+            SNOQuest.x1_Event_WaveFight_CultistLegion,
+            SNOQuest.x1_Event_WaveFight_DeathChill,
+            SNOQuest.x1_Event_WaveFight_FallenWarband,
+            SNOQuest.x1_Event_WaveFight_ForsakenSoldiers,
+            SNOQuest.x1_Event_WaveFight_HostileRealm,
+            SNOQuest.x1_Event_WaveFight_Juggernaut,
+            SNOQuest.x1_Event_WaveFight_KhazraWarband,
+            SNOQuest.x1_Event_WaveFight_SunkenGrave,
         };
 
         /// <summary>
@@ -2490,39 +2628,30 @@ namespace Trinity.Framework.Reference
             5212
         };
 
-        public static HashSet<int> FetishArmyIds { get; } = new HashSet<int>
+        public static HashSet<SNOActor> FetishArmyIds { get; } = new HashSet<SNOActor>
         {
-            87189, //rune0, rune2, rune3 Fetish_Melee_A-78285
-            89934, //rune1 Fetish_Skeleton_A-77992
-
-            // rune4 Tiki Torch 5 + 2 shamans
-            409656, //Name: Fetish_Melee_fire-78523,
-            90072, //Fetish_doubleStack_Shaman_A-78522,
-
-            410238, //rune5 Fetish_Melee_poison-78595,
-
-            //ActorId: 409590, Type: Monster, Name: Fetish_Melee_Sycophants-852,
+            SNOActor.Fetish_Melee_A,
+            SNOActor.Fetish_Skeleton_A,
+            SNOActor.Fetish_Melee_fire,
+            SNOActor.Fetish_doubleStack_Shaman_A,
+            SNOActor.Fetish_Melee_poison,
+            SNOActor.Fetish_Melee_Sycophants,
         };
 
-        public static HashSet<int> ForceDestructibles { get; } = new HashSet<int>()
+        public static HashSet<SNOActor> ForceDestructibles { get; } = new HashSet<SNOActor>()
         {
-            273323, // x1_westm_Door_Wide_Clicky
-            55325, // a3dun_Keep_Door_Destructable
-            392606, // p1_Tgoblin_Vase_C
-            225252, // Shamanic Ward - Revenge of Gharbad bounty
-
-            331397, // x1_westm_Graveyard_Floor_Sarcophagus_Undead_Husband_Event
-
-            390498, // Tgoblin_Gold_Pile_A
-            386274, // Tgoblin_Gold_Pile_C
-            391765, // Tgoblin_Vase_A
-            392606, // Tgoblin_Vase_C
-
-            211861, //Pinata
-
-            437152, // A3 - Bounty: Khazra Guardians (436284)
-
-            121821, // A2 - Bounty: The Putrid Waters (433017)
+            SNOActor.x1_westm_Door_Wide_Clicky,
+            SNOActor.a3dun_Keep_Door_Destructable,
+            SNOActor.p1_Tgoblin_Vase_C,
+            SNOActor.trOut_Highlands_Goatman_Totem_Gharbad,
+            SNOActor.x1_westm_Graveyard_Floor_Sarcophagus_Undead_Husband_Event,
+            SNOActor.p1_Tgoblin_Gold_Pile_A,
+            SNOActor.p1_Tgoblin_Gold_Pile_C,
+            SNOActor.p1_Tgoblin_Vase_A,
+            SNOActor.p1_Tgoblin_Vase_C,
+            SNOActor.Pinata,
+            SNOActor.p4_Ruins_Frost_Goatman_Drum_A,
+            SNOActor.a2dun_Aqd_Mummy_Spawner_Muck,
         };
 
         /// <summary>
@@ -2530,25 +2659,25 @@ namespace Trinity.Framework.Reference
         /// as part of a quest that cannot be identified as quest monsters by any
         /// other means - use with caution.
         /// </summary>
-        public static HashSet<int> ForceKillAllSceneSnoIds { get; } = new HashSet<int>
+        public static HashSet<SNOScene> ForceKillAllSceneSnoIds { get; } = new HashSet<SNOScene>
         {
-            52888, //caOut_Interior_G_x01_y01,
-            199502, //ragnyr idol bounty fight scene.
-            31604, // a miners gold bounty - caOut_Sub240x240_Mine_Destroyed
-            430021, // king of the ziggaurat?
-            79983, // forged in battle bounty a3dun_Keep_SW_03_Forge
+            SNOScene.caOut_Interior_G_x01_y01,
+            SNOScene.a2dun_Zolt_Random_W_03_Poltahr, //ragnyr idol bounty fight scene.
+            SNOScene.caOut_Sub240x240_Mine_Destroyed,
+            SNOScene.p4_ruins_frost_NSEW_03_Ziggurat, // king of the ziggaurat?
+            SNOScene.a3dun_Keep_SW_03_Forge
         };
 
         /// <summary>
         /// World-object dictionaries eg large object lists, ignore lists etc.
         /// A list of SNO's to *FORCE* to type: Item. (BE CAREFUL WITH THIS!).
         /// </summary>
-        public static HashSet<int> ForceToItemOverrideIds { get; } = new HashSet<int>
+        public static HashSet<SNOActor> ForceToItemOverrideIds { get; } = new HashSet<SNOActor>
         {
-            166943, // DemonTrebuchetKey, infernal key
-            255880, // DemonKey_Destruction
-            255881, // DemonKey_Hate
-            255882, // DemonKey_Terror
+            SNOActor.DemonTrebuchetKey,
+            SNOActor.DemonKey_Destruction,
+            SNOActor.DemonKey_Hate,
+            SNOActor.DemonKey_Terror
         };
 
         public static HashSet<int> ForceTownPortalLevelAreaIds { get; } = new HashSet<int>
@@ -2561,112 +2690,115 @@ namespace Trinity.Framework.Reference
             256015, 256000, 255996
         };
 
-        public static HashSet<int> GargantuanIds { get; } = new HashSet<int>
+        public static HashSet<SNOActor> GargantuanIds { get; } = new HashSet<SNOActor>
         {
-            179780, 179778, 179772, 179779, 179776, 122305,
-            // Short Mans Finger
-            432690, //ActorId: 432690, Type: Monster, Name: Legendary_WD_Gargantuan-485, Distance2d: 8.563416,
-            432692, //ActorId: 432692, Type: Monster, Name: Legendary_WD_Gargantuan_Cleave-469,
-            432693, //ActorId: 432693, Type: Monster, Name: Legendary_WD_Gargantuan_Cooldown-476,
-            432695, //ActorId: 432695, Type: Monster, Name: Legendary_WD_Gargantuan_Slam-502,
-            432694, //ActorId: 432694, Type: Monster, Name: Legendary_WD_Gargantuan_Poison-508,
-            432691, //ActorId: 432691, Type: Monster, Name: Legendary_WD_Gargantuan_Absorb-522,
+            SNOActor.WD_Gargantuan_Cooldown,
+            SNOActor.WD_Gargantuan_Cleave,
+            SNOActor.WD_Gargantuan_Slam,
+            SNOActor.WD_Gargantuan_Poison,
+            SNOActor.WD_Gargantuan_Absorb,
+            SNOActor.WD_Gargantuan,
+            SNOActor.Legendary_WD_Gargantuan,
+            SNOActor.Legendary_WD_Gargantuan_Cleave,
+            SNOActor.Legendary_WD_Gargantuan_Cooldown,
+            SNOActor.Legendary_WD_Gargantuan_Slam,
+            SNOActor.Legendary_WD_Gargantuan_Poison,
+            SNOActor.Legendary_WD_Gargantuan_Absorb,
         };
 
         /// <summary>
         /// A list of all known SNO's of treasure goblins/bandits etc.
         /// </summary>
-        public static HashSet<int> GoblinIds { get; } = new HashSet<int>
+        public static HashSet<SNOActor> GoblinIds { get; } = new HashSet<SNOActor>
         {
-            (int)SNOActor.treasureGoblin_A, //5984
-            (int)SNOActor.treasureGoblin_B, //5985
-            (int)SNOActor.treasureGoblin_backpack, //5986
-            (int)SNOActor.treasureGoblin_C, //5987
-            //(int)SNOActor.treasureGoblin_Portal, //54862
-            //(int)SNOActor.treasureGoblin_Portal_Proxy, //54887
-            //(int)SNOActor.treasureGoblin_portal_emitter, //59948
-            //(int)SNOActor.treasureGoblin_portal_opening, //60549
-            //(int)SNOActor.treasureGoblin_portal_closing, //60558
-            //(int)SNOActor.treasureGoblin_portal_summon_trailActor, //108403
-            //(int)SNOActor.treasureGoblin_stunImmune_trailActor, //129286
-            //(int)SNOActor.Lore_Bestiary_TreasureGoblin, //147316
-            (int)SNOActor.Shrine_TreasureGoblin, //269349
-            //(int)SNOActor.treasureGoblin_A_Slave, //326803
-            (int)SNOActor.X1_Treasure_Goblin_Event_Runner, //330135
-            //(int)SNOActor.treasureGoblin_C_Unique_DevilsHand, //343046
-            //(int)SNOActor.p1_Tgoblin_Chest_Bomb, //382664
-            //(int)SNOActor.p1_Tgoblin_Gold_Pile_Gib, //385658
-            //(int)SNOActor.p1_Tgoblin_Gold_Pile_C, //386274
-            //(int)SNOActor.p1_Tgoblin_Gold_Pile_C_Gib, //386434
-            //(int)SNOActor.p1_Tgoblin_Gold_Pile_C_ribbons, //386558
-            //(int)SNOActor.p1_TGoblin_Gate, //389569
-            //(int)SNOActor.p1_Tgoblin_Gold_Pile_A, //390498
-            //(int)SNOActor.p1_TGoblin_LightBeam_A, //390682
-            //(int)SNOActor.p1_TGoblin_Torch, //391021
-            //(int)SNOActor.p1_TGoblin_Gondola, //391270
-            (int)SNOActor.treasureGoblin_G, //391593
-            //(int)SNOActor.p1_Tgoblin_Vase_A, //391765
-            //(int)SNOActor.p1_Tgoblin_Vault_Door, //392094
-            //(int)SNOActor.p1_TGoblin_Gondola_Vertical, //392098
-            //(int)SNOActor.p1_Tgoblin_Vase_C, //392606
-            //(int)SNOActor.p1_TGoblin_Gondola_Card_Left, //392657
-            //(int)SNOActor.p1_TGoblin_Gondola_Card_Right, //392660
-            (int)SNOActor.p1_treasureGoblin_inBackpack_A, //394196
-            //(int)SNOActor.p1_TGoblin_CenterPiece_Gem, //394555
-            //(int)SNOActor.p1_Tgoblin_Greed_Bait, //403041
-            //(int)SNOActor.p1_Greed_crowds_goblinPortal, //403532
-            //(int)SNOActor.p1_treasureGoblin_jump_trailActor, //403549
-            (int)SNOActor.p1_Tgoblin_basket_goblin, //403843
-            (int)SNOActor.p1_Tgoblin_basket_goblin, //403843
-            //(int)SNOActor.p1_greed_crowds_goblinCoinThrow_2, //404109
-            //(int)SNOActor.p1_Tgoblin_BG_Torch, //404302
-            //(int)SNOActor.p1_TGoblin_Gate_Closed, //404625
-            //(int)SNOActor.p1_TGoblin_CenterPiece_Gem_Fogged, //404731
-            //(int)SNOActor.p1_TGoblin_CenterPiece_Gem_INVIS, //404733
-            //(int)SNOActor.p1_Greed_crowds_goblinPortal_no_dist, //404854
-            (int)SNOActor.p1_treasureGoblin_tentacle_A, //405186
-            (int)SNOActor.p1_treasureGoblin_tentacle_backpack, //405189
-            //(int)SNOActor.p1_Tgoblin_Chest_Bomb_Chunks, //405308
-            //(int)SNOActor.p1_Tgoblin_Greed_Bait_Chunks, //405339
-            (int)SNOActor.p1_Portal_Tentacle_goblin, //405590
-            (int)SNOActor.treasureGoblin_D_Splitter, //408354
-            (int)SNOActor.treasureGoblin_E, //408655
-            (int)SNOActor.MarkerLocation_GoblinPortalIn, //408679
-            (int)SNOActor.treasureGoblin_F, //408989
-            (int)SNOActor.treasureGoblin_Portal_Open, //410460
-            (int)SNOActor.treasureGoblin_D_Splitter_02, //410572
-            (int)SNOActor.treasureGoblin_D_Splitter_03, //410574
-            (int)SNOActor.treasureGoblin_H, //413289
-            //(int)SNOActor.P2_Goblin_Spawner_LR, //425478
-            (int)SNOActor.p1_treasureGoblin_teleport_shell, //428094
-            (int)SNOActor.p1_treasureGoblin_backpack_B, //428205
-            (int)SNOActor.p1_treasureGoblin_backpack_F, //428206
-            (int)SNOActor.p1_treasureGoblin_backpack_C, //428211
-            (int)SNOActor.p1_treasureGoblin_backpack_H, //428213
-            (int)SNOActor.p1_treasureGoblin_backpack_D, //428247
-            (int)SNOActor.treasureGoblin_I, //428663
-            (int)SNOActor.treasureGoblin_J, //429161
-            (int)SNOActor.p1_treasureGoblin_backpack_J, //429526
-            (int)SNOActor.treasureGoblin_B_WhatsNew, //429615
-            (int)SNOActor.treasureGoblin_F_WhatsNew, //429619
-            (int)SNOActor.treasureGoblin_C_WhatsNew, //429620
-            (int)SNOActor.treasureGoblin_B_FX_WhatsNew, //429624
-            //(int)SNOActor.MarkerLocation_SpecialGoblinRiftSpawn, //429649
-            (int)SNOActor.p1_treasureGoblin_backpack_E, //429660
-            //(int)SNOActor.Spawner_MarkerLocation_SpecialGoblinRiftSpawn, //429676
-            //(int)SNOActor.treasureGoblin_A_LegacyPuzzleRing, //429689
-            (int)SNOActor.p1_Portal_Tentacle_goblin_NoAccess, //430916
-            (int)SNOActor.p1_treasureGoblin_backpack_I, //433905
-            (int)SNOActor.a4_Heaven_Shrine_TreasureGoblin, //434409
-            (int)SNOActor.treasureGoblin_J_WhatsNew, //434630
-            (int)SNOActor.treasureGoblin_J_FX_WhatsNew, //434631
-            (int)SNOActor.treasureGoblin_E_WhatsNew, //434632
-            (int)SNOActor.treasureGoblin_D_WhatsNew, //434633
-            (int)SNOActor.treasureGoblin_Anniversary_Event, //434745
-            (int)SNOActor.p1_Portal_Anniversary_goblin_NoAccess, //435639
-            (int)SNOActor.p3_cos_pet_Murkgoblin_A, //441208
-
-            450993, // Yahoo !treasureGoblin_K-613 ActorSnoId: 450993, Menagerist Goblin
+            SNOActor.treasureGoblin_A, //5984
+            SNOActor.treasureGoblin_B, //5985
+            SNOActor.treasureGoblin_backpack, //5986
+            SNOActor.treasureGoblin_C, //5987
+            //SNOActor.treasureGoblin_Portal, //54862
+            //SNOActor.treasureGoblin_Portal_Proxy, //54887
+            //SNOActor.treasureGoblin_portal_emitter, //59948
+            //SNOActor.treasureGoblin_portal_opening, //60549
+            //SNOActor.treasureGoblin_portal_closing, //60558
+            //SNOActor.treasureGoblin_portal_summon_trailActor, //108403
+            //SNOActor.treasureGoblin_stunImmune_trailActor, //129286
+            //SNOActor.Lore_Bestiary_TreasureGoblin, //147316
+            SNOActor.Shrine_TreasureGoblin, //269349
+            //SNOActor.treasureGoblin_A_Slave, //326803
+            SNOActor.X1_Treasure_Goblin_Event_Runner, //330135
+            //SNOActor.treasureGoblin_C_Unique_DevilsHand, //343046
+            //SNOActor.p1_Tgoblin_Chest_Bomb, //382664
+            //SNOActor.p1_Tgoblin_Gold_Pile_Gib, //385658
+            //SNOActor.p1_Tgoblin_Gold_Pile_C, //386274
+            //SNOActor.p1_Tgoblin_Gold_Pile_C_Gib, //386434
+            //SNOActor.p1_Tgoblin_Gold_Pile_C_ribbons, //386558
+            //SNOActor.p1_TGoblin_Gate, //389569
+            //SNOActor.p1_Tgoblin_Gold_Pile_A, //390498
+            //SNOActor.p1_TGoblin_LightBeam_A, //390682
+            //SNOActor.p1_TGoblin_Torch, //391021
+            //SNOActor.p1_TGoblin_Gondola, //391270
+            SNOActor.treasureGoblin_G, //391593
+            //SNOActor.p1_Tgoblin_Vase_A, //391765
+            //SNOActor.p1_Tgoblin_Vault_Door, //392094
+            //SNOActor.p1_TGoblin_Gondola_Vertical, //392098
+            //SNOActor.p1_Tgoblin_Vase_C, //392606
+            //SNOActor.p1_TGoblin_Gondola_Card_Left, //392657
+            //SNOActor.p1_TGoblin_Gondola_Card_Right, //392660
+            SNOActor.p1_treasureGoblin_inBackpack_A, //394196
+            //SNOActor.p1_TGoblin_CenterPiece_Gem, //394555
+            //SNOActor.p1_Tgoblin_Greed_Bait, //403041
+            //SNOActor.p1_Greed_crowds_goblinPortal, //403532
+            //SNOActor.p1_treasureGoblin_jump_trailActor, //403549
+            SNOActor.p1_Tgoblin_basket_goblin, //403843
+            SNOActor.p1_Tgoblin_basket_goblin, //403843
+            //SNOActor.p1_greed_crowds_goblinCoinThrow_2, //404109
+            //SNOActor.p1_Tgoblin_BG_Torch, //404302
+            //SNOActor.p1_TGoblin_Gate_Closed, //404625
+            //SNOActor.p1_TGoblin_CenterPiece_Gem_Fogged, //404731
+            //SNOActor.p1_TGoblin_CenterPiece_Gem_INVIS, //404733
+            //SNOActor.p1_Greed_crowds_goblinPortal_no_dist, //404854
+            SNOActor.p1_treasureGoblin_tentacle_A, //405186
+            SNOActor.p1_treasureGoblin_tentacle_backpack, //405189
+            //SNOActor.p1_Tgoblin_Chest_Bomb_Chunks, //405308
+            //SNOActor.p1_Tgoblin_Greed_Bait_Chunks, //405339
+            SNOActor.p1_Portal_Tentacle_goblin, //405590
+            SNOActor.treasureGoblin_D_Splitter, //408354
+            SNOActor.treasureGoblin_E, //408655
+            SNOActor.MarkerLocation_GoblinPortalIn, //408679
+            SNOActor.treasureGoblin_F, //408989
+            SNOActor.treasureGoblin_Portal_Open, //410460
+            SNOActor.treasureGoblin_D_Splitter_02, //410572
+            SNOActor.treasureGoblin_D_Splitter_03, //410574
+            SNOActor.treasureGoblin_H, //413289
+            //SNOActor.P2_Goblin_Spawner_LR, //425478
+            SNOActor.p1_treasureGoblin_teleport_shell, //428094
+            SNOActor.p1_treasureGoblin_backpack_B, //428205
+            SNOActor.p1_treasureGoblin_backpack_F, //428206
+            SNOActor.p1_treasureGoblin_backpack_C, //428211
+            SNOActor.p1_treasureGoblin_backpack_H, //428213
+            SNOActor.p1_treasureGoblin_backpack_D, //428247
+            SNOActor.treasureGoblin_I, //428663
+            SNOActor.treasureGoblin_J, //429161
+            SNOActor.p1_treasureGoblin_backpack_J, //429526
+            SNOActor.treasureGoblin_B_WhatsNew, //429615
+            SNOActor.treasureGoblin_F_WhatsNew, //429619
+            SNOActor.treasureGoblin_C_WhatsNew, //429620
+            SNOActor.treasureGoblin_B_FX_WhatsNew, //429624
+            //SNOActor.MarkerLocation_SpecialGoblinRiftSpawn, //429649
+            SNOActor.p1_treasureGoblin_backpack_E, //429660
+            //SNOActor.Spawner_MarkerLocation_SpecialGoblinRiftSpawn, //429676
+            //SNOActor.treasureGoblin_A_LegacyPuzzleRing, //429689
+            SNOActor.p1_Portal_Tentacle_goblin_NoAccess, //430916
+            SNOActor.p1_treasureGoblin_backpack_I, //433905
+            SNOActor.a4_Heaven_Shrine_TreasureGoblin, //434409
+            SNOActor.treasureGoblin_J_WhatsNew, //434630
+            SNOActor.treasureGoblin_J_FX_WhatsNew, //434631
+            SNOActor.treasureGoblin_E_WhatsNew, //434632
+            SNOActor.treasureGoblin_D_WhatsNew, //434633
+            SNOActor.treasureGoblin_Anniversary_Event, //434745
+            SNOActor.p1_Portal_Anniversary_goblin_NoAccess, //435639
+            SNOActor.p3_cos_pet_Murkgoblin_A, //441208
+            SNOActor.treasureGoblin_K, // Yahoo !treasureGoblin_K-613 ActorSnoId: 450993, Menagerist Goblin
 
             ////    //5984, 5985, 5987, 5988, 405186, 380657
 
@@ -2768,63 +2900,64 @@ namespace Trinity.Framework.Reference
             //434745,
         };
 
-        public static HashSet<int> HidingUnits { get; } = new HashSet<int>()
+        public static HashSet<SNOActor> HidingUnits { get; } = new HashSet<SNOActor>()
         {
-            (int)SNOActor.p6_Shepherd,
-            218947, //Rockworm_Stationary_QueenWorm
+            SNOActor.p6_Shepherd,
+            SNOActor.Rockworm_Stationary_QueenWorm,
         };
 
-        public static HashSet<int> HighPriorityInteractables { get; } = new HashSet<int>
+        public static HashSet<SNOActor> HighPriorityInteractables { get; } = new HashSet<SNOActor>
         {
-            56686, // a3dun_Keep_Bridge_Switch
-            211999, // a3dun_Keep_Bridge_Switch_B
-            451047, // Mystical Chest - Falcon's Wings
+            SNOActor.a3dun_Keep_Bridge_Switch,
+            SNOActor.a3dun_Keep_Bridge_Switch_B,
+            SNOActor.A4dun_Garden_Chest_Cosmetic_02,
         };
 
-        public static HashSet<int> IgnoreUntargettableAttribute { get; } = new HashSet<int>()
+        public static HashSet<SNOActor> IgnoreUntargettableAttribute { get; } = new HashSet<SNOActor>()
         {
-            5432, // A2 Snakem
+            SNOActor.snakeMan_Melee_A, // A2 Snakem
         };
 
-        public static Dictionary<int, int> InteractEndAnimations { get; } = new Dictionary<int, int>()
+        public static Dictionary<SNOActor, int> InteractEndAnimations { get; } = new Dictionary<SNOActor, int>()
         {
-            {348096, 348093}, // x1_Bog_Beacon_B
+            {SNOActor.x1_Bog_Beacon_B, 348093},
         };
 
         /// <summary>
         /// Interactable whitelist - things that need interacting with like special wheels, levers - they will be blacklisted for 30 seconds after one-use
         /// </summary>
-        public static HashSet<int> InteractWhiteListIds { get; } = new HashSet<int>
+        public static HashSet<SNOActor> InteractWhiteListIds { get; } = new HashSet<SNOActor>
         {
             //454511, //p43_AD_Valor_BloodStone-21326
-            454473, 455059, // Diablo1 Area Lore Book Lecturn Switches
+            SNOActor.p43_trDun_Lecturn_ArkainesValor,
+            SNOActor.p43_trDun_Lecturn_ChamberOfBone,
             //455675, //p43_AD_Valor_Pedestal-21061 (Sno=455675
-            453770, //p43_trdun_lecturn_hallsoftheblind- 453770
+            SNOActor.p43_trDun_Lecturn_HallsOfTheBlind, //p43_trdun_lecturn_hallsoftheblind- 453770
 
             //328830//x1_Fortress_Portal_Switch (328830)
-            309432, // x1_westm_Bridge
-            209133, // TentacleLord (209133)  QuestSnoId: 434753 QuestStep: 1, Description: Slay the Infernal Bovine herd!
-            363725, // Special Event Chest
-            451047, // Mystical Chest - Falcon's Wings
-            56686, // a3dun_Keep_Bridge_Switch
-            211999, // a3dun_Keep_Bridge_Switch_B
-            52685, // a3dun_Keep_Bridge
-            54882, // a3dun_Keep_Door_Wooden_A
-            105478, // a1dun_Leor_Spike_Spawner_Switch
-            102927, // A1 Cursed Hold Prisoners
-            5747, // A1 Cathedral Switch
-            365097, // Cursed Chest - Damp Cellar
+            SNOActor.x1_westm_Bridge, // x1_westm_Bridge
+            SNOActor.TentacleLord, // TentacleLord (209133)  QuestSnoId: 434753 QuestStep: 1, Description: Slay the Infernal Bovine herd!
+            SNOActor.x1_Global_Chest_StartsClean, // Special Event Chest
+            SNOActor.A4dun_Garden_Chest_Cosmetic_02, // Mystical Chest - Falcon's Wings
+            SNOActor.a3dun_Keep_Bridge_Switch, // a3dun_Keep_Bridge_Switch
+            SNOActor.a3dun_Keep_Bridge_Switch_B, // a3dun_Keep_Bridge_Switch_B
+            SNOActor.a3dun_Keep_Bridge, // a3dun_Keep_Bridge
+            SNOActor.a3dun_Keep_Door_Wooden_A, // a3dun_Keep_Door_Wooden_A
+            SNOActor.a1dun_Leor_Spike_Spawner_Switch, // a1dun_Leor_Spike_Spawner_Switch
+            SNOActor.Ghost_Jail_Prisoner, // A1 Cursed Hold Prisoners
+            SNOActor.trDun_Cath_Chandelier_Trap_Switch2, // A1 Cathedral Switch
+            SNOActor.x1_Global_Chest_CursedChest_B, // Cursed Chest - Damp Cellar
 
-            (int)SNOActor.a2dun_Aqd_Chest_Special_GreedyMiner, // Bounty Quest: A Miners' Gold requires it to be opened.
+            SNOActor.a2dun_Aqd_Chest_Special_GreedyMiner, // Bounty Quest: A Miners' Gold requires it to be opened.
 
             // A5
-            348096, // Paths of the Drowned - portal switches - x1_Bog_Beacon_B
-            361364, // A5 Siege Rune Path of War
+            SNOActor.x1_Bog_Beacon_B, // Paths of the Drowned - portal switches - x1_Bog_Beacon_B
+            SNOActor.X1_PandExt_SiegeRune, // A5 Siege Rune Path of War
 
-            274457, // A5 Spirit of Malthael - Tower of Korelan
-            368515, // A5 Nephalem Switch - Passage to Corvus
+            SNOActor.x1_Malthael_NPC, // A5 Spirit of Malthael - Tower of Korelan
+            SNOActor.x1_Catacombs_Nephalem_Event_Switch, // A5 Nephalem Switch - Passage to Corvus
 
-            354407, // X1_Angel_Common_Event_GreatWeapon
+            SNOActor.X1_Angel_Common_Event_GreatWeapon, // X1_Angel_Common_Event_GreatWeapon
         };
 
         /// <summary>
@@ -2842,27 +2975,25 @@ namespace Trinity.Framework.Reference
         /// <summary>
         /// Objects that should never be ignored due to no Line of Sight (LoS) or ZDiff
         /// </summary>
-        public static HashSet<int> LineOfSightWhitelist { get; } = new HashSet<int>
+        public static HashSet<SNOActor> LineOfSightWhitelist { get; } = new HashSet<SNOActor>
         {
-            307, // a2dun_zolt_pedestal
-            410366, // Siege_wallMonster_C = 410366, Bounty to kill wall monsters, failing los checks.
-            309432, // x1_westm_Bridge
-            116807, // Butcher Health Well
-            180575, // Diablo arena Health Well
-            129031, // A3 Skycrown Catapults
-            220160, // Small Belial (220160),
-            3349,   // Big Belial (3349),
-            210268, // Corrupt Growths 2nd Tier
-            193077, // a3dun_Crater_ST_GiantDemonHeart_Mob
-
-            375106, // A5 x1_Death_Orb_Monster
-            375111, // A5 x1_Death_Orb_Master_Monster
-
-            329390, // x1_Pand_BatteringRam_Hook_B_low
-            368515, // A5 Nephalem Switch -  Passage to Corvus
-            347276, // x1_Fortress_Soul_Grinder_A
-            326937, // x1_Pand_BatteringRam_Hook_B
-            291368, // x1_Urzael_Boss
+            SNOActor.a2dun_Zolt_Pedestal,
+            SNOActor.Siege_wallMonster_C,
+            SNOActor.x1_westm_Bridge,
+            SNOActor.a1dun_Leor_BloodWell_A,
+            SNOActor.a4dun_DIablo_Arena_Health_Well,
+            SNOActor.Catapult_a3dunKeep_WarMachines_Breakable,
+            SNOActor.Belial_TreasureGrant,
+            SNOActor.Belial,
+            SNOActor.a4dun_Garden_Corruption_HellRift_Monster,
+            SNOActor.a3dun_Crater_ST_GiantDemonHeart_Mob,
+            SNOActor.x1_Death_Orb_Monster,
+            SNOActor.x1_Death_Orb_Master_Monster,
+            SNOActor.x1_Pand_BatteringRam_Hook_B_low,
+            SNOActor.x1_Catacombs_Nephalem_Event_Switch,
+            SNOActor.x1_Fortress_Soul_Grinder_A,
+            SNOActor.x1_Pand_BatteringRam_Hook_B,
+            SNOActor.x1_Urzael_Boss
         };
 
         /// <summary>
@@ -2933,46 +3064,55 @@ namespace Trinity.Framework.Reference
             { 300864, -300 },
         };
 
-        public static HashSet<int> MysticAllyIds { get; } = new HashSet<int>
+        public static HashSet<SNOActor> MysticAllyIds { get; } = new HashSet<SNOActor>
         {
-            169123, 123885, 169890, 168878, 169891, 169077, 169904, 169907, 169906, 169908, 169905, 169909
+            SNOActor.Monk_female_mysticAlly_golden,
+            SNOActor.Monk_female_mysticAlly,
+            SNOActor.Monk_female_mysticAlly_indigo,
+            SNOActor.Monk_female_mysticAlly_crimson,
+            SNOActor.Monk_female_mysticAlly_alabaster,
+            SNOActor.Monk_female_mysticAlly_obsidian,
+            SNOActor.Monk_male_mysticAlly,
+            SNOActor.Monk_male_mysticAlly_indigo,
+            SNOActor.Monk_male_mysticAlly_crimson,
+            SNOActor.Monk_male_mysticAlly_golden,
+            SNOActor.Monk_male_mysticAlly_alabaster,
+            SNOActor.Monk_male_mysticAlly_obsidian
         };
 
         /// <summary>
         /// Navigation obstacles for standard navigation down dungeons etc. to help DB movement
         /// MAKE SURE you add the *SAME* SNO to the "size" dictionary below, and include a reasonable size (keep it smaller rather than larger) for the SNO.
         /// </summary>
-        public static HashSet<int> NavigationObstacleIds { get; } = new HashSet<int>
+        public static HashSet<SNOActor> NavigationObstacleIds { get; } = new HashSet<SNOActor>
         {
-            104596, //GizmoType: DestroyableObject Name: trOut_FesteringWoods_Neph_Column_B-27477 ActorSnoId: 104596
-
-            174900, 185391, // demonic forge
-            198977,293900, // Azmo room center
-            194682, 81699, 3340, 123325,
-
-            158681, // A1 Blacksmith_Lore
-            104596, // A1 trOut_FesteringWoods_Neph_Column_B
-            104632, // A1 trOut_FesteringWoods_Neph_Column_B_Broken_Base
-            105303, // A1 trOut_FesteringWoods_Neph_Column_C_Broken_Base_Bottom
-            104827, // A1 trOut_FesteringWoods_Neph_Column_C_Broken_Base
-
-            332924, // x1_Bog_bloodSpring_small, Blood Spring - Overgrown Ruins
-            332922, // x1_Bog_bloodSpring_medium
-            332923, // x1_Bog_bloodSpring_large
-            321855, // x1_Pand_Ext_Ordnance_Mine
-            355898, // x1_Bog_Family_Guard_Tower_Stump
-            376917, // [1FA3B814] Type: ServerProp Name: x1_Westm_Hub_Stool_A-381422 ActorSnoId: 376917, Distance: 2.337004
-            (int)SNOActor.px_Bounty_Camp_Hellportals_Frame, // A4 bounties
-            (int)SNOActor.px_Bounty_Camp_Pinger, // A4 bounties
-
-            // DyingHymn A4 Bounties
-            433402,
-            434971,
-
-            // Bulba
-            433383, // A3 - Bounty - Catapult Command - Catapults
-            433384, // A3 - Bounty - Catapult Command - Catapults
-            210433 //A3 -  Catapult_a3dunKeep_WarMachines_Snow_Firing
+            SNOActor.trOut_FesteringWoods_Neph_Column_B,
+            SNOActor.a3_Battlefield_demonic_forge,
+            SNOActor.a3_crater_st_demonic_forge,
+            SNOActor.a3dun_crater_st_Demon_ChainPylon_Fire_Azmodan,
+            SNOActor.a3dun_crater_st_Demon_ChainPylon_Fire_Azmodan_Blocker,
+            SNOActor.a3dun_Bridge_ammunition_A,
+            SNOActor.trOut_Wagon_Barricade,
+            SNOActor.Beast_Corpse_A_01,
+            SNOActor.caOut_Boneyard_SkullSpawner,
+            SNOActor.Blacksmith_Lore,
+            SNOActor.trOut_FesteringWoods_Neph_Column_B,
+            SNOActor.trOut_FesteringWoods_Neph_Column_B_Broken_Base,
+            SNOActor.trOut_FesteringWoods_Neph_Column_C_Broken_Base_Bottom,
+            SNOActor.trOut_FesteringWoods_Neph_Column_C_Broken_Base,
+            SNOActor.x1_Bog_bloodSpring_small,
+            SNOActor.x1_Bog_bloodSpring_medium,
+            SNOActor.x1_Bog_bloodSpring_large,
+            SNOActor.x1_Pand_Ext_Ordnance_Mine,
+            SNOActor.x1_Bog_Family_Guard_Tower_Stump,
+            SNOActor.x1_Westm_Hub_Stool_A,
+            SNOActor.px_Bounty_Camp_Hellportals_Frame,
+            SNOActor.px_Bounty_Camp_Pinger,
+            SNOActor.px_Bounty_Camp_Hellportals_Frame,
+            SNOActor.px_Bounty_Camp_Pinger,
+            SNOActor.px_Bounty_Ramparts_Camp_CatapultFiring,
+            SNOActor.px_Bounty_Ramparts_Camp_CatapultIdle,
+            SNOActor.Catapult_a3dunKeep_WarMachines_Snow_Firing
         };
 
         /// <summary>
@@ -3022,15 +3162,15 @@ namespace Trinity.Framework.Reference
             {434971, 10},
         };
 
-        public static HashSet<int> PandemoniumFortressLevelAreaIds { get; } = new HashSet<int>
+        public static HashSet<SNOLevelArea> PandemoniumFortressLevelAreaIds { get; } = new HashSet<SNOLevelArea>
         {
-            333758, //LevelArea: X1_LR_Tileset_Fortress
+            SNOLevelArea.X1_LR_Tileset_Fortress
         };
 
-        public static HashSet<int> PandemoniumFortressWorlds { get; } = new HashSet<int>
+        public static HashSet<SNOWorld> PandemoniumFortressWorlds { get; } = new HashSet<SNOWorld>
         {
-            271233, // Adventure Pand Fortress 1
-            271235, // Adventure Pand Fortress 2
+            SNOWorld.x1_fortress_level_01,
+            SNOWorld.x1_fortress_level_02,
         };
 
         public static HashSet<int> QuestLevelAreaIds { get; } = new HashSet<int>
@@ -3071,24 +3211,33 @@ namespace Trinity.Framework.Reference
             5984, 5985, 5987, 5988, 405186, //goblins
         };
 
-        public static HashSet<int> RayWalkTargetingOnlyActors { get; } = new HashSet<int>
+        public static HashSet<SNOActor> RayWalkTargetingOnlyActors { get; } = new HashSet<SNOActor>
         {
-            (int) SNOActor.X1_Pand_Ext_Ordnance_Tower_Shock_A,
+            SNOActor.X1_Pand_Ext_Ordnance_Tower_Shock_A,
         };
 
         /// <summary>
         /// Resplendent chest SNO list
         /// </summary>
-        public static HashSet<int> ResplendentChestIds { get; } = new HashSet<int>
+        public static HashSet<SNOActor> ResplendentChestIds { get; } = new HashSet<SNOActor>
         {
-            62873, 95011, 81424, 108230, 111808, 111809, 211861, 62866, 109264, 62866, 62860, 96993,
-            // Magi
-            112182,
-            363725, 357331, // chests after Cursed Chest
-
-            301177, // A5 Timeless Prison Switch
-
-            433670, //[1FA93634] GizmoType: Chest Name: x1_Global_Chest_BossBounty-6118 ActorSnoId: 433670 Distance: 14.60398
+            SNOActor.CaOut_Oasis_Chest_Rare,
+            SNOActor.a1dun_Leor_Chest_Rare,
+            SNOActor.trDun_Chest_Rare,
+            SNOActor.caOut_StingingWinds_Chest_Rare,
+            SNOActor.A3_Battlefield_Chest_Rare_Snowy,
+            SNOActor.A3_Battlefield_Chest_Rare_Frosty,
+            SNOActor.Pinata,
+            SNOActor.TrOut_Highlands_Chest_Rare,
+            SNOActor.a3dun_Keep_Chest_Rare,
+            SNOActor.TrOut_Highlands_Chest_Rare,
+            SNOActor.TrOut_Fields_Chest_Rare,
+            SNOActor.a1dun_Cath_chest_Rare,
+            SNOActor.a2dun_Spider_Chest_Rare,
+            SNOActor.x1_Global_Chest_StartsClean,
+            SNOActor.x1_Global_Chest,
+            SNOActor.x1_PandExt_Time_Activator,
+            SNOActor.x1_Global_Chest_BossBounty
         };
 
         /// <summary>
@@ -3111,23 +3260,26 @@ namespace Trinity.Framework.Reference
         /// <summary>
         /// Contains a list of Rift WorldId's
         /// </summary>
-        public static List<int> RiftWorldIds { get; } = new List<int>()
+        public static List<SNOWorld> RiftWorldIds { get; } = new List<SNOWorld>()
         {
-            288454,
-            288685,
-            288687,
-            288798,
-            288800,
-            288802,
-            288804,
-            288806,
+            SNOWorld.X1_LR_Level_01,
+            SNOWorld.X1_LR_Level_02,
+            SNOWorld.X1_LR_Level_03,
+            SNOWorld.X1_LR_Level_04,
+            SNOWorld.X1_LR_Level_05,
+            SNOWorld.X1_LR_Level_06,
+            SNOWorld.X1_LR_Level_07,
+            SNOWorld.X1_LR_Level_08,
+            SNOWorld.X1_LR_Level_09,
+            SNOWorld.X1_LR_Level_10,
+            (SNOWorld)288806,
         };
 
         // De-weight to zero but they still need to be processed for ClsoedDoor checks. todo proper fix.
-        public static Dictionary<int, int> SceneSpecificDoorsIgnore { get; } = new Dictionary<int, int>
+        public static Dictionary<SNOScene, SNOActor> SceneSpecificDoorsIgnore { get; } = new Dictionary<SNOScene, SNOActor>
         {
-            { 454485, (int)SNOActor.p43_AD_Catacombs_Door_A },              // p43_AD_Catacombs_Door_A-13146 (454346)  // D1 Valor Scene Event
-            { 158161, (int)SNOActor.a2dun_Aqd_GodHead_Door_LargePuzzle },   // a2dun_Aqd_GodHead_Door_LargePuzzle  // Bounty: Lost Treasure of Khan Dakab
+            { SNOScene.x1_Catacombs_NSE_01_Valor, SNOActor.p43_AD_Catacombs_Door_A },              // p43_AD_Catacombs_Door_A-13146 (454346)  // D1 Valor Scene Event
+            { SNOScene.a2dun_Aqd_NSE_Vault_01, SNOActor.a2dun_Aqd_GodHead_Door_LargePuzzle },   // a2dun_Aqd_GodHead_Door_LargePuzzle  // Bounty: Lost Treasure of Khan Dakab
         };
 
         /// <summary>
@@ -3187,21 +3339,26 @@ namespace Trinity.Framework.Reference
             "Diabolic Wand"
         };
 
-        public static HashSet<int> WizardHydraIds { get; } = new HashSet<int>
+        public static HashSet<SNOActor> WizardHydraIds { get; } = new HashSet<SNOActor>
         {
             // Some hydras are 3 monsters, only use one of their heads.
-            82972, //Type: Monster Name: Wizard_HydraHead_Frost_1-1037 ActorSnoId: 82972
-            83959, // Type: Monster Name: Wizard_HydraHead_Big-1168 ActorSnoId: 83959
-            325807, // Type: Monster Name: Wizard_HydraHead_fire2_1-1250 ActorSnoId: 325807
-            82109, // Type: Monster Name: Wizard_HydraHead_Lightning_1-1288 ActorSnoId: 82109,
-            81515, // Type: Monster Name: Wizard_HydraHead_Arcane_1-1338 ActorSnoId: 81515,
-            80745, // Type: Monster Name: Wizard_HydraHead_Default_1-1364 ActorSnoId: 80745,
+            SNOActor.Wizard_HydraHead_Frost_1,
+            SNOActor.Wizard_HydraHead_Big,
+            SNOActor.Wizard_HydraHead_fire2_1,
+            SNOActor. Wizard_HydraHead_Lightning_1,
+            SNOActor. Wizard_HydraHead_Arcane_1,
+            SNOActor. Wizard_HydraHead_Default_1,
         };
 
         // Three special lists used purely for checking for the existance of a player's summoned mystic ally, gargantuan, or zombie dog
-        public static HashSet<int> ZombieDogIds { get; } = new HashSet<int>
+        public static HashSet<SNOActor> ZombieDogIds { get; } = new HashSet<SNOActor>
         {
-            110959, 103235, 103215, 105763, 103217, 51353,
+            SNOActor.WD_ZombieDogRune_healthLink,
+            SNOActor.WD_ZombieDogRune_lifeSteal,
+            SNOActor.WD_ZombieDogRune_fire,
+            SNOActor.WD_ZombieDogRune_healthGlobe,
+            SNOActor.WD_ZombieDogRune_poison,
+            SNOActor.WD_ZombieDog,
         };
 
         /// <summary>
@@ -3209,7 +3366,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         /// <param name="actorId"></param>
         /// <returns></returns>
-        public static bool AddToBlacklist(int actorId)
+        public static bool AddToBlacklist(SNOActor actorId)
         {
             if (!BlackListIds.Contains(actorId))
             {
@@ -3228,8 +3385,7 @@ namespace Trinity.Framework.Reference
             if (anim == SNOAnim.Invalid)
                 return string.Empty;
 
-            string result;
-            AnimatioNamesById.TryGetValue((int)anim, out result);
+            AnimatioNamesById.TryGetValue((int)anim, out var result);
 
             return result ?? string.Empty;
         }

@@ -42,7 +42,7 @@ namespace Trinity.Modules
             //statusText.Append(" Speed=");
             //statusText.Append(ZetaDia.Me.Movement.SpeedXY.ToString("0.00"));
             statusText.Append(" SNO=");
-            statusText.Append(currentTarget.ActorSnoId.ToString(CultureInfo.InvariantCulture));
+            statusText.Append(((int)currentTarget.ActorSnoId).ToString(CultureInfo.InvariantCulture));
             statusText.Append(" Elite=");
             statusText.Append(currentTarget.IsElite.ToString());
             statusText.Append(" Weight=");

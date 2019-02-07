@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Zeta.Common;
+using Zeta.Game;
 
 
 namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
@@ -24,7 +25,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
 
     public static class SceneData
     {
-        public static Dictionary<int, SceneInfo> SceneDefs { get; } = new Dictionary<int, SceneInfo>();
+        public static Dictionary<SNOScene, SceneInfo> SceneDefs { get; } = new Dictionary<SNOScene, SceneInfo>();
 
         static SceneData()
         {
@@ -34,7 +35,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
 
             // Cathedral
 
-            SceneDefs.Add(32960, new SceneInfo
+            SceneDefs.Add(SNOScene.trDun_Cath_NSE_01, new SceneInfo
             {
                 Name = "trDun_Cath_NSE_01",
                 SnoId = 32960,
@@ -46,7 +47,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 }
             });
 
-            SceneDefs.Add(1884, new SceneInfo
+            SceneDefs.Add(SNOScene.trDun_Cath_NSW_01, new SceneInfo
             {
                 Name = "trDun_Cath_NSW_01",
                 SnoId = 1884,

@@ -2,14 +2,16 @@
 using Trinity.Framework;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Game.Quests;
+using Trinity.Framework.Grid;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
+using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
 {
     public class MoveToPositionCoroutine : ISubroutine
     {
-        private readonly int _worldId;
+        private readonly SNOWorld _worldId;
         private readonly int _distance;
         private readonly Vector3 _position;
         private bool _isDone;
@@ -46,7 +48,7 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
 
         public bool IsDone => _isDone || AdvDia.CurrentWorldId != _worldId;
 
-        public MoveToPositionCoroutine(int worldId, Vector3 position, int distance = 1, bool forceStraightLinePathing = false)
+        public MoveToPositionCoroutine(SNOWorld worldId, Vector3 position, int distance = 1, bool forceStraightLinePathing = false)
         {
             _startTime = DateTime.UtcNow;
             _distance = distance;
@@ -113,7 +115,7 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
                 Core.Logger.Debug("[MoveToPosition] CoroutineResult.Failure");
 
                 var canFullyPath = await AdvDia.Navigator.CanFullyClientPathTo(_position);
-                var closeRayCastFail = AdvDia.MyPosition.Distance(_position) < 15f && !Core.Grids.CanRayWalk(AdvDia.MyPosition, _position);//!NavigationGrid.Instance.CanRayWalk(AdvDia.MyPosition, _position);
+                var closeRayCastFail = AdvDia.MyPosition.Distance(_position) < 15f && !TrinityGrid.Instance.CanRayWalk(AdvDia.MyPosition, _position);//!NavigationGrid.Instance.CanRayWalk(AdvDia.MyPosition, _position);
                 var failedMoveResult = NavigationCoroutine.LastMoveResult == MoveResult.Failed || NavigationCoroutine.LastMoveResult == MoveResult.PathGenerationFailed;
                 if (!canFullyPath || closeRayCastFail || failedMoveResult)
                 {

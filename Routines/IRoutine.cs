@@ -78,11 +78,6 @@ namespace Trinity.Routines
         Func<bool> ShouldIgnoreAvoidance { get; }
         Func<bool> ShouldIgnoreKiting { get; }
         Func<bool> ShouldIgnoreFollowing { get; }
-
-        // Yeah...
-        Task<bool> HandleStart();
-        bool ShouldReturnStartResult { get; }
-
     }
 }
 

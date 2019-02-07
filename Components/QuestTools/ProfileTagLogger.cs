@@ -4,16 +4,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
-using log4net;
-using log4net.Appender;
-using log4net.Repository.Hierarchy;
 using Trinity.Components.Adventurer;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects.Enums;
 using Trinity.Modules;
 using Zeta.Bot.Profile;
 using Zeta.Common;
@@ -40,13 +35,11 @@ namespace Trinity.Components.QuestTools
                     Core.Scenes.Update();
                     Core.Update();
 
-                    var position = ZetaDia.Me.Position;
                     var currentQuest = ZetaDia.CurrentQuest;
-
-
-                    s.QuestId = currentQuest?.QuestSnoId ?? 1;
+                    
+                    s.QuestId = currentQuest?.QuestSnoId ?? (SNOQuest)1;
                     s.QuestStep = currentQuest?.StepId ?? 1;
-                    s.SceneSnoId = ZetaDia.Me.CurrentScene.SceneInfo.SNOId;
+                    s.SceneSnoId = ZetaDia.Me.CurrentScene.SceneInfo.GetSNOId<SNOScene>();
                     s.SceneName = ZetaDia.Me.CurrentScene.Name;
                     s.WorldSnoId = ZetaDia.Globals.WorldSnoId;
                     s.LevelAreaSnoId = ZetaDia.CurrentLevelAreaSnoId;
@@ -73,7 +66,7 @@ namespace Trinity.Components.QuestTools
                 }
 
                 ActorId = actor.ActorSnoId;
-                ActorSno = (SNOActor)ActorId;
+                ActorSno = ActorId;
                 ActorName = actor.Name;
                 StartAnimation = actor.Animation != 0 ? actor.Animation.ToString() : string.Empty;
                 SetPosition(actor.Position);
@@ -82,7 +75,6 @@ namespace Trinity.Components.QuestTools
                 if (marker != null)
                 {
                     MarkerHash = marker.NameHash;
-                    MarkerName = marker.Name;
                     MarkerType = marker.MarkerType;
                 }
                 else
@@ -97,7 +89,6 @@ namespace Trinity.Components.QuestTools
             {
                 if (marker == null) return;
                 MarkerHash = marker.NameHash;
-                MarkerName = marker.Name;
                 MarkerType = marker.MarkerType;
 
                 var actor = Core.Actors.Where(a => !a.IsMe && !a.IsExcludedId && a.Position.Distance(marker.Position) <= 3f).OrderBy(a => a.IsGizmo).ThenBy(a => a.Distance).FirstOrDefault();
@@ -125,7 +116,7 @@ namespace Trinity.Components.QuestTools
             public int MarkerHash { get; set; }
             public string MarkerName { get; set; }
             public SNOActor ActorSno { get; set; }
-            public int ActorId { get; set; }
+            public SNOActor ActorId { get; set; }
             public string ActorName { get; set; }
             public int WaypointNumber { get; set; }
             public float SceneZ { get; set; }
@@ -135,11 +126,11 @@ namespace Trinity.Components.QuestTools
             public float Y { get; set; }
             public float X { get; set; }
             public int QuestStep { get; set; }
-            public int LevelAreaSnoId { get; set; }
-            public int WorldSnoId { get; set; }
+            public SNOLevelArea LevelAreaSnoId { get; set; }
+            public SNOWorld WorldSnoId { get; set; }
             public string SceneName { get; set; }
-            public int SceneSnoId { get; set; }
-            public int QuestId { get; set; }
+            public SNOScene SceneSnoId { get; set; }
+            public SNOQuest QuestId { get; set; }
         }
 
         public static string GenerateActorTags<T>(Func<TrinityActor, bool> actorSelector) where T : ProfileBehavior
@@ -152,7 +143,7 @@ namespace Trinity.Components.QuestTools
                 var minimapEntry = Core.Minimap.MinimapIcons.FirstOrDefault(m => m.Position.Distance(actor.Position) < 5f);
                 var minimapMsg = minimapEntry != null ? $"MinimapName={minimapEntry.Name} " : string.Empty;
                 var markerMsg = !string.IsNullOrEmpty(s.MarkerName) ? $"Marker={s.MarkerName} ({s.MarkerHash}, {s.MarkerType}) " : string.Empty;
-                sb.AppendLine($"     <!-- {actor.Name} ({actor.ActorSnoId}) {(SNOActor)actor.ActorSnoId} Distance={actor.Distance} Type={actor.Type} Anim={actor.Animation} {minimapMsg}{markerMsg}-->");
+                sb.AppendLine($"     <!-- {actor.Name} ({actor.ActorSnoId}) {actor.ActorSnoId} Distance={actor.Distance} Type={actor.Type} Anim={actor.Animation} {minimapMsg}{markerMsg}-->");
                 sb.AppendLine(GenerateTag<T>(s));
                 sb.AppendLine(Environment.NewLine);
             }
@@ -167,7 +158,7 @@ namespace Trinity.Components.QuestTools
             {
                 s.UpdateForMarker(marker);
                 var actorMsg = s.ActorId != 0 ? $"Actor={s.ActorName} ({s.ActorId}) " : string.Empty;
-                sb.AppendLine($"     <!-- {marker.Name} {marker.NameHash} {marker.MarkerType} Distance={marker.Distance} TextureId={marker.TextureId} WorldSnoId={marker.WorldSnoId} {actorMsg}-->");
+                sb.AppendLine($"     <!-- {marker.NameHash} {marker.MarkerType} Distance={marker.Distance} TextureId={marker.TextureId} WorldSnoId={marker.WorldSnoId} {actorMsg}-->");
                 sb.AppendLine(GenerateTag<T>(s));
                 sb.AppendLine(Environment.NewLine);
             }
@@ -231,15 +222,14 @@ namespace Trinity.Components.QuestTools
             var currentQuest = ZetaDia.Storage.Quests.ActiveQuests.FirstOrDefault();
             if (currentQuest == null) return null;
             var currentStep = currentQuest.QuestRecord.Steps.FirstOrDefault(q => q.StepId == currentQuest.QuestStep);
-            var obj = currentStep?.QuestStepObjectiveSet?.QuestStepObjectives?.FirstOrDefault();
-            var output = $"Quest: {currentQuest.Quest}: {currentQuest.DisplayName} ({currentQuest.QuestSNO}) {currentQuest.QuestType} Step: {currentStep?.Name} ({currentQuest.QuestStep})";
+            var output = $"Quest: {currentQuest.QuestSNO}: {currentQuest.DisplayName} ({currentQuest.QuestSNO}) {currentQuest.QuestType} Step: {currentStep?.Name} ({currentQuest.QuestStep})";
             return output;
         }
 
         public static string GenerateTagComment()
         {
             var sb = new StringBuilder();
-            var indent = "        ";
+            var indent = "\t";
             sb.AppendLine("");
             sb.AppendLine(indent + GenerateQuestInfoComment());
             foreach (var o in GetObjectiveInfo())
@@ -254,31 +244,16 @@ namespace Trinity.Components.QuestTools
 
         public static List<TrinityObjectiveInfo> GetObjectiveInfo()
         {
-            // Why you make things so difficult for me nesox?
-            var objectives = new List<TrinityObjectiveInfo>();
-            var logger = (log4net.Repository.Hierarchy.Logger)log4net.LogManager.GetLogger(typeof(QuestObjectiveInfo))?.Logger;
-            if (logger == null) return objectives;
-            var dbLogger = (log4net.Repository.Hierarchy.Logger)log4net.LogManager.GetLogger(typeof(Demonbuddy.MainWindow))?.Logger;
-            if (dbLogger == null) return objectives;
-            var asyncAppender = dbLogger.Parent.Appenders.ToArray().OfType<Zeta.Common.Logger.AsyncAppender>().FirstOrDefault();
-            var repository = (Hierarchy)LogManager.GetRepository();
-            repository.Root.RemoveAppender(asyncAppender);
-            var appender = new MemoryAppender();
-            logger.AddAppender(appender);
-            QuestObjectiveInfo.DumpObjectives();
-            objectives.AddRange(appender.GetEvents().Select(e => new TrinityObjectiveInfo(e.RenderedMessage)));
-            logger.RemoveAppender(appender);
-            repository.Root.AddAppender(asyncAppender);
-            return objectives;
+            return QuestObjectiveInfo.QuestList.Quests.SelectMany(q => q.Objectives).SelectMany(o => o.Elements).Select(e => new TrinityObjectiveInfo(e.ObjectiveIndex, e.State, e.Description)).ToList();
         }
 
         public class TrinityObjectiveInfo
         {
-            public TrinityObjectiveInfo(string input)
+            public TrinityObjectiveInfo(int index, QuestStepObjectiveElementState state, string description)
             {
-                Description = new Regex("(?<=Description:\\W)[\\w\\s\\'\\`]+").Match(input).Value;
-                Enum.TryParse(new Regex("(?<=State:\\W)[\\w\\s]+").Match(input).Value, out State);
-                int.TryParse(new Regex("(?<=Index:\\W)[\\w\\s]+").Match(input).Value, out Index);
+                Index = index;
+                State = state;
+                Description = description;
             }
 
             public QuestStepObjectiveElementState State;
@@ -295,11 +270,10 @@ namespace Trinity.Components.QuestTools
         public static string GenerateWorldInfoComment()
         {
             var sceneSnoId = ZetaDia.CurrentLevelAreaSnoId;
-            var sceneName = Core.World.CurrentLevelAreaName;
-            var sceneSnoName = ZetaDia.SNO.LookupSNOName(SNOGroup.LevelArea, sceneSnoId);
+            var sceneSnoName = ZetaDia.SNO.LookupSNOName(SNOGroup.LevelArea, (int)sceneSnoId);
             var worldSnoId = ZetaDia.Globals.WorldSnoId;
-            var world = ZetaDia.SNO[SNOGroup.Worlds].GetRecord<SNORecordWorld>(worldSnoId);
-            return $"<!-- World: {world.Name} ({worldSnoId}) Scene: {sceneSnoName} {sceneName} ({sceneSnoId}) Generated={world.IsGenerated} -->";
+            var world = ZetaDia.SNO[SNOGroup.Worlds].GetRecord<SNORecordWorld>((int)worldSnoId);
+            return $"<!-- World: {world.Name} ({worldSnoId}) Scene: {sceneSnoName} ({sceneSnoId}) Generated={world.IsGenerated} -->";
         }
 
         private static HashSet<string> IgnoreXmlAttributeNames { get; } = new HashSet<string>

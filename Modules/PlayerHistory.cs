@@ -30,11 +30,11 @@ namespace Trinity.Modules
 
             public Vector3 Position;
             public DateTime RecordedAt;
-            public int WorldId;
+            public SNOWorld WorldId;
 
             public bool Equals(PositionHistory other)
             {
-                return Position == other.Position && WorldId == other.WorldId;
+                return other != null && (Position == other.Position && WorldId == other.WorldId);
             }
         } 
 
@@ -54,7 +54,7 @@ namespace Trinity.Modules
             }
         }
         
-        protected override void OnWorldChanged(ChangeEventArgs<int> args)
+        protected override void OnWorldChanged(ChangeEventArgs<SNOWorld> args)
         {
             RecentPositions.Clear();
             _centroid.Clear();
@@ -128,7 +128,5 @@ namespace Trinity.Modules
 
             return speedperSecond;
         }
-
-
     }
 }

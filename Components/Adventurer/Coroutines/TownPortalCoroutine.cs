@@ -123,7 +123,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 return false;
             }
 
-            if (!await CommonCoroutines.UseTownPortal("Adventurer"))
+            if (await CommonCoroutines.UseTownPortal("Adventurer") == Zeta.Bot.Coroutines.CoroutineResult.Running)
                 return false;
 
             State = States.UsedTownPortal;
@@ -144,7 +144,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 return false;
             }
-            
+
             State = HasReachedDestionation ? States.Completed : States.NotStarted;
 
             Navigator.Clear();

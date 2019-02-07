@@ -18,8 +18,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
     public class MoveToSceneCoroutine : IBountySubroutine
     {
-        private readonly int _questId;
-        private readonly int _worldId;
+        private readonly SNOQuest _questId;
+        private readonly SNOWorld _worldId;
         private BountyData _bountyData;
         private bool _explore;
 
@@ -38,7 +38,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private readonly bool _zergEnabled;
         private int _failureCount;
 
-        public MoveToSceneCoroutine(int questId, int worldId, int sceneSnoId, bool zergSafe = false, bool explore = true)
+        public MoveToSceneCoroutine(SNOQuest questId, SNOWorld worldId, int sceneSnoId, bool zergSafe = false, bool explore = true)
         {
             _questId = questId;
             _worldId = worldId;
@@ -49,7 +49,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         }
 
-        public MoveToSceneCoroutine(int questId, int worldId, string sceneName, bool zergSafe = false, bool explore = true)
+        public MoveToSceneCoroutine(SNOQuest questId, SNOWorld worldId, string sceneName, bool zergSafe = false, bool explore = true)
         {
             _questId = questId;
             _worldId = worldId;
@@ -141,7 +141,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 State = States.Moving;
                 return false;
             }
-            var levelArea = BountyData != null ? BountyData.LevelAreaIds : new HashSet<int> {ZetaDia.CurrentLevelAreaSnoId};
+            var levelArea = BountyData != null ? BountyData.LevelAreaIds : new HashSet<SNOLevelArea> {ZetaDia.CurrentLevelAreaSnoId};
             if (!await ExplorationCoroutine.Explore(levelArea)) return false;
             Core.Scenes.Reset();
             return false;

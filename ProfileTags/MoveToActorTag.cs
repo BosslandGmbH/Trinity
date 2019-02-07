@@ -5,6 +5,7 @@ using Trinity.Components.Adventurer;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Framework.Actors.ActorTypes;
+using Zeta.Game;
 using Zeta.XmlEngine;
 
 
@@ -23,7 +24,7 @@ namespace Trinity.ProfileTags
         [XmlAttribute("actorId")]
         [DefaultValue(0)]
         [Description("id of actor to be found")]
-        public int ActorId { get; set; }
+        public SNOActor ActorId { get; set; }
 
         [XmlAttribute("internalName")]
         [Description("The full or partial SNO name / internal name of actor to be found")]

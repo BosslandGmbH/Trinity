@@ -12,16 +12,16 @@ namespace Trinity.Components.Adventurer.Game.Quests
     public class BountyData
     {
         private QuestData _questData;
-        private HashSet<int> _levelAreaIds;
+        private HashSet<SNOLevelArea> _levelAreaIds;
 
-        public int QuestId { get; set; }
+        public SNOQuest QuestId { get; set; }
         public Act Act { get; set; }
-        public int WorldId { get; set; }
+        public SNOWorld WorldId { get; set; }
         public BountyQuestType QuestType { get; set; }
         public List<ISubroutine> Coroutines { get; set; }
-        public int WaypointLevelAreaId { get; set; }
+        public SNOLevelArea WaypointLevelAreaId { get; set; }
 
-        public HashSet<int> LevelAreaIds
+        public HashSet<SNOLevelArea> LevelAreaIds
         {
             get
             {
@@ -75,13 +75,13 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 coroutine.Reset();
             }
 
-            if (WaypointLevelAreaId == 13)
+            if (WaypointLevelAreaId == (SNOLevelArea)13)
             {
                 var firstCoroutine = Coroutines.FirstOrDefault();
                 if (firstCoroutine != null && !(firstCoroutine is MoveToPositionCoroutine))
                 {
                     //<SafeMoveTo questId="312429" stepId="2" x="2401" y="4537" z="-2" pathPrecision="5" pathPointLimit="250" scene="trOut_Highlands_Roads_EW_03" statusText="" />
-                    Coroutines.Insert(0, new MoveToPositionCoroutine(71150, new Vector3(2401, 4537, -2)));
+                    Coroutines.Insert(0, new MoveToPositionCoroutine(SNOWorld.trOUT_Town, new Vector3(2401, 4537, -2)));
                 }
             }
             //if (WaypointNumber == 14)
@@ -99,17 +99,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
         public override string ToString()
         {
             return
-                string.Format(
-                    "Act={0} QuestId={1} IsAvailable={2} Coroutines.Count={3} Waypoint.Number={4} StartWorldSnoId={5} StartLevelArea={6} WorldId={7}",
-                    this.Act,
-                    this.QuestId,
-                    this.IsAvailable,
-                    this.Coroutines.Count,
-                    this.QuestData.Waypoint.Number,
-                    this.QuestData.Waypoint.WorldSnoId,
-                    this.QuestData.Waypoint.LevelAreaSnoId,
-                    this.WorldId
-                    );
+                $"Act={Act} QuestId={QuestId} IsAvailable={IsAvailable} Coroutines.Count={Coroutines.Count} Waypoint.Number={QuestData.Waypoint.Number} StartWorldSnoId={QuestData.Waypoint.WorldSnoId} StartLevelArea={QuestData.Waypoint.LevelAreaSnoId} WorldId={WorldId}";
         }
     }
 }

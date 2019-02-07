@@ -1,18 +1,21 @@
+using Serilog;
 using System.Linq;
-using Trinity.Framework;
 using System.Runtime.Serialization;
-using Trinity.Framework.Actors.ActorTypes;
+using Zeta.Common;
 using Zeta.Game;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Components.Adventurer.Settings
 {
     [DataContract]
     public class AdventurerGem
     {
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
+
         public int Guid { get; set; }
 
         [DataMember]
-        public int SNO { get; set; }
+        public SNOActor SNO { get; set; }
 
         [DataMember]
         public int Rank { get; set; }
@@ -43,18 +46,18 @@ namespace Trinity.Components.Adventurer.Settings
         {
         }
 
-        public AdventurerGem(TrinityItem gem, int riftLevel)
+        public AdventurerGem(ACDItem gem, int riftLevel)
         {
             Guid = gem.AnnId;
             SNO = gem.ActorSnoId;
-            Rank = gem.Attributes.JewelRank;
+            Rank = gem.Stats.JewelRank;
             Name = gem.Name;
             CurrentRiftLevel = riftLevel;
 
             Settings = PluginSettings.Current.Gems.GemSettings.FirstOrDefault(g => g.Sno == gem.ActorSnoId);
             if (Settings == null)
             {
-                Core.Logger.Error($"Gems Settings Entry not found for {gem.Name} ({gem.ActorSnoId}), if its a new gem, it needs to be added to Trinity's Gems.cs reference");
+                s_logger.Error($"[{nameof(AdventurerGem)}] Gems Settings Entry not found for {gem.Name} ({gem.ActorSnoId}), if its a new gem, it needs to be added to Trinity's Gems.cs reference");
                 return;
             }
 
@@ -83,7 +86,7 @@ namespace Trinity.Components.Adventurer.Settings
                 var chance = CalculateUpgradeChance(riftLevel, rank);
                 if (chance < requiredChance || MaxRank != 0 && rank >= MaxRank)
                 {
-                    //Core.Logger.Debug($"{Name} RiftLevel={riftLevel} Chance={chance} RequiredChance={requiredChance} CurrentRank={Rank} TestingRank={rank} MaxRank={MaxRank} Upgrades={i} ");
+                    //s_logger.Debug($"{Name} RiftLevel={riftLevel} Chance={chance} RequiredChance={requiredChance} CurrentRank={Rank} TestingRank={rank} MaxRank={MaxRank} Upgrades={i} ");
                     return i;
                 }
             }

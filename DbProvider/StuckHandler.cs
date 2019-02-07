@@ -9,6 +9,7 @@ using Trinity.Components.Adventurer;
 using Trinity.Components.Adventurer.Coroutines;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
+using Trinity.Framework.Grid;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Bot.Profile;
@@ -22,7 +23,7 @@ using Trinity.Routines;
 
 namespace Trinity.DbProvider
 {
-    public class StuckHandler : IStuckHandler
+    public class StuckHandler : DefaultStuckHandler
     {
         private DateTime _lastStuckCheck = DateTime.MinValue;
         private Vector3 _lastPosition = Vector3.Zero;
@@ -39,7 +40,7 @@ namespace Trinity.DbProvider
             GameEvents.OnWorldChanged += (sender, args) => Reset();
         }
 
-        public bool IsStuck
+        public new bool IsStuck
         {
             get
             {
@@ -59,42 +60,46 @@ namespace Trinity.DbProvider
 
         protected bool CheckForStuck()
         {
-            _lastPosition = ZetaDia.Me.Position;
-            _lastStuckCheck = DateTime.UtcNow;
-
-            if (IsNotStuck())
+            // Don't revert that if. It's not really an early exit ;)
+            if (ZetaDia.Me != null)
             {
-                if (_isSuspectedStuck)
-                    Core.Logger.Log(LogCategory.StuckHandler, "No longer suspected of stuck");
+                _lastPosition = ZetaDia.Me.Position;
+                _lastStuckCheck = DateTime.UtcNow;
 
-                if (_isStuck)
-                    Core.Logger.Log(LogCategory.StuckHandler, "No longer stuck!");
-
-                Reset();
-                return _isStuck;
-            }
-
-            if (!_isStuck && !_isSuspectedStuck)
-            {
-                SetSuspectedStuck();
-                return _isStuck;
-            }
-
-            if (_isSuspectedStuck)
-            {
-                var millisecondsSuspected = DateTime.UtcNow.Subtract(_suspectedStuckStartTime).TotalMilliseconds;
-                if (millisecondsSuspected >= _stuckValidationTime)
+                if (IsNotStuck())
                 {
-                    SetStuck();
+                    if (_isSuspectedStuck)
+                        Core.Logger.Log(LogCategory.StuckHandler, "No longer suspected of stuck");
+
+                    if (_isStuck)
+                        Core.Logger.Log(LogCategory.StuckHandler, "No longer stuck!");
+
+                    Reset();
                     return _isStuck;
                 }
 
-                Core.Logger.Log(LogCategory.StuckHandler, "Suspected Stuck for {0}ms", millisecondsSuspected);
-                return _isStuck;
-            }
+                if (!_isStuck && !_isSuspectedStuck)
+                {
+                    SetSuspectedStuck();
+                    return _isStuck;
+                }
 
-            if (_isStuck)
-                return true;
+                if (_isSuspectedStuck)
+                {
+                    var millisecondsSuspected = DateTime.UtcNow.Subtract(_suspectedStuckStartTime).TotalMilliseconds;
+                    if (millisecondsSuspected >= _stuckValidationTime)
+                    {
+                        SetStuck();
+                        return _isStuck;
+                    }
+
+                    Core.Logger.Log(LogCategory.StuckHandler, "Suspected Stuck for {0}ms", millisecondsSuspected);
+                    return _isStuck;
+                }
+
+                if (_isStuck)
+                    return true;
+            }
 
             Reset();
             return _isStuck;
@@ -182,7 +187,10 @@ namespace Trinity.DbProvider
                 return false;
             }
 
-            var isWaiting = TrinityCombat.Targeting.CurrentTarget != null && TrinityCombat.Targeting.CurrentPower?.SNOPower == SNOPower.Walk && Core.Player.MovementSpeed < 4 && Core.Grids.CanRayWalk(ZetaDia.Me.Position, TrinityCombat.Targeting.CurrentTarget.Position);
+            var isWaiting = TrinityCombat.Targeting.CurrentTarget != null &&
+                            TrinityCombat.Targeting.CurrentPower?.SNOPower == SNOPower.Walk &&
+                            Core.Player.MovementSpeed < 4 &&
+                            TrinityGrid.Instance.CanRayWalk(ZetaDia.Me.Position, TrinityCombat.Targeting.CurrentTarget.Position);
             if (isWaiting)
             {
                 Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Waiting (Routine Walk)");
@@ -326,21 +334,22 @@ namespace Trinity.DbProvider
             return false;
         }
 
-        public async Task<bool> DoUnstick()
-        {
-            Core.Logger.Warn("Trying to get Unstuck...");
-            Navigator.Clear();
-            Navigator.NavigationProvider.Clear();
-            await ClearDestructibleNearby();
+        //Try the default DB Unstick behavior.
+        //public async Task<bool> DoUnstick()
+        //{
+        //    Core.Logger.Warn("Trying to get Unstuck...");
+        //    Navigator.Clear();
+        //    Navigator.NavigationProvider.Clear();
+        //    await ClearDestructibleNearby();
 
-            await Navigator.SearchGridProvider.Update();
-            var startPosition = ZetaDia.Me.Position;
-            Core.Logger.Log("Starting Segment 1...");
-            await MoveAwayFrom(startPosition);
-            Core.Logger.Log("Starting Segment 2 ...");
-            await MoveAwayFrom(startPosition);
-            return true;
-        }
+        //    await Navigator.SearchGridProvider.Update();
+        //    var startPosition = ZetaDia.Me.Position;
+        //    Core.Logger.Log("Starting Segment 1...");
+        //    await MoveAwayFrom(startPosition);
+        //    Core.Logger.Log("Starting Segment 2 ...");
+        //    await MoveAwayFrom(startPosition);
+        //    return true;
+        //}
 
         private async Task<bool> ClearDestructibleNearby()
         {

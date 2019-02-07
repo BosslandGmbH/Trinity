@@ -1,20 +1,22 @@
-﻿using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using Trinity.Modules;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
 
-
 namespace Trinity.Components.Adventurer.Game.Exploration
 {
     public class WorldScene
     {
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
+
         private readonly float _boxSize;
         private readonly float _boxTolerance;
         public Vector2 Center { get; private set; }
@@ -26,14 +28,14 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         public Vector2 Max { get; private set; }
 
         //public Rect Rect { get; private set; }
-        public int LevelAreaId { get; set; }
+        public SNOLevelArea LevelAreaId { get; set; }
 
         public bool IsIgnored { get; private set; }
         public bool HasParent { get; set; }
         public bool HasChild { get; set; }
         public bool IsTopLevel => !HasParent;
         public bool GridCreated { get; private set; }
-        public int DynamicWorldId { get; private set; }
+        public SNOWorld DynamicWorldId { get; private set; }
         public int SceneId { get; private set; }
         public SceneExitDirections ExitDirections { get; private set; }
 
@@ -47,7 +49,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         {
             using (new PerformanceLogger("[WorldScene] ctor", false))
             {
-                //                Core.Logger.Debug("[WorldScene] Scene GridSquare Size: {0} X:{1} Y:{2}", scene.Mesh.Zone.NavZoneDef.GridSquareSize,scene.Mesh.Zone.NavZoneDef.NavGridSquareCountX, scene.Mesh.Zone.NavZoneDef.NavGridSquareCountY);
                 _boxSize = boxSize;
                 _boxTolerance = boxTolerance;
                 //Scene = scene;
@@ -87,13 +88,13 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 {
                     SubScene = new WorldScene(mesh.SubScene, boxSize, boxTolerance);
                 }
-                Core.Logger.Verbose("[WorldScene] Created a new world scene. Name: {0} LevelArea: {1} ({2})", Name, (SNOLevelArea)LevelAreaId, LevelAreaId);
+                s_logger.Debug($"[{nameof(WorldScene)}] Created a new world scene. Name: {Name} LevelArea: {LevelAreaId}");
                 if (LevelAreaId != AdvDia.CurrentLevelAreaId && !ExplorationData.OpenWorldIds.Contains(AdvDia.CurrentWorldId))
                 {
-                    Core.Logger.Verbose("[WorldScene] The scene LevelAreaID is different than the CurrentLevelAreaID");
-                    Core.Logger.Verbose("[WorldScene] Scene Name: {0}", Name);
-                    Core.Logger.Verbose("[WorldScene] Scene: {0} ({1})", (SNOLevelArea)LevelAreaId, LevelAreaId);
-                    Core.Logger.Verbose("[WorldScene] Current: {0} ({1})", (SNOLevelArea)AdvDia.CurrentLevelAreaId, AdvDia.CurrentLevelAreaId);
+                    s_logger.Debug($"[{nameof(WorldScene)}] The scene LevelAreaID is different than the CurrentLevelAreaID");
+                    s_logger.Debug($"[{nameof(WorldScene)}] Scene Name: {Name}");
+                    s_logger.Debug($"[{nameof(WorldScene)}] Scene: {LevelAreaId}");
+                    s_logger.Debug($"[{nameof(WorldScene)}] Current: {AdvDia.CurrentLevelAreaId}");
                 }
 
                 CreateGrid(mesh);
@@ -113,11 +114,11 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         private void ScanExitDirection(SceneExitDirections dir)
         {
             var n = GetNavigableConnection(dir);
-            if (n != Vector3.Zero)
-            {
-                ExitPositions.Add(dir, n);
-                ExitDirections |= dir;
-            }
+            if (n == Vector3.Zero)
+                return;
+
+            ExitPositions.Add(dir, n);
+            ExitDirections |= dir;
         }
 
         private SceneInfo _sceneInfo;
@@ -161,17 +162,16 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             switch (direction)
             {
                 case SceneExitDirections.North:
-                    return n.TopLeft.X == NorthWest.X;
+                    return Math.Abs(n.TopLeft.X - NorthWest.X) < float.Epsilon;
                 case SceneExitDirections.East:
-                    return n.BottomLeft.Y == NorthEast.Y;
+                    return Math.Abs(n.BottomLeft.Y - NorthEast.Y) < float.Epsilon;
                 case SceneExitDirections.South:
-                    return n.BottomRight.X == SouthEast.X;
+                    return Math.Abs(n.BottomRight.X - SouthEast.X) < float.Epsilon;
                 case SceneExitDirections.West:
-                    return n.TopRight.Y == SouthWest.Y;
+                    return Math.Abs(n.TopRight.Y - SouthWest.Y) < float.Epsilon;
             }
             return false;
         }
-
 
         public Vector3 GetNavigableConnection(SceneExitDirections direction)
         {
@@ -255,12 +255,11 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         {
             var scenesSharingCorners = Core.Scenes.CurrentWorldScenes.Where(s => s.CornerPositions.Any(pos => CornerPositions.Contains(pos)));
             var output = new List<ConnectedSceneResult>();
-            bool withinBounds;
 
             foreach (var other in scenesSharingCorners)
             {
-                var onSouthEdge = other.NorthWest.X == SouthWest.X && other.NorthEast.X == SouthEast.X;
-                withinBounds = other.Size.X < Size.X
+                var onSouthEdge = Math.Abs(other.NorthWest.X - SouthWest.X) < float.Epsilon && Math.Abs(other.NorthEast.X - SouthEast.X) < float.Epsilon;
+                var withinBounds = other.Size.X < Size.X
                     ? other.NorthWest.Y >= SouthWest.Y && other.NorthEast.Y <= SouthEast.Y
                     : other.NorthWest.Y <= SouthWest.Y && other.NorthEast.Y >= SouthEast.Y;
 
@@ -280,7 +279,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     continue;
                 }
 
-                var onNorthEdge = other.SouthWest.X == NorthWest.X && other.SouthEast.X == NorthEast.X;
+                var onNorthEdge = Math.Abs(other.SouthWest.X - NorthWest.X) < float.Epsilon && Math.Abs(other.SouthEast.X - NorthEast.X) < float.Epsilon;
                 withinBounds = other.Size.X < Size.X
                     ? other.SouthWest.Y >= NorthWest.Y && other.SouthEast.Y <= NorthEast.Y
                     : other.SouthWest.Y <= NorthWest.Y && other.SouthEast.Y >= NorthEast.Y;
@@ -302,7 +301,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     continue;
                 }
 
-                var onEastEdge = other.NorthWest.Y == NorthEast.Y && other.SouthWest.Y == SouthEast.Y;
+                var onEastEdge = Math.Abs(other.NorthWest.Y - NorthEast.Y) < float.Epsilon && Math.Abs(other.SouthWest.Y - SouthEast.Y) < float.Epsilon;
                 withinBounds = other.Size.X < Size.X
                     ? other.NorthWest.X >= NorthEast.X && other.SouthWest.X <= SouthEast.X
                     : other.NorthWest.X <= NorthEast.X && other.SouthWest.X >= SouthEast.X;
@@ -324,7 +323,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     continue;
                 }
 
-                var onWestEdge = other.NorthEast.Y == NorthWest.Y && other.SouthEast.Y == SouthWest.Y;
+                var onWestEdge = Math.Abs(other.NorthEast.Y - NorthWest.Y) < float.Epsilon && Math.Abs(other.SouthEast.Y - SouthWest.Y) < float.Epsilon;
                 withinBounds = other.Size.X < Size.X
                     ? other.NorthEast.X >= NorthWest.X && other.SouthEast.X <= SouthWest.X
                     : other.NorthEast.X <= NorthWest.X && other.SouthEast.X >= SouthWest.X;
@@ -406,7 +405,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public HashSet<Vector3> BlacklistedPositions { get; set; } = new HashSet<Vector3>();
 
-        public int SnoId { get; set; }
+        public SNOScene SnoId { get; set; }
         public bool HasBeenVisited { get; set; }
 
         public Vector3 GetRelativePosition(Vector3 worldPosition)
@@ -441,7 +440,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             if (results == null || !results.Any())
                 return false;
 
-            results.ForEach(r => Core.Logger.Verbose(LogCategory.Movement, $"> {r.Scene.Name} {r.Direction} {(ExitPositions.ContainsKey(r.Direction) ? ExitPositions[r.Direction].ToString() : "")}"));
+            results.ForEach(r => s_logger.Verbose($"> {r.Scene.Name} {r.Direction} {(ExitPositions.ContainsKey(r.Direction) ? ExitPositions[r.Direction].ToString() : "")}"));
             return true;
         }
 

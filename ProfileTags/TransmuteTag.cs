@@ -1,22 +1,27 @@
-﻿using Trinity.Framework;
+﻿using Serilog;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Coroutines.Town;
 using Trinity.Components.QuestTools;
-using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Reference;
 using Trinity.ProfileTags.EmbedTags;
 using Trinity.Settings;
+using Zeta.Bot.Coroutines;
+using Zeta.Common;
 using Zeta.Game;
+using Zeta.Game.Internals.Actors;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags
 {
+    // TODO: Fix that stuff...
     [XmlElement("Transmute")]
     public class TransmuteTag : BaseProfileBehavior
     {
+        private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
         [XmlElement("Items")]
         [Description("Items to be transmuted")]
         public List<ItemTag> Items { get; set; }
@@ -47,51 +52,47 @@ namespace Trinity.ProfileTags
         {
             if (Items == null || !Items.Any())
             {
-                Core.Logger.Error("[TransmuteTag] No items were specified. Use: <Transmute recipe=\"UpgradeRareItem\"><Items><Item id=\"0\" quantity =\"0\" /></Items></Transmute>");
+                s_logger.Error($"[{nameof(MainTask)}] No items were specified. Use: <Transmute recipe=\"UpgradeRareItem\"><Items><Item id=\"0\" quantity =\"0\" /></Items></Transmute>");
                 return true;
             }
 
             if (!GameUI.KanaisCubeWindow.IsVisible)
             {
-                Core.Logger.Error("[TransmuteTag] Kanai's Cube window must be visible");
+                s_logger.Error($"[{nameof(MainTask)}] Kanai's Cube window must be visible");
                 return true;
             }
 
             if (Recipe == 0)
             {
-                Core.Logger.Error("[TransmuteTag] You must specifiy a recipe to use: <Transmute recipe=\"UpgradeRareItem\"... valid values are: ConvertCraftingMaterialsFromRare, AugmentAncientItem, ConvertGems, RemoveLevelRequirement, ConvertCraftingMaterialsFromMagic, ExtractLegendaryPower, OpenPortalToCow, OpenPortalToGreed, ConvertCraftingMaterialsFromNormal, ConvertSetItem, ReforgeLegendary, UpgradeRareItem");
+                s_logger.Error($"[{nameof(MainTask)}] You must specifiy a recipe to use: <Transmute recipe=\"UpgradeRareItem\"... valid values are: ConvertCraftingMaterialsFromRare, AugmentAncientItem, ConvertGems, RemoveLevelRequirement, ConvertCraftingMaterialsFromMagic, ExtractLegendaryPower, OpenPortalToCow, OpenPortalToGreed, ConvertCraftingMaterialsFromNormal, ConvertSetItem, ReforgeLegendary, UpgradeRareItem");
                 return true;
             }
 
-            var transmuteGroup = new List<TrinityItem>();
+            var transmuteGroup = new List<ACDItem>();
             foreach (var item in Items)
             {
-                var backpackItems = Core.Inventory.Backpack.ByActorSno(item.Id);
-                if (backpackItems == null || !backpackItems.Any())
+                var backpackItems = InventoryManager.Backpack.ByActorSno(item.Id);
+                var acdItems = backpackItems as ACDItem[] ?? backpackItems.ToArray();
+                if (acdItems.Length == 0)
                 {
                     if (item.Quality != TrinityItemQuality.Invalid)
                     {
-                        backpackItems = Core.Inventory.Backpack.ByQuality(item.Quality);
+                        backpackItems = InventoryManager.Backpack.ByQuality(item.Quality);
+                        acdItems = backpackItems as ACDItem[] ?? backpackItems.ToArray();
                     }
-                    if (backpackItems == null || !backpackItems.Any())
+
+                    if (acdItems.Length == 0)
                     {
-                        Core.Logger.Error($"[TransmuteTag] {item} was not found in backpack");
+                        s_logger.Error($"[{nameof(MainTask)}] {item} was not found in backpack");
                         return true;
                     }
                 }
-
-                var stacks = Core.Inventory.GetStacksUpToQuantity(backpackItems, item.Quantity);
+                
+                var stacks = acdItems.GetStacksUpToQuantity(item.Quantity);
                 transmuteGroup.AddRange(stacks);
             }
 
-            if (!await Transmute.Execute(transmuteGroup, Recipe))
-            {
-                Core.Logger.Error("[TransmuteTag] Trasmute Failed.");
-                return true;
-            }
-
-            return true;
+            return await TrinityTownRun.TransmuteRecipe(Recipe, transmuteGroup.ToArray()) == CoroutineResult.Done;
         }
     }
 }
-

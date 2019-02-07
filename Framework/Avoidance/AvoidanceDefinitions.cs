@@ -26,7 +26,7 @@ namespace Trinity.Framework.Avoidance
                 {
                     Name = "Disease Cloud Effect",
                     Filter = o => o.Attributes.GetAttribute<bool>(ActorAttributeType.PowerBuff0VisualEffectNone, (int) SNOPower.FastMummy_Disease_Cloud),
-                    ActorSnoId = (int) SNOActor.Generic_Proxy,
+                    ActorSnoId = SNOActor.Generic_Proxy,
                     Type = PartType.Main,
                     Radius = 13f
                 }
@@ -45,49 +45,49 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Falling wood",
-                    ActorSnoId = (int) SNOActor.x1_westm_Falling_Wood_Urzael,
+                    ActorSnoId = SNOActor.x1_westm_Falling_Wood_Urzael,
                     Type = PartType.Telegraph,
                     Radius = 14f
                 },
                 new AvoidancePart
                 {
                     Name = "Falling wood 2",
-                    ActorSnoId = (int) SNOActor.x1_westm_Falling_Wood_02_Urzael,
+                    ActorSnoId = SNOActor.x1_westm_Falling_Wood_02_Urzael,
                     Type = PartType.Telegraph,
                     Radius = 14f
                 },
                 new AvoidancePart
                 {
                     Name = "Cannonball",
-                    ActorSnoId = (int) SNOActor.x1_Urzael_Cannonball,
+                    ActorSnoId = SNOActor.x1_Urzael_Cannonball,
                     Type = PartType.Projectile,
                     Radius = 14f
                 },
                 new AvoidancePart
                 {
                     Name = "Cannonball Burning",
-                    ActorSnoId = (int) SNOActor.x1_Urzael_Cannonball_burning,
+                    ActorSnoId = SNOActor.x1_Urzael_Cannonball_burning,
                     Type = PartType.Projectile,
                     Radius = 14f
                 },
                 new AvoidancePart
                 {
                     Name = "Flame Sweep",
-                    ActorSnoId = (int) SNOActor.x1_Urzael_FlameSweep,
+                    ActorSnoId = SNOActor.x1_Urzael_FlameSweep,
                     Type = PartType.Projectile,
                     Radius = 14f
                 },
                 new AvoidancePart
                 {
                     Name = "Ceiling Debri Impact Emitter",
-                    ActorSnoId = (int) SNOActor.x1_Urzael_ceilingDebris_beam_impact_emitter,
+                    ActorSnoId = SNOActor.x1_Urzael_ceilingDebris_beam_impact_emitter,
                     Type = PartType.Telegraph,
                     Radius = 14f
                 },
                 new AvoidancePart
                 {
                     Name = "Bad Circle",
-                    ActorSnoId = (int) SNOActor.x1_Urzael_ceilingDebris_beam_groundGlow,
+                    ActorSnoId = SNOActor.x1_Urzael_ceilingDebris_beam_groundGlow,
                     Type = PartType.Telegraph,
                     Radius = 14f
                 },
@@ -95,7 +95,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Falling Debri Circle",
-                    ActorSnoId = (int) SNOActor.x1_Urzael_ceilingDebris_Impact_Beam,
+                    ActorSnoId = SNOActor.x1_Urzael_ceilingDebris_Impact_Beam,
                     Type = PartType.Main,
                     Radius = 14f
                 },
@@ -114,7 +114,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Tornado",
-                    ActorSnoId = (int)SNOActor.ZoltunKulle_EnergyTwister, 
+                    ActorSnoId = SNOActor.ZoltunKulle_EnergyTwister, 
                     Type = PartType.Main,
                     Radius = 12f
                 }
@@ -133,7 +133,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Breathe Lightning",
-                    ActorSnoId = (int) SNOActor.x1_LR_boss_terrorDemon_A_projectile,
+                    ActorSnoId = SNOActor.x1_LR_boss_terrorDemon_A_projectile,
                     Type = PartType.Projectile,
                     Radius = 9f
                 }
@@ -152,7 +152,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Pulse",
-                    ActorSnoId = (int) SNOActor.x1_MonsterAffix_Thunderstorm_Impact,
+                    ActorSnoId = SNOActor.x1_MonsterAffix_Thunderstorm_Impact,
                     Radius = 22f,
                     Delay = TimeSpan.FromSeconds(1),
                     Duration = TimeSpan.FromSeconds(4),
@@ -173,7 +173,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Hands",
-                    ActorSnoId = (int) SNOActor.creepMobArm,
+                    ActorSnoId = SNOActor.creepMobArm,
                     Radius = 15f,
                     Type = PartType.Main
                 }
@@ -195,7 +195,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Desecrator AOE",
-                    ActorSnoId = (int) SNOActor.monsterAffix_Desecrator_damage_AOE,
+                    ActorSnoId = SNOActor.monsterAffix_Desecrator_damage_AOE,
                     Radius = 8f,
                     Type = PartType.Main
                 }
@@ -218,7 +218,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Morlu Meteor Pending",
-                    ActorSnoId = (int) SNOActor.MorluSpellcaster_Meteor_Pending,
+                    ActorSnoId = SNOActor.MorluSpellcaster_Meteor_Pending,
                     Radius = 20f,
                     Type = PartType.Main
                 }
@@ -240,7 +240,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Lightning Storm",
-                    ActorSnoId = (int) SNOActor.x1_sniperAngel_shardBolt_orb,
+                    ActorSnoId = SNOActor.x1_sniperAngel_shardBolt_orb,
                     Radius = 22f,
                     Type = PartType.Main
                 }
@@ -288,7 +288,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Gas Cloud",
-                    ActorSnoId = (int) SNOActor.Gluttony_gasCloud_proxy,
+                    ActorSnoId = SNOActor.Gluttony_gasCloud_proxy,
                     Radius = 20f,
                     Type = PartType.Main
                 }
@@ -333,7 +333,7 @@ namespace Trinity.Framework.Avoidance
                 {
                     Name = "Telegraph",
                     InternalName = "monsterAffix_Molten_deathStart_Proxy",
-                    ActorSnoId = 4803,
+                    ActorSnoId = SNOActor.monsterAffix_Molten_deathStart_Proxy,
                     Radius = 24f,
                     Duration = TimeSpan.FromSeconds(3),
                     Type = PartType.Telegraph
@@ -342,7 +342,7 @@ namespace Trinity.Framework.Avoidance
                 {
                     Name = "Explosion",
                     InternalName = "monsterAffix_Molten_deathExplosion_Proxy",
-                    ActorSnoId = 4804,
+                    ActorSnoId = SNOActor.monsterAffix_Molten_deathExplosion_Proxy,
                     Radius = 24f,
                     Delay = TimeSpan.FromSeconds(3),
                     Duration = TimeSpan.FromSeconds(1),
@@ -352,7 +352,7 @@ namespace Trinity.Framework.Avoidance
                 {
                     Name = "Explosion",
                     InternalName = "monsterAffix_molten_fireRing",
-                    ActorSnoId = 224225,
+                    ActorSnoId = SNOActor.monsterAffix_molten_fireRing,
                     Radius = 24f,
                     Delay = TimeSpan.FromSeconds(3),
                     Duration = TimeSpan.FromSeconds(1),
@@ -395,7 +395,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Satanic Symbol 1",
-                    ActorSnoId = 315366,
+                    ActorSnoId = SNOActor.x1_Adria_Geyser,
                     InternalName = "x1_Adria_Geyser",
                     Radius = 12f,
                     Type = PartType.Main
@@ -403,7 +403,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Satanic Symbol 2",
-                    ActorSnoId = 315362,
+                    ActorSnoId = SNOActor.x1_Adria_Geyser_Pending,
                     InternalName = "x1_Adria_Geyser_Pending",
                     Type = PartType.Main
                 }
@@ -424,7 +424,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Ice Cluster",
-                    ActorSnoId = (int) SNOActor.monsterAffix_frozen_iceClusters, //223675,
+                    ActorSnoId = SNOActor.monsterAffix_frozen_iceClusters, //223675,
                     Radius = 17f,
                     Duration = TimeSpan.FromSeconds(4),
                     Type = PartType.Main
@@ -444,7 +444,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Forge Fire Breath 1",
-                    ActorSnoId = (int) SNOActor.a3_Battlefield_demonic_forge, //174900,
+                    ActorSnoId = SNOActor.a3_Battlefield_demonic_forge, //174900,
                     Attribute = ActorAttributeType.PowerBuff0VisualEffectNone,
                     Power = SNOPower.a3_battlefield_demonic_forge,
                     Type = PartType.VisualEffect
@@ -452,7 +452,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Forge Fire Breath 2",
-                    ActorSnoId = (int) SNOActor.a3_crater_st_demonic_forge, //185391,
+                    ActorSnoId = SNOActor.a3_crater_st_demonic_forge, //185391,
                     Attribute = ActorAttributeType.PowerBuff0VisualEffectNone,
                     Power = SNOPower.a3_battlefield_demonic_forge,
                     Type = PartType.VisualEffect
@@ -473,14 +473,14 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Butcher Pentagram",
-                    ActorSnoId = (int) SNOActor.X1_Unique_Monster_Generic_AOE_DOT_Fire_10foot, //359693,
+                    ActorSnoId = SNOActor.X1_Unique_Monster_Generic_AOE_DOT_Fire_10foot, //359693,
                     Radius = 12f,
                     Type = PartType.Main
                 },
                 new AvoidancePart
                 {
                     Name = "Butcher Pentagram Telegraph", // ClientEffect
-                    ActorSnoId = (int) SNOActor.X1_Unique_Monster_Generic_AOE_Sphere_Distortion, //359693,
+                    ActorSnoId = SNOActor.X1_Unique_Monster_Generic_AOE_Sphere_Distortion, //359693,
                     Radius = 12f,
                     Type = PartType.Telegraph
                 }
@@ -743,7 +743,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Rat Ball",
-                    ActorSnoId = (int) SNOActor.p4_RatKing_RatBallMonster,
+                    ActorSnoId = SNOActor.p4_RatKing_RatBallMonster,
                     Radius = 10f,
                     Type = PartType.Main
                 }
@@ -765,14 +765,14 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Swirly Poison Pool A",
-                    ActorSnoId = 108869,
+                    ActorSnoId = SNOActor.monsterAffix_Plagued_endCloud,
                     Radius = 12f,
                     Type = PartType.Main
                 },
                 new AvoidancePart
                 {
                     Name = "Swirly Poison Pool B",
-                    ActorSnoId = 223933,
+                    ActorSnoId = SNOActor.monsterAffix_plagued_groundGeo,
                     Radius = 12f,
                     Type = PartType.Main
                 }
@@ -794,7 +794,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Swirly Poison Pool A",
-                    ActorSnoId = 349774,
+                    ActorSnoId = SNOActor.x1_MonsterAffix_frozenPulse_monster,
                     Radius = 15f,
                     Type = PartType.Main
                 }
@@ -816,7 +816,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Trail",
-                    ActorSnoId = 95868,
+                    ActorSnoId = SNOActor.monsterAffix_Molten_trail,
                     Duration = TimeSpan.FromSeconds(1),
                     Type = PartType.Main
                 }
@@ -838,14 +838,14 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Telegraph",
-                    ActorSnoId = 257306,
+                    ActorSnoId = SNOActor.arcaneEnchantedDummy_spawn,
                     Duration = TimeSpan.FromSeconds(2),
                     Type = PartType.Telegraph
                 },
                 new AvoidancePart
                 {
                     Name = "Beam",
-                    ActorSnoId = 219702,
+                    ActorSnoId = SNOActor.MonsterAffix_ArcaneEnchanted_PetSweep,
                     //Delay = TimeSpan.FromSeconds(2),
                     Duration = TimeSpan.FromSeconds(10),
                     MovementType = MovementType.Rotation,
@@ -854,7 +854,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Beam Reverse Beam",
-                    ActorSnoId = 221225,
+                    ActorSnoId = SNOActor.MonsterAffix_ArcaneEnchanted_PetSweep_reverse,
                     //Delay = TimeSpan.FromSeconds(2),
                     Duration = TimeSpan.FromSeconds(10),
                     MovementType = MovementType.Rotation,
@@ -876,7 +876,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Projectile",
-                    ActorSnoId = (int) SNOActor.UberMaghda_Punish_projectile, //278340,
+                    ActorSnoId = SNOActor.UberMaghda_Punish_projectile, //278340,
                     InternalName = "UberMaghda_Punish_projectile",
                     Duration = TimeSpan.FromSeconds(10),
                     Type = PartType.Projectile,
@@ -900,7 +900,7 @@ namespace Trinity.Framework.Avoidance
                 {
                     Name = "Orb1",
                     Radius = 7f,
-                    ActorSnoId = (int) SNOActor.X1_MonsterAffix_Orbiter_Projectile, //343539,
+                    ActorSnoId = SNOActor.X1_MonsterAffix_Orbiter_Projectile, //343539,
                     InternalName = "X1_MonsterAffix_Orbiter_Projectile",
                     Duration = TimeSpan.FromSeconds(10),
                     Type = PartType.Projectile
@@ -910,7 +910,7 @@ namespace Trinity.Framework.Avoidance
                     Name = "Orb2",
                     Radius = 7f,
                     InternalName = "x1_MonsterAffix_orbiter_projectile_orb",
-                    ActorSnoId = (int) SNOActor.x1_MonsterAffix_orbiter_projectile_orb, //346805,
+                    ActorSnoId = SNOActor.x1_MonsterAffix_orbiter_projectile_orb, //346805,
                     Duration = TimeSpan.FromSeconds(10),
                     Type = PartType.Projectile
                 }
@@ -931,7 +931,7 @@ namespace Trinity.Framework.Avoidance
                 {
                     Name = "Projectile",
                     Radius = 6f,
-                    ActorSnoId = (int) SNOActor.skeletonMage_Fire_projectile, //5374,
+                    ActorSnoId = SNOActor.skeletonMage_Fire_projectile, //5374,
                     InternalName = "skeletonMage_Fire_projectile",
                     Type = PartType.Projectile
                 },
@@ -939,7 +939,7 @@ namespace Trinity.Framework.Avoidance
                 {
                     Name = "Ground Effect",
                     Radius = 8f,
-                    ActorSnoId = (int) SNOActor.skeletonMage_fire_groundPool, //432,
+                    ActorSnoId = SNOActor.skeletonMage_fire_groundPool, //432,
                     InternalName = "skeletonMage_fire_groundPool",
                     Duration = TimeSpan.FromSeconds(3),
                     Type = PartType.Main
@@ -963,21 +963,21 @@ namespace Trinity.Framework.Avoidance
                 {
                     Name = "Slime Bomb Telegraph",
                     InternalName = "x1_MonsterAffix_CorpseBomber_bomb_start",
-                    ActorSnoId = (int) SNOActor.x1_MonsterAffix_CorpseBomber_bomb_start, //340319,
+                    ActorSnoId = SNOActor.x1_MonsterAffix_CorpseBomber_bomb_start, //340319,
                     Duration = TimeSpan.FromSeconds(2),
                     Type = PartType.Telegraph
                 },
                 new AvoidancePart
                 {
                     Name = "Slime Bomb",
-                    ActorSnoId = (int) SNOActor.X1_MonsterAffix_corpseBomber_bomb, //325761,
+                    ActorSnoId = SNOActor.X1_MonsterAffix_corpseBomber_bomb, //325761,
                     InternalName = "X1_MonsterAffix_corpseBomber_bomb",
                     Type = PartType.Main
                 },
                 new AvoidancePart
                 {
                     Name = "Slime Bomb Projectile",
-                    ActorSnoId = (int) SNOActor.x1_MonsterAffix_CorpseBomber_projectile, //316389,
+                    ActorSnoId = SNOActor.x1_MonsterAffix_CorpseBomber_projectile, //316389,
                     InternalName = "x1_MonsterAffix_CorpseBomber_projectile",
                     Type = PartType.Projectile
                 }
@@ -998,7 +998,7 @@ namespace Trinity.Framework.Avoidance
                 {
                     Name = "Mortar Impact",
                     InternalName = "x1_MonsterAffix_CorpseBomber_bomb_start",
-                    ActorSnoId = (int) SNOActor.Grenadier_Proj_mortar_inpact,
+                    ActorSnoId = SNOActor.Grenadier_Proj_mortar_inpact,
                     Type = PartType.Main,
                     Radius = 8f
                 }
@@ -1019,7 +1019,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Death Fog Actor",
-                    ActorSnoId = (int)SNOActor.x1_Malthael_DeathFogMonster,
+                    ActorSnoId = SNOActor.x1_Malthael_DeathFogMonster,
                     Type = PartType.Main,
                     Radius = 18f
                 },
@@ -1040,7 +1040,7 @@ namespace Trinity.Framework.Avoidance
                 new AvoidancePart
                 {
                     Name = "Fire Gate Actor",
-                    ActorSnoId = (int)SNOActor.x1_malthael_gratesOfHell_darkBall_glowOuter,
+                    ActorSnoId = SNOActor.x1_malthael_gratesOfHell_darkBall_glowOuter,
                     Type = PartType.Main,
                     Radius = 20f
                 },
@@ -1096,7 +1096,7 @@ namespace Trinity.Framework.Avoidance
                 {
                     Name = "Fire ball",
                     Radius = 6f,
-                    ActorSnoId = 4103,
+                    ActorSnoId = SNOActor.FallenShaman_fireball_projectile,
                     InternalName = "GoatMutant_Shaman_blast_projectile",
                     Type = PartType.Projectile
                 },
@@ -1104,7 +1104,7 @@ namespace Trinity.Framework.Avoidance
                 {
                     Name = "Blood star",
                     Radius = 6f,
-                    ActorSnoId =  (int) SNOActor.succubus_bloodStar_projectile, 
+                    ActorSnoId =  SNOActor.succubus_bloodStar_projectile, 
                     InternalName = "succubus_bloodStar_projectile",
                     Type = PartType.Projectile
                 },
@@ -1125,7 +1125,7 @@ namespace Trinity.Framework.Avoidance
                 {
                     Name = "Skeleton bow",
                     Radius = 6f,
-                    ActorSnoId = 5347,
+                    ActorSnoId = SNOActor.SkeletonArcher_B,
                     InternalName = "SkeletonArcher_B",
                     Type = PartType.Projectile
                 },
@@ -1133,7 +1133,7 @@ namespace Trinity.Framework.Avoidance
                 {
                     Name = "Bees wasps",
                     Radius = 6f,
-                    ActorSnoId = 5212,
+                    ActorSnoId = SNOActor.SandWasp_Projectile,
                     InternalName = "Bees_Wasps",
                     Type = PartType.Projectile
                 },

@@ -97,12 +97,12 @@ namespace Trinity.Settings.ItemList
             {
                 LItem item;
 
-                if (!existingItemTypes.TryGetValue((int)itemType, out item))
+                if (!existingItemTypes.TryGetValue((SNOActor)itemType, out item))
                 {
                     item = new LItem
                     {
                         Name = itemType.ToString(),
-                        Id = (int)itemType,
+                        Id = (SNOActor)itemType,
                         Type = LItem.ILType.Slot,
                         TrinityItemType = itemType,
                         ItemSelectionType = itemType.ToItemSelectionType(),
@@ -849,7 +849,7 @@ namespace Trinity.Settings.ItemList
 
         private void SelectItems(IEnumerable<ACDItem> collection)
         {
-            var itemIds = new HashSet<int>(collection.Where(i => i.ItemQualityLevel >= ItemQuality.Legendary).Select(i => i.ActorSnoId));
+            var itemIds = new HashSet<SNOActor>(collection.Where(i => i.ItemQualityLevel >= ItemQuality.Legendary).Select(i => i.ActorSnoId));
             AddToSelection(item => itemIds.Contains(item.Id));
         }
 

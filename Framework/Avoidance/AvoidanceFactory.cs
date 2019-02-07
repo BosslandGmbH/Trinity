@@ -19,7 +19,7 @@ namespace Trinity.Framework.Avoidance
 
         internal static ILookup<SNOAnim, AvoidancePart> LookupPartByAnimation { get; set; }
 
-        public static readonly Dictionary<int, AvoidancePart> AvoidanceDataDictionary = new Dictionary<int, AvoidancePart>();
+        public static readonly Dictionary<SNOActor, AvoidancePart> AvoidanceDataDictionary = new Dictionary<SNOActor, AvoidancePart>();
 
         public static Dictionary<AvoidanceType, AvoidanceDefinition> AvoidanceDataByType { get; set; }
 
@@ -160,7 +160,7 @@ namespace Trinity.Framework.Avoidance
             return false;
         }
 
-        public static AvoidancePart GetAvoidancePart(int actorId)
+        public static AvoidancePart GetAvoidancePart(SNOActor actorId)
         {
             return AvoidanceDataDictionary.ContainsKey(actorId) ? AvoidanceDataDictionary[actorId] : null;
         }

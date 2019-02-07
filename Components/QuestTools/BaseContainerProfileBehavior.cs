@@ -5,6 +5,7 @@ using Trinity.Framework;
 using Zeta.Bot;
 using Zeta.Bot.Profile.Composites;
 using Zeta.Common;
+using Zeta.Game;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 

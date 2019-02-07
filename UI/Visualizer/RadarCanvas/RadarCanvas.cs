@@ -31,7 +31,7 @@ using FlowDirection = System.Windows.FlowDirection;
 using LineSegment = System.Windows.Media.LineSegment;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using RectangularRegion = Trinity.Components.Adventurer.Game.Exploration.SceneMapping.RectangularRegion;
-
+using Zeta.Game.Internals;
 
 namespace Trinity.UI.Visualizer.RadarCanvas
 {
@@ -106,7 +106,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                     Core.Logger.Log($"Clicked World Position = {startWorldPosition}, Distance={startWorldPosition.Distance(ZetaDia.Me.Position)}, IsExplored: {isExplored}");
 
 
-                    var result = Core.Grids.Avoidance.CanRayWalk(startWorldPosition, Player.Actor.Position);
+                    var result = TrinityGrid.Instance.CanRayWalk(startWorldPosition, Player.Actor.Position);
                     CurrentRayWalk = new Tuple<Vector3, Vector3, bool>(startWorldPosition, Player.Actor.Position, result);
 
                     //var isConnectedScene = Core.Scenes.CurrentScene.IsConnected(startWorldPosition);
@@ -164,7 +164,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         private RadarHitTestUtility.HitContainer FindElementUnderClick(object sender, MouseEventArgs e)
         {
-            var position = e.GetPosition((UIElement)sender);
+            var position = e.GetPosition((System.Windows.UIElement)sender);
             return HitTester.GetHit(position);
         }
 
@@ -292,8 +292,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         static void OnItemsSourceChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
-            var radarCanvas = obj as RadarCanvas;
-            if (radarCanvas != null)
+            if (obj is RadarCanvas radarCanvas)
                 radarCanvas.OnItemsSourceChanged(args);
         }
 
@@ -332,8 +331,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         static void OnZoomChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
             Core.Logger.Verbose("[RadarUI] Zoom changed from {0} to {1}", args.OldValue, args.NewValue);
-            var radarCanvas = obj as RadarCanvas;
-            if (radarCanvas != null)
+            if (obj is RadarCanvas radarCanvas)
             {
                 radarCanvas.GridSize = (int)args.NewValue;
                 radarCanvas.Clear();
@@ -353,8 +351,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         private static void OnIsDraggingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             Core.Logger.Verbose("[RadarUI] Dragging Changed from {0} to {1}", e.OldValue, e.NewValue);
-            var radarCanvas = d as RadarCanvas;
-            if (radarCanvas != null)
+            if (d is RadarCanvas radarCanvas)
             {
                 // Update Pan Offset
             }
@@ -385,8 +382,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         static void OnPanChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
             Core.Logger.Verbose("[RadarUI] Pan changed from {0} to {1}", args.OldValue, args.NewValue);
-            var radarCanvas = obj as RadarCanvas;
-            if (radarCanvas != null)
+            if (obj is RadarCanvas radarCanvas)
             {
                 // Update Pan Offset
             }
@@ -438,8 +434,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         static void OnVisibilityFlagsChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
             Core.Logger.Verbose("[RadarUI] VisibilityFlags changed from {0} to {1}", args.OldValue, args.NewValue);
-            var radarCanvas = obj as RadarCanvas;
-            if (radarCanvas != null)
+            if (obj is RadarCanvas radarCanvas)
             {
                 // Update Visibility Settings
             }
@@ -495,8 +490,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         }
 
         #endregion
-
-        private DateTime LastUpdate = DateTime.MinValue;
 
         /// <summary>
         /// Go through the ItemSource collection and calculate their canvas positions
@@ -813,7 +806,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 var pen = marker.MarkerType == WorldMarkerType.Objective ? RadarResources.EliteLightPen : RadarResources.MarkerPen;
                 var markerPoint = marker.Position.ToCanvasPoint();
                 dc.DrawLine(pen, CenterActor.Point, markerPoint);
-                DrawLabel(dc, CanvasData, marker.Name, markerPoint, OrangeBrush, 45, 12, 3);
+                DrawLabel(dc, CanvasData, marker.NameHash.ToString(), markerPoint, OrangeBrush, 45, 12, 3);
             }
         }
 
@@ -868,7 +861,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                     dc.DrawLine(RadarResources.CurrentPathPen1, from.ToCanvasPoint(), to.ToCanvasPoint());
                 }
 
-                var losPathPosition = Core.Grids.Avoidance.GetPathCastPosition(50f);
+                var losPathPosition = TrinityGrid.Instance.GetPathCastPosition(50f);
                 if (losPathPosition != Vector3.Zero)
                 {
                     var losPathPoint = losPathPosition.ToCanvasPoint();
@@ -886,12 +879,12 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         private void DrawCurrentSceneConnectionPath(DrawingContext dc, CanvasData canvas)
         {
             try
-            { 
+            {
                 if (SceneConnectionPath == null) return;
                 for (int i = 0; i < SceneConnectionPath.Count; i++)
                 {
                     var to = SceneConnectionPath[i];
-                    var from = i == 0 ? canvas.CenterVector  : SceneConnectionPath[i - 1];
+                    var from = i == 0 ? canvas.CenterVector : SceneConnectionPath[i - 1];
                     dc.DrawLine(RadarResources.CurrentPathPen2, from.ToCanvasPoint(), to.ToCanvasPoint());
                 }
             }
@@ -1118,14 +1111,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
 
         }
-        
-        private Dictionary<DateTime, StaticTelegraph> _telegraphedNodes = new Dictionary<DateTime, StaticTelegraph>();
-
-        public class StaticTelegraph
-        {
-            public Vector3 Origin;
-            public Vector3 Target;
-        }
 
         private void DrawKiteDirection(DrawingContext dc, CanvasData canvas)
         {
@@ -1144,7 +1129,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 Core.Logger.Log("Exception in RadarUI.DrawKiteDirection(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
-
 
         private void DrawNodeArea(DrawingContext dc, CanvasData canvas, AvoidanceNode node, Brush brush, Pen pen = null)
         {
@@ -1228,18 +1212,25 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 // Sort them by polar angle from iMin, 
                 var sortQuery = Enumerable.Range(0, initialPointsList.Count)
                     .Where((i) => (i != iMin)) // Skip the min point
-                    .Select((i) => new KeyValuePair<double, Vector3>(Math.Atan2(initialPointsList[i].Y - initialPointsList[iMin].Y, initialPointsList[i].X - initialPointsList[iMin].X), initialPointsList[i]))
+                    .Select((i) => new KeyValuePair<double, Vector3>(
+                        Math.Atan2(
+                            initialPointsList[i].Y - initialPointsList[iMin].Y,
+                            initialPointsList[i].X - initialPointsList[iMin].X),
+                        initialPointsList[i]))
                     .OrderBy((pair) => pair.Key)
                     .Select((pair) => pair.Value);
-                List<Vector3> points = new List<Vector3>(initialPointsList.Count);
-                points.Add(initialPointsList[iMin]);     // Add minimum point
+
+                List<Vector3> points = new List<Vector3>(initialPointsList.Count)
+                {
+                    initialPointsList[iMin]
+                }; // Add minimum point
                 points.AddRange(sortQuery);          // Add the sorted points.
 
-                int M = 0;
-                for (int i = 1, N = points.Count; i < N; i++)
+                int m = 0;
+                for (int i = 1, n = points.Count; i < n; i++)
                 {
                     bool keepNewPoint = true;
-                    if (M == 0)
+                    if (m == 0)
                     {
                         // Find at least one point not coincident with points[0]
                         keepNewPoint = !NearlyEqual(points[0], points[i]);
@@ -1248,14 +1239,15 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                     {
                         while (true)
                         {
-                            var flag = WhichToRemoveFromBoundary(points[M - 1], points[M], points[i]);
+                            var flag = WhichToRemoveFromBoundary(points[m - 1], points[m], points[i]);
                             if (flag == RemovalFlag.None)
                                 break;
-                            else if (flag == RemovalFlag.MidPoint)
+
+                            if (flag == RemovalFlag.MidPoint)
                             {
-                                if (M > 0)
-                                    M--;
-                                if (M == 0)
+                                if (m > 0)
+                                    m--;
+                                if (m == 0)
                                     break;
                             }
                             else if (flag == RemovalFlag.EndPoint)
@@ -1267,14 +1259,14 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                                 throw new Exception("Unknown RemovalFlag");
                         }
                     }
-                    if (keepNewPoint)
-                    {
-                        M++;
-                        Swap(points, M, i);
-                    }
+
+                    if (!keepNewPoint)
+                        continue;
+                    m++;
+                    Swap(points, m, i);
                 }
                 // points[M] is now the last point in the boundary.  Remove the remainder.
-                points.RemoveRange(M + 1, points.Count - M - 1);
+                points.RemoveRange(m + 1, points.Count - m - 1);
                 return points;
             }
 
@@ -1405,21 +1397,21 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                     }
 
                     var exitPositions = adventurerScene.ExitPositions;
-                        var unconnectedExits =
-                            exitPositions.Where(
-                                ep => connectedScenes.FirstOrDefault(cs => cs.Direction == ep.Key) == null).ToList();
-                        foreach (var exitPosition in adventurerScene.ExitPositions.Values)
+                    var unconnectedExits =
+                        exitPositions.Where(
+                            ep => connectedScenes.FirstOrDefault(cs => cs.Direction == ep.Key) == null).ToList();
+                    foreach (var exitPosition in adventurerScene.ExitPositions.Values)
+                    {
+                        if (exitPosition != Vector3.Zero)
                         {
-                            if (exitPosition != Vector3.Zero)
-                            {
-                                if (unconnectedExits.Any(ep => exitPosition.Distance(ep.Value) <= 15))
-                                    dc.DrawEllipse(null, RadarResources.FailurePen, exitPosition.ToCanvasPoint(), 10, 10);
-                                else
-                                    dc.DrawEllipse(null, RadarResources.EliteLightPen, exitPosition.ToCanvasPoint(), 10,
-                                        10);
-                            }
+                            if (unconnectedExits.Any(ep => exitPosition.Distance(ep.Value) <= 15))
+                                dc.DrawEllipse(null, RadarResources.FailurePen, exitPosition.ToCanvasPoint(), 10, 10);
+                            else
+                                dc.DrawEllipse(null, RadarResources.EliteLightPen, exitPosition.ToCanvasPoint(), 10,
+                                    10);
                         }
-                    
+                    }
+
 
                     // Combine navcells into one drawing and store it; because they don't change relative to each other
                     // And because translating geometry for every navcell on every frame is waaaaay too slow.
@@ -1619,8 +1611,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                 if (VisibilityFlags.HasFlag(RadarVisibilityFlags.RiftValue))
                 {
-                    var tco = radarObject.Actor as TrinityActor;
-                    if (tco != null)
+                    if (radarObject.Actor is TrinityActor tco)
                     {
                         var value = $"{tco.RiftValuePct:0.00}%";
                         DrawLabel(dc, canvas, value, radarObject.Point, YellowBrush, 15, 12, 8);
@@ -1628,8 +1619,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 }
                 else if (VisibilityFlags.HasFlag(RadarVisibilityFlags.Weighting))
                 {
-                    var tco = radarObject.Actor as TrinityActor;
-                    if (tco != null)
+                    if (radarObject.Actor is TrinityActor tco)
                     {
                         var value = $"{tco.Weight:#.#}";
                         DrawLabel(dc, canvas, value, new Point(radarObject.Point.X + gridRadius, radarObject.Point.Y), YellowBrush, 15, 12, 8);

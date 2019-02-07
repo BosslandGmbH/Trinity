@@ -16,8 +16,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
     public class ClearLevelAreaCoroutine : IBountySubroutine
     {
-        private readonly int _questId;
-        private readonly int _objectiveId;
+        private readonly SNOQuest _questId;
+        private readonly SNOActor _objectiveId;
         private bool _isDone;
         private States _state;
         private Vector3 _hostileLocation = Vector3.Zero;
@@ -69,7 +69,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public BountyData BountyData => _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId));
 
-        public ClearLevelAreaCoroutine(int questId, bool stopWhenExplored = false, int objectiveId = -1)
+        public ClearLevelAreaCoroutine(SNOQuest questId, bool stopWhenExplored = false, SNOActor objectiveId = SNOActor.Invalid)
         {
             _questId = questId;
             _stopWhenExplored = stopWhenExplored;
@@ -138,7 +138,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 }
             }
 
-            var ids = BountyData?.LevelAreaIds ?? new HashSet<int> { ZetaDia.CurrentLevelAreaSnoId };
+            var ids = BountyData?.LevelAreaIds ?? new HashSet<SNOLevelArea> { ZetaDia.CurrentLevelAreaSnoId };
 
             if (!await ExplorationCoroutine.Explore(ids, useIgnoreRegions: false))
                 return false;

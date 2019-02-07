@@ -15,8 +15,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
     public class MoveThroughDeathGates : IBountySubroutine
     {
-        private readonly int _questId;
-        private readonly int _worldId;
+        private readonly SNOQuest _questId;
+        private readonly SNOWorld _worldId;
         private BountyData _bountyData;
         private readonly int _gatesToUse;
         private int _gatesUsed;
@@ -31,7 +31,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public Vector3 TargetGatePosition { get; set; }
 
-        public MoveThroughDeathGates(int questId, int worldId, int numberOfGatesToUse = -1)
+        public MoveThroughDeathGates(SNOQuest questId, SNOWorld worldId, int numberOfGatesToUse = -1)
         {
             _questId = questId;
             _worldId = worldId;
@@ -126,7 +126,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 return false;
             }
 
-            if (CurrentGateScene.SnoId != ZetaDia.Me.CurrentScene.SceneInfo.SNOId)
+            if (CurrentGateScene.SnoId != ZetaDia.Me.CurrentScene.SceneInfo.GetSNOId<SNOScene>())
             {
                 Core.Logger.Debug($"Moving to CurrentGateScene {CurrentGateScene} Distance={CurrentGateScene.Distance}");
                 State = States.MovingToScene;

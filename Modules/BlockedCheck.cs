@@ -27,8 +27,8 @@ namespace Trinity.Modules
                 return;
             }
 
-            Nodes = Core.Grids.Avoidance.GetNodesInRadius(Core.Player.Position, 10f)
-                .Where(n => n.IsWalkable && Core.Grids.Avoidance.IsInPlayerFacingDirection(n.NavigableCenter,90d)).ToList();
+            Nodes = TrinityGrid.Instance.GetNodesInRadius(Core.Player.Position, 10f)
+                .Where(n => n.IsWalkable && TrinityGrid.Instance.IsInPlayerFacingDirection(n.NavigableCenter,90d)).ToList();
 
             NodeCount = Nodes.Count;
             ClearNodeCount = Nodes.Count(n => n.IsWalkable && !n.AvoidanceFlags.HasFlag(AvoidanceFlags.Monster));

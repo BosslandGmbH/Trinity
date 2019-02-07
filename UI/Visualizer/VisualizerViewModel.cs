@@ -324,14 +324,14 @@ namespace Trinity.UI.Visualizer
         }
 
         [XmlIgnore]
-        public int WorldSnoId
+        public SNOWorld WorldSnoId
         {
             get => _worldSnoId;
             set => SetField(ref _worldSnoId, value);
         }
 
         [XmlIgnore]
-        public int LevelAreaSnoId
+        public SNOLevelArea LevelAreaSnoId
         {
             get => _levelAreaSnoId;
             set => SetField(ref _levelAreaSnoId, value);
@@ -1057,8 +1057,8 @@ namespace Trinity.UI.Visualizer
         private bool _startThreadAllowed = true;
         private bool _isGridPanelExpanded;
         private bool _isSidePanelExpanded;
-        private int _worldSnoId;
-        private int _levelAreaSnoId;
+        private SNOWorld _worldSnoId;
+        private SNOLevelArea _levelAreaSnoId;
         private double _playerRotation;
         private bool _isStuck;
         private bool _isAvoiding;
