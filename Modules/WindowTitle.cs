@@ -39,7 +39,7 @@ namespace Trinity.Modules
 
             if (!string.IsNullOrEmpty(title))
                 Application.Current.Dispatcher.Invoke((Action)(()
-                    => Application.Current.MainWindow.Title = $"DemonBuddy ({DemonbuddyUI.Version}) - {title}"));
+                    => Application.Current.MainWindow.Title = $"Demonbuddy ({DemonbuddyUI.Version}) - {title}"));
         }
     }
 }
