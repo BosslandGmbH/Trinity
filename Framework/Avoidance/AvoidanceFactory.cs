@@ -38,6 +38,7 @@ namespace Trinity.Framework.Avoidance
                 StartPosition = actor.Position,
                 Settings = Core.Avoidance.Settings.GetDefinitionSettings(data.Type),
                 RActorId = actor.RActorId,
+                ActorSno = actor.ActorSnoId,
                 IsImmune = Core.Player.ElementImmunity.Contains(data.Element)
             };
 

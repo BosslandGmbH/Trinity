@@ -52,7 +52,7 @@ namespace Trinity.Framework.Avoidance
 
         protected override void OnPulse()
         {
-            if (!Plugin.IsEnabled || ZetaDia.Globals.IsLoadingWorld || !Settings.Entries.Any(s => !s.IsEnabled))
+            if (!Plugin.IsEnabled || ZetaDia.Globals.IsLoadingWorld)
                 return;
 
             UpdateAvoidances();
@@ -69,26 +69,32 @@ namespace Trinity.Framework.Avoidance
                 if (actor == null || !actor.IsValid)
                     continue;
 
-                _currentRActorIds.Add(actor.RActorId);
+                var id = actor.RActorId;
+                _currentRActorIds.Add(id);
 
-                Structures.Avoidance avoidance;
-                if (AvoidanceFactory.TryCreateAvoidance(actor, out avoidance))
+                if (!CurrentAvoidances.Any(c => c.RActorId == id))
                 {
-                    Core.Logger.Log(LogCategory.Avoidance, $"Created new Avoidance from {actor.InternalName} RActorId={actor.RActorId} ({avoidance.Definition.Name}, Immune: {avoidance.IsImmune})");
-                    CurrentAvoidances.Add(avoidance);
+                    Structures.Avoidance avoidance;
+                    if (AvoidanceFactory.TryCreateAvoidance(actor, out avoidance))
+                    {
+                        Core.Logger.Log(LogCategory.Avoidance, $"Created new Avoidance from {actor.InternalName} RActorId={actor.RActorId} ({avoidance.Definition.Name}, Immune: {avoidance.IsImmune})");
+                        CurrentAvoidances.Add(avoidance);
+                    }
                 }
             }
         }
 
         private void RemoveExpiredAvoidances()
         {
+            var previousCount = CurrentAvoidances.Count;
             foreach (var avoidance in CurrentAvoidances)
             {
                 if (!_currentRActorIds.Contains(avoidance.RActorId))
                     avoidance.RActorId = -1;
             }
             CurrentAvoidances.RemoveAll(a => a.RActorId == -1);
-            CurrentAvoidances.RemoveAll(a => a.IsExpired);
+            // CurrentAvoidances.RemoveAll(a => a.IsExpired);
+            Core.Logger.Log(LogCategory.Avoidance, $"Cleanup Avoidance before {previousCount}, now {CurrentAvoidances.Count}");
         }
 
         #region Settings
