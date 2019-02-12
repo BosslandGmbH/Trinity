@@ -92,9 +92,12 @@ namespace Trinity.Framework.Avoidance
                 if (!_currentRActorIds.Contains(avoidance.RActorId))
                     avoidance.RActorId = -1;
             }
+
             CurrentAvoidances.RemoveAll(a => a.RActorId == -1);
-            // CurrentAvoidances.RemoveAll(a => a.IsExpired);
-            Core.Logger.Log(LogCategory.Avoidance, $"Cleanup Avoidance before {previousCount}, now {CurrentAvoidances.Count}");
+            CurrentAvoidances.RemoveAll(a => a.IsExpired);
+
+            if (previousCount != 0 || CurrentAvoidances.Count != 0)
+                Core.Logger.Log(LogCategory.Avoidance, $"Cleanup Avoidance before {previousCount}, now {CurrentAvoidances.Count}");
         }
 
         #region Settings
