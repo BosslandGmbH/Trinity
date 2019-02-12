@@ -42,10 +42,8 @@ namespace Trinity.Framework.Avoidance
         }
 
         public const float AvoidanceWeightRadiusFactor = 1f;
-        private readonly Dictionary<int, TrinityActor> _cachedActors = new Dictionary<int, TrinityActor>();
-        private readonly HashSet<int> _currentRActorIds = new HashSet<int>();
-
-        public IEnumerable<TrinityActor> ActiveAvoidanceActors => CurrentAvoidances.SelectMany(a => a.Actors);
+        // private readonly Dictionary<int, TrinityActor> _cachedActors = new Dictionary<int, TrinityActor>();
+        private HashSet<int> _currentRActorIds = new HashSet<int>();
 
         public List<Structures.Avoidance> CurrentAvoidances = new List<Structures.Avoidance>();
         public AvoidanceAreaStats NearbyStats = new AvoidanceAreaStats();
@@ -54,7 +52,7 @@ namespace Trinity.Framework.Avoidance
 
         protected override void OnPulse()
         {
-            if (!Plugin.IsEnabled || ZetaDia.Globals.IsLoadingWorld)
+            if (!Plugin.IsEnabled || ZetaDia.Globals.IsLoadingWorld || !Settings.Entries.Any(s => !s.IsEnabled))
                 return;
 
             UpdateAvoidances();
@@ -65,50 +63,18 @@ namespace Trinity.Framework.Avoidance
 
         private void UpdateAvoidances()
         {
-            _currentRActorIds.Clear();
-
-            if (!Settings.Entries.Any(s => s.IsEnabled))
-                return;
-
-            var source = Core.Actors.Actors.ToList();
-
-            foreach (var actor in source)
+            _currentRActorIds = new HashSet<int>();
+            foreach (var actor in Core.Actors.Actors)
             {
-                if (actor == null)
+                if (actor == null || !actor.IsValid)
                     continue;
 
-                var rActorId = actor.RActorId;
-
-                TrinityActor existingActor;
-
-                _currentRActorIds.Add(rActorId);
-
-                var isValid = actor.IsValid;
-
-                if (_cachedActors.TryGetValue(rActorId, out existingActor))
-                {
-                    if (!isValid)
-                    {
-                        _cachedActors.Remove(rActorId);
-                    }
-                    else
-                    {
-                        //Core.Logger.Verbose($"Updated Avoidance Actor {actor}");
-                        //existingActor.Position = actor.Position;
-                        //existingActor.Distance = actor.Distance;
-                        //existingActor.Animation = actor.Animation;
-                    }
-                    continue;
-                }
-
-                if (!isValid)
-                    continue;
+                _currentRActorIds.Add(actor.RActorId);
 
                 Structures.Avoidance avoidance;
-                if (AvoidanceFactory.TryCreateAvoidance(source, actor, out avoidance))
+                if (AvoidanceFactory.TryCreateAvoidance(actor, out avoidance))
                 {
                     Core.Logger.Log(LogCategory.Avoidance, $"Created new Avoidance from {actor.InternalName} RActorId={actor.RActorId} ({avoidance.Definition.Name}, Immune: {avoidance.IsImmune})");
-                    _cachedActors.Add(rActorId, actor);
                     CurrentAvoidances.Add(avoidance);
                 }
             }
@@ -118,9 +84,10 @@ namespace Trinity.Framework.Avoidance
         {
             foreach (var avoidance in CurrentAvoidances)
             {
-                avoidance.Actors.RemoveAll(a => !_currentRActorIds.Contains(a.RActorId));
+                if (!_currentRActorIds.Contains(avoidance.RActorId))
+                    avoidance.RActorId = -1;
             }
-            CurrentAvoidances.RemoveAll(a => !a.Actors.Any(actor => actor.IsValid));
+            CurrentAvoidances.RemoveAll(a => a.RActorId == -1);
             CurrentAvoidances.RemoveAll(a => a.IsExpired);
         }
 
@@ -148,7 +115,6 @@ namespace Trinity.Framework.Avoidance
 
         public void Clear()
         {
-            _cachedActors.Clear();
             _currentRActorIds.Clear();
             CurrentAvoidances.Clear();
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Grid;
 
@@ -7,27 +8,22 @@ namespace Trinity.Framework.Avoidance.Handlers
 {
     public class AnimationConeAvoidanceHandler : IAvoidanceHandler
     {
-        public void UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
+        public bool UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
         {
-            foreach (var actor in avoidance.Actors)
-            {
-                try
-                {
-                    var part = avoidance.Definition.GetPart(actor.Animation);
-                    if (actor.Animation != part.Animation)
-                        continue;
+            var actor = Core.Actors.RactorByRactorId<TrinityActor>(avoidance.RActorId);
+            if (actor == null || !actor.IsValid)
+                return false;
 
-                    var radius = Math.Max(part.Radius, actor.Radius) * avoidance.Settings.DistanceMultiplier;
-                    var nonCachedRotation = actor.Rotation;
-                    var arcDegrees = Math.Max(15, part.AngleDegrees);
-                    var nodes = grid.GetConeAsNodes(actor.Position, arcDegrees, radius, nonCachedRotation);
-                    grid.FlagAvoidanceNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance, avoidance, 10);
-                }
-                catch (Exception ex)
-                {
-                    Core.Logger.Debug($"AnimationConeAvoidanceHandler Exception for Actor: {actor.InternalName}. {ex}");
-                }
-            }
+            var part = avoidance.Definition.GetPart(actor.Animation);
+            if (actor.Animation != part?.Animation)
+                return false;
+
+            var radius = Math.Max(part.Radius, actor.Radius) * avoidance.Settings.DistanceMultiplier;
+            var nonCachedRotation = actor.Rotation;
+            var arcDegrees = Math.Max(15, part.AngleDegrees);
+            var nodes = grid.GetConeAsNodes(actor.Position, arcDegrees, radius, nonCachedRotation);
+            grid.FlagAvoidanceNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance, avoidance, 10);
+            return true;
         }
     }
 }

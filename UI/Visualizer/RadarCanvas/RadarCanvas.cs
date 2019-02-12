@@ -690,14 +690,15 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                     foreach (var avoidance in Core.Avoidance.CurrentAvoidances)
                     {
-                        foreach (var actor in avoidance.Actors)
+                        var actor = Core.Actors.RactorByRactorId<TrinityActor>(avoidance.RActorId);
+                        if (actor == null || !actor.IsValid)
+                            continue;
+
+                        var part = avoidance.Definition.GetPart(avoidance.ActorSno);
+                        if (part != null)
                         {
-                            var part = avoidance.Definition.GetPart(actor.ActorSnoId);
-                            if (part != null)
-                            {
-                                var r = part.Radius * GridSize;
-                                dc.DrawEllipse(null, RadarResources.AvoidanceLightPen, actor.Position.ToCanvasPoint(), r, r);
-                            }
+                            var r = part.Radius * GridSize;
+                            dc.DrawEllipse(null, RadarResources.AvoidanceLightPen, actor.Position.ToCanvasPoint(), r, r);
                         }
                     }
 

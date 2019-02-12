@@ -14,45 +14,43 @@ namespace Trinity.Framework.Avoidance.Handlers
     {
         private static readonly Dictionary<int, Rotator> _rotators = new Dictionary<int, Rotator>();
 
-        public void UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
+        public bool UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
         {
+            var actor = Core.Actors.RactorByRactorId<TrinityActor>(avoidance.RActorId);
+            if (actor == null || !actor.IsValid)
+                return false;
+
             CleanUpRotators();
 
-            foreach (var actor in avoidance.Actors)
+            var part = avoidance.Definition.GetPart(actor.ActorSnoId);
+
+            if (part?.MovementType == MovementType.Rotation)
             {
-                if (actor == null || !actor.IsValid || actor.IsDead || actor.CommonData == null || actor.CommonData.IsDisposed)
+                Rotator rotator;
+                if (!_rotators.TryGetValue(actor.RActorId, out rotator))
                 {
-                    continue;
+                    rotator = CreateNewRotator(actor);
+                    _rotators.Add(actor.RActorId, rotator);
+                    Task.FromResult(rotator.Rotate());
                 }
 
-                var part = avoidance.Definition.GetPart(actor.ActorSnoId);
+                var centerNodes = grid.GetNodesInRadius(actor.Position, 8f);
+                var radAngle = MathUtil.ToRadians(rotator.Angle);
+                var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 28f, radAngle)).SelectMany(n => n.AdjacentNodes).ToList();
 
-                if (part?.MovementType == MovementType.Rotation)
-                {
-                    Rotator rotator;
-                    if (!_rotators.TryGetValue(actor.RActorId, out rotator))
-                    {
-                        rotator = CreateNewRotator(actor);
-                        _rotators.Add(actor.RActorId, rotator);
-                        Task.FromResult(rotator.Rotate());
-                    }
-
-                    var centerNodes = grid.GetNodesInRadius(actor.Position, 8f);
-                    var radAngle = MathUtil.ToRadians(rotator.Angle);
-                    var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 28f, radAngle)).SelectMany(n => n.AdjacentNodes).ToList();
-
-                    var futureRadAngle = MathUtil.ToRadians((float)rotator.GetFutureAngle(TimeSpan.FromMilliseconds(500)));
-                    nodes.AddRange(grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 28f, futureRadAngle)).SelectMany(n => n.AdjacentNodes));
-                    nodes.AddRange(centerNodes);
-                    nodes = nodes.Distinct().ToList();
-                    grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 32);
-                }
-                else
-                {
-                    var telegraphNodes = grid.GetNodesInRadius(actor.Position, 12f);
-                    grid.FlagAvoidanceNodes(telegraphNodes, AvoidanceFlags.Avoidance, avoidance, 12);
-                }
+                var futureRadAngle = MathUtil.ToRadians((float)rotator.GetFutureAngle(TimeSpan.FromMilliseconds(500)));
+                nodes.AddRange(grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 28f, futureRadAngle)).SelectMany(n => n.AdjacentNodes));
+                nodes.AddRange(centerNodes);
+                nodes = nodes.Distinct().ToList();
+                grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 32);
             }
+            else
+            {
+                var telegraphNodes = grid.GetNodesInRadius(actor.Position, 12f);
+                grid.FlagAvoidanceNodes(telegraphNodes, AvoidanceFlags.Avoidance, avoidance, 12);
+            }
+
+            return true;
         }
 
         private void CleanUpRotators()

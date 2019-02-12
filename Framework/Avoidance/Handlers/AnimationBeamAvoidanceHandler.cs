@@ -1,38 +1,31 @@
 ﻿using System;
 using Trinity.Framework.Helpers;
 using System.Linq;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Grid;
 using Zeta.Common;
-
 
 namespace Trinity.Framework.Avoidance.Handlers
 {
     public class AnimationBeamAvoidanceHandler : NotifyBase, IAvoidanceHandler
     {
-        public void UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
+        public bool UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
         {
-            var checkActors = avoidance.Actors.Where(a => a != null && a.IsValid).ToArray();
-            foreach (var actor in checkActors)
-            {
-                try
-                {
-                    var part = avoidance.Definition.GetPart(actor.Animation);
-                    if (actor.Animation != part?.Animation)
-                        continue;
+            var actor = Core.Actors.RactorByRactorId<TrinityActor>(avoidance.RActorId);
+            if (actor == null || !actor.IsValid)
+                return false;
 
-                    var radius = Math.Max(part.Radius, actor.Radius) * avoidance.Settings.DistanceMultiplier;
-                    var nonCachedRotation = actor.Rotation;
-                    var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, radius, nonCachedRotation)).SelectMany(n => n.AdjacentNodes);
+            var part = avoidance.Definition.GetPart(actor.Animation);
+            if (actor.Animation != part?.Animation)
+                return false;
 
-                    grid.FlagAvoidanceNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance, avoidance, 10);
-                }
-                catch (Exception)
-                {
-                    Core.Logger.Debug($"AnimationBeamAvoidanceHandler Exception reading Animation/Rotation for actor: {actor.InternalName}");
-                    avoidance.Actors.Remove(actor);
-                }
-            }
+            var radius = Math.Max(part.Radius, actor.Radius) * avoidance.Settings.DistanceMultiplier;
+            var nonCachedRotation = actor.Rotation;
+            var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, radius, nonCachedRotation)).SelectMany(n => n.AdjacentNodes);
+
+            grid.FlagAvoidanceNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance, avoidance, 10);
+            return true;
         }
     }
 }
