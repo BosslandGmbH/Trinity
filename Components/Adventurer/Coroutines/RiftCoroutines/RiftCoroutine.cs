@@ -226,11 +226,29 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
             var tmpWorld = ZetaDia.Globals.WorldSnoId;
             var tmpLevelArea = ZetaDia.CurrentLevelAreaSnoId;
-            if (await CommonCoroutines.MoveAndInteract(
-                    ExitPortal,
-                    () => ZetaDia.Globals.IsLoadingWorld ||
-                          ZetaDia.Globals.IsPlayingCutscene) ==
-                CoroutineResult.Done)
+
+
+            // There is a rare but possible condition when the character enters the ExitPortal
+            // but IsLoadingWorld and IsPlayingCutscene does not return 'true'.
+            //
+            // In this case the bot runs in an infinite loop of cycling between two portals.
+            // The reason is because it was checked for CoroutineResult.Done before and since the implementation
+            // of CommonCoroutines.MoveAndInteract only returns Done when the condition is met it was always 'Running' returned.
+            //
+            // Changing the MoveAndInteract breaks navigation due to the wait timout. Adding the change of the
+            // level and world area ids in the condition leads to returning NoAction in second iteration.
+            //
+            // Due to these reasons we simply ignore the Coroutine.Result in that specific case and everything
+            // is fixed and working.
+            //
+            // Don't change that. You have been warned. It works like it is now.
+            await CommonCoroutines.MoveAndInteract(
+                ExitPortal,
+                () => ZetaDia.Globals.IsLoadingWorld ||
+                      ZetaDia.Globals.IsPlayingCutscene);
+
+            if (tmpLevelArea != ZetaDia.CurrentLevelAreaSnoId ||
+                tmpWorld != ZetaDia.Globals.WorldSnoId)
             {
                 PreviousWorld = tmpWorld;
                 PreviousLevel = tmpLevelArea;
