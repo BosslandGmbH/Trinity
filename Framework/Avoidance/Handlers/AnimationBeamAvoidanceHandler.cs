@@ -4,6 +4,7 @@ using System.Linq;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Grid;
+using Zeta.Bot.Navigation;
 using Zeta.Common;
 
 namespace Trinity.Framework.Avoidance.Handlers
@@ -24,7 +25,16 @@ namespace Trinity.Framework.Avoidance.Handlers
             var nonCachedRotation = actor.Rotation;
             var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, radius, nonCachedRotation)).SelectMany(n => n.AdjacentNodes);
 
-            grid.FlagAvoidanceNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance, avoidance, 10);
+            if (avoidance.Settings.Prioritize)
+            {
+                grid.FlagAvoidanceNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance | AvoidanceFlags.CriticalAvoidance, avoidance, 50);
+            }
+            else
+            {
+                grid.FlagAvoidanceNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance, avoidance, 10);
+            }
+
+            Core.DBGridProvider.AddCellWeightingObstacle(actor.RActorId, ObstacleFactory.FromActor(actor, radius));
             return true;
         }
     }

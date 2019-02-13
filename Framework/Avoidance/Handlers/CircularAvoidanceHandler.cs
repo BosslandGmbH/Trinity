@@ -2,6 +2,7 @@
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Grid;
+using Zeta.Bot.Navigation;
 
 namespace Trinity.Framework.Avoidance.Handlers
 {
@@ -24,7 +25,6 @@ namespace Trinity.Framework.Avoidance.Handlers
             if (avoidance.Settings.Prioritize)
             {
                 //Core.Logger.Log(LogCategory.Avoidance, $"<CircularAvoidanceHandler> marking {nodes.Count} nodes critical for actor {actor}, def={avoidance.Definition.Name}");
-                Core.DBGridProvider.AddCellWeightingObstacle(actor.ActorSnoId, finalRadius);
                 grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance | AvoidanceFlags.CriticalAvoidance,
                     avoidance, 50);
             }
@@ -34,6 +34,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                 grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 10);
             }
 
+            Core.DBGridProvider.AddCellWeightingObstacle(actor.RActorId, ObstacleFactory.FromActor(actor, finalRadius));
             return true;
         }
     }

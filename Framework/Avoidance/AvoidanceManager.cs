@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using Trinity.Framework.Actors.ActorTypes;
@@ -84,20 +85,18 @@ namespace Trinity.Framework.Avoidance
             }
         }
 
-        private void RemoveExpiredAvoidances()
+        private void RemoveExpiredAvoidances(bool invalidate = false)
         {
-            var previousCount = CurrentAvoidances.Count;
             foreach (var avoidance in CurrentAvoidances)
             {
-                if (!_currentRActorIds.Contains(avoidance.RActorId))
+                if (invalidate || !_currentRActorIds.Contains(avoidance.RActorId) || avoidance.IsExpired)
+                {
+                    Core.DBGridProvider.RemoveCellWeightingObstacle(avoidance.RActorId);
                     avoidance.RActorId = -1;
+                }
             }
 
             CurrentAvoidances.RemoveAll(a => a.RActorId == -1);
-            CurrentAvoidances.RemoveAll(a => a.IsExpired);
-
-            if (previousCount != 0 || CurrentAvoidances.Count != 0)
-                Core.Logger.Log(LogCategory.Avoidance, $"Cleanup Avoidance before {previousCount}, now {CurrentAvoidances.Count}");
         }
 
         #region Settings
@@ -124,9 +123,15 @@ namespace Trinity.Framework.Avoidance
 
         public void Clear()
         {
+            // Cleanup navigation grid before we cleanup.
+            RemoveExpiredAvoidances(true);
             _currentRActorIds.Clear();
             CurrentAvoidances.Clear();
         }
 
+        internal void Invalidate()
+        {
+            RemoveExpiredAvoidances(true);
+        }
     }
 }

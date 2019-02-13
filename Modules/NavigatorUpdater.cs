@@ -11,12 +11,6 @@ namespace Trinity.Modules
     {
         protected override void OnPulse()
         {
-            var provider = (Navigator.SearchGridProvider as MainGridProvider);
-
-            foreach (var prop in ZetaDia.Actors.GetActorsOfType<DiaObject>().Where(a => a.ActorType == ActorType.ServerProp))
-            {
-                provider?.AddCellWeightingObstacle(prop.ActorSnoId, prop.ActorInfo.Sphere.Radius);
-            }
         }
     }
 }

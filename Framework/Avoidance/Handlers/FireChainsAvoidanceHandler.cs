@@ -2,6 +2,7 @@
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Grid;
+using Zeta.Bot.Navigation;
 
 namespace Trinity.Framework.Avoidance.Handlers
 {
@@ -16,6 +17,7 @@ namespace Trinity.Framework.Avoidance.Handlers
             var fireChainFriendList = Core.Avoidance.CurrentAvoidances.Where(c => c != avoidance && c.ActorSno == avoidance.ActorSno)
                 .ToList();
 
+            var appliedAvoidanceNode = false;
             foreach (var fireChainFriend in fireChainFriendList)
             {
                 var friend = Core.Actors.RactorByRactorId<TrinityActor>(fireChainFriend.RActorId);
@@ -23,10 +25,26 @@ namespace Trinity.Framework.Avoidance.Handlers
                     continue;
 
                 var nodes = grid.GetRayLineAsNodes(actor.Position, friend.Position).SelectMany(n => n.AdjacentNodes);
-                grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 10);
+
+                if (avoidance.Settings.Prioritize)
+                {
+                    appliedAvoidanceNode = true;
+                    grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance | AvoidanceFlags.CriticalAvoidance, avoidance, 50);
+                }
+                else
+                {
+                    appliedAvoidanceNode = true;
+                    grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 10);
+                }
             }
 
-            return fireChainFriendList.Count > 0;
+            if (appliedAvoidanceNode)
+            {
+                Core.DBGridProvider.AddCellWeightingObstacle(actor.RActorId, ObstacleFactory.FromActor(actor));
+                return true;
+            }
+
+            return false;
         }
     }
 }

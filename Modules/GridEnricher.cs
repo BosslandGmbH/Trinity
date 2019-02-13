@@ -166,7 +166,6 @@ namespace Trinity.Modules
                                     if (actor != null && actor.IsValid)
                                     {
                                         activeAvoidanceSnoIds.Add(avoidance.ActorSno);
-                                        Core.DBGridProvider.AddCellWeightingObstacle(avoidance.ActorSno, actor.CollisionRadius);
                                     }
                                 }
 

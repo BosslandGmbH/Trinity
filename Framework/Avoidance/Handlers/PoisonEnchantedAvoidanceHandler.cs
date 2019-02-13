@@ -4,6 +4,7 @@ using System.Linq;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Grid;
+using Zeta.Bot.Navigation;
 using Zeta.Common;
 
 
@@ -32,16 +33,23 @@ namespace Trinity.Framework.Avoidance.Handlers
                     MathEx.GetPointAt(actor.Position, 60f, (float)(3 * Math.PI / 2))));
                 nodes.AddRange(grid.GetRayLineAsNodes(actor.Position,
                     MathEx.GetPointAt(actor.Position, 60f, (float)(Math.PI))));
-                grid.FlagAvoidanceNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance,
-                    avoidance, 10);
+
+                if (avoidance.Settings.Prioritize)
+                    grid.FlagAvoidanceNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance | AvoidanceFlags.CriticalAvoidance, avoidance, 50);
+                else
+                    grid.FlagAvoidanceNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance, avoidance, 10);
             }
             else
             {
-                var nodes = grid.GetRayLineAsNodes(actor.Position, avoidance.StartPosition)
-                    .SelectMany(n => n.AdjacentNodes);
-                grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 10);
+                var nodes = grid.GetRayLineAsNodes(actor.Position, avoidance.StartPosition).SelectMany(n => n.AdjacentNodes);
+
+                if (avoidance.Settings.Prioritize)
+                    grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance | AvoidanceFlags.CriticalAvoidance, avoidance, 50);
+                else
+                    grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 10);
             }
 
+            Core.DBGridProvider.AddCellWeightingObstacle(actor.RActorId, ObstacleFactory.FromActor(actor));
             return true;
         }
     }
