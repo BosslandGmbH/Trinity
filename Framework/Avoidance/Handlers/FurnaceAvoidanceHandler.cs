@@ -8,9 +8,9 @@ using Zeta.Common;
 
 namespace Trinity.Framework.Avoidance.Handlers
 {
-    internal class FurnaceAvoidanceHandler : IAvoidanceHandler
+    internal class FurnaceAvoidanceHandler : BaseAvoidanceHandler
     {
-        public bool UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
+        public override bool UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
         {
             var actor = Core.Actors.RactorByRactorId<TrinityActor>(avoidance.RActorId);
             if (actor == null || !actor.IsValid || actor.IsDead)
@@ -27,16 +27,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                     Core.Logger.Log("Power {0} on {1} ({1}) in Attribute {2}", part.Power, actor.InternalName, part.Name, part.Attribute);
                     var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 30f, actor.Rotation)).SelectMany(n => n.AdjacentNodes).Distinct();
 
-                    if (avoidance.Settings.Prioritize)
-                    {
-                        grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance | AvoidanceFlags.CriticalAvoidance, avoidance, 50);
-                    }
-                    else
-                    {
-                        grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 10);
-                    }
-
-                    Core.DBGridProvider.AddCellWeightingObstacle(actor.RActorId, ObstacleFactory.FromActor(actor));
+                    HandleNavigationGrid(grid, nodes, avoidance, actor, 0f);
                     return true;
                 }
             }
@@ -44,12 +35,8 @@ namespace Trinity.Framework.Avoidance.Handlers
             {
                 var obstacleNodes = grid.GetNodesInRadius(actor.Position, part.Radius);
 
-                if (avoidance.Settings.Prioritize)
-                    grid.FlagAvoidanceNodes(obstacleNodes, AvoidanceFlags.NavigationBlocking | AvoidanceFlags.CriticalAvoidance, avoidance, 50);
-                else
-                    grid.FlagAvoidanceNodes(obstacleNodes, AvoidanceFlags.NavigationBlocking, avoidance, 5);
-
-                Core.DBGridProvider.AddCellWeightingObstacle(actor.RActorId, ObstacleFactory.FromActor(actor));
+                const int weightOverride = 5;
+                HandleNavigationGrid(AvoidanceFlags.NavigationBlocking, grid, obstacleNodes, avoidance, actor, 0f, weightOverride);
                 return true;
             }
 

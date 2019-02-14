@@ -9,32 +9,21 @@ using Zeta.Common;
 
 namespace Trinity.Framework.Avoidance.Handlers
 {
-    public class AnimationBeamAvoidanceHandler : NotifyBase, IAvoidanceHandler
+    public class AnimationBeamAvoidanceHandler : BaseAvoidanceHandler
     {
-        public bool UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
+        public override bool UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
         {
             var actor = Core.Actors.RactorByRactorId<TrinityActor>(avoidance.RActorId);
             if (actor == null || !actor.IsValid)
                 return false;
 
             var part = avoidance.Definition.GetPart(actor.Animation);
-            if (actor.Animation != part?.Animation)
-                return false;
 
             var radius = Math.Max(part.Radius, actor.Radius) * avoidance.Settings.DistanceMultiplier;
             var nonCachedRotation = actor.Rotation;
             var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, radius, nonCachedRotation)).SelectMany(n => n.AdjacentNodes);
 
-            if (avoidance.Settings.Prioritize)
-            {
-                grid.FlagAvoidanceNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance | AvoidanceFlags.CriticalAvoidance, avoidance, 50);
-            }
-            else
-            {
-                grid.FlagAvoidanceNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance, avoidance, 10);
-            }
-
-            Core.DBGridProvider.AddCellWeightingObstacle(actor.RActorId, ObstacleFactory.FromActor(actor, radius));
+            HandleNavigationGrid(grid, nodes.SelectMany(n => n.AdjacentNodes), avoidance, actor, radius);
             return true;
         }
     }

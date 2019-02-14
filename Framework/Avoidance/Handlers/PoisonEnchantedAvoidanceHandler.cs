@@ -10,9 +10,9 @@ using Zeta.Common;
 
 namespace Trinity.Framework.Avoidance.Handlers
 {
-    internal class PoisonEnchantedAvoidanceHandler : IAvoidanceHandler
+    internal class PoisonEnchantedAvoidanceHandler : BaseAvoidanceHandler
     {
-        public bool UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
+        public override bool UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
         {
             var actor = Core.Actors.RactorByRactorId<TrinityActor>(avoidance.RActorId);
             if (actor == null || !actor.IsValid)
@@ -34,22 +34,14 @@ namespace Trinity.Framework.Avoidance.Handlers
                 nodes.AddRange(grid.GetRayLineAsNodes(actor.Position,
                     MathEx.GetPointAt(actor.Position, 60f, (float)(Math.PI))));
 
-                if (avoidance.Settings.Prioritize)
-                    grid.FlagAvoidanceNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance | AvoidanceFlags.CriticalAvoidance, avoidance, 50);
-                else
-                    grid.FlagAvoidanceNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance, avoidance, 10);
+                HandleNavigationGrid(grid, nodes.SelectMany(n => n.AdjacentNodes), avoidance, actor, 0f);
             }
             else
             {
                 var nodes = grid.GetRayLineAsNodes(actor.Position, avoidance.StartPosition).SelectMany(n => n.AdjacentNodes);
-
-                if (avoidance.Settings.Prioritize)
-                    grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance | AvoidanceFlags.CriticalAvoidance, avoidance, 50);
-                else
-                    grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 10);
+                HandleNavigationGrid(grid, nodes, avoidance, actor, 0f);
             }
 
-            Core.DBGridProvider.AddCellWeightingObstacle(actor.RActorId, ObstacleFactory.FromActor(actor));
             return true;
         }
     }

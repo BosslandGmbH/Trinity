@@ -7,9 +7,9 @@ using Zeta.Game.Internals.Actors.Gizmos;
 
 namespace Trinity.Framework.Avoidance.Handlers
 {
-    public class AnimationCircularAvoidanceHandler : IAvoidanceHandler
+    public class AnimationCircularAvoidanceHandler : BaseAvoidanceHandler
     {
-        public bool UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
+        public override bool UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
         {
             var actor = Core.Actors.RactorByRactorId<TrinityActor>(avoidance.RActorId);
             if (actor == null || !actor.IsValid)
@@ -23,19 +23,7 @@ namespace Trinity.Framework.Avoidance.Handlers
             var finalRadius = radius * avoidance.Settings.DistanceMultiplier;
             var nodes = grid.GetNodesInRadius(actor.Position, finalRadius);
 
-            if (actor.Animation != part?.Animation)
-                return false;
-
-            if (avoidance.Settings.Prioritize)
-            {
-                grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance | AvoidanceFlags.CriticalAvoidance, avoidance, 50);
-            }
-            else
-            {
-                grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 10);
-            }
-
-            Core.DBGridProvider.AddCellWeightingObstacle(actor.RActorId, ObstacleFactory.FromActor(actor, finalRadius));
+            HandleNavigationGrid(grid, nodes, avoidance, actor, finalRadius);
             return true;
         }
     }

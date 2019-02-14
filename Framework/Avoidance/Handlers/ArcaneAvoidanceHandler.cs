@@ -11,11 +11,11 @@ using Zeta.Common;
 
 namespace Trinity.Framework.Avoidance.Handlers
 {
-    internal class ArcaneAvoidanceHandler : IAvoidanceHandler
+    internal class ArcaneAvoidanceHandler : BaseAvoidanceHandler
     {
         private static readonly Dictionary<int, Rotator> _rotators = new Dictionary<int, Rotator>();
 
-        public bool UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
+        public override bool UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
         {
             var actor = Core.Actors.RactorByRactorId<TrinityActor>(avoidance.RActorId);
             if (actor == null || !actor.IsValid)
@@ -43,27 +43,16 @@ namespace Trinity.Framework.Avoidance.Handlers
                 nodes.AddRange(grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 28f, futureRadAngle)).SelectMany(n => n.AdjacentNodes));
                 nodes.AddRange(centerNodes);
                 nodes = nodes.Distinct().ToList();
-                if (avoidance.Settings.Prioritize)
-                {
-                    grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance | AvoidanceFlags.CriticalAvoidance, avoidance, 50);
-                }
-                else
-                {
-                    grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 32);
-                }
+
+                const int defaultWeightModification = 32;
+                HandleNavigationGrid(grid, nodes, avoidance, actor, 0f, defaultWeightModification);
             }
             else
             {
                 var telegraphNodes = grid.GetNodesInRadius(actor.Position, 12f);
 
-                if (avoidance.Settings.Prioritize)
-                {
-                    grid.FlagAvoidanceNodes(telegraphNodes, AvoidanceFlags.Avoidance | AvoidanceFlags.CriticalAvoidance, avoidance, 50);
-                }
-                else
-                {
-                    grid.FlagAvoidanceNodes(telegraphNodes, AvoidanceFlags.Avoidance, avoidance, 12);
-                }
+                const int defaultWeightModification = 12;
+                HandleNavigationGrid(grid, telegraphNodes, avoidance, actor, 0f, defaultWeightModification);
             }
 
             Core.DBGridProvider.AddCellWeightingObstacle(actor.RActorId, ObstacleFactory.FromActor(actor));

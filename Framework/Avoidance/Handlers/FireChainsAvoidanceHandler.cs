@@ -26,16 +26,16 @@ namespace Trinity.Framework.Avoidance.Handlers
 
                 var nodes = grid.GetRayLineAsNodes(actor.Position, friend.Position).SelectMany(n => n.AdjacentNodes);
 
+                AvoidanceFlags flags = AvoidanceFlags.Avoidance;
+                int weightModification = BaseAvoidanceHandler.DefaultWeightModification;
                 if (avoidance.Settings.Prioritize)
                 {
-                    appliedAvoidanceNode = true;
-                    grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance | AvoidanceFlags.CriticalAvoidance, avoidance, 50);
+                    flags |= AvoidanceFlags.CriticalAvoidance;
+                    weightModification = BaseAvoidanceHandler.CriticalWeightModification;
                 }
-                else
-                {
-                    appliedAvoidanceNode = true;
-                    grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 10);
-                }
+
+                grid.FlagAvoidanceNodes(nodes, flags, avoidance, weightModification);
+                appliedAvoidanceNode = true;
             }
 
             if (appliedAvoidanceNode)
