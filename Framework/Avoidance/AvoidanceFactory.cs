@@ -23,7 +23,7 @@ namespace Trinity.Framework.Avoidance
 
         public static Dictionary<AvoidanceType, AvoidanceDefinition> AvoidanceDataByType { get; set; }
 
-        public static bool TryCreateAvoidance(List<TrinityActor> actors, TrinityActor actor, out Structures.Avoidance avoidance)
+        public static bool TryCreateAvoidance(TrinityActor actor, out Structures.Avoidance avoidance)
         {
             avoidance = null;
 
@@ -37,7 +37,8 @@ namespace Trinity.Framework.Avoidance
                 CreationTime = DateTime.UtcNow,
                 StartPosition = actor.Position,
                 Settings = Core.Avoidance.Settings.GetDefinitionSettings(data.Type),
-                Actors = new List<TrinityActor> { actor },
+                RActorId = actor.RActorId,
+                ActorSno = actor.ActorSnoId,
                 IsImmune = Core.Player.ElementImmunity.Contains(data.Element)
             };
 

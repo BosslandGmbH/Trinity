@@ -20,6 +20,7 @@ using Trinity.Framework.Reference;
 using Zeta.Bot;
 using System.Linq;
 using System.Collections.Generic;
+using Zeta.Game.Internals.Actors.Gizmos;
 
 namespace Trinity.Framework.Actors.ActorTypes
 {
@@ -313,5 +314,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public DiaObject ToDiaObject() => Actor?.IsValid ?? false ? Actor : null;
 
         public DiaObject ToDiaUnit() => Actor?.IsValid ?? false ? Actor : null;
+
+        public bool IsGizmoDestructable => ToDiaObject() is GizmoDestructible;
     }
 }

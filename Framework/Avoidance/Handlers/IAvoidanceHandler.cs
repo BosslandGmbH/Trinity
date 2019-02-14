@@ -4,6 +4,6 @@ namespace Trinity.Framework.Avoidance.Handlers
 {
     public interface IAvoidanceHandler
     {
-        void UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance);
+        bool UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance);
     }
 }
