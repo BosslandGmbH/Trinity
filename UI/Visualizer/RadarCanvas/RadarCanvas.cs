@@ -695,11 +695,11 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                             continue;
 
                         var part = avoidance.Definition.GetPart(avoidance.ActorSno);
-                        if (part != null)
-                        {
-                            var r = part.Radius * GridSize;
-                            dc.DrawEllipse(null, RadarResources.AvoidanceLightPen, actor.Position.ToCanvasPoint(), r, r);
-                        }
+                        if (part == null)
+                            continue;
+
+                        var r = part.Radius * GridSize;
+                        dc.DrawEllipse(null, RadarResources.AvoidanceLightPen, actor.Position.ToCanvasPoint(), r, r);
                     }
 
                 }
