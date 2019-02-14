@@ -36,7 +36,7 @@ namespace Trinity.Framework.Avoidance.Handlers
 
         protected void HandleNavigationGrid(TrinityGrid grid, IEnumerable<AvoidanceNode> nodes, Structures.Avoidance avoidance, TrinityActor actor, float radius, int normalWeightModificationOverride = 0)
         {
-            HandleNavigationGrid(AvoidanceFlags.Avoidance, grid, nodes, avoidance, radius, normalWeightModificationOverride);
+            HandleNavigationGrid(AvoidanceFlags.Avoidance, grid, nodes, avoidance, actor, radius, normalWeightModificationOverride);
         }
     }
 }
