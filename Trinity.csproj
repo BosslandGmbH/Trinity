@@ -8,7 +8,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
-    <OutputPath>$(SolutionDir)\build\$(Platform)\$(Configuration)\Routines\</OutputPath>
+    <OutputPath>$(SolutionDir)\build\$(Platform)\$(Configuration)\Bots\</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).dll.xml</DocumentationFile>
     <CodeAnalysisLogFile>$(OutputPath)\$(AssemblyName).dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>

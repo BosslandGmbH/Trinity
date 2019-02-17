@@ -1,7 +1,8 @@
 ﻿using System;
-using Trinity.Framework;
 using System.IO;
 using System.Reflection;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 
 namespace Trinity.Components.Adventurer.Util
 {
@@ -26,7 +27,7 @@ namespace Trinity.Components.Adventurer.Util
             get
             {
                 if (string.IsNullOrWhiteSpace(_pluginPath))
-                    _pluginPath = Path.Combine(DemonBuddyPath, "Plugins", "Trinity");
+                    _pluginPath = FileManager.PluginPath;
                 return _pluginPath;
             }
         }
