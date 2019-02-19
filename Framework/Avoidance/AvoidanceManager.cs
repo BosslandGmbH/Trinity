@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using Trinity.Framework.Actors.ActorTypes;
@@ -42,10 +43,8 @@ namespace Trinity.Framework.Avoidance
         }
 
         public const float AvoidanceWeightRadiusFactor = 1f;
-        private readonly Dictionary<int, TrinityActor> _cachedActors = new Dictionary<int, TrinityActor>();
-        private readonly HashSet<int> _currentRActorIds = new HashSet<int>();
-
-        public IEnumerable<TrinityActor> ActiveAvoidanceActors => CurrentAvoidances.SelectMany(a => a.Actors);
+        // private readonly Dictionary<int, TrinityActor> _cachedActors = new Dictionary<int, TrinityActor>();
+        private HashSet<int> _currentRActorIds = new HashSet<int>();
 
         public List<Structures.Avoidance> CurrentAvoidances = new List<Structures.Avoidance>();
         public AvoidanceAreaStats NearbyStats = new AvoidanceAreaStats();
@@ -65,63 +64,39 @@ namespace Trinity.Framework.Avoidance
 
         private void UpdateAvoidances()
         {
-            _currentRActorIds.Clear();
-
-            if (!Settings.Entries.Any(s => s.IsEnabled))
-                return;
-
-            var source = Core.Actors.Actors.ToList();
-
-            foreach (var actor in source)
+            _currentRActorIds = new HashSet<int>();
+            foreach (var actor in Core.Actors.Actors)
             {
-                if (actor == null)
+                if (actor == null || !actor.IsValid)
                     continue;
 
-                var rActorId = actor.RActorId;
+                var id = actor.RActorId;
+                _currentRActorIds.Add(id);
 
-                TrinityActor existingActor;
-
-                _currentRActorIds.Add(rActorId);
-
-                var isValid = actor.IsValid;
-
-                if (_cachedActors.TryGetValue(rActorId, out existingActor))
+                if (!CurrentAvoidances.Any(c => c.RActorId == id))
                 {
-                    if (!isValid)
+                    Structures.Avoidance avoidance;
+                    if (AvoidanceFactory.TryCreateAvoidance(actor, out avoidance))
                     {
-                        _cachedActors.Remove(rActorId);
+                        Core.Logger.Log(LogCategory.Avoidance, $"Created new Avoidance from {actor.InternalName} RActorId={actor.RActorId} ({avoidance.Definition.Name}, Immune: {avoidance.IsImmune})");
+                        CurrentAvoidances.Add(avoidance);
                     }
-                    else
-                    {
-                        //Core.Logger.Verbose($"Updated Avoidance Actor {actor}");
-                        //existingActor.Position = actor.Position;
-                        //existingActor.Distance = actor.Distance;
-                        //existingActor.Animation = actor.Animation;
-                    }
-                    continue;
-                }
-
-                if (!isValid)
-                    continue;
-
-                Structures.Avoidance avoidance;
-                if (AvoidanceFactory.TryCreateAvoidance(source, actor, out avoidance))
-                {
-                    Core.Logger.Log(LogCategory.Avoidance, $"Created new Avoidance from {actor.InternalName} RActorId={actor.RActorId} ({avoidance.Definition.Name}, Immune: {avoidance.IsImmune})");
-                    _cachedActors.Add(rActorId, actor);
-                    CurrentAvoidances.Add(avoidance);
                 }
             }
         }
 
-        private void RemoveExpiredAvoidances()
+        private void RemoveExpiredAvoidances(bool invalidate = false)
         {
             foreach (var avoidance in CurrentAvoidances)
             {
-                avoidance.Actors.RemoveAll(a => !_currentRActorIds.Contains(a.RActorId));
+                if (invalidate || !_currentRActorIds.Contains(avoidance.RActorId) || avoidance.IsExpired)
+                {
+                    Core.DBGridProvider.RemoveCellWeightingObstacle(avoidance.RActorId);
+                    avoidance.RActorId = -1;
+                }
             }
-            CurrentAvoidances.RemoveAll(a => !a.Actors.Any(actor => actor.IsValid));
-            CurrentAvoidances.RemoveAll(a => a.IsExpired);
+
+            CurrentAvoidances.RemoveAll(a => a.RActorId == -1);
         }
 
         #region Settings
@@ -148,10 +123,15 @@ namespace Trinity.Framework.Avoidance
 
         public void Clear()
         {
-            _cachedActors.Clear();
+            // Cleanup navigation grid before we cleanup.
+            RemoveExpiredAvoidances(true);
             _currentRActorIds.Clear();
             CurrentAvoidances.Clear();
         }
 
+        internal void Invalidate()
+        {
+            RemoveExpiredAvoidances(true);
+        }
     }
 }

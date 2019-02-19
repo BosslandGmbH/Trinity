@@ -287,6 +287,8 @@
     <Compile Include="Framework\Actors\Attributes\ACDItemExtensions.cs" />
     <Compile Include="Framework\Actors\Attributes\AttributeKey.cs" />
     <Compile Include="Framework\Actors\Attributes\DescriptorHelper.cs" />
+    <Compile Include="Framework\Avoidance\Handlers\BaseAvoidanceHandler.cs" />
+    <Compile Include="Framework\Avoidance\ObstacleFactory.cs" />
     <Compile Include="Framework\Objects\Enums\RequirementType.cs" />
     <Compile Include="Modules\ProfilePulsator.cs" />
     <Compile Include="Components\QuestTools\BaseProfileBehavior.cs" />

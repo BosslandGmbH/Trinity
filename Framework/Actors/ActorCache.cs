@@ -28,6 +28,7 @@ namespace Trinity.Framework.Actors
         DateTime LastUpdated { get; }
         IEnumerable<T> OfType<T>() where T : TrinityActor;
         T RActorByAcdId<T>(int acdId) where T : TrinityActor;
+        T RactorByRactorId<T>(int ractorId) where T : TrinityActor;
         ACDItem ItemByAnnId(int annId);
         ACDItem GetAcdItemByAnnId(int annId);
         bool IsAnnIdValid(int itemAnnId);
@@ -265,10 +266,15 @@ namespace Trinity.Framework.Actors
                 return default(T);
 
             var rActorId = _acdToRActorIndex[acdId];
-            if (!RActors.ContainsKey(rActorId))
+            return RactorByRactorId<T>(rActorId);
+        }
+
+        public T RactorByRactorId<T>(int ractorId) where T : TrinityActor
+        {
+            if (!RActors.ContainsKey(ractorId))
                 return default(T);
 
-            return RActors[rActorId] as T;
+            return RActors[ractorId] as T;
         }
 
         IEnumerator IEnumerable.GetEnumerator() => Actors.GetEnumerator();

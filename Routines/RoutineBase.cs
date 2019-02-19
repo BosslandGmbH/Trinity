@@ -429,7 +429,7 @@ namespace Trinity.Routines
             }
 
             var safe = (!Core.Player.IsTakingDamage ||
-                         Core.Player.CurrentHealthPct > 0.5f) &&
+                        Core.Player.CurrentHealthPct > 0.5f) &&
                         Core.Player.Actor != null &&
                         !Core.Player.Actor.IsInCriticalAvoidance;
 
@@ -437,6 +437,7 @@ namespace Trinity.Routines
                 Core.Player.Actor.IsAvoidanceOnPath && safe)
             {
                 Core.Logger.Log(LogCategory.Avoidance, "Waiting for avoidance to clear (out of combat)");
+                Core.Avoidance.Invalidate();
                 return await CommonCoroutines.MoveAndStop(Core.Avoidance.Avoider.SafeSpot, 5f, "Safe Spot") != MoveResult.ReachedDestination;
             }
 

@@ -160,14 +160,15 @@ namespace Trinity.Modules
 
                             if (avoidance.IsAllowed && !avoidance.IsExpired)
                             {
-                                handler.UpdateNodes(TrinityGrid.Instance, avoidance);
-
-                                avoidance.Actors.ForEach(a =>
+                                if (handler.UpdateNodes(TrinityGrid.Instance, avoidance))
                                 {
-                                    activeAvoidanceSnoIds.Add(a.ActorSnoId);
-                                    Core.DBGridProvider.AddCellWeightingObstacle(a.ActorSnoId, a.CollisionRadius);
-                                    //Core.Logger.Warn(LogCategory.Avoidance, $"Avoidance Flagged {a} for {avoidance.Definition.Name}, handler={avoidance.Definition.Handler.GetType().Name}");
-                                });
+                                    var actor = Core.Actors.RactorByRactorId<TrinityActor>(avoidance.RActorId);
+                                    if (actor != null && actor.IsValid)
+                                    {
+                                        activeAvoidanceSnoIds.Add(avoidance.ActorSno);
+                                    }
+                                }
+
                             }
                             else
                             {
