@@ -1,13 +1,12 @@
-using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
-using System.IO;
-using System.Reflection;
-using System.Threading;
-using System.Windows;
 using Serilog;
 using Serilog.Events;
+using System;
+using System.IO;
+using System.Reflection;
+using System.Windows;
 using Trinity.DbProvider;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Trinity.UI;
@@ -25,16 +24,17 @@ namespace Trinity
     public class Plugin : IPlugin
     {
         private static readonly ILogger s_logger = Logger.GetLoggerInstanceForType();
-
         private static Plugin _instance;
+        public static Plugin Instance => _instance ?? (_instance = new Plugin());
+        public static bool IsEnabled { get; private set; }
+
         public string Name { get; } = typeof(Plugin).Assembly.GetCustomAttribute<AssemblyTitleAttribute>().Title;
         public Version Version { get; } = new Version(typeof(Plugin).Assembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version);
         public string Author => "xzjv, TarasBulba, rrrix, jubisman, Phelon and many more";
         public string Description { get; } = typeof(Plugin).Assembly.GetCustomAttribute<AssemblyDescriptionAttribute>().Description;
         public Window DisplayWindow => UILoader.GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));
         public bool Equals(IPlugin other) => other?.Name == Name && other?.Version == Version;
-        public static Plugin Instance => _instance ?? (_instance = new Plugin());
-        public static bool IsEnabled { get; private set; }
+        
         public bool IsInitialized { get; private set; }
 
         public Plugin()
@@ -122,7 +122,7 @@ namespace Trinity
         }
 
         /// <summary>
-        /// Install empty providers to DemonBuddy otherwise it will try to use its 
+        /// Install empty providers to Demonbuddy otherwise it will try to use its 
         /// in-built default ones and interfere with Trinity operations.
         /// </summary>
         private static void SetupDemonBuddy()

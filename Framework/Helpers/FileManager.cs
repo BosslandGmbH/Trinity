@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
+using Zeta.Bot.Settings;
 using Zeta.Game;
 
 namespace Trinity.Framework.Helpers
@@ -155,7 +156,10 @@ namespace Trinity.Framework.Helpers
             get
             {
                 if (string.IsNullOrWhiteSpace(_PluginPath))
-                    _PluginPath = Path.Combine(DemonBuddyPath, "Plugins", TrinityName);
+                {
+                    _PluginPath = Path.GetFullPath(Path.Combine(GlobalSettings.Instance.BotsPath, TrinityName));
+                }
+
                 return _PluginPath;
             }
         }

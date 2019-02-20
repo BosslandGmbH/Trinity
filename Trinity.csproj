@@ -8,7 +8,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
-    <OutputPath>$(SolutionDir)\build\$(Platform)\$(Configuration)\Plugins\</OutputPath>
+    <OutputPath>$(SolutionDir)\build\$(Platform)\$(Configuration)\Bots\</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).dll.xml</DocumentationFile>
     <CodeAnalysisLogFile>$(OutputPath)\$(AssemblyName).dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
@@ -76,32 +76,32 @@
       <Name>GreyMagic</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Engine\Zeta.Bot\Zeta.Bot.csproj">
+    <ProjectReference Include="$(SolutionDir)\Engine\Zeta.Bot\Zeta.Bot.csproj">
       <Project>{fcd803dc-3517-4f4d-b4a5-a37fc59d1de4}</Project>
       <Name>Zeta.Bot</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Generic\Zeta.Common\Zeta.Common.csproj">
+    <ProjectReference Include="$(SolutionDir)\Generic\Zeta.Common\Zeta.Common.csproj">
       <Project>{29EA5AC0-1FBF-4EE3-BAEE-67E7BF2ED6FC}</Project>
       <Name>Zeta.Common</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Engine\Zeta.Localization\Zeta.Localization.csproj">
+    <ProjectReference Include="$(SolutionDir)\Engine\Zeta.Localization\Zeta.Localization.csproj">
       <Project>{E2E00AA6-E923-42E0-900C-79C006E51141}</Project>
       <Name>Zeta.Localization</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Generic\Zeta.TreeSharp\Zeta.TreeSharp.csproj">
+    <ProjectReference Include="$(SolutionDir)\Generic\Zeta.TreeSharp\Zeta.TreeSharp.csproj">
       <Project>{F8BAD537-AE82-4678-A4AB-62DE6B8C1A64}</Project>
       <Name>Zeta.TreeSharp</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Generic\Zeta.XmlEngine\Zeta.XmlEngine.csproj">
+    <ProjectReference Include="$(SolutionDir)\Generic\Zeta.XmlEngine\Zeta.XmlEngine.csproj">
       <Project>{A70D8F62-C8B2-4BEA-AF18-42843117F589}</Project>
       <Name>Zeta.XmlEngine</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Engine\Zeta.Game\Zeta.Game.csproj">
+    <ProjectReference Include="$(SolutionDir)\Engine\Zeta.Game\Zeta.Game.csproj">
       <Project>{37036ADC-4D19-4C67-B334-69BA08CAEAD6}</Project>
       <Name>Zeta.Game</Name>
       <Private>False</Private>
@@ -156,10 +156,11 @@
       <HintPath>..\..\Microsoft.Scripting.Metadata.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Udis86Net">
-      <HintPath>..\..\Udis86Net.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Serilog">
+      <Version>2.8.0</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -1130,11 +1131,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Serilog">
-      <Version>2.8.0</Version>
-    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>

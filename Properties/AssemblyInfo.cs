@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Trinity is an All-In-One extension for Deamonbuddy. It provides support for Bounties and Rifts, and handles combat for all classes.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Bossland GmbH")]
-[assembly: AssemblyProduct("DemonBuddy")]
+[assembly: AssemblyProduct("Demonbuddy")]
 [assembly: AssemblyCopyright("Copyright © xzjv, TarasBulba, rrrix, jubisman, Phelon and many more 2016 - 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
