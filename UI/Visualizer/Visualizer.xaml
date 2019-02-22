@@ -368,8 +368,8 @@
                         <ListView.View>
 
                                         <controls:AutoSizedGridView GridView.ColumnCollection="{Binding GridViewColumns, Mode=OneWayToSource}">
-                                            <controls:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=RActorGuid}" Width="Auto" DisplayMemberBinding="{Binding RActorGuid}">
-                                                <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="RActorGuid"  Command="{Binding SortCommand}" CommandParameter="RActorGuid" />
+                      <controls:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=RActorId}" Width="Auto" DisplayMemberBinding="{Binding RActorId}">
+                        <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="RActorId"  Command="{Binding SortCommand}" CommandParameter="RActorId" />
                                             </controls:GridViewColumnExtended>
 
                                             <controls:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=AcdId}" Width="Auto"  DisplayMemberBinding="{Binding AcdId}">
