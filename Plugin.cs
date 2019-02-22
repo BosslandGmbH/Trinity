@@ -100,7 +100,7 @@ namespace Trinity
 
         public void OnEnabled()
         {
-            using (ZetaDia.Memory.AcquireFrame())
+            using (ZetaDia.Memory.AcquireFrame(true))
             {
                 if (IsEnabled || !Application.Current.CheckAccess())
                     return;
