@@ -622,9 +622,5 @@ namespace Trinity.Settings.ItemList
             newValue = returnValue;
             return result;
         }
-
-
-
     }
 }
-
