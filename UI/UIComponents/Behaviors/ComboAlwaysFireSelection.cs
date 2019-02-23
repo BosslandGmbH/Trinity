@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Web.UI.WebControls;
+using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -44,7 +44,7 @@ namespace Trinity.UI.UIComponents.Behaviors
             var comboBox = ((ComboBox) sender);
             if (comboBox.SelectedIndex == _selectedIndex)
             {
-                comboBox.RaiseEvent(new SelectionChangedEventArgs(Selector.SelectionChangedEvent, new ListItemCollection(), new ListItemCollection()));
+                comboBox.RaiseEvent(new SelectionChangedEventArgs(Selector.SelectionChangedEvent, new ArrayList(), new ArrayList()));
             }
         }
 
