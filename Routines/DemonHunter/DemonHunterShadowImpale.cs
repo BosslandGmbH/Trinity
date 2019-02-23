@@ -1,23 +1,21 @@
 ﻿using System;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Controls;
 using Trinity.Components.Combat.Resources;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Grid;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
-using Trinity.UI;
 using Trinity.Settings;
+using Trinity.UI;
 using Zeta.Common;
 using Zeta.Game;
-using Trinity.Routines.DemonHunter;
-using Trinity.Routines;
 using Zeta.Game.Internals.Actors;
 
-namespace Trinity750.Routines.DemonHunter
+namespace Trinity.Routines.DemonHunter
 {
     public sealed class DemonHunterShadowImpale : DemonHunterBase, IRoutine
     {
@@ -57,7 +55,7 @@ namespace Trinity750.Routines.DemonHunter
 
         public TrinityPower GetOffensivePower()
         {
-            TrinityActor target = CurrentTarget;
+            var target = CurrentTarget;
 
             if (CurrentTarget != null &&
                 (!CurrentTarget.IsBoss ||
@@ -110,7 +108,6 @@ namespace Trinity750.Routines.DemonHunter
 
             return null;
         }
-
 
         public TrinityPower GetDestructiblePower() => DefaultDestructiblePower();
 

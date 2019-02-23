@@ -217,10 +217,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             Cursor = Cursors.Arrow;
 
-            using (ZetaDia.Memory.AcquireFrame())
-            {
-                HandleMapClicked(sender, e);
-            }
+            HandleMapClicked(sender, e);
         }
 
         private void Clear()

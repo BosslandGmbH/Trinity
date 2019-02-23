@@ -122,13 +122,16 @@ namespace Trinity.Components.Combat
                 target.ToDiaObject() is DiaGizmo obj &&
                 !obj.IsDestructibleObject)
             {
-                // TODO: Fix the interaction condition here.
-                if (await CommonCoroutines.MoveAndInteract(
-                        obj,
-                        () => obj is GizmoLootContainer lc ? lc.IsOpen : obj.HasBeenOperated) == CoroutineResult.Running)
-                {
+                // Do not restart interaction with Gizmo that requires casting.
+                if (Core.Player.IsCasting)
                     return true;
-                }
+
+                // TODO: Fix the interaction condition here.
+                var result = await CommonCoroutines.MoveAndInteract(obj,
+                    () => obj is GizmoLootContainer lc ? lc.IsOpen : obj.HasBeenOperated);
+
+                if (result == CoroutineResult.Running || Core.Player.IsCasting)
+                    return true;
 
                 Clear();
                 return false;
