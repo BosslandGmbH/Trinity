@@ -85,7 +85,6 @@ namespace Trinity.Modules
         public SNOAnim CurrentAnimation { get; set; }
         public bool IsJailed { get; set; }
         public bool IsFrozen { get; set; }
-        public bool IsCasting { get; set; }
         public bool IsCastingPortal { get; set; }
         public bool IsInParty { get; set; }
         public float ShieldHitpoints { get; private set; }
@@ -178,8 +177,7 @@ namespace Trinity.Modules
         }
 
         public DateTime LastChangedLevelAreaId { get; set; }
-
-
+        
         internal void UpdateFastChangingData()
         {
             var commonData = _me.CommonData;
@@ -213,7 +211,6 @@ namespace Trinity.Modules
             IsFrozen = _me.IsFrozen;
             ParticipatingInTieredLootRun = _me.IsParticipatingInTieredLootRun;
             TieredLootRunlevel = _me.InTieredLootRunLevel;
-            IsCasting = _me.LoopingAnimationEndTime > 0;
             IsInteractingWithGizmo = commonData.GetAttribute<bool>(ActorAttributeType.PowerBuff0VisualEffectNone, (int)SNOPower.Axe_Operate_Gizmo);
             CurrentAnimation = commonData.CurrentAnimation;
 
@@ -235,7 +232,7 @@ namespace Trinity.Modules
             //             );
 
             var wasCastingPortal = IsCastingPortal;
-            IsCastingPortal = IsCasting && wasCastingPortal || IsCastingTownPortalOrTeleport();
+            IsCastingPortal = ZetaDia.Me.IsCasting && wasCastingPortal || IsCastingTownPortalOrTeleport();
 
             CurrentHealth = _me.HitpointsCurrent;
             IsInBossEncounter = _me.IsInBossEncounter;

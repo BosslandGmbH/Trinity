@@ -316,7 +316,7 @@ namespace Trinity.Framework.Reference
 
             _lastCheckedUiButtons = DateTime.UtcNow;
 
-            if (Core.Player.IsCasting)
+            if (ZetaDia.Me.IsCasting)
                 return;
 
             if (isInGame && SafeClickElement(MercenaryOKButton, "Mercenary OK Button"))

@@ -125,7 +125,7 @@ namespace Trinity.Components.Combat
                 // TODO: Fix the interaction condition here.
                 if (await CommonCoroutines.MoveAndInteract(
                         obj,
-                        () => obj is GizmoLootContainer lc ? lc.IsOpen : obj.HasBeenOperated) == CoroutineResult.Running)
+                        () => ZetaDia.Me.IsCasting || (obj is GizmoLootContainer lc ? lc.IsOpen : obj.HasBeenOperated)) == CoroutineResult.Running)
                 {
                     return true;
                 }
