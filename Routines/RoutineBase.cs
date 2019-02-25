@@ -540,7 +540,7 @@ namespace Trinity.Routines
 
         public bool WaitForInteractionChannelling()
         {
-            if (Core.Player.IsCasting &&
+            if (ZetaDia.Me.IsCasting &&
                 !Core.Player.IsTakingDamage &&
                 CurrentTarget != null &&
                 CurrentTarget.IsGizmo)
@@ -553,7 +553,7 @@ namespace Trinity.Routines
 
         public virtual async Task<bool> HandleOutsideCombat()
         {
-            if (!Core.Player.IsCasting &&
+            if (!ZetaDia.Me.IsCasting &&
                 (!TargetUtil.AnyMobsInRange(20f) ||
                  !Core.Player.IsTakingDamage))
             {

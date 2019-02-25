@@ -442,7 +442,7 @@ namespace Trinity.Routines.Wizard
 
             if (IsInCombat && Runes.Wizard.SafePassage.IsActive && !Skills.Wizard.Teleport.IsBuffActive)
             {
-                if (CanTeleportTo(CurrentTarget.Position) && !Player.IsCasting)
+                if (CanTeleportTo(CurrentTarget.Position) && !ZetaDia.Me.IsCasting)
                 {
                     position = CanTeleportTo(CurrentTarget.Position) ? CurrentTarget.Position : Player.Position;
                     return true;

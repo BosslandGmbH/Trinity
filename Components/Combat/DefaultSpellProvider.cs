@@ -126,7 +126,7 @@ namespace Trinity.Components.Combat
             if (power.ShouldWaitForAttackToFinish)
             {
                 Core.Logger.Log(LogCategory.Spells, $"Waiting for Attack to Finish");
-                await Coroutine.Wait(1000, () => Core.Player.IsCasting);
+                await Coroutine.Wait(1000, () => ZetaDia.Me.IsCasting);
             }
             return true;
         }

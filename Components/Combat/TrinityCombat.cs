@@ -111,7 +111,7 @@ namespace Trinity.Components.Combat
             if (await Routines.Current.HandleOutsideCombat())
                 return CoroutineResult.Running;
 
-            if (!Core.Player.IsCasting && (!TargetUtil.AnyMobsInRange(20f) || !Core.Player.IsTakingDamage))
+            if (!ZetaDia.Me.IsCasting && (!TargetUtil.AnyMobsInRange(20f) || !Core.Player.IsTakingDamage))
             {
                 await AutoEquipSkills.Instance.Execute();
                 await AutoEquipItems.Instance.Execute();
